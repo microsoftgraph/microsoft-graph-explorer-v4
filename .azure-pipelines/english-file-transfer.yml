@@ -1,10 +1,8 @@
 steps:
-- checkout: self
-
-- checkout: github://microsoftgraph/microsoft-graph-devx-content@dev
+- checkout: microsoft-graph-devx-content
   persistCredentials: true
-  displayName: 'Checkout GitHub Repo'
-  name: microsoftgraph
+  displayName: 'Checkout content repo'
+  fetchDepth: 1
 
 - pwsh: |
     $today = Get-Date -Format "yyyyMMddHHmm"

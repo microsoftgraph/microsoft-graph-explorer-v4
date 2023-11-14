@@ -10,6 +10,14 @@ name: $(date:yyyyMMdd)$(rev:.r)
 
 pool: 1es-windows-latest
 
+resources:
+ repositories:
+   - repository: microsoft-graph-devx-content
+     type: github
+     endpoint: microsoftgraph
+     name: microsoftgraph/microsoft-graph-devx-content
+     ref: dev
+
 pr:
   branches:
     include:
