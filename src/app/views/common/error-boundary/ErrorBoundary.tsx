@@ -26,7 +26,7 @@ function ErrorBoundary(props: Props) {
   };
 
   if (state.hasError) {
-    return <Label>{translateMessage('Something went wrong. Reload the tab')}</Label>;
+    return <Label>{translateMessage('Something went wrong')}</Label>;
   } else {
     return (
       <React.Fragment>

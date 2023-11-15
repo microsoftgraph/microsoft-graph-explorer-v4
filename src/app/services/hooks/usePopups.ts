@@ -1,28 +1,9 @@
-import {
-  ShareQuery, FullPermissions, PreviewCollection, ThemeChoser, CollectionPermissions, ManifestDescription
-} from '../../views/common/lazy-loader/component-registry';
+import { PopupItem, popups } from '../../views/common/lazy-loader/component-registry/popups';
 import {
   POPUPS, PopupsProps, PopupsType,
   UsePopupsResponse,
   usePopupsDispatchContext, usePopupsStateContext
 } from '../context/popups-context';
-
-type PopupItem =
-'share-query' |
-'theme-chooser' |
-'preview-collection' |
-'full-permissions' |
-'collection-permissions' |
-'manifest-description'
-
-const popups = new Map<string, any>([
-  ['share-query', ShareQuery],
-  ['theme-chooser', ThemeChoser],
-  ['preview-collection', PreviewCollection],
-  ['full-permissions', FullPermissions],
-  ['collection-permissions', CollectionPermissions],
-  ['manifest-description', ManifestDescription]
-])
 
 const usePopups = <Data = {}>(item: PopupItem , type: PopupsType,
   reference?: string): UsePopupsResponse<Data> => {
