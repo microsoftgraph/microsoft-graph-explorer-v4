@@ -97,23 +97,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
 
-  const openManifestInVisualStudio = () => {
-    if (!manifest) { return; }
-    const identifierKeys = Object.keys(manifest.apiDependencies);
-    const apiIdentifier = identifierKeys.length === 1 ? Object.keys(manifest.apiDependencies)[0] : null;
-    const manifestContentUrl
-      // eslint-disable-next-line max-len
-      = `vscode://ms-graph.kiota/OpenManifest?fromclipboard=true${apiIdentifier ? `&apiIdentifier=${apiIdentifier}` : ''}`;
-    window.open(manifestContentUrl, '_blank');
-    trackVSCodeButtonClick();
-    setManifestCopied(false);
-  }
-
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
     try {
       setManifestCopied(true);
-      trackedGenericCopy(JSON.stringify(manifest), componentNames.COPY_API_MANIFEST_BUTTON);
+      trackedGenericCopy(JSON.stringify(manifest, null, 2), componentNames.COPY_API_MANIFEST_BUTTON);
+      handleTimeout();
     }
     catch {
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -123,10 +112,9 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
     }
   }
 
-  const trackVSCodeButtonClick = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON
-    });
+  const handleTimeout = () => {
+    const timer = setTimeout(() => { setManifestCopied(false) }, 3000); // 3 seconds
+    return () => clearTimeout(timer);
   }
 
   return (
@@ -181,14 +169,8 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
           onClick={copyManifestToClipboard}
           disabled={isGeneratingManifest || isFetching || manifestCopied}
         >
-          <FormattedMessage id='Copy to the clipboard' />
+          {manifestCopied ? <FormattedMessage id='Copied' /> : <FormattedMessage id='Copy to the clipboard' />}
         </PrimaryButton>
-
-        <PrimaryButton disabled={isGeneratingManifest || isFetching || !manifestCopied}
-          onClick={openManifestInVisualStudio}>
-          {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
-        </PrimaryButton>
-
         <PrimaryButton disabled={isGeneratingManifest || isFetching}
           onClick={downloadManifest}>
           {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
