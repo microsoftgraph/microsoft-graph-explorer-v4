@@ -6,7 +6,7 @@ export const popups = new Map<string, any>([
   ['preview-collection', lazy(() => import('../../../sidebar/resource-explorer/collection/PreviewCollection'))],
   ['full-permissions', lazy(() => import('../../../query-runner/request/permissions/Permissions.Full'))],
   ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))],
-  ['manifest-description', lazy(() => import('../../../sidebar/resource-explorer/collection/ManifestDescription'))],
+  ['manifest-description', lazy(() => import('../../../sidebar/resource-explorer/collection/ManifestDescription'))]
 ]);
 
 export type PopupItem =
