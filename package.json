@@ -92,7 +92,7 @@
         ],
         "devDependencies": {
                 "@axe-core/playwright": "4.7.3",
-                "@playwright/test": "1.38.1",
+                "@playwright/test": "1.39.0",
                 "@types/chromedriver": "81.0.1",
                 "@types/isomorphic-fetch": "0.0.36",
                 "@types/jest": "29.5.3",
@@ -122,7 +122,7 @@
                 "redux-logger": "3.0.6",
                 "redux-mock-store": "1.5.4",
                 "selenium-webdriver": "4.11.1",
-                "start-server-and-test": "2.0.0",
+                "start-server-and-test": "2.0.2",
                 "ts-jest": "29.1.1"
         },
         "jestSonar": {
