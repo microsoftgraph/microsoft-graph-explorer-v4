@@ -121,12 +121,12 @@ jobs:
         displayName: "Install playwright"
 
       - script: |
-          npm run test-playwright-accessibility
+          npx playwright test src/tests/accessibility --project=Ms-Edge
         displayName: "Run accessibility tests"
 
       - script: |
           set CI=true
-          npm run test-playwright
+          npx playwright test src/tests/ui/
 
         env:
           REACT_APP_CLIENT_ID: $(REACT_APP_PLAYWRIGHT_TEST_CLIENT_ID)
