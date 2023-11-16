@@ -8,7 +8,7 @@ const paths = require('./paths');
 const fs = require('fs');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
-const host = process.env.HOST || '0.0.0.0';
+const host = process.env.HOST || '0.0.0.0' || '127.0.0.1';
 const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH;
 const sockPort = process.env.WDS_SOCKET_PORT
