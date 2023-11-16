@@ -23,9 +23,10 @@ const initialState: IScopes = {
 };
 
 export function scopes(state: IScopes = initialState, action: AppAction): any {
+  let response: IPermissionsResponse;
   switch (action.type) {
     case FETCH_FULL_SCOPES_SUCCESS:
-      let response: IPermissionsResponse = { ...action.response as IPermissionsResponse };
+      response = { ...action.response as IPermissionsResponse };
       return {
         pending: { ...state.pending, isFullPermissions: false },
         data: { ...state.data, fullPermissions: response.scopes.fullPermissions },

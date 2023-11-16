@@ -20,7 +20,7 @@ describe('Tests suffix utilities', () => {
     query.sampleUrl = `https://graph.microsoft.com/v1.0/me/messages/${id}`;
     const docService = new DocumentationService({
       sampleQuery: query,
-      source: resource.children
+      source: resource.children!
     })
     const documentationUrl = docService.getDocumentationLink();
     expect(documentationUrl).toBeDefined();

@@ -20,6 +20,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import thunk from 'redux-thunk';
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { translateMessage } from '../../utils/translate-messages';
 const middleware = [thunk];
 let mockStore = configureMockStore(middleware);
 
@@ -120,11 +121,6 @@ const mockState: ApplicationState = {
       labels: [],
       children: []
     },
-    error: null
-  },
-  policies: {
-    pending: false,
-    data: {},
     error: null
   }
 }
@@ -256,7 +252,13 @@ describe('Permissions action creators', () => {
       uniqueId: 'string',
       tenantId: 'string',
       scopes: ['profile.Read User.Read'],
-      account: null,
+      account: {
+        homeAccountId: 'string',
+        environment: 'string',
+        tenantId: 'string',
+        username: 'string',
+        localAccountId: 'string'
+      },
       idToken: 'string',
       idTokenClaims: {},
       fromCache: true,
@@ -273,8 +275,8 @@ describe('Permissions action creators', () => {
       {
         type: 'QUERY_GRAPH_STATUS',
         response: {
-          statusText: 'Success',
-          status: 'Scope consent successful',
+          statusText: translateMessage('Success'),
+          status: translateMessage('Scope consent successful'),
           ok: true,
           messageType: 4
         }
@@ -360,8 +362,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking'),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -370,8 +372,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: translateMessage('Default scope'),
+            status: translateMessage('Cannot delete default scope'),
             ok: false,
             messageType: 1
           }
@@ -427,8 +429,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking '),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -437,8 +439,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: translateMessage('Unable to dissent'),
+            status: translateMessage('Unable to dissent. You require the following permissions to revoke'),
             ok: false,
             messageType: 1
           }
@@ -498,8 +500,8 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Revoking ',
-            status: 'Please wait while we revoke this permission',
+            statusText: translateMessage('Revoking'),
+            status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
@@ -508,8 +510,9 @@ describe('Permissions action creators', () => {
         {
           type: 'QUERY_GRAPH_STATUS',
           response: {
-            statusText: 'Failed',
-            status: 'An error occurred when unconsenting. Please try again',
+            statusText: translateMessage('Revoking admin granted scopes'),
+            // eslint-disable-next-line max-len
+            status: translateMessage('You are unconsenting to an admin pre-consented permission'),
             ok: false,
             messageType: 1
           }

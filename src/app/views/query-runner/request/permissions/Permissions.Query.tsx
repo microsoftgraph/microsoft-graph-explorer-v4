@@ -2,36 +2,38 @@ import {
   DetailsList, DetailsListLayoutMode, getTheme, IColumn,
   Label, Link, SelectionMode, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
 import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
+import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import { getColumns } from './columns';
 import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
-import { getColumns } from './columns';
-import { setConsentedStatus } from './util';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
+  const validation = useContext(ValidationContext);
   const { sampleQuery, scopes, authToken, consentedScopes, dimensions } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;
   const { pending: loading, error } = scopes;
-  const permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
+  let permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
   const [permissionsError, setPermissionsError] = useState(error);
 
   useEffect(() => {
-    if(error?.error && error?.error?.url.contains('permissions')){
+    if (error?.error && error?.error?.url.contains('permissions')) {
       setPermissionsError(error?.error);
     }
   }, [error])
@@ -44,7 +46,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const classes = classNames(classProps);
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const tabHeight =  convertVhToPx(dimensions.request.height, 110);
+  const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
@@ -75,7 +77,9 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }
 
   useEffect(() => {
-    getPermissions();
+    if (validation.isValid) {
+      getPermissions();
+    }
   }, [sampleQuery]);
 
   useEffect(() => {
@@ -83,7 +87,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   }, [consentedScopes]);
 
   useEffect(() => {
-    if (tokenPresent) {
+    if (tokenPresent && validation.isValid) {
       dispatch(fetchAllPrincipalGrants());
     }
   }, []);
@@ -108,6 +112,14 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
     );
   }
 
+  if (!validation.isValid) {
+    return (
+      <Label style={{ marginLeft: '12px' }}>
+        <FormattedMessage id={'Invalid URL'} />!
+      </Label>
+    );
+  }
+
   const displayNoPermissionsFoundMessage = (): JSX.Element => {
     return (
       <Label styles={permissionsTabStyles}>
@@ -126,7 +138,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       </Label>)
   }
 
-  const displayErrorFetchingPermissionsMessage = () : JSX.Element => {
+  const displayErrorFetchingPermissionsMessage = (): JSX.Element => {
     return (<Label className={classes.permissionLabel}>
       <FormattedMessage id='Fetching permissions failing' />
     </Label>);
@@ -141,6 +153,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       ? displayNoPermissionsFoundMessage() :
       displayErrorFetchingPermissionsMessage();
   }
+  permissions = sortPermissionsWithPrivilege(permissions);
 
   return (
     <div >
