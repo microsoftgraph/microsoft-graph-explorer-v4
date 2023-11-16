@@ -19,7 +19,7 @@ module.exports = {
     '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   testEnvironmentOptions: {
-    url: 'http://localhost' || process.env.PLAYWRIGHT_TESTS_BASE_URL
+    url: 'http://localhost'
   },
   testEnvironment: 'jsdom',
   transform: {
