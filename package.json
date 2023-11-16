@@ -76,9 +76,9 @@
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",
                 "start-server": "npm start",
-                "test-playwright": "start-server-and-test start-server http://localhost:3000 test-ui",
+                "test-playwright": "start-server-and-test start-server http://127.0.0.1:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
-                "test-playwright-accessibility": "start-server-and-test start-server http://localhost:3000 test-accessibility",
+                "test-playwright-accessibility": "start-server-and-test start-server http://127.0.0.1:3000 test-accessibility",
                 "test-accessibility": "npx playwright test src/tests/accessibility --project=Ms-Edge"
         },
         "eslintConfig": {
@@ -122,7 +122,7 @@
                 "redux-logger": "3.0.6",
                 "redux-mock-store": "1.5.4",
                 "selenium-webdriver": "4.11.1",
-                "start-server-and-test": "1.14.0",
+                "start-server-and-test": "2.0.2",
                 "ts-jest": "29.1.1"
         },
         "jestSonar": {
