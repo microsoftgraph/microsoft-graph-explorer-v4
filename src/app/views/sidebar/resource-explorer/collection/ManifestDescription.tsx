@@ -13,9 +13,10 @@ import { useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
+import { Monaco } from '../../../common';
 import { genericCopy, trackedGenericCopy } from '../../../common/copy';
+import CopyButton from '../../../common/copy-button';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
@@ -23,7 +24,6 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
   const { permissions, isFetching, getPermissions } = useCollectionPermissions();
   const [manifest, setManifest] = useState<APIManifest>();
   const [isGeneratingManifest, setIsGeneratingManifest] = useState<boolean>(false);
-  const [manifestCopied, setManifestCopied] = useState<boolean>(false);
 
   const manifestStyle = mergeStyleSets(
     {
@@ -109,15 +109,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
       = `vscode://ms-graph.kiota/OpenManifest?fromclipboard=true${apiIdentifier ? `&apiIdentifier=${apiIdentifier}` : ''}`;
     window.open(manifestContentUrl, '_blank');
     trackVSCodeButtonClick();
-    setManifestCopied(false);
   }
 
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
     try {
-      setManifestCopied(true);
       trackedGenericCopy(JSON.stringify(manifest, null, 2), componentNames.COPY_API_MANIFEST_BUTTON);
-      handleTimeout();
     }
     catch {
       telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -131,11 +128,6 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON
     });
-  }
-
-  const handleTimeout = () => {
-    const timer = setTimeout(() => { setManifestCopied(false) }, 3000); // 3 seconds
-    return () => clearTimeout(timer);
   }
 
   return (
@@ -181,31 +173,30 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
       </div>
       <VerticalDivider />
       <br />
-      {isFetching && <>
+      {isGeneratingManifest || isFetching ? <>
         <Stack horizontal className={manifestStyle.actionButtons}> Fetching permissions<Spinner /></Stack>
         <br />
-      </>}
-      <Stack horizontal className={manifestStyle.actionButtons}>
-        <PrimaryButton
-          onClick={copyManifestToClipboard}
-          disabled={isGeneratingManifest || isFetching || manifestCopied}
-        >
-          {manifestCopied ? <FormattedMessage id='Copied' /> : <FormattedMessage id='Copy to the clipboard' />}
-        </PrimaryButton>
+      </> : <>
+        <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={copyManifestToClipboard} />
+        <Monaco
+          height='60vh'
+          body={manifest}
+          language={'json'}
+          readOnly={true}
+        />
+        <Stack horizontal className={manifestStyle.actionButtons}>
+          <PrimaryButton disabled={isGeneratingManifest || isFetching}
+            onClick={openManifestInVisualStudio}>
+            {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
+          </PrimaryButton>
 
-        <PrimaryButton disabled={isGeneratingManifest || isFetching }
-          onClick={openManifestInVisualStudio}>
-          {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
-        </PrimaryButton>
-
-        <PrimaryButton disabled={isGeneratingManifest || isFetching}
-          onClick={downloadManifest}>
-          {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
-        </PrimaryButton>
-      </Stack>
-      <br />
-      To learn more about the API Manifest,
-      visit the <Link href={API_MANIFEST_SPEC_PAGE} target='_blank' >API Manifest specification</Link> page.
+          <PrimaryButton disabled={isGeneratingManifest || isFetching}
+            onClick={downloadManifest}>
+            {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
+          </PrimaryButton>
+        </Stack>
+      </>
+      }
     </div>
   )
 }
