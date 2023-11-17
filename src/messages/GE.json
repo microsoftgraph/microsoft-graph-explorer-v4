@@ -517,5 +517,6 @@
   "Unable to dissent": "Unable to dissent",
   "Unable to dissent. You require the following permissions to revoke": "Unable to dissent. You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions",
   "Revoking admin granted scopes": "Revoking admin granted scopes",
-  "Revoking default scopes": "Revoking default scopes"
+  "Revoking default scopes": "Revoking default scopes",
+  "Open in VS Code": "Open in VS Code"
 }

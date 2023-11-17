@@ -27,6 +27,7 @@ export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account but
 export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
 export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const COPY_API_MANIFEST_BUTTON = 'Copy API manifest button';
+export const OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON = 'Open manifest in Visual Studio Code button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';

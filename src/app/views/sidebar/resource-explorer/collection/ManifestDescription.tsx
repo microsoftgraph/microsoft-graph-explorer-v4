@@ -15,7 +15,7 @@ import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { API_MANIFEST_SPEC_PAGE } from '../../../../services/graph-constants';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
-import { trackedGenericCopy } from '../../../common/copy';
+import { genericCopy, trackedGenericCopy } from '../../../common/copy';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { generateAPIManifest } from './api-manifest.util';
 
@@ -97,6 +97,21 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
     trackDownload(filename, componentNames.DOWNLOAD_API_MANIFEST_BUTTON);
   }
 
+  const openManifestInVisualStudio = () => {
+    if (!manifest) { return; }
+    const base64UrlEncodedManifest = btoa(JSON.stringify(manifest));
+    genericCopy(base64UrlEncodedManifest);
+
+    const identifierKeys = Object.keys(manifest.apiDependencies);
+    const apiIdentifier = identifierKeys.length === 1 ? Object.keys(manifest.apiDependencies)[0] : null;
+    const manifestContentUrl
+      // eslint-disable-next-line max-len
+      = `vscode://ms-graph.kiota/OpenManifest?fromclipboard=true${apiIdentifier ? `&apiIdentifier=${apiIdentifier}` : ''}`;
+    window.open(manifestContentUrl, '_blank');
+    trackVSCodeButtonClick();
+    setManifestCopied(false);
+  }
+
   const copyManifestToClipboard = () => {
     if (!manifest) { return; }
     try {
@@ -110,6 +125,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
         Error: 'Failed to copy manifest to clipboard'
       });
     }
+  }
+
+  const trackVSCodeButtonClick = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON
+    });
   }
 
   const handleTimeout = () => {
@@ -171,6 +192,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
         >
           {manifestCopied ? <FormattedMessage id='Copied' /> : <FormattedMessage id='Copy to the clipboard' />}
         </PrimaryButton>
+
+        <PrimaryButton disabled={isGeneratingManifest || isFetching }
+          onClick={openManifestInVisualStudio}>
+          {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
+        </PrimaryButton>
+
         <PrimaryButton disabled={isGeneratingManifest || isFetching}
           onClick={downloadManifest}>
           {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
