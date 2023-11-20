@@ -6,7 +6,7 @@ import {
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -487,11 +487,11 @@ const History = (props: any) => {
           isMultiline={true}
           dismissButtonAriaLabel='Close'
         >
-          <FormattedMessage id='Your history includes queries made in the last 30 days' />
+          {translateMessage('Your history includes queries made in the last 30 days')}
           .
         </MessageBar>
         {items.length === 0 && <Label className={classes.spinner}>
-          <FormattedMessage id='We did not find any history items' />
+          {translateMessage('We did not find any history items')}
         </Label>}
         <Announced
           message={`${items.length} search results available.`}

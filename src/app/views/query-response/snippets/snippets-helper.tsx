@@ -3,7 +3,6 @@ import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { FormattedMessage } from 'react-intl';
 import { getSnippet } from '../../../services/actions/snippet-action-creator';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
@@ -12,9 +11,11 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { translateMessage } from '../../../utils/translate-messages';
+import {
+  convertVhToPx, getResponseEditorHeight,
+  getResponseHeight
+} from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/lazy-loader/component-registry';
-import { convertVhToPx, getResponseEditorHeight,
-  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
@@ -159,7 +160,7 @@ function Snippet(props: ISnippetProps) {
     ){
       return(
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Snippet not available' />
+          {translateMessage('Snippet not available' )}
         </Label>
       )
     }
@@ -168,7 +169,7 @@ function Snippet(props: ISnippetProps) {
         <>
           {!loadingState &&
             <Label style={{ padding: 10 }}>
-              <FormattedMessage id='Fetching code snippet failing' />
+              {translateMessage('Fetching code snippet failing' )}
             </Label>
           }
         </>
@@ -180,7 +181,7 @@ function Snippet(props: ISnippetProps) {
     <div style={{ display: 'block' }} id={`${language}-tab`}>
       {loadingState &&
         <Label style={{ padding: 10 }}>
-          <FormattedMessage id='Fetching code snippet' />...
+          {translateMessage('Fetching code snippet' )}...
         </Label>
       }
       {!loadingState && snippet &&

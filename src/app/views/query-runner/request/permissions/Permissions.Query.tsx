@@ -3,7 +3,6 @@ import {
   Label, Link, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useContext, useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -107,7 +106,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   if (loading.isSpecificPermissions) {
     return (
       <Label style={{ marginLeft: '12px' }}>
-        <FormattedMessage id={'Fetching permissions'} />...
+        {translateMessage('Fetching permissions')}...
       </Label>
     );
   }
@@ -115,7 +114,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   if (!validation.isValid) {
     return (
       <Label style={{ marginLeft: '12px' }}>
-        <FormattedMessage id={'Invalid URL'} />!
+        {translateMessage('Invalid URL')}!
       </Label>
     );
   }
@@ -123,24 +122,24 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const displayNoPermissionsFoundMessage = (): JSX.Element => {
     return (
       <Label styles={permissionsTabStyles}>
-        <FormattedMessage id='permissions not found in permissions tab' />
+        {translateMessage('permissions not found in permissions tab')}
         <Link underline onClick={openPermissionsPanel}>
-          <FormattedMessage id='open permissions panel' />
+          {translateMessage('open permissions panel')}
         </Link>
-        <FormattedMessage id='permissions list' />
+        {translateMessage('permissions list')}
       </Label>);
   }
 
   const displayNotSignedInMessage = (): JSX.Element => {
     return (
       <Label styles={permissionsTabStyles}>
-        <FormattedMessage id='sign in to view a list of all permissions' />
+        {translateMessage('sign in to view a list of all permissions')}
       </Label>)
   }
 
   const displayErrorFetchingPermissionsMessage = (): JSX.Element => {
     return (<Label className={classes.permissionLabel}>
-      <FormattedMessage id='Fetching permissions failing' />
+      {translateMessage('Fetching permissions failing')}
     </Label>);
   }
 
@@ -158,11 +157,10 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   return (
     <div >
       <Label className={classes.permissionLength} style={{ paddingLeft: '12px' }}>
-        <FormattedMessage id='Permissions' />
+        {translateMessage('Permissions')}
       </Label>
       <Label className={classes.permissionText} style={{ paddingLeft: '12px' }}>
-        {!tokenPresent && <FormattedMessage id='sign in to consent to permissions' />}
-        {tokenPresent && <FormattedMessage id='permissions required to run the query' />}
+        {translateMessage(tokenPresent ? 'permissions required to run the query' : 'sign in to consent to permissions')}
       </Label>
       <div
         onMouseEnter={() => {

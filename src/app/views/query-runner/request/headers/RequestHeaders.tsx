@@ -1,6 +1,6 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import { useState, createRef } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -36,7 +36,7 @@ const RequestHeaders = (props: any) => {
 
   const changeHeaderProperties =
     (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setHeader({...header, [event.currentTarget.name]: event.currentTarget.value});
+      setHeader({ ...header, [event.currentTarget.name]: event.currentTarget.value });
     };
 
   const handleOnHeaderDelete = (headerToDelete: IHeader) => {
@@ -74,12 +74,12 @@ const RequestHeaders = (props: any) => {
   };
 
   const handleOnHeaderEdit = (headerToEdit: IHeader) => {
-    if(header.name !== ''){
+    if (header.name !== '') {
       return;
     }
     removeHeaderFromSampleQuery(headerToEdit);
     setIsUpdatingHeader(true);
-    setHeader({...headerToEdit});
+    setHeader({ ...headerToEdit });
     onSetFocus();
   }
 
@@ -96,8 +96,8 @@ const RequestHeaders = (props: any) => {
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
       className={classes.container}
-      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60)  } :
-        { height: convertVhToPx(height, 60) , overflow: 'hidden' }}>
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } :
+        { height: convertVhToPx(height, 60), overflow: 'hidden' }}>
       <Announced message={announcedMessage} />
       <div className='row'>
         <div className='col-sm-5'>
@@ -122,7 +122,7 @@ const RequestHeaders = (props: any) => {
           <PrimaryButton
             style={{ width: '100%' }}
             onClick={handleOnHeaderAdd}>
-            <FormattedMessage id= {isUpdatingHeader ? 'Update' : 'Add'} />
+            {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}
           </PrimaryButton>
         </div>
       </div>

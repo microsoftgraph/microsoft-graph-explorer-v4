@@ -3,7 +3,6 @@ import {
   IGroup, Label, SearchBox, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -152,11 +151,11 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   return (
     <div data-is-scrollable={true} style={panelStyles}>
       {loading ? <Label>
-        <FormattedMessage id={'Fetching permissions'} />...
+        {translateMessage('Fetching permissions')}...
       </Label> :
         <>
           <Label>
-            <FormattedMessage id='Select different permissions' />
+            {translateMessage('Select different permissions')}
           </Label>
           <hr />
           <SearchBox
@@ -202,12 +201,12 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           justifyContent: 'center',
           alignItems: 'center'
         }}>
-          <FormattedMessage id='permissions not found' />
+          {translateMessage('permissions not found')}
         </Label> :
         !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
-          <Label>
-            <FormattedMessage id='Fetching permissions failing' />
-          </Label>
+        <Label>
+          {translateMessage('Fetching permissions failing')}
+        </Label>
       }
     </div>
   );

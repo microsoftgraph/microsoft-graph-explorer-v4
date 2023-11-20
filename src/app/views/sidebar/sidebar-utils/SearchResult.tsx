@@ -1,19 +1,21 @@
 import { Label } from '@fluentui/react';
-import { FormattedMessage } from 'react-intl';
+import { translateMessage } from '../../../utils/translate-messages';
 
-export const NoResultsFound = (searchMessage : string, additionalStyles? : {[key: string]: string}) => {
+export const NoResultsFound = (searchMessage: string, additionalStyles?: { [key: string]: string }) => {
   return (
     <Label
-      styles={{root: {
-        paddingLeft: '5px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '60vh',
-        ...additionalStyles
-      }}}
+      styles={{
+        root: {
+          paddingLeft: '5px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '60vh',
+          ...additionalStyles
+        }
+      }}
     >
-      <FormattedMessage id={searchMessage} />
+      {translateMessage(searchMessage)}
     </Label>
   );
 }
