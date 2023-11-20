@@ -4,7 +4,6 @@ import {
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
 import { useEffect } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -204,6 +203,4 @@ const AdaptiveCard = (props: any) => {
 // @ts-ignore
 const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles);
 const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
-// @ts-ignore
-const IntlAdaptiveCard = injectIntl(trackedComponent);
-export default IntlAdaptiveCard;
+export default trackedComponent;

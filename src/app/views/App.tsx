@@ -1,7 +1,6 @@
 import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -43,7 +42,6 @@ import { ValidationProvider } from '../services/context/validation-context/Valid
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  intl: any;
   profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -476,7 +474,7 @@ class App extends Component<IAppProps, IAppState> {
                       <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
                         <StatusMessages />
                       </div>
-                      <QueryResponse verb={this.state.selectedVerb} />
+                      <QueryResponse />
                     </div>
                   </ValidationProvider>
                 </Resizable>
@@ -529,7 +527,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const StyledApp = styled(App, appStyles as any);
-const IntlApp = injectIntl(StyledApp);
 
 //@ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(IntlApp);
+export default connect(mapStateToProps, mapDispatchToProps)(StyledApp);

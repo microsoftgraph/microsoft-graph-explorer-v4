@@ -6,7 +6,6 @@ import {
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -543,5 +542,4 @@ const History = (props: any) => {
 const trackedComponent = telemetry.trackReactComponent(History, componentNames.HISTORY_TAB);
 // @ts-ignore
 const styledHistory = styled(trackedComponent, sidebarStyles);
-const IntlHistory = injectIntl(styledHistory);
-export default IntlHistory;
+export default styledHistory;

@@ -1,6 +1,5 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../store';
@@ -24,7 +23,7 @@ const QueryRunner = (props: any) => {
   const [sampleBody, setSampleBody] = useState('');
 
   useEffect(() => {
-    if(sampleQuery.selectedVerb !== 'GET') {
+    if (sampleQuery.selectedVerb !== 'GET') {
       const query = { ...sampleQuery };
       query.sampleBody = sampleBody;
       dispatch(setSampleQuery(query));
@@ -113,13 +112,11 @@ const QueryRunner = (props: any) => {
     <>
       <div className='ms-Grid-row'>
         <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-          {
-            <QueryInput
-              handleOnRunQuery={handleOnRunQuery}
-              handleOnMethodChange={handleOnMethodChange}
-              handleOnVersionChange={handleOnVersionChange}
-            />
-          }
+          <QueryInput
+            handleOnRunQuery={handleOnRunQuery}
+            handleOnMethodChange={handleOnMethodChange}
+            handleOnVersionChange={handleOnVersionChange}
+          />
         </div>
       </div>
       <div className='ms-Grid-row' style={{ marginTop: 10 }}>
@@ -136,6 +133,4 @@ const QueryRunner = (props: any) => {
   );
 }
 
-// @ts-ignore
-const IntlQueryRunner = injectIntl(QueryRunner);
-export default IntlQueryRunner;
+export default QueryRunner;

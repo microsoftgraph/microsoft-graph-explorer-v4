@@ -1,15 +1,14 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
-import { useState, createRef } from 'react';
-import { injectIntl } from 'react-intl';
+import { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 interface IHeader {
   name: string;
@@ -25,7 +24,6 @@ const RequestHeaders = (props: any) => {
   const emptyHeader = { name: '', value: '' };
   const [header, setHeader] = useState(emptyHeader);
 
-  const { intl: { messages } } = props;
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
   const dispatch: AppDispatch = useDispatch();
@@ -102,7 +100,7 @@ const RequestHeaders = (props: any) => {
       <div className='row'>
         <div className='col-sm-5'>
           <TextField className='header-input'
-            placeholder={messages.Key}
+            placeholder={translateMessage('Key')}
             value={header.name}
             onChange={changeHeaderProperties}
             componentRef={textfieldRef}
@@ -112,7 +110,7 @@ const RequestHeaders = (props: any) => {
         <div className='col-sm-5'>
           <TextField
             className='header-input'
-            placeholder={messages.Value}
+            placeholder={translateMessage('Value')}
             value={header.value}
             onChange={changeHeaderProperties}
             name='value'
@@ -128,7 +126,6 @@ const RequestHeaders = (props: any) => {
       </div>
       <hr />
       <HeadersList
-        messages={messages}
         handleOnHeaderDelete={(headerToDelete: IHeader) => handleOnHeaderDelete(headerToDelete)}
         headers={sampleQueryHeaders}
         handleOnHeaderEdit={(headerToEdit: IHeader) => handleOnHeaderEdit(headerToEdit)}
@@ -137,5 +134,5 @@ const RequestHeaders = (props: any) => {
   );
 };
 // @ts-ignore
-const styledRequestHeaders = styled(injectIntl(RequestHeaders), headerStyles);
+const styledRequestHeaders = styled(RequestHeaders, headerStyles);
 export default styledRequestHeaders;
