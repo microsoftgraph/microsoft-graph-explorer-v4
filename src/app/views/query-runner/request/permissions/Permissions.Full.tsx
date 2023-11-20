@@ -1,12 +1,15 @@
 import {
-  Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  Label, SearchBox, SelectionMode, TooltipHost
+  Announced, DetailsList, DetailsListLayoutMode, getId, getTheme, GroupHeader, IColumn,
+  IconButton,
+  IContextualMenuProps,
+  Label, SearchBox, SelectionMode, Stack, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
@@ -32,7 +35,6 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const [permissions, setPermissions] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<{ order: SortOrder, value: string } | null>(null)
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
@@ -79,6 +81,10 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const searchValueChanged = (event: any, value?: string): void => {
     setSearchValue(value!);
+    setPermissions(searchPermissions(value));
+  };
+
+  const searchPermissions = (value?: string) => {
     let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
@@ -89,9 +95,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
         return name.includes(keyword) || groupName.includes(keyword);
       });
     }
-    setPermissions(filteredPermissions);
-  };
-
+    return filteredPermissions;
+  }
 
   const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
@@ -102,7 +107,6 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
     return null;
   };
-
 
   const groupHeaderStyles = () => {
     return {
@@ -123,45 +127,43 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     searchValueChanged({}, '');
   }
 
-  const handleColumnClicked = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
-    let items = [...permissions];
-    let order = sortOrder?.order;
-    switch (order) {
-      case SortOrder.DESC:
-        order = SortOrder.ASC;
-        break;
-      case SortOrder.ASC:
-        order = SortOrder.DESC;
-        break;
-      default:
-        order = SortOrder.DESC;
-        break;
-    }
-    items = items.sort(dynamicSort(column.fieldName!, order));
-    setPermissions(items);
-    setSortOrder({ order, value: column.fieldName! });
-  }
-
-  let columns = getColumns({ source: 'panel', tokenPresent, onColumnClicked: handleColumnClicked });
-  if (sortOrder) {
-    columns = columns.map((column: IColumn) => {
-      if (column.isSorted && column.fieldName === sortOrder.value) {
-        column.isSortedDescending = sortOrder.order === SortOrder.DESC;
-      }
-      return column;
-    })
-  }
-
+  const columns = getColumns({ source: 'panel', tokenPresent });
   const permissionsList: any[] = [];
   permissions.map((perm: IPermission) => {
     const permission: any = { ...perm };
     const permissionValue = permission.value;
-    const groupName = permissionValue.split('.')[0];
-    permission.groupName = (permission.consented && sortOrder?.value === 'consented')
-      ? `${translateMessage('Consented')} - ${groupName}` : groupName;
+    permission.groupName = permissionValue.split('.')[0];
     permissionsList.push(permission);
   });
   const groups = generateGroupsFromList(permissionsList, 'groupName');
+
+  const menuProperties: IContextualMenuProps = {
+    items: [
+      {
+        key: 'all-permissions',
+        text: translateMessage('All permissions'),
+        onClick: () => setPermissions(searchPermissions(searchValue))
+      },
+      {
+        key: 'consented-permissions',
+        text: translateMessage('Consented permissions'),
+        onClick: () => setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => permission.consented))
+      },
+      {
+        key: 'unconsented-permissions',
+        text: translateMessage('Unconsented permissions'),
+        onClick: () => setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => !permission.consented))
+      }
+    ]
+  };
+
+  const trackFilterButtonClickEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.FILTER_PERMISSIONS_BUTTON
+    });
+  }
 
   return (
     <div data-is-scrollable={true} style={panelStyles}>
@@ -173,15 +175,35 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             <FormattedMessage id='Select different permissions' />
           </Label>
           <hr />
-          <SearchBox
-            placeholder={translateMessage('Search permissions')}
-            onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-              searchValueChanged(event, newValue)}
-            styles={searchBoxStyles}
-            onClear={() => clearSearchBox()}
-            value={searchValue}
-          />
-          <Announced message={`${permissions.length} search results available.`} />
+          <Stack horizontal>
+            <SearchBox
+              placeholder={translateMessage('Search permissions')}
+              onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+                searchValueChanged(event, newValue)}
+              styles={searchBoxStyles}
+              onClear={() => clearSearchBox()}
+              value={searchValue}
+            />
+            <Announced message={`${permissions.length} search results available.`} />
+            <TooltipHost
+              content={
+                <div style={{ padding: '3px' }}>
+                  {translateMessage('Filter permissions')}
+                </div>}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={tooltipStyles}
+            >
+              <IconButton
+                ariaLabel={translateMessage('Filter permissions')}
+                role='button'
+                disabled={loading || fullPermissions.length === 0}
+                menuIconProps={{ iconName: 'Filter' }}
+                menuProps={menuProperties}
+                onMenuClick={trackFilterButtonClickEvent}
+              />
+            </TooltipHost>
+          </Stack>
           <hr />
           <DetailsList
             onShouldVirtualize={() => false}

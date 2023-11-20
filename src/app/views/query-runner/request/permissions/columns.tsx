@@ -119,8 +119,6 @@ const getColumns = ({ source, tokenPresent, onColumnClicked }: ColumnProps): ICo
         fieldName: 'consented',
         minWidth: 130,
         onRenderHeader: () => renderColumnHeader('Status'),
-        onColumnClick: onColumnClicked,
-        isSorted: true,
         styles: columnCellStyles,
         targetWidthProportion: 1,
         flexGrow: 1
