@@ -175,7 +175,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             <FormattedMessage id='Select different permissions' />
           </Label>
           <hr />
-          <Stack horizontal>
+          <Stack horizontal tokens={{ childrenGap: 7 }}>
             <SearchBox
               placeholder={translateMessage('Search permissions')}
               onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
@@ -201,6 +201,12 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
                 menuIconProps={{ iconName: 'Filter' }}
                 menuProps={menuProperties}
                 onMenuClick={trackFilterButtonClickEvent}
+                styles={{
+                  root: {
+                    float: 'right',
+                    width: '100%'
+                  }
+                }}
               />
             </TooltipHost>
           </Stack>
