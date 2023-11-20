@@ -1,4 +1,3 @@
-import { geLocale } from '../../../appLocale';
 import { samplesCache } from '../../../modules/cache/samples.cache';
 import { AppDispatch } from '../../../store';
 import { AppAction } from '../../../types/action';
@@ -41,8 +40,7 @@ export function fetchSamples() {
       : `${samplesUrl}`;
 
     const headers = {
-      'Content-Type': 'application/json',
-      'Accept-Language': geLocale
+      'Content-Type': 'application/json'
     };
 
     const options: IRequestOptions = { headers };
