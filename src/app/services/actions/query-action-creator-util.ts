@@ -261,7 +261,7 @@ export function parseResponse(
 export function queryResultsInCorsError(sampleUrl: string): boolean {
   sampleUrl = sampleUrl.toLowerCase();
   if (
-    (['/drive/', '/drives/', '/driveItem/'].some((x) =>
+    (['/drive/', '/drives/', '/driveItem/', '/employeeexperience/'].some((x) =>
       sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
     sampleUrl.includes('/reports/')
   ) {
