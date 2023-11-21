@@ -161,7 +161,6 @@ module.exports = function (webpackEnv) {
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: 'static/js/graph-explorer-v2.js',
-      chunkFilename: 'static/js/graph-explorer.chunk.[name].[chunkhash].js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath,
@@ -414,7 +413,7 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 50
+        maxChunks: 1
       }),
       new MonacoWebpackPlugin({
         languages: [
