@@ -176,15 +176,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           </Label>
           <hr />
           <Stack horizontal tokens={{ childrenGap: 7 }}>
-            <SearchBox
-              placeholder={translateMessage('Search permissions')}
-              onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-                searchValueChanged(event, newValue)}
-              styles={searchBoxStyles}
-              onClear={() => clearSearchBox()}
-              value={searchValue}
-            />
-            <Announced message={`${permissions.length} search results available.`} />
+
             <TooltipHost
               content={
                 <div style={{ padding: '3px' }}>
@@ -203,12 +195,21 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
                 onMenuClick={trackFilterButtonClickEvent}
                 styles={{
                   root: {
-                    float: 'right',
+                    float: 'left',
                     width: '100%'
                   }
                 }}
               />
             </TooltipHost>
+            <SearchBox
+              placeholder={translateMessage('Search permissions')}
+              onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+                searchValueChanged(event, newValue)}
+              styles={searchBoxStyles}
+              onClear={() => clearSearchBox()}
+              value={searchValue}
+            />
+            <Announced message={`${permissions.length} search results available.`} />
           </Stack>
           <hr />
           <DetailsList
