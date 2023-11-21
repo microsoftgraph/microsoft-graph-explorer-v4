@@ -27,8 +27,7 @@ const Request = (props: any) => {
   const maxHeight = 800;
 
   const {
-    handleOnEditorChange,
-    intl: { messages }
+    handleOnEditorChange
   }: any = props;
 
   useEffect(() => {
@@ -55,13 +54,14 @@ const Request = (props: any) => {
         key='request-body'
         itemIcon='Send'
         itemKey='request-body' // To be used to construct component name for telemetry data
-        ariaLabel={messages['request body']}
-        headerText={messages['request body']}
+        ariaLabel={translateMessage('request body')}
+        headerText={translateMessage('request body')}
+        title={translateMessage('request body')}
         headerButtonProps={{
           'aria-controls': 'request-body-tab'
         }}
       >
-        <div style={containerStyle} id={'request-body-tab'}>
+        <div style={containerStyle} id={'request-body-tab'} tabIndex={0}>
           <RequestBody handleOnEditorChange={handleOnEditorChange} />
         </div>
       </PivotItem>,
@@ -69,13 +69,14 @@ const Request = (props: any) => {
         key='request-headers'
         itemIcon='FileComment'
         itemKey='request-headers'
-        ariaLabel={messages['request header']}
-        headerText={messages['request header']}
+        ariaLabel={translateMessage('request header')}
+        headerText={translateMessage('request header')}
+        title={translateMessage('request header')}
         headerButtonProps={{
           'aria-controls': 'request-header-tab'
         }}
       >
-        <div style={containerStyle} id={'request-header-tab'}>
+        <div style={containerStyle} id={'request-header-tab'} tabIndex={0}>
           <RequestHeaders />
         </div>
       </PivotItem>,
@@ -84,12 +85,13 @@ const Request = (props: any) => {
         itemIcon='AzureKeyVault'
         itemKey='modify-permissions'
         ariaLabel={translateMessage('modify permissions')}
-        headerText={messages['modify permissions']}
+        headerText={translateMessage('modify permissions')}
+        title={translateMessage('modify permissions')}
         headerButtonProps={{
           'aria-controls': 'permission-tab'
         }}
       >
-        <div style={containerStyle} id={'permission-tab'}>
+        <div style={containerStyle} id={'permission-tab'} tabIndex={0}>
           <Permissions />
         </div>
       </PivotItem>
@@ -102,10 +104,11 @@ const Request = (props: any) => {
           itemKey='access-token'
           ariaLabel={translateMessage('Access Token')}
           headerText={translateMessage('Access Token')}
+          title={translateMessage('Access Token')}
           headerButtonProps={{
             'aria-controls': 'access-token-tab'
           }}>
-          <div style={containerStyle} id={'access-token-tab'}>
+          <div style={containerStyle} id={'access-token-tab'} tabIndex={0}>
             <Auth />
           </div>
         </PivotItem>
