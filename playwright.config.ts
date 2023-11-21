@@ -5,6 +5,13 @@ const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
 export default defineConfig({
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
+  webServer: {
+    command: 'npm run start',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    stdout: 'ignore',
+    stderr: 'pipe'
+  },
   expect: {
     toMatchSnapshot: {
       threshold: 0.3,
