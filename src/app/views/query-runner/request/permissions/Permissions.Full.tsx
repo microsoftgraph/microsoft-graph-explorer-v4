@@ -23,9 +23,15 @@ import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
 
+type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
+interface PermissionListItem extends IPermission {
+  groupName?: string;
+}
+
 const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
+  const [filter, setFilter] = useState<Filter>('all-permissions');
 
   const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
@@ -33,7 +39,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
 
-  const [permissions, setPermissions] = useState<any[]>([]);
+  const [permissions, setPermissions] = useState<IPermission[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
 
   const getPermissions = (): void => {
@@ -79,9 +85,16 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  const searchValueChanged = (event: any, value?: string): void => {
+  const searchValueChanged = (value?: string): void => {
     setSearchValue(value!);
-    setPermissions(searchPermissions(value));
+    const searchResults = searchPermissions(value);
+    const values = filter === 'all-permissions' ? searchResults : searchResults.filter((permission: IPermission) => {
+      if (filter === 'consented-permissions') {
+        return permission.consented;
+      }
+      return !permission.consented;
+    });
+    setPermissions(values);
   };
 
   const searchPermissions = (value?: string) => {
@@ -124,14 +137,34 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const clearSearchBox = () => {
     setSearchValue('');
-    searchValueChanged({}, '');
+    searchValueChanged('');
+  }
+
+  const chooseFilter = (chosenFilter: Filter) => {
+    setFilter(chosenFilter);
+    switch (chosenFilter) {
+      case 'all-permissions': {
+        setPermissions(searchPermissions(searchValue));
+        break;
+      }
+      case 'consented-permissions': {
+        setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => permission.consented));
+        break;
+      }
+      case 'unconsented-permissions': {
+        setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => !permission.consented));
+        break;
+      }
+    }
   }
 
   const columns = getColumns({ source: 'panel', tokenPresent });
-  const permissionsList: any[] = [];
+  const permissionsList: PermissionListItem[] = [];
   permissions.map((perm: IPermission) => {
-    const permission: any = { ...perm };
-    const permissionValue = permission.value;
+    const permission: PermissionListItem = { ...perm };
+    const permissionValue = permission.value!;
     permission.groupName = permissionValue.split('.')[0];
     permissionsList.push(permission);
   });
@@ -142,19 +175,17 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
       {
         key: 'all-permissions',
         text: translateMessage('All permissions'),
-        onClick: () => setPermissions(searchPermissions(searchValue))
+        onClick: () => chooseFilter('all-permissions')
       },
       {
         key: 'consented-permissions',
         text: translateMessage('Consented permissions'),
-        onClick: () => setPermissions(searchPermissions(searchValue)
-          .filter((permission: IPermission) => permission.consented))
+        onClick: () => chooseFilter('consented-permissions')
       },
       {
         key: 'unconsented-permissions',
         text: translateMessage('Unconsented permissions'),
-        onClick: () => setPermissions(searchPermissions(searchValue)
-          .filter((permission: IPermission) => !permission.consented))
+        onClick: () => chooseFilter('unconsented-permissions')
       }
     ]
   };
@@ -190,7 +221,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
                 ariaLabel={translateMessage('Filter permissions')}
                 role='button'
                 disabled={loading || fullPermissions.length === 0}
-                menuIconProps={{ iconName: 'Filter' }}
+                menuIconProps={{ iconName: filter === 'all-permissions' ? 'Filter' : 'FilterSolid' }}
                 menuProps={menuProperties}
                 onMenuClick={trackFilterButtonClickEvent}
                 styles={{
@@ -203,8 +234,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             </TooltipHost>
             <SearchBox
               placeholder={translateMessage('Search permissions')}
-              onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-                searchValueChanged(event, newValue)}
+              onChange={(_event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+                searchValueChanged(newValue)}
               styles={searchBoxStyles}
               onClear={() => clearSearchBox()}
               value={searchValue}
@@ -217,8 +248,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             items={permissions}
             columns={columns}
             groups={groups}
-            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-              return <PermissionItem column={column} index={index} item={item} />
+            onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
+              return <PermissionItem column={column} index={index} item={item!} />
             }}
             selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
