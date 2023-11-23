@@ -160,11 +160,15 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
   }
 
+  const handleRenderItemColumn = (item?: IPermission, index?: number, column?: IColumn) => {
+    return <PermissionItem column={column} index={index} item={item!} />;
+  }
+
   const columns = getColumns({ source: 'panel', tokenPresent });
   const permissionsList: PermissionListItem[] = [];
   permissions.map((perm: IPermission) => {
     const permission: PermissionListItem = { ...perm };
-    const permissionValue = permission.value!;
+    const permissionValue = permission.value;
     permission.groupName = permissionValue.split('.')[0];
     permissionsList.push(permission);
   });
@@ -248,9 +252,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             items={permissions}
             columns={columns}
             groups={groups}
-            onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
-              return <PermissionItem column={column} index={index} item={item!} />
-            }}
+            onRenderItemColumn={handleRenderItemColumn}
             selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
             compact={true}
