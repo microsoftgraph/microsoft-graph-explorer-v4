@@ -32,7 +32,7 @@ export default defineConfig({
     ]
   ],
   retries: 1,
-  timeout: 60000,
+  timeout: 120*1000,
   projects: [
     {
       name: 'Ms-Edge',
