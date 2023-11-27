@@ -138,13 +138,15 @@ extends:
           displayName: "Install playwright"
 
         - script: |
-            npm run test-playwright-accessibility
+            npx playwright test src/tests/accessibility --project=Ms-Edge
+          env:
+            CI: true
           displayName: "Run accessibility tests"
 
         - script: |
-            set CI=true
-            npm run test-playwright
+            npx playwright test src/tests/ui/
           env:
+            CI: true
             REACT_APP_CLIENT_ID: $(REACT_APP_PLAYWRIGHT_TEST_CLIENT_ID)
             REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
             REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
