@@ -139,8 +139,6 @@ extends:
 
         - script: |
             npx playwright test src/tests/accessibility --project=Ms-Edge
-          env:
-            CI: true
           displayName: "Run accessibility tests"
 
         - script: |
