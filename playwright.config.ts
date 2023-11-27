@@ -9,7 +9,7 @@ export default defineConfig({
     command: 'npm start',
     url: 'http://localhost:3000/',
     reuseExistingServer: !process.env.CI,
-    timeout: 300 * 1000
+    timeout: 350 * 1000
   },
   expect: {
     toMatchSnapshot: {
