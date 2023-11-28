@@ -138,10 +138,6 @@ extends:
           displayName: "Install playwright"
 
         - script: |
-            npx playwright test src/tests/accessibility --project=Ms-Edge
-          displayName: "Run accessibility tests"
-
-        - script: |
             npx playwright test src/tests/ui/
           env:
             CI: true
@@ -156,6 +152,10 @@ extends:
             PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
             PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
           displayName: "Run playwright tests"
+
+        - script: |
+            npx playwright test src/tests/accessibility --project=Ms-Edge
+          displayName: "Run accessibility tests"
 
         templateContext:
           outputs:
