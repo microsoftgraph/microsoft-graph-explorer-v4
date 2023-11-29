@@ -15,7 +15,7 @@ test.describe('Accessibility', () => {
   test('should not have any automatically detectable accessibility issues', async () => {
 
     await page.locator('[aria-label="Settings"]').isVisible();
-    const accessibilityScan = new AxeBuilder({ page }).setLegacyMode();
+    const accessibilityScan = new AxeBuilder({ page });
     const result = await accessibilityScan
       .disableRules([
         'landmark-one-main',
@@ -29,7 +29,6 @@ test.describe('Accessibility', () => {
         'color-contrast'
       ])
       .analyze();
-    accessibilityScan.setLegacyMode(false);
 
     expect(result.violations).toEqual([]);
   });
