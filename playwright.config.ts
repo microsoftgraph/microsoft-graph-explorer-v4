@@ -1,7 +1,7 @@
-require('dotenv').config();
+//require('dotenv').config();
 import { defineConfig } from '@playwright/test';
 
-const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
+const baseURL = 'http://localhost:3000/';
 
 export default defineConfig({
   globalSetup: require.resolve('./src/tests/ui/global-setup'),

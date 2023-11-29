@@ -6,7 +6,7 @@ let page: Page;
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext();
   page = await context.newPage();
-  await page.goto('http://localhost:3000/');
+  await page.goto('/');
 });
 
 test.describe('Accessibility', () => {
