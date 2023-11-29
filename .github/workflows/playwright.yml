@@ -21,7 +21,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright accessibility tests
-      run: npx playwright test src/tests/accessibility/
+      run: npx playwright test src/tests/accessibility/ --project=Ms-Edge
     - uses: actions/upload-artifact@v3
       if: always()
       with:
