@@ -1,13 +1,13 @@
-//require('dotenv').config();
+require('dotenv').config();
 import { defineConfig } from '@playwright/test';
 
-const baseURL = 'http://localhost:3000/';
+const baseURL = process.env.PLAYWRIGHT_TESTS_BASE_URL!;
 
 export default defineConfig({
   globalSetup: require.resolve('./src/tests/ui/global-setup'),
   webServer: {
     command: 'npm start',
-    url: 'http://localhost:3000/',
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 350 * 1000
   },

@@ -4,6 +4,9 @@ on:
     branches: [ master, dev ]
   pull_request:
     types: [opened, synchronize, reopened, closed]
+
+env:
+  PLAYWRIGHT_TESTS_BASE_URL: "http://localhost:3000/"
 jobs:
   test:
     timeout-minutes: 60
