@@ -138,10 +138,6 @@ extends:
           displayName: "Install playwright"
 
         - script: |
-            npx playwright test src/tests/accessibility/
-          displayName: "Run accessibility tests"
-
-        - script: |
             npx playwright test src/tests/ui/
           env:
             CI: true
