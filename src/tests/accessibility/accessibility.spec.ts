@@ -33,3 +33,7 @@ test.describe('Accessibility', () => {
     expect(result.violations).toEqual([]);
   });
 })
+
+test.afterAll(async ({ browser}) => {
+  await browser.close();
+});

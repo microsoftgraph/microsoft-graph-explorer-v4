@@ -138,7 +138,7 @@ extends:
           displayName: "Install playwright"
 
         - script: |
-            npx playwright test src/tests/accessibility/ --project=Ms-Edge
+            npx playwright test src/tests/accessibility/
           displayName: "Run accessibility tests"
 
         - script: |
