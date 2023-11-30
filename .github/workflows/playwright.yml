@@ -6,7 +6,9 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 env:
-  PLAYWRIGHT_TESTS_BASE_URL: "http://localhost:3000/"
+  PLAYWRIGHT_TESTS_BASE_URL: ${{secrets.PLAYWRIGHT_TESTS_BASE_URL}}
+  PLAYWRIGHT_TESTS_USERNAME: ${{PLAYWRIGHT_TESTS_USERNAME}}
+  PLAYWRIGHT_TESTS_PASSWORD: ${{PLAYWRIGHT_TESTS_PASSWORD}}
 jobs:
   test:
     timeout-minutes: 60
@@ -18,10 +20,16 @@ jobs:
         node-version: 18
     - name: Install dependencies
       run: npm ci
+
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+
     - name: Run Playwright accessibility tests
       run: npx playwright test src/tests/accessibility/ --project=Ms-Edge
+
+    - name: Run Playwright UI tests
+      run: npx playwright test src/tests/ui/
+
     - uses: actions/upload-artifact@v3
       if: always()
       with:
