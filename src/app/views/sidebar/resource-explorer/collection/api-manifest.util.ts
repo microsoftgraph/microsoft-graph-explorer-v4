@@ -32,7 +32,7 @@ function getDependenciesFromPaths({ paths, permissions }: ManifestProps): ApiDep
     const scopeType = variant.split('-')[1];
     dependencies[dependencyName] = {
       apiDescriptionUrl: version === 'beta' ? GRAPH_BETA_DESCRIPTION_URL : GRAPH_V1_DESCRIPTION_URL,
-      apiDeploymentBaseUrl: GRAPH_URL,
+      apiDeploymentBaseUrl: `${GRAPH_URL}/`,
       apiDescriptionVersion: version,
       auth: {
         clientIdentifier: '',
