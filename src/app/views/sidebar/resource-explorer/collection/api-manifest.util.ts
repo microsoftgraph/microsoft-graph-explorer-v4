@@ -1,3 +1,5 @@
+import { Guid } from 'guid-typescript';
+
 import { APIManifest, Access, ApiDependencies, ManifestRequest } from '../../../../../types/api-manifest';
 import { CollectionPermission, ResourcePath } from '../../../../../types/resources';
 import { GRAPH_BETA_DESCRIPTION_URL, GRAPH_URL, GRAPH_V1_DESCRIPTION_URL } from '../../../../services/graph-constants';
@@ -12,6 +14,7 @@ interface ManifestProps {
 
 export function generateAPIManifest({ paths, permissions }: ManifestProps): APIManifest {
   return {
+    applicationName: `API Manifest ${Guid.create().toString()}`,
     publisher: {
       name: 'Microsoft Graph',
       contactEmail: 'graphsdkpub@microsoft.com'

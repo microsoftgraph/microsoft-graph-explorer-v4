@@ -1,4 +1,5 @@
 export interface APIManifest {
+  applicationName: string;
   publisher: Publisher;
   apiDependencies: ApiDependencies;
 }
