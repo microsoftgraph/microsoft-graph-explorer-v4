@@ -28,6 +28,7 @@ export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions b
 export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const COPY_API_MANIFEST_BUTTON = 'Copy API manifest button';
 export const OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON = 'Open manifest in Visual Studio Code button';
+export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';

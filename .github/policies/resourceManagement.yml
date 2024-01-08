@@ -95,6 +95,15 @@ configuration:
         - addLabel:
             label: 'ToTriage'
     - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
+          - isAssignedToSomeone
+          - isLabeled
+      then:
+        - removeLabel:
+            label: 'ToTriage'
+    - if:
       - payloadType: Issue_Comment
       - isAction:
           action: Created
@@ -152,5 +161,6 @@ configuration:
           label: Service issue
       - closeIssue
       description:
+      triggerOnOwnActions: true
 onFailure:
 onSuccess:
