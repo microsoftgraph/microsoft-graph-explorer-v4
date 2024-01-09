@@ -22,11 +22,6 @@
     "src",
     "src/tests",
     "typings.d.ts",
-    ".eslintrc.js",
-    "__mocks__",
-    "config",
-    "jest.config.js",
-    "playwright.config.ts",
-    "versioned-build.js"
+    ".eslintrc.js"
   ]
 }
