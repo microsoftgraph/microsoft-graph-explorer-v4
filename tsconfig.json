@@ -21,6 +21,7 @@
   "include": [
     "src",
     "src/tests",
-    "typings.d.ts"
+    "typings.d.ts",
+    ".eslintrc.js"
   ]
 }
