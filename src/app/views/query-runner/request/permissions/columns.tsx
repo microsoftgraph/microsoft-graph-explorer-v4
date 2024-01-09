@@ -8,6 +8,12 @@ import { permissionStyles } from './Permission.styles';
 
 type source = 'panel' | 'tab';
 
+interface ColumnProps {
+  source: source;
+  tokenPresent?: boolean;
+  onColumnClicked?: (ev: React.MouseEvent<HTMLElement>, column: IColumn) => void;
+}
+
 const trackLinkClickedEvent = (link: string, componentName: string) => {
   telemetry.trackLinkClickEvent(link, componentName);
 }
@@ -25,7 +31,7 @@ const openExternalWebsite = (url: string) => {
   }
 }
 
-const getColumns = (source: source, tokenPresent?: boolean): IColumn[] => {
+const getColumns = ({ source, tokenPresent, onColumnClicked }: ColumnProps): IColumn[] => {
 
   const theme = getTheme();
   const { columnCellStyles, cellTitleStyles } = permissionStyles(theme);

@@ -179,7 +179,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
               { height: tabHeight, overflowX: 'hidden', overflowY: 'auto' }
           } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
-          columns={getColumns('tab', tokenPresent)}
+          columns={getColumns({ source: 'tab', tokenPresent })}
           onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
             return <PermissionItem column={column} index={index} item={item} />
           }}

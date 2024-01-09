@@ -1,11 +1,14 @@
 import {
-  Announced, DetailsList, DetailsListLayoutMode, getTheme, GroupHeader, IColumn,
-  IGroup, Label, SearchBox, SelectionMode, TooltipHost
+  Announced, DetailsList, DetailsListLayoutMode, getId, getTheme, GroupHeader, IColumn,
+  IconButton,
+  IContextualMenuProps,
+  Label, SearchBox, SelectionMode, Stack, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
@@ -19,9 +22,15 @@ import { permissionStyles } from './Permission.styles';
 import PermissionItem from './PermissionItem';
 import { setConsentedStatus } from './util';
 
+type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
+interface PermissionListItem extends IPermission {
+  groupName?: string;
+}
+
 const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
   const dispatch: AppDispatch = useDispatch();
+  const [filter, setFilter] = useState<Filter>('all-permissions');
 
   const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
@@ -29,12 +38,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
 
-  const [permissions, setPermissions] = useState<any[]>([]);
-  const [groups, setGroups] = useState<IGroup[]>([]);
-  const [searchStarted, setSearchStarted] = useState(false);
+  const [permissions, setPermissions] = useState<IPermission[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
-
-  const permissionsList: any[] = [];
 
   const getPermissions = (): void => {
     dispatch(fetchScopes());
@@ -77,33 +82,21 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
   }, [scopes.data]);
 
-  const shouldGenerateGroups = useRef(true)
-
-  useEffect(() => {
-    if (shouldGenerateGroups.current) {
-      setGroups(generateGroupsFromList(permissionsList, 'groupName'));
-      if (groups && groups.length > 0) {
-        shouldGenerateGroups.current = false;
-      }
-      if (permissionsList.length === 0) { return }
-    }
-  }, [permissions, searchStarted])
-
-
   setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
-  permissions.forEach((perm: IPermission) => {
-    const permission: any = { ...perm };
-    const permissionValue = permission.value;
-    const groupName = permissionValue.split('.')[0];
-    permission.groupName = groupName;
-    permissionsList.push(permission);
-  });
-
-  const searchValueChanged = (event: any, value?: string): void => {
+  const searchValueChanged = (value?: string): void => {
     setSearchValue(value!);
-    shouldGenerateGroups.current = true;
-    setSearchStarted((search) => !search);
+    const searchResults = searchPermissions(value);
+    const values = filter === 'all-permissions' ? searchResults : searchResults.filter((permission: IPermission) => {
+      if (filter === 'consented-permissions') {
+        return permission.consented;
+      }
+      return !permission.consented;
+    });
+    setPermissions(values);
+  };
+
+  const searchPermissions = (value?: string) => {
     let filteredPermissions = scopes.data.fullPermissions;
     if (value) {
       const keyword = value.toLowerCase();
@@ -114,9 +107,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
         return name.includes(keyword) || groupName.includes(keyword);
       });
     }
-    setPermissions(filteredPermissions);
-  };
-
+    return filteredPermissions;
+  }
 
   const onRenderGroupHeader = (props: any): JSX.Element | null => {
     if (props) {
@@ -127,7 +119,6 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     }
     return null;
   };
-
 
   const groupHeaderStyles = () => {
     return {
@@ -145,7 +136,67 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const clearSearchBox = () => {
     setSearchValue('');
-    searchValueChanged({}, '');
+    searchValueChanged('');
+  }
+
+  const chooseFilter = (chosenFilter: Filter) => {
+    setFilter(chosenFilter);
+    switch (chosenFilter) {
+      case 'all-permissions': {
+        setPermissions(searchPermissions(searchValue));
+        break;
+      }
+      case 'consented-permissions': {
+        setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => permission.consented));
+        break;
+      }
+      case 'unconsented-permissions': {
+        setPermissions(searchPermissions(searchValue)
+          .filter((permission: IPermission) => !permission.consented));
+        break;
+      }
+    }
+  }
+
+  const handleRenderItemColumn = (item?: IPermission, index?: number, column?: IColumn) => {
+    return <PermissionItem column={column} index={index} item={item!} />;
+  }
+
+  const columns = getColumns({ source: 'panel', tokenPresent });
+  const permissionsList: PermissionListItem[] = [];
+  permissions.map((perm: IPermission) => {
+    const permission: PermissionListItem = { ...perm };
+    const permissionValue = permission.value;
+    permission.groupName = permissionValue.split('.')[0];
+    permissionsList.push(permission);
+  });
+  const groups = generateGroupsFromList(permissionsList, 'groupName');
+
+  const menuProperties: IContextualMenuProps = {
+    items: [
+      {
+        key: 'all-permissions',
+        text: translateMessage('All permissions'),
+        onClick: () => chooseFilter('all-permissions')
+      },
+      {
+        key: 'consented-permissions',
+        text: translateMessage('Consented permissions'),
+        onClick: () => chooseFilter('consented-permissions')
+      },
+      {
+        key: 'unconsented-permissions',
+        text: translateMessage('Unconsented permissions'),
+        onClick: () => chooseFilter('unconsented-permissions')
+      }
+    ]
+  };
+
+  const trackFilterButtonClickEvent = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.FILTER_PERMISSIONS_BUTTON
+    });
   }
 
   return (
@@ -158,24 +209,49 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
             {translateMessage('Select different permissions')}
           </Label>
           <hr />
-          <SearchBox
-            placeholder={translateMessage('Search permissions')}
-            onChange={(event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
-              searchValueChanged(event, newValue)}
-            styles={searchBoxStyles}
-            onClear={() => clearSearchBox()}
-            value={searchValue}
-          />
-          <Announced message={`${permissions.length} search results available.`} />
+          <Stack horizontal tokens={{ childrenGap: 7 }}>
+
+            <TooltipHost
+              content={
+                <div style={{ padding: '3px' }}>
+                  {translateMessage('Filter permissions')}
+                </div>}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              styles={tooltipStyles}
+            >
+              <IconButton
+                ariaLabel={translateMessage('Filter permissions')}
+                role='button'
+                disabled={loading || fullPermissions.length === 0}
+                menuIconProps={{ iconName: filter === 'all-permissions' ? 'Filter' : 'FilterSolid' }}
+                menuProps={menuProperties}
+                onMenuClick={trackFilterButtonClickEvent}
+                styles={{
+                  root: {
+                    float: 'left',
+                    width: '100%'
+                  }
+                }}
+              />
+            </TooltipHost>
+            <SearchBox
+              placeholder={translateMessage('Search permissions')}
+              onChange={(_event?: React.ChangeEvent<HTMLInputElement>, newValue?: string) =>
+                searchValueChanged(newValue)}
+              styles={searchBoxStyles}
+              onClear={() => clearSearchBox()}
+              value={searchValue}
+            />
+            <Announced message={`${permissions.length} search results available.`} />
+          </Stack>
           <hr />
           <DetailsList
             onShouldVirtualize={() => false}
             items={permissions}
-            columns={getColumns('panel', tokenPresent)}
+            columns={columns}
             groups={groups}
-            onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-              return <PermissionItem column={column} index={index} item={item} />
-            }}
+            onRenderItemColumn={handleRenderItemColumn}
             selectionMode={SelectionMode.multiple}
             layoutMode={DetailsListLayoutMode.justified}
             compact={true}
