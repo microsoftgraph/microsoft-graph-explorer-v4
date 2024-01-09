@@ -70,7 +70,7 @@ function GetSnippets() {
   </Pivot> : <Label style={{ marginLeft: '12px' }}>
     <FormattedMessage id={'Invalid URL'} />!
   </Label>
-};
+}
 
 const Snippets = telemetry.trackReactComponent(
   GetSnippets,
