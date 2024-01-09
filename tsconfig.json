@@ -22,6 +22,8 @@
     "src",
     "src/tests",
     "typings.d.ts",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "__mocks__",
+    "config"
   ]
 }
