@@ -6,7 +6,6 @@ import {
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -22,6 +21,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
+import { UploadPostmanCollection } from './collection/UploadCollection';
 import CommandOptions from './command-options/CommandOptions';
 import {
   createResourcesList, getResourcePaths,
@@ -29,7 +29,6 @@ import {
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -150,14 +149,14 @@ const UnstyledResourceExplorer = (props: any) => {
 
       <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
         {selectedLinks && selectedLinks.length > 0 && <>
-          <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
+          <Label>{translateMessage('Selected Resources')} ({selectedLinks.length})</Label>
           <CommandOptions version={version} />
         </>
         }
       </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
-        <FormattedMessage id='Resources available' />
+        {translateMessage('Resources available')}
       </Label>
       }
 

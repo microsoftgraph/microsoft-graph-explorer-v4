@@ -1,7 +1,6 @@
 import { AuthenticationResult } from '@azure/msal-browser';
 import { IconButton, IIconProps, Label, MessageBar, MessageBarType, styled } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { useAppSelector } from '../../../../../store';
 
@@ -42,7 +41,7 @@ export function Auth(props: any) {
 
   if (!authToken.token) {
     return <MessageBar messageBarType={MessageBarType.blocked}>
-      <FormattedMessage id='Sign In to see your access token.' />
+      {translateMessage('Sign In to see your access token.')}
     </MessageBar>;
   }
 
@@ -52,7 +51,7 @@ export function Auth(props: any) {
     {!loading ?
       <div>
         <div className={classes.accessTokenContainer}>
-          <Label className={classes.accessTokenLabel}><FormattedMessage id='Access Token' /></Label>
+          <Label className={classes.accessTokenLabel}>{translateMessage('Access Token' )}</Label>
           <CopyButton isIconButton={true} handleOnClick={handleCopy} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage(showMessage())}
@@ -66,7 +65,7 @@ export function Auth(props: any) {
       </div>
       :
       <Label className={classes.emptyStateLabel}>
-        <FormattedMessage id='Getting your access token' /> ...
+        {translateMessage('Getting your access token')} ...
       </Label>
     }
   </div>);

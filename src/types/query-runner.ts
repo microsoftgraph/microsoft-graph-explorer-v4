@@ -1,5 +1,4 @@
 import { IDropdownOption, ITheme } from '@fluentui/react';
-import { Mode } from './enums';
 
 export interface IQueryRunnerState {
   sampleBody?: string;
@@ -36,16 +35,7 @@ export interface IQueryInputProps {
   styles?: object;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
-  handleOnUrlChange: Function;
   handleOnVersionChange: Function;
-  handleOnBlur: Function;
-  sampleQuery: IQuery;
-  submitting: boolean;
-  authenticated: boolean;
-  mode: Mode;
-  intl: {
-    message: object;
-  };
   actions?: {
     setSampleQuery: Function;
   };

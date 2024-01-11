@@ -1,7 +1,6 @@
 import { FontSizes, Label, Pivot, PivotItem } from '@fluentui/react';
 import { useDispatch } from 'react-redux';
 import { useContext } from 'react';
-import { FormattedMessage } from 'react-intl';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
@@ -44,7 +43,7 @@ function GetSnippets() {
       sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     },
-    'CLI' : {
+    'CLI': {
       sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
       sdkDocLink: 'https://aka.ms/sdk-doc'
     }
@@ -68,7 +67,7 @@ function GetSnippets() {
   >
     {renderSnippets(supportedLanguages)}
   </Pivot> : <Label style={{ marginLeft: '12px' }}>
-    <FormattedMessage id={'Invalid URL'} />!
+    {translateMessage('Invalid URL')}!
   </Label>
 }
 

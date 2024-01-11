@@ -3,7 +3,6 @@ import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
-import { IntlProvider } from 'react-intl';
 
 import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
@@ -16,8 +15,6 @@ import { fetchResources } from './app/services/actions/resource-explorer-action-
 import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import App from './app/views/App';
-import { geLocale } from './appLocale';
-import messages from './messages';
 import { authenticationWrapper } from './modules/authentication';
 import { collectionsCache } from './modules/cache/collections.cache';
 import { historyCache } from './modules/cache/history-utils';
@@ -179,12 +176,7 @@ window.onerror = (message, url, lineNumber, columnNumber, error) => {
 const Root = () => {
   return (
     <Provider store={appStore}>
-      <IntlProvider
-        locale={geLocale}
-        messages={(messages as { [key: string]: object })[geLocale]}
-      >
-        <App />
-      </IntlProvider>
+      <App />
     </Provider>
   );
 };
