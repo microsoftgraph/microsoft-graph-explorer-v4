@@ -1,6 +1,5 @@
 import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { useContext } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -130,6 +129,4 @@ const QueryInput = (props: IQueryInputProps) => {
 }
 
 // @ts-ignore
-const IntlQueryInput = injectIntl(QueryInput);
-// @ts-ignore
-export default IntlQueryInput;
+export default QueryInput;

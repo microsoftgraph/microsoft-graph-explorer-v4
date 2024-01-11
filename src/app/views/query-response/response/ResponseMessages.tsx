@@ -1,6 +1,5 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { IAuthenticateResult } from '../../../../types/authentication';
 import { Mode } from '../../../../types/enums';
 import { IGraphResponse } from '../../../../types/query-response';
@@ -54,9 +53,9 @@ export function ResponseMessages(
   if (odataLink) {
     return (
       <MessageBar messageBarType={MessageBarType.info}>
-        <FormattedMessage id={'This response contains an @odata property.'} />: @odata.{odataLink.name}
+        {translateMessage('This response contains an @odata property.')}: @odata.{odataLink.name}
         <Link onClick={() => setQuery()} underline>
-          &nbsp;<FormattedMessage id='Click here to follow the link' />
+          &nbsp;{translateMessage('Click here to follow the link')}
         </Link>
       </MessageBar>
     );
@@ -67,9 +66,9 @@ export function ResponseMessages(
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
-          <FormattedMessage id={'This response contains unviewable content'} />
+          {translateMessage('This response contains unviewable content')}
           <Link href={body?.contentDownloadUrl} download underline>
-            <FormattedMessage id={'Click to download file'} />
+            {translateMessage('Click to download file')}
           </Link>&nbsp;
         </MessageBar>
       </div>
@@ -81,16 +80,16 @@ export function ResponseMessages(
     return (
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
-          <FormattedMessage id={'Response content not available due to CORS policy'} />
+          {translateMessage('Response content not available due to CORS policy')}
           <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} underline>
-            <FormattedMessage id={'here'} />
+            {translateMessage('here')}
           </Link>.
         </MessageBar>
       </div>
     );
   }
 
-  if(body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
+  if (body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
     return (
       <div>
         <MessageBar
@@ -99,8 +98,8 @@ export function ResponseMessages(
           onDismiss={() => setDisplayMessage(false)}
           dismissButtonAriaLabel={translateMessage('Close')}
         >
-          <FormattedMessage id='Using demo tenant' />{' '}
-          <FormattedMessage id='To access your own data:' />
+          {translateMessage('Using demo tenant')}{' '}
+          {translateMessage('To access your own data:')}
         </MessageBar>
       </div>
     );

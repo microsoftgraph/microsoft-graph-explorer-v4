@@ -2,7 +2,6 @@ import {
   DefaultButton, FontSizes, IColumn, IIconProps, IconButton, Label,
   PrimaryButton, TooltipHost, getId, getTheme
 } from '@fluentui/react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -90,7 +89,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
         return <PrimaryButton onClick={() => handleRevoke(item)}
           styles={consentButtonStyles}
         >
-          <FormattedMessage id='Revoke' />
+          {translateMessage('Revoke')}
         </PrimaryButton>
       }
       return <TooltipHost
@@ -110,7 +109,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     return <PrimaryButton onClick={() => handleConsent(item)}
       styles={consentButtonStyles}
     >
-      <FormattedMessage id='Consent' />
+      {translateMessage('Consent')}
     </PrimaryButton>;
   }
 
@@ -119,7 +118,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     switch (column.key) {
 
       case 'value':
-        if(props.index === 0) {
+        if (props.index === 0) {
           return <div>
             {content}
             <TooltipHost
@@ -143,7 +142,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
 
       case 'isAdmin':
         return <div style={adminLabelStyles}>
-          <Label>{item.isAdmin ? <FormattedMessage id='Yes' /> : <FormattedMessage id='No' />}</Label>
+          <Label>{translateMessage(item.isAdmin ? 'Yes' : 'No')}</Label>
         </div>;
 
       case 'consented':

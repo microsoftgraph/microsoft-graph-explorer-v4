@@ -2,7 +2,6 @@ import {
   CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -64,7 +63,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   return (
     <>
       <Label>
-        <FormattedMessage id='Export list as a Postman collection message' />
+        {translateMessage('Export list as a Postman collection message')}
       </Label>
       <CommandBar
         items={options}
@@ -80,7 +79,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         />
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-            <FormattedMessage id='Download postman collection' />
+            {translateMessage('Download postman collection')}
           </PrimaryButton>
         </DialogFooter>
       </>

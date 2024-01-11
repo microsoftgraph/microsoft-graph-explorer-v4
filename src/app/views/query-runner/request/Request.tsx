@@ -5,7 +5,6 @@ import {
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -200,5 +199,4 @@ const Request = (props: any) => {
   );
 }
 
-const IntlRequest = injectIntl(Request);
-export default IntlRequest;
+export default Request;
