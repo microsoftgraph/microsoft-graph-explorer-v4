@@ -1,19 +1,14 @@
 import {
-  FontSizes, FontWeights,
-  Link,
-  PrimaryButton,
-  Spinner,
-  Stack,
-  VerticalDivider, getTheme, mergeStyleSets
+  FontSizes, FontWeights, Link, PrimaryButton, Spinner, Stack, VerticalDivider, getTheme, mergeStyleSets
 } from '@fluentui/react';
 import { FC, useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { APIManifest } from '../../../../../types/api-manifest';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
+import { translateMessage } from '../../../../utils/translate-messages';
 import { Monaco } from '../../../common';
 import { genericCopy, trackedGenericCopy } from '../../../common/copy';
 import CopyButton from '../../../common/copy-button';
@@ -132,26 +127,25 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
 
   return (
     <div className={manifestStyle.root}>
-      <FormattedMessage id='API manifest description' />
+      {translateMessage('API manifest description')}
       <br />
       <br />
       <VerticalDivider />
-
-      <FormattedMessage id='To generate client' />
+      {translateMessage('To generate client')}
       <br />
-      <FormattedMessage id='Use VS Code' />
+      {translateMessage('Use VS Code')}
       <Link href='https://learn.microsoft.com/en-us/openapi/kiota/overview'
         target='_blank'
       >
         &nbsp;Kiota
       </Link>
       &nbsp;
-      <FormattedMessage id='VS Code extension' />
+      {translateMessage('VS Code extension')}
       <br />
 
       <VerticalDivider />
       <br />
-      <FormattedMessage id='Use Kiota CLI' />
+      {translateMessage('Use Kiota CLI')}
       <Link
         href='https://aka.ms/get/kiota'
         target='_blank'
@@ -187,12 +181,12 @@ const ManifestDescription: FC<PopupsComponent<null>> = () => {
         <Stack horizontal className={manifestStyle.actionButtons}>
           <PrimaryButton disabled={isGeneratingManifest || isFetching}
             onClick={openManifestInVisualStudio}>
-            {!isGeneratingManifest && <FormattedMessage id='Open in VS Code' />}
+            {!isGeneratingManifest && translateMessage('Open in VS Code')}
           </PrimaryButton>
 
           <PrimaryButton disabled={isGeneratingManifest || isFetching}
             onClick={downloadManifest}>
-            {!isGeneratingManifest && <FormattedMessage id='Download API Manifest' />}
+            {!isGeneratingManifest && translateMessage('Download API Manifest')}
           </PrimaryButton>
         </Stack>
       </>

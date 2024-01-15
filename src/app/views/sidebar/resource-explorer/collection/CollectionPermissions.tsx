@@ -1,6 +1,5 @@
 import { DefaultButton, DetailsList, DialogFooter, IGroup, Label, PrimaryButton, SelectionMode } from '@fluentui/react';
 import { FC, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames } from '../../../../../telemetry';
@@ -48,7 +47,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <FormattedMessage id='permissions not found' />
+        {translateMessage('permissions not found')}
       </Label>
     )
   }
@@ -56,7 +55,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   if (isFetching) {
     return (
       <Label>
-        <FormattedMessage id={'Fetching permissions'} />...
+        {translateMessage('Fetching permissions')}...
       </Label>
     )
   }
@@ -81,10 +80,10 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
       {permissions &&
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={downloadPermissions}>
-            <FormattedMessage id='Download permissions' />
+            {translateMessage('Download permissions')}
           </PrimaryButton>
           <DefaultButton onClick={() => props.dismissPopup()}>
-            <FormattedMessage id='Close' />
+            {translateMessage('Close')}
           </DefaultButton>
         </DialogFooter>}
     </>
