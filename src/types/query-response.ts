@@ -5,9 +5,6 @@ export interface IQueryResponseProps {
   mode: Mode;
   dispatch: Function;
   graphResponse?: IGraphResponse;
-  intl: {
-    message: object;
-  };
   verb: string;
   theme: string;
   scopes: string[];

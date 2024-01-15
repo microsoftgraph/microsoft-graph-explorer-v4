@@ -1,10 +1,9 @@
 import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
-import { IQuery } from '../../../types/query-runner';
 import { AppDispatch, useAppSelector } from '../../../store';
+import { IQuery } from '../../../types/query-runner';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
@@ -12,6 +11,7 @@ import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
+import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -70,15 +70,15 @@ const StatusMessages = () => {
       {`${statusText} - `}{displayStatusMessage(message, urls)}
 
       {duration && <>
-        {` - ${duration}`}<FormattedMessage id='milliseconds' />
+        {` - ${duration} ${translateMessage('milliseconds')}`}
       </>}
 
       {status === 403 && <>.
-        <FormattedMessage id='consent to scopes' />
+        {translateMessage('consent to scopes')}
         <span style={{ fontWeight: 600 }}>
-          <FormattedMessage id='modify permissions' />
+          {translateMessage('modify permissions')}
         </span>
-        <FormattedMessage id='tab' />
+        {translateMessage('tab')}
       </>}
 
       {hint && <div>{hint}</div>}

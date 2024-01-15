@@ -1,20 +1,9 @@
 import {
-  DefaultButton,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  getId,
-  getTheme,
-  IconButton,
-  INavLink, INavLinkGroup, Label, Nav, PrimaryButton, SearchBox, Spinner, SpinnerSize,
-  Stack,
-  styled,
-  Toggle,
-  TooltipHost
+  DefaultButton, Dialog, DialogFooter, DialogType, getId, getTheme, IconButton, INavLink, INavLinkGroup, Label,
+  Nav, PrimaryButton, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle, TooltipHost
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -24,20 +13,17 @@ import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../
 import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { usePopups } from '../../../services/hooks';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import {
-  createResourcesList, getResourcePaths,
-  getUrlFromLink
-} from './resource-explorer.utils';
+import { UploadPostmanCollection } from './collection/UploadCollection';
+import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles, resourceExplorerStyles } from './resources.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
-import { usePopups } from '../../../services/hooks';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -171,8 +157,8 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
-      <Label styles = {{root: { marginBottom: '10px'}}}>
-        <FormattedMessage id='Microsoft Graph OpenAPI explorer' />
+      <Label styles={{ root: { marginBottom: '10px' } }}>
+        {translateMessage('Microsoft Graph OpenAPI explorer')}
       </Label>
       <SearchBox
         placeholder={translateMessage('Search resources')}
@@ -181,13 +167,13 @@ const UnstyledResourceExplorer = (props: any) => {
       />
       <hr />
       <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
-        <Label styles={{root: {position: 'relative', top: '2px'}}} >
+        <Label styles={{ root: { position: 'relative', top: '2px' } }} >
           {translateMessage('Switch to beta')}
         </Label>
         <Toggle
           onChange={changeVersion}
           inlineLabel
-          styles={{root: {position: 'relative', top: '4px'}}}
+          styles={{ root: { position: 'relative', top: '4px' } }}
         />
       </Stack>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
@@ -220,7 +206,7 @@ const UnstyledResourceExplorer = (props: any) => {
       </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
-        <FormattedMessage id='Resources available' />
+        {translateMessage('Resources available')}
       </Label>
       }
 
