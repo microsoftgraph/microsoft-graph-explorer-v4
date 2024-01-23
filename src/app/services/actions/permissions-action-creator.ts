@@ -1,6 +1,5 @@
 import { MessageBarType } from '@fluentui/react';
 
-import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { AppAction } from '../../../types/action';
 import { IUser } from '../../../types/profile';
@@ -136,8 +135,7 @@ export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
       }
 
       const headers = {
-        'Content-Type': 'application/json',
-        'Accept-Language': geLocale
+        'Content-Type': 'application/json'
       };
 
       const options: IRequestOptions = { headers };

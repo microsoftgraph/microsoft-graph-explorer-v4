@@ -2,9 +2,6 @@ import { ITheme } from '@fluentui/react';
 import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
-  intl: {
-    message: object;
-  };
   theme?: ITheme;
   styles?: object;
   mobileScreen: boolean;

@@ -97,6 +97,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          CI: false
 
   test:
     name: Test
@@ -179,6 +181,7 @@ jobs:
           REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
           REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
           REACT_APP_USAGE_TIME: ${{secrets.REACT_APP_USAGE_TIME}}
+          CI: false
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v0.0.1-preview
         with:

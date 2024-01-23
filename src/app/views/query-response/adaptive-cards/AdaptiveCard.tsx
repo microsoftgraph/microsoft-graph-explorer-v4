@@ -4,7 +4,6 @@ import {
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
 import { useEffect } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -15,9 +14,11 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
+import {
+  convertVhToPx, getResponseEditorHeight,
+  getResponseHeight
+} from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/lazy-loader/component-registry';
-import { convertVhToPx, getResponseEditorHeight,
-  getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { queryResponseStyles } from './../queryResponse.styles';
 
 const AdaptiveCard = (props: any) => {
@@ -25,7 +26,7 @@ const AdaptiveCard = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
 
   const { body, hostConfig } = props;
-  const {dimensions: { response }, responseAreaExpanded,
+  const { dimensions: { response }, responseAreaExpanded,
     sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme } = useAppSelector((state) => state);
   const { data, pending } = card;
 
@@ -69,7 +70,7 @@ const AdaptiveCard = (props: any) => {
   if (body && pending) {
     return (
       <Label className={classes.emptyStateLabel}>
-        <FormattedMessage id='Fetching Adaptive Card' />
+        {translateMessage('Fetching Adaptive Card')}
         ...
       </Label>
     );
@@ -80,7 +81,7 @@ const AdaptiveCard = (props: any) => {
     if (!data || (queryStatus && !queryStatus.ok)) {
       return (
         <Label styles={{ root: textStyle }}>
-          <FormattedMessage id='The Adaptive Card for this response is not available' />
+          {translateMessage('The Adaptive Card for this response is not available')}
           &nbsp;
           <Link
             href={'https://adaptivecards.io/designer/'}
@@ -89,7 +90,7 @@ const AdaptiveCard = (props: any) => {
             rel='noopener noreferrer'
             underline
           >
-            <FormattedMessage id='Adaptive Cards designer' />
+            {translateMessage('Adaptive Cards designer')}
           </Link>
         </Label>
       );
@@ -99,12 +100,12 @@ const AdaptiveCard = (props: any) => {
       adaptiveCard.parse(data.card);
       const renderedCard = adaptiveCard.render();
 
-      if(renderedCard){
+      if (renderedCard) {
         renderedCard.style.backgroundColor = currentTheme.palette.neutralLighter;
 
         const applyTheme = (child: HTMLElement) => {
-          if(!child){ return; }
-          if(child && child.tagName === 'BUTTON'){ return; }
+          if (!child) { return; }
+          if (child && child.tagName === 'BUTTON') { return; }
 
           child.style.color = currentTheme.palette.black;
           if (child.children.length > 0) {
@@ -115,7 +116,7 @@ const AdaptiveCard = (props: any) => {
           }
         }
 
-        if(theme !== 'light'){
+        if (theme !== 'light') {
           applyTheme(renderedCard);
         }
       }
@@ -159,23 +160,23 @@ const AdaptiveCard = (props: any) => {
           >
             <div id={'JSON-schema-tab'} tabIndex={0}>
               <MessageBar messageBarType={MessageBarType.info}>
-                <FormattedMessage id='Get started with adaptive cards on' />
+                {translateMessage('Get started with adaptive cards on')}
                 <Link href={'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'}
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
                   underline
                 >
-                  <FormattedMessage id='Adaptive Cards Templating SDK' />
+                  {translateMessage('Adaptive Cards Templating SDK')}
                 </Link>
-                <FormattedMessage id='and experiment on' />
+                {translateMessage('and experiment on')}
                 <Link href={'https://adaptivecards.io/designer/'}
                   target='_blank'
                   rel='noopener noreferrer'
                   tabIndex={0}
                   underline
                 >
-                  <FormattedMessage id='Adaptive Cards designer' />
+                  {translateMessage('Adaptive Cards designer')}
                 </Link>
               </MessageBar>
               <CopyButton
@@ -202,6 +203,4 @@ const AdaptiveCard = (props: any) => {
 // @ts-ignore
 const styledAdaptiveCard = styled(AdaptiveCard, queryResponseStyles);
 const trackedComponent = telemetry.trackReactComponent(styledAdaptiveCard, componentNames.ADAPTIVE_CARDS_TAB);
-// @ts-ignore
-const IntlAdaptiveCard = injectIntl(trackedComponent);
-export default IntlAdaptiveCard;
+export default trackedComponent;

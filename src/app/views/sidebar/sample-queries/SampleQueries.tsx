@@ -5,7 +5,6 @@ import {
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
@@ -176,7 +175,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             tooltipProps={{
               onRenderContent: () => (
                 <div style={{ paddingBottom: 3 }}>
-                  <FormattedMessage id={signInText} />
+                  {translateMessage(signInText)}
                 </div>
               )
             }}
@@ -349,7 +348,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           isMultiline={true}
           dismissButtonAriaLabel='Close'
         >
-          <FormattedMessage id='viewing a cached set' />
+          {translateMessage('viewing a cached set')}
         </MessageBar>
       )}
       <MessageBar
@@ -357,7 +356,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         isMultiline={true}
         dismissButtonAriaLabel='Close'
       >
-        <FormattedMessage id='see more queries' />
+        {translateMessage('see more queries')}
         <Link
           target='_blank'
           rel="noopener noreferrer"
@@ -366,7 +365,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
           underline
         >
-          <FormattedMessage id='Microsoft Graph API Reference docs' />
+          {translateMessage('Microsoft Graph API Reference docs')}
         </Link>
       </MessageBar>
       <Announced

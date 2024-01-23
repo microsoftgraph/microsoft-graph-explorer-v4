@@ -1,11 +1,6 @@
-import { geLocale } from '../../appLocale';
 import messages from '../../messages';
 
 export function translateMessage(messageId: string): string {
-  const translatedMessage = getTranslation(messageId, geLocale);
-  if (translatedMessage) {
-    return translatedMessage;
-  }
   return getTranslation(messageId, 'en-US') || messageId;
 }
 
