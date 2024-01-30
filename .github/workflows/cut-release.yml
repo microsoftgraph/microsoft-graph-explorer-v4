@@ -6,6 +6,9 @@ on:
         description: Release type (major/minor/patch)
         required: true
 
+permissions:
+  pull-requests: write
+
 jobs:
   cut-release:
     name: Creates release branch and PRs into dev/master

@@ -5,6 +5,11 @@ on:
   issues:
     types:
       - opened
+
+permissions:
+  issues: write
+  repository-projects: write
+
 jobs:
   track_issue:
     runs-on: ubuntu-latest
