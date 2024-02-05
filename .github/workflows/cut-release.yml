@@ -6,6 +6,10 @@ on:
         description: Release type (major/minor/patch)
         required: true
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   cut-release:
     name: Creates release branch and PRs into dev/master
@@ -74,22 +78,3 @@ jobs:
 
           echo "NEW_VERSION=${newVersion}" >> $GITHUB_ENV
           echo "::set-output name=branchName::$branchName"
-
-      - name: Create pull request into dev
-        uses: repo-sync/pull-request@v2
-        if: ${{ github.event.inputs.release-type == 'major' || github.event.inputs.release-type == 'minor' }}
-        with:
-          source_branch: ${{ steps.create-release.outputs.branchName }}
-          destination_branch: "dev"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Chore: Update to ${{ env.NEW_VERSION }}"
-          pr_body: ${{ env.devPrBody }}
-
-      - name: Create pull request into master
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: ${{ steps.create-release.outputs.branchName }}
-          destination_branch: "master"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: "Chore: Release ${{ env.NEW_VERSION }}"
-          pr_body: ${{ env.masterPrBody }}
