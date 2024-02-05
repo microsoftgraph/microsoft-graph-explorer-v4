@@ -14,8 +14,8 @@ test.describe('Resources Explorer', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('text=admin (5)').click();
-    await page.locator('text=admin').nth(1).click();
+    await page.getByLabel('admin (6)').click();
+    await page.getByRole('link', { name: 'GET' }).click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
