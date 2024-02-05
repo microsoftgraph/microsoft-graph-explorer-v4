@@ -79,18 +79,18 @@ test.describe.serial('Sample Query tab', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.locator('[placeholder="Search sample queries"]').click();
-    await page.locator('[placeholder="Search sample queries"]').fill('drive');
+    await page.getByPlaceholder('Search sample queries').click();
+    await page.getByPlaceholder('Search sample queries').fill('drive');
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
     await page.locator('[aria-label="list items in my drive"]').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('row', { name: 'OneDrive has 5 results 4 of 6' }).getByRole('button', { name: 'expand collapse group' }).click();
+    await page.getByLabel('OneDrive has 5 results 4 of').getByLabel('expand collapse group').click();
     await page.evaluate(() => document.fonts.ready);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('gridcell', { name: 'my recent files' }).click();
+    await page.getByLabel('getmy recent files').click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
   })
