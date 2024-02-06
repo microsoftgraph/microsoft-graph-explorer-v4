@@ -68,7 +68,9 @@ test.describe('Request area navigation', () => {
 });
 test.describe('Response area navigation', () => {
   test('should have code snippets tab in overflow menu', async () => {
-    await page.getByLabel('More items').nth(1).click();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(200);
+    await page.getByLabel('More response area items').click();
     await page.getByRole('menuitem', { name: 'Code snippets' }).click();
     await page.getByRole('tab', { name: 'C# C#' }).click();
     await page.evaluate(() => document.fonts.ready);
@@ -82,7 +84,7 @@ test.describe('Response area navigation', () => {
     await page.getByRole('button', { name: 'Run query' }).click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1000);
-    await page.getByLabel('More items').nth(1).click();
+    await page.getByLabel('More response area items').click();
     await page.getByRole('menuitem', { name: 'Adaptive cards' }).click();
     await page.getByRole('tabpanel', { name: 'Adaptive cards' }).getByRole('tab', { name: 'Card' }).click();
     expect(page.getByText('Megan Bowen')).toBeDefined();
@@ -93,15 +95,15 @@ test.describe('Response area navigation', () => {
     expect(await page.screenshot()).toMatchSnapshot();
   })
   test('should have toolkit component tab in overflow menu', async () => {
-    await page.getByLabel('More items').nth(1).click();
+    await page.getByLabel('More response area items').click();
     await page.getByRole('menuitem', { name: 'Toolkit component' }).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(700);
     await page.evaluate(() => document.fonts.ready);
     expect(page.locator('text=Open this example in')).toBeDefined();
     expect(await page.screenshot()).toMatchSnapshot();
   });
   test('should have expand component tab in overflow menu', async () => {
-    await page.getByLabel('More items').nth(1).click();
+    await page.getByLabel('More response area items').click();
     await page.getByRole('menuitem', { name: 'Expand response' }).click();
     await page.getByRole('tab', { name: 'More items' }).click();
     await page.getByRole('menuitem', { name: 'Code snippets' }).click();
