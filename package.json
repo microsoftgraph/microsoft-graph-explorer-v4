@@ -124,7 +124,7 @@
                 "redux-logger": "3.0.6",
                 "redux-mock-store": "1.5.4",
                 "selenium-webdriver": "4.17.0",
-                "start-server-and-test": "2.0.1",
+                "start-server-and-test": "2.0.3",
                 "ts-jest": "29.1.2"
         },
         "jestSonar": {
