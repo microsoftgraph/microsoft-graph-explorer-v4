@@ -185,7 +185,7 @@ const Request = (props: any) => {
         <div className='query-request'>
           <Pivot
             overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More items')}
+            overflowAriaLabel={translateMessage('More request area items')}
             onLinkClick={handlePivotItemClick}
             className='pivot-request'
             selectedKey={pivot}
