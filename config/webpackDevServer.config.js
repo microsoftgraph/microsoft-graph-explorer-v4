@@ -45,7 +45,9 @@ module.exports = function (proxy, allowedHost) {
         port: sockPort
       },
       overlay:{
-        errors: true,
+        runtimeErrors: (error) => {
+          return (error.message !== 'ResizeObserver loop limit exceeded');
+        },
         warnings: false
       }
     },
