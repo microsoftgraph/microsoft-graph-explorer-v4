@@ -71,7 +71,10 @@ describe('Permissions reducer', () => {
     }
     const expectedState = {
       pending: { isSpecificPermissions: false, isFullPermissions: false },
-      data: {},
+      data: {
+        fullPermissions: [],
+        specificPermissions: []
+      },
       error: 'error'
     }
 
