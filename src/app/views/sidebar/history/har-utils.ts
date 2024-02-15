@@ -1,116 +1,105 @@
-import { IHarFormat, IHarHeaders, IHarPayload } from '../../../../types/har';
+import { Entry, HarFormat, HarHeader } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { downloadToLocal } from '../../common/download';
 
-export function createHarPayload(query: IHistoryItem): IHarPayload {
+export function createHarEntry(query: IHistoryItem): Entry {
   const queryResult = JSON.stringify(query.result);
 
-  const headers: IHarHeaders[] = [];
+  const headers: HarHeader[] = [];
   if (query.headers) {
     query.headers.forEach((header) => {
       const { name, value } = header;
-      const head: IHarHeaders = {
+      const head: HarHeader = {
         name,
         value
       };
       headers.push(head);
     });
   }
+  const responseHeaders: HarHeader[] = [];
+  if (query.responseHeaders && query.responseHeaders.length > 0) {
+    query.responseHeaders.forEach((header) => {
+      const { name, value } = header;
+      const head: HarHeader = {
+        name,
+        value
+      };
+      responseHeaders.push(head);
+    });
+  }
 
-  let harPayload: IHarPayload = {
+  let harEntry: Entry = {
     startedDateTime: query.createdAt.toString(),
     time: query.duration,
-    method: query.method,
-    url: query.url,
-    cookies: [],
-    queryString: [{ name: '', value: '' }],
-    status: query.status,
-    statusText: query.statusText,
-    content: {
-      text: queryResult,
-      size: queryResult.length,
-      mimeType: 'application/json'
-    },
     request: {
-      headers
+      method: query.method,
+      url: query.url,
+      httpVersion: 'HTTP/1.1',
+      cookies: [],
+      headers,
+      queryString: [{ name: '', value: '' }],
+      headersSize: -1,
+      bodySize: -1,
+      postData: undefined
     },
     response: {
-      headers: query.responseHeaders
+      status: query.status,
+      statusText: query.statusText,
+      httpVersion: 'HTTP/1.1',
+      cookies: [],
+      headers: responseHeaders,
+      content: {
+        text: queryResult,
+        size: queryResult.length,
+        mimeType: 'application/json',
+        compression: -1
+      },
+      redirectURL: '',
+      headersSize: -1,
+      bodySize: -1
     },
-    sendTime: 0,
-    waitTime: 0,
-    receiveTime: 0,
-    httpVersion: 'HTTP/1.1'
+    timings: {
+      blocked: 0,
+      dns: 0,
+      connect: -1,
+      send: 0,
+      wait: 0,
+      receive: 0,
+      ssl: 0
+    },
+    cache: {},
+    pageref: ''
   };
 
   if (query.body) {
-    harPayload = Object.assign(harPayload, {
-      //tslint:disable-line
+    harEntry = Object.assign(harEntry, {
       postData: {
         mimeType: 'application/json',
-        text: query.body
+        text: query.body,
+        size: query.body.length,
+        compression: -1
       }
     });
   }
-  return harPayload;
+  return harEntry;
 }
 
-export function generateHar(payloads: IHarPayload[]): IHarFormat {
-  const entries = createEntries(payloads);
+export function generateHar(entries: Entry[]): HarFormat {
   return {
     log: {
-      version: '4.0',
+      version: '1.2',
       creator: {
         name: 'Graph Explorer',
         version: '4.0'
       },
-      entries
+      entries,
+      pages: []
     }
   };
 }
 
-function createEntries(payloads: IHarPayload[]) {
-  const entries: any = [];
-  payloads.forEach((payload) => {
-    entries.push({
-      startedDateTime: payload.startedDateTime,
-      time: payload.time,
-      request: {
-        method: payload.method,
-        url: payload.url,
-        httpVersion: payload.httpVersion,
-        cookies: payload.cookies,
-        headers: payload.request.headers,
-        queryString: payload.queryString,
-        postData: payload.postData,
-        headersSize: -1,
-        bodySize: -1
-      },
-      response: {
-        status: payload.status,
-        statusText: payload.statusText,
-        httpVersion: payload.httpVersion,
-        cookies: payload.cookies,
-        headers: payload.response.headers,
-        content: payload.content,
-        redirectURL: '',
-        headersSize: -1,
-        bodySize: -1
-      },
-      cache: {},
-      timings: {
-        send: payload.sendTime,
-        wait: payload.waitTime,
-        receive: payload.receiveTime
-      },
-      connection: ''
-    });
-  });
-  return entries;
-}
-
-export function exportQuery(content: IHarFormat, requestUrl: string) {
-  const url = requestUrl.substr(8).split('/');
+export function exportQuery(content: HarFormat, requestUrl: string) {
+  const url = requestUrl.substring(8).split('/');
   url.pop();
 
   const filename = `${url.join('_')}.har`;

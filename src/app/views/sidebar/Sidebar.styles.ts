@@ -1,7 +1,7 @@
 import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
 
 export const sidebarStyles = (theme: ITheme) => {
-  const pageHeightInVh = '60vh';
+  const height = '85dvh'
   return {
     searchBox: {
       marginTop: theme.spacing.s1
@@ -9,15 +9,14 @@ export const sidebarStyles = (theme: ITheme) => {
     spinner: {
       display: 'flex',
       width: '100%',
-      minHeight: pageHeightInVh,
+      height,
       justifyContent: 'center',
       alignItems: 'center'
     },
     queryList: {
       marginBottom: theme.spacing.s1,
       cursor: 'pointer',
-      maxHeight: '72vh',
-      minHeight: pageHeightInVh,
+      height,
       overflow: 'hidden',
       fontSize: FontSizes.medium,
       background: 'inherit',
@@ -97,10 +96,7 @@ export const sidebarStyles = (theme: ITheme) => {
       fontWeight: FontWeights.bold,
       fontSize: FontSizes.small,
       display: 'inline-block',
-      paddingLeft: 3,
-      paddingRight: 3,
-      paddingTop: 3,
-      paddingBottom: 3,
+      padding: 3,
       color: '#fff',
       minWidth: '55px',
       marginRight: '-10%'

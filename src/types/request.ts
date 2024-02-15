@@ -5,7 +5,6 @@ import { Header, IQuery } from './query-runner';
 export interface IHeadersListControl {
   handleOnHeaderDelete: Function;
   headers?: Header[];
-  messages: any;
   handleOnHeaderEdit: Function;
 }
 
@@ -15,9 +14,6 @@ export interface IRequestHeadersProps {
   actions?: {
     setSampleQuery: Function;
   };
-  intl: {
-    message: object;
-  };
 }
 
 export interface IRequestComponent {
@@ -26,9 +22,6 @@ export interface IRequestComponent {
   handleOnEditorChange: Function;
   dimensions: IDimensions;
   headers?: Header[];
-  intl: {
-    messages: object;
-  };
   actions: {
     setDimensions: Function;
   };
@@ -39,7 +32,7 @@ export interface IRequestComponent {
 export interface IRequestOptions {
   headers?: {};
   method?: string;
-  body?: string | undefined;
+  body?: string;
 }
 
 export interface IRequestState {

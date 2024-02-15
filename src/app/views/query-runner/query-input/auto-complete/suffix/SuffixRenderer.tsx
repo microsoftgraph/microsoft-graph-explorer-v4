@@ -1,108 +1,78 @@
 import {
-  Callout, getId, IconButton, IIconProps, ITooltipHostStyles,
-  Spinner, Text, TooltipHost
+  getId, IconButton, IIconProps, ITooltipHostStyles, TooltipHost
 } from '@fluentui/react';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { telemetry, eventTypes, componentNames } from '../../../../../../telemetry';
 
-import { ISampleQuery } from '../../../../../../types/query-runner';
-import { IRootState } from '../../../../../../types/root';
+import { useAppSelector } from '../../../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
+import { GRAPH_URL } from '../../../../../services/graph-constants';
+import { validateExternalLink } from '../../../../../utils/external-link-validation';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
-import { HintList } from './HintList';
-import { getMatchingSamples, IHint } from './suffix-util';
+import DocumentationService from './documentation';
 import { styles } from './suffix.styles';
 
 const SuffixRenderer = () => {
-  const { autoComplete, sampleQuery, samples, queryRunnerStatus } = useSelector(
-    (state: IRootState) => state
+  const { sampleQuery, samples, resources } = useAppSelector(
+    (state) => state
   );
-  const fetchingSuggestions = autoComplete.pending;
-  const autoCompleteError = autoComplete.error;
-  const { requestUrl, queryVersion } =
-    parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
 
-  const getDocumentationLink = (): IHint | null => {
-    const { queries } = samples;
-    const sampleUrl = `/${queryVersion}/${requestUrl}`;
-    if (queries) {
-      const querySamples: ISampleQuery[] = getMatchingSamples({ queries, sampleQuery, sampleUrl, queryRunnerStatus });
-
-      const hasDocumentationLink = (querySamples.length > 0);
-      if (hasDocumentationLink) {
-        return {
-          link: {
-            url: querySamples[0].docLink || '',
-            name: translateMessage('Learn more')
-          },
-          description: translateMessage('A documentation link for this URL exists. Click learn more to access it')
-        };
-      }
-    }
-    return null;
-  }
-
-  const [isCalloutVisible, setCalloutVisibility] = useState(false);
   const buttonId = getId('callout-button');
-  const labelId = getId('callout-label');
-  const descriptionId = getId('callout-description');
-
-  const toggleCallout = () => {
-    let visible = isCalloutVisible;
-    visible = !visible;
-    setCalloutVisibility(visible);
-    if (visible) {
-      trackToggleEvent()
-    }
-  }
-
-  const trackToggleEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.QUERY_MORE_INFO_BUTTON,
-        QuerySignature: `/${queryVersion}/${requestUrl}`
-      });
-  }
-
   const calloutProps = { gapSpace: 0 };
   const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
 
-  if (fetchingSuggestions) {
-    return (<TooltipHost
-      content={translateMessage('Fetching suggestions')}
-      id={getId()}
-      calloutProps={calloutProps}
-      styles={hostStyles}
-    >
-      <Spinner />
-    </TooltipHost>
-    );
+  const getDocumentationLink = (): string | null => {
+    const { queries } = samples;
+
+    const resourceDocumentationUrl = new DocumentationService({
+      sampleQuery,
+      source: resources.data.children!
+    }).getDocumentationLink();
+
+    const sampleDocumentationUrl = new DocumentationService({
+      sampleQuery,
+      source: queries
+    }).getDocumentationLink();
+
+    const documentationUrl = sampleDocumentationUrl || resourceDocumentationUrl;
+    if (documentationUrl) { return documentationUrl; }
+    return null;
   }
 
-  const getHints = (): IHint[] => {
-    const availableHints: IHint[] = [];
-    if (autoCompleteError) {
-      availableHints.push({
-        description: translateMessage('No auto-complete suggestions available')
-      })
-    }
-    const documentationLink = getDocumentationLink();
+  const documentationLink = getDocumentationLink();
+  const documentationLinkAvailable = !!documentationLink;
+  const infoIcon: IIconProps = { iconName: 'TextDocument' };
+
+  const onDocumentationLinkClicked = () => {
     if (documentationLink) {
-      availableHints.push(documentationLink);
+      window.open(documentationLink, '_blank');
+      trackDocumentLinkClickedEvent();
     }
-    return availableHints;
-  }
-  const hints = getHints();
-  const hintsAvailable = hints.length > 0;
-  const infoIcon: IIconProps = { iconName: 'Info' };
+  };
 
+  const trackDocumentLinkClickedEvent = async (): Promise<void> => {
+    const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
+    const parsed = parseSampleUrl(sanitizeQueryUrl(`${GRAPH_URL}/v1.0/${requestUrl}`));
+
+    const properties: { [key: string]: string } = {
+      ComponentName: componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK,
+      QueryUrl: parsed.requestUrl,
+      Link: documentationLink ?? ''
+    };
+    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
+
+    // Check if link throws error
+    validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
+  }
+
+  const tipMessage = documentationLinkAvailable ?
+    translateMessage('Read documentation') :
+    translateMessage('Query documentation not found')
 
   return (
     <>
       <TooltipHost
-        content={translateMessage('More info')}
+        content={tipMessage}
         id={getId()}
         calloutProps={calloutProps}
         styles={hostStyles}
@@ -110,29 +80,12 @@ const SuffixRenderer = () => {
         <IconButton
           iconProps={infoIcon}
           className={styles.iconButton}
-          onClick={toggleCallout}
+          onClick={() => onDocumentationLinkClicked()}
           id={buttonId}
-          ariaLabel={translateMessage('More Info')}
-          disabled={!hintsAvailable}
+          ariaLabel={tipMessage}
+          disabled={!documentationLinkAvailable}
         />
       </TooltipHost>
-      {isCalloutVisible && (
-        <Callout
-          className={styles.callout}
-          ariaLabelledBy={labelId}
-          ariaDescribedBy={descriptionId}
-          role='alertdialog'
-          gapSpace={0}
-          target={`#${buttonId}`}
-          onDismiss={toggleCallout}
-          setInitialFocus
-        >
-          <Text block variant='xLarge' className={styles.title} id={labelId}>
-            /{requestUrl}
-          </Text>
-          <HintList hints={hints} />
-        </Callout>
-      )}
     </>
   );
 }

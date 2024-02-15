@@ -6,6 +6,8 @@ export interface IPermission {
   consentDescription: string;
   isAdmin: boolean;
   consented: boolean;
+  consentType?: 'Principal' | 'AllPrinripal';
+  isLeastPrivilege?: boolean;
 }
 
 export interface IPermissionProps {
@@ -14,6 +16,7 @@ export interface IPermissionProps {
   dimensions?: IDimensions;
   setPermissions?: Function;
   panel?: boolean;
+  permissionsRef?: any
 }
 
 export interface IPermissionState {
@@ -34,10 +37,27 @@ export interface IScopes {
   pending: {
     isSpecificPermissions: boolean;
     isFullPermissions: boolean;
+    isTenantWidePermissionsGrant?: boolean;
+    isRevokePermissions?: boolean;
   };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];
+    tenantWidePermissionsGrant?: IPermissionGrant[];
   };
   error: any | null;
+}
+
+export interface IPermissionGrant {
+  clientId: string;
+  consentType: string;
+  principalId: string | null;
+  resourceId: string;
+  scope: string;
+  id?: string
+}
+
+export interface IOAuthGrantPayload {
+  value: IPermissionGrant[];
+  '@odata.context': string;
 }

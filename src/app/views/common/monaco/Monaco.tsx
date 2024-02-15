@@ -1,6 +1,7 @@
 import { FocusZone } from '@fluentui/react';
-import Editor, { OnChange } from '@monaco-editor/react';
-import React from 'react';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import Editor, { OnChange, loader } from '@monaco-editor/react';
+import { useEffect } from 'react';
 
 import { ThemeContext } from '../../../../themes/theme-context';
 import './monaco.scss';
@@ -8,7 +9,7 @@ import { formatJsonStringForAllBrowsers } from './util/format-json';
 
 interface IMonaco {
   body: object | string | undefined;
-  onChange?: OnChange | undefined;
+  onChange?: OnChange;
   verb?: string;
   language?: string;
   readOnly?: boolean;
@@ -17,7 +18,6 @@ interface IMonaco {
 }
 
 export function Monaco(props: IMonaco) {
-
   let { body } = props;
   const { onChange, language, readOnly, height } = props;
 
@@ -26,11 +26,25 @@ export function Monaco(props: IMonaco) {
   }
   const itemHeight = height ? height : '300px';
 
+  loader.config({ monaco });
+
+  useEffect(() => {
+    if (monaco) {
+      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+        validate: true,
+        allowComments: false,
+        schemas: [],
+        enableSchemaRequest: true,
+        schemaRequest: 'ignore'
+      });
+    }
+  }, [monaco]);
+
   return (
-    <FocusZone disabled={props.extraInfoElement ? false : true}>
+    <FocusZone disabled= {props.extraInfoElement ? false : true}>
       <div className='monaco-editor'>
         {props.extraInfoElement}
-        <ThemeContext.Consumer >
+        <ThemeContext.Consumer>
           {(theme) => (<Editor
             width='800 !important'
             height={itemHeight}
@@ -48,7 +62,8 @@ export function Monaco(props: IMonaco) {
               showFoldingControls: 'always',
               renderLineHighlight: 'none',
               scrollBeyondLastLine: true,
-              overviewRulerBorder: false
+              overviewRulerBorder: false,
+              wordSeparators: '"'
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}

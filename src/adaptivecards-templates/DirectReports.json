@@ -1,0 +1,59 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "@odata.type": "#microsoft.graph.user",
+    "body": [
+        {
+            "type": "Container",
+            "$data": "{value}",
+            "items": [
+                {
+                    "type": "ColumnSet",
+                    "columns": [
+                        {
+                            "type": "Column",
+                            "width": "stretch",
+                            "items": [
+                                {
+                                    "type": "ColumnSet",
+                                    "columns": [
+                                        {
+                                            "type": "Column",
+                                            "width": "auto",
+                                            "items": [
+                                                {
+                                                    "type": "Image",
+                                                    "altText": "",
+                                                    "url": "https://graph.microsoft.com/v1.0/users/{mail}/photo/$value",
+                                                    "size": "Small",
+                                                    "style": "Person"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "Column",
+                                            "width": "stretch",
+                                            "items": [
+                                                {
+                                                    "type": "TextBlock",
+                                                    "text": "{displayName}"
+                                                },
+                                                {
+                                                    "type": "TextBlock",
+                                                    "text": "{jobTitle}",
+                                                    "isSubtle": true,
+                                                    "spacing": "None"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

@@ -1,6 +1,7 @@
 
+import { AppAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
-import { bulkRemoveHistoryData, removeHistoryData } from '../../views/sidebar/history/history-utils';
+import { historyCache } from '../../../modules/cache/history-utils';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
@@ -9,25 +10,35 @@ import {
   BULK_ADD_HISTORY_ITEMS_SUCCESS
 } from '../redux-constants';
 
-export function addHistoryItem(historyItem: IHistoryItem): any {
+export function addHistoryItem(historyItem: IHistoryItem): AppAction {
   return {
     type: ADD_HISTORY_ITEM_SUCCESS,
     response: historyItem
   };
 }
 
-export function bulkAddHistoryItems(historyItems: IHistoryItem[]): any {
+export function bulkAddHistoryItems(historyItems: IHistoryItem[]): AppAction {
   return {
     type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
     response: historyItems
   };
 }
 
-export function removeHistoryItem(historyItem: IHistoryItem): Function {
+export function viewHistoryItem(historyItem: IHistoryItem): AppAction {
+  return {
+    type: VIEW_HISTORY_ITEM_SUCCESS,
+    response: {
+      body: historyItem.result,
+      headers: historyItem.headers
+    }
+  };
+}
+
+export function removeHistoryItem(historyItem: IHistoryItem) {
 
   delete historyItem.category;
   return async (dispatch: Function) => {
-    return removeHistoryData(historyItem)
+    return historyCache.removeHistoryData(historyItem)
       .then(() => {
         dispatch({
           type: REMOVE_HISTORY_ITEM_SUCCESS,
@@ -37,7 +48,7 @@ export function removeHistoryItem(historyItem: IHistoryItem): Function {
   };
 }
 
-export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
+export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]) {
 
   const listOfKeys: any = [];
   historyItems.forEach(historyItem => {
@@ -45,7 +56,7 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
   });
 
   return async (dispatch: Function) => {
-    return bulkRemoveHistoryData(listOfKeys)
+    return historyCache.bulkRemoveHistoryData(listOfKeys)
       .then(() => {
         dispatch({
           type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
@@ -55,9 +66,3 @@ export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]): Function {
   };
 }
 
-export function viewHistoryItem(historyItem: IHistoryItem): any {
-  return {
-    type: VIEW_HISTORY_ITEM_SUCCESS,
-    response: historyItem
-  };
-}

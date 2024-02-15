@@ -1,41 +1,30 @@
 import {
-  ChoiceGroup,
-  DefaultButton,
-  Dialog,
-  DialogFooter,
-  DialogType,
-  DirectionalHint,
-  getId,
-  getTheme,
-  IconButton,
-  IContextualMenuProps,
-  TooltipHost
+  DirectionalHint, getId,
+  getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-import '../../../utils/string-operations';
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IRootState } from '../../../../types/root';
-import { ISettingsProps } from '../../../../types/settings';
-import { translateMessage } from '../../../utils/translate-messages';
 import { geLocale } from '../../../../appLocale';
-import { changeTheme } from '../../../services/actions/theme-action-creator';
-import { loadGETheme } from '../../../../themes';
-import { AppTheme } from '../../../../types/enums';
+import { useAppSelector } from '../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { ISettingsProps } from '../../../../types/settings';
+import { usePopups } from '../../../services/hooks';
+import '../../../utils/string-operations';
+import { translateMessage } from '../../../utils/translate-messages';
 import { mainHeaderStyles } from '../MainHeader.styles';
 import { Sovereign } from '../../../../modules/sovereign-clouds/cloud-options';
 import { SovereignClouds } from '../../settings/SovereignClouds';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   const dispatch = useDispatch();
-  const { authToken, theme: appTheme, profile } = useSelector((state: IRootState) => state);
+  const { authToken, profile } = useAppSelector((state) => state);
   const authenticated = authToken.token;
-  const [themeChooserDialogHidden, hideThemeChooserDialog] = useState(true);
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
   const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
   const cloudOptions = new Sovereign(profile).getOptions();
+  const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
 
   useEffect(() => {
     let menuItems: any = [
@@ -75,9 +64,11 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
   }, [authenticated, profile]);
 
   const toggleThemeChooserDialogState = () => {
-    let hidden = themeChooserDialogHidden;
-    hidden = !hidden;
-    hideThemeChooserDialog(hidden);
+    showThemeChooser({
+      settings: {
+        title: translateMessage('Change theme')
+      }
+    });
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.THEME_CHANGE_BUTTON
     });
@@ -88,16 +79,6 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     open = !open;
     setCloudSelectorOpen(open);
   }
-
-  const handleChangeTheme = (selectedTheme: any) => {
-    const newTheme: string = selectedTheme.key;
-    dispatch(changeTheme(newTheme));
-    loadGETheme(newTheme);
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SELECT_THEME_BUTTON,
-      SelectedTheme: selectedTheme.key.replace('-', ' ').toSentenceCase()
-    });
-  };
 
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
@@ -152,55 +133,11 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
         />
       </TooltipHost>
       <div>
-        <Dialog
-          hidden={themeChooserDialogHidden}
-          onDismiss={() => toggleThemeChooserDialogState()}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: translateMessage('Change theme'),
-            isMultiline: false
-          }}
-        >
-          <ChoiceGroup
-            defaultSelectedKey={appTheme}
-            styles={{ flexContainer: { flexWrap: 'nowrap' } }}
-            options={[
-              {
-                key: AppTheme.Light,
-                iconProps: { iconName: 'Light' },
-                text: translateMessage('Light')
-              },
-              {
-                key: AppTheme.Dark,
-                iconProps: { iconName: 'CircleFill' },
-                text: translateMessage('Dark')
-              },
-              {
-                key: AppTheme.HighContrast,
-                iconProps: { iconName: 'Contrast' },
-                text: translateMessage('High Contrast')
-              }
-            ]}
-            onChange={(_event, selectedTheme) =>
-              handleChangeTheme(selectedTheme)
-            }
-          />
-          <DialogFooter>
-            <DefaultButton
-              text={translateMessage('Close')}
-              onClick={() => toggleThemeChooserDialogState()}
-            />
-          </DialogFooter>
-        </Dialog>
-        {
-          cloudSelectorOpen && <SovereignClouds
-            cloudSelectorOpen={cloudSelectorOpen}
-            toggleCloudSelector={toggleCloudSelector}
-          />
-        }
+        {cloudSelectorOpen && <SovereignClouds
+          cloudSelectorOpen={cloudSelectorOpen}
+          toggleCloudSelector={toggleCloudSelector}
+        />}
       </div>
     </div>
   );
 }
-
-

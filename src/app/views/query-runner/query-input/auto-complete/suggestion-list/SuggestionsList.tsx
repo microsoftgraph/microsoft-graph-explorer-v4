@@ -1,17 +1,20 @@
-import { Label, styled } from '@fluentui/react';
-import React, { useEffect } from 'react';
+import { Label, getTheme, mergeStyles } from '@fluentui/react';
+import { createRef, useEffect } from 'react';
 
 import { ISuggestionsList } from '../../../../../../types/auto-complete';
-import { classNames } from '../../../../classnames';
 import { autoCompleteStyles } from '../AutoComplete.styles';
 
-const styledSuggesions = (props: any) => {
-  const { filteredSuggestions, activeSuggestion, onClick }: ISuggestionsList = props;
-  const classes = classNames(props);
+const SuggestionsList = ({ filteredSuggestions, activeSuggestion, onSuggestionSelected }: ISuggestionsList) => {
+  const theme = getTheme();
+  const suggestionsClass = mergeStyles(autoCompleteStyles(theme).suggestions);
+  const suggestionActiveClass = mergeStyles(autoCompleteStyles(theme).suggestionActive);
+  const suggestionOptionClass = mergeStyles(autoCompleteStyles(theme).suggestionOption);
+  const suggestionTitleClass = mergeStyles(autoCompleteStyles(theme).suggestionTitle);
 
-  const refs = filteredSuggestions.reduce((ref: any, value: any) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const refs = filteredSuggestions.reduce((ref: any, value: string) => {
     const itemIndex = filteredSuggestions.findIndex(k => k === value);
-    ref[itemIndex] = React.createRef();
+    ref[itemIndex] = createRef();
     return ref;
   }, {});
 
@@ -26,16 +29,16 @@ const styledSuggesions = (props: any) => {
   }, [activeSuggestion]);
 
   return (
-    <ul className={classes.suggestions} tabIndex={-1}>
-      {filteredSuggestions.map((suggestion: {} | null | undefined, index: number) => {
+    <ul className={suggestionsClass} tabIndex={-1}>
+      {filteredSuggestions.map((suggestion: string, index: number) => {
         return (
           <li
-            className={(index === activeSuggestion) ? classes.suggestionActive : classes.suggestionOption}
+            className={(index === activeSuggestion) ? suggestionActiveClass : suggestionOptionClass}
             key={index}
             ref={refs[index]}
-            onClick={(e: any) => onClick(e)}
+            onClick={() => onSuggestionSelected(suggestion)}
           >
-            <Label className={classes.suggestionTitle}>
+            <Label className={suggestionTitleClass}>
               {suggestion}
             </Label>
           </li>
@@ -45,6 +48,4 @@ const styledSuggesions = (props: any) => {
   );
 };
 
-// @ts-ignore
-const SuggestionsList = styled(styledSuggesions, autoCompleteStyles);
 export default SuggestionsList;

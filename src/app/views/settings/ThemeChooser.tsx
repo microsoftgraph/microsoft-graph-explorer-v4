@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { loadGETheme } from '../../../themes';
 import { AppTheme } from '../../../types/enums';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { changeTheme } from '../../services/actions/theme-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
 
@@ -19,7 +19,7 @@ interface IThemeChooser {
 
 export const ThemeChooser = ({ dialogHidden, toggleThemeChooserDialogState }: IThemeChooser) => {
   const dispatch = useDispatch();
-  const { theme: appTheme } = useSelector((state: IRootState) => (state));
+  const { theme: appTheme } = useSelector((state: ApplicationState) => (state));
 
   const handleChangeTheme = (selectedTheme: any) => {
     const newTheme: AppTheme = selectedTheme.key;

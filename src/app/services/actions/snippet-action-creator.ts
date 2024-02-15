@@ -1,34 +1,43 @@
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { Header, IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import {
   GET_SNIPPET_ERROR,
   GET_SNIPPET_PENDING,
-  GET_SNIPPET_SUCCESS
+  GET_SNIPPET_SUCCESS,
+  SET_SNIPPET_TAB_SUCCESS
 } from '../redux-constants';
 
-export function getSnippetSuccess(response: string): IAction {
+export function getSnippetSuccess(response: string): AppAction {
   return {
     type: GET_SNIPPET_SUCCESS,
     response
   };
 }
 
-export function getSnippetError(response: object): IAction {
+export function getSnippetError(response: object): AppAction {
   return {
     type: GET_SNIPPET_ERROR,
     response
   };
 }
 
-export function getSnippetPending(): any {
+export function getSnippetPending(): AppAction {
   return {
-    type: GET_SNIPPET_PENDING
+    type: GET_SNIPPET_PENDING,
+    response: null
   };
 }
 
-export function getSnippet(language: string): Function {
+export function setSnippetTabSuccess(response: string): AppAction {
+  return {
+    type: SET_SNIPPET_TAB_SUCCESS,
+    response
+  }
+}
+
+export function getSnippet(language: string) {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi, sampleQuery } = getState();
 
@@ -44,7 +53,7 @@ export function getSnippet(language: string): Function {
       if (language !== 'csharp') {
         snippetsUrl += `?lang=${language}`;
       }
-      const openApiSnippets: string[] = ['go', 'powershell'];
+      const openApiSnippets: string[] = ['go', 'powershell', 'python', 'cli', 'php'];
       if (openApiSnippets.includes(language)) {
         snippetsUrl += '&generation=openapi';
       }

@@ -1,59 +1,56 @@
 import {
   Announced, DetailsList, DetailsRow, FontSizes, FontWeights, getId,
   getTheme,
-  GroupHeader, IColumn, Icon, IDetailsRowStyles, Link, MessageBar, MessageBarType, SearchBox,
+  GroupHeader, IColumn, Icon, IDetailsRowStyles, IGroup, Link, MessageBar, MessageBarType, SearchBox,
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import {
-  IQuery,
-  ISampleQueriesProps,
-  ISampleQuery
-} from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
+import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
+import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
+import { fetchSamples } from '../../../services/actions/samples-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getStyleFor } from '../../../utils/http-methods.utils';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { getStyleFor } from '../../../utils/http-methods.utils';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
+import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { substituteTokens } from '../../../utils/token-helpers';
+import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
+import { NoResultsFound } from '../sidebar-utils/SearchResult';
+import { sidebarStyles } from '../Sidebar.styles';
 import {
-  columns, isJsonString, performSearch, trackDocumentLinkClickedEvent,
+  isJsonString, performSearch, shouldRunQuery, trackDocumentLinkClickedEvent,
   trackSampleQueryClickEvent
 } from './sample-query-utils';
-import { sidebarStyles } from '../Sidebar.styles';
-import { searchBoxStyles } from '../../../utils/searchbox.styles';
-import { fetchSamples } from '../../../services/actions/samples-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import { runQuery } from '../../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { translateMessage } from '../../../utils/translate-messages';
-import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
-import { parseSampleUrl } from '../../../utils/sample-url-generation';
-import { NoResultsFound } from '../sidebar-utils/SearchResult';
 
-const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
+const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
   const { authToken, profile, samples } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
-  const dispatch = useDispatch();
+  const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState<boolean>(false);
+  const dispatch: AppDispatch = useDispatch();
   const currentTheme = getTheme();
 
   const { error, pending } = samples;
-  const groups = generateGroupsFromList(sampleQueries, 'category');
 
   const classProps = {
     styles: sampleProps!.styles,
     theme: sampleProps!.theme
   };
   const classes = classNames(classProps);
+
+  const shouldGenerateGroups = useRef(true);
 
   useEffect(() => {
     if (samples.queries.length === 0) {
@@ -63,15 +60,21 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }, [samples.queries, tokenPresent])
 
+  useEffect(() => {
+    if (shouldGenerateGroups.current) {
+      setGroups(generateGroupsFromList(sampleQueries, 'category'));
+      if (groups && groups.length > 0) {
+        shouldGenerateGroups.current = false;
+      }
+    }
+  }, [sampleQueries, searchStarted]);
+
   const searchValueChanged = (_event: any, value?: string): void => {
+    shouldGenerateGroups.current = true;
+    setSearchStarted(searchStatus => !searchStatus);
     const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
-  };
-
-  const onDocumentationLinkClicked = (item: ISampleQuery) => {
-    window.open(item.docLink, '_blank');
-    trackDocumentLinkClickedEvent(item);
   };
 
   const querySelected = (query: ISampleQuery) => {
@@ -89,10 +92,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
     if (query.tip) {
       displayTipMessage(query);
-    }
-
-    if (shouldRunQuery(query)) {
-      dispatch(runQuery(sampleQuery));
     }
 
     trackSampleQueryClickEvent(query);
@@ -117,132 +116,153 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }));
   }
 
-  const shouldRunQuery = (query: ISampleQuery) => {
-    if (query.tip && tokenPresent) {
-      return false;
-    }
-    if (!tokenPresent || query.method === 'GET') {
-      return true;
-    }
-    return false;
-  }
+  const columns: IColumn[] = [
+    {
+      key: 'button',
+      name: '',
+      fieldName: 'button',
+      minWidth: 15,
+      maxWidth: 25,
+      isIconOnly: true,
 
-
-  const renderItemColumn = (
-    item: ISampleQuery,
-    index: number | undefined,
-    column: IColumn | undefined
-  ) => {
-    if (column) {
-      const queryContent = item[column.fieldName as keyof ISampleQuery] as string;
-      const signInText = translateMessage('Sign In to try this sample');
-
-      switch (column.key) {
-        case 'authRequiredIcon':
-          if (item.method !== 'GET' && !tokenPresent) {
-            return (
-              <TooltipHost
-                tooltipProps={{
-                  onRenderContent: () => (
-                    <div style={{ paddingBottom: 3 }}>
-                      <FormattedMessage id={signInText} />
-                    </div>
-                  )
-                }}
-                id={getId()}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
-              >
-                <Icon
-                  iconName='Lock'
-                  style={{
-                    fontSize: 15,
-                    height: 10,
-                    width: 10,
-                    verticalAlign: 'center',
-                    paddingTop: 2,
-                    paddingRight: 1
-                  }}
-                />
-              </TooltipHost>
-            );
-          } else {
-            return null;
-          }
-
-        case 'button':
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div
-                    style={{ paddingBottom: 3 }}>
-                    {item.docLink}
-                  </div>
-                )
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
+      onRender: (item: ISampleQuery) => {
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div
+                  style={{ paddingBottom: 3 }}>
+                  {item.docLink}
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+          >
+            <Link
+              aria-label={item.docLink}
+              target="_blank"
+              href={item.docLink}
+              onClick={() => trackDocumentLinkClickedEvent(item)}
             >
               <Icon
-                iconName='TextDocument'
-                onClick={() => onDocumentationLinkClicked(item)}
                 className={classes.docLink}
+                aria-label={translateMessage('Read documentation')}
+                iconName='TextDocument'
                 style={{
                   marginRight: '45%',
                   width: 10
                 }}
               />
-            </TooltipHost>
-          );
+            </Link>
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'authRequiredIcon',
+      name: '',
+      fieldName: 'authRequiredIcon',
+      minWidth: 20,
+      maxWidth: 20,
+      isIconOnly: true,
+      onRender: (item: ISampleQuery) => {
+        const signInText = translateMessage('Sign In to try this sample');
 
-        case 'method':
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div style={{ paddingBottom: 3 }}>{queryContent}</div>
-                )
-              }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}
-            >
-              <span
-                className={classes.badge}
-                style={{
-                  background: getStyleFor(item.method),
-                  textAlign: 'center',
-                  position: 'relative',
-                  right: '5px'
-                }}
-              >
-                {item.method}
-              </span>
-            </TooltipHost>
-          );
+        if (shouldRunQuery({ method: item.method, authenticated: tokenPresent, url: item.requestUrl })) {
+          return <div aria-hidden='true' />;
+        }
 
-        default:
-          return (
-            <TooltipHost
-              tooltipProps={{
-                onRenderContent: () => (
-                  <div style={{ paddingBottom: 3 }}>
-                    {item.method} {queryContent}{' '}
-                  </div>
-                )
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>
+                  {translateMessage(signInText)}
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <Icon
+              iconName='Lock'
+              style={{
+                fontSize: 15,
+                height: 10,
+                width: 10,
+                verticalAlign: 'center',
+                paddingTop: 2,
+                paddingRight: 1
               }}
-              id={getId()}
-              calloutProps={{ gapSpace: 0 }}
+            />
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'method',
+      name: '',
+      fieldName: 'method',
+      minWidth: 20,
+      maxWidth: 50,
+      onRender: (item: ISampleQuery) => {
+
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>{item.method}</div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}
+          >
+            <span
+              className={classes.badge}
+              style={{
+                background: getStyleFor(item.method),
+                textAlign: 'center',
+                position: 'relative',
+                right: '5px'
+              }}
             >
-              <span aria-label={queryContent} className={classes.queryContent}>
-                {queryContent}
-              </span>
-            </TooltipHost>
-          );
+              {item.method}
+            </span>
+          </TooltipHost>
+        );
+      }
+    },
+    {
+      key: 'humanName',
+      name: '',
+      fieldName: 'humanName',
+      minWidth: 100,
+      maxWidth: 200,
+      onRender: (item: ISampleQuery) => {
+        const queryContent = item.humanName;
+        return (
+          <TooltipHost
+            tooltipProps={{
+              onRenderContent: () => (
+                <div style={{ paddingBottom: 3 }}>
+                  {item.method} {queryContent}{' '}
+                </div>
+              )
+            }}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+          >
+            <span aria-label={queryContent} className={classes.queryContent}>
+              {queryContent}
+            </span>
+          </TooltipHost>
+        );
       }
     }
-  }
+  ];
 
   const renderRow = (props: any): any => {
     let selectionDisabled = false;
@@ -252,7 +272,8 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
 
     if (props) {
-      if (!tokenPresent && props.item.method !== 'GET') {
+      const query: ISampleQuery = props.item!;
+      if (!shouldRunQuery({ method: query.method, authenticated: tokenPresent, url: query.requestUrl })) {
         selectionDisabled = true;
       }
       return (
@@ -262,7 +283,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
             styles={customStyles}
             onClick={() => {
               if (!selectionDisabled) {
-                const query: ISampleQuery = props.item!;
                 querySelected(query);
               }
               setSelectedQuery(props.item)
@@ -288,7 +308,8 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           check: { display: 'none' },
           title: {
             fontSize: FontSizes.medium,
-            fontWeight: FontWeights.semibold
+            fontWeight: FontWeights.semibold,
+            paddingBottom: 2
           },
           expand: {
             fontSize: FontSizes.small
@@ -310,7 +331,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }
 
-  if (pending) {
+  if (pending && groups.length === 0) {
     return (
       <Spinner
         className={classes.spinner}
@@ -338,7 +359,7 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
           isMultiline={true}
           dismissButtonAriaLabel='Close'
         >
-          <FormattedMessage id='viewing a cached set' />
+          {translateMessage('viewing a cached set')}
         </MessageBar>
       )}
       <MessageBar
@@ -346,15 +367,16 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
         isMultiline={true}
         dismissButtonAriaLabel='Close'
       >
-        <FormattedMessage id='see more queries' />
+        {translateMessage('see more queries')}
         <Link
           target='_blank'
           rel="noopener noreferrer"
           onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-          href={`https://docs.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          underline
         >
-          <FormattedMessage id='Microsoft Graph API Reference docs' />
+          {translateMessage('Microsoft Graph API Reference docs')}
         </Link>
       </MessageBar>
       <Announced
@@ -369,7 +391,6 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
               cellExtraRightPadding: 0,
               cellLeftPadding: 0
             }}
-            onRenderItemColumn={renderItemColumn}
             items={sampleQueries}
             selectionMode={SelectionMode.none}
             columns={columns}
@@ -389,5 +410,5 @@ const unstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 }
 
 // @ts-ignore
-const SampleQueries = styled(unstyledSampleQueries, sidebarStyles);
+const SampleQueries = styled(UnstyledSampleQueries, sidebarStyles);
 export default SampleQueries;

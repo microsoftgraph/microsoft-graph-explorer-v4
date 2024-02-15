@@ -1,5 +1,5 @@
+import { authenticationWrapper } from '.';
 import { HOME_ACCOUNT_KEY } from '../../app/services/graph-constants';
-import { AuthenticationWrapper } from './AuthenticationWrapper';
 
 window.open = jest.fn();
 jest.spyOn(window.sessionStorage.__proto__, 'clear');
@@ -14,73 +14,83 @@ jest.mock('./msal-app.ts', () => {
     getAccount: jest.fn(),
     logoutRedirect: jest.fn(),
     logoutPopup: jest.fn(),
-    loginRedirect: jest.fn(),
-    loginPopup: jest.fn(),
-    acquireTokenSilent: jest.fn(),
-    acquireTokenPopup: jest.fn(),
-    getAllAccounts: jest.fn()
+    getAllAccounts: jest.fn(),
+    loginPopup: jest.fn(() => {
+      return Promise.resolve({
+        account: {
+          homeAccountId: 'homeAccountId',
+          environment: 'environment',
+          tenantId: 'tenantId',
+          username: 'username'
+        }
+      })
+    }),
+    acquireTokenSilent: jest.fn(() => {
+      return Promise.resolve({
+        account: {
+          homeAccountId: 'homeAccountId',
+          environment: 'environment',
+          tenantId: 'tenantId',
+          username: 'username'
+        }
+      })
+    })
   };
 
   return {
     msalApplication
   };
 })
-describe('Tests authentication wrapper functions should', () => {
-  it('return null when account data is null', () => {
-    const sessionId = new AuthenticationWrapper().getSessionId();
-    expect(sessionId).toBeNull();
-  });
-
-  it('throw an error when logIn fails', () => {
-    const logIn = new AuthenticationWrapper().logIn();
-    expect(logIn).rejects.toThrow();
-  });
-
-  it('throw an error when consenting to scopes fails', () => {
-    const consentToScopes = new AuthenticationWrapper().consentToScopes();
-    expect(consentToScopes).rejects.toThrow();
-  })
-
-  it('return undefined when getAccount is called and msalApplication is undefined', () => {
-    const account = new AuthenticationWrapper().getAccount();
-    expect(account).toBeUndefined();
-  })
-
-  it('throw an error when getToken returns a rejected Promise', () => {
-    const getToken = new AuthenticationWrapper().getToken();
-    expect(getToken).resolves.toBeUndefined();
-  });
-
-  describe('throw an error when getOcpsToken fails ', () => {
-    it('Throws an error when getOcpsToken fails', () => {
-      const getOcpsToken = new AuthenticationWrapper().getOcpsToken();
-      expect(getOcpsToken).rejects.toThrow();
-    });
-  })
+describe('AuthenticationWrapper should', () => {
 
   it('log out a user and call removeItem with the home_account_key', () => {
-    new AuthenticationWrapper().logOut();
+    authenticationWrapper.logOut();
     expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
   })
 
   it('log out a user with logoutPopup and call removeItem once with the home_account_key', () => {
-    new AuthenticationWrapper().logOutPopUp();
+    authenticationWrapper.logOutPopUp();
     expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
   })
 
   it('call removeItem from localStorage when deleting home account id', () => {
-    new AuthenticationWrapper().deleteHomeAccountId();
+    authenticationWrapper.deleteHomeAccountId();
     expect(window.localStorage.removeItem).toHaveBeenCalledWith(HOME_ACCOUNT_KEY);
   });
 
   it('clear the cache by calling removeItem with all available msal keys', () => {
-    new AuthenticationWrapper().clearCache();
+    authenticationWrapper.clearCache();
     expect(window.localStorage.removeItem).toHaveBeenCalled();
   });
 
   it('clear user current session, calling removeItem from localStorage and window.sessionStorage.clear', () => {
-    new AuthenticationWrapper().clearSession();
+    authenticationWrapper.clearSession();
     expect(window.localStorage.removeItem).toHaveBeenCalled();
     expect(window.sessionStorage.clear).toHaveBeenCalled();
   })
+
+  it('return null when account data is null', () => {
+    const sessionId = authenticationWrapper.getSessionId();
+    expect(sessionId).toBeNull();
+  });
+
+  it('return undefined when getAccount is called and number of accounts is zero', () => {
+    const account = authenticationWrapper.getAccount();
+    expect(account).toBeUndefined();
+  })
+
+  it('Log a user in with the appropriate homeAccountId as returned by the auth call', async () => {
+    const logIn = await authenticationWrapper.logIn();
+    expect(logIn.account!.homeAccountId).toBe('homeAccountId');
+  });
+
+  it('get consented scopes along with a valid homeAccountId as returned by the auth call', async () => {
+    const consentToScopes = await authenticationWrapper.consentToScopes();
+    expect(consentToScopes.account!.homeAccountId).toBe('homeAccountId');
+  });
+
+  it('get auth token with a valid homeAccountId as returned by the auth call', async () => {
+    const token = await authenticationWrapper.getToken();
+    expect(token.account!.homeAccountId).toBe('homeAccountId');
+  });
 })

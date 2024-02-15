@@ -1,26 +1,26 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import {
+  fetchResources, fetchResourcesError,
+  fetchResourcesPending, fetchResourcesSuccess
+} from '../../../app/services/actions/resource-explorer-action-creators';
+import {
+  FETCH_RESOURCES_ERROR,
+  FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
+} from '../../../app/services/redux-constants';
+import { AppAction } from '../../../types/action';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
+import { globalCloud } from '../../../modules/sovereign-clouds';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-import {
-  addResourcePaths, fetchResourcesSuccess, fetchResourcesError,
-  fetchResourcesPending, removeResourcePaths, fetchResources
-} from '../../../app/services/actions/resource-explorer-action-creators';
-import {
-  FETCH_RESOURCES_SUCCESS, RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, FETCH_RESOURCES_ERROR,
-  FETCH_RESOURCES_PENDING
-} from '../../../app/services/redux-constants';
-import { globalCloud } from '../../../modules/sovereign-clouds';
-import { Mode } from '../../../types/enums';
-import { IRootState } from '../../../types/root';
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: null,
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
@@ -99,12 +99,6 @@ const mockState: IRootState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
-  },
-  policies: {
-    pending: false,
-    data: {},
     error: null
   },
   cloud: globalCloud
@@ -116,8 +110,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
     name: 'issues (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Post'] },
-      { name: 'beta', methods: ['Get', 'Post'] }
+      { name: 'v1.0', methods: ['GET', 'POST'] },
+      { name: 'beta', methods: ['GET', 'POST'] }
     ],
     isExpanded: true,
     parent: '{serviceHealth-id}',
@@ -130,8 +124,8 @@ const paths = [
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
     name: '{serviceHealthIssue-id} (1)',
     labels: [
-      { name: 'v1.0', methods: ['Get', 'Patch', 'Delete'] },
-      { name: 'beta', methods: ['Get', 'Patch', 'Delete'] }
+      { name: 'v1.0', methods: ['GET', 'PATCH', 'DELETE'] },
+      { name: 'beta', methods: ['GET', 'PATCH', 'DELETE'] }
     ],
     isExpanded: true,
     parent: 'issues',
@@ -150,7 +144,7 @@ describe('Resource Explorer actions', () => {
   it('should dispatch FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess() is called', () => {
 
     const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_RESOURCES_SUCCESS,
       response
     };
@@ -159,48 +153,10 @@ describe('Resource Explorer actions', () => {
     expect(action).toEqual(expectedAction);
   });
 
-  it('should dispatch RESOURCEPATHS_ADD_SUCCESS when addResourcePaths() is called with valid paths', () => {
-
-    const expectedActions = [
-      {
-        type: RESOURCEPATHS_ADD_SUCCESS,
-        response: paths
-      }
-    ];
-
-    const store_ = mockStore({
-      resources: {
-        paths: []
-      }
-    });
-
-    store_.dispatch(addResourcePaths(paths));
-    expect(store_.getActions()).toEqual(expectedActions);
-  });
-
-  it('should dispatch RESOURCEPATHS_DELETE_SUCCESS when removeResourcePaths() is dispatched', () => {
-
-    const expectedActions = [
-      {
-        type: RESOURCEPATHS_DELETE_SUCCESS,
-        response: paths
-      }
-    ];
-
-    const store_ = mockStore({
-      resources: {
-        paths
-      }
-    });
-
-    store_.dispatch(removeResourcePaths(paths));
-    expect(store_.getActions()).toEqual(expectedActions);
-  })
-
   it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
     // Arrange
     const response = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: FETCH_RESOURCES_ERROR,
       response
     }
@@ -214,8 +170,9 @@ describe('Resource Explorer actions', () => {
 
   it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
     // Arrange
-    const expectedAction = {
-      type: FETCH_RESOURCES_PENDING
+    const expectedAction: AppAction = {
+      type: FETCH_RESOURCES_PENDING,
+      response: null
     }
 
     // Act
@@ -227,8 +184,8 @@ describe('Resource Explorer actions', () => {
 
   it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called', () => {
     // Arrange
-    const expectedAction = [
-      { type: FETCH_RESOURCES_PENDING },
+    const expectedAction: AppAction[] = [
+      { type: FETCH_RESOURCES_PENDING, response: null },
       {
         type: FETCH_RESOURCES_SUCCESS,
         response: { paths, ok: true }

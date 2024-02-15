@@ -1,20 +1,20 @@
-import { Dropdown, IDropdownOption } from '@fluentui/react';
-import React from 'react';
-import { injectIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { httpMethods, IQuery, IQueryInputProps } from '../../../../types/query-runner';
+import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
+import { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { IRootState } from '../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../store';
+import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
+import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
-import { ShareQuery } from './share-query';
-
+import { ShareButton } from './share-query';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -23,7 +23,8 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnVersionChange
   } = props;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const validation = useContext(ValidationContext);
 
   const urlVersions: IDropdownOption[] = [];
   GRAPH_API_VERSIONS.forEach(version => {
@@ -34,11 +35,15 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, authToken,
-    isLoadingData: submitting } = useSelector((state: IRootState) => state);
+    isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
+  const { mobileScreen } = sidebarProperties;
 
-  const showError = !authenticated && sampleQuery.selectedVerb !== 'GET';
-  const verbSelector: any = queryRunnerStyles().verbSelector;
+  const showError = !shouldRunQuery({
+    method: sampleQuery.selectedVerb, authenticated,
+    url: sampleQuery.sampleUrl
+  });
+  const { queryButtonStyles, verbSelector, shareQueryButtonStyles } = queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,
     background: getStyleFor(sampleQuery.selectedVerb)
@@ -49,32 +54,38 @@ const QueryInput = (props: IQueryInputProps) => {
     dispatch(setSampleQuery(updatedQuery));
   };
 
-  const getChangedQueryContent = (newUrl: string) : IQuery => {
+  const getChangedQueryContent = (newUrl: string): IQuery => {
 
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);
 
     if (GRAPH_API_VERSIONS.includes(newQueryVersion)) {
       query.selectedVersion = newQueryVersion;
-      query.sampleUrl = newUrl;
     }
+    query.sampleUrl = newUrl;
     return query;
   }
 
-  const runQuery = () => {
-    if (!sampleQuery.sampleUrl) {
+  const runQuery = (queryUrl?: string) => {
+    let query: IQuery = sampleQuery;
+    if (queryUrl) {
+      query = getChangedQueryContent(queryUrl);
+    }
+    if (!validation.isValid) {
       return;
     }
-    // allows the state to be populated with the new url before running it
-    setTimeout(() => {
-      handleOnRunQuery();
-    }, 500);
+    handleOnRunQuery(query);
   };
+
+  const queryInputStackTokens: IStackTokens = {
+    childrenGap: 7
+  };
+
 
   return (
     <>
-      <div className='row' >
-        <div className='col-xs-12 col-lg-2'>
+      <Stack horizontal={mobileScreen ? false : true} tokens={queryInputStackTokens}>
+        <Stack.Item styles={!mobileScreen ? queryButtonStyles : {}}>
           <Dropdown
             ariaLabel={translateMessage('HTTP request method option')}
             selectedKey={sampleQuery.selectedVerb}
@@ -83,41 +94,39 @@ const QueryInput = (props: IQueryInputProps) => {
             errorMessage={showError ? translateMessage('Sign in to use this method') : undefined}
             onChange={(event, method) => handleOnMethodChange(method)}
           />
-        </div>
-        <div className='col-xs-12 col-lg-2'>
+        </Stack.Item>
+        <Stack.Item >
           <Dropdown
             ariaLabel={translateMessage('Microsoft Graph API Version option')}
             selectedKey={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
             options={urlVersions}
             onChange={(event, method) => handleOnVersionChange(method)}
           />
-        </div>
-        <div className='col-xs-12 col-lg-5'>
+        </Stack.Item>
+        <Stack.Item grow disableShrink>
           <AutoComplete
             contentChanged={contentChanged}
             runQuery={runQuery}
           />
-        </div>
-        <div className='col-lg-2 col-sm-10 col-xs-10'>
+        </Stack.Item>
+        <Stack.Item shrink>
           <SubmitButton
             className='run-query-button'
             text={translateMessage('Run Query')}
-            disabled={showError || !sampleQuery.sampleUrl}
+            disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
             role='button'
             handleOnClick={() => runQuery()}
             submitting={submitting}
             allowDisabledFocus={true}
           />
-        </div>
-        <div className='col-lg-1 col-sm-2 col-xs-2'>
-          <ShareQuery />
-        </div>
-      </div>
+        </Stack.Item>
+        <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
+          <ShareButton />
+        </Stack.Item>
+      </Stack>
     </>
   )
 }
 
 // @ts-ignore
-const IntlQueryInput = injectIntl(QueryInput);
-// @ts-ignore
-export default IntlQueryInput;
+export default QueryInput;

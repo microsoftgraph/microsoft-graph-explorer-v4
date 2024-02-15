@@ -13,15 +13,14 @@
 
 
   @media screen and (min-width: 1320px) {
-    .pivot-response *[data-content='Expand xx'] {
-      float: right !important;
+    .pivot-response button:nth-last-child(2) {
+      float: right;
     }
-  }
-
-
-  @media screen and (min-width: 1320px) {
-    .pivot-response *[data-content='Share xx'] {
-      float: right !important;
+    .unstyled-pivot button:nth-last-child(2) {
+      float: none;
+    }
+    .adaptive-pivot button:nth-last-child(2) {
+      float: none;
     }
   }
 
@@ -33,17 +32,10 @@
     justify-content: center;
     align-items: center;
   }
-
-  .share-query-btn {
-    float: right;
-    margin-top: 10px;
-    padding: 0px;
-    z-index: 1;
-  }
 }
 
 .share-query-params {
-  font-family: 'monospace';
+  font-family: 'monospace', 'courier';
   font-size: 12px;
   width: '100%';
   overflow-x: auto;

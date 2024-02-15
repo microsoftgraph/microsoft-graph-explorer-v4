@@ -9,20 +9,20 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { IAction } from '../../../types/action';
+import { AppAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
-import { ClientError } from '../../utils/ClientError';
+import { ClientError } from '../../utils/error-utils/ClientError';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
-import { DEFAULT_USER_SCOPES } from '../graph-constants';
+import { DEFAULT_USER_SCOPES, GRAPH_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { queryRunningStatus } from './query-loading-action-creators';
 
-export function queryResponse(response: object): IAction {
+export function queryResponse(response: object): AppAction {
   return {
     type: QUERY_GRAPH_SUCCESS,
     response
@@ -55,11 +55,12 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
     });
   }
 
-  const authToken = '{token:https://graph.microsoft.com/}';
+  const authToken = `{token:${GRAPH_URL}/}`;
   let headers = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
+    prefer: 'ms-graph-dev-mode',
     ...sampleHeaders
   };
 
@@ -70,7 +71,8 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
 
   const options: IRequestOptions = {
     method: query.selectedVerb,
-    headers
+    headers,
+    body: query.sampleBody ? JSON.stringify(query.sampleBody) : undefined
   };
   return { graphUrl, options };
 }
@@ -90,12 +92,14 @@ function createAuthenticatedRequest(
 ): GraphRequest {
   const sampleHeaders: any = {};
   sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
+  sampleHeaders.prefer = 'ms-graph-dev-mode';
 
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
       sampleHeaders[header.name] = header.value;
     });
   }
+  const updatedHeaders = { ...sampleHeaders, 'cache-control': 'no-cache', pragma: 'no-cache' }
 
   const msalAuthOptions: AuthCodeMSALBrowserAuthenticationProviderOptions = {
     account: authenticationWrapper.getAccount()!,
@@ -106,16 +110,14 @@ function createAuthenticatedRequest(
     authProvider,
     msalAuthOptions
   )
-  const graphRequest = GraphClient.getInstance()
+  return GraphClient.getInstance()
     .api(encodeHashCharacters(query))
     .middlewareOptions([middlewareOptions])
-    .headers(sampleHeaders)
+    .headers(updatedHeaders)
     .responseType(ResponseType.RAW);
-
-  return graphRequest;
 }
 
-export function makeGraphRequest(scopes: string[]): Function {
+export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
     let response;
 
@@ -212,8 +214,7 @@ export async function generateResponseDownloadUrl(
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
-      const downloadUrl = URL.createObjectURL(blob);
-      return downloadUrl;
+      return URL.createObjectURL(blob);
     }
   } catch (error) {
     return null;
@@ -233,7 +234,6 @@ export function parseResponse(
     switch (contentType) {
       case ContentType.Json:
         return response.json();
-
       case ContentType.XML:
       case ContentType.HTML:
       case ContentType.TextPlain:
@@ -261,7 +261,7 @@ export function parseResponse(
 export function queryResultsInCorsError(sampleUrl: string): boolean {
   sampleUrl = sampleUrl.toLowerCase();
   if (
-    (['/drive/', '/drives/', '/driveItem/'].some((x) =>
+    (['/drive/', '/drives/', '/driveItem/', '/employeeexperience/'].some((x) =>
       sampleUrl.includes(x)) && sampleUrl.endsWith('/content')) ||
     sampleUrl.includes('/reports/')
   ) {

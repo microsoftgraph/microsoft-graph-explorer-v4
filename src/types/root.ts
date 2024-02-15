@@ -6,17 +6,16 @@ import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
-import { IPolicies } from './ocps-api';
 import { IScopes } from './permissions';
 import { IUser } from './profile';
 import { IGraphResponse } from './query-response';
 import { IQuery, ISampleQuery } from './query-runner';
-import { IResources } from './resources';
+import { IResources, Collection } from './resources';
 import { ISidebarProps } from './sidebar';
 import { ISnippet } from './snippets';
 import { IStatus } from './status';
 
-export interface IRootState {
+export interface ApplicationState {
   adaptiveCard: IAdaptiveCardResponse;
   authToken: IAuthenticateResult;
   autoComplete: IAutocompleteResponse;
@@ -27,7 +26,6 @@ export interface IRootState {
   graphResponse: IGraphResponse;
   history: IHistoryItem[];
   isLoadingData: boolean;
-  permissionsPanelOpen: boolean;
   profile: IUser | undefined | null;
   queryRunnerStatus: IStatus | null;
   responseAreaExpanded: boolean;
@@ -44,7 +42,7 @@ export interface IRootState {
   theme: string;
   devxApi: IDevxAPI;
   resources: IResources;
-  policies: IPolicies;
+  collections?: Collection[];
 }
 
 export interface IApiFetch {

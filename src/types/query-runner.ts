@@ -1,7 +1,6 @@
-import { ITheme, IDropdownOption } from '@fluentui/react';
-import { ICloud } from './cloud';
-import { Mode } from './enums';
+import { IDropdownOption, ITheme } from '@fluentui/react';
 
+import { ICloud } from './cloud';
 export interface IQueryRunnerState {
   sampleBody?: string;
   url: string;
@@ -37,16 +36,7 @@ export interface IQueryInputProps {
   styles?: object;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
-  handleOnUrlChange: Function;
   handleOnVersionChange: Function;
-  handleOnBlur: Function;
-  sampleQuery: IQuery;
-  submitting: boolean;
-  authenticated: boolean;
-  mode: Mode;
-  intl: {
-    message: object;
-  };
   actions?: {
     setSampleQuery: Function;
   };

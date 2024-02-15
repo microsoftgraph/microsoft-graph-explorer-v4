@@ -1,19 +1,12 @@
-import {
-  AUTOCOMPLETE_FETCH_ERROR,
-  AUTOCOMPLETE_FETCH_PENDING,
-  AUTOCOMPLETE_FETCH_SUCCESS
-} from '../../../app/services/redux-constants'
-import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import fetch from 'jest-fetch-mock';
+import thunk from 'redux-thunk';
+
 import { store } from '../../../../src/store/index';
-import { IRootState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
-import {
-  fetchAutocompleteSuccess, fetchAutocompleteError,
-  fetchAutocompletePending, fetchAutoCompleteOptions
-} from '../../../app/services/actions/autocomplete-action-creators';
+import { fetchAutoCompleteOptions } from '../../../app/services/actions/autocomplete-action-creators';
 import { globalCloud } from '../../../modules/sovereign-clouds';
+import { suggestions } from '../../../modules/suggestions/suggestions';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -21,12 +14,11 @@ const mockStore = configureMockStore(middleware);
 jest.mock('../../../../src/store/index');
 window.fetch = jest.fn();
 
-const mockState: IRootState = {
+const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  permissionsPanelOpen: true,
   profile: null,
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
@@ -106,138 +98,60 @@ const mockState: IRootState = {
       labels: [],
       children: []
     },
-    error: null,
-    paths: []
-  },
-  policies: {
-    pending: false,
-    data: {},
     error: null
   }
 }
 
-const currentState = store.getState();
-store.getState = () => {
-  return {
-    mockState,
-    ...currentState
-  }
-}
-describe('Autocomplete action creators', () => {
-  beforeEach(() => {
-    // eslint-disable-next-line no-undef
-    fetchMock.resetMocks();
+store.getState = () => ({
+  ...mockState,
+  proxyUrl: '',
+  collections: []
+})
+
+describe('fetchAutoCompleteOptions', () => {
+  it('dispatches fetchAutocompleteSuccess when suggestions are retrieved successfully', async () => {
+    const url = '/some/url';
+    const version = '1.0';
+
+    // Replace this with a sample response object you expect from suggestions.getSuggestions
+    const sampleSuggestions = ['option1', 'option2', 'option3'];
+    suggestions.getSuggestions = jest.fn().mockResolvedValue(sampleSuggestions);
+
+    // Create a mock store
+    const store_ = mockStore(store.getState());
+
+    // Call the function by dispatching the returned async function
+    await store_.dispatch(fetchAutoCompleteOptions(url, version));
+
+    // Assertions
+    const expectedActions = [
+      { type: 'AUTOCOMPLETE_FETCH_PENDING', response: null },
+      {
+        type: 'AUTOCOMPLETE_FETCH_SUCCESS',
+        response: [ 'option1', 'option2', 'option3' ]
+      }
+    ];
+    expect(store_.getActions()).toEqual(expectedActions);
   });
 
-  it('should dispatch AUTOCOMPLETE_FETCH_ERROR with error payload when fetchAutocompleteError() is called', () => {
-    // Arrange
-    const errorObject = {};
-    const expectedAction = {
-      type: AUTOCOMPLETE_FETCH_ERROR,
-      response: errorObject
-    }
+  it('dispatches fetchAutocompleteError when suggestions retrieval fails', async () => {
+    const url = '/some/url';
+    const version = '1.0';
 
-    // Act
-    const action = fetchAutocompleteError(errorObject);
+    // Mock a response with null
+    suggestions.getSuggestions = jest.fn().mockResolvedValue(null);
 
-    // Assert
-    expect(action).toEqual(expectedAction)
-  })
+    // Create a mock store
+    const store_ = mockStore(store.getState());
 
-  // eslint-disable-next-line max-len
-  it('should dispatch AUTOCOMPLETE_FETCH_SUCCESS with autocomplete options when fetchAutocompleteSuccess is called', () => {
-    // Arrange
-    const response = {
-      url: 'https://graph.microsoft.com/v1.0/',
-      parameters: {
-        verb: 'GET',
-        values: [],
-        links: []
-      },
-      createdAt: ''
-    }
-    const expectedAction = {
-      type: AUTOCOMPLETE_FETCH_SUCCESS,
-      response
-    }
+    // Call the function by dispatching the returned async function
+    await store_.dispatch(fetchAutoCompleteOptions(url, version));
 
-    // Act
-    const action = fetchAutocompleteSuccess(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  })
-
-  it('should dispatch AUTOCOMPLETE_FETCH_PENDING when fetchAutocompletePending() is called', () => {
-    // Arrange
-    const expectedAction = {
-      type: AUTOCOMPLETE_FETCH_PENDING
-    }
-
-    // Act
-    const action = fetchAutocompletePending();
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  })
-
-  jest.mock('../../../../src/modules/suggestions/suggestions.ts', () => {
-    return {
-      getSuggestions: () => {
-        return Promise.resolve({
-          url: 'https://graph.microsoft.com/v1.0/',
-          parameters: [
-            {
-              name: 'verb',
-              values: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
-            }
-          ],
-          createdAt: '363647474'
-        });
-      }
-    }
-  })
-
-  describe('Autocomplete suggestions thunk', () => {
-    it('Should begin the api call and pull autocomplete suggestions, but fail and return an empty array ', () => {
-      // Arrange
-      const expectedResponse = {
-        url: 'https://graph.microsoft.com/v1.0/',
-        parameters: {
-          verb: 'GET',
-          values: [],
-          links: []
-        },
-        createdAt: ''
-      }
-      fetch.mockResponseOnce(JSON.stringify(expectedResponse));
-
-      const store_ = mockStore({ autocomplete: null });
-
-      // Act
-      // @ts-ignore
-      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/', 'v1.0'));
-
-      // Assert
-      expect(store_.getActions()).toEqual([]);
-    });
-
-    it('should dispatch AUTOCOMPLETE_FETCH_ERROR when fetch does not return autoOptions', () => {
-      // Arrange
-      const expectedAction = {
-        type: AUTOCOMPLETE_FETCH_ERROR,
-        response: {}
-      };
-      const store_ = mockStore({})
-
-      // Act
-      // @ts-ignore
-      store_.dispatch(fetchAutoCompleteOptions('https://graph.microsoft.com/v1.0/me?', 'v1.0'))
-        .then(() => {
-          // Assert
-          expect(store_.getActions()).toEqual([expectedAction]);
-        })
-
-    })
-  })
-})
+    // Assertions
+    const expectedActions = [
+      { type: 'AUTOCOMPLETE_FETCH_PENDING', response: null },
+      { type: 'AUTOCOMPLETE_FETCH_ERROR', response: {} }
+    ];
+    expect(store_.getActions()).toEqual(expectedActions);
+  });
+});

@@ -1,6 +1,3 @@
-import { hasPlaceHolders, hasWhiteSpace } from '../../../../utils/sample-url-generation';
-import { translateMessage } from '../../../../utils/translate-messages';
-
 function cleanUpSelectedSuggestion(compare: string, userInput: string, selected: string) {
   let finalSelectedSuggestion = `${userInput + selected}`;
   if (compare) {
@@ -20,22 +17,21 @@ function getLastCharacterOf(content: string) {
 
 // Filter out suggestions that don't contain the user's input
 function getFilteredSuggestions(compareString: string, suggestions: string[]) {
-  return suggestions.filter((suggestion: string) => {
-    return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
-  });
-}
 
-function getErrorMessage(queryUrl: string) {
-  if (!queryUrl) {
-    return translateMessage('Missing url');
+  function getStartsWith() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().startsWith(compareString.toLocaleLowerCase());
+    });
   }
-  if (hasWhiteSpace(queryUrl)) {
-    return translateMessage('Invalid whitespace in URL');
+
+  function getIncludes() {
+    return suggestions.filter((suggestion: string) => {
+      return suggestion.toLowerCase().indexOf(compareString.toLowerCase()) > -1;
+    });
   }
-  if (hasPlaceHolders(queryUrl)) {
-    return translateMessage('Parts between {} need to be replaced with real values');
-  }
-  return '';
+
+  const filteredSuggestions = getStartsWith().concat(getIncludes());
+  return Array.from(new Set(filteredSuggestions));
 }
 
 function getSearchText(input: string, index: number) {
@@ -46,9 +42,9 @@ function getSearchText(input: string, index: number) {
 }
 
 export {
-  getErrorMessage,
-  getFilteredSuggestions,
   cleanUpSelectedSuggestion,
+  getFilteredSuggestions,
   getLastCharacterOf,
   getSearchText
-}
+};
+

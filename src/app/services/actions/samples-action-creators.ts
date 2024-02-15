@@ -1,34 +1,37 @@
-import { geLocale } from '../../../appLocale';
-import { IAction } from '../../../types/action';
+import { samplesCache } from '../../../modules/cache/samples.cache';
+import { AppDispatch } from '../../../store';
+import { AppAction } from '../../../types/action';
 import { IRequestOptions } from '../../../types/request';
+import { queries } from '../../views/sidebar/sample-queries/queries';
 import {
   SAMPLES_FETCH_ERROR,
   SAMPLES_FETCH_PENDING,
   SAMPLES_FETCH_SUCCESS
 } from '../redux-constants';
 
-export function fetchSamplesSuccess(response: object): IAction {
+export function fetchSamplesSuccess(response: object): AppAction {
   return {
     type: SAMPLES_FETCH_SUCCESS,
     response
   };
 }
 
-export function fetchSamplesError(response: object): IAction {
+export function fetchSamplesError(response: object): AppAction {
   return {
     type: SAMPLES_FETCH_ERROR,
     response
   };
 }
 
-export function fetchSamplesPending(): any {
+export function fetchSamplesPending(): AppAction {
   return {
-    type: SAMPLES_FETCH_PENDING
+    type: SAMPLES_FETCH_PENDING,
+    response: null
   };
 }
 
-export function fetchSamples(): Function {
-  return async (dispatch: Function, getState: Function) => {
+export function fetchSamples() {
+  return async (dispatch: AppDispatch, getState: Function) => {
     const { devxApi } = getState();
     let samplesUrl = `${devxApi.baseUrl}/samples`;
 
@@ -37,8 +40,7 @@ export function fetchSamples(): Function {
       : `${samplesUrl}`;
 
     const headers = {
-      'Content-Type': 'application/json',
-      'Accept-Language': geLocale
+      'Content-Type': 'application/json'
     };
 
     const options: IRequestOptions = { headers };
@@ -53,7 +55,11 @@ export function fetchSamples(): Function {
       const res = await response.json();
       return dispatch(fetchSamplesSuccess(res.sampleQueries));
     } catch (error) {
-      return dispatch(fetchSamplesError({ error }));
+      let cachedSamples = await samplesCache.readSamples();
+      if (cachedSamples.length === 0) {
+        cachedSamples = queries;
+      }
+      return dispatch(fetchSamplesError(cachedSamples));
     }
   };
 }

@@ -1,27 +1,27 @@
+import { getTheme, MessageBarType } from '@fluentui/react';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
-import { getTheme, MessageBarType } from '@fluentui/react';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
-import { IRootState } from '../../../../../types/root';
+import { AppDispatch, useAppSelector } from '../../../../../store';
+import { componentNames, telemetry } from '../../../../../telemetry';
 import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
-import { componentNames, telemetry } from '../../../../../telemetry';
 
 export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
-  const { profile, policies } = useSelector((state: IRootState) => state);
+  const { profile } = useAppSelector((state) => state);
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;
@@ -94,15 +94,15 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       },
       userEmail: ' ',  // Replaced by the user email
       userEmailConsentDefault: false, // Should the email checkbox be checked
-      emailPolicyValue: policies?.data?.email,
-      screenshotPolicyValue: policies?.data?.screenshot,
+      emailPolicyValue: 0, // NotConfigured = 0, Enabled = 1, Disabled = 2
+      screenshotPolicyValue: 0,
       customResourcesSetExternally: 2 // None = 0, Css = 1, Strings = 2, CssAndStrings = 3
     };
 
     floodgateObject.floodgate.initOptions = {
       autoDismiss: 2,
       campaignDefinitions: CampaignDefinitions,
-      showEmailAddress: (policies?.data?.email !== 2),
+      showEmailAddress: true,
       surveyEnabled: (profile?.profileType !== ACCOUNT_TYPE.AAD),
       onDismiss: (campaignId: string, submitted: boolean) => {
         const SecondsBeforePopup = getSecondsBeforePopup(floodgateObject.floodgate.getEngine()

@@ -1,6 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
+import { AppAction } from '../../../types/action';
 import { getProfileInfo, profileRequestError, profileRequestSuccess } from './profile-action-creators';
 import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 const middlewares = [thunk];
@@ -14,7 +15,7 @@ describe('Profile action creators', () => {
   it('should dispatch PROFILE_REQUEST_SUCCESS when profileRequestSuccess() is called', () => {
 
     const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: PROFILE_REQUEST_SUCCESS,
       response
     };
@@ -38,7 +39,7 @@ describe('Profile action creators', () => {
   it('should dispatch PROFILE_REQUEST_ERROR when profileRequestError() is called', () => {
     // Arrange
     const response = {};
-    const expectedAction = {
+    const expectedAction: AppAction = {
       type: PROFILE_REQUEST_ERROR,
       response
     }

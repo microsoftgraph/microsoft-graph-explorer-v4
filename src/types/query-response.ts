@@ -5,9 +5,6 @@ export interface IQueryResponseProps {
   mode: Mode;
   dispatch: Function;
   graphResponse?: IGraphResponse;
-  intl: {
-    message: object;
-  };
   verb: string;
   theme: string;
   scopes: string[];
@@ -16,12 +13,6 @@ export interface IQueryResponseProps {
     getConsent: Function;
   };
   mobileScreen: boolean;
-}
-
-export interface IQueryResponseState {
-  showShareQueryDialog: boolean;
-  showModal: boolean;
-  query: string;
 }
 
 export interface IGraphResponse {

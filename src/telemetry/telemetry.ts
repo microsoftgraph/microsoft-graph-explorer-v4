@@ -23,11 +23,16 @@ import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
   filterTelemetryTypes,
-  sanitizeStackTrace,
-  sanitizeTelemetryItemUriProperty
+  sanitizeTelemetryItemUriProperty,
+  filterResizeObserverExceptions
 } from './filters';
 import ITelemetry from './ITelemetry';
 import { getVersion } from '../app/utils/version';
+import {
+  getBrowserScreenSize,
+  getDeviceScreenScale
+} from '../app/utils/device-characteristics-telemetry';
+import variantService from '../app/services/variant-service';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
@@ -54,16 +59,18 @@ class Telemetry implements ITelemetry {
   public initialize() {
     this.appInsights.loadAppInsights();
     this.appInsights.trackPageView();
+    this.appInsights.addTelemetryInitializer(filterResizeObserverExceptions);
     this.appInsights.addTelemetryInitializer(filterTelemetryTypes);
     this.appInsights.addTelemetryInitializer(filterRemoteDependencyData);
-    this.appInsights.addTelemetryInitializer(sanitizeStackTrace);
     this.appInsights.addTelemetryInitializer(sanitizeTelemetryItemUriProperty);
     this.appInsights.addTelemetryInitializer(addCommonTelemetryItemProperties);
     this.appInsights.context.application.ver = getVersion().toString();
   }
 
-  public trackEvent(name: string, properties: {}) {
-    this.appInsights.trackEvent({ name, properties });
+  public trackEvent(name: string, properties:{ AssignmentContext?: string, [key: string]: any } = {}) {
+    const defaultProperties = { AssignmentContext: variantService.getAssignmentContext() };
+    const mergedProperties = { ...defaultProperties, ...properties };
+    this.appInsights.trackEvent({ name, properties: mergedProperties });
   }
 
   public trackException(
@@ -118,12 +125,32 @@ class Telemetry implements ITelemetry {
     telemetry.trackEvent(WINDOW_OPEN_EVENT, properties);
   }
 
+  public getDeviceCharacteristicsData() {
+    return {
+      deviceHeight: screen.height.toString(),
+      deviceWidth: screen.width.toString(),
+      browserScreenSize: getBrowserScreenSize(window.innerWidth),
+      browserHeight: window.innerHeight.toString(),
+      browserWidth: window.innerWidth.toString(),
+      scale: getDeviceScreenScale()
+    };
+  }
+
   private getInstrumentationKey() {
     return (
       (window as any).InstrumentationKey ||
       process.env.REACT_APP_INSTRUMENTATION_KEY ||
       ''
     );
+  }
+
+  public getUserId(){
+    try {
+      const userId = document.cookie.split(';').filter((item) => item.trim().startsWith('ai_user')).map((item) => item.split('=')[1])[0];
+      return userId.split('|')[0];
+    } catch (error) {
+      return '';
+    }
   }
 }
 

@@ -1,32 +1,41 @@
 import { INavLink } from '@fluentui/react';
 
+export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
+
 export interface IResource {
   segment: string;
   labels: IResourceLabel[];
-  children: IResource[];
+  children?: IResource[];
 }
 
 export interface IResourceLabel {
   name: string;
-  methods: string[];
+  methods: ResourceMethod[] | string[];
+}
+
+export interface ResourceMethod {
+  name: Method;
+  documentationUrl?: string | null;
 }
 
 export interface IResources {
   pending: boolean;
   data: IResource;
   error: Error | null;
-  paths: IResourceLink[];
 }
 
-export interface IResourceLink extends INavLink {
+export interface IResourceLink extends INavLink, Omit<ResourcePath, 'key'> {
   labels: IResourceLabel[];
-  parent: string;
-  level: number;
-  paths: string[];
-  type: ResourceLinkType;
   links: IResourceLink[];
+}
+export interface ResourcePath {
+  paths: string[];
+  name: string;
+  type: ResourceLinkType;
   version?: string;
   method?: string;
+  key?: string;
+  url: string;
 }
 
 export enum ResourceLinkType {
@@ -36,5 +45,13 @@ export enum ResourceLinkType {
 }
 
 export enum ResourceOptions {
-  ADD_TO_COLLECTION = 'add-to-collection'
+  ADD_TO_COLLECTION = 'add-to-collection',
+  REMOVE_FROM_COLLECTION = 'remove-from-collection'
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  paths: ResourcePath[],
+  isDefault?: boolean;
 }

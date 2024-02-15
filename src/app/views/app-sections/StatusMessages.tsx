@@ -1,11 +1,10 @@
 import { Link, MessageBar } from '@fluentui/react';
-import React, { Fragment } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
+import { AppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
-import { IRootState } from '../../../types/root';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
@@ -13,12 +12,13 @@ import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
+import { translateMessage } from '../../utils/translate-messages';
 
 
 const StatusMessages = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { queryRunnerStatus, sampleQuery } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
 
   function displayStatusMessage(message: string, urls: any) {
     const { matches, parts } = getMatchesAndParts(message);
@@ -33,9 +33,9 @@ const StatusMessages = () => {
         const link = urls[part];
         if (link) {
           if (link.includes(GRAPH_URL)) {
-            return <Link onClick={() => setQuery(link)}>{link}</Link>;
+            return <Link onClick={() => setQuery(link)} underline>{link}</Link>;
           }
-          return <Link target="_blank" href={link}>{link}</Link>;
+          return <Link target="_blank" href={link} underline>{link}</Link>;
         }
       };
       return (
@@ -48,7 +48,9 @@ const StatusMessages = () => {
 
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
+    link = link.replace(/\.$/, '');
     query.sampleUrl = replaceBaseUrl(link);
+    query.selectedVerb = 'GET';
     dispatch(setSampleQuery(query));
   }
 
@@ -70,15 +72,15 @@ const StatusMessages = () => {
       {`${statusText} - `}{displayStatusMessage(message, urls)}
 
       {duration && <>
-        {` - ${duration}`}<FormattedMessage id='milliseconds' />
+        {` - ${duration} ${translateMessage('milliseconds')}`}
       </>}
 
       {status === 403 && <>.
-        <FormattedMessage id='consent to scopes' />
+        {translateMessage('consent to scopes')}
         <span style={{ fontWeight: 600 }}>
-          <FormattedMessage id='modify permissions' />
+          {translateMessage('modify permissions')}
         </span>
-        <FormattedMessage id='tab' />
+        {translateMessage('tab')}
       </>}
 
       {hint && <div>{hint}</div>}

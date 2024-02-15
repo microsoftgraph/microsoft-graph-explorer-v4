@@ -24,12 +24,13 @@ export const SETTINGS_BUTTON = 'Settings button';
 export const HELP_BUTTON = 'Help button';
 export const SIGN_IN_BUTTON = 'Sign in button';
 export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
+export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
+export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
 export const RESOURCES_LIST_ITEM = 'Resources list item';
 export const SAMPLE_QUERY_LIST_ITEM = 'Sample query list item';
-export const RESOURCES_ISOLATE_QUERY_LIST_ITEM = 'Resources isolate query list item';
 export const ADD_RESOURCE_TO_COLLECTION_LIST_ITEM = 'Add resource to collection list item';
 
 // Tabs
@@ -46,6 +47,18 @@ export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
 export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
+export const KEYBOARD_COPY_TABS = {
+  'access-tokens-tab': 'Access token tab',
+  'response-tab': 'Response preview tab',
+  'response-headers-tab': 'Response headers tab',
+  'csharp-tab': 'Csharp tab',
+  'java-tab': 'Java tab',
+  'javascript-tab': 'Javascript tab',
+  'go-tab': 'Go tab',
+  'powershell-tab': 'Powershell tab',
+  'JSON-schema-tab': 'JSON schema tab',
+  'request-body-tab': 'Request body tab'
+}
 
 // Dropdowns
 export const VERSION_CHANGE_DROPDOWN = 'Version change dropdown';
@@ -53,6 +66,8 @@ export const QUERY_URL_AUTOCOMPLETE_DROPDOWN = 'Query URL autocomplete dropdown'
 
 // Links
 export const DOCUMENTATION_LINK = 'Documentation link';
+export const AUTOCOMPLETE_DOCUMENTATION_LINK = 'Autocomplete documentation link';
+export const RESOURCE_DOCUMENTATION_LINK = 'Resource documentation link';
 export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
 export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
@@ -82,6 +97,8 @@ export const CODE_SNIPPET_LANGUAGES = {
 export const GE_DOCUMENTATION_LINK = 'GE documentation link';
 export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
+export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
+export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';

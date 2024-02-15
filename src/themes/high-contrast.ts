@@ -24,6 +24,7 @@ export const highContrast = {
     white: '#000000',
     blueMid: '#6cb8f6',
     green: '#92c353'
+
   },
   semanticColors: {
     messageText: '#f4f4f4',

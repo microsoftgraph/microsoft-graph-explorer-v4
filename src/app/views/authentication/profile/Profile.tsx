@@ -1,25 +1,22 @@
 import {
-  ActionButton, Callout, DefaultButton, FontSizes, getTheme, IOverlayProps, IPersonaProps,
-  IPersonaSharedProps, Label, mergeStyleSets, Panel, PanelType, Persona, PersonaSize,
-  PrimaryButton, Spinner, SpinnerSize, Stack, styled
+  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
+  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
-import React, { useEffect, useState } from 'react'; import { useDispatch, useSelector } from 'react-redux';
 import { useId } from '@fluentui/react-hooks';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { IRootState } from '../../../../types/root';
+import { globalCloud, storeCloudValue } from '../../../../modules/sovereign-clouds';
+import { AppDispatch, useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 import { signOut } from '../../../services/actions/auth-action-creators';
-import { consentToScopes } from '../../../services/actions/permissions-action-creator';
-import { togglePermissionsPanel } from '../../../services/actions/permissions-panel-action-creator';
+import { setActiveCloud } from '../../../services/actions/cloud-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
+import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
-import { Permission } from '../../query-runner/request/permissions';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-import { Mode } from '../../../../types/enums';
-import { storeCloudValue, globalCloud } from '../../../../modules/sovereign-clouds';
-import { setActiveCloud } from '../../../services/actions/cloud-action-creator';
 
 const getInitials = (name: string) => {
   let initials = '';
@@ -38,23 +35,20 @@ const getInitials = (name: string) => {
 };
 
 const Profile = (props: any) => {
-  const dispatch = useDispatch();
-  const {
-    profile,
-    authToken,
-    permissionsPanelOpen,
-    graphExplorerMode
-  } = useSelector((state: IRootState) => state);
+  const dispatch: AppDispatch = useDispatch();
+  const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
+
+  const { show: showPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isCalloutVisible, setIsCalloutVisible] = useState(false);
   const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
+
   const buttonId = useId('callout-button');
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, inactiveConsentStyles,
-    personaButtonStyles, profileContainerStyles, permissionPanelStyles, activeConsentStyles } = profileStyles(theme);
+  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles,
+    personaButtonStyles, profileContainerStyles } = profileStyles(theme);
 
   useEffect(() => {
     if (authenticated) {
@@ -85,64 +79,17 @@ const Profile = (props: any) => {
   };
 
   const changePanelState = () => {
-    let open = !!permissionsPanelOpen;
-    open = !open;
-    dispatch(togglePermissionsPanel(open));
-    setSelectedPermissions([]);
-    trackSelectPermissionsButtonClickEvent();
-  };
-
-  const trackSelectPermissionsButtonClickEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.VIEW_ALL_PERMISSIONS_BUTTON
-    });
-  };
-
-  const setPermissions = (permissions: []) => {
-    setSelectedPermissions(permissions);
-  };
-
-  const handleConsent = () => {
-    dispatch(consentToScopes(selectedPermissions));
-    setSelectedPermissions([]);
-  };
-
-  const getSelectionDetails = () => {
-    const selectionCount = selectedPermissions.length;
-
-    switch (selectionCount) {
-      case 0:
-        return '';
-      case 1:
-        return `1 ${translateMessage('selected')}: ` + selectedPermissions[0];
-      default:
-        return `${selectionCount} ${translateMessage('selected')}`;
-    }
-  };
-
-  const onRenderFooterContent = () => {
-    return (
-      <div>
-        <Label>{getSelectionDetails()}</Label>
-        <PrimaryButton
-          disabled={selectedPermissions.length === 0}
-          onClick={() => handleConsent()}
-          style={(selectedPermissions.length === 0) ? activeConsentStyles : inactiveConsentStyles}
-        >
-          {translateMessage('Consent')}
-        </PrimaryButton>
-        <DefaultButton onClick={() => changePanelState()}>
-          {translateMessage('Cancel')}
-        </DefaultButton>
-      </div>
-    );
+    showPermissions({
+      settings: {
+        title: translateMessage('Permissions'),
+        width: 'lg'
+      }
+    })
   };
 
   const classes = classNames(props);
 
-  const panelOverlayProps: IOverlayProps = {
-    isDarkThemed: true
-  }
+
   const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
     return (
       <span style={{ fontSize: FontSizes.small }}>
@@ -222,20 +169,6 @@ const Profile = (props: any) => {
   return (
     <div className={classes.profile} style={profileContainerStyles}>
       {showProfileComponent(persona)}
-      <Panel
-        isOpen={permissionsPanelOpen}
-        onDismiss={() => changePanelState()}
-        type={PanelType.medium}
-        hasCloseButton={true}
-        headerText={translateMessage('Permissions')}
-        onRenderFooterContent={onRenderFooterContent}
-        isFooterAtBottom={true}
-        closeButtonAriaLabel='Close'
-        overlayProps={panelOverlayProps}
-        styles={permissionPanelStyles}
-      >
-        <Permission panel={true} setPermissions={setPermissions} />
-      </Panel>
     </div>
   );
 }

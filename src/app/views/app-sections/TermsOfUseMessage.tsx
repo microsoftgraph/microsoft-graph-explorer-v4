@@ -1,46 +1,47 @@
 import { Link, MessageBar, MessageBarType, styled } from '@fluentui/react';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../appLocale';
+import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
-import { IRootState } from '../../../types/root';
 import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
+import { translateMessage } from '../../utils/translate-messages';
 import { appStyles } from '../App.styles';
 
-const styledTermsOfUseMessage = () => {
+const StyledTermsOfUseMessage = () => {
 
   const { termsOfUse } =
-    useSelector((state: IRootState) => state);
+    useAppSelector((state) => state);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   if (termsOfUse) {
     return <MessageBar messageBarType={MessageBarType.info}
       isMultiline={true}
       onDismiss={() => dispatch(clearTermsOfUse())}
       dismissButtonAriaLabel='Close'
       style={{ position: 'relative' }}>
-      <FormattedMessage id='use the Microsoft Graph API' />
+      {translateMessage('use the Microsoft Graph API')}
       <Link
         onClick={(e) =>
           telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_APIS_TERMS_OF_USE_LINK)}
-        href={'https://docs.microsoft.com/' + geLocale +
-          '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'>
-        <FormattedMessage id='Terms of use' /></Link>.
-      <FormattedMessage id='View the' />
+        href={'https://learn.microsoft.com/' + geLocale +
+          '/legal/microsoft-apis/terms-of-use?context=graph/context'} target='_blank' rel='noopener noreferrer'
+        underline>
+        {translateMessage('Terms of use')}</Link>.
+      {translateMessage('View the')}
       <Link
         onClick={(e) =>
           telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_PRIVACY_STATEMENT_LINK)}
         href={'https://privacy.microsoft.com/' + geLocale + '/privacystatement'}
-        target='_blank' rel='noopener noreferrer'>
-        <FormattedMessage id='Microsoft Privacy Statement' /></Link>.
+        target='_blank' rel='noopener noreferrer'
+        underline>
+        {translateMessage('Microsoft Privacy Statement')}</Link>.
     </MessageBar>;
   }
   return <div />;
 }
 // @ts-ignore
-const TermsOfUseMessage = styled(styledTermsOfUseMessage, appStyles);
+const TermsOfUseMessage = styled(StyledTermsOfUseMessage, appStyles);
 export default TermsOfUseMessage;

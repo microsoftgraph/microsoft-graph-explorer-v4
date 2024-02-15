@@ -1,27 +1,23 @@
-import { getTheme, Icon, ITheme, PivotItem } from '@fluentui/react';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { getTheme, IPivotItemProps, ITheme, PivotItem } from '@fluentui/react';
+import { useAppSelector } from '../../../../store';
 
-import { componentNames, telemetry } from '../../../../telemetry';
+import { componentNames } from '../../../../telemetry';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { Mode } from '../../../../types/enums';
-import { IQuery } from '../../../../types/query-runner';
-import { IRootState } from '../../../../types/root';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
-import AdaptiveCard from '../adaptive-cards/AdaptiveCard';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
-import { ResponseHeaders } from '../headers';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { Snippets } from '../snippets';
+import { AdaptiveCards, GraphToolkit, ResponseHeaders,
+  Snippets } from '../../common/lazy-loader/component-registry';
 
-export const getPivotItems = () => {
+export const GetPivotItems = () => {
 
-  const { graphExplorerMode: mode, sampleQuery, graphResponse: { body } } = useSelector((state: IRootState) => state);
+  const { graphExplorerMode: mode, sampleQuery,
+    graphResponse: { body } } = useAppSelector((state) => state);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
@@ -46,17 +42,20 @@ export const getPivotItems = () => {
     }
     return null;
   }
+  function renderItemLink(
+    link?: IPivotItemProps,
+    defaultRenderer?: (link?: IPivotItemProps) => JSX.Element | null,
+  ): JSX.Element | null {
+    if (!link || !defaultRenderer) {
+      return null;
+    }
 
-  function renderItemLink(link: any) {
     return (
-      <>
-        <Icon iconName={link.itemIcon} style={{ paddingRight: 5 }} />
-        {link.headerText}
-
+      <span>
+        {defaultRenderer({ ...link, itemKey: 'adaptive-cards' })}
         {link.itemKey === 'adaptive-cards' && showDotIfAdaptiveCardPresent()}
         {link.itemKey === 'toolkit-component' && showDotIfGraphToolkitPresent()}
-      </>
-
+      </span>
     );
   }
 
@@ -68,12 +67,11 @@ export const getPivotItems = () => {
       itemKey='response-preview' // To be used to construct component name for telemetry data
       headerText={translateMessage('Response Preview')}
       title={translateMessage('Response Preview')}
-      onRenderItemLink={renderItemLink}
       headerButtonProps={{
         'aria-controls': 'response-tab'
       }}
     >
-      <div id={'response-tab'}><Response /></div>
+      <div id={'response-tab'} tabIndex={0}><Response /></div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -82,15 +80,13 @@ export const getPivotItems = () => {
       itemIcon='FileComment'
       itemKey='response-headers'
       title={translateMessage('Response Headers')}
-      onRenderItemLink={renderItemLink}
       headerButtonProps={{
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'}><ResponseHeaders/></div>
+      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
     </PivotItem>
   ];
-
   if (mode === Mode.Complete) {
     pivotItems.push(
       <PivotItem
@@ -100,12 +96,11 @@ export const getPivotItems = () => {
         headerText={translateMessage('Snippets')}
         itemIcon='PasteAsCode'
         itemKey='code-snippets'
-        onRenderItemLink={renderItemLink}
         headerButtonProps={{
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'}><Snippets /></div>
+        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -119,7 +114,7 @@ export const getPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'}><GraphToolkit /></div>
+        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -136,8 +131,8 @@ export const getPivotItems = () => {
         <ThemeContext.Consumer >
           {(theme) => (
             // @ts-ignore
-            <div id={'adaptive-cards-tab'}>
-              <AdaptiveCard
+            <div id={'adaptive-cards-tab'} tabIndex={0}>
+              <AdaptiveCards
                 body={body}
                 hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />
@@ -149,12 +144,4 @@ export const getPivotItems = () => {
   }
 
   return pivotItems;
-};
-
-export const onPivotItemClick = (query: IQuery, item?: PivotItem) => {
-  if (!item) { return; }
-  const tabKey = item.props.itemKey;
-  if (tabKey) {
-    telemetry.trackTabClickEvent(tabKey, query);
-  }
 };

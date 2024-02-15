@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,6 +21,12 @@
   "include": [
     "src",
     "src/tests",
-    "typings.d.ts"
+    "typings.d.ts",
+    ".eslintrc.js",
+    "__mocks__",
+    "config",
+    "jest.config.js",
+    "playwright.config.ts",
+    "versioned-build.js"
   ]
 }

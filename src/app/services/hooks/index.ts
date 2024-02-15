@@ -1,5 +1,5 @@
-import { usePrevious } from './usePrevious';
+import { usePopups } from './usePopups';
 
-export default {
-  usePrevious
+export {
+  usePopups
 }

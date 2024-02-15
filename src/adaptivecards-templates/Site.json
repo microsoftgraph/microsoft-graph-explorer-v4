@@ -1,0 +1,38 @@
+{
+    "type": "AdaptiveCard",
+    "version": "1.0",
+    "@odata.type": "#microsoft.graph.site",
+    "body": [
+        {
+            "type": "Container",
+            "$data": "${value}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "${displayName}",
+                    "size": "Medium",
+                    "weight": "Bolder"
+                },
+                {
+                    "type": "TextBlock",
+                    "text": "${description}",
+                    "spacing": "Small",
+                    "wrap": true,
+                    "maxLines": 2
+                },
+                {
+                    "type": "ActionSet",
+                    "actions": [
+                        {
+                            "type": "Action.OpenUrl",
+                            "title": "Open site",
+                            "url": "${webUrl}"
+                        }
+                    ]
+                }
+            ],
+            "separator": true
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}

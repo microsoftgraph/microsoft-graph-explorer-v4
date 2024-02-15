@@ -1,0 +1,166 @@
+id:
+name: GitOps.PullRequestIssueManagement
+description: GitOps.PullRequestIssueManagement primitive
+owner:
+resource: repository
+disabled: false
+where:
+configuration:
+  resourceManagementConfiguration:
+    scheduledSearches:
+    - description:
+      frequencies:
+      - hourly:
+          hour: 1
+      filters:
+      - isIssue
+      - isOpen
+      - hasLabel:
+          label: 'Needs: Author Feedback'
+      - hasLabel:
+          label: 'Status: No Recent Activity'
+      - noActivitySince:
+          days: 3
+      - isNotLabeledWith:
+          label: Service Bug
+      actions:
+      - closeIssue
+    - description:
+      frequencies:
+      - hourly:
+          hour: 1
+      filters:
+      - isIssue
+      - isOpen
+      - hasLabel:
+          label: 'Needs: Author Feedback'
+      - noActivitySince:
+          days: 4
+      - isNotLabeledWith:
+          label: 'Status: No Recent Activity'
+      - isNotLabeledWith:
+          label: Service Bug
+      actions:
+      - addLabel:
+          label: 'Status: No Recent Activity'
+      - addReply:
+          reply: This issue has been automatically marked as stale because it has been marked as requiring author feedback but has not had any activity for **4 days**. It will be closed if no further activity occurs **within 3 days of this comment**.
+    - description:
+      frequencies:
+      - hourly:
+          hour: 1
+      filters:
+      - isIssue
+      - isOpen
+      - hasLabel:
+          label: duplicate
+      - noActivitySince:
+          days: 1
+      actions:
+      - addReply:
+          reply: This issue has been marked as duplicate and has not had any activity for **1 day**. It will be closed for housekeeping purposes.
+      - closeIssue
+    - description:
+      frequencies:
+      - hourly:
+          hour: 1
+      filters:
+      - isOpen
+      - hasLabel:
+          label: 'API: Graph'
+      - noActivitySince:
+          days: 14
+      actions:
+      - addLabel:
+          label: Service issue
+      - addReply:
+          reply: >-
+            Hello @${issueAuthor}
+
+
+            Thank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.
+
+
+            https://aka.ms/askgraph
+    eventResponderTasks:
+    - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
+          - not:
+              and:
+                - isAssignedToSomeone
+                - isLabeled
+      then:
+        - addLabel:
+            label: 'ToTriage'
+    - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
+          - isAssignedToSomeone
+          - isLabeled
+      then:
+        - removeLabel:
+            label: 'ToTriage'
+    - if:
+      - payloadType: Issue_Comment
+      - isAction:
+          action: Created
+      - isActivitySender:
+          issueAuthor: True
+      - hasLabel:
+          label: 'Needs: Author Feedback'
+      then:
+      - addLabel:
+          label: "Needs: Attention \U0001F44B"
+      - removeLabel:
+          label: 'Needs: Author Feedback'
+      description:
+    - if:
+      - payloadType: Issues
+      - not:
+          isAction:
+            action: Closed
+      - hasLabel:
+          label: 'Status: No Recent Activity'
+      then:
+      - removeLabel:
+          label: 'Status: No Recent Activity'
+      description:
+    - if:
+      - payloadType: Issue_Comment
+      - activitySenderHasAssociation:
+          association: Contributor
+      - bodyContains:
+          pattern: '?'
+          isRegex: False
+      - bodyContains:
+          pattern: '@'
+          isRegex: False
+      then:
+      - addLabel:
+          label: 'Needs: Author Feedback'
+      description:
+    - if:
+      - payloadType: Issue_Comment
+      - hasLabel:
+          label: 'API: Graph'
+      then:
+      - addReply:
+          reply: >-
+            Hello @${issueAuthor}
+
+
+            Thank you for reporting your concern. Unfortunately, we in the Graph Explorer team do not have any ownership of the APIs that are causing you issues. If you report this issue in the Microsoft Q&A forum, it will get routed to the appropriate team for them to triage.
+
+            https://aka.ms/askgraph
+
+            This issue will now be closed. If you encounter any issues with Graph Explorer in the future, please feel free to open an issue.
+      - addLabel:
+          label: Service issue
+      - closeIssue
+      description:
+      triggerOnOwnActions: true
+onFailure:
+onSuccess:

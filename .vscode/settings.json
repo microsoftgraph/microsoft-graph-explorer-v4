@@ -4,25 +4,22 @@
     "**/all.min.js": true
   },
   "files.exclude": {
-    "**/node_modules": true,
-    "**/.github": true
+    "**/node_modules": false,
+    "**/.github": false
   },
   "files.trimTrailingWhitespace": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.format.enable": true,
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "eslint.validate": [
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["typescript", "typescriptreact"],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).d.ts, $(capture).spec.ts",
     "*.tsx": "$(capture).ts, $(capture).d.ts, $(capture).spec.tsx, $(capture).styles.ts",
     "package.json": "package-lock.json, .npmrc"
-  }
+  },
 }

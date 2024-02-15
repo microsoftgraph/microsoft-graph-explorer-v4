@@ -2,13 +2,13 @@ import {
   CommandBar, CommandBarButton, DefaultButton, Dialog, DialogFooter, DialogType,
   getId, getTheme, IButtonProps, ICommandBarItemProps, PrimaryButton
 } from '@fluentui/react';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { IRootState } from '../../../../../types/root';
-import { removeResourcePaths } from '../../../../services/actions/resource-explorer-action-creators';
+import { AppDispatch, useAppSelector } from '../../../../../store';
+import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
+import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
-import PathsReview from '../panels/PathsReview';
 import { resourceExplorerStyles } from '../resources.styles';
 
 interface ICommandOptions {
@@ -16,13 +16,16 @@ interface ICommandOptions {
 }
 
 const CommandOptions = (props: ICommandOptions) => {
-  const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
+
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const { version } = props;
   const theme = getTheme();
 
-  const { resources: { paths } } = useSelector((state: IRootState) => state);
+  const { collections } = useAppSelector((state) => state);
+  const paths = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
+
   const itemStyles = resourceExplorerStyles(theme).itemStyles;
   const commandStyles = resourceExplorerStyles(theme).commandBarStyles;
   const options: ICommandBarItemProps[] = [
@@ -31,7 +34,7 @@ const CommandOptions = (props: ICommandOptions) => {
       text: translateMessage('Preview collection'),
       ariaLabel: translateMessage('Preview collection'),
       iconProps: { iconName: 'View' },
-      onClick: () => toggleSelectedResourcesPreview()
+      onClick: () => openPreviewCollection()
     }
   ];
 
@@ -47,10 +50,16 @@ const CommandOptions = (props: ICommandOptions) => {
     }
   ]
 
-  const toggleSelectedResourcesPreview = () => {
-    let open = isOpen;
-    open = !open;
-    setIsOpen(open);
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
+        width: 'xl'
+      },
+      data: {
+        version
+      }
+    })
   }
 
   const removeAllResources = () => {
@@ -82,11 +91,6 @@ const CommandOptions = (props: ICommandOptions) => {
         farItemsGroupAriaLabel='More selection actions'
         buttonAs={CustomButton}
         styles={commandStyles}
-      />
-      <PathsReview
-        isOpen={isOpen}
-        version={version}
-        toggleSelectedResourcesPreview={toggleSelectedResourcesPreview}
       />
       <Dialog
         hidden={isDialogHidden}

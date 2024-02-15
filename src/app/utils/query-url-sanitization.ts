@@ -2,6 +2,7 @@
 import { IQuery } from '../../types/query-runner';
 import {
   isAllAlpha,
+  isPlaceHolderSegment,
   sanitizeQueryParameter
 } from './query-parameter-sanitization';
 import { parseSampleUrl } from './sample-url-generation';
@@ -11,7 +12,7 @@ const DEPRECATION_REGEX = /^[a-z]+_v2$/gi;
 // Matches patterns like users('MeganB@M365x214355.onmicrosoft.com')
 const FUNCTION_CALL_REGEX = /^[a-z]+\(.*\)$/i;
 // Matches entity and entity set name patterns like microsoft.graph.group or all letters
-const ENTITY_NAME_REGEX = /^((microsoft.graph(.[a-z]+)+)|[a-z]+)$/i;
+const ENTITY_NAME_REGEX = /^(microsoft\.graph(\.[a-z]+)+|(?![a-z.])[a-z]+)$/i;
 // Matches folder/file path which is part of url  e.g. /root:/FolderA/FileB.txt:/
 const ITEM_PATH_REGEX = /(?:\/)[\w]+:[\w\/.]+(:(?=\/)|$)/g;
 // Matches patterns like root: <value>
@@ -79,7 +80,6 @@ function sanitizedQueryUrl(url: string): string {
         return `${match.substring(0, match.indexOf(':'))}:<value>`;
       }
     );
-
     // Split requestUrl into segments that can be sanitized individually
     const urlSegments = resourceUrl.split('/');
     urlSegments.forEach((segment, index) => {
@@ -132,6 +132,10 @@ function sanitizePathSegment(previousSegment: string, segment: string): string {
       })
       .join(',');
     return `${segment.substring(0, openingBracketIndex)}(${sanitizedText})`;
+  }
+
+  if (isPlaceHolderSegment(segment)) {
+    return segment;
   }
 
   if (!isAllAlpha(previousSegment) && !isDeprecation(previousSegment)) {

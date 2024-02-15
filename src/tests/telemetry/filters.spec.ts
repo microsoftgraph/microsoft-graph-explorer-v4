@@ -1,9 +1,11 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import {
-  filterTelemetryTypes, filterRemoteDependencyData, addCommonTelemetryItemProperties, sanitizeTelemetryItemUriProperty,
-  sanitizeStackTrace
+  filterTelemetryTypes,
+  filterRemoteDependencyData,
+  addCommonTelemetryItemProperties,
+  sanitizeTelemetryItemUriProperty,
+  filterResizeObserverExceptions
 } from '../../../src/telemetry/filters';
-
 
 describe('Telemetry filters should', () => {
   it('ensure telemetry types to include are correct when filterTelemetryTypes() is called', () => {
@@ -21,7 +23,6 @@ describe('Telemetry filters should', () => {
 
     // Assert
     expect(result).toBe(true);
-
   });
 
   it('return true by default when filterRemoteDependencyData() is called', () => {
@@ -76,36 +77,25 @@ describe('Telemetry filters should', () => {
 
     // Assert
     expect(result).toBe(true);
-  })
+  });
 
-  it('sanitize stack trace', () => {
+  it('remove telemetry with ResizeObserver loop limit error when filterResizeObserverExceptions() is called', () => {
     // Arrange
     const envelope: ITelemetryItem = {
       ver: '1.0',
       name: 'test',
       time: '',
       iKey: '',
-      baseType: 'ExceptionData',
-      baseData: {
-        exceptions: [
-          {
-            parsedStack: [
-              {
-                fileName: 'webpack-internal',
-                assembly: 'Assembly'
-              }
-            ],
-            stack: '\n First line of test, \n Second line of test'
-          }
-        ]
+      baseType: 'ErrorData',
+      data: {
+        message: 'ErrorEvent: ResizeObserver loop limit exceeded'
       }
     }
 
     // Act
-    const result = sanitizeStackTrace(envelope);
+    const result = filterResizeObserverExceptions(envelope);
 
     // Assert
-    expect(result).toBe(true);
-  })
-
+    expect(result).toBe(false);
+  });
 })

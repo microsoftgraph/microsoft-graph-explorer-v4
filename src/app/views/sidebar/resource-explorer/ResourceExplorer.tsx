@@ -1,21 +1,20 @@
 import {
-  Breadcrumb, DefaultButton,
-  IBreadcrumbItem, INavLink, INavLinkGroup, Label, Nav,
-  SearchBox, Spinner, SpinnerSize,
-  Stack, styled, Toggle
+  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
+  Stack,
+  styled,
+  Toggle
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
-import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
+import { useDispatch } from 'react-redux';
 
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
+import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { IRootState } from '../../../../types/root';
+import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { addResourcePaths } from '../../../services/actions/resource-explorer-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
@@ -23,61 +22,46 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
+import { UploadPostmanCollection } from './collection/UploadCollection';
 import CommandOptions from './command-options/CommandOptions';
 import {
-  createResourcesList, getCurrentTree,
-  getResourcePaths,
-  getUrlFromLink, removeCounter
+  createResourcesList, getResourcePaths,
+  getUrlFromLink
 } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
 
-const unstyledResourceExplorer = (props: any) => {
-  const dispatch = useDispatch();
-  const { resources } = useSelector(
-    (state: IRootState) => state
+const UnstyledResourceExplorer = (props: any) => {
+  const { resources: { data, pending }, collections } = useAppSelector(
+    (state) => state
   );
-  const classes = classNames(props);
-  const { data, pending, paths: selectedLinks } = resources;
 
+  const dispatch: AppDispatch = useDispatch();
+  const classes = classNames(props);
+  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: any[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
 
+  const resourcesToUse = data.children ? JSON.parse(JSON.stringify(data.children)) : [] as IResource[];
   const [version, setVersion] = useState(versions[0].key);
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = getResourcesSupportedByVersion(data.children, version, searchText);
+  const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
-  const [resourceItems, setResourceItems] = useState<IResource[]>(filteredPayload);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
 
   useEffect(() => {
     setItems(navigationGroup);
-    setResourceItems(filteredPayload)
   }, [filteredPayload.length]);
-
-  const [isolated, setIsolated] = useState<any>(null);
-  const [linkLevel, setLinkLevel] = useState(-1);
-
-  const generateBreadCrumbs = () => {
-    if (!!isolated && isolated.paths.length > 0) {
-      const breadcrumbItems: IBreadcrumbItem[] = [];
-      isolated.paths.forEach((path: string) => {
-        path = removeCounter(path);
-        breadcrumbItems.push({ text: path, key: path, onClick: navigateToBreadCrumb });
-      });
-      let { name } = isolated;
-      name = removeCounter(name);
-      breadcrumbItems.push({ text: name, key: name });
-      return breadcrumbItems;
-    }
-    return [];
-  }
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
+  }
+
+  const removeFromCollection = (item: IResourceLink) => {
+    dispatch(removeResourcePaths(getResourcePaths(item, version)));
   }
 
   const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
@@ -94,45 +78,6 @@ const unstyledResourceExplorer = (props: any) => {
     return debouce(changeSearchValue, 300);
   }, []);
 
-  const navigateToBreadCrumb = (ev?: any, item?: IBreadcrumbItem): void => {
-    const iterator = item!.key;
-    if (iterator === '/') {
-      disableIsolation();
-      return;
-    }
-
-    if (isolated) {
-      const { paths } = isolated;
-      const level = paths.findIndex((k: string) => k === iterator);
-      const currentTree = getCurrentTree({ paths, level, resourceItems, version });
-      isolateTree(currentTree);
-    }
-  }
-
-  const isolateTree = (navLink: any): void => {
-    const tree = [
-      {
-        isExpanded: true,
-        links: navLink.links
-      }
-    ];
-    setItems(tree);
-    setIsolated(navLink);
-    setLinkLevel(navLink.level);
-    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT,
-      {
-        ComponentName: componentNames.RESOURCES_ISOLATE_QUERY_LIST_ITEM,
-        ResourcePath: getUrlFromLink(navLink)
-      });
-  }
-
-  const disableIsolation = (): void => {
-    setIsolated(null);
-    setSearchText('');
-    const filtered = getResourcesSupportedByVersion(data.children, version);
-    setLinkLevel(-1);
-    setItems(createResourcesList(filtered, version));
-  }
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
     ev!.preventDefault();
@@ -144,15 +89,21 @@ const unstyledResourceExplorer = (props: any) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
     }
+
+    if (activity === ResourceOptions.REMOVE_FROM_COLLECTION) {
+      removeFromCollection(context);
+    }
   }
 
   const setQuery = (resourceLink: INavLink) => {
+    const link = resourceLink as IResourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
-    const resourceUrl = getUrlFromLink(resourceLink);
+    const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
     const sampleUrl = replaceBaseUrl(`${GRAPH_URL}/${version}${resourceUrl}`);
+    const verb = resourceLink.method!;
     const query: IQuery = {
-      selectedVerb: resourceLink.method!,
+      selectedVerb: verb.toString().toUpperCase(),
       selectedVersion: version,
       sampleUrl,
       sampleHeaders: [],
@@ -165,8 +116,6 @@ const unstyledResourceExplorer = (props: any) => {
       SelectedVersion: version
     });
   }
-
-  const breadCrumbs = generateBreadCrumbs();
 
   if (pending) {
     return (
@@ -181,65 +130,48 @@ const unstyledResourceExplorer = (props: any) => {
   }
 
   return (
-    <section style = {{marginTop: '8px'}}>
-      {!isolated && <>
-        <SearchBox
-          placeholder={translateMessage('Search resources')}
-          onChange={debouncedSearch}
-          disabled={!!isolated}
-          styles={searchBoxStyles}
+    <section style={{ marginTop: '8px' }}>
+      <SearchBox
+        placeholder={translateMessage('Search resources')}
+        onChange={debouncedSearch}
+        styles={searchBoxStyles}
+      />
+      <hr />
+      <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
+        <Toggle label={`${translateMessage('Switch to beta')}`}
+          onChange={changeVersion}
+          onText={translateMessage('On')}
+          offText={translateMessage('Off')}
+          inlineLabel
+          styles={{ text: { position: 'relative', top: '4px' } }}
         />
-        <hr />
-        <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-          <Toggle label={`${translateMessage('Switch to beta')}`}
-            onChange={changeVersion}
-            onText={translateMessage('On')}
-            offText={translateMessage('Off')}
-            inlineLabel
-            styles={{ text: { position: 'relative', top: '4px' } }}
-          />
-        </Stack>
-      </>}
+        < UploadPostmanCollection />
+      </Stack>
 
-      {selectedLinks && selectedLinks.length > 0 && <>
-        <Label><FormattedMessage id='Selected Resources' /> ({selectedLinks.length})</Label>
-        <CommandOptions version={version} />
-      </>
-      }
-
-      {
-        isolated && breadCrumbs.length > 0 &&
-        <>
-          <DefaultButton
-            text={translateMessage('Close isolation')}
-            iconProps={{ iconName: 'Back' }}
-            onClick={disableIsolation}
-          />
-          <hr />
-          <Breadcrumb
-            items={breadCrumbs}
-            maxDisplayedItems={3}
-            ariaLabel={translateMessage('Path display')}
-            overflowAriaLabel={translateMessage('More path links')}
-          />
+      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
+        {selectedLinks && selectedLinks.length > 0 && <>
+          <Label>{translateMessage('Selected Resources')} ({selectedLinks.length})</Label>
+          <CommandOptions version={version} />
         </>
+        }
+      </Stack>
+
+      {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
+        {translateMessage('Resources available')}
+      </Label>
       }
 
-      <Label styles={{ root: { position: 'relative', left: '10px' } }}>
-        <FormattedMessage id='Resources available' />
-      </Label>
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', {paddingBottom: '60px'}):
+        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
             groups={items}
             styles={navStyles}
-            onRenderLink={(link) => {
+            onRenderLink={link => {
               return <ResourceLink
-                link={link}
-                isolateTree={isolateTree}
+                link={link!}
+                version={version}
                 resourceOptionSelected={(activity: string, context: unknown) =>
                   resourceOptionSelected(activity, context)}
-                linkLevel={linkLevel}
                 classes={classes}
               />
             }}
@@ -252,5 +184,5 @@ const unstyledResourceExplorer = (props: any) => {
 }
 
 // @ts-ignore
-const ResourceExplorer = styled(unstyledResourceExplorer, sidebarStyles);
+const ResourceExplorer = styled(UnstyledResourceExplorer, sidebarStyles);
 export default ResourceExplorer;

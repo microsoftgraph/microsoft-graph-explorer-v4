@@ -12,7 +12,7 @@ import {
   replaceBaseUrl, storeCloudValue
 } from '../../../modules/sovereign-clouds';
 import { Sovereign } from '../../../modules/sovereign-clouds/cloud-options';
-import { IRootState } from '../../../types/root';
+import { ApplicationState } from '../../../types/root';
 import { setActiveCloud } from '../../services/actions/cloud-action-creator';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
@@ -27,7 +27,7 @@ interface ISovereignCloudsProps {
 
 export const SovereignClouds = ({ cloudSelectorOpen, toggleCloudSelector, prompt = false }: ISovereignCloudsProps) => {
   const dispatch = useDispatch();
-  const { sampleQuery, profile } = useSelector((state: IRootState) => state);
+  const { sampleQuery, profile } = useSelector((state: ApplicationState) => state);
 
   const cloudOptions: IChoiceGroupOption[] = new Sovereign(profile).getOptions();
   const currentCloud = (getCurrentCloud() !== undefined) ? getCurrentCloud() : globalCloud;
