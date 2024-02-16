@@ -30,16 +30,13 @@ class VariantService {
         };
 
     const client = new VariantAssignmentServiceClient(settings);
-    const response = await client.getVariantAssignments(request);
-    Promise.resolve(response).then((r) => {
-      if (r){
-        this.expResponse = r.featureVariables as TasResponse[] | null;
-        this.assignmentContext = r.assignmentContext;
-      }
-    })
-      .catch((error) => {
-        telemetry.trackException(new Error(errorTypes.UNHANDLED_ERROR), SeverityLevel.Error, error);
-      });
+    try {
+      const response = await client.getVariantAssignments(request);
+      this.expResponse = response.featureVariables as TasResponse[] | null;
+      this.assignmentContext = response.assignmentContext;
+    } catch (error) {
+      telemetry.trackException(new Error(errorTypes.UNHANDLED_ERROR), SeverityLevel.Error, error as object);
+    }
   }
 
   public createUser() {
