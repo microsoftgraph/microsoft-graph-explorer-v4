@@ -1,5 +1,6 @@
 import {
   FontIcon, getId, getTheme, IconButton, IStackTokens, Label,
+  MessageBar,
   registerIcons, Stack, TooltipHost
 } from '@fluentui/react';
 
@@ -12,6 +13,9 @@ import { Help } from './Help';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { Settings } from './settings/Settings';
 import TenantIcon from './tenantIcon';
+import { useState, useEffect } from 'react';
+import variantService from '../../services/variant-service';
+import { ALWAYSSHOWBUTTONS, BANNERMESSAGE } from '../../services/variant-constants';
 
 interface MainHeaderProps {
   toggleSidebar: Function;
@@ -32,6 +36,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
   const { profile, graphExplorerMode, sidebarProperties } = useAppSelector(
     (state) => state
   );
+  const [bannerMessage, setBannerMessage] = useState(' ');
 
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -41,6 +46,14 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
   const { rootStyles: itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
+
+  useEffect(() => {
+    variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
+      if (value) {
+        setBannerMessage(value as string);
+      }
+    });
+  }, []);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -114,6 +127,9 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
           <Authentication />
         </Stack>
       </Stack>
+      <MessageBar>
+        {bannerMessage}
+      </MessageBar>
     </Stack>
   );
 };
