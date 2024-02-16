@@ -48,11 +48,15 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
   useEffect(() => {
-    variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
-      if (value) {
-        setBannerMessage(value as string);
-      }
-    });
+    const delay = 1000;
+    const interval = setInterval(() => {
+      variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
+        if (value) {
+          setBannerMessage(value as string);
+        }
+      });
+    }, delay);
+    return () => clearInterval(interval);
   }, []);
 
   return (
