@@ -3,9 +3,12 @@ import {
   MessageBar,
   registerIcons, Stack, TooltipHost
 } from '@fluentui/react';
+import { useState } from 'react';
 
 import { useAppSelector } from '../../../store';
 import { Mode } from '../../../types/enums';
+import { BANNERMESSAGE } from '../../services/variant-constants';
+import variantService from '../../services/variant-service';
 import { translateMessage } from '../../utils/translate-messages';
 import { Authentication } from '../authentication';
 import { FeedbackButton } from './FeedbackButton';
@@ -13,9 +16,6 @@ import { Help } from './Help';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { Settings } from './settings/Settings';
 import TenantIcon from './tenantIcon';
-import { useState, useEffect } from 'react';
-import variantService from '../../services/variant-service';
-import { ALWAYSSHOWBUTTONS, BANNERMESSAGE } from '../../services/variant-constants';
 
 interface MainHeaderProps {
   toggleSidebar: Function;
@@ -36,7 +36,7 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
   const { profile, graphExplorerMode, sidebarProperties } = useAppSelector(
     (state) => state
   );
-  const [bannerMessage, setBannerMessage] = useState(' ');
+  const [bannerMessage, setBannerMessage] = useState('');
 
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -47,17 +47,13 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
     feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
     tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
-  useEffect(() => {
-    const delay = 1000;
-    const interval = setInterval(() => {
-      variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
-        if (value) {
-          setBannerMessage(value as string);
-        }
-      });
-    }, delay);
-    return () => clearInterval(interval);
-  }, []);
+  setTimeout(() => {
+    variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
+      if (value && value !== ' ') {
+        setBannerMessage(value as string);
+      }
+    });
+  }, 1000);
 
   return (
     <Stack tokens={sectionStackTokens}>
@@ -131,9 +127,9 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
           <Authentication />
         </Stack>
       </Stack>
-      <MessageBar>
+      {!!bannerMessage && <MessageBar>
         {bannerMessage}
-      </MessageBar>
+      </MessageBar>}
     </Stack>
   );
 };
