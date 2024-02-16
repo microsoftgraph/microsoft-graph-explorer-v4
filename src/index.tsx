@@ -3,8 +3,8 @@ import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
-
 import { Provider } from 'react-redux';
+
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
