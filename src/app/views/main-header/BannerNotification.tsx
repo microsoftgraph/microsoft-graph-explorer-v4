@@ -8,11 +8,10 @@ const BannerNotification = () => {
   const [bannerMessage, setBannerMessage] = useState('');
 
   setTimeout(() => {
-    variantService.getFeatureVariables('default', BANNERMESSAGE).then((value) => {
-      if (value && value !== ' ') {
-        setBannerMessage(value as string);
-      }
-    });
+    const value = variantService.getFeatureVariables('default', BANNERMESSAGE) as string;
+    if (value && value !== ' ') {
+      setBannerMessage(value);
+    }
   }, 1000);
 
   if (!!!bannerMessage) {

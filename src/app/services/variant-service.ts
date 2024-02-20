@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { VariantAssignmentRequest } from 'expvariantassignmentsdk/src/interfaces/VariantAssignmentRequest';
-import {VariantAssignmentServiceClient} from 'expvariantassignmentsdk/src/contracts/VariantAssignmentServiceClient';
+import { VariantAssignmentServiceClient } from 'expvariantassignmentsdk/src/contracts/VariantAssignmentServiceClient';
 import { VariantAssignmentClientSettings } from 'expvariantassignmentsdk/src/contracts/VariantAssignmentClientSettings';
 import { errorTypes, telemetry } from '../../telemetry';
 import { readFromLocalStorage, saveToLocalStorage } from '../utils/local-storage';
@@ -25,9 +25,9 @@ class VariantService {
     const settings: VariantAssignmentClientSettings = { endpoint: this.endpoint };
     this.createUser();
     const request: VariantAssignmentRequest =
-        {
-          parameters: this.getParameters()
-        };
+    {
+      parameters: this.getParameters()
+    };
 
     const client = new VariantAssignmentServiceClient(settings);
     try {
@@ -48,7 +48,7 @@ class VariantService {
     return this.assignmentContext;
   }
 
-  public async getFeatureVariables(namespace: string, flagname: string) {
+  public getFeatureVariables(namespace: string, flagname: string) {
     const defaultConfig = this.expResponse?.find(c => c.Id === namespace);
     return defaultConfig?.Parameters[flagname];
   }
