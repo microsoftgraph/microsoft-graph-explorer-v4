@@ -33,6 +33,6 @@ export interface IToken {
 }
 
 export interface ICacheData {
-  data: string,
+  data: string | object,
   expiry: number
 }

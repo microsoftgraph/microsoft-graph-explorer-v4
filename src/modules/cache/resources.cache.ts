@@ -14,8 +14,8 @@ const expiryTime = new Date().getTime() + 3 * 24 * 60 * 60 * 1000; //3 days expi
 export const resourcesCache = (function () {
 
   const saveResources = async (resource: IResource) => {
-    const cacheData={
-      data: JSON.stringify(resource),
+    const cacheData = {
+      data: resource,
       expiry: expiryTime
     }
     await resourcesStorage.setItem(RESOURCE_KEY, cacheData);
@@ -24,9 +24,9 @@ export const resourcesCache = (function () {
   const readResources = async (): Promise<IResource | null> => {
     const cacheData = await resourcesStorage.getItem(RESOURCE_KEY) as ICacheData;
     if (cacheData) {
-      const {data, expiry} = cacheData;
-      if(expiry >= Date.now()){
-        return JSON.parse(data);
+      const { data, expiry } = cacheData;
+      if (expiry >= Date.now()) {
+        return data as IResource;
       }
       resourcesStorage.removeItem(RESOURCE_KEY);
     }
