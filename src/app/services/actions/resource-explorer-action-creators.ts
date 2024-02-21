@@ -48,13 +48,38 @@ export function fetchResources() {
       if (cachedResources) {
         return dispatch(fetchResourcesSuccess(cachedResources));
       } else {
-        const response = await fetch(resourcesUrl, options);
-        if (response.ok) {
-          const resources = await response.json() as IResource;
-          resourcesCache.saveResources(resources);
-          return dispatch(fetchResourcesSuccess(resources));
-        }
-        throw response;
+        fetch(resourcesUrl, options)
+          .then(response => {
+            if (!response.ok) {
+              throw response;
+            }
+            const reader = response.body!.getReader();
+            return new ReadableStream({
+              start(controller) {
+                function push() {
+                  reader.read().then(({ done, value }) => {
+                    if (done) {
+                      controller.close();
+                      return;
+                    }
+                    controller.enqueue(value);
+                    push();
+                  })
+                    .catch(error => {
+                      controller.error(error);
+                    });
+                };
+                push();
+              }
+            });
+          })
+          .then(stream => {
+            return new Response(stream, { headers: { 'Content-Type': 'application/json' } }).json();
+          })
+          .then((resources: IResource) => {
+            resourcesCache.saveResources(resources);
+            return dispatch(fetchResourcesSuccess(resources));
+          });
       }
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));
