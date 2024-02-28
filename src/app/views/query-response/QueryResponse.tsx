@@ -107,7 +107,7 @@ const QueryResponse = () => {
           flex: 1
         }} onScroll={onScroll}>
           <Pivot overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More items')}
+            overflowAriaLabel={translateMessage('More response items')}
             onLinkClick={handlePivotItemClick}
             className={'pivot-response'}
             selectedKey={currentTab}
