@@ -56,16 +56,10 @@ const res = {
 };
 
 const resource = JSON.parse(JSON.stringify(res)) as IResource
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 const initialState: IResources = {
   pending: false,
-  data: {
-    children: [],
-    labels: [],
-    segment: ''
-  },
+  data: {},
   error: null
 };
 
@@ -144,7 +138,7 @@ describe('Resources Reducer', () => {
 
   it('should handle FETCH_RESOURCES_SUCCESS', () => {
     const newState = { ...initialState };
-    newState.data = resource;
+    newState.data['v1.0'] = resource;
 
     const resourceAction = { type: FETCH_RESOURCES_SUCCESS, response: resource };
     const state = resources(initialState, resourceAction);
@@ -158,7 +152,7 @@ describe('Resources Reducer', () => {
 
     const newState = { ...initialState };
     newState.error = mockResponse;
-    newState.data = resource;
+    newState.data['v1.0'] = resource;
 
     const resourceAction = { type: FETCH_RESOURCES_ERROR, response: mockResponse };
     const state = resources(initialState, resourceAction);
