@@ -1,17 +1,6 @@
 import { IResource } from '../../../types/resources';
 import { hasPlaceHolders } from '../sample-url-generation';
 
-function getResourcesSupportedByVersion(
-  resources: IResource[],
-  version: string,
-  searchText?: string
-): IResource[] {
-  return searchText
-    ? searchResources(resources, searchText)
-    : resources;
-}
-
-
 function searchResources(haystack: IResource[], needle: string): IResource[] {
   const foundResources: IResource[] = [];
   haystack.forEach((resource: IResource) => {
@@ -48,6 +37,5 @@ function getMatchingResourceForUrl(url: string, resources: IResource[]): IResour
 
 export {
   searchResources,
-  getResourcesSupportedByVersion,
   getMatchingResourceForUrl
 }

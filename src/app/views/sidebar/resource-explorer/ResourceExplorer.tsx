@@ -11,11 +11,11 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
-import { IResource, IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
+import { searchResources } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
@@ -46,7 +46,7 @@ const UnstyledResourceExplorer = (props: any) => {
   const [version, setVersion] = useState<string>(versions[0].key);
   const resourcesToUse = Object.keys(data[version]).length > 0 ? data[version].children! : [];
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = getResourcesSupportedByVersion(resourcesToUse, version, searchText);
+  const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
 
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
