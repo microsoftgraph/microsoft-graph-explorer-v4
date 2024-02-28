@@ -6,40 +6,11 @@ function getResourcesSupportedByVersion(
   version: string,
   searchText?: string
 ): IResource[] {
-  const versionedResources: IResource[] = [];
-  resources.forEach((resource: IResource) => {
-    if (versionExists(resource, version)) {
-      resource.children = getResourcesSupportedByVersion(
-        resource.children || [],
-        version
-      );
-      versionedResources.push(resource);
-    }
-  });
   return searchText
-    ? searchResources(versionedResources, searchText)
-    : versionedResources;
+    ? searchResources(resources, searchText)
+    : resources;
 }
 
-function versionExists(resource: IResource, version: string): boolean {
-  if (!resource) {
-    return false;
-  }
-
-  const hasLabels = resource.labels && resource.labels.length > 0;
-  const hasChildren = resource.children && resource.children.length > 0;
-
-  if (!hasLabels && !hasChildren) {
-    return false;
-  }
-
-  if (!hasLabels && hasChildren) {
-    const childLabels = resource.children?.map((child) => child.labels);
-    return childLabels?.some((child) => child?.some((label) => label.name === version)) || false;
-  }
-
-  return resource.labels.some((k) => k.name === version);
-}
 
 function searchResources(haystack: IResource[], needle: string): IResource[] {
   const foundResources: IResource[] = [];
@@ -78,6 +49,5 @@ function getMatchingResourceForUrl(url: string, resources: IResource[]): IResour
 export {
   searchResources,
   getResourcesSupportedByVersion,
-  versionExists,
   getMatchingResourceForUrl
 }
