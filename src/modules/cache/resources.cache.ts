@@ -30,8 +30,6 @@ export const resourcesCache = (function () {
       }
       resourcesStorage.removeItem(`${RESOURCE_KEY}_${version}`);
     }
-    // TODO: Remove this cache clear code
-    resourcesStorage.removeItem(RESOURCE_KEY);
     return null;
   }
 
