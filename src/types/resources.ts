@@ -1,7 +1,7 @@
 import { INavLink } from '@fluentui/react';
 
 export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
-
+export type Version = 'v1.0' | 'beta';
 export interface IResource {
   segment: string;
   labels: IResourceLabel[];
@@ -20,7 +20,7 @@ export interface ResourceMethod {
 
 export interface IResources {
   pending: boolean;
-  data: IResource;
+  data: { [version: string]: IResource };
   error: Error | null;
 }
 

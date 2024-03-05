@@ -4,7 +4,7 @@ import { IResource, ResourceMethod } from '../../../../../../types/resources';
 import { GRAPH_URL } from '../../../../../services/graph-constants';
 import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import {
-  getMatchingResourceForUrl, getResourcesSupportedByVersion
+  getMatchingResourceForUrl
 } from '../../../../../utils/resources/resources-filter';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 
@@ -64,8 +64,7 @@ class DocumentationService implements IDocumentationService {
 
   private getResourceDocumentationUrl = (): string | null => {
     const resources = this.source as IResource[];
-    const supportedResources = getResourcesSupportedByVersion(resources, this.queryVersion);
-    const matchingResource = getMatchingResourceForUrl(this.requestUrl, supportedResources)!;
+    const matchingResource = getMatchingResourceForUrl(this.requestUrl, resources)!;
 
     if (matchingResource && matchingResource.labels.length > 0) {
       const currentLabel = matchingResource.labels.filter(k => k.name === this.queryVersion)[0];

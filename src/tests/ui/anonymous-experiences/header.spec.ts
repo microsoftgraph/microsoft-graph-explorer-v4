@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable max-len */
 import { test, expect, Page } from '@playwright/test';
 
@@ -11,40 +12,40 @@ test.beforeAll(async ({ browser }) => {
 test.describe('Settings button', () => {
   test('should change theme settings', async () => {
 
-    const settingsButton = page.locator('[aria-label="Settings"]');
+    const settingsButton = page.getByLabel('Settings');
     await settingsButton.click();
-    const changeThemeButton = page.locator('button[role="menuitem"]:has-text("Change theme")');
+    const changeThemeButton = page.getByRole('menuitem', { name: 'Change theme' });
     await changeThemeButton.click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
     await page.locator('text=Dark').click();
-    const closeThemeDialogButton = page.locator('button:has-text("Close")');
+    const closeThemeDialogButton = page.getByRole('button', { name: 'Close' });
     await closeThemeDialogButton.click();
-    await page.locator('[aria-label="Settings"]').click();
-    await changeThemeButton.click();
-    await page.locator('text=High contrast').click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
+    await settingsButton.click();
+    await changeThemeButton.click();
+    await page.locator('text=High contrast').click();
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
     await closeThemeDialogButton.click();
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(200);
     await settingsButton.click();
     await changeThemeButton.click();
     await page.locator('text=Light').click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(200);
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 1080 } })).toMatchSnapshot();
     await page.locator('text=Close').click();
   });
 
   test('should get a sandbox with sample data', async () => {
     test.slow();
-    await page.locator('[aria-label="Settings"]').click();
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(700);
+    await page.waitForTimeout(200);
+    await page.getByLabel('Settings').click();
     const [page1] = await Promise.all([
       page.waitForEvent('popup'),
-      page.locator('text=Get a sandbox with sample data').click()
+      await page.getByRole('menuitem', { name: 'Get a sandbox with sample data' }).click()
     ]);
     expect(page1.url()).toBe('https://developer.microsoft.com/en-US/microsoft-365/dev-program');
   })
