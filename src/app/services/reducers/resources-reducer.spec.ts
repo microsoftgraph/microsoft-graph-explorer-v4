@@ -56,16 +56,10 @@ const res = {
 };
 
 const resource = JSON.parse(JSON.stringify(res)) as IResource
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 const initialState: IResources = {
   pending: false,
-  data: {
-    children: [],
-    labels: [],
-    segment: ''
-  },
+  data: {},
   error: null
 };
 
@@ -144,32 +138,26 @@ describe('Resources Reducer', () => {
 
   it('should handle FETCH_RESOURCES_SUCCESS', () => {
     const newState = { ...initialState };
-    newState.data = resource;
-
-    const resourceAction = { type: FETCH_RESOURCES_SUCCESS, response: resource };
+    newState.data['v1.0'] = resource;
+    const resourceAction = { type: FETCH_RESOURCES_SUCCESS, response: { 'v1.0': resource } };
     const state = resources(initialState, resourceAction);
-
     expect(state).toEqual(newState);
   });
 
-  it.skip('should handle FETCH_RESOURCES_ERROR', () => {
+  it('should handle FETCH_RESOURCES_ERROR', () => {
 
     const mockResponse = new Error('400');
 
-    const newState = { ...initialState };
-    newState.error = mockResponse;
-    newState.data = resource;
-
+    const newState = { ...initialState, error: mockResponse, data: {} };
     const resourceAction = { type: FETCH_RESOURCES_ERROR, response: mockResponse };
-    const state = resources(initialState, resourceAction);
 
+    const state = resources(initialState, resourceAction);
     expect(state).toEqual(newState);
   });
 
   it('should handle FETCH_RESOURCES_PENDING', () => {
     const isRunning = true;
-    const newState = { ...initialState };
-    newState.pending = isRunning;
+    const newState = { ...initialState, pending: isRunning, data: {} };
     const queryAction = { type: FETCH_RESOURCES_PENDING, response: null };
     const state = resources(initialState, queryAction);
     expect(state).toEqual(newState);

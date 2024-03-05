@@ -90,11 +90,7 @@ const mockState: ApplicationState = {
   },
   resources: {
     pending: false,
-    data: {
-      segment: '',
-      labels: [],
-      children: []
-    },
+    data: {},
     error: null
   }
 }

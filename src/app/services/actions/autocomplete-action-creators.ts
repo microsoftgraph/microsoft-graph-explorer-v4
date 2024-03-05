@@ -30,7 +30,7 @@ export function fetchAutocompletePending(): AppAction {
 export function fetchAutoCompleteOptions(url: string, version: string, context: SignContext = 'paths') {
   return async (dispatch: Function, getState: Function) => {
     const devxApiUrl = getState().devxApi.baseUrl;
-    const resources = getState().resources.data;
+    const resources = Object.keys(getState().resources.data).length > 0 ? getState().resources.data[version] : [];
     dispatch(fetchAutocompletePending());
     const autoOptions = await suggestions.getSuggestions(
       url,
