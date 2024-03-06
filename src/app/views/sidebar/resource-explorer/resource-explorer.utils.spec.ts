@@ -1,6 +1,6 @@
 import { IResource } from '../../../../types/resources';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
-import { getMatchingResourceForUrl, getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
+import { getMatchingResourceForUrl } from '../../../utils/resources/resources-filter';
 import content from '../../../utils/resources/resources.json';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import {
@@ -12,11 +12,6 @@ describe('Resource payload should', () => {
   it('have children', async () => {
     const resources: any = { ...resource };
     expect(resources.children.length).toBeGreaterThan(0);
-  });
-
-  it('return children with version v1.0', async () => {
-    const resources = getResourcesSupportedByVersion(resource.children!, 'v1.0');
-    expect(resources.length).toBeGreaterThan(0);
   });
 
   it('return links with version v1.0', async () => {
@@ -84,7 +79,7 @@ describe('Resource payload should', () => {
 });
 
 describe('Resource filter should', () => {
-  const resources = getResourcesSupportedByVersion(resource.children!, 'v1.0');
+  const resources = resource.children!;
 
   const messageId = 'AAMkAGFkNWI1Njg3LWZmNTUtNDZjOS04ZTM2LTc5ZTc5ZjFlNTM4ZgB1SyTR4EQuQIAbWVtP3x1LBwD4_HsJDyJ8QAAA=';
 
