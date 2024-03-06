@@ -3,7 +3,6 @@ import { INavLinkGroup } from '@fluentui/react';
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
 } from '../../../../types/resources';
-import { versionExists } from '../../../utils/resources/resources-filter';
 
 interface ITreeFilter {
   paths: string[];
@@ -118,7 +117,6 @@ export function createResourcesList(
     // versioned children
     children &&
       children
-        .filter((child) => versionExists(child, version))
         .forEach((versionedChild) => {
           links.push(createNavLink(versionedChild, segment, childPaths));
         });

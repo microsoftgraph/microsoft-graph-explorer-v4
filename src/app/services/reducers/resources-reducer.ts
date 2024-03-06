@@ -7,11 +7,7 @@ import {
 
 const initialState: IResources = {
   pending: false,
-  data: {
-    children: [],
-    labels: [],
-    segment: ''
-  },
+  data: {},
   error: null
 };
 
@@ -27,7 +23,7 @@ export function resources(state: IResources = initialState, action: AppAction): 
       return {
         pending: false,
         error: action.response,
-        data: {} as IResource
+        data: {}
       };
     case FETCH_RESOURCES_PENDING:
       return {
