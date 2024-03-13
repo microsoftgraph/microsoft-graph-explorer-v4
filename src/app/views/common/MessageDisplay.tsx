@@ -9,7 +9,7 @@ import {
 
 interface MessageDisplay {
   message: string;
-  onSetQuery: (link: string) => void;
+  onSetQuery?: (link: string) => void;
 }
 
 const messageDisplay = (props: MessageDisplay) => {
@@ -33,7 +33,7 @@ const messageDisplay = (props: MessageDisplay) => {
       const link = urls[part];
       if (link) {
         if (link.includes(GRAPH_URL)) {
-          return <Link onClick={() => onSetQuery(link)} underline>{link}</Link>;
+          return <Link onClick={() => onSetQuery && onSetQuery(link)} underline>{link}</Link>;
         }
         return <Link target='_blank' href={link} underline>{link}</Link>;
       }

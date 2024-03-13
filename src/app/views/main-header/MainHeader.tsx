@@ -12,7 +12,6 @@ import { Help } from './Help';
 import { mainHeaderStyles } from './MainHeader.styles';
 import { Settings } from './settings/Settings';
 import TenantIcon from './tenantIcon';
-import BannerNotification from './BannerNotification';
 
 interface MainHeaderProps {
   toggleSidebar: Function;
@@ -115,7 +114,6 @@ export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: Main
           <Authentication />
         </Stack>
       </Stack>
-      <BannerNotification />
     </Stack>
   );
 };
