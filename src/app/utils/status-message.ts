@@ -9,7 +9,7 @@ export function replaceLinks(message: string): string {
   return message;
 }
 
-export function convertArrayToObject(array: any[]): object {
+export function convertArrayToObject(array: any[]): { [key: string]: string } {
   const initialValue = {};
   return array.reduce((obj, item, index) => {
     return {
