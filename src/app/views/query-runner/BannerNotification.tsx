@@ -1,24 +1,10 @@
 import { FontWeights, IStackTokens, MessageBar, MessageBarType, Stack } from '@fluentui/react';
-import { useState } from 'react';
 
-import { BANNERMESSAGE } from '../../services/variant-constants';
-import variantService from '../../services/variant-service';
-import MessageDisplay from '../common/MessageDisplay';
 import { translateMessage } from '../../utils/translate-messages';
+import MessageDisplay from '../common/MessageDisplay';
 
 const BannerNotification = () => {
-  const [bannerMessage, setBannerMessage] = useState('');
-
-  setTimeout(() => {
-    const value = variantService.getFeatureVariables('default', BANNERMESSAGE) as string;
-    if (value && value !== ' ') {
-      setBannerMessage(value);
-    }
-  }, 1000);
-
-  if (!!!bannerMessage) {
-    return null;
-  }
+  const bannerMessage = translateMessage('Banner message');
 
   const horizontalGapStackTokens: IStackTokens = {
     childrenGap: 10
