@@ -1,7 +1,6 @@
 import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
 
-
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
 import { GRAPH_URL } from '../../services/graph-constants';
@@ -12,37 +11,12 @@ import {
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
+import MessageDisplay from '../common/MessageDisplay';
 
 const StatusMessages = () => {
   const dispatch = useAppDispatch();
   const { queryRunnerStatus, sampleQuery } =
     useAppSelector((state) => state);
-
-  function displayStatusMessage(message: string, urls: any) {
-    const { matches, parts } = getMatchesAndParts(message);
-
-    if (!parts || !matches || !urls || Object.keys(urls).length === 0) {
-      return message;
-    }
-
-    return parts.map((part: string, index: number) => {
-      const includesLink = matchIncludesLink(matches, part);
-      const displayLink = (): React.ReactNode => {
-        const link = urls[part];
-        if (link) {
-          if (link.includes(GRAPH_URL)) {
-            return <Link onClick={() => setQuery(link)} underline>{link}</Link>;
-          }
-          return <Link target="_blank" href={link} underline>{link}</Link>;
-        }
-      };
-      return (
-        <Fragment key={part + index}>{includesLink ?
-          displayLink() : part}
-        </Fragment>
-      );
-    })
-  }
 
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
@@ -69,7 +43,7 @@ const StatusMessages = () => {
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
       aria-live={'assertive'}>
-      {`${statusText} - `}{displayStatusMessage(message, urls)}
+      {`${statusText} - `}{<MessageDisplay message={status.toString()} onSetQuery={setQuery} />}
 
       {duration && <>
         {` - ${duration} ${translateMessage('milliseconds')}`}
