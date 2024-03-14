@@ -24,13 +24,12 @@ const StatusMessages = () => {
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
 
-
     return <MessageBar messageBarType={messageType}
       isMultiline={true}
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
       aria-live={'assertive'}>
-      {`${statusText} - `}{<MessageDisplay message={status.toString()} onSetQuery={setQuery} />}
+      <MessageDisplay message={`**${statusText} - **${status.toString()}`} onSetQuery={setQuery} />
 
       {duration && <>
         {` - ${duration} ${translateMessage('milliseconds')}`}
