@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { extractUrl, replaceLinks, convertArrayToObject, getMatchesAndParts, setStatusMessage } from './status-message';
+import { extractUrl, replaceLinks, convertArrayToObject, getMatchesAndParts, setStatusMessage, extractLinks } from './status-message';
 
 describe('status message should', () => {
 
@@ -46,4 +46,10 @@ describe('status message should', () => {
     const statusMessage = setStatusMessage(statusCode);
     expect(statusMessage).toBe('OK');
   })
+
+  it('have extracted more than one', () => {
+    const message = 'This query requires a team id and a channel id from that team. To find the team id  & channel id, you can run: 1) [GET](https://graph.microsoft.com/beta/me/joinedTeams) 2) GET https://graph.microsoft.com/beta/teams/{team-id}/channels';
+    const links = extractLinks(message);
+    expect(links.length).toBe(2);
+  });
 })

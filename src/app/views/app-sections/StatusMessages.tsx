@@ -6,7 +6,7 @@ import { IQuery } from '../../../types/query-runner';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
 import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { translateMessage } from '../../utils/translate-messages';
-import MessageDisplay from '../common/MessageDisplay';
+import MessageDisplay from '../common/message-display/MessageDisplay';
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();

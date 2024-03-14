@@ -1,7 +1,7 @@
 import { FontWeights, IStackTokens, MessageBar, MessageBarType, Stack } from '@fluentui/react';
 
 import { translateMessage } from '../../utils/translate-messages';
-import MessageDisplay from '../common/MessageDisplay';
+import MessageDisplay from '../common/message-display/MessageDisplay';
 
 const BannerNotification = () => {
   const bannerMessage = translateMessage('Banner message');

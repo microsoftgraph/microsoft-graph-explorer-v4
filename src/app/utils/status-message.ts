@@ -23,6 +23,35 @@ export function extractUrl(value: string): string[] | null {
   return value.toString().match(/\bhttps?:\/\/\S+/gi);
 }
 
+interface Link {
+  url: string;
+  text: string;
+}
+
+export function extractLinks(content: string): Link[] {
+  const links: Link[] = [];
+  const markupRegex = /\[([^\]]+)\]\(([^)]+)\)/g; // g flag for global matching
+  const urlRegex = /(https?:\/\/[^\s)]+)/g; // g flag for global matching
+
+  let match: RegExpExecArray | null;
+  while ((match = markupRegex.exec(content)) !== null) {
+    const text = match[1];
+    const url = match[2];
+    if (!links.some(link => link.url === url)) {
+      links.push({ text, url });
+    }
+  }
+
+  while ((match = urlRegex.exec(content)) !== null) {
+    const url = match[0];
+    if (!links.some(link => link.url === url)) {
+      links.push({ text: url, url });
+    }
+  }
+
+  return links;
+}
+
 export function matchIncludesLink(matches: RegExpMatchArray, part: string) {
   const includes = matches.includes(part);
   const dollarSignWithNumber = /[$]\d+/;
