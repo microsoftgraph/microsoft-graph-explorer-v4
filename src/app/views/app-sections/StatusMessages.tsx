@@ -2,6 +2,7 @@ import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { replaceBaseUrl } from '../../../modules/sovereign-clouds';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
@@ -12,6 +13,7 @@ import {
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
+
 
 const StatusMessages = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -47,7 +49,7 @@ const StatusMessages = () => {
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
     link = link.replace(/\.$/, '');
-    query.sampleUrl = link;
+    query.sampleUrl = replaceBaseUrl(link);
     query.selectedVerb = 'GET';
     dispatch(setSampleQuery(query));
   }

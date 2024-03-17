@@ -6,15 +6,18 @@ import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { globalCloud, storeCloudValue } from '../../../../modules/sovereign-clouds';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
 import { signOut } from '../../../services/actions/auth-action-creators';
+import { setActiveCloud } from '../../../services/actions/cloud-action-creator';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
+
 const getInitials = (name: string) => {
   let initials = '';
   if (name && name !== '') {
@@ -44,8 +47,8 @@ const Profile = (props: any) => {
   const labelId = useId('callout-label');
   const descriptionId = useId('callout-description');
   const theme = getTheme();
-  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
-    profileContainerStyles } = profileStyles(theme);
+  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles,
+    personaButtonStyles, profileContainerStyles } = profileStyles(theme);
 
   useEffect(() => {
     if (authenticated) {
@@ -59,6 +62,8 @@ const Profile = (props: any) => {
   }
 
   const handleSignOut = () => {
+    storeCloudValue(globalCloud.name);
+    dispatch(setActiveCloud(globalCloud));
     dispatch(signOut());
   }
 

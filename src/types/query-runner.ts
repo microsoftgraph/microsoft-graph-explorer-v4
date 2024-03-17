@@ -1,5 +1,6 @@
 import { IDropdownOption, ITheme } from '@fluentui/react';
 
+import { ICloud } from './cloud';
 export interface IQueryRunnerState {
   sampleBody?: string;
   url: string;
@@ -77,6 +78,7 @@ export interface ISampleQueriesProps {
   styles?: object;
   tokenPresent: boolean;
   profile: object;
+  cloud: ICloud;
   samples: {
     pending: boolean;
     queries: ISampleQuery[];

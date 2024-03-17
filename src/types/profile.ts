@@ -1,10 +1,13 @@
 import { ITheme } from '@fluentui/react';
+
+import { ICloud } from './cloud';
 import { ACCOUNT_TYPE } from '../app/services/graph-constants';
 
 export interface IProfileProps {
   theme?: ITheme;
   styles?: object;
   mobileScreen: boolean;
+  cloud: ICloud;
   actions?: {
     getProfileInfo: Function;
     signOut: Function;

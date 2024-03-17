@@ -11,6 +11,7 @@ import {
   sanitizeGraphAPISandboxUrl,
   sanitizeQueryUrl
 } from '../app/utils/query-url-sanitization';
+import { clouds } from '../modules/sovereign-clouds';
 import { store } from '../store';
 
 export function filterTelemetryTypes(envelope: ITelemetryItem) {
@@ -46,6 +47,10 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     }
 
     const target = baseData.target || '';
+    if (getCloudUrls().includes(urlObject.origin)) {
+      baseData.name = sanitizeQueryUrl(target);
+    }
+
     switch (urlObject.origin) {
       case GRAPH_URL:
         baseData.name = sanitizeQueryUrl(target);
@@ -58,6 +63,14 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     }
   }
   return true;
+}
+
+function getCloudUrls() {
+  const urls: string[] = [];
+  clouds.forEach(cloud => {
+    urls.push(cloud.baseUrl);
+  });
+  return urls;
 }
 
 export function addCommonTelemetryItemProperties(envelope: ITelemetryItem) {
@@ -91,8 +104,9 @@ export function sanitizeTelemetryItemUriProperty(envelope: ITelemetryItem) {
   return true;
 }
 
-export function filterResizeObserverExceptions(envelope: ITelemetryItem){
+export function filterResizeObserverExceptions(envelope: ITelemetryItem) {
   if (envelope.data?.message === 'ErrorEvent: ResizeObserver loop limit exceeded') {
     return false;
   }
+  return true;
 }

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
+import { cloud } from './cloud-reducer';
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
@@ -27,6 +28,7 @@ export default combineReducers({
   adaptiveCard,
   authToken,
   autoComplete,
+  cloud,
   collections,
   consentedScopes,
   devxApi,

@@ -1,10 +1,12 @@
-import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+
 import { store } from '../../../../src/store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
 import { fetchAutoCompleteOptions } from '../../../app/services/actions/autocomplete-action-creators';
+import { globalCloud } from '../../../modules/sovereign-clouds';
 import { suggestions } from '../../../modules/suggestions/suggestions';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
 
 const middleware = [thunk];
 const mockStore = configureMockStore(middleware);
@@ -36,6 +38,7 @@ const mockState: ApplicationState = {
       template: 'Template'
     }
   },
+  cloud: globalCloud,
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,

@@ -8,6 +8,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
@@ -20,7 +21,6 @@ import { setQueryResponseStatus } from '../../../services/actions/query-status-a
 import {
   bulkRemoveHistoryItems, removeHistoryItem, viewHistoryItem
 } from '../../../services/actions/request-history-action-creators';
-import { GRAPH_URL } from '../../../services/graph-constants';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -155,6 +155,7 @@ const History = (props: any) => {
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
+      const { requestUrl, search, queryVersion } = parseSampleUrl(queryContent);
       let color = currentTheme.palette.green;
       if (item.status > 300) {
         color = currentTheme.palette.red;
@@ -229,7 +230,7 @@ const History = (props: any) => {
           );
 
         default:
-          const shortQueryContent = queryContent.replace(GRAPH_URL, '');
+          const shortQueryContent = `/${queryVersion}/${requestUrl + search}`;
           return (
             <>
               <TooltipHost
@@ -373,7 +374,7 @@ const History = (props: any) => {
   }
 
   const onRunQuery = (query: IHistoryItem) => {
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(replaceBaseUrl(query.url));
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,
@@ -435,7 +436,7 @@ const History = (props: any) => {
   };
 
   const onViewQuery = (query: IHistoryItem) => {
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const { sampleUrl, queryVersion } = parseSampleUrl(replaceBaseUrl(query.url));
     const sampleQuery: IQuery = {
       sampleUrl,
       selectedVerb: query.method,
