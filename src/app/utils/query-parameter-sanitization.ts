@@ -16,7 +16,7 @@ const LAMBDA_OPERATORS = ['/any', '/all'];
 
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
-const ALL_ALPHANUM_REGEX = /^[a-zA-Z0-9]+$/;
+const ONE_NUMERIC_REGEX = /^(?=[a-zA-Z]*\d[a-zA-Z]*$)[a-zA-Z\d]*$/;
 const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 // Matches media type formats
 // Examples: https://www.iana.org/assignments/media-types/media-types.xhtml
@@ -64,7 +64,7 @@ function isAllAlpha(str: string): boolean {
 }
 
 function isAllAlphaNumeric(str: string): boolean {
-  return ALL_ALPHANUM_REGEX.test(str);
+  return ONE_NUMERIC_REGEX.test(str);
 }
 
 function isPlaceHolderSegment(segment: string) {
