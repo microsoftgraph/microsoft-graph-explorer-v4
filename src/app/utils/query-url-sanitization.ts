@@ -2,6 +2,7 @@
 import { IQuery } from '../../types/query-runner';
 import {
   isAllAlpha,
+  isAllAlphaNumeric,
   isPlaceHolderSegment,
   sanitizeQueryParameter
 } from './query-parameter-sanitization';
@@ -104,7 +105,7 @@ function sanitizePathSegment(previousSegment: string, segment: string): string {
   const segmentsToIgnore = ['$value', '$count', '$ref', '$batch'];
 
   if (
-    isAllAlpha(segment) ||
+    isAllAlphaNumeric(segment) ||
     isDeprecation(segment) ||
     SANITIZED_ITEM_PATH_REGEX.test(segment) ||
     segmentsToIgnore.includes(segment.toLowerCase()) ||

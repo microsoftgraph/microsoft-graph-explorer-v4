@@ -16,6 +16,7 @@ const LAMBDA_OPERATORS = ['/any', '/all'];
 
 // REGEXES
 const ALL_ALPHA_REGEX = /^[a-z]+$/i;
+const ALL_ALPHANUM_REGEX = /^[a-zA-Z0-9]+$/;
 const POSITIVE_INTEGER_REGEX = /^[1-9]\d*$/;
 // Matches media type formats
 // Examples: https://www.iana.org/assignments/media-types/media-types.xhtml
@@ -60,6 +61,10 @@ function isPropertyName(str: string): boolean {
 
 function isAllAlpha(str: string): boolean {
   return ALL_ALPHA_REGEX.test(str);
+}
+
+function isAllAlphaNumeric(str: string): boolean {
+  return ALL_ALPHANUM_REGEX.test(str);
 }
 
 function isPlaceHolderSegment(segment: string) {
@@ -483,6 +488,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
 export {
   isPropertyName,
   isAllAlpha,
+  isAllAlphaNumeric,
   isPlaceHolderSegment,
   sanitizeQueryParameter
 }
