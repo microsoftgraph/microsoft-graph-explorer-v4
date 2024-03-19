@@ -63,7 +63,7 @@ function isAllAlpha(str: string): boolean {
   return ALL_ALPHA_REGEX.test(str);
 }
 
-function isAllAlphaNumeric(str: string): boolean {
+function isAlphaNumeric(str: string): boolean {
   return ONE_NUMERIC_REGEX.test(str);
 }
 
@@ -488,7 +488,7 @@ function sanitizeFilterQueryOptionValue(queryParameterValue: string): string {
 export {
   isPropertyName,
   isAllAlpha,
-  isAllAlphaNumeric,
+  isAlphaNumeric,
   isPlaceHolderSegment,
   sanitizeQueryParameter
 }
