@@ -35,7 +35,7 @@ class DocumentationService implements IDocumentationService {
 
   public getDocumentationLink = (): string => {
     const link = this.getSampleDocumentationUrl() || this.getResourceDocumentationUrl();
-    return link || '';
+    return link ? link : '';
   }
 
   private getSampleDocumentationUrl = (): string => {
@@ -69,7 +69,7 @@ class DocumentationService implements IDocumentationService {
     if (matchingResource && matchingResource.labels.length > 0) {
       const currentLabel = matchingResource.labels.filter(k => k.name === this.queryVersion)[0];
 
-      const method = currentLabel.methods[0];
+      const method = currentLabel?.methods[0];
       if (typeof method === 'string') {
         return null;
       }
