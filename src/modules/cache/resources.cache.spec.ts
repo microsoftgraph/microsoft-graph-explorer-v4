@@ -67,12 +67,12 @@ const resources: IResource = {
 
 beforeEach(async () => {
   // Save resource in the cache
-  await resourcesCache.saveResources(resources);
+  await resourcesCache.saveResources(resources, 'beta');
 });
 
 afterEach(async () => {
   // Clear the cache
-  await resourcesCache.saveResources(emptyResource);
+  await resourcesCache.saveResources(emptyResource, 'beta');
 });
 
 describe('Resources Cache should', () => {
@@ -83,7 +83,7 @@ describe('Resources Cache should', () => {
     jest.spyOn(Date, 'now').mockImplementation(() => currentTime + 3 * 24 * 60 * 60 * 1000);
 
     // Fetch the resource and check that it's updated
-    const updatedResource = await resourcesCache.readResources();
+    const updatedResource = await resourcesCache.readResources('beta');
 
     expect(updatedResource).toEqual(null);
   });

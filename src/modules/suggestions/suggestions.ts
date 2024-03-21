@@ -1,8 +1,7 @@
 import { ISuggestions, SignContext } from '.';
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
 import {
-  getMatchingResourceForUrl,
-  getResourcesSupportedByVersion
+  getMatchingResourceForUrl
 } from '../../app/utils/resources/resources-filter';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
@@ -15,7 +14,7 @@ class Suggestions implements ISuggestions {
     version: string, context: SignContext, resources?: IResource): Promise<IParsedOpenApiResponse | null> {
 
     if (context === 'paths') {
-      const resourceOptions = await this.getSuggestionsFromResources(url, version, resources!);
+      const resourceOptions = await this.getSuggestionsFromResources(url, resources!);
       if (resourceOptions) {
         return resourceOptions;
       }
@@ -38,14 +37,13 @@ class Suggestions implements ISuggestions {
     return null;
   }
 
-  private async getSuggestionsFromResources(url: string, version: string,
+  private async getSuggestionsFromResources(url: string,
     resources: IResource): Promise<IParsedOpenApiResponse | null> {
     if (!resources || !resources.children || resources.children.length === 0) { return null; }
-    const versionedResources = getResourcesSupportedByVersion(resources.children, version);
     if (!url) {
-      return this.createOpenApiResponse(versionedResources, url);
+      return this.createOpenApiResponse(resources.children, url);
     } else {
-      const matching = getMatchingResourceForUrl(url, versionedResources);
+      const matching = getMatchingResourceForUrl(url, resources.children);
       if (matching && matching.children && matching.children.length > 0) {
         return this.createOpenApiResponse(matching.children, url)
       }
