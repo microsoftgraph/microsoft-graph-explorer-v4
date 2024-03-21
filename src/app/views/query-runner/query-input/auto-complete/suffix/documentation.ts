@@ -35,7 +35,7 @@ class DocumentationService implements IDocumentationService {
 
   public getDocumentationLink = (): string => {
     const link = this.getSampleDocumentationUrl() || this.getResourceDocumentationUrl();
-    return link ? link : '';
+    return link || '';
   }
 
   private getSampleDocumentationUrl = (): string => {
