@@ -102,7 +102,7 @@ function sanitizedQueryUrl(url: string): string {
  * @param segment
  */
 function sanitizePathSegment(previousSegment: string, segment: string): string {
-  const segmentsToIgnore = ['$value', '$count', '$ref', '$batch'];
+  const segmentsToIgnore = ['$value', '$count', '$ref', '$batch', '$metadata'];
 
   if (
     isAllAlpha(segment) ||
