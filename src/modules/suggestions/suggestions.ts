@@ -52,20 +52,12 @@ class Suggestions implements ISuggestions {
   }
 
   private createOpenApiResponse(versionedResources: IResource[], url: string): IParsedOpenApiResponse {
-    const paths: string[] = [];
-
-    versionedResources.forEach((resource: IResource) => {
-      if (!resource.segment.contains('$')) {
-        paths.push(resource.segment);
-      }
-    });
-
     const response: IParsedOpenApiResponse = {
       createdAt: '',
       parameters: [{
         verb: 'get',
         values: [],
-        links: paths
+        links: versionedResources.map((resource: IResource) => resource.segment)
       }],
       url
     };
