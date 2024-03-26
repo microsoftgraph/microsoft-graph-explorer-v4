@@ -69,7 +69,7 @@ class DocumentationService implements IDocumentationService {
     if (matchingResource && matchingResource.labels.length > 0) {
       const currentLabel = matchingResource.labels.filter(k => k.name === this.queryVersion)[0];
 
-      const method = currentLabel.methods[0];
+      const method = currentLabel?.methods[0];
       if (typeof method === 'string') {
         return null;
       }

@@ -24,7 +24,7 @@ function getMatchingResourceForUrl(url: string, resources: IResource[]): IResour
   let matching = [...resources];
   let node;
   for (const path of parts) {
-    if (hasPlaceHolders(path)) {
+    if (hasPlaceHolders(path) && path !== '{undefined-id}') {
       node = matching.find(k => hasPlaceHolders(k.segment));
       matching = node?.children || [];
     } else {
