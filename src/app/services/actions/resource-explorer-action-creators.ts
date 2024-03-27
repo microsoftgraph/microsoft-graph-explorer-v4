@@ -34,6 +34,8 @@ export function fetchResources() {
   return async (dispatch: Function, getState: Function) => {
     const { devxApi }: ApplicationState = getState();
     const resourcesUrl = `${devxApi.baseUrl}/openapi/tree`;
+    const v1Url = resourcesUrl + '?graphVersions=v1.0';
+    const betaUrl = resourcesUrl + '?graphVersions=beta';
 
     const headers = {
       'Content-Type': 'application/json'
@@ -44,17 +46,34 @@ export function fetchResources() {
     dispatch(fetchResourcesPending());
 
     try {
-      const cachedResources = await resourcesCache.readResources();
-      if (cachedResources) {
-        return dispatch(fetchResourcesSuccess(cachedResources));
+      const v1CachedResources = await resourcesCache.readResources('v1.0');
+      const betaCachedResources = await resourcesCache.readResources('beta');
+      if (v1CachedResources && betaCachedResources) {
+        return dispatch(fetchResourcesSuccess({
+          'v1.0': v1CachedResources,
+          'beta': betaCachedResources
+        }));
       } else {
-        const response = await fetch(resourcesUrl, options);
-        if (response.ok) {
-          const resources = await response.json() as IResource;
-          resourcesCache.saveResources(resources);
-          return dispatch(fetchResourcesSuccess(resources));
+        const [v1Response, betaResponse] = await Promise.all([
+          fetch(v1Url, options),
+          fetch(betaUrl, options)
+        ]);
+
+        if (v1Response.ok && betaResponse.ok) {
+          const [v1Data, betaData] = await Promise.all([
+            v1Response.json(), betaResponse.json()
+          ]);
+
+          resourcesCache.saveResources(v1Data as IResource, 'v1.0');
+          resourcesCache.saveResources(betaData as IResource, 'beta');
+
+          return dispatch(fetchResourcesSuccess({
+            'v1.0': v1Data,
+            'beta': betaData
+          }));
+        } else {
+          throw new Error('Failed to fetch resources');
         }
-        throw response;
       }
     } catch (error) {
       return dispatch(fetchResourcesError({ error }));

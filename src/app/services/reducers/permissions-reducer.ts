@@ -43,7 +43,7 @@ export function scopes(state: IScopes = initialState, action: AppAction): any {
       return {
         pending: { isFullPermissions: false, isSpecificPermissions: false },
         error: action.response,
-        data: state.data
+        data: initialState.data
       };
     case FETCH_URL_SCOPES_PENDING:
       return {

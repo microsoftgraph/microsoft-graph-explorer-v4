@@ -31,8 +31,3 @@ export interface IToken {
   authenticatedUserValue?: string;
   authenticatedUserValueFn?: Function;
 }
-
-export interface ICacheData {
-  data: string,
-  expiry: number
-}

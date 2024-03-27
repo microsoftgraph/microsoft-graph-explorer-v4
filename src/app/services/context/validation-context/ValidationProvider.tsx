@@ -4,7 +4,6 @@ import { ValidationService } from '../../../../modules/validation/validation-ser
 import { useAppSelector } from '../../../../store';
 import { IResource } from '../../../../types/resources';
 import { ValidationError } from '../../../utils/error-utils/ValidationError';
-import { getResourcesSupportedByVersion } from '../../../utils/resources/resources-filter';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { GRAPH_API_VERSIONS } from '../../graph-constants';
 import { ValidationContext } from './ValidationContext';
@@ -15,27 +14,29 @@ interface ValidationProviderProps {
 
 export const ValidationProvider = ({ children }: ValidationProviderProps) => {
   const { resources } = useAppSelector((state) => state);
-  const base = getResourcesSupportedByVersion(resources.data.children!, GRAPH_API_VERSIONS[0]);
+  const base = Object.keys(resources.data).length > 0 ?
+    resources.data[GRAPH_API_VERSIONS[0]].children! : [];
 
   const [isValid, setIsValid] = useState<boolean>(false);
   const [query, setQuery] = useState<string>('');
   const [validationError, setValidationError] = useState<string>('');
 
   const [versionedResources, setVersionedResources] =
-    useState<IResource[]>(resources.data.children!.length > 0 ? base : []);
+    useState<IResource[]>(base && base.length > 0 ? base : []);
   const [version, setVersion] = useState<string>(GRAPH_API_VERSIONS[0]);
 
   const { queryVersion } = parseSampleUrl(query);
 
   useEffect(() => {
-    if (resources.data.children!.length > 0) {
-      setVersionedResources(getResourcesSupportedByVersion(resources.data.children!, GRAPH_API_VERSIONS[0]));
+    if (Object.keys(resources.data).length > 0 && resources.data[GRAPH_API_VERSIONS[0]].children!.length > 0) {
+      setVersionedResources(resources.data[GRAPH_API_VERSIONS[0]].children!);
     }
   }, [resources])
 
   useEffect(() => {
-    if (version !== queryVersion && GRAPH_API_VERSIONS.includes(queryVersion) && resources.data.children!.length > 0) {
-      setVersionedResources(getResourcesSupportedByVersion(resources.data.children!, queryVersion));
+    if (version !== queryVersion && GRAPH_API_VERSIONS.includes(queryVersion)
+      && resources.data[queryVersion].children!.length > 0) {
+      setVersionedResources(resources.data[queryVersion].children!);
       setVersion(queryVersion);
     }
   }, [query]);

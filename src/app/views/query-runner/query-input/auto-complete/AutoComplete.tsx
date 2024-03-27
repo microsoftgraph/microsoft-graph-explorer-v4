@@ -241,9 +241,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const appendSuggestionToUrl = (selected: string) => {
     if (!selected) { return; }
-
+    const { context } = getLastDelimiterInUrl(queryUrl);
     let query = selected;
-    if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+    if (selected.startsWith(delimiters.DOLLAR.symbol) && context === 'parameters') {
       selected += delimiters.EQUALS.symbol;
       query = '';
     }
