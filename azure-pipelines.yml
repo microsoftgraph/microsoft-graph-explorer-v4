@@ -63,6 +63,9 @@ resources:
     type: git
     name: 1ESPipelineTemplates/1ESPipelineTemplates
     ref: refs/tags/release
+  - repository: ReleasePipelines
+    type: git
+    name: "Graph Developer Experiences/release-pipelines"
 
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
@@ -71,6 +74,12 @@ extends:
       name: Azure-Pipelines-1ESPT-ExDShared
       image: windows-latest
       os: windows
+
+    sdl:
+      sourceRepositoriesToScan:
+        exclude:
+        - repository: ReleasePipelines
+
     customBuildTags:
     - ES365AIMigrationTooling
 
@@ -260,3 +269,8 @@ extends:
             displayName: 'Publish Artifact: drop'
             targetPath: "$(build.ArtifactStagingDirectory)/build"
             artifactName: drop
+
+      - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
+        parameters:
+          directory: 'microsoft-graph-explorer'
+          repoName: ReleasePipelines
