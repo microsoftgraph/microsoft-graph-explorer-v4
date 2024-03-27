@@ -101,7 +101,7 @@
                 "@types/react-redux": "7.1.30",
                 "@types/redux-logger": "3.0.11",
                 "@types/redux-mock-store": "1.0.3",
-                "@types/selenium-webdriver": "4.1.21",
+                "@types/selenium-webdriver": "4.1.22",
                 "@typescript-eslint/eslint-plugin": "6.20.0",
                 "@typescript-eslint/parser": "6.17.0",
                 "acorn": "8.11.3",
