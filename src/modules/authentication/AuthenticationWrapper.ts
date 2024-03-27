@@ -32,6 +32,18 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     selectedVersion: '',
     sampleHeaders: []
   };
+  private extraQueryParameters: { [key: string]: string } = (() => {
+    const params: { [key: string]: string } = {
+      mkt: geLocale
+    };
+
+    const migrationParam = process.env.REACT_APP_MIGRATION_PARAMETER;
+    if (migrationParam) {
+      params.MigrationQueryParam = migrationParam;
+    }
+
+    return params;
+  })();
 
   public static getInstance(): AuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
@@ -50,7 +62,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async logIn(sessionId = '', sampleQuery?: IQuery): Promise<AuthenticationResult> {
-    if(sampleQuery){
+    if (sampleQuery) {
       this.sampleQuery = sampleQuery;
       this.performingStepUpAuth = true;
     }
@@ -58,7 +70,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     // eslint-disable-next-line no-useless-catch
     try {
       const authResult = await this.getAuthResult([], sessionId);
-      if(this.performingStepUpAuth && authResult){
+      if (this.performingStepUpAuth && authResult) {
         this.claimsAvailable = true;
       }
       return authResult;
@@ -73,7 +85,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: { mkt: geLocale }
+      extraQueryParameters: this.extraQueryParameters
     };
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
@@ -180,7 +192,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private getClaims(): string | undefined {
     const account = this.getAccount();
-    if(account && (this.sampleQuery.sampleUrl !== '')){
+    if (account && (this.sampleQuery.sampleUrl !== '')) {
       const claimsChallenge = new ClaimsChallenge(this.sampleQuery, account);
       const storedClaims = claimsChallenge.getClaimsFromStorage();
       return storedClaims ? window.atob(storedClaims) : undefined;
@@ -205,9 +217,10 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: { mkt: geLocale },
+      extraQueryParameters: this.extraQueryParameters,
       claims: this.getClaims()
     };
+    console.log('popUpRequest', popUpRequest)
 
     if (this.consentingToNewScopes || this.performingStepUpAuth) {
       delete popUpRequest.prompt;
