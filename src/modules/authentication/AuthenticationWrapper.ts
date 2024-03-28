@@ -42,7 +42,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
     const migrationParam = process.env.REACT_APP_MIGRATION_PARAMETER;
     if (migrationParam) {
-      params.MigrationQueryParam = migrationParam;
+      params.safe_rollout = migrationParam;
     }
 
     return params;
