@@ -272,5 +272,5 @@ extends:
 
       - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
         parameters:
-          directory: 'microsoft-graph-explorer'
+          directory: 'microsoft-graph-explorer-v4'
           repoName: ReleasePipelines
