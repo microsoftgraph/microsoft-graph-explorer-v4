@@ -178,7 +178,7 @@ extends:
       - job: Three
         displayName: "Publish artifacts"
         dependsOn: One
-        condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true')))
+        # condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true')))
         steps:
         - task: NodeTool@0
           inputs:
@@ -259,6 +259,14 @@ extends:
             contents: node_modules
           displayName: "Delete node_modules"
 
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
+            includeRootFolder: true
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
+            replaceExistingArchive: true
+
         templateContext:
           outputs:
           - output: pipelineArtifact
@@ -274,3 +282,4 @@ extends:
         parameters:
           directory: 'microsoft-graph-explorer-v4'
           repoName: ReleasePipelines
+          dependsOn: ['Three']
