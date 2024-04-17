@@ -178,6 +178,7 @@ extends:
       - job: Three
         displayName: "Publish artifacts"
         dependsOn: One
+        # Test deployment
         # condition: and(succeeded(), or(eq(variables['isMaster'], 'true'), eq(variables['isDev'], 'true')))
         steps:
         - task: NodeTool@0
