@@ -225,7 +225,7 @@ async function tryParseJson(textValue: string) {
   try {
     return JSON.parse(textValue);
   } catch (error) {
-    throw new ClientError({ error: translateMessage('Malformed JSON body') });
+    return textValue;
   }
 }
 
