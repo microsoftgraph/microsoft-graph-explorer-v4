@@ -70,7 +70,8 @@ class Suggestions implements ISuggestions {
     const headers = {
       'Accept': 'application/json'
     };
-    const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
+    const openApiUrl =
+      `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}&includeRequestBody=true`;
     const options: IRequestOptions = { headers };
     try {
       if (hasBannedPaths()) {
