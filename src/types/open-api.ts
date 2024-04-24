@@ -57,22 +57,33 @@ interface Schema {
   properties?: Properties;
 }
 
-export interface AllOf {
+export interface AllOf extends Property {
   title: string;
-  type: string;
-  properties: Properties;
+  properties?: Properties;
 }
 
-interface Properties {
-  [key: string]: any | AnyOf | AllOf
+export interface Properties {
+  [key: string]: Property | AnyOf | AllOf
 }
 
-interface AnyOf {
+export interface Property {
+  description: string;
+  nullable?: boolean;
+  type?: 'string' | 'number' | 'boolean' | 'integer' | 'array' | 'object';
+  anyOf?: AnyOf[];
   allOf?: AllOf[];
-  type?: string;
+  items?: {
+    anyOf?: AnyOf[];
+    allOf: AllOf[]
+  };
+}
+
+export interface AnyOf extends Property {
+  allOf?: AllOf[];
   nullable?: boolean;
   title?: string;
   enum?: string[];
+  properties?: Properties;
 }
 
 
