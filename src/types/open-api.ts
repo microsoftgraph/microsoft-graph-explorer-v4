@@ -1,4 +1,13 @@
 export interface IOpenApiResponse {
+  openapi: string;
+  info: {
+    title: string;
+    version: string;
+  };
+  servers: {
+    url: string;
+    description: string;
+  }[];
   paths: {
     [path: string]: {
       [method: string]: MethodValue;
@@ -7,17 +16,19 @@ export interface IOpenApiResponse {
 }
 
 export interface MethodValue {
-  summary: string;
-  operationId: string;
-
   tags?: string[];
+  summary?: string;
+  description?: string;
   externalDocs?: {
-    description: string,
-    url: string
+    url: string;
+    description: string;
   };
+  'x-ms-docs-operation-type'?: string;
+  operationId?: string;
+
   parameters?: IQueryParameter[],
   requestBody?: RequestBody;
-  responses: any;
+  responses?: any;
 }
 
 interface ParamSchema {

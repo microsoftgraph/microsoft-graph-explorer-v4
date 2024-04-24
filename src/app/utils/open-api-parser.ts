@@ -1,5 +1,4 @@
 import {
-  AllOf,
   IOpenApiParseContent,
   IParameterValue,
   IParameters,
@@ -7,6 +6,7 @@ import {
   IQueryParameter,
   MethodValue
 } from '../../types/open-api';
+import { extractProperties } from './extractProperties';
 
 export function parseOpenApiResponse(
   params: IOpenApiParseContent
@@ -40,29 +40,6 @@ export function parseOpenApiResponse(
   } catch (error: any) {
     throw new Error(error);
   }
-}
-
-function extractProperties(methodValue: MethodValue): any {
-  if (!methodValue.requestBody) {
-    return null;
-  }
-
-  if (!methodValue.requestBody.content || !methodValue.requestBody.content['application/json']) {
-    return null;
-  }
-
-  const schema = methodValue.requestBody.content['application/json']?.schema;
-  if (schema.properties) {
-    return schema.properties;
-  }
-  if (schema.allOf) {
-    return extractPropertiesFromSchema(schema.allOf
-      .filter(k => k.title !== 'entity')[0]);
-  }
-}
-
-function extractPropertiesFromSchema(allOf: AllOf): any {
-  return allOf.properties;
 }
 
 function getVerbParameterValues(values: MethodValue): IParameterValue[] {
