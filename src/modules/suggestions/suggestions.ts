@@ -1,5 +1,5 @@
 import { ISuggestions, SignContext } from '.';
-import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
+import { parseOpenApiResponse } from '../../app/utils/open-api-parser/parse/open-api-parser';
 import {
   getMatchingResourceForUrl
 } from '../../app/utils/resources/resources-filter';

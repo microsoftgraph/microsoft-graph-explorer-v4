@@ -24,7 +24,7 @@ export interface MethodValue {
     description: string;
   };
   'x-ms-docs-operation-type'?: string;
-  operationId?: string;
+  operationId: string;
 
   parameters?: IQueryParameter[],
   requestBody?: RequestBody;

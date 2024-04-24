@@ -13,7 +13,8 @@
           "run",
           "test",
           "--",
-          "--watch"
+          "--watch",
+          "open-api-parser.spec.ts"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

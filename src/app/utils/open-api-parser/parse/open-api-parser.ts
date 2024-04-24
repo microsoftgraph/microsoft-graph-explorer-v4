@@ -5,8 +5,8 @@ import {
   IParsedOpenApiResponse,
   IQueryParameter,
   MethodValue
-} from '../../types/open-api';
-import { extractProperties } from './extractProperties';
+} from '../../../../types/open-api';
+import { generateRequestBody } from './request-body';
 
 export function parseOpenApiResponse(
   params: IOpenApiParseContent
@@ -26,7 +26,7 @@ export function parseOpenApiResponse(
     verbs.forEach((verb: string) => {
       const methodValue: MethodValue = pathValues[`${verb}`];
       if (methodValue.requestBody) {
-        requestBody[verb] = extractProperties(methodValue);
+        requestBody[verb] = generateRequestBody(methodValue);
       }
       parameters.push({
         verb,
