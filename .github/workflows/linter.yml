@@ -186,7 +186,6 @@ jobs:
           REACT_APP_NOMINATION_PERIOD: ${{secrets.REACT_APP_NOMINATION_PERIOD}}
           REACT_APP_COOLDOWN_PERIOD: ${{secrets.REACT_APP_COOLDOWN_PERIOD}}
           REACT_APP_USAGE_TIME: ${{secrets.REACT_APP_USAGE_TIME}}
-          REACT_APP_MIGRATION_PARAMETER: ${{secrets.REACT_APP_MIGRATION_PARAMETER}}
           CI: false
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

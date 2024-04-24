@@ -35,18 +35,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     selectedVersion: '',
     sampleHeaders: []
   };
-  private extraQueryParameters: { [key: string]: string } = (() => {
-    const params: { [key: string]: string } = {
-      mkt: geLocale
-    };
-
-    const migrationParam = process.env.REACT_APP_MIGRATION_PARAMETER;
-    if (migrationParam) {
-      params.safe_rollout = migrationParam;
-    }
-
-    return params;
-  })();
 
   public static getInstance(): AuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
@@ -88,7 +76,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: this.extraQueryParameters
+      extraQueryParameters: { mkt: geLocale }
     };
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
@@ -219,10 +207,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: this.extraQueryParameters,
+      extraQueryParameters: { mkt: geLocale },
       claims: this.getClaims()
     };
-    console.log('popUpRequest', popUpRequest)
 
     if (this.consentingToNewScopes || this.performingStepUpAuth) {
       delete popUpRequest.prompt;
