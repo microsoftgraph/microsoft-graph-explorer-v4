@@ -1,12 +1,14 @@
-import { IOpenApiResponse } from '../../../../types/open-api';
+import { IOpenApiResponse, OpenApiPath } from '../../../../types/open-api';
 import sample from './open-api-sample.json';
 
 export function getSample(): IOpenApiResponse {
-  return {
+  const response: IOpenApiResponse = {
     openapi: sample.openapi,
     info: sample.info,
     servers: sample.servers,
-    paths: sample.paths
+    paths: sample.paths as unknown as OpenApiPath
   };
+
+  return response;
 }
 

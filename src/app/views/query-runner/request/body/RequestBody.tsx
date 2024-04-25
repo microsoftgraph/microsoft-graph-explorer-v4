@@ -1,4 +1,5 @@
-import { FocusZone, IconButton } from '@fluentui/react';
+import { FocusZone, IconButton, Spinner, SpinnerSize } from '@fluentui/react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
@@ -9,31 +10,55 @@ import { Monaco } from '../../../common';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 const RequestBody = ({ handleOnEditorChange }: any) => {
-  const { dimensions: { request: { height } }, sampleQuery } = useAppSelector((state) => state);
+  const { dimensions: { request: { height } }, sampleQuery,
+    autoComplete: { data, pending } } = useAppSelector((state) => state);
   const dispatch: AppDispatch = useDispatch();
+  const [sampleBody, setSampleBody] = useState(sampleQuery.sampleBody);
+
   const canGenerateSamplePayload = ['POST', 'PATCH'].includes(sampleQuery.selectedVerb);
+  const { requestUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
 
   function showMessage(): string {
-    return 'Get sample payload';
+    return translateMessage('Get sample payload');
   }
 
   const generateSamplePayload = () => {
-    const { requestUrl, queryVersion } = parseSampleUrl(sampleQuery.sampleUrl);
     dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, 'parameters'));
+  }
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+    if (data.url !== requestUrl) {
+      return;
+    }
+    const requestBody = data?.requestBody;
+    const verb = sampleQuery.selectedVerb.toLocaleLowerCase();
+    if (requestBody && requestBody[verb]) {
+      setSampleBody(requestBody[verb]);
+    } else {
+      setSampleBody('');
+    }
+  }, [data]);
+
+  const showGenerateButton = () => {
+    if (pending) {
+      return <Spinner size={SpinnerSize.small} />
+    }
+    return <IconButton iconProps={{ iconName: 'TriggerAuto' }}
+      title={translateMessage(showMessage())}
+      ariaLabel={translateMessage(showMessage())}
+      onClick={generateSamplePayload}
+    />;
   }
 
   return (
     <FocusZone>
       <div>
-        {canGenerateSamplePayload &&
-          <IconButton iconProps={{ iconName: 'TriggerAuto' }}
-            title={translateMessage(showMessage())}
-            ariaLabel={translateMessage(showMessage())}
-            onClick={generateSamplePayload}
-          />
-        }
+        {canGenerateSamplePayload && showGenerateButton()}
         <Monaco
-          body={sampleQuery.sampleBody}
+          body={sampleBody}
           height={convertVhToPx(height, 60)}
           onChange={(value) => handleOnEditorChange(value)} />
       </div>

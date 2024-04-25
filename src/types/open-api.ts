@@ -1,3 +1,9 @@
+export interface OpenApiPath {
+  [path: string]: {
+    [method: string]: MethodValue;
+  };
+}
+
 export interface IOpenApiResponse {
   openapi: string;
   info: {
@@ -8,11 +14,7 @@ export interface IOpenApiResponse {
     url: string;
     description: string;
   }[];
-  paths: {
-    [path: string]: {
-      [method: string]: MethodValue;
-    };
-  };
+  paths: OpenApiPath;
 }
 
 export interface MethodValue {
@@ -58,7 +60,7 @@ interface Schema {
 }
 
 export interface AllOf extends Property {
-  title: string;
+  title?: string;
   properties?: Properties;
 }
 
@@ -67,7 +69,7 @@ export interface Properties {
 }
 
 export interface Property {
-  description: string;
+  description?: string;
   nullable?: boolean;
   type?: 'string' | 'number' | 'boolean' | 'integer' | 'array' | 'object';
   anyOf?: AnyOf[];
