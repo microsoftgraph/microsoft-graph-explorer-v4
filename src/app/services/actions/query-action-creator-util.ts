@@ -236,6 +236,7 @@ export function parseResponse(
         return response.json();
       case ContentType.XML:
       case ContentType.HTML:
+      case ContentType.TextCsv:
       case ContentType.TextPlain:
         return response.text();
 
