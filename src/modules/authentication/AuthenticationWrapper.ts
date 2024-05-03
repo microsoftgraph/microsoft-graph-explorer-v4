@@ -11,13 +11,15 @@ import {
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
-import { signInAuthError } from './authentication-error-hints';
+import { ALWAYSSHOWBUTTONS } from '../../app/services/variant-constants';
+import variantService from '../../app/services/variant-service';
 import { geLocale } from '../../appLocale';
-import { getCurrentUri } from './authUtils';
-import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
-import { msalApplication } from './msal-app';
 import { IQuery } from '../../types/query-runner';
 import { ClaimsChallenge } from './ClaimsChallenge';
+import { getCurrentUri } from './authUtils';
+import { signInAuthError } from './authentication-error-hints';
+import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
+import { msalApplication } from './msal-app';
 
 const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 
@@ -32,18 +34,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     selectedVersion: '',
     sampleHeaders: []
   };
-  private extraQueryParameters: { [key: string]: string } = (() => {
-    const params: { [key: string]: string } = {
-      mkt: geLocale
-    };
-
-    const migrationParam = process.env.REACT_APP_MIGRATION_PARAMETER;
-    if (migrationParam) {
-      params.safe_rollout = migrationParam;
-    }
-
-    return params;
-  })();
 
   public static getInstance(): AuthenticationWrapper {
     if (!AuthenticationWrapper.instance) {
@@ -85,7 +75,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: this.extraQueryParameters
+      extraQueryParameters: getExtraQueryParameters()
     };
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
@@ -217,10 +207,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: this.extraQueryParameters,
+      extraQueryParameters: getExtraQueryParameters(),
       claims: this.getClaims()
     };
-    console.log('popUpRequest', popUpRequest)
 
     if (this.consentingToNewScopes || this.performingStepUpAuth) {
       delete popUpRequest.prompt;
@@ -310,3 +299,20 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     window.sessionStorage.clear();
   }
 }
+
+function getExtraQueryParameters(): { [key: string]: string } {
+  const params: { [key: string]: string } = {
+    mkt: geLocale
+  };
+  getSafeRolloutParameter(params);
+  return params;
+}
+
+function getSafeRolloutParameter(params: { [key: string]: string; }) {
+  const safeRolloutActive = variantService.getFeatureVariables('default', ALWAYSSHOWBUTTONS);
+  const migrationParam = process.env.REACT_APP_MIGRATION_PARAMETER;
+  if (safeRolloutActive && migrationParam) {
+    params.safe_rollout = migrationParam;
+  }
+}
+
