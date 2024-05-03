@@ -15,6 +15,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/Request';
+import BannerNotification from './BannerNotification';
 
 const QueryRunner = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
@@ -111,6 +112,9 @@ const QueryRunner = (props: any) => {
   return (
     <>
       <div className='ms-Grid-row'>
+        <BannerNotification />
+      </div>
+      <div className='ms-Grid-row' style={{ marginTop: 10 }}>
         <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
           <QueryInput
             handleOnRunQuery={handleOnRunQuery}
