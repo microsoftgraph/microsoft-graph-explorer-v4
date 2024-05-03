@@ -15,6 +15,7 @@ export enum ContentType {
   TextPlain = 'text/plain',
   HTML = 'text/html',
   BinaryResponse = 'application/octet-stream',
+  TextCsv = 'text/csv',
 }
 
 export enum AppTheme {
