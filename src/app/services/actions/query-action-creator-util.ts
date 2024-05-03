@@ -221,6 +221,14 @@ export async function generateResponseDownloadUrl(
   }
 }
 
+async function tryParseJson(textValue: string) {
+  try {
+    return JSON.parse(textValue);
+  } catch (error) {
+    return textValue;
+  }
+}
+
 export function parseResponse(
   response: any,
   respHeaders: any = {}
@@ -233,9 +241,10 @@ export function parseResponse(
     const contentType = getContentType(response.headers);
     switch (contentType) {
       case ContentType.Json:
-        return response.json();
+        return response.text().then(tryParseJson);
       case ContentType.XML:
       case ContentType.HTML:
+      case ContentType.TextCsv:
       case ContentType.TextPlain:
         return response.text();
 
