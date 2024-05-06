@@ -265,7 +265,7 @@ extends:
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
-            includeRootFolder: true
+            includeRootFolder: false
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
             replaceExistingArchive: true
