@@ -145,8 +145,8 @@ export function runQuery(query: IQuery) {
     };
 
     if (error instanceof ClientError) {
-      status.status = 0;
-      status.statusText = `${error.name}: ${error.message}`;
+      status.status = error.message;
+      status.statusText = error.name;
     }
 
     if (queryResultsInCorsError(query.sampleUrl)) {

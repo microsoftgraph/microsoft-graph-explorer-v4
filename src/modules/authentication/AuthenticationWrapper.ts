@@ -50,7 +50,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async logIn(sessionId = '', sampleQuery?: IQuery): Promise<AuthenticationResult> {
-    if(sampleQuery){
+    if (sampleQuery) {
       this.sampleQuery = sampleQuery;
       this.performingStepUpAuth = true;
     }
@@ -58,7 +58,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     // eslint-disable-next-line no-useless-catch
     try {
       const authResult = await this.getAuthResult([], sessionId);
-      if(this.performingStepUpAuth && authResult){
+      if (this.performingStepUpAuth && authResult) {
         this.claimsAvailable = true;
       }
       return authResult;
@@ -180,7 +180,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
   private getClaims(): string | undefined {
     const account = this.getAccount();
-    if(account && (this.sampleQuery.sampleUrl !== '')){
+    if (account && (this.sampleQuery.sampleUrl !== '')) {
       const claimsChallenge = new ClaimsChallenge(this.sampleQuery, account);
       const storedClaims = claimsChallenge.getClaimsFromStorage();
       return storedClaims ? window.atob(storedClaims) : undefined;
