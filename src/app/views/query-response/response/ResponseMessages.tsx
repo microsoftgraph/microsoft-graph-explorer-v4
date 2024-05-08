@@ -1,10 +1,11 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { useState } from 'react';
-import { IAuthenticateResult } from '../../../../types/authentication';
-import { Mode } from '../../../../types/enums';
-import { IGraphResponse } from '../../../../types/query-response';
+import { useDispatch } from 'react-redux';
 
+import { AppDispatch, useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
+import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
@@ -15,31 +16,32 @@ interface ODataLink {
   name: string;
 }
 
-export function ResponseMessages(
-  graphResponse: IGraphResponse,
-  sampleQuery: IQuery,
-  authToken: IAuthenticateResult,
-  graphExplorerMode: Mode,
-  dispatch: Function) {
-
-  function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
-    const odataLinks = ['nextLink', 'deltaLink'];
-    let data = null;
-    if (responseBody) {
-      odataLinks.forEach(link => {
-        if (responseBody[`@odata.${link}`]) {
-          data = {
-            link: responseBody[`@odata.${link}`],
-            name: link
-          };
-        }
-      });
-    }
-    return data;
+function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
+  const odataLinks = ['nextLink', 'deltaLink'];
+  let data = null;
+  if (responseBody) {
+    odataLinks.forEach(link => {
+      if (responseBody[`@odata.${link}`]) {
+        data = {
+          link: responseBody[`@odata.${link}`],
+          name: link
+        };
+      }
+    });
   }
+  return data;
+}
+
+export const ResponseMessages = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const messageBars = [];
+
+  const { graphResponse: { body, headers }, sampleQuery, authToken, graphExplorerMode
+  } = useAppSelector((state) => state);
   const [displayMessage, setDisplayMessage] = useState(true);
+
   const tokenPresent = !!authToken.token;
-  const { body } = graphResponse;
+  const contentType = getContentType(headers);
   const odataLink = getOdataLinkFromResponseBody(body);
 
   const setQuery = () => {
@@ -51,7 +53,7 @@ export function ResponseMessages(
 
   // Display link to step to next result
   if (odataLink) {
-    return (
+    messageBars.push(
       <MessageBar messageBarType={MessageBarType.info}>
         {translateMessage('This response contains an @odata property.')}: @odata.{odataLink.name}
         <Link onClick={() => setQuery()} underline>
@@ -63,7 +65,7 @@ export function ResponseMessages(
 
   // Display link to download file response
   if (body?.contentDownloadUrl) {
-    return (
+    messageBars.push(
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           {translateMessage('This response contains unviewable content')}
@@ -77,7 +79,7 @@ export function ResponseMessages(
 
   // Show CORS compliance message
   if (body?.throwsCorsError) {
-    return (
+    messageBars.push(
       <div>
         <MessageBar messageBarType={MessageBarType.warning}>
           {translateMessage('Response content not available due to CORS policy')}
@@ -90,7 +92,7 @@ export function ResponseMessages(
   }
 
   if (body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
-    return (
+    messageBars.push(
       <div>
         <MessageBar
           messageBarType={MessageBarType.warning}
@@ -104,4 +106,20 @@ export function ResponseMessages(
       </div>
     );
   }
+
+  if (contentType === 'application/json' && typeof body === 'string') {
+    messageBars.push(
+      <div>
+        <MessageBar
+          messageBarType={MessageBarType.info}
+          onDismiss={() => setDisplayMessage(false)}
+          dismissButtonAriaLabel={translateMessage('Close')}
+        >
+          {translateMessage('Malformed JSON body')}
+        </MessageBar>
+      </div>
+    );
+  }
+
+  return messageBars;
 }
