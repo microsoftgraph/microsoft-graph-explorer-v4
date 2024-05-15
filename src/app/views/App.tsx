@@ -6,6 +6,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
+import { getCurrentCloud, getEligibleCloud } from '../../modules/sovereign-clouds';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
@@ -37,6 +38,7 @@ import { MainHeader } from './main-header/MainHeader';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
+import { SovereignClouds } from './settings/SovereignClouds';
 import { Sidebar } from './sidebar/Sidebar';
 import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 export interface IAppProps {
@@ -62,6 +64,7 @@ interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
   hideDialog: boolean;
+  showCloudDialog: boolean;
   sidebarTabSelection: string;
 }
 
@@ -76,6 +79,7 @@ class App extends Component<IAppProps, IAppState> {
     this.state = {
       selectedVerb: 'GET',
       mobileScreen: false,
+      showCloudDialog: false,
       hideDialog: true,
       sidebarTabSelection: 'sample-queries'
     };
@@ -125,7 +129,24 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
+    this.toggleConfirmCloud();
   };
+
+  public toggleConfirmCloud = () => {
+    if (this.state.showCloudDialog) {
+      this.setState({
+        showCloudDialog: false
+      })
+    } else {
+      const currentCloud = getCurrentCloud();
+      const eligibleCloud = getEligibleCloud();
+      if (!currentCloud && eligibleCloud) {
+        this.setState({
+          showCloudDialog: true
+        })
+      }
+    }
+  }
 
   public handleSharedQueries() {
     const { actions } = this.props;
@@ -364,6 +385,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public render() {
+    const { showCloudDialog } = this.state;
     const classes = classNames(this.props);
     const { authenticated, graphExplorerMode, minimised, sampleQuery,
       sidebarProperties, dimensions }: any = this.props;
@@ -484,9 +506,14 @@ class App extends Component<IAppProps, IAppState> {
               <TermsOfUseMessage />
             </div>
           </div>
+          <SovereignClouds
+            prompt={true}
+            cloudSelectorOpen={showCloudDialog}
+            toggleCloudSelector={this.toggleConfirmCloud}
+          />
           <PopupsWrapper />
         </PopupsProvider>
-      </ThemeContext.Provider>
+      </ThemeContext.Provider >
     );
   }
 }

@@ -1,26 +1,31 @@
-import {
-  FETCH_SCOPES_ERROR,
-  FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_PENDING
-} from '../../../app/services/redux-constants';
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 
 import {
-  fetchFullScopesSuccess, fetchScopesError, getPermissionsScopeType, fetchScopes,
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_SCOPES_ERROR,
+  FETCH_URL_SCOPES_PENDING
+} from '../../../app/services/redux-constants';
+import { authenticationWrapper } from '../../../modules/authentication';
+import { globalCloud } from '../../../modules/sovereign-clouds';
+import { store } from '../../../store/index';
+import { Mode } from '../../../types/enums';
+import { IPermissionsResponse } from '../../../types/permissions';
+import { ApplicationState } from '../../../types/root';
+import { translateMessage } from '../../utils/translate-messages';
+import { ACCOUNT_TYPE } from '../graph-constants';
+import {
   consentToScopes,
-  fetchUrlScopesPending,
   fetchFullScopesPending,
+  fetchFullScopesSuccess,
+  fetchScopes,
+  fetchScopesError,
+  fetchUrlScopesPending,
+  getPermissionsScopeType,
   revokeScopes
 } from './permissions-action-creator';
-import { IPermissionsResponse } from '../../../types/permissions';
-import { store } from '../../../store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
-import configureMockStore from 'redux-mock-store';
-import { authenticationWrapper } from '../../../modules/authentication';
-import thunk from 'redux-thunk';
-import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
-import { translateMessage } from '../../utils/translate-messages';
+
 const middleware = [thunk];
 let mockStore = configureMockStore(middleware);
 
@@ -118,7 +123,8 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  cloud: globalCloud
 }
 const currentState = store.getState();
 store.getState = () => {

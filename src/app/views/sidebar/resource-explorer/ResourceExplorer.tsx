@@ -5,9 +5,10 @@ import {
   Toggle
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
@@ -99,7 +100,7 @@ const UnstyledResourceExplorer = (props: any) => {
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
     const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
-    const sampleUrl = `${GRAPH_URL}/${version}${resourceUrl}`;
+    const sampleUrl = replaceBaseUrl(`${GRAPH_URL}/${version}${resourceUrl}`);
     const verb = resourceLink.method!;
     const query: IQuery = {
       selectedVerb: verb.toString().toUpperCase(),

@@ -2,6 +2,7 @@ import {
   DirectionalHint, getId,
   getTheme, IconButton, IContextualMenuProps, TooltipHost
 } from '@fluentui/react';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 import { geLocale } from '../../../../appLocale';
@@ -12,16 +13,21 @@ import { usePopups } from '../../../services/hooks';
 import '../../../utils/string-operations';
 import { translateMessage } from '../../../utils/translate-messages';
 import { mainHeaderStyles } from '../MainHeader.styles';
+import { Sovereign } from '../../../../modules/sovereign-clouds/cloud-options';
+import { SovereignClouds } from '../../settings/SovereignClouds';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
-  const { authToken } = useAppSelector((state) => state);
+  const dispatch = useDispatch();
+  const { authToken, profile } = useAppSelector((state) => state);
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
+  const [cloudSelectorOpen, setCloudSelectorOpen] = useState(false);
+  const cloudOptions = new Sovereign(profile).getOptions();
   const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
 
   useEffect(() => {
-    const menuItems: any = [
+    let menuItems: any = [
       {
         key: 'change-theme',
         text: translateMessage('Change theme'),
@@ -39,10 +45,23 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
           iconName: 'CommandPrompt'
         },
         onClick: () => trackOfficeDevProgramLinkClickEvent()
+      },
+      {
+        key: 'select-cloud',
+        text: translateMessage('Select cloud'),
+        iconProps: {
+          iconName: 'Cloud'
+        },
+        onClick: () => toggleCloudSelector()
       }
     ];
+
+    if (cloudOptions.length === 1) {
+      menuItems = menuItems.filter((k: any) => k.key !== 'select-cloud');
+    }
+
     setItems(menuItems);
-  }, [authenticated]);
+  }, [authenticated, profile]);
 
   const toggleThemeChooserDialogState = () => {
     showThemeChooser({
@@ -54,6 +73,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
       ComponentName: componentNames.THEME_CHANGE_BUTTON
     });
   };
+
+  const toggleCloudSelector = () => {
+    let open = !!cloudSelectorOpen;
+    open = !open;
+    setCloudSelectorOpen(open);
+  }
 
   const trackOfficeDevProgramLinkClickEvent = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
@@ -107,8 +132,12 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
           onMenuClick={trackSettingsButtonClickEvent}
         />
       </TooltipHost>
+      <div>
+        {cloudSelectorOpen && <SovereignClouds
+          cloudSelectorOpen={cloudSelectorOpen}
+          toggleCloudSelector={toggleCloudSelector}
+        />}
+      </div>
     </div>
   );
 }
-
-

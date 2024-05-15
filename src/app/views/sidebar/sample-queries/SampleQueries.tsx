@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
+import { replaceBaseUrl } from '../../../../modules/sovereign-clouds';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
@@ -17,6 +18,7 @@ import { fetchSamples } from '../../../services/actions/samples-action-creators'
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { getStyleFor } from '../../../utils/http-methods.utils';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -76,9 +78,10 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   };
 
   const querySelected = (query: ISampleQuery) => {
-    const queryVersion = query.requestUrl.substring(1, 5);
+    const sampleUrl = replaceBaseUrl(GRAPH_URL + query.requestUrl);
+    const { queryVersion } = parseSampleUrl(sampleUrl);
     const sampleQuery: IQuery = {
-      sampleUrl: GRAPH_URL + query.requestUrl,
+      sampleUrl,
       selectedVerb: query.method,
       sampleBody: query.postBody,
       sampleHeaders: query.headers || [],
@@ -318,6 +321,14 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const renderDetailsHeader = () => {
     return <div />;
+  }
+
+  if (selectedQuery) {
+    const index = groups.findIndex(k => k.key === selectedQuery.category);
+    if (index > 0) {
+      groups[index].isCollapsed = false;
+      groups[0].isCollapsed = true;
+    }
   }
 
   if (pending && groups.length === 0) {

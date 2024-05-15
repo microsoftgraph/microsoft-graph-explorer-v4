@@ -1,3 +1,4 @@
+import { ICloud } from './cloud';
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
@@ -15,29 +16,30 @@ import { ISnippet } from './snippets';
 import { IStatus } from './status';
 
 export interface ApplicationState {
-  theme: string;
   adaptiveCard: IAdaptiveCardResponse;
+  authToken: IAuthenticateResult;
+  autoComplete: IAutocompleteResponse;
+  cloud: ICloud;
+  consentedScopes: string[];
+  dimensions: IDimensions;
   graphExplorerMode: Mode;
+  graphResponse: IGraphResponse;
+  history: IHistoryItem[];
+  isLoadingData: boolean;
   profile: IUser | undefined | null;
   queryRunnerStatus: IStatus | null;
+  responseAreaExpanded: boolean;
   sampleQuery: IQuery;
-  termsOfUse: boolean;
-  sidebarProperties: ISidebarProps;
-  authToken: IAuthenticateResult;
   samples: {
     queries: ISampleQuery[];
     pending: boolean;
     error: string | null;
   };
-  consentedScopes: string[];
   scopes: IScopes;
-  history: IHistoryItem[];
-  graphResponse: IGraphResponse;
-  isLoadingData: boolean;
+  sidebarProperties: ISidebarProps;
   snippets: ISnippet;
-  responseAreaExpanded: boolean;
-  dimensions: IDimensions;
-  autoComplete: IAutocompleteResponse;
+  termsOfUse: boolean;
+  theme: string;
   devxApi: IDevxAPI;
   resources: IResources;
   collections?: Collection[];

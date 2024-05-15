@@ -11,6 +11,7 @@ import {
 import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
+import { globalCloud } from '../../../modules/sovereign-clouds';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -95,7 +96,8 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  cloud: globalCloud
 }
 
 const paths = [

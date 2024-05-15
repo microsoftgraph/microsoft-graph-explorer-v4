@@ -37,8 +37,8 @@ const Authentication = (props: any) => {
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
     } catch (error: any) {
-      const { errorCode } = error;
-      if (signInAuthError(errorCode)) {
+      const errorCode = error.errorCode;
+      if (errorCode && signInAuthError(errorCode)) {
         authenticationWrapper.clearSession();
       }
       dispatch(
@@ -47,7 +47,7 @@ const Authentication = (props: any) => {
           statusText: translateMessage('Authentication failed'),
           status: removeUnderScore(errorCode),
           messageType: MessageBarType.error,
-          hint: getSignInAuthErrorHint(errorCode)
+          hint: (errorCode) ? getSignInAuthErrorHint(errorCode) : null
         })
       );
       setLoginInProgress(false);

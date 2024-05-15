@@ -6,8 +6,8 @@ import {
   SilentRequest
 } from '@azure/msal-browser';
 
+import { getCurrentCloud, globalCloud } from '../sovereign-clouds';
 import {
-  AUTH_URL,
   DEFAULT_USER_SCOPES,
   HOME_ACCOUNT_KEY
 } from '../../app/services/graph-constants';
@@ -165,6 +165,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       this.storeHomeAccountId(result.account!);
       return result;
     } catch (error: any) {
+
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
         return this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes, sessionId);
 
@@ -176,6 +177,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         throw error;
       }
     }
+  }
+  private isString(value: any): boolean {
+    return typeof value === 'string' || value instanceof String;
   }
 
   private getClaims(): string | undefined {
@@ -192,11 +196,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     const urlParams = new URLSearchParams(location.search);
     let tenant = urlParams.get('tenant');
 
+    const currentCloud = getCurrentCloud();
+    const { loginUrl } = (currentCloud) ? currentCloud : globalCloud;
+
     if (!tenant) {
       tenant = 'common';
     }
 
-    return `${AUTH_URL}/${tenant}/`;
+    return `${loginUrl}/${tenant}/`;
   }
 
   private async loginWithInteraction(userScopes: string[], sessionId?: string) {

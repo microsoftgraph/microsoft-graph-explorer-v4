@@ -6,6 +6,7 @@ import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
 import reducers from '../app/services/reducers';
+import { getCurrentCloud, globalCloud } from '../modules/sovereign-clouds';
 import { AppAction } from '../types/action';
 import { ApplicationState } from '../types/root';
 
@@ -26,6 +27,9 @@ if (NODE_ENV === 'development') {
   middlewares.push(loggerMiddleware);
 }
 
+const currentCloud = getCurrentCloud() || null;
+const { baseUrl } = (currentCloud) ? currentCloud : globalCloud;
+
 const initialState: any = {
   authToken: { token: false, pending: false },
   consentedScopes: [],
@@ -33,7 +37,7 @@ const initialState: any = {
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
-    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    sampleUrl: `${baseUrl}/v1.0/me`,
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
