@@ -190,6 +190,7 @@ extends:
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
             REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
             REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+            REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for staging"
 
         - task: PowerShell@2
@@ -215,6 +216,7 @@ extends:
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
             REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
             REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+            REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for prod"
 
         - task: PowerShell@2
