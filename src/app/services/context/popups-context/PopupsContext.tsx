@@ -1,12 +1,17 @@
 import { createContext, useContext, useReducer } from 'react';
-import { PopupState, initialState } from '.';
+
+import { PopupState } from '.';
 import { reducedPopups } from './reducedPopups';
 
-const PopupStateContext = createContext<PopupState>(initialState);
+const PopupStateContext = createContext<PopupState>({
+  popups: []
+});
 const PopupDispatchContext = createContext<any>({});
 
 export function PopupsProvider({ children }: any) {
-  const [state, dispatch] = useReducer(reducedPopups, initialState);
+  const [state, dispatch] = useReducer(reducedPopups, {
+    popups: []
+  });
 
   return (
     <PopupStateContext.Provider value={state}>
