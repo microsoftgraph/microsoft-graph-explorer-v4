@@ -1,8 +1,10 @@
+import { Middleware } from 'redux';
 import { collectionsCache } from '../../modules/cache/collections.cache';
 import { resourcesCache } from '../../modules/cache/resources.cache';
 import { samplesCache } from '../../modules/cache/samples.cache';
 import { AppAction } from '../../types/action';
 import { ResourcePath } from '../../types/resources';
+import { ApplicationState } from '../../types/root';
 import { addResourcePaths } from '../services/actions/collections-action-creators';
 import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
@@ -12,7 +14,7 @@ import {
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
 
-const localStorageMiddleware = (store: any) => (next: any) => async (action: AppAction) => {
+const localStorageMiddleware: Middleware<{}, ApplicationState> = (store) => (next) => async (action: AppAction) => {
   switch (action.type) {
     case CHANGE_THEME_SUCCESS:
       saveToLocalStorage(CURRENT_THEME,action.response);
@@ -62,7 +64,7 @@ const localStorageMiddleware = (store: any) => (next: any) => async (action: App
     default:
       break;
   }
-  return next(action);
-};
+  return next(action);}
+
 
 export default localStorageMiddleware;

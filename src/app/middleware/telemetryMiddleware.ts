@@ -17,9 +17,10 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
+import { Middleware } from 'redux';
 
-const telemetryMiddleware =
-  (store: any) => (next: any) => async (action: AppAction) => {
+const telemetryMiddleware: Middleware<{}, ApplicationState> =
+  (store) => (next) => async (action: AppAction) => {
     const state: ApplicationState = store.getState();
     switch (action.type) {
       case GET_SNIPPET_ERROR: {

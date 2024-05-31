@@ -23,7 +23,7 @@ import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 
-export default combineReducers({
+const reducers = {
   adaptiveCard,
   authToken,
   autoComplete,
@@ -47,4 +47,10 @@ export default combineReducers({
   snippets,
   termsOfUse,
   theme
-});
+};
+
+const rootReducer = combineReducers(reducers);
+
+export {
+  reducers, rootReducer
+};
