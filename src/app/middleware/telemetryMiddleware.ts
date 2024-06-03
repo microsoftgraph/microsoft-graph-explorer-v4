@@ -1,4 +1,6 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { Middleware } from 'redux';
+
 import {
   componentNames,
   errorTypes,
@@ -17,9 +19,8 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
-import { Middleware } from 'redux';
 
-const telemetryMiddleware: Middleware<{}, ApplicationState> =
+const telemetryMiddleware: Middleware<{}, any> =
   (store) => (next) => async (action: AppAction) => {
     const state: ApplicationState = store.getState();
     switch (action.type) {
