@@ -98,7 +98,9 @@ const mockState: ApplicationState = {
 store.getState = () => ({
   ...mockState,
   proxyUrl: '',
-  collections: []
+  collections: [],
+  graphExplorerMode: Mode.Complete,
+  queryRunnerStatus: null
 })
 
 describe('fetchAutoCompleteOptions', () => {

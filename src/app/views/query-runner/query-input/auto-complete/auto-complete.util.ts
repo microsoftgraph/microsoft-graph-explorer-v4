@@ -35,6 +35,7 @@ function getFilteredSuggestions(compareString: string, suggestions: string[]) {
 }
 
 function getSearchText(input: string, index: number) {
+  if (!input || !index) { return { previous: '', searchText:'' }}
   const stringPosition = index + 1;
   const previous = input.substring(0, stringPosition);
   const searchText = input.replace(previous, '');
