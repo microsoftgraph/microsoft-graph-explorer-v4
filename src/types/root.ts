@@ -17,9 +17,9 @@ import { IStatus } from './status';
 export interface ApplicationState {
   theme: string;
   adaptiveCard: IAdaptiveCardResponse;
-  graphExplorerMode: Mode;
+  graphExplorerMode?: Mode;
   profile: IUser | undefined | null;
-  queryRunnerStatus: IStatus | null;
+  queryRunnerStatus?: IStatus | null;
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
