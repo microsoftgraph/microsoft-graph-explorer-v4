@@ -1,13 +1,14 @@
-import thunk from 'redux-thunk';
+
 import configureMockStore from 'redux-mock-store';
 import { store } from '../../../../src/store/index';
 import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 import { fetchAutoCompleteOptions } from '../../../app/services/actions/autocomplete-action-creators';
 import { suggestions } from '../../../modules/suggestions/suggestions';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 jest.mock('../../../../src/store/index');
 window.fetch = jest.fn();

@@ -1,11 +1,12 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 
 import { AppAction } from '../../../types/action';
 import { getProfileInfo, profileRequestError, profileRequestSuccess } from './profile-action-creators';
 import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Profile action creators', () => {
   beforeEach(() => {

@@ -1,12 +1,11 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import { clearTermsOfUse } from '../../../app/services/actions/terms-of-use-action-creator';
 import { CLEAR_TERMS_OF_USE } from '../../../app/services/redux-constants';
 import { AppAction } from '../../../types/action';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Terms of Use Action Creators', () => {
   it('should set terms of use flag to false', () => {
@@ -19,7 +18,6 @@ describe('Terms of Use Action Creators', () => {
 
     const store = mockStore({ termsOfUse: {} });
 
-    // @ts-ignore
     store.dispatch(clearTermsOfUse({
       termsOfUse: false
     }));

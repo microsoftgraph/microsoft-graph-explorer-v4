@@ -1,20 +1,20 @@
-import { SET_GRAPH_PROXY_URL } from '../../../app/services/redux-constants';
-import { setGraphProxyUrl, getGraphProxyUrl } from '../../../app/services/actions/proxy-action-creator';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { getGraphProxyUrl, setGraphProxyUrl } from '../../../app/services/actions/proxy-action-creator';
 import { AppAction } from '../../../types/action';
+import { SET_GRAPH_PROXY_URL } from '../redux-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Tests Proxy-Action-Creators', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
+
   it('should dispatch SET_GRAPH_PROXY_URL when setGraphProxyUrl is called', () => {
     // Arrange
     const response: string = 'https://proxy.apisandbox.msdn.microsoft.com/svc';
-    const expectedAction: AppAction = {
+    const expectedAction = {
       type: SET_GRAPH_PROXY_URL,
       response
     }

@@ -1,3 +1,5 @@
+import configureMockStore from 'redux-mock-store';
+
 import {
   getAdaptiveCard,
   getAdaptiveCardError,
@@ -9,12 +11,10 @@ import {
   FETCH_ADAPTIVE_CARD_PENDING,
   FETCH_ADAPTIVE_CARD_SUCCESS
 } from '../../../app/services/redux-constants';
-import { IQuery } from '../../../types/query-runner';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import { AppAction } from '../../../types/action';
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+import { IQuery } from '../../../types/query-runner';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Graph Explorer Adaptive Cards Action Creators\'', () => {
   beforeEach(() => {

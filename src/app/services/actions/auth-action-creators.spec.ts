@@ -9,12 +9,11 @@ import {
 } from '../../../app/services/actions/auth-action-creators';
 import { AppAction } from '../../../types/action';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import { HOME_ACCOUNT_KEY } from '../graph-constants';
 import { msalApplication } from '../../../modules/authentication/msal-app';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 window.open = jest.fn();
 jest.spyOn(window.sessionStorage.__proto__, 'clear');

@@ -17,15 +17,16 @@ import { ApplicationState } from '../../../types/root';
 import { Mode } from '../../../types/enums';
 import configureMockStore from 'redux-mock-store';
 import { authenticationWrapper } from '../../../modules/authentication';
-import thunk from 'redux-thunk';
+
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
 import { translateMessage } from '../../utils/translate-messages';
-const middleware = [thunk];
-let mockStore = configureMockStore(middleware);
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+
+let mockStore = configureMockStore([mockThunkMiddleware]);
 
 beforeEach(() => {
-  const mockStore_ = configureMockStore(middleware);
+  const mockStore_ = configureMockStore([mockThunkMiddleware]);
   mockStore = mockStore_
 })
 window.open = jest.fn();

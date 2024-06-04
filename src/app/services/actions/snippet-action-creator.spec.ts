@@ -1,5 +1,4 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import {
   getSnippetSuccess, getSnippetError,
@@ -10,9 +9,9 @@ import {
 import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
 import { Header, IQuery } from '../../../types/query-runner';
 import { AppAction } from '../../../types/action';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Snippet actions creators', () => {
   it('should dispatch GET_SNIPPET_SUCCESS when getSnippetSuccess() is called', () => {

@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import { runQuery } from './query-action-creators';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Query action creators', () => {
   beforeEach(() => {
