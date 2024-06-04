@@ -1,13 +1,13 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Middleware } from 'redux';
 
+import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import {
   componentNames,
   errorTypes,
   eventTypes,
   telemetry
 } from '../../telemetry';
-import { AppAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
 import { ApplicationState } from '../../types/root';
 import {
@@ -19,66 +19,67 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
+import { AppAction } from '../../types/action';
 
-const telemetryMiddleware: Middleware<{}, any> =
-  (store) => (next) => async (action: AppAction) => {
-    const state: ApplicationState = store.getState();
-    switch (action.type) {
-      case GET_SNIPPET_ERROR: {
-        trackException(
-          componentNames.GET_SNIPPET_ACTION,
-          state.sampleQuery,
-          action.response.error,
-          {
-            Language: action.response.language
-          }
-        );
-        break;
-      }
-      case FETCH_SCOPES_ERROR: {
-        trackException(
-          componentNames.FETCH_PERMISSIONS_ACTION,
-          state.sampleQuery,
-          action.response.error,
-          {}
-        );
-        break;
-      }
-      case SAMPLES_FETCH_ERROR: {
-        trackException(
-          componentNames.FETCH_SAMPLES_ACTION,
-          state.sampleQuery,
-          action.response,
-          {}
-        );
-        break;
-      }
-      case FETCH_ADAPTIVE_CARD_ERROR: {
-        trackException(
-          componentNames.GET_ADAPTIVE_CARD_ACTION,
-          state.sampleQuery,
-          action.response,
-          {}
-        );
-        break;
-      }
-      case RESOURCEPATHS_ADD_SUCCESS: {
-        telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-          ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-          ResourcePath: action.response[0].url
-        });
-        break;
-      }
-      case RESOURCEPATHS_DELETE_SUCCESS: {
-        telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-          ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
-          ResourceCount: action.response.length
-        });
-        break;
-      }
+const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store) => (next) => async (value) => {
+  const state: ApplicationState = store.getState();
+  const action = value as AppAction;
+  switch (action.type) {
+    case GET_SNIPPET_ERROR: {
+      trackException(
+        componentNames.GET_SNIPPET_ACTION,
+        state.sampleQuery,
+        action.response.error,
+        {
+          Language: action.response.language
+        }
+      );
+      break;
     }
-    return next(action);
-  };
+    case FETCH_SCOPES_ERROR: {
+      trackException(
+        componentNames.FETCH_PERMISSIONS_ACTION,
+        state.sampleQuery,
+        action.response.error,
+        {}
+      );
+      break;
+    }
+    case SAMPLES_FETCH_ERROR: {
+      trackException(
+        componentNames.FETCH_SAMPLES_ACTION,
+        state.sampleQuery,
+        action.response,
+        {}
+      );
+      break;
+    }
+    case FETCH_ADAPTIVE_CARD_ERROR: {
+      trackException(
+        componentNames.GET_ADAPTIVE_CARD_ACTION,
+        state.sampleQuery,
+        action.response,
+        {}
+      );
+      break;
+    }
+    case RESOURCEPATHS_ADD_SUCCESS: {
+      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+        ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
+        ResourcePath: action.response[0].url
+      });
+      break;
+    }
+    case RESOURCEPATHS_DELETE_SUCCESS: {
+      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+        ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
+        ResourceCount: action.response.length
+      });
+      break;
+    }
+  }
+  return next(action);
+};
 
 function trackException(
   componentName: string,

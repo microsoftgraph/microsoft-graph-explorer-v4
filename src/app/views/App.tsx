@@ -2,7 +2,7 @@ import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';

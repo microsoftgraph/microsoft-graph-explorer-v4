@@ -1,8 +1,9 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  ActionCreator, Dispatch, Middleware, ThunkAction, UnknownAction,
+  combineReducers, configureStore
+} from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { ActionCreator } from 'redux';
 import { createLogger } from 'redux-logger';
-import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
@@ -13,18 +14,16 @@ import { ApplicationState } from '../types/root';
 const loggerMiddleware = createLogger({
   level: 'error',
   collapsed: true
-});
+}) as Middleware<{}, any, Dispatch<UnknownAction>>;
 
-const { NODE_ENV } = process.env;
-
-const middlewares = [
-  thunkMiddleware,
+const middleware = [
   localStorageMiddleware,
   telemetryMiddleware
 ];
 
+const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
-  middlewares.push(loggerMiddleware);
+  middleware.push(loggerMiddleware);
 }
 
 const combinedReducer = combineReducers(reducers);
@@ -46,10 +45,9 @@ const initialState: Partial<ApplicationState> = {
   collections: undefined
 }
 
-const logger = process.env.NODE_ENV === 'development' ? loggerMiddleware : undefined;
-
 export const store = configureStore({
   reducer: combinedReducer,
+  middleware: (getDefaultMiddleware: any) => getDefaultMiddleware().concat(...middleware),
   preloadedState: {
     ...initialState,
     adaptiveCard: undefined,
@@ -74,12 +72,7 @@ export const store = configureStore({
     responseAreaExpanded: undefined as undefined,
     resources: undefined as undefined,
     graphExplorerMode: undefined as undefined
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
-    .concat(logger!)
-    .concat(thunkMiddleware)
-    .concat(localStorageMiddleware)
-    .concat(telemetryMiddleware)
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;
