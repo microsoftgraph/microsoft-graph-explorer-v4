@@ -89,7 +89,6 @@ module.exports = function (proxy, allowedHost) {
     // src/node_modules is not ignored to support absolute imports
     // https://github.com/facebook/create-react-app/issues/1065
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
-    https: protocol === 'https',
     host,
     historyApiFallback: {
       // Paths with dots should still use the history fallback.
@@ -97,23 +96,24 @@ module.exports = function (proxy, allowedHost) {
       disableDotRule: true
     },
     proxy,
-    onBeforeSetupMiddleware(devServer) {
+    setupMiddlewares: (middlewares, devServer) => {
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(devServer.app);
       }
 
       // This lets us fetch source contents from webpack for the error overlay
-      devServer.app.use(evalSourceMapMiddleware(devServer));
+      middlewares.push(evalSourceMapMiddleware(devServer));
       // This lets us open files from the runtime error overlay.
-      devServer.app.use(errorOverlayMiddleware());
+      middlewares.push(errorOverlayMiddleware());
 
       // This service worker file is effectively a 'no-op' that will reset any
       // previous service worker registered for the same host:port combination.
       // We do this in development to avoid hitting the production cache if
       // it used the same host and port.
       // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
-      devServer.app.use(noopServiceWorkerMiddleware('/'));
+      middlewares.push(noopServiceWorkerMiddleware('/'));
+      return middlewares;
     }
   };
 };
