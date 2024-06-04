@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 import {
   fetchResources, fetchResourcesError,
   fetchResourcesPending, fetchResourcesSuccess
@@ -12,8 +12,7 @@ import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 const mockState: ApplicationState = {
   devxApi: {

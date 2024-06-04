@@ -1,13 +1,11 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import {
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../redux-constants';
 import { addResourcePaths, removeResourcePaths } from './collections-action-creators';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 const paths = [
   {
