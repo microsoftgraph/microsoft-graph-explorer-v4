@@ -14,7 +14,7 @@ import { setSampleQuery } from './app/services/actions/query-input-action-creato
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
-import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { changeTheme } from './app/services/actions/theme-action-creator';
 import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import variantService from './app/services/variant-service';
@@ -116,7 +116,7 @@ const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
   loadGETheme(theme);
-  appStore.dispatch(changeThemeSuccess(theme));
+  appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 } else {
   appStore.dispatch(setGraphExplorerMode(Mode.Complete));
