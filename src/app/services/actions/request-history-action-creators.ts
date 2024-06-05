@@ -1,13 +1,12 @@
 
 import { AppAction } from '../../../types/action';
 import { IHistoryItem } from '../../../types/history';
-import { historyCache } from '../../../modules/cache/history-utils';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
+  BULK_ADD_HISTORY_ITEMS_SUCCESS,
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS,
-  VIEW_HISTORY_ITEM_SUCCESS,
-  BULK_ADD_HISTORY_ITEMS_SUCCESS
+  VIEW_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
 
 export function addHistoryItem(historyItem: IHistoryItem): AppAction {
@@ -34,35 +33,16 @@ export function viewHistoryItem(historyItem: IHistoryItem): AppAction {
   };
 }
 
-export function removeHistoryItem(historyItem: IHistoryItem) {
-
-  delete historyItem.category;
-  return async (dispatch: Function) => {
-    return historyCache.removeHistoryData(historyItem)
-      .then(() => {
-        dispatch({
-          type: REMOVE_HISTORY_ITEM_SUCCESS,
-          response: historyItem
-        });
-      });
+export function removeHistoryItem(historyItem: IHistoryItem): AppAction {
+  return {
+    type: REMOVE_HISTORY_ITEM_SUCCESS,
+    response: historyItem
   };
 }
 
-export function bulkRemoveHistoryItems(historyItems: IHistoryItem[]) {
-
-  const listOfKeys: any = [];
-  historyItems.forEach(historyItem => {
-    listOfKeys.push(historyItem.createdAt);
-  });
-
-  return async (dispatch: Function) => {
-    return historyCache.bulkRemoveHistoryData(listOfKeys)
-      .then(() => {
-        dispatch({
-          type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
-          response: listOfKeys
-        });
-      });
+export function bulkRemoveHistoryItems(listOfKeys: string[]) {
+  return {
+    type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+    response: listOfKeys
   };
 }
-

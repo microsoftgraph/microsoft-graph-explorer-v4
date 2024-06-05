@@ -31,6 +31,7 @@ import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
+import { historyCache } from '../../../../modules/cache/history-utils';
 
 const columns = [
   { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
@@ -346,9 +347,14 @@ const History = (props: any) => {
     setHideDialog(true);
   };
 
-  const deleteHistoryCategory = (): any => {
+  const deleteHistoryCategory = (): void => {
     const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
-    dispatch(bulkRemoveHistoryItems(itemsToDelete));
+    const listOfKeys: string[] = [];
+    itemsToDelete.forEach(historyItem => {
+      listOfKeys.push(historyItem.createdAt);
+    });
+    historyCache.bulkRemoveHistoryData(listOfKeys)
+    dispatch(bulkRemoveHistoryItems(listOfKeys));
     closeDialog();
   };
 
@@ -408,6 +414,8 @@ const History = (props: any) => {
 
   const deleteQuery = async (query: IHistoryItem) => {
 
+    delete query.category;
+    historyCache.removeHistoryData(query);
     dispatch(removeHistoryItem(query));
     trackHistoryItemEvent(
       eventTypes.BUTTON_CLICK_EVENT,
