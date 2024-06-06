@@ -26,7 +26,7 @@ export interface ApplicationState {
   authToken: IAuthenticateResult;
   samples: {
     queries: ISampleQuery[];
-    pending: boolean;
+    status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
   };
   consentedScopes: string[];

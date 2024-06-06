@@ -126,7 +126,7 @@ describe('Query action creators', () => {
 
     // @ts-ignore
     return store.dispatch(runQuery(query))
-      .then((response) => {
+      .then((response: { type: any; response: { ok: boolean; }; }) => {
         expect(response.type).toBe('QUERY_GRAPH_STATUS');
         expect(response.response.ok).toBe(false);
       })

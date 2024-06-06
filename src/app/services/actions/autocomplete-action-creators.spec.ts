@@ -1,10 +1,12 @@
 
+import { AnyAction } from '@reduxjs/toolkit';
 import configureMockStore from 'redux-mock-store';
+
 import { store } from '../../../../src/store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
 import { fetchAutoCompleteOptions } from '../../../app/services/actions/autocomplete-action-creators';
 import { suggestions } from '../../../modules/suggestions/suggestions';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
 
@@ -44,7 +46,7 @@ const mockState: ApplicationState = {
   },
   samples: {
     queries: [],
-    pending: false,
+    status: 'idle',
     error: null
   },
   scopes: {
@@ -101,7 +103,12 @@ store.getState = () => ({
   proxyUrl: '',
   collections: [],
   graphExplorerMode: Mode.Complete,
-  queryRunnerStatus: null
+  queryRunnerStatus: null,
+  samples: {
+    queries: [],
+    status: 'idle',
+    error: null
+  }
 })
 
 describe('fetchAutoCompleteOptions', () => {
@@ -117,7 +124,7 @@ describe('fetchAutoCompleteOptions', () => {
     const store_ = mockStore(store.getState());
 
     // Call the function by dispatching the returned async function
-    await store_.dispatch(fetchAutoCompleteOptions(url, version));
+    await store_.dispatch(fetchAutoCompleteOptions(url, version) as unknown as AnyAction);
 
     // Assertions
     const expectedActions = [
@@ -141,7 +148,7 @@ describe('fetchAutoCompleteOptions', () => {
     const store_ = mockStore(store.getState());
 
     // Call the function by dispatching the returned async function
-    await store_.dispatch(fetchAutoCompleteOptions(url, version));
+    await store_.dispatch(fetchAutoCompleteOptions(url, version) as unknown as AnyAction);
 
     // Assertions
     const expectedActions = [

@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
 
+import samplesReducer from '../slices/samples.slice';
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
@@ -17,7 +17,6 @@ import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
 import { resources } from './resources-reducer';
 import { responseAreaExpanded } from './response-expanded-reducer';
-import { samples } from './samples-reducers';
 import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 import { theme } from './theme-reducer';
@@ -41,7 +40,7 @@ const reducers = {
   resources,
   responseAreaExpanded,
   sampleQuery,
-  samples,
+  samples: samplesReducer,
   scopes,
   sidebarProperties,
   snippets,
@@ -49,8 +48,7 @@ const reducers = {
   theme
 };
 
-const rootReducer = combineReducers(reducers);
-
 export {
-  reducers, rootReducer
+  reducers
 };
+
