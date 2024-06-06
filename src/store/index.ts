@@ -1,15 +1,15 @@
 import {
-  ActionCreator, Dispatch, Middleware, ThunkAction, UnknownAction,
+  AnyAction,
+  Dispatch, Middleware, Store,
+  ThunkDispatch, UnknownAction,
   combineReducers, configureStore
 } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
 
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
 import { reducers } from '../app/services/reducers';
-import { AppAction } from '../types/action';
-import { ApplicationState } from '../types/root';
 
 const loggerMiddleware = createLogger({
   level: 'error',
@@ -28,7 +28,7 @@ if (NODE_ENV === 'development') {
 
 const combinedReducer = combineReducers(reducers);
 
-const initialState: Partial<ApplicationState> = {
+const initialState = {
   authToken: { token: false, pending: false },
   consentedScopes: [],
   isLoadingData: false,
@@ -75,6 +75,13 @@ export const store = configureStore({
   }
 });
 
-export type AppDispatch = typeof store.dispatch;
+export type ApplicationState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = ThunkDispatch<ApplicationState, any, AnyAction>;
+
+export type AppStore = Omit<Store<ApplicationState, AnyAction>, 'dispatch'> & {
+  dispatch: AppDispatch;
+};
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<ApplicationState> = useSelector;
-export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, AppAction>>;

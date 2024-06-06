@@ -48,7 +48,7 @@ const QueryRunner = (props: any) => {
   const handleOnRunQuery = (query?: IQuery) => {
     if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
       const headers = sampleQuery.sampleHeaders;
-      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+      const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
         try {
           sampleQuery.sampleBody = JSON.parse(sampleBody);

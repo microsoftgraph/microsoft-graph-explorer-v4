@@ -29,20 +29,6 @@ export const configuration: Configuration = {
           return;
         }
         telemetry.trackEvent(eventTypes.AUTH_REQUEST_EVENT, { message, level });
-        switch (level) {
-          case LogLevel.Error:
-            console.error('[MSAL]', message);
-            return;
-          case LogLevel.Info:
-            console.info('[MSAL]', message);
-            return;
-          case LogLevel.Verbose:
-            console.debug('[MSAL]', message);
-            return;
-          case LogLevel.Warning:
-            console.warn('[MSAL]', message);
-            return;
-        }
       },
       piiLoggingEnabled: false
     }

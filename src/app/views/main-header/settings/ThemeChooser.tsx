@@ -25,7 +25,7 @@ const ThemeChooser: React.FC<PopupsComponent<null>> = (props) => {
 
   return (
     <>
-      <ChoiceGroup defaultSelectedKey={appTheme} styles={{
+      <ChoiceGroup defaultSelectedKey={appTheme! as string} styles={{
         flexContainer: {
           flexWrap: 'nowrap'
         }
