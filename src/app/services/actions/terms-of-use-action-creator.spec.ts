@@ -18,9 +18,7 @@ describe('Terms of Use Action Creators', () => {
 
     const store = mockStore({ termsOfUse: {} });
 
-    store.dispatch(clearTermsOfUse({
-      termsOfUse: false
-    }));
+    store.dispatch(clearTermsOfUse());
     expect(store.getActions()).toEqual(expectedAction);
   });
 });
