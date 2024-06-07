@@ -1,5 +1,5 @@
 import { AppAction } from '../../../types/action';
-import { IResource, IResources } from '../../../types/resources';
+import { IResources } from '../../../types/resources';
 import {
   FETCH_RESOURCES_ERROR, FETCH_RESOURCES_PENDING,
   FETCH_RESOURCES_SUCCESS

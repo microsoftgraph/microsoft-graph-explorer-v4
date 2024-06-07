@@ -1,19 +1,17 @@
 import { Dispatch, Middleware, UnknownAction } from '@reduxjs/toolkit';
 import { collectionsCache } from '../../modules/cache/collections.cache';
-import { resourcesCache } from '../../modules/cache/resources.cache';
 import { samplesCache } from '../../modules/cache/samples.cache';
+import { AppAction } from '../../types/action';
 import { ResourcePath } from '../../types/resources';
-import { addResourcePaths } from '../services/actions/collections-action-creators';
 import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
-  CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS, FETCH_RESOURCES_ERROR, FETCH_RESOURCES_SUCCESS,
+  CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
-import { AppAction } from '../../types/action';
 
-const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store) => (next) => async (value) => {
+const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () => (next) => async (value) => {
   const action = value as AppAction;
   switch (action.type) {
     case CHANGE_THEME_SUCCESS:
@@ -48,17 +46,6 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (st
 
     case COLLECTION_CREATE_SUCCESS: {
       await collectionsCache.create(action.response);
-      break;
-    }
-
-    case FETCH_RESOURCES_SUCCESS:
-    case FETCH_RESOURCES_ERROR: {
-      resourcesCache.readCollection().then((data: ResourcePath[]) => {
-        if (data && data.length > 0) {
-          // TODO: Restore addResiurce action
-          // store.dispatch(addResourcePaths(data));
-        }
-      });
       break;
     }
 
