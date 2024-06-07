@@ -17,12 +17,12 @@ const initialState: SamplesState = {
   error: null
 };
 
-export const fetchSamples = createAsyncThunk(
+export const fetchSamples = createAsyncThunk<ISampleQuery[], void, { rejectValue: ISampleQuery[] }>(
   'samples/fetchSamples',
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const { devxApi } = state;
-    let samplesUrl = `${devxApi.baseUrl}/samples`;
+    let samplesUrl = `${devxApi.baseUrl}/samplsses`;
 
     samplesUrl = devxApi.parameters
       ? `${samplesUrl}?${devxApi.parameters}`
@@ -64,9 +64,14 @@ const samplesSlice = createSlice({
         state.queries = action.payload;
       })
       .addCase(fetchSamples.rejected, (state, action) => {
+        if (action.payload) {
+          state.queries = action.payload;
+        }
         state.status = 'failed';
-        state.error = action.payload as object;
+        state.error = 'failed';
       });
+
+
   }
 });
 

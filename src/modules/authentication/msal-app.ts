@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 import { eventTypes, telemetry } from '../../telemetry';
 
 function getClientIdFromWindow() {
-  return (window as any).ClientId;
+  return window?.ClientId ?? '';
 }
 
 function getClientIdFromEnv() {
-  return process.env.REACT_APP_CLIENT_ID;
+  return process.env?.REACT_APP_CLIENT_ID ?? '';
 }
 
 const windowHasClientId = getClientIdFromWindow();
