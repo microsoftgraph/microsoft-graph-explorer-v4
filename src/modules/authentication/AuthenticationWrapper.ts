@@ -1,6 +1,7 @@
 import {
   AccountInfo,
   AuthenticationResult,
+  BrowserAuthError,
   InteractionRequiredAuthError,
   PopupRequest,
   SilentRequest
@@ -45,8 +46,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   public getSessionId(): string | null {
     const account = this.getAccount();
     if (account) {
-      const idTokenClaims: any = account?.idTokenClaims;
-      return idTokenClaims?.sid;
+      const idTokenClaims = account?.idTokenClaims;
+      return idTokenClaims?.sid ?? null;
     }
     return null;
   }
@@ -81,10 +82,12 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error: any) {
-      const { errorCode } = error;
-      if (errorCode === 'interaction_in_progress') {
-        this.eraseInteractionInProgressCookie();
+    } catch (error: unknown) {
+      if (error instanceof BrowserAuthError){
+        const { errorCode } = error;
+        if (errorCode === 'interaction_in_progress') {
+          this.eraseInteractionInProgressCookie();
+        }
       }
       throw error;
     }
@@ -166,17 +169,14 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.acquireTokenSilent(silentRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof InteractionRequiredAuthError || !this.getAccount()) {
         return this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes, sessionId);
-
-      } else if (signInAuthError(error)) {
+      }
+      if (typeof error === 'string' && signInAuthError(error as string)) {
         this.deleteHomeAccountId();
-        throw error;
       }
-      else {
-        throw error;
-      }
+      throw error;
     }
   }
 
@@ -225,22 +225,20 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       const result = await msalApplication.loginPopup(popUpRequest);
       this.storeHomeAccountId(result.account!);
       return result;
-    } catch (error: any) {
-      const { errorCode } = error;
-      if (signInAuthError(errorCode) && !this.consentingToNewScopes && (errorCode && errorCode !== 'user_cancelled')) {
-        this.clearSession();
-        if (errorCode === 'interaction_in_progress') {
-          this.eraseInteractionInProgressCookie();
+    } catch (error: unknown) {
+      if(error instanceof BrowserAuthError){
+        const { errorCode } = error;
+        const valid = !this.consentingToNewScopes && errorCode !== 'user_cancelled';
+        if (signInAuthError(errorCode) && valid) {
+          this.clearSession();
+          if (errorCode === 'interaction_in_progress') {
+            this.eraseInteractionInProgressCookie();
+          }
         }
-        throw error;
       }
-      else {
-        throw error;
-      }
-
+      throw error;
     }
   }
-
   private storeHomeAccountId(account: AccountInfo): void {
     localStorage.setItem(HOME_ACCOUNT_KEY, account.homeAccountId);
   }
