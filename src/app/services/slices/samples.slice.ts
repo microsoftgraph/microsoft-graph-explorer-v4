@@ -22,7 +22,7 @@ export const fetchSamples = createAsyncThunk<ISampleQuery[], void, { rejectValue
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const { devxApi } = state;
-    let samplesUrl = `${devxApi.baseUrl}/samplsses`;
+    let samplesUrl = `${devxApi.baseUrl}/samples`;
 
     samplesUrl = devxApi.parameters
       ? `${samplesUrl}?${devxApi.parameters}`
