@@ -318,9 +318,17 @@ class App extends Component<IAppProps, IAppState> {
     const width = parseFloat(sidebarWidth.replace('%', ''));
 
     const { dimensions, actions }: any = this.props;
-    const dimensionsToUpdate = { ...dimensions };
-    dimensionsToUpdate.content.width = `${maxWidth - width}%`;
-    dimensionsToUpdate.sidebar.width = `${width}%`;
+    const dimensionsToUpdate = {
+      ...dimensions,
+      content: {
+        ...dimensions.content,
+        width: `${maxWidth - width}%`
+      },
+      sidebar: {
+        ...dimensions.sidebar,
+        width: `${width}%`
+      }
+    };
     if (actions) {
       actions.setDimensions(dimensionsToUpdate);
     }

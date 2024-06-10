@@ -21,10 +21,29 @@ const initialState: IDimensions = {
   }
 };
 
-export function dimensions(state = initialState, action: AppAction): any {
+export function dimensions(state = initialState, action: AppAction): IDimensions {
   switch (action.type) {
+
     case RESIZE_SUCCESS:
-      return action.response;
+      return {
+        ...state,
+        request: {
+          width: action.response.request.width,
+          height: action.response.request.height
+        },
+        response: {
+          width: action.response.response.width,
+          height: action.response.response.height
+        },
+        sidebar: {
+          width: action.response.sidebar.width,
+          height: action.response.sidebar.height
+        },
+        content: {
+          width: action.response.content.width,
+          height: action.response.content.height
+        }
+      };
     default:
       return state;
   }

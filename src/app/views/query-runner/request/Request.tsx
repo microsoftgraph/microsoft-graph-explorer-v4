@@ -140,12 +140,22 @@ const Request = (props: any) => {
     const heightInPx = requestHeight.replace('px', '').trim();
     const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
-    const dimen = { ...dimensions };
-    dimen.request.height = requestHeightInVh;
-    const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
-    dimen.response.height = response + 'vh';
-    dispatch(setDimensions(dimen));
+
+    const dimensionsToUpdate = {
+      ...dimensions,
+      request: {
+        ...dimensions.request,
+        height: requestHeightInVh
+      },
+      response: {
+        ...dimensions.response,
+        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
+      }
+    };
+
+    dispatch(setDimensions(dimensionsToUpdate));
   };
+
 
   // Resizable element does not update it's size when the browser window is resized.
   // This is a workaround to reset the height
