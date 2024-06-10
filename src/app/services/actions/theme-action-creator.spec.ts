@@ -1,7 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 
-import { changeTheme } from '../../../app/services/actions/theme-action-creator';
-import { CHANGE_THEME_SUCCESS } from '../../../app/services/redux-constants';
+import { changeTheme } from '../slices/theme.slice';
 
 const mockStore = configureMockStore();
 
@@ -9,8 +8,8 @@ describe('Change theme action creator', () => {
   it('Changes theme to dark', () => {
     const expectedActions = [
       {
-        type: CHANGE_THEME_SUCCESS,
-        response: 'dark'
+        type: 'theme/changeTheme',
+        payload: 'dark'
       }
     ];
 
