@@ -1,5 +1,7 @@
 
 import samplesReducer from '../slices/samples.slice';
+import themeChange from '../slices/theme.slice';
+
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import { autoComplete } from './autocomplete-reducer';
@@ -19,7 +21,6 @@ import { resources } from './resources-reducer';
 import { responseAreaExpanded } from './response-expanded-reducer';
 import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
-import { theme } from './theme-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 
 const reducers = {
@@ -45,7 +46,7 @@ const reducers = {
   sidebarProperties,
   snippets,
   termsOfUse,
-  theme
+  theme: themeChange
 };
 
 export {

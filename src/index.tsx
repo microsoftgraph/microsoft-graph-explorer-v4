@@ -14,7 +14,6 @@ import { setSampleQuery } from './app/services/actions/query-input-action-creato
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
-import { changeTheme } from './app/services/actions/theme-action-creator';
 import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import variantService from './app/services/variant-service';
@@ -32,6 +31,7 @@ import { loadGETheme } from './themes';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
+import { changeTheme } from './app/services/slices/theme.slice';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
