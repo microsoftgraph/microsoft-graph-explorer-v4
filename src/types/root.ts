@@ -1,4 +1,3 @@
-import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
 import { IDevxAPI } from './devx-api';
@@ -16,7 +15,6 @@ import { IStatus } from './status';
 
 export interface ApplicationState {
   theme: string;
-  adaptiveCard: IAdaptiveCardResponse;
   graphExplorerMode?: Mode;
   profile: IUser | undefined | null;
   queryRunnerStatus?: IStatus | null;
