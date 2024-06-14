@@ -30,7 +30,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, status: autoCompleteStatus } } = useAppSelector(
     (state) => state
   );
 
@@ -276,7 +276,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
-    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
+    if (!shouldShowSuggestions && autoCompleteStatus !== 'loading' && properties?.description) {
       return (
         <Text variant="small" >
           {properties?.description}
