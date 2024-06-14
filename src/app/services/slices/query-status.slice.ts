@@ -3,13 +3,7 @@ import { IStatus } from '../../../types/status';
 
 type Status = Partial<IStatus>
 
-const initialState: Status = {
-  ok: false,
-  statusText: 'Something worked!',
-  status: 200,
-  messageType: 1,
-  hint: 'Something worked!'
-}
+const initialState: Status = {}
 
 const queryStatus = createSlice({
   name: 'queryStatus',
