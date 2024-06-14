@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 
-import { setSampleQuery } from './query-input-action-creators';
+import { setSampleQuery } from '../slices/sample-query.slice';
 import { SET_SAMPLE_QUERY_SUCCESS } from '../redux-constants';
 
 const mockStore = configureMockStore();
