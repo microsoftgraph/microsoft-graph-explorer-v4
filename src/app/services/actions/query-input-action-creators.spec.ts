@@ -14,7 +14,7 @@ describe('Query input action creators should', () => {
     const expectedActions = [
       {
         type: SET_SAMPLE_QUERY_SUCCESS,
-        response: {
+        payload: {
           selectedVerb: 'GET',
           sampleUrl: 'https://graph.microsoft.com/v1.0/me/'
         }
