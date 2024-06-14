@@ -16,7 +16,7 @@ import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { runQuery } from '../../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import {
   bulkRemoveHistoryItems, removeHistoryItem, viewHistoryItem
 } from '../../../services/actions/request-history-action-creators';

@@ -8,7 +8,7 @@ import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authen
 import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';

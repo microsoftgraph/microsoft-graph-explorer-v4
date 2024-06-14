@@ -8,7 +8,7 @@ import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
 import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';

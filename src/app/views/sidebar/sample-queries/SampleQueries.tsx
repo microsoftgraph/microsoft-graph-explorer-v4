@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
 import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';

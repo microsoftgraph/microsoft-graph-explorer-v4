@@ -25,7 +25,7 @@ import {
   getConsentedScopesSuccess
 } from './auth-action-creators';
 import { getProfileInfo } from './profile-action-creators';
-import { setQueryResponseStatus } from './query-status-action-creator';
+import { setQueryResponseStatus } from '../slices/query-status.slice';
 import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
