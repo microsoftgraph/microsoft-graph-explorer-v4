@@ -10,7 +10,7 @@ import { geLocale } from '../../../../appLocale';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { fetchSamples } from '../../../services/slices/samples.slice';
