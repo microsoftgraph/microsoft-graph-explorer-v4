@@ -53,8 +53,10 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: ['profile.read User.Read Files.Read'],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: ['profile.read User.Read Files.Read']
+  },
   isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
