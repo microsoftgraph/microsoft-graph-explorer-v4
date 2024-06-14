@@ -20,6 +20,7 @@ import {
 import { CopyButton } from '../../common/lazy-loader/component-registry';
 import { queryResponseStyles } from './../queryResponse.styles';
 import { getAdaptiveCard } from './adaptive-cards.util';
+import MarkdownIt from 'markdown-it';
 
 export interface AdaptiveCardResponse {
   data?: IAdaptiveCardContent;
@@ -101,6 +102,12 @@ const AdaptiveCard = (props: any) => {
     }
 
     try {
+        // markdown support
+      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown = (text: string, result: AdaptiveCardsAPI.IMarkdownProcessingResult) => {
+        const md = new MarkdownIt();
+        result.outputHtml = md.render(text);
+        result.didProcess = true;
+      };
       adaptiveCard.parse(cardContent!.data.card);
       const renderedCard = adaptiveCard.render();
 
