@@ -102,12 +102,13 @@ const AdaptiveCard = (props: any) => {
     }
 
     try {
-        // markdown support
-      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown = (text: string, result: AdaptiveCardsAPI.IMarkdownProcessingResult) => {
-        const md = new MarkdownIt();
-        result.outputHtml = md.render(text);
-        result.didProcess = true;
-      };
+      // markdown support
+      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown =
+        (text: string, result: AdaptiveCardsAPI.IMarkdownProcessingResult) => {
+          const md = new MarkdownIt();
+          result.outputHtml = md.render(text);
+          result.didProcess = true;
+        };
       adaptiveCard.parse(cardContent!.data.card);
       const renderedCard = adaptiveCard.render();
 
