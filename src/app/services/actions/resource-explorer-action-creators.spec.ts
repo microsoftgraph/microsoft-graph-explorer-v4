@@ -34,12 +34,6 @@ const mockState: ApplicationState = {
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -90,7 +84,7 @@ const mockState: ApplicationState = {
   autoComplete: {
     data: null,
     error: null,
-    pending: false
+    status: 'idle'
   },
   resources: {
     pending: false,

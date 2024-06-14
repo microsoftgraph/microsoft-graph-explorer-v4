@@ -1,13 +1,12 @@
-import { graphExplorerMode } from '../../../app/services/reducers/graph-explorer-mode-reducer';
 import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../../../app/services/redux-constants';
 import { Mode } from '../../../types/enums';
+import { setGraphExplorerMode } from '../slices/explorer-mode.slice';
 
 describe('Graph Explorer Mode Reducer', () => {
   it('should change graph explorer Mode', () => {
-    const initialState = undefined;
-    const dummyAction = { type: SET_GRAPH_EXPLORER_MODE_SUCCESS, response: Mode.TryIt };
-    const newState = graphExplorerMode(initialState, dummyAction);
+    const dummyAction = { type: SET_GRAPH_EXPLORER_MODE_SUCCESS, payload: Mode.TryIt };
+    const newState = setGraphExplorerMode(dummyAction.payload);
 
-    expect(newState).toEqual(Mode.TryIt);
+    expect(newState).toEqual(dummyAction);
   });
 });
