@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
 import { setSampleQuery } from './app/services/actions/query-input-action-creators';
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
