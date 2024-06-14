@@ -50,7 +50,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware: any) => getDefaultMiddleware().concat(...middleware),
   preloadedState: {
     ...initialState,
-    adaptiveCard: undefined,
     authToken: undefined,
     autoComplete: undefined,
     collections: [] as never,
