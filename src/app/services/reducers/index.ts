@@ -3,7 +3,7 @@ import samplesReducer from '../slices/samples.slice';
 import themeChange from '../slices/theme.slice';
 
 import { adaptiveCard } from './adaptive-cards-reducer';
-import auth from '../slices/auth.slice';
+import authReducer from '../slices/auth.slice';
 import { autoComplete } from './autocomplete-reducer';
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
@@ -25,7 +25,7 @@ import { sidebarProperties } from './toggle-sidebar-reducer';
 
 const reducers = {
   adaptiveCard,
-  auth,
+  auth: authReducer,
   autoComplete,
   collections,
   devxApi,

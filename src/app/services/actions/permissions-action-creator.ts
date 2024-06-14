@@ -242,7 +242,7 @@ interface IPermissionUpdate {
 }
 export function revokeScopes(permissionToRevoke: string) {
   return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes, profile } = getState();
+    const { auth: { consentedScopes }, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
     dispatch(revokeScopesPending());
@@ -303,7 +303,7 @@ export function revokeScopes(permissionToRevoke: string) {
 }
 
 async function updatePermissions(permissionsUpdateObject: IPermissionUpdate):
-Promise<string[] | null> {
+  Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
     profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay } = permissionsUpdateObject;

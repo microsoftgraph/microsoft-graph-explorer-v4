@@ -1,18 +1,19 @@
+import { PayloadAction } from '@reduxjs/toolkit';
+import configureMockStore from 'redux-mock-store';
 import {
   AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
   LOGOUT_SUCCESS
 } from '../../../app/services/redux-constants';
 import {
-  getAuthTokenSuccess, getConsentedScopesSuccess, signOutSuccess,
+  getAuthTokenSuccess, getConsentedScopesSuccess,
   setAuthenticationPending,
-  storeScopes, signIn, signOut
+  signIn, signOut,
+  signOutSuccess,
+  storeScopes
 } from '../../../app/services/slices/auth.slice';
-import { AppAction } from '../../../types/action';
-import configureMockStore from 'redux-mock-store';
-import { HOME_ACCOUNT_KEY } from '../graph-constants';
 import { msalApplication } from '../../../modules/authentication/msal-app';
+import { HOME_ACCOUNT_KEY } from '../graph-constants';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
-import { PayloadAction } from '@reduxjs/toolkit';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);
 
