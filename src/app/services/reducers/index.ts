@@ -1,6 +1,7 @@
 
 import samplesReducer from '../slices/samples.slice';
 import themeChange from '../slices/theme.slice';
+import sampleQuery from '../slices/sample-query.slice';
 
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
@@ -12,7 +13,7 @@ import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
-import { sampleQuery } from './query-input-reducers';
+// import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
