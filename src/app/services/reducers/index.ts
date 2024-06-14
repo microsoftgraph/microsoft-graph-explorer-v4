@@ -2,7 +2,6 @@
 import samplesReducer from '../slices/samples.slice';
 import themeChange from '../slices/theme.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
-import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
 import autoComplete from '../slices/autocomplete.slice';
 import { collections } from './collections-reducer';
