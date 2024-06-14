@@ -4,7 +4,7 @@ import themeChange from '../slices/theme.slice';
 
 import { adaptiveCard } from './adaptive-cards-reducer';
 import { authToken, consentedScopes } from './auth-reducers';
-import { autoComplete } from './autocomplete-reducer';
+import autoComplete from '../slices/autocomplete.slice';
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';

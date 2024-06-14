@@ -1,6 +1,6 @@
 import { IAdaptiveCardResponse } from './adaptivecard';
 import { IAuthenticateResult } from './authentication';
-import { IAutocompleteResponse } from './auto-complete';
+import { AutocompleteResponse } from './auto-complete';
 import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
@@ -37,7 +37,7 @@ export interface ApplicationState {
   snippets: ISnippet;
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
-  autoComplete: IAutocompleteResponse;
+  autoComplete: AutocompleteResponse;
   devxApi: IDevxAPI;
   resources: IResources;
   collections?: Collection[];
