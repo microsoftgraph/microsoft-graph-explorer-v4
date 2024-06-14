@@ -1,12 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IStatus } from '../../../types/status';
 
-// make some of the fields in interface null
-type PartialNullable<T> = {
-  [P in keyof T]?: T[P] | null;
-};
-
-type Status = PartialNullable<IStatus>
+type Status = Partial<IStatus>
 
 const initialState: Status = {
   ok: false,
