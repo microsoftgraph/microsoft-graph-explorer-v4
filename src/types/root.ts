@@ -1,5 +1,5 @@
 import { IAdaptiveCardResponse } from './adaptivecard';
-import { IAuthenticateResult } from './authentication';
+import { AuthenticateResult } from './authentication';
 import { IAutocompleteResponse } from './auto-complete';
 import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
@@ -23,13 +23,12 @@ export interface ApplicationState {
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
-  authToken: IAuthenticateResult;
+  auth: AuthenticateResult;
   samples: {
     queries: ISampleQuery[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
   };
-  consentedScopes: string[];
   scopes: IScopes;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
