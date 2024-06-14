@@ -302,8 +302,7 @@ export function revokeScopes(permissionToRevoke: string) {
   }
 }
 
-async function updatePermissions(permissionsUpdateObject: IPermissionUpdate):
-  Promise<string[] | null> {
+async function updatePermissions(permissionsUpdateObject: IPermissionUpdate): Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
     profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay } = permissionsUpdateObject;
