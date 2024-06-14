@@ -34,7 +34,7 @@ const QueryInput = (props: IQueryInputProps) => {
     })
   });
 
-  const { sampleQuery, authToken,
+  const { sampleQuery, auth: { authToken },
     isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
