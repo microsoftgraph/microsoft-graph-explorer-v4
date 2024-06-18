@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 import { eventTypes, telemetry } from '../../telemetry';
 
 function getClientIdFromWindow() {
-  return (window as any).ClientId;
+  return window?.ClientId ?? '';
 }
 
 function getClientIdFromEnv() {
-  return process.env.REACT_APP_CLIENT_ID;
+  return process.env?.REACT_APP_CLIENT_ID ?? '';
 }
 
 const windowHasClientId = getClientIdFromWindow();
@@ -29,20 +30,6 @@ export const configuration: Configuration = {
           return;
         }
         telemetry.trackEvent(eventTypes.AUTH_REQUEST_EVENT, { message, level });
-        switch (level) {
-          case LogLevel.Error:
-            console.error('[MSAL]', message);
-            return;
-          case LogLevel.Info:
-            console.info('[MSAL]', message);
-            return;
-          case LogLevel.Verbose:
-            console.debug('[MSAL]', message);
-            return;
-          case LogLevel.Warning:
-            console.warn('[MSAL]', message);
-            return;
-        }
       },
       piiLoggingEnabled: false
     }
