@@ -76,7 +76,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
-      extraQueryParameters: getExtraQueryParameters()
+      extraQueryParameters: getExtraQueryParameters(),
+      tokenQueryParameters: getExtraQueryParameters()
     };
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
@@ -207,8 +208,9 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       authority: this.getAuthority(),
       prompt: 'select_account',
       redirectUri: getCurrentUri(),
+      claims: this.getClaims(),
       extraQueryParameters: getExtraQueryParameters(),
-      claims: this.getClaims()
+      tokenQueryParameters: getExtraQueryParameters()
     };
 
     if (this.consentingToNewScopes || this.performingStepUpAuth) {
