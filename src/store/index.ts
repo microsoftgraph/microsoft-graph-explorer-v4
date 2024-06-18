@@ -29,8 +29,10 @@ if (NODE_ENV === 'development') {
 const combinedReducer = combineReducers(reducers);
 
 const initialState = {
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   isLoadingData: false,
   profile: null,
   queryRunnerStatus: null,
@@ -50,10 +52,12 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware: any) => getDefaultMiddleware().concat(...middleware),
   preloadedState: {
     ...initialState,
-    authToken: undefined,
+    auth: {
+      authToken: { pending: false, token: false },
+      consentedScopes: []
+    },
     autoComplete: undefined,
     collections: [] as never,
-    consentedScopes: undefined,
     devxApi: undefined,
     dimensions: undefined as undefined,
     graphResponse: undefined as undefined,

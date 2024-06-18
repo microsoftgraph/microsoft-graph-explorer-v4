@@ -9,8 +9,10 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
-  REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
+import {
+  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+  REVOKING_PERMISSIONS_REQUIRED_SCOPES
+} from '../graph-constants';
 import {
   FETCH_SCOPES_ERROR,
   FETCH_FULL_SCOPES_PENDING,
@@ -23,7 +25,7 @@ import {
 import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess
-} from './auth-action-creators';
+} from '../slices/auth.slice';
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
@@ -66,7 +68,7 @@ export function fetchScopesError(response: object): AppAction {
   };
 }
 
-export function getAllPrincipalGrantsPending(response: boolean){
+export function getAllPrincipalGrantsPending(response: boolean) {
   return {
     type: GET_ALL_PRINCIPAL_GRANTS_PENDING,
     response
@@ -178,10 +180,10 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
 export function consentToScopes(scopes: string[]) {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { profile, consentedScopes }: ApplicationState = getState();
+      const { profile, auth: { consentedScopes } }: ApplicationState = getState();
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
-        dispatch(getAuthTokenSuccess(true));
+        dispatch(getAuthTokenSuccess());
         const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
         dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
@@ -216,7 +218,7 @@ export function consentToScopes(scopes: string[]) {
 
 const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
   consentedResponse: string[]) => {
-  if(!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+  if (!consentedScopes || !consentedResponse || !scopeToBeConsented) {
     return consentedResponse;
   }
   const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
@@ -240,7 +242,7 @@ interface IPermissionUpdate {
 }
 export function revokeScopes(permissionToRevoke: string) {
   return async (dispatch: Function, getState: Function) => {
-    const { consentedScopes, profile } = getState();
+    const { auth: { consentedScopes }, profile } = getState();
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
     dispatch(revokeScopesPending());
@@ -262,7 +264,8 @@ export function revokeScopes(permissionToRevoke: string) {
       const retryDelay = 100;
       const permissionsUpdateObject: IPermissionUpdate = {
         permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
-        profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay }
+        profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay
+      }
 
       const updatedScopes = await updatePermissions(permissionsUpdateObject)
 
@@ -272,7 +275,7 @@ export function revokeScopes(permissionToRevoke: string) {
         dispatch(revokeScopesSuccess());
         trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
       }
-      else{
+      else {
         throw new RevokeScopesError({
           errorText: 'Scopes not updated', statusText: 'An error occurred when unconsenting',
           status: '500', messageType: 1
@@ -299,8 +302,7 @@ export function revokeScopes(permissionToRevoke: string) {
   }
 }
 
-async function updatePermissions(permissionsUpdateObject: IPermissionUpdate):
-Promise<string[] | null> {
+async function updatePermissions(permissionsUpdateObject: IPermissionUpdate): Promise<string[] | null> {
   const {
     permissionBeingRevokedIsAllPrincipal, userIsTenantAdmin, revokePermissionUtil, grantsPayload,
     profile, permissionToRevoke, newScopesArray, retryCount, dispatch, retryDelay } = permissionsUpdateObject;
@@ -319,14 +321,14 @@ Promise<string[] | null> {
   if (isRevokeSuccessful) {
     return newScopesString.split(' ');
   }
-  else if((retryCount < maxRetryCount) && !isRevokeSuccessful) {
+  else if ((retryCount < maxRetryCount) && !isRevokeSuccessful) {
     await new Promise(resolve => setTimeout(resolve, retryDelay * 2));
     dispatchScopesStatus(dispatch, 'We are retrying the revoking operation', 'Retrying', 5);
 
     permissionsUpdateObject.retryCount += 1;
     return updatePermissions(permissionsUpdateObject);
   }
-  else{
+  else {
     return null;
   }
 
@@ -359,7 +361,7 @@ export function fetchAllPrincipalGrants() {
       const { profile, consentedScopes, scopes } = getState();
       const tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
       const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
-      if (revokePermissionUtil && revokePermissionUtil.getGrantsPayload() !== null){
+      if (revokePermissionUtil && revokePermissionUtil.getGrantsPayload() !== null) {
         const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
         dispatch(getAllPrincipalGrantsPending(true));
         const requestCounter = 0;
@@ -367,7 +369,7 @@ export function fetchAllPrincipalGrants() {
         await checkScopesConsentType(servicePrincipalAppId, tenantWideGrant, revokePermissionUtil,
           consentedScopes, profile, requestCounter, dispatch);
       }
-      else{
+      else {
         dispatch(getAllPrincipalGrantsPending(false));
         dispatchScopesStatus(dispatch, 'Permissions', 'You require the following permissions to read', 0)
       }
@@ -391,11 +393,11 @@ const allScopesHaveConsentType = (consentedScopes: string[], tenantWideGrant: IO
 }
 
 export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): string[] => {
-  if(tenantWideGrant){
+  if (tenantWideGrant) {
     const allGrants = tenantWideGrant;
-    if(allGrants){
-      const principalGrant =  allGrants.find(grant => grant.consentType === 'AllPrincipals');
-      if(principalGrant){
+    if (allGrants) {
+      const principalGrant = allGrants.find(grant => grant.consentType === 'AllPrincipals');
+      if (principalGrant) {
         return principalGrant.scope.split(' ');
       }
     }
@@ -404,10 +406,10 @@ export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): strin
 }
 
 export const getSinglePrincipalGrant = (tenantWideGrant: IPermissionGrant[], principalId: string): string[] => {
-  if(tenantWideGrant && principalId){
+  if (tenantWideGrant && principalId) {
     const allGrants = tenantWideGrant;
     const singlePrincipalGrant = allGrants.find(grant => grant.principalId === principalId);
-    if(singlePrincipalGrant){
+    if (singlePrincipalGrant) {
       return singlePrincipalGrant.scope.split(' ');
     }
   }

@@ -5,7 +5,8 @@ import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
+import App from './app/views/App';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
@@ -19,7 +20,6 @@ import { CURRENT_THEME } from './app/services/graph-constants';
 import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import { readFromLocalStorage } from './app/utils/local-storage';
-import App from './app/views/App';
 import { authenticationWrapper } from './modules/authentication';
 import { collectionsCache } from './modules/cache/collections.cache';
 import { historyCache } from './modules/cache/history-utils';
@@ -100,7 +100,7 @@ appStore.dispatch(getGraphProxyUrl());
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
-      appStore.dispatch(getAuthTokenSuccess(true));
+      appStore.dispatch(getAuthTokenSuccess());
       appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   })

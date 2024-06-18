@@ -28,7 +28,7 @@ const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
-    const tokenPresent = !!getState()?.authToken?.token;
+    const tokenPresent = !!getState()?.auth?.authToken?.token;
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 

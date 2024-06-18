@@ -3,7 +3,9 @@ import configureMockStore from 'redux-mock-store';
 import {
   FETCH_FULL_SCOPES_SUCCESS,
   FETCH_SCOPES_ERROR,
-  FETCH_URL_SCOPES_PENDING
+  FETCH_URL_SCOPES_PENDING,
+  GET_AUTH_TOKEN_SUCCESS,
+  GET_CONSENTED_SCOPES_SUCCESS
 } from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { store } from '../../../store/index';
@@ -53,8 +55,10 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: ['profile.read User.Read Files.Read'],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: ['profile.read User.Read Files.Read']
+  },
   isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
@@ -260,10 +264,10 @@ describe('Permissions action creators', () => {
       correlationId: 'string'
     })
     const expectedAction: any = [
-      { type: 'GET_AUTH_TOKEN_SUCCESS', response: true },
+      { type: GET_AUTH_TOKEN_SUCCESS, payload: undefined },
       {
-        type: 'GET_CONSENTED_SCOPES_SUCCESS',
-        response: ['profile.Read User.Read']
+        type: GET_CONSENTED_SCOPES_SUCCESS,
+        payload: ['profile.Read User.Read']
       },
       {
         type: 'QUERY_GRAPH_STATUS',

@@ -2,7 +2,7 @@
 import samplesReducer from '../slices/samples.slice';
 import themeChange from '../slices/theme.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
-import { authToken, consentedScopes } from './auth-reducers';
+import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
@@ -22,10 +22,9 @@ import { termsOfUse } from './terms-of-use-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 
 const reducers = {
-  authToken,
+  auth: authReducer,
   autoComplete,
   collections,
-  consentedScopes,
   devxApi,
   dimensions,
   graphExplorerMode,
