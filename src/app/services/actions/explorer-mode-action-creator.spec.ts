@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 
-import { setGraphExplorerMode } from './explorer-mode-action-creator';
+import { setGraphExplorerMode } from '../slices/explorer-mode.slice';
 import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
 import { Mode } from '../../../types/enums';
 
@@ -11,7 +11,7 @@ describe('Graph Explorer Mode Action Creators', () => {
     const expectedActions = [
       {
         type: SET_GRAPH_EXPLORER_MODE_SUCCESS,
-        response: Mode.TryIt
+        payload: Mode.TryIt
       }
     ];
 

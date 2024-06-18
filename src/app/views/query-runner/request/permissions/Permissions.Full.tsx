@@ -33,7 +33,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const [filter, setFilter] = useState<Filter>('all-permissions');
 
   const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes, authToken } } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;

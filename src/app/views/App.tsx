@@ -14,7 +14,7 @@ import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-ru
 import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import * as authActionCreators from '../services/actions/auth-action-creators';
+import { signIn, storeScopes } from '../services/slices/auth.slice';
 import { setDimensions } from '../services/actions/dimensions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
 import { setSampleQuery } from '../services/slices/sample-query.slice';
@@ -500,7 +500,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, authToken, graphExplorerMode
+  profile, sampleQuery, auth: { authToken }, graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -525,7 +525,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         runQuery,
         setSampleQuery,
         toggleSidebar,
-        ...authActionCreators,
+        signIn,
+        storeScopes,
         changeTheme,
         setDimensions
       },

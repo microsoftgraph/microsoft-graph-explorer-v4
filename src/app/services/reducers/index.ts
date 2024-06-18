@@ -2,14 +2,13 @@
 import samplesReducer from '../slices/samples.slice';
 import themeChange from '../slices/theme.slice';
 import sampleQuery from '../slices/sample-query.slice';
-
-import { adaptiveCard } from './adaptive-cards-reducer';
-import { authToken, consentedScopes } from './auth-reducers';
+import graphExplorerMode from '../slices/explorer-mode.slice';
+import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
+
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
-import { graphExplorerMode } from './graph-explorer-mode-reducer';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
@@ -24,11 +23,9 @@ import { termsOfUse } from './terms-of-use-reducer';
 import { sidebarProperties } from './toggle-sidebar-reducer';
 
 const reducers = {
-  adaptiveCard,
-  authToken,
+  auth: authReducer,
   autoComplete,
   collections,
-  consentedScopes,
   devxApi,
   dimensions,
   graphExplorerMode,

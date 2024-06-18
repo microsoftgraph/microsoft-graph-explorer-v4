@@ -1,12 +1,16 @@
+import { BrowserAuthError } from '@azure/msal-browser';
 import { MessageBarType } from '@fluentui/react';
 
+import { authenticationWrapper } from '../../../modules/authentication';
+import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
+import { historyCache } from '../../../modules/cache/history-utils';
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
-import { historyCache } from '../../../modules/cache/history-utils';
+import { translateMessage } from '../../utils/translate-messages';
 import {
   anonymousRequest,
   authenticatedRequest,
@@ -19,16 +23,12 @@ import {
 } from './query-action-creator-util';
 import { setQueryResponseStatus } from './query-status-action-creator';
 import { addHistoryItem } from './request-history-action-creators';
-import { authenticationWrapper } from '../../../modules/authentication';
-import { BrowserAuthError } from '@azure/msal-browser';
-import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
-import { translateMessage } from '../../utils/translate-messages';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 export function runQuery(query: IQuery) {
   return (dispatch: Function, getState: Function) => {
-    const tokenPresent = !!getState()?.authToken?.token;
+    const tokenPresent = !!getState()?.auth?.authToken?.token;
     const respHeaders: any = {};
     const createdAt = new Date().toISOString();
 

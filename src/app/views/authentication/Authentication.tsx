@@ -7,7 +7,7 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/actions/auth-action-creators';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/slices/auth.slice';
 import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
@@ -17,7 +17,7 @@ import { translateMessage } from '../../utils/translate-messages';
 const Authentication = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
-  const { authToken } = useAppSelector((state) => state);
+  const { auth: { authToken } } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
 
@@ -33,7 +33,9 @@ const Authentication = (props: any) => {
       const authResponse = await authenticationWrapper.logIn();
       if (authResponse) {
         setLoginInProgress(false);
-        dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
+        if (authResponse.accessToken) {
+          dispatch(getAuthTokenSuccess());
+        }
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
     } catch (error: any) {
@@ -67,14 +69,16 @@ const Authentication = (props: any) => {
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON
     });
-    try{
+    try {
       const authResponse = await authenticationWrapper.logInWithOther();
       if (authResponse) {
         setLoginInProgress(false);
-        dispatch(getAuthTokenSuccess(!!authResponse.accessToken));
+        if (authResponse.accessToken) {
+          dispatch(getAuthTokenSuccess());
+        }
         dispatch(getConsentedScopesSuccess(authResponse.scopes));
       }
-    } catch(error: any) {
+    } catch (error: any) {
       setLoginInProgress(false);
     }
   }
