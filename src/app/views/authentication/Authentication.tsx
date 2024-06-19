@@ -14,7 +14,7 @@ import { authenticationStyles } from './Authentication.styles';
 import { translateMessage } from '../../utils/translate-messages';
 
 const Authentication = (props: any) => {
-  const dispatch: AppDispatch = useAppDispatch;
+  const dispatch: AppDispatch = useAppDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { auth: { authToken } } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;
