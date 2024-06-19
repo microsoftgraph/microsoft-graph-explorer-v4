@@ -6,7 +6,7 @@ import { CLEAR_QUERY_STATUS,
 export function queryRunnerStatus(state = {}, action: AppAction): any {
   switch (action.type) {
     case QUERY_GRAPH_STATUS:
-      return action.response;
+      return action.payload;
     case GET_CONSENT_ERROR:
       return action.response;
     case QUERY_GRAPH_RUNNING:
