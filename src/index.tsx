@@ -160,6 +160,32 @@ function loadResources() {
 }
 loadResources();
 
+/**
+ * Set's up Monaco Editor's Workers.
+ */
+enum Workers {
+  Json = 'json',
+  Editor = 'editor',
+}
+
+(window as any).MonacoEnvironment = {
+  getWorkerUrl(moduleId: any, label: string) {
+    if (label === 'json') {
+      return getWorkerFor(Workers.Json);
+    }
+    return getWorkerFor(Workers.Editor);
+  }
+};
+
+function getWorkerFor(worker: string): string {
+  // tslint:disable-next-line:max-line-length
+  const WORKER_PATH =
+    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
+
+  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
+}
+
 variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
