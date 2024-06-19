@@ -1,5 +1,5 @@
 import { ISuggestions, SignContext } from '.';
-import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
+import { parseOpenApiResponse } from '../../app/utils/open-api-parser/parse/open-api-parser';
 import {
   getMatchingResourceForUrl
 } from '../../app/utils/resources/resources-filter';
@@ -70,7 +70,8 @@ class Suggestions implements ISuggestions {
     const headers = {
       'Accept': 'application/json'
     };
-    const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
+    const openApiUrl =
+      `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}&includeRequestBody=true`;
     const options: IRequestOptions = { headers };
     try {
       if (hasBannedPaths()) {
