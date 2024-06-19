@@ -30,7 +30,7 @@ import {
 const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
-  const { authToken, profile, samples } =
+  const { auth: { authToken }, profile, samples } =
     useAppSelector((state) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);

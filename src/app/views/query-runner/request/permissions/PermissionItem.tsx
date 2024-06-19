@@ -36,7 +36,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const theme = getTheme();
   const dispatch: AppDispatch = useAppDispatch();
   const hostId: string = getId('tooltipHost');
-  const { scopes, consentedScopes, profile } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes }, profile } = useAppSelector((state) => state);
   const { item, column } = props;
   const consented = !!item.consented;
 

@@ -1,16 +1,18 @@
+import { PayloadAction } from '@reduxjs/toolkit';
+import configureMockStore from 'redux-mock-store';
 import {
   AUTHENTICATION_PENDING, GET_AUTH_TOKEN_SUCCESS, GET_CONSENTED_SCOPES_SUCCESS,
   LOGOUT_SUCCESS
 } from '../../../app/services/redux-constants';
 import {
-  getAuthTokenSuccess, getConsentedScopesSuccess, signOutSuccess,
+  getAuthTokenSuccess, getConsentedScopesSuccess,
   setAuthenticationPending,
-  storeScopes, signIn, signOut
-} from '../../../app/services/actions/auth-action-creators';
-import { AppAction } from '../../../types/action';
-import configureMockStore from 'redux-mock-store';
-import { HOME_ACCOUNT_KEY } from '../graph-constants';
+  signIn, signOut,
+  signOutSuccess,
+  storeScopes
+} from '../../../app/services/slices/auth.slice';
 import { msalApplication } from '../../../modules/authentication/msal-app';
+import { HOME_ACCOUNT_KEY } from '../graph-constants';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);
@@ -28,14 +30,13 @@ msalApplication.logoutPopup = jest.fn();
 describe('Auth Action Creators', () => {
   it('should dispatch AUTHENTICATION_PENDING when setAuthenticationPending() is called', () => {
     // Arrange
-    const response: boolean = true;
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<undefined> = {
       type: AUTHENTICATION_PENDING,
-      response
+      payload: undefined
     }
 
     // Act
-    const action = setAuthenticationPending(response);
+    const action = setAuthenticationPending();
 
     // Assert
     expect(action).toEqual(expectedAction);
@@ -43,14 +44,13 @@ describe('Auth Action Creators', () => {
 
   it('should dispatch GET_AUTH_TOKEN_SUCCESS when getAuthTokenSuccess() is called', () => {
     // Arrange
-    const response: boolean = true;
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<undefined> = {
       type: GET_AUTH_TOKEN_SUCCESS,
-      response
+      payload: undefined
     }
 
     // Act
-    const action = getAuthTokenSuccess(response);
+    const action = getAuthTokenSuccess();
 
     // Assert
     expect(action).toEqual(expectedAction);
@@ -59,9 +59,9 @@ describe('Auth Action Creators', () => {
   it('should dispatch GET_CONSENTED_SCOPES_SUCCESS when getConsentedScopesSuccess() is called', () => {
     // Arrange
     const response: string[] = ['mail.read', 'profile.read'];
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<string[]> = {
       type: GET_CONSENTED_SCOPES_SUCCESS,
-      response
+      payload: response
     }
 
     // Act
@@ -73,13 +73,12 @@ describe('Auth Action Creators', () => {
 
   it('should dispatch LOGOUT_SUCCESS when signOutSuccess() is called', () => {
     // Arrange
-    const response: boolean = true;
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<undefined> = {
       type: LOGOUT_SUCCESS,
-      response
+      payload: undefined
     }
     // Act
-    const action = signOutSuccess(response);
+    const action = signOutSuccess();
 
     // Assert
     expect(action).toEqual(expectedAction);
@@ -88,9 +87,9 @@ describe('Auth Action Creators', () => {
   it('should dispatch GET_CONSENTED_SCOPES_SUCCESS when storeScopes() is called', () => {
     // Arrange
     const response: string[] = ['mail.read', 'profile.read'];
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<string[]> = {
       type: GET_CONSENTED_SCOPES_SUCCESS,
-      response
+      payload: response
     }
 
     // Act
@@ -106,10 +105,9 @@ describe('Auth Action Creators', () => {
 
   it('should dispatch GET_AUTH_TOKEN_SUCCESS when signIn() is called', () => {
     // Arrange
-    const response: boolean = true;
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<undefined> = {
       type: GET_AUTH_TOKEN_SUCCESS,
-      response
+      payload: undefined
     }
 
     // Act
@@ -125,9 +123,9 @@ describe('Auth Action Creators', () => {
   it('should dispatch LOGOUT_SUCCESS when signOutSuccess() is called', () => {
     // Arrange
     const response: boolean = true;
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<boolean> = {
       type: LOGOUT_SUCCESS,
-      response
+      payload: response
     }
 
     // Act
@@ -151,11 +149,11 @@ describe('Auth Action Creators', () => {
     const expectedActions = [
       {
         type: AUTHENTICATION_PENDING,
-        response: true
+        payload: undefined
       },
       {
         type: LOGOUT_SUCCESS,
-        response: true
+        payload: undefined
       }
     ];
     // Act and assert

@@ -26,18 +26,14 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
