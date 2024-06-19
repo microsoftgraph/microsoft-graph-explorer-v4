@@ -166,23 +166,25 @@ loadResources();
 enum Workers {
   Json = 'json',
   Editor = 'editor',
-}
-
-import { Environment } from 'monaco-editor/esm/vs/editor/editor.api';
-// ... other imports
-
-declare global {
-  interface Window {
-    MonacoEnvironment: Environment;
-  }
+  Typescript='ts',
+  Css='css',
+  Html='html'
 }
 
 window.MonacoEnvironment = {
   getWorkerUrl(moduleId: any, label: string) {
-    if (label === 'json') {
-      return getWorkerFor(Workers.Json);
+    switch (label) {
+      case 'json':
+        return getWorkerFor(Workers.Json);
+      case 'css':
+        return getWorkerFor(Workers.Css);
+      case 'html':
+        return getWorkerFor(Workers.Html);
+      case 'typescript':
+        return getWorkerFor(Workers.Typescript);
+      default:
+        return getWorkerFor(Workers.Editor);
     }
-    return getWorkerFor(Workers.Editor);
   }
 };
 
