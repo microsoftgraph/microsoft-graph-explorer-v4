@@ -168,7 +168,16 @@ enum Workers {
   Editor = 'editor',
 }
 
-(window as any).MonacoEnvironment = {
+import { Environment } from 'monaco-editor/esm/vs/editor/editor.api';
+// ... other imports
+
+declare global {
+  interface Window {
+    MonacoEnvironment: Environment;
+  }
+}
+
+window.MonacoEnvironment = {
   getWorkerUrl(moduleId: any, label: string) {
     if (label === 'json') {
       return getWorkerFor(Workers.Json);
