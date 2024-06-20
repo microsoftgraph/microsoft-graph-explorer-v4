@@ -17,7 +17,7 @@ import { ISidebarProps } from '../../types/sidebar';
 import { signIn, storeScopes } from '../services/slices/auth.slice';
 import { setDimensions } from '../services/actions/dimensions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
-import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../services/slices/sample-query.slice';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { PopupsProvider } from '../services/context/popups-context';
