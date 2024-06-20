@@ -83,7 +83,7 @@ const UnstyledResourceExplorer = (props: any) => {
     setQuery(item!);
   }
 
-  const resourceOptionSelected = (activity: string, context: any) => {
+  const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
     }
@@ -168,7 +168,7 @@ const UnstyledResourceExplorer = (props: any) => {
               return <ResourceLink
                 link={link!}
                 version={version}
-                resourceOptionSelected={(activity: string, context: unknown) =>
+                resourceOptionSelected={(activity: string, context: IResourceLink) =>
                   resourceOptionSelected(activity, context)}
                 classes={classes}
               />
