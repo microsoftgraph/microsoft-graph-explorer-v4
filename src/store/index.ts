@@ -44,7 +44,7 @@ const initialState = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  collections: undefined
+  collections: []
 }
 
 export const store = configureStore({
@@ -57,7 +57,7 @@ export const store = configureStore({
       consentedScopes: []
     },
     autoComplete: undefined,
-    collections: [] as never,
+    collections: [],
     devxApi: undefined,
     dimensions: undefined as undefined,
     graphResponse: undefined as undefined,
