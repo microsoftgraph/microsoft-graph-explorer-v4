@@ -11,7 +11,7 @@ import { createCollection } from './app/services/actions/collections-action-crea
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
-import { setSampleQuery } from './app/services/actions/query-input-action-creators';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
