@@ -1,21 +1,20 @@
 import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
-import { AppDispatch, useAppSelector } from '../../../store';
+import { AppDispatch, useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/slices/auth.slice';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
 import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components';
 import { authenticationStyles } from './Authentication.styles';
 import { translateMessage } from '../../utils/translate-messages';
 
 const Authentication = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
   const { auth: { authToken } } = useAppSelector((state) => state);
   const tokenPresent = !!authToken.token;

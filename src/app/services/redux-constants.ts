@@ -1,6 +1,6 @@
 export const QUERY_GRAPH_SUCCESS = 'QUERY_GRAPH_SUCCESS';
-export const QUERY_GRAPH_STATUS = 'QUERY_GRAPH_STATUS';
-export const CLEAR_QUERY_STATUS = 'CLEAR_QUERY_STATUS';
+export const QUERY_GRAPH_STATUS = 'queryStatus/setQueryResponseStatus';
+export const CLEAR_QUERY_STATUS = 'queryStatus/clearQueryStatus';
 export const GET_AUTH_TOKEN_SUCCESS = 'auth/getAuthTokenSuccess';
 export const LOGOUT_SUCCESS = 'auth/signOutSuccess';
 export const QUERY_GRAPH_RUNNING = 'QUERY_GRAPH_RUNNING';
@@ -17,7 +17,7 @@ export const REMOVE_HISTORY_ITEM_SUCCESS = 'REMOVE_HISTORY_ITEM_SUCCESS';
 export const ADD_HISTORY_ITEM_SUCCESS = 'ADD_HISTORY_ITEM_SUCCESS';
 export const GET_HISTORY_ITEMS_SUCCESS = 'GET_HISTORY_ITEMS_SUCCESS';
 export const VIEW_HISTORY_ITEM_SUCCESS = 'VIEW_HISTORY_ITEM_SUCCESS';
-export const CLEAR_RESPONSE = 'CLEAR_RESPONSE';
+export const CLEAR_RESPONSE = 'queryStatus/clearResponse';
 export const SAMPLES_FETCH_SUCCESS = 'SAMPLES_FETCH_SUCCESS';
 export const SAMPLES_FETCH_ERROR = 'SAMPLES_FETCH_ERROR';
 export const SAMPLES_FETCH_PENDING = 'SAMPLES_FETCH_PENDING';

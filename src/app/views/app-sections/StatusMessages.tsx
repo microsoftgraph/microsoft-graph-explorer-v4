@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
+import { clearQueryStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
-import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
