@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Collection, ResourcePath } from '../../../types/resources';
-import { getUniquePaths } from '../reducers/collections-reducer.util';
 
 const initialState: Collection[] = [];
 
@@ -15,10 +14,8 @@ const collections = createSlice({
     resourcepathsAddSuccess:(state, action: PayloadAction<ResourcePath[]>) => {
       const index = state.findIndex(collection => collection.isDefault);
       if (index > -1) {
-        const paths: ResourcePath[] = getUniquePaths(state[index].paths, action.payload);
-        state[index].paths.push(...paths)
+        state[index].paths.push(...action.payload)
       }
-      return state
     },
     resourcepathsDeleteSuccess: (state, action: PayloadAction<ResourcePath[]>)=>{
       const index = state.findIndex(collection => collection.isDefault);
@@ -32,7 +29,6 @@ const collections = createSlice({
         })
         state[index].paths = defaultResourcePaths;
       }
-      return state
     }
   }
 })
