@@ -5,8 +5,8 @@ import sampleQuery from '../slices/sample-query.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
+import collections from '../slices/collections.slice';
 
-import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { scopes } from './permissions-reducer';
