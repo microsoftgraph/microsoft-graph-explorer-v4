@@ -2,12 +2,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { ApplicationState } from '../../../store';
 import { IPermission, IScopes } from '../../../types/permissions';
-import { IUser } from '../../../types/profile';
 import { IRequestOptions } from '../../../types/request';
+import { ScopesError } from '../../utils/error-utils/ScopesError';
+import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { ACCOUNT_TYPE, PERMS_SCOPE } from '../graph-constants';
-import { ScopesError } from '../../utils/error-utils/ScopesError';
 
 type ScopesFetchType = 'full' | 'query';
 
@@ -24,13 +23,6 @@ const initialState: IScopes = {
     tenantWidePermissionsGrant: []
   },
   error: null
-}
-
-function getPermissionsScopeType(profile: IUser | null | undefined) {
-  if (profile?.profileType === ACCOUNT_TYPE.MSA) {
-    return PERMS_SCOPE.PERSONAL;
-  }
-  return PERMS_SCOPE.WORK;
 }
 
 export const fetchScopes = createAsyncThunk(
