@@ -1,13 +1,13 @@
 
-import samplesReducer from '../slices/samples.slice';
-import themeChange from '../slices/theme.slice';
-import graphExplorerMode from '../slices/explorer-mode.slice';
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
+import graphExplorerMode from '../slices/explorer-mode.slice';
+import samplesReducer from '../slices/samples.slice';
+import scopes from '../slices/scopes.slice';
+import themeChange from '../slices/theme.slice';
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
-import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { sampleQuery } from './query-input-reducers';

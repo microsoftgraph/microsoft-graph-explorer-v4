@@ -1,72 +1,33 @@
-import { MessageBarType } from '@fluentui/react';
 
+import { MessageBarType } from '@fluentui/react';
 import { authenticationWrapper } from '../../../modules/authentication';
-import { AppAction } from '../../../types/action';
-import { IUser } from '../../../types/profile';
-import { IRequestOptions } from '../../../types/request';
-import { ApplicationState } from '../../../types/root';
-import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
-import { parseSampleUrl } from '../../utils/sample-url-generation';
-import { translateMessage } from '../../utils/translate-messages';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
+import { ApplicationState } from '../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../telemetry';
+import { AppAction } from '../../../types/action';
+import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
+import { IUser } from '../../../types/profile';
+import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
+import { translateMessage } from '../../utils/translate-messages';
 import {
-  ACCOUNT_TYPE, DEFAULT_USER_SCOPES, PERMS_SCOPE,
+  DEFAULT_USER_SCOPES,
   REVOKING_PERMISSIONS_REQUIRED_SCOPES
 } from '../graph-constants';
 import {
-  FETCH_SCOPES_ERROR,
-  FETCH_FULL_SCOPES_PENDING,
-  FETCH_URL_SCOPES_PENDING,
-  FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_SUCCESS,
-  GET_ALL_PRINCIPAL_GRANTS_SUCCESS, GET_ALL_PRINCIPAL_GRANTS_ERROR, REVOKE_SCOPES_PENDING,
-  REVOKE_SCOPES_SUCCESS, REVOKE_SCOPES_ERROR, GET_ALL_PRINCIPAL_GRANTS_PENDING
+  GET_ALL_PRINCIPAL_GRANTS_ERROR,
+  GET_ALL_PRINCIPAL_GRANTS_PENDING,
+  GET_ALL_PRINCIPAL_GRANTS_SUCCESS,
+  REVOKE_SCOPES_ERROR,
+  REVOKE_SCOPES_PENDING,
+  REVOKE_SCOPES_SUCCESS
 } from '../redux-constants';
 import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess
 } from '../slices/auth.slice';
+import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
 import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from './query-status-action-creator';
-import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
-import { componentNames, eventTypes, telemetry } from '../../../telemetry';
-import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
-import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
-
-export function fetchFullScopesSuccess(response: object): AppAction {
-  return {
-    type: FETCH_FULL_SCOPES_SUCCESS,
-    response
-  };
-}
-
-export function fetchUrlScopesSuccess(response: Object): AppAction {
-  return {
-    type: FETCH_URL_SCOPES_SUCCESS,
-    response
-  }
-}
-
-export function fetchFullScopesPending(): AppAction {
-  return {
-    type: FETCH_FULL_SCOPES_PENDING,
-    response: 'full'
-  };
-}
-
-export function fetchUrlScopesPending(): AppAction {
-  return {
-    type: FETCH_URL_SCOPES_PENDING,
-    response: 'url'
-  };
-}
-
-export function fetchScopesError(response: object): AppAction {
-  return {
-    type: FETCH_SCOPES_ERROR,
-    response
-  };
-}
 
 export function getAllPrincipalGrantsPending(response: boolean) {
   return {
@@ -109,72 +70,6 @@ export function revokeScopesError(): AppAction {
     type: REVOKE_SCOPES_ERROR,
     response: null
   }
-}
-
-type ScopesFetchType = 'full' | 'query';
-
-export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
-  return async (dispatch: Function, getState: Function) => {
-    try {
-      const { devxApi, profile, sampleQuery: query }: ApplicationState = getState();
-      const scopeType = getPermissionsScopeType(profile);
-      let permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scopeType}`;
-
-      if (scopesFetchType === 'query') {
-        const signature = sanitizeQueryUrl(query.sampleUrl);
-        const { requestUrl, sampleUrl } = parseSampleUrl(signature);
-
-        if (!sampleUrl) {
-          throw new Error('url is invalid');
-        }
-
-        // eslint-disable-next-line max-len
-        permissionsUrl = `${permissionsUrl}&requesturl=/${requestUrl}&method=${query.selectedVerb}`;
-      }
-
-      if (devxApi.parameters) {
-        permissionsUrl = `${permissionsUrl}&${devxApi.parameters}`;
-      }
-
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
-      const options: IRequestOptions = { headers };
-      if (scopesFetchType === 'full') {
-        dispatch(fetchFullScopesPending());
-      } else {
-        dispatch(fetchUrlScopesPending());
-      }
-
-      const response = await fetch(permissionsUrl, options);
-      if (response.ok) {
-        const scopes = await response.json();
-
-        return scopesFetchType === 'full' ? dispatch(fetchFullScopesSuccess({
-          scopes: { fullPermissions: scopes }
-        })) :
-          dispatch(fetchUrlScopesSuccess({
-            scopes: { specificPermissions: scopes }
-          }));
-      }
-
-      throw response;
-    } catch (error) {
-      return dispatch(
-        fetchScopesError({
-          error
-        })
-      );
-    }
-  };
-}
-
-export function getPermissionsScopeType(profile: IUser | null | undefined) {
-  if (profile?.profileType === ACCOUNT_TYPE.MSA) {
-    return PERMS_SCOPE.PERSONAL;
-  }
-  return PERMS_SCOPE.WORK;
 }
 
 export function consentToScopes(scopes: string[]) {
