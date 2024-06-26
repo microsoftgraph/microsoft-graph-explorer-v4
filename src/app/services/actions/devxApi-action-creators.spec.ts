@@ -15,8 +15,7 @@ describe('Devx api url', () => {
     const expectedActions =
     {
       type: SET_DEVX_API_URL_SUCCESS,
-      payload: devxApi,
-      response: devxApi // TODO: remove
+      payload: devxApi
     };
 
     // Act
