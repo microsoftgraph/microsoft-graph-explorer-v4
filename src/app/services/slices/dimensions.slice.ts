@@ -25,11 +25,6 @@ const dimensions = createSlice({
   initialState,
   reducers: {
     resizeSuccess: (state, action: PayloadAction<IDimensions>) => state = action.payload
-    //   state.request = action.payload.request;
-    //   state.response = action.payload.response;
-    //   state.sidebar = action.payload.sidebar;
-    //   state.content = action.payload.content;
-    // }
   }
 })
 
