@@ -26,7 +26,7 @@ describe('Dimensions setting on GE', () => {
 
     const expectedActions = {
       type: RESIZE_SUCCESS,
-      payload:dimensions
+      payload: dimensions
     }
 
     // Act
