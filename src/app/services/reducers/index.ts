@@ -9,7 +9,6 @@ import dimensions from '../slices/dimensions.slice';
 
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
-// import { dimensions } from './dimensions-reducers';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
