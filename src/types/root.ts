@@ -5,7 +5,7 @@ import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
 import { IScopes } from './permissions';
-import { IUser } from './profile';
+import { IProfileState } from './profile';
 import { IGraphResponse } from './query-response';
 import { IQuery, ISampleQuery } from './query-runner';
 import { IResources, Collection } from './resources';
@@ -16,7 +16,7 @@ import { IStatus } from './status';
 export interface ApplicationState {
   theme: string;
   graphExplorerMode?: Mode;
-  profile: IUser | undefined | null;
+  profile: IProfileState;
   queryRunnerStatus?: IStatus | null;
   sampleQuery: IQuery;
   termsOfUse: boolean;

@@ -26,12 +26,12 @@ import {
   getAuthTokenSuccess,
   getConsentedScopesSuccess
 } from '../slices/auth.slice';
-import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from '../slices/query-status.slice';
 import { RevokePermissionsUtil, REVOKE_STATUS } from './permissions-action-creator.util';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
+import { getProfileInfo } from '../slices/profile.slice';
 
 export function fetchFullScopesSuccess(response: object): AppAction {
   return {
@@ -117,7 +117,7 @@ export function fetchScopes(scopesFetchType: ScopesFetchType = 'full') {
   return async (dispatch: Function, getState: Function) => {
     try {
       const { devxApi, profile, sampleQuery: query }: ApplicationState = getState();
-      const scopeType = getPermissionsScopeType(profile);
+      const scopeType = getPermissionsScopeType(profile?.user);
       let permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scopeType}`;
 
       if (scopesFetchType === 'query') {
@@ -180,7 +180,7 @@ export function getPermissionsScopeType(profile: IUser | null | undefined) {
 export function consentToScopes(scopes: string[]) {
   return async (dispatch: Function, getState: Function) => {
     try {
-      const { profile, auth: { consentedScopes } }: ApplicationState = getState();
+      const { profile:{user}, auth: { consentedScopes } }: ApplicationState = getState();
       const authResponse = await authenticationWrapper.consentToScopes(scopes);
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess());
@@ -188,7 +188,7 @@ export function consentToScopes(scopes: string[]) {
         dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
           authResponse.account &&
-          authResponse.account.localAccountId !== profile?.id
+          authResponse.account.localAccountId !== user?.id
         ) {
           dispatch(getProfileInfo());
         }
@@ -405,7 +405,8 @@ export const getAllPrincipalGrant = (tenantWideGrant: IPermissionGrant[]): strin
   return [];
 }
 
-export const getSinglePrincipalGrant = (tenantWideGrant: IPermissionGrant[], principalId: string): string[] => {
+export const getSinglePrincipalGrant = (
+  tenantWideGrant: IPermissionGrant[], principalId: string | undefined): string[] => {
   if (tenantWideGrant && principalId) {
     const allGrants = tenantWideGrant;
     const singlePrincipalGrant = allGrants.find(grant => grant.principalId === principalId);

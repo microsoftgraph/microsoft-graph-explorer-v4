@@ -2,7 +2,6 @@ import {
   DefaultButton, FontSizes, IColumn, IIconProps, IconButton, Label,
   PrimaryButton, TooltipHost, getId, getTheme
 } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
@@ -36,7 +35,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const theme = getTheme();
   const dispatch: AppDispatch = useAppDispatch();
   const hostId: string = getId('tooltipHost');
-  const { scopes, auth: { consentedScopes }, profile } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes }, profile: {user} } = useAppSelector((state) => state);
   const { item, column } = props;
   const consented = !!item.consented;
 
@@ -64,11 +63,10 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   }
 
   const ConsentTypeProperty = (): JSX.Element | null => {
-    if (scopes && consented && profile && profile.id) {
-
+    if (scopes && consented && user?.id) {
       const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
       const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
-      const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, profile.id);
+      const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, user?.id);
       const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
       const consentTypeProperties = {
         item, allPrincipalPermissions, singlePrincipalPermissions,
