@@ -27,7 +27,7 @@ import {
 } from '../slices/auth.slice';
 import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
 import { getProfileInfo } from './profile-action-creators';
-import { setQueryResponseStatus } from './query-status-action-creator';
+import { setQueryResponseStatus } from '../slices/query-status.slice';
 
 export function getAllPrincipalGrantsPending(response: boolean) {
   return {

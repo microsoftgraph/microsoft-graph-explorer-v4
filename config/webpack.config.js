@@ -389,6 +389,10 @@ module.exports = function (webpackEnv) {
               )
             },
             {
+              test: /\.css$/,
+              use: ['style-loader', 'css-loader']
+            },
+            {
               test: /\.ttf$/,
               type: 'asset/resource'
             },

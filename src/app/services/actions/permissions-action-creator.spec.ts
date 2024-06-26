@@ -5,12 +5,14 @@ import {
   FETCH_FULL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
   GET_AUTH_TOKEN_SUCCESS,
-  GET_CONSENTED_SCOPES_SUCCESS
+  GET_CONSENTED_SCOPES_SUCCESS,
+  QUERY_GRAPH_STATUS
 } from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { store } from '../../../store/index';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
+import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
 import { fetchScopes } from '../slices/scopes.slice';
@@ -20,7 +22,6 @@ import {
   revokeScopes
 } from './permissions-action-creator';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
-import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 
 let mockStore = configureMockStore([mockThunkMiddleware]);
 
@@ -206,8 +207,8 @@ describe('Permissions action creators', () => {
         payload: ['profile.Read User.Read']
       },
       {
-        type: 'QUERY_GRAPH_STATUS',
-        response: {
+        type: QUERY_GRAPH_STATUS,
+        payload: {
           statusText: translateMessage('Success'),
           status: translateMessage('Scope consent successful'),
           ok: true,
@@ -293,8 +294,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -303,8 +304,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Default scope'),
             status: translateMessage('Cannot delete default scope'),
             ok: false,
@@ -360,8 +361,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking '),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -370,8 +371,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Unable to dissent'),
             status: translateMessage('Unable to dissent. You require the following permissions to revoke'),
             ok: false,
@@ -431,8 +432,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -441,8 +442,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking admin granted scopes'),
             // eslint-disable-next-line max-len
             status: translateMessage('You are unconsenting to an admin pre-consented permission'),

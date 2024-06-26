@@ -21,7 +21,7 @@ import {
   queryResponse,
   queryResultsInCorsError
 } from './query-action-creator-util';
-import { setQueryResponseStatus } from './query-status-action-creator';
+import { setQueryResponseStatus } from '../slices/query-status.slice';
 import { addHistoryItem } from './request-history-action-creators';
 
 const MAX_NUMBER_OF_RETRIES = 3;

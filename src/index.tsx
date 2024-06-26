@@ -11,7 +11,7 @@ import { createCollection } from './app/services/actions/collections-action-crea
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
-import { setSampleQuery } from './app/services/actions/query-input-action-creators';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
@@ -179,6 +179,43 @@ appStore.dispatch(setSampleQuery(
   }
 ));
 appStore.dispatch(queryRunningStatus(false));
+
+/**
+ * Set's up Monaco Editor's Workers.
+ */
+enum Workers {
+  Json = 'json',
+  Editor = 'editor',
+  Typescript='ts',
+  Css='css',
+  Html='html'
+}
+
+window.MonacoEnvironment = {
+  getWorkerUrl(moduleId: any, label: string) {
+    switch (label) {
+      case 'json':
+        return getWorkerFor(Workers.Json);
+      case 'css':
+        return getWorkerFor(Workers.Css);
+      case 'html':
+        return getWorkerFor(Workers.Html);
+      case 'typescript':
+        return getWorkerFor(Workers.Typescript);
+      default:
+        return getWorkerFor(Workers.Editor);
+    }
+  }
+};
+
+function getWorkerFor(worker: string): string {
+  // tslint:disable-next-line:max-line-length
+  const WORKER_PATH =
+    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
+
+  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
+}
 
 variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;

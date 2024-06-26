@@ -2,15 +2,16 @@
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
+import sampleQuery from '../slices/sample-query.slice';
 import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
+
 import { collections } from './collections-reducer';
 import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
-import { sampleQuery } from './query-input-reducers';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
