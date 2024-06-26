@@ -7,23 +7,20 @@ import {
 export function addResourcePaths(response: object): AppAction {
   return {
     type: RESOURCEPATHS_ADD_SUCCESS,
-    payload: response,
-    response // TODO: remove when moved to rtk is done
+    payload: response
   };
 }
 
 export function createCollection(response: object): AppAction {
   return {
     type: COLLECTION_CREATE_SUCCESS,
-    payload: response,
-    response // TODO: remove
+    payload: response
   };
 }
 
 export function removeResourcePaths(response: object): AppAction {
   return {
     type: RESOURCEPATHS_DELETE_SUCCESS,
-    payload: response,
-    response // TODO: remove
-  };
+    payload: response
+  }
 }
