@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 
 function getClientIdFromWindow() {
