@@ -1,29 +1,24 @@
 import configureMockStore from 'redux-mock-store';
 
+import { AnyAction } from '@reduxjs/toolkit';
 import {
+  FETCH_FULL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_SCOPES_ERROR,
-  FETCH_URL_SCOPES_PENDING,
-  QUERY_GRAPH_STATUS,
   GET_AUTH_TOKEN_SUCCESS,
-  GET_CONSENTED_SCOPES_SUCCESS
+  GET_CONSENTED_SCOPES_SUCCESS,
+  QUERY_GRAPH_STATUS
 } from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { store } from '../../../store/index';
 import { Mode } from '../../../types/enums';
-import { IPermissionsResponse } from '../../../types/permissions';
 import { ApplicationState } from '../../../types/root';
+import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
+import { fetchScopes } from '../slices/scopes.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 import {
   consentToScopes,
-  fetchFullScopesPending,
-  fetchFullScopesSuccess,
-  fetchScopes,
-  fetchScopesError,
-  fetchUrlScopesPending,
-  getPermissionsScopeType,
   revokeScopes
 } from './permissions-action-creator';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
@@ -131,66 +126,6 @@ store.getState = () => {
 }
 
 describe('Permissions action creators', () => {
-  it('should dispatch FETCH_SCOPES_SUCCESS when fetchFullScopesSuccess() is called', () => {
-    // Arrange
-    const response: IPermissionsResponse = {
-      scopes: {
-        fullPermissions: [],
-        specificPermissions: []
-      }
-    }
-
-    const expectedAction = {
-      type: FETCH_FULL_SCOPES_SUCCESS,
-      response
-    }
-
-    // Act
-    const action = fetchFullScopesSuccess(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  });
-
-  it('should dispatch FETCH_SCOPES_ERROR when fetchScopesError() is called', () => {
-    // Arrange
-    const response = {
-      error: {}
-    }
-
-    const expectedAction = {
-      type: FETCH_SCOPES_ERROR,
-      response
-    }
-
-    // Act
-    const action = fetchScopesError(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  });
-
-  // eslint-disable-next-line max-len
-  it('should dispatch FETCH_FULL_SCOPES_PENDING or FETCH_URL_SCOPES_PENDING depending on type passed to fetchScopesPending', () => {
-    // Arrange
-    const expectedFullScopesAction = {
-      type: 'FETCH_SCOPES_PENDING',
-      response: 'full'
-    }
-
-    const expectedUrlScopesAction = {
-      type: FETCH_URL_SCOPES_PENDING,
-      response: 'url'
-    }
-
-    // Act
-    const fullScopesAction = fetchFullScopesPending();
-    const urlScopesAction = fetchUrlScopesPending();
-
-    // Assert
-    expect(fullScopesAction).toEqual(expectedFullScopesAction);
-    expect(urlScopesAction).toEqual(expectedUrlScopesAction)
-  });
 
   it('should return a valid scope type when getPermissionsScopeType() is called with a user profile or null', () => {
     // Arrange
@@ -204,17 +139,17 @@ describe('Permissions action creators', () => {
 
   });
 
-  it('should fetch scopes', () => {
+  it('should fetch scopes', async () => {
     // Arrange
     const expectedResult = {}
-    const expectedAction: any = [
+    const expectedAction = [
       {
-        type: 'FETCH_SCOPES_PENDING',
-        response: 'full'
+        type: FETCH_FULL_SCOPES_PENDING,
+        payload: undefined
       },
       {
-        type: 'FULL_SCOPES_FETCH_SUCCESS',
-        response: {
+        type: FETCH_FULL_SCOPES_SUCCESS,
+        payload: {
           scopes: {
             fullPermissions: {}
           }
@@ -222,7 +157,7 @@ describe('Permissions action creators', () => {
       }
     ];
 
-    const store_ = mockStore(mockState);
+    const store_ = mockStore(store.getState());
 
     const mockFetch = jest.fn().mockImplementation(() => {
       return Promise.resolve({
@@ -234,12 +169,13 @@ describe('Permissions action creators', () => {
     window.fetch = mockFetch;
 
     // Act and Assert
-    // @ts-ignore
-    return store_.dispatch(fetchScopes())
-      // @ts-ignore
-      .then(() => {
-        expect(store_.getActions()).toEqual(expectedAction);
-      });
+    await store_.dispatch(fetchScopes('full') as unknown as AnyAction);
+
+    expect(store_.getActions().map(action => {
+      const { meta, error, ...rest } = action;
+      return rest;
+    })).toEqual(expectedAction);
+
   });
 
   it('should consent to scopes', () => {

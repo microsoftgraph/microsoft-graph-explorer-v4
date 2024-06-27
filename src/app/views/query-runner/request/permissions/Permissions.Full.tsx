@@ -4,15 +4,16 @@ import {
   IContextualMenuProps,
   Label, SearchBox, SelectionMode, Stack, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
@@ -42,7 +43,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const getPermissions = (): void => {
-    dispatch(fetchScopes());
+    dispatch(fetchScopes('full'));
     fetchPermissionGrants();
   }
 
@@ -61,7 +62,12 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   }, [consentedScopes]);
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
-    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
+    try {
+      return [...permissionsToSort].sort(dynamicSort('value', SortOrder.ASC));
+    } catch (error) {
+      // ignore
+    }
+    return permissionsToSort;
   }
 
   const renderDetailsHeader = (properties: any, defaultRender?: any): JSX.Element => {
@@ -268,8 +274,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           />
         </>}
 
-      {!loading && permissions && permissions.length === 0 && scopes?.error && scopes?.error?.error &&
-        scopes?.error?.error?.status && scopes?.error?.error?.status === 404 ?
+      {!loading && permissions && permissions.length === 0 && scopes?.error &&
+        scopes?.error?.status && scopes?.error?.status === 404 ?
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -279,7 +285,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
         }}>
           {translateMessage('permissions not found')}
         </Label> :
-        !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
+        !loading && permissions && permissions.length === 0 && scopes.error &&
         <Label>
           {translateMessage('Fetching permissions failing')}
         </Label>
