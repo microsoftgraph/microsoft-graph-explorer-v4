@@ -6,8 +6,8 @@ import graphExplorerMode from '../slices/explorer-mode.slice';
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
 import collections from '../slices/collections.slice';
+import devxApi from '../slices/devxapi.slice';
 
-import { devxApi } from './devxApi-reducers';
 import { dimensions } from './dimensions-reducers';
 import { scopes } from './permissions-reducer';
 import { profile } from './profile-reducer';
