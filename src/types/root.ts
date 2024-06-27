@@ -1,6 +1,5 @@
-import { IAdaptiveCardResponse } from './adaptivecard';
-import { IAuthenticateResult } from './authentication';
-import { IAutocompleteResponse } from './auto-complete';
+import { AuthenticateResult } from './authentication';
+import { AutocompleteResponse } from './auto-complete';
 import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
@@ -16,20 +15,18 @@ import { IStatus } from './status';
 
 export interface ApplicationState {
   theme: string;
-  adaptiveCard: IAdaptiveCardResponse;
-  graphExplorerMode: Mode;
+  graphExplorerMode?: Mode;
   profile: IUser | undefined | null;
-  queryRunnerStatus: IStatus | null;
+  queryRunnerStatus?: IStatus | null;
   sampleQuery: IQuery;
   termsOfUse: boolean;
   sidebarProperties: ISidebarProps;
-  authToken: IAuthenticateResult;
+  auth: AuthenticateResult;
   samples: {
     queries: ISampleQuery[];
-    pending: boolean;
+    status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
   };
-  consentedScopes: string[];
   scopes: IScopes;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
@@ -37,7 +34,7 @@ export interface ApplicationState {
   snippets: ISnippet;
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
-  autoComplete: IAutocompleteResponse;
+  autoComplete: AutocompleteResponse;
   devxApi: IDevxAPI;
   resources: IResources;
   collections?: Collection[];

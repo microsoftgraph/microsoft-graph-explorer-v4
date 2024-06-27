@@ -9,7 +9,7 @@ import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';

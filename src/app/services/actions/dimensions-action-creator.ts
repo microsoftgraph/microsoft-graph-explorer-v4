@@ -5,6 +5,6 @@ import { RESIZE_SUCCESS } from '../redux-constants';
 export function setDimensions(response: IDimensions): AppAction {
   return {
     type: RESIZE_SUCCESS,
-    response
+    payload: response
   };
 }

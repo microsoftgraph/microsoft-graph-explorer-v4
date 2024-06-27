@@ -36,7 +36,7 @@ describe('Query Runner Reducer', () => {
     const mockResponse = {
       status: 400
     };
-    const queryAction = { type: QUERY_GRAPH_STATUS, response: mockResponse };
+    const queryAction = { type: QUERY_GRAPH_STATUS, payload: mockResponse };
     const newState = queryRunnerStatus(initialState, queryAction);
 
     expect(newState).toEqual(mockResponse);

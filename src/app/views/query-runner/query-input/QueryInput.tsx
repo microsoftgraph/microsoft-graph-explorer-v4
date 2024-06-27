@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-runner';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { getStyleFor } from '../../../utils/http-methods.utils';
@@ -34,7 +34,7 @@ const QueryInput = (props: IQueryInputProps) => {
     })
   });
 
-  const { sampleQuery, authToken,
+  const { sampleQuery, auth: { authToken },
     isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;

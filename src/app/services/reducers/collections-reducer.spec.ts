@@ -1,13 +1,11 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import { Collection, IResourceLink, ResourceLinkType, ResourcePath } from '../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../actions/collections-action-creators';
 import { RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS } from '../redux-constants';
 import { collections } from './collections-reducer';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 const initialState: Collection[] = [{
   id: '1',

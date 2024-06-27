@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 import {
   fetchResources, fetchResourcesError,
   fetchResourcesPending, fetchResourcesSuccess
@@ -12,8 +12,7 @@ import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 const mockState: ApplicationState = {
   devxApi: {
@@ -27,18 +26,14 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -46,7 +41,7 @@ const mockState: ApplicationState = {
   },
   samples: {
     queries: [],
-    pending: false,
+    status: 'idle',
     error: null
   },
   scopes: {
@@ -89,7 +84,7 @@ const mockState: ApplicationState = {
   autoComplete: {
     data: null,
     error: null,
-    pending: false
+    status: 'idle'
   },
   resources: {
     pending: false,

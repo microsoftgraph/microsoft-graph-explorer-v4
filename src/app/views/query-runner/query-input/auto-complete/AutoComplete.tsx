@@ -6,9 +6,9 @@ import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
-import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
+import { fetchAutoCompleteOptions } from '../../../../services/slices/autocomplete.slice';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -30,7 +30,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, status: autoCompleteStatus } } = useAppSelector(
     (state) => state
   );
 
@@ -190,11 +190,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (!requestUrl) {
-      dispatch(fetchAutoCompleteOptions('', queryVersion));
+      dispatch(fetchAutoCompleteOptions({ url: '', version: queryVersion }));
       return;
     }
 
-    dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
+    dispatch(fetchAutoCompleteOptions({ url: requestUrl, version: queryVersion, context }));
   }
 
   const displayAutoCompleteSuggestions = (url: string) => {
@@ -276,7 +276,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
-    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
+    if (!shouldShowSuggestions && autoCompleteStatus !== 'loading' && properties?.description) {
       return (
         <Text variant="small" >
           {properties?.description}

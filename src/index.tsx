@@ -3,18 +3,23 @@ import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
-
 import { Provider } from 'react-redux';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
+
+import App from './app/views/App';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
+import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
+import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
-import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
+import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
+import { CURRENT_THEME } from './app/services/graph-constants';
+import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
-import App from './app/views/App';
+import { readFromLocalStorage } from './app/utils/local-storage';
 import { authenticationWrapper } from './modules/authentication';
 import { collectionsCache } from './modules/cache/collections.cache';
 import { historyCache } from './modules/cache/history-utils';
@@ -23,12 +28,10 @@ import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
-import { readFromLocalStorage } from './app/utils/local-storage';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { Collection } from './types/resources';
-import variantService from './app/services/variant-service';
-import { CURRENT_THEME } from './app/services/graph-constants';
+import { changeTheme } from './app/services/slices/theme.slice';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -97,7 +100,7 @@ appStore.dispatch(getGraphProxyUrl());
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
-      appStore.dispatch(getAuthTokenSuccess(true));
+      appStore.dispatch(getAuthTokenSuccess());
       appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   })
@@ -113,8 +116,14 @@ const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
   loadGETheme(theme);
-  appStore.dispatch(changeThemeSuccess(theme));
+  appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
+} else {
+  appStore.dispatch(setGraphExplorerMode(Mode.Complete));
+  appStore.dispatch(toggleSidebar({
+    mobileScreen: false,
+    showSidebar: true
+  }))
 }
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
@@ -159,6 +168,17 @@ function loadResources() {
   appStore.dispatch(fetchResources());
 }
 loadResources();
+
+appStore.dispatch(setSampleQuery(
+  {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    selectedVerb: 'GET',
+    sampleBody: undefined,
+    sampleHeaders: [],
+    selectedVersion: 'v1.0'
+  }
+));
+appStore.dispatch(queryRunningStatus(false));
 
 /**
  * Set's up Monaco Editor's Workers.

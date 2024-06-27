@@ -1,5 +1,5 @@
 import { CLEAR_RESPONSE, QUERY_GRAPH_STATUS } from '../../../app/services/redux-constants';
-import { clearResponse, setQueryResponseStatus } from '../../../app/services/actions/query-status-action-creator';
+import { clearResponse, setQueryResponseStatus } from '../../../app/services/slices/query-status.slice';
 import { AppAction } from '../../../types/action';
 
 describe('Query Action Creators', () => {
@@ -13,9 +13,9 @@ describe('Query Action Creators', () => {
       hint: 'Something worked!'
     }
 
-    const expectedAction: AppAction = {
+    const expectedAction = {
       type: QUERY_GRAPH_STATUS,
-      response
+      payload: response
     }
 
     // Act
@@ -27,9 +27,9 @@ describe('Query Action Creators', () => {
 
   it('should dispatch CLEAR_RESPONSE action when clearResponse() is called', () => {
     // Assert
-    const expectedAction: AppAction = {
+    const expectedAction = {
       type: CLEAR_RESPONSE,
-      response: null
+      payload: undefined
     }
 
     // Act

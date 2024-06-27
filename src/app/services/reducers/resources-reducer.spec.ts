@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 
 import { resources } from '../../../app/services/reducers/resources-reducer';
 import {

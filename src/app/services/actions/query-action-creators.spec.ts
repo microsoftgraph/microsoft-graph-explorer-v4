@@ -1,12 +1,11 @@
 /* eslint-disable max-len */
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import { runQuery } from './query-action-creators';
-import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { QUERY_GRAPH_SUCCESS, QUERY_GRAPH_STATUS,ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_RUNNING } from '../redux-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Query action creators', () => {
   beforeEach(() => {
@@ -25,7 +24,7 @@ describe('Query action creators', () => {
 
     const expectedActions = [
       {
-        type: 'QUERY_GRAPH_RUNNING',
+        type: QUERY_GRAPH_RUNNING,
         response: true
       },
       {
@@ -49,7 +48,7 @@ describe('Query action creators', () => {
           statusText: 'OK',
           url: sampleUrl
         },
-        type: 'ADD_HISTORY_ITEM_SUCCESS'
+        type: ADD_HISTORY_ITEM_SUCCESS
       },
       {
         type: QUERY_GRAPH_SUCCESS,
@@ -77,7 +76,7 @@ describe('Query action creators', () => {
       fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
     }, 1000);
 
-    const expectedActions = ['QUERY_GRAPH_SUCCESS', 'ADD_HISTORY_ITEM_SUCCESS', 'QUERY_GRAPH_STATUS'];
+    const expectedActions = [QUERY_GRAPH_SUCCESS, ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_STATUS];
 
     const getDispatchedTypes = (actions: any) => {
       const types_: string[] = [];
@@ -127,9 +126,9 @@ describe('Query action creators', () => {
 
     // @ts-ignore
     return store.dispatch(runQuery(query))
-      .then((response) => {
-        expect(response.type).toBe('QUERY_GRAPH_STATUS');
-        expect(response.response.ok).toBe(false);
+      .then((response: { type: any; payload: { ok: boolean; }; }) => {
+        expect(response.type).toBe(QUERY_GRAPH_STATUS);
+        expect(response.payload.ok).toBe(false);
       })
       .catch((e: Error) => { throw e });
 

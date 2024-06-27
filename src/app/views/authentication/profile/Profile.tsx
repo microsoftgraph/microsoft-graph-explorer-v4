@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
-import { signOut } from '../../../services/actions/auth-action-creators';
+import { signOut } from '../../../services/slices/auth.slice';
 import { getProfileInfo } from '../../../services/actions/profile-action-creators';
 import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -33,7 +33,7 @@ const getInitials = (name: string) => {
 
 const Profile = (props: any) => {
   const dispatch: AppDispatch = useDispatch();
-  const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
+  const { profile, auth: { authToken }, graphExplorerMode } = useAppSelector((state) => state);
 
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;

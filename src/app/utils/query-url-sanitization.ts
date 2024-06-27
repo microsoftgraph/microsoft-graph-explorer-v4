@@ -159,5 +159,8 @@ function sanitizeQueryParameters(queryString: string): string {
 }
 
 export function encodeHashCharacters(query: IQuery): string {
-  return query.sampleUrl.replace(/#/g, '%2523');
+  if (query.sampleUrl) {
+    return query.sampleUrl.replace(/#/g, '%2523');
+  }
+  return '';
 }

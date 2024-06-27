@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
 
 import {
   addHistoryItem, viewHistoryItem, removeHistoryItem,
@@ -15,8 +15,9 @@ import {
 import { IHistoryItem } from '../../../types/history';
 import { AppAction } from '../../../types/action';
 import { IGraphResponse } from '../../../types/query-response';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
+const middlewares = [mockThunkMiddleware];
 const mockStore = configureMockStore(middlewares);
 
 describe('Request History Action Creators', () => {
@@ -80,11 +81,8 @@ describe('Request History Action Creators', () => {
     const store = mockStore([historyItem]);
 
     // Act and Assert
-    // @ts-ignore
     store.dispatch(removeHistoryItem(historyItem))
-      .then(() => {
-        expect(store.getActions()).toEqual([expectedAction]);
-      })
+    expect(store.getActions()).toEqual([expectedAction]);
 
   });
 
@@ -117,6 +115,11 @@ describe('Request History Action Creators', () => {
       }
     ]
 
+    const listOfKeys: string[] = [];
+    historyItems.forEach(historyItem => {
+      listOfKeys.push(historyItem.createdAt);
+    });
+
     const expectedAction: AppAction = {
       type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
       response: ['12345', '12345']
@@ -125,11 +128,8 @@ describe('Request History Action Creators', () => {
     const store = mockStore(historyItems);
 
     // Act and Assert
-    // @ts-ignore
-    store.dispatch(bulkRemoveHistoryItems(historyItems))
-      .then(() => {
-        expect(store.getActions()).toEqual([expectedAction]);
-      })
+    store.dispatch(bulkRemoveHistoryItems(listOfKeys))
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should dispatch BULK_ADD_HISTORY_ITEMS_SUCCESS when bulkAddHistoryItems() is called', () => {

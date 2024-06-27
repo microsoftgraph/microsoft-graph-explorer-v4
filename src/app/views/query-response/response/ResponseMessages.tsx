@@ -7,7 +7,7 @@ import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { runQuery } from '../../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 
@@ -36,7 +36,7 @@ export const ResponseMessages = () => {
   const dispatch: AppDispatch = useDispatch();
   const messageBars = [];
 
-  const { graphResponse: { body, headers }, sampleQuery, authToken, graphExplorerMode
+  const { graphResponse: { body, headers }, sampleQuery, auth: { authToken }, graphExplorerMode
   } = useAppSelector((state) => state);
   const [displayMessage, setDisplayMessage] = useState(true);
 

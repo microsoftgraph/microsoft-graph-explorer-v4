@@ -13,7 +13,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';

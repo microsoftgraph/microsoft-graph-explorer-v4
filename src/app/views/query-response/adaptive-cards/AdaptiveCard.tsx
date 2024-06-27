@@ -3,13 +3,12 @@ import {
   MessageBar, MessageBarType, Pivot, PivotItem, styled
 } from '@fluentui/react';
 import * as AdaptiveCardsAPI from 'adaptivecards';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
+import { IAdaptiveCardContent } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
-import { getAdaptiveCard } from '../../../services/actions/adaptive-cards-action-creator';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { Monaco } from '../../common';
@@ -20,15 +19,21 @@ import {
 } from '../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../common/lazy-loader/component-registry';
 import { queryResponseStyles } from './../queryResponse.styles';
+import { getAdaptiveCard } from './adaptive-cards.util';
+import MarkdownIt from 'markdown-it';
+
+export interface AdaptiveCardResponse {
+  data?: IAdaptiveCardContent;
+  error?: string;
+}
 
 const AdaptiveCard = (props: any) => {
   let adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null = new AdaptiveCardsAPI.AdaptiveCard();
-  const dispatch: AppDispatch = useDispatch();
+  const [cardContent, setCardContent] = useState<AdaptiveCardResponse | undefined>(undefined);
 
   const { body, hostConfig } = props;
   const { dimensions: { response }, responseAreaExpanded,
-    sampleQuery, queryRunnerStatus: queryStatus, adaptiveCard: card, theme } = useAppSelector((state) => state);
-  const { data, pending } = card;
+    sampleQuery, queryRunnerStatus: queryStatus, theme } = useAppSelector((state) => state);
 
   const classes = classNames(props);
   const currentTheme: ITheme = getTheme();
@@ -38,7 +43,17 @@ const AdaptiveCard = (props: any) => {
   const monacoHeight = getResponseEditorHeight(190);
 
   useEffect(() => {
-    dispatch(getAdaptiveCard(body, sampleQuery));
+    try {
+      const content = getAdaptiveCard(body, sampleQuery);
+      setCardContent({
+        data: content
+      })
+    } catch (err: unknown) {
+      const error = err as Error;
+      setCardContent({
+        error: error.message
+      })
+    }
 
     if (!adaptiveCard) {
       adaptiveCard = new AdaptiveCardsAPI.AdaptiveCard();
@@ -67,18 +82,8 @@ const AdaptiveCard = (props: any) => {
     return <div />;
   }
 
-  if (body && pending) {
-    return (
-      <Label className={classes.emptyStateLabel}>
-        {translateMessage('Fetching Adaptive Card')}
-        ...
-      </Label>
-    );
-  }
-
-
-  if (body && !pending) {
-    if (!data || (queryStatus && !queryStatus.ok)) {
+  if (body) {
+    if (!cardContent?.data || (queryStatus && !queryStatus.ok)) {
       return (
         <Label styles={{ root: textStyle }}>
           {translateMessage('The Adaptive Card for this response is not available')}
@@ -97,7 +102,14 @@ const AdaptiveCard = (props: any) => {
     }
 
     try {
-      adaptiveCard.parse(data.card);
+      // markdown support
+      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown =
+        (text: string, result: AdaptiveCardsAPI.IMarkdownProcessingResult) => {
+          const md = new MarkdownIt();
+          result.outputHtml = md.render(text);
+          result.didProcess = true;
+        };
+      adaptiveCard.parse(cardContent!.data.card);
       const renderedCard = adaptiveCard.render();
 
       if (renderedCard) {
@@ -122,9 +134,10 @@ const AdaptiveCard = (props: any) => {
       }
 
       const handleCopy = async () => {
-        trackedGenericCopy(JSON.stringify(data.template, null, 4),
+        trackedGenericCopy(JSON.stringify(cardContent!.data?.template, null, 4),
           componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
       }
+
       return (
         <Pivot className='adaptive-pivot'
           onLinkClick={(pivotItem: PivotItem | undefined) => onPivotItemClick(sampleQuery, pivotItem)}
@@ -187,15 +200,16 @@ const AdaptiveCard = (props: any) => {
               />
               <Monaco
                 language='json'
-                body={data.template}
+                body={cardContent!.data?.template}
                 height={responseAreaExpanded ? defaultHeight : monacoHeight}
               />
             </div>
           </PivotItem>
         </Pivot>
       );
-    } catch (err: any) {
-      return <div style={{ color: 'red' }}>{err.message}</div>;
+    } catch (err: unknown) {
+      const error = err as Error;
+      return <div style={{ color: 'red' }}>{error.message}</div>;
     }
   }
 }

@@ -7,8 +7,8 @@ import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { runQuery } from '../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
@@ -48,7 +48,7 @@ const QueryRunner = (props: any) => {
   const handleOnRunQuery = (query?: IQuery) => {
     if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
       const headers = sampleQuery.sampleHeaders;
-      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+      const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
         try {
           sampleQuery.sampleBody = JSON.parse(sampleBody);

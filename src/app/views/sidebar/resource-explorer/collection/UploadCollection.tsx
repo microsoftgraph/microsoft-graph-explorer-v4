@@ -5,7 +5,7 @@ import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconPro
 import { useDispatch } from 'react-redux';
 import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { ResourcePath } from '../../../../../types/resources';
 import { useAppSelector } from '../../../../../store';
 
@@ -48,7 +48,7 @@ export const UploadPostmanCollection = () => {
           dispatch(
             setQueryResponseStatus({
               status: translateMessage('Invalid file format'),
-              statusMessage: translateMessage('Invalid file format'),
+              statusText: translateMessage('Invalid file format'),
               ok: true,
               messageType: MessageBarType.error
             })

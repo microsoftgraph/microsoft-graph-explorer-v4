@@ -21,7 +21,7 @@ import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
   const dispatch: AppDispatch = useDispatch();
   const validation = useContext(ValidationContext);
-  const { sampleQuery, scopes, authToken, consentedScopes, dimensions } =
+  const { sampleQuery, scopes, auth: { authToken, consentedScopes }, dimensions } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 

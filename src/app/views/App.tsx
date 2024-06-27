@@ -2,7 +2,7 @@ import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
@@ -14,10 +14,10 @@ import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-ru
 import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import * as authActionCreators from '../services/actions/auth-action-creators';
+import { signIn, storeScopes } from '../services/slices/auth.slice';
 import { setDimensions } from '../services/actions/dimensions-action-creator';
 import { runQuery } from '../services/actions/query-action-creators';
-import { setSampleQuery } from '../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../services/slices/sample-query.slice';
 import { changeTheme } from '../services/actions/theme-action-creator';
 import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { PopupsProvider } from '../services/context/popups-context';
@@ -318,9 +318,17 @@ class App extends Component<IAppProps, IAppState> {
     const width = parseFloat(sidebarWidth.replace('%', ''));
 
     const { dimensions, actions }: any = this.props;
-    const dimensionsToUpdate = { ...dimensions };
-    dimensionsToUpdate.content.width = `${maxWidth - width}%`;
-    dimensionsToUpdate.sidebar.width = `${width}%`;
+    const dimensionsToUpdate = {
+      ...dimensions,
+      content: {
+        ...dimensions.content,
+        width: `${maxWidth - width}%`
+      },
+      sidebar: {
+        ...dimensions.sidebar,
+        width: `${width}%`
+      }
+    };
     if (actions) {
       actions.setDimensions(dimensionsToUpdate);
     }
@@ -492,7 +500,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, authToken, graphExplorerMode
+  profile, sampleQuery, auth: { authToken }, graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -517,7 +525,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         runQuery,
         setSampleQuery,
         toggleSidebar,
-        ...authActionCreators,
+        signIn,
+        storeScopes,
         changeTheme,
         setDimensions
       },

@@ -1,31 +1,37 @@
-import {
-  FETCH_SCOPES_ERROR,
-  FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_PENDING
-} from '../../../app/services/redux-constants';
+import configureMockStore from 'redux-mock-store';
 
 import {
-  fetchFullScopesSuccess, fetchScopesError, getPermissionsScopeType, fetchScopes,
+  FETCH_FULL_SCOPES_SUCCESS,
+  FETCH_SCOPES_ERROR,
+  FETCH_URL_SCOPES_PENDING,
+  QUERY_GRAPH_STATUS,
+  GET_AUTH_TOKEN_SUCCESS,
+  GET_CONSENTED_SCOPES_SUCCESS
+} from '../../../app/services/redux-constants';
+import { authenticationWrapper } from '../../../modules/authentication';
+import { store } from '../../../store/index';
+import { Mode } from '../../../types/enums';
+import { IPermissionsResponse } from '../../../types/permissions';
+import { ApplicationState } from '../../../types/root';
+import { translateMessage } from '../../utils/translate-messages';
+import { ACCOUNT_TYPE } from '../graph-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+import {
   consentToScopes,
-  fetchUrlScopesPending,
   fetchFullScopesPending,
+  fetchFullScopesSuccess,
+  fetchScopes,
+  fetchScopesError,
+  fetchUrlScopesPending,
+  getPermissionsScopeType,
   revokeScopes
 } from './permissions-action-creator';
-import { IPermissionsResponse } from '../../../types/permissions';
-import { store } from '../../../store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
-import configureMockStore from 'redux-mock-store';
-import { authenticationWrapper } from '../../../modules/authentication';
-import thunk from 'redux-thunk';
-import { ACCOUNT_TYPE } from '../graph-constants';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';
-import { translateMessage } from '../../utils/translate-messages';
-const middleware = [thunk];
-let mockStore = configureMockStore(middleware);
+
+let mockStore = configureMockStore([mockThunkMiddleware]);
 
 beforeEach(() => {
-  const mockStore_ = configureMockStore(middleware);
+  const mockStore_ = configureMockStore([mockThunkMiddleware]);
   mockStore = mockStore_
 })
 window.open = jest.fn();
@@ -50,18 +56,14 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: ['profile.read User.Read Files.Read'],
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: ['profile.read User.Read Files.Read']
+  },
   isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -69,7 +71,7 @@ const mockState: ApplicationState = {
   },
   samples: {
     queries: [],
-    pending: false,
+    status: 'idle',
     error: null
   },
   scopes: {
@@ -112,7 +114,7 @@ const mockState: ApplicationState = {
   autoComplete: {
     data: null,
     error: null,
-    pending: false
+    status: 'idle'
   },
   resources: {
     pending: false,
@@ -263,14 +265,14 @@ describe('Permissions action creators', () => {
       correlationId: 'string'
     })
     const expectedAction: any = [
-      { type: 'GET_AUTH_TOKEN_SUCCESS', response: true },
+      { type: GET_AUTH_TOKEN_SUCCESS, payload: undefined },
       {
-        type: 'GET_CONSENTED_SCOPES_SUCCESS',
-        response: ['profile.Read User.Read']
+        type: GET_CONSENTED_SCOPES_SUCCESS,
+        payload: ['profile.Read User.Read']
       },
       {
-        type: 'QUERY_GRAPH_STATUS',
-        response: {
+        type: QUERY_GRAPH_STATUS,
+        payload: {
           statusText: translateMessage('Success'),
           status: translateMessage('Scope consent successful'),
           ok: true,
@@ -356,8 +358,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -366,8 +368,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Default scope'),
             status: translateMessage('Cannot delete default scope'),
             ok: false,
@@ -423,8 +425,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking '),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -433,8 +435,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Unable to dissent'),
             status: translateMessage('Unable to dissent. You require the following permissions to revoke'),
             ok: false,
@@ -494,8 +496,8 @@ describe('Permissions action creators', () => {
         { type: 'REVOKE_SCOPES_PENDING', response: null },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
@@ -504,8 +506,8 @@ describe('Permissions action creators', () => {
         },
         { type: 'REVOKE_SCOPES_ERROR', response: null },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking admin granted scopes'),
             // eslint-disable-next-line max-len
             status: translateMessage('You are unconsenting to an admin pre-consented permission'),

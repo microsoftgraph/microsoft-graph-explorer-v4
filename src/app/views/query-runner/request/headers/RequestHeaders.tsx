@@ -3,7 +3,7 @@ import { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
-import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
+import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -44,7 +44,7 @@ const RequestHeaders = (props: any) => {
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
 
-    dispatch(queryInputActionCreators.setSampleQuery(query));
+    dispatch(setSampleQuery(query));
     setAnnouncedMessage(translateMessage('Request Header deleted'));
     onSetFocus(); //set focus to textfield after an item is deleted
   };
@@ -67,7 +67,7 @@ const RequestHeaders = (props: any) => {
 
       const query = { ...sampleQuery };
       query.sampleHeaders = newHeaders;
-      dispatch(queryInputActionCreators.setSampleQuery(query));
+      dispatch(setSampleQuery(query));
     }
   };
 
@@ -86,7 +86,7 @@ const RequestHeaders = (props: any) => {
     headers = headers.filter(head => head.name !== headerToRemove.name);
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
-    dispatch(queryInputActionCreators.setSampleQuery(query));
+    dispatch(setSampleQuery(query));
   }
 
   return (

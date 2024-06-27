@@ -16,7 +16,10 @@ export interface IAuthenticationProps {
   graphExplorerMode: Mode;
 }
 
-export interface IAuthenticateResult {
-  pending: boolean;
-  token: boolean;
+export interface AuthenticateResult {
+  authToken: {
+    pending: boolean;
+    token: boolean;
+  };
+  consentedScopes: string[];
 }
