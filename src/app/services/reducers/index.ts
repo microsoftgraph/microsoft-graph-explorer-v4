@@ -6,10 +6,10 @@ import sampleQuery from '../slices/sample-query.slice';
 import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
+import dimensions from '../slices/dimensions.slice';
+import devxApi from '../slices/devxapi.slice';
 
 import { collections } from './collections-reducer';
-import { devxApi } from './devxApi-reducers';
-import { dimensions } from './dimensions-reducers';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { isLoadingData } from './query-loading-reducers';
