@@ -2,7 +2,7 @@ import { Dispatch, Middleware, UnknownAction } from '@reduxjs/toolkit';
 import { collectionsCache } from '../../modules/cache/collections.cache';
 import { samplesCache } from '../../modules/cache/samples.cache';
 import { AppAction } from '../../types/action';
-import { ResourcePath } from '../../types/resources';
+import { Collection, ResourcePath } from '../../types/resources';
 import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
@@ -25,13 +25,13 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
     case RESOURCEPATHS_ADD_SUCCESS: {
       const collections = await collectionsCache.read();
       const item = collections.find(k => k.isDefault)!;
-      item.paths = getUniquePaths(item.paths, action.response);
+      item.paths = getUniquePaths(item.paths, action.payload as ResourcePath[]);
       await collectionsCache.update(item.id, item);
       break;
     }
 
     case RESOURCEPATHS_DELETE_SUCCESS: {
-      const paths = action.response;
+      const paths = action.payload as ResourcePath[];
       const collections = await collectionsCache.read();
       const collection = collections.find(k => k.isDefault)!;
       paths.forEach((path: ResourcePath) => {
@@ -45,7 +45,7 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
     }
 
     case COLLECTION_CREATE_SUCCESS: {
-      await collectionsCache.create(action.response);
+      await collectionsCache.create(action.payload as Collection);
       break;
     }
 

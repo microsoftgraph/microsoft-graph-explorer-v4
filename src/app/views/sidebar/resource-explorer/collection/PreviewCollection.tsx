@@ -2,9 +2,8 @@ import {
   CommandBar, DialogFooter, ICommandBarItemProps, Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -18,7 +17,7 @@ export interface IPathsReview {
 }
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const { collections } = useAppSelector(
     (state) => state
   );
