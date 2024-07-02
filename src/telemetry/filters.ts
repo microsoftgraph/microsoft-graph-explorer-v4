@@ -1,6 +1,5 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import {
-  DEVX_API_URL,
   GRAPH_API_SANDBOX_URL,
   GRAPH_TOOOLKIT_EXAMPLE_URL,
   GRAPH_URL,
@@ -32,10 +31,11 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
     const urlObject = new URL(baseData.target || '');
 
     const graphProxyUrl = store.getState()?.proxyUrl;
+    const devxApiUrl = process.env.REACT_APP_DEVX_API_URL || '';
 
     const targetsToInclude = [
       GRAPH_URL,
-      DEVX_API_URL,
+      new URL(devxApiUrl).origin,
       GRAPH_API_SANDBOX_URL,
       new URL(graphProxyUrl).origin,
       new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
