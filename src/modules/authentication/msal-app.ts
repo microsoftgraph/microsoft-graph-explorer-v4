@@ -1,11 +1,12 @@
-import { Configuration, PublicClientApplication } from '@azure/msal-browser';
+import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
+import { eventTypes, telemetry } from '../../telemetry';
 
 function getClientIdFromWindow() {
-  return (window as any).ClientId;
+  return window?.ClientId ?? '';
 }
 
 function getClientIdFromEnv() {
-  return process.env.REACT_APP_CLIENT_ID;
+  return process.env?.REACT_APP_CLIENT_ID ?? '';
 }
 
 const windowHasClientId = getClientIdFromWindow();
@@ -19,10 +20,22 @@ export const configuration: Configuration = {
     cacheLocation: 'localStorage',
     storeAuthStateInCookie: true,
     claimsBasedCachingEnabled: true
+  },
+  system: {
+    loggerOptions: {
+      logLevel: LogLevel.Verbose,
+      loggerCallback: (level, message, containsPii) => {
+        if (containsPii) {
+          return;
+        }
+        telemetry.trackEvent(eventTypes.AUTH_REQUEST_EVENT, { message, level });
+      },
+      piiLoggingEnabled: false
+    }
   }
 };
 
 
 const msalApplication = new PublicClientApplication(configuration);
 msalApplication.initialize();
-export{ msalApplication };
+export { msalApplication };
