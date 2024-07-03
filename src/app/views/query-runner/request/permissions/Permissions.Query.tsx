@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
+import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
+import { fetchScopes } from '../../../../services/slices/scopes.slice';
+import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -29,11 +31,11 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { pending: loading, error } = scopes;
   let permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
-  const [permissionsError, setPermissionsError] = useState(error);
+  const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
 
   useEffect(() => {
-    if (error?.error && error?.error?.url.contains('permissions')) {
-      setPermissionsError(error?.error);
+    if (error && error?.url.contains('permissions')) {
+      setPermissionsError(error);
     }
   }, [error])
 
