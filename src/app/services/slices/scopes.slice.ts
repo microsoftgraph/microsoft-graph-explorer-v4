@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { ApplicationState } from '../../../store';
 import { IPermission, IScopes } from '../../../types/permissions';
 import { IRequestOptions } from '../../../types/request';
+import { ApplicationState } from '../../../store';
 import { ScopesError } from '../../utils/error-utils/ScopesError';
 import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
@@ -30,7 +30,7 @@ export const fetchScopes = createAsyncThunk(
   async (scopesFetchType: ScopesFetchType = 'full', { getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const { devxApi, profile, sampleQuery: query } = state;
-    const scopeType = getPermissionsScopeType(profile);
+    const scopeType = getPermissionsScopeType(profile.user!);
     let permissionsUrl = `${devxApi.baseUrl}/permissions?scopeType=${scopeType}`;
 
     if (scopesFetchType === 'query') {
