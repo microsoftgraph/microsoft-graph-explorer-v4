@@ -56,7 +56,8 @@ export const fetchResources = createAsyncThunk(
           throw new Error('Failed to fetch resources');
         }
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       return rejectWithValue(error);
     }
   });
@@ -78,7 +79,7 @@ const resourcesSlice = createSlice({
       })
       .addCase(fetchResources.rejected, (state, action) => {
         state.pending = false;
-        state.error = action.error.message || 'Failed to fetch resources';
+        state.error = action.payload as Error;
       });
   }
 });
