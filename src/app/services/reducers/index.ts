@@ -8,12 +8,12 @@ import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
 import dimensions from '../slices/dimensions.slice';
 import devxApi from '../slices/devxapi.slice';
+import graphResponse from '../slices/graphResponse.slice';
 
 import { collections } from './collections-reducer';
 import { profile } from './profile-reducer';
 import { proxyUrl } from './proxy-url-reducer';
 import { isLoadingData } from './query-loading-reducers';
-import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
 import { resources } from './resources-reducer';
