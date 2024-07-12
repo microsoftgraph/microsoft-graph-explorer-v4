@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import configureMockStore from 'redux-mock-store';
 
-import { runQuery } from './query-action-creators';
-import { QUERY_GRAPH_SUCCESS, QUERY_GRAPH_STATUS,ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_RUNNING } from '../redux-constants';
+import { ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
+import { runQuery } from '../slices/graphResponse.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);

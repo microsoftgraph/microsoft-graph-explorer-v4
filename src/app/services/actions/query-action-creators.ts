@@ -33,7 +33,7 @@ export function runQuery(query: IQuery) {
     const createdAt = new Date().toISOString();
 
     if (tokenPresent) {
-      return authenticatedRequest(dispatch, query)
+      return authenticatedRequest(query)
         .then(async (response: Response) => {
           await processResponse(response, respHeaders, dispatch, createdAt);
         })
@@ -42,7 +42,7 @@ export function runQuery(query: IQuery) {
         });
     }
 
-    return anonymousRequest(dispatch, query, getState)
+    return anonymousRequest(query, getState)
       .then(async (response: Response) => {
         await processResponse(response, respHeaders, dispatch, createdAt);
       })
