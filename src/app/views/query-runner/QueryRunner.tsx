@@ -6,7 +6,7 @@ import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
-import { runQuery } from '../../services/actions/query-action-creators';
+import { runQuery } from '../../services/slices/graphResponse.slice';
 import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';

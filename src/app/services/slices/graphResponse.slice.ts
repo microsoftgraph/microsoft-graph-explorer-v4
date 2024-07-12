@@ -1,57 +1,54 @@
-import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { BrowserAuthError } from '@azure/msal-browser';
 import { MessageBarType } from '@fluentui/react';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
 import { historyCache } from '../../../modules/cache/history-utils';
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
+import { IGraphResponse } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
+import { ApplicationState } from '../../../types/root';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
 import { setStatusMessage } from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
 import {
-  authenticatedRequest, anonymousRequest, parseResponse,
-  isFileResponse, generateResponseDownloadUrl, queryResultsInCorsError,
-  isImageResponse
+  anonymousRequest,
+  authenticatedRequest,
+  generateResponseDownloadUrl,
+  isFileResponse,
+  isImageResponse,
+  parseResponse,
+  queryResultsInCorsError
 } from '../actions/query-action-creator-util';
 import { addHistoryItem } from '../actions/request-history-action-creators';
+import { setQueryResponseStatus } from './query-status.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 
-interface QueryResponsePayload {
-  body: any;
-  headers: any;
-}
-
-interface QueryState {
-  status: IStatus | null;
-  response: QueryResponsePayload | null;
-}
-
-const initialState: QueryState = {
-  status: null,
-  response: null
-}
+const initialState: IGraphResponse = {
+  body: undefined,
+  headers: undefined
+};
 
 export const runQuery = createAsyncThunk(
   'query/runQuery',
-  async (query: IQuery, { dispatch, getState, rejectWithValue }) => {
-    const state = getState() as any;
+  async (query: IQuery, { dispatch, getState }) => {
+    const state = getState() as ApplicationState;
     const tokenPresent = !!state?.auth?.authToken?.token;
-    const respHeaders: any = {};
+    const respHeaders: { [key: string]: string } = {};
     const createdAt = new Date().toISOString();
 
     try {
-      const response = tokenPresent
-        ? await authenticatedRequest(dispatch, query)
-        : await anonymousRequest(dispatch, query, getState);
+      const response: Response = tokenPresent
+        ? await authenticatedRequest(query)
+        : await anonymousRequest(query, getState);
 
       await processResponse(response, respHeaders, dispatch, createdAt, query);
-    } catch (error: any) {
+    } catch (error) {
       return handleError(dispatch, error, query);
     }
   }
@@ -61,15 +58,12 @@ const querySlice = createSlice({
   name: 'query',
   initialState,
   reducers: {
-    setQueryResponseStatus(state, action: PayloadAction<IStatus>) {
-      state.status = action.payload;
-    },
-    setQueryResponse(state, action: PayloadAction<QueryResponsePayload>) {
-      state.response = action.payload;
+    setQueryResponse(state, action: PayloadAction<IGraphResponse>) {
+      state = action.payload;
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(runQuery.fulfilled, (state, action) => {
+    builder.addCase(runQuery.pending, (state, action) => {
       // Handle fulfilled state if needed
     });
     builder.addCase(runQuery.rejected, (state, action) => {
@@ -78,15 +72,15 @@ const querySlice = createSlice({
   }
 });
 
-const { setQueryResponseStatus, setQueryResponse } = querySlice.actions;
+const { setQueryResponse } = querySlice.actions;
 
 export default querySlice.reducer;
 
 async function processResponse(
   response: Response,
-  respHeaders: any,
+  respHeaders: { [key: string]: string },
   dispatch: Function,
-  createdAt: any,
+  createdAt: string,
   query: IQuery
 ) {
   let result = await parseResponse(response, respHeaders);
@@ -150,7 +144,6 @@ async function runReAuthenticatedRequest(response: Response, query: IQuery): Pro
   }
   return false;
 }
-
 
 async function createHistory(
   response: Response,
@@ -223,6 +216,6 @@ function handleError(dispatch: Function, error: any, query: IQuery) {
     }
   }
 
-  dispatch(setQueryResponse({ body, headers: null }));
+  dispatch(setQueryResponse({ body, headers: undefined }));
   return dispatch(setQueryResponseStatus(status));
 }

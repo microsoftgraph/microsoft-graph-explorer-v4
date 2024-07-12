@@ -8,19 +8,20 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { historyCache } from '../../../../modules/cache/history-utils';
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
-import { runQuery } from '../../../services/actions/query-action-creators';
-import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
-import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import {
   bulkRemoveHistoryItems, removeHistoryItem, viewHistoryItem
 } from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { runQuery } from '../../../services/slices/graphResponse.slice';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -31,7 +32,6 @@ import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
-import { historyCache } from '../../../../modules/cache/history-utils';
 
 const columns = [
   { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },

@@ -6,9 +6,9 @@ import { AppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
-import { runQuery } from '../../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
+import { runQuery } from '../../../services/slices/graphResponse.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 
 interface ODataLink {
