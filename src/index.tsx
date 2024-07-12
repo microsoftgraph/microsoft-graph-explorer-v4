@@ -9,7 +9,9 @@ import App from './app/views/App';
 
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
+import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
+import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
