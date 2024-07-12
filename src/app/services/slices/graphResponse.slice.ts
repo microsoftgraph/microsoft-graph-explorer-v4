@@ -66,6 +66,10 @@ const querySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(runQuery.pending, (state) => {
+        state.body = undefined;
+        state.headers = undefined;
+      })
       .addCase(runQuery.rejected, (state, action) => {
         const payload = action.payload as IGraphResponse;
         state.body = payload.body;
