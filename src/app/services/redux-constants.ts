@@ -1,9 +1,9 @@
-export const QUERY_GRAPH_SUCCESS = 'QUERY_GRAPH_SUCCESS';
+export const QUERY_GRAPH_SUCCESS = 'query/runQuery/fulfilled';
 export const QUERY_GRAPH_STATUS = 'queryStatus/setQueryResponseStatus';
 export const CLEAR_QUERY_STATUS = 'queryStatus/clearQueryStatus';
 export const GET_AUTH_TOKEN_SUCCESS = 'auth/getAuthTokenSuccess';
 export const LOGOUT_SUCCESS = 'auth/signOutSuccess';
-export const QUERY_GRAPH_RUNNING = 'QUERY_GRAPH_RUNNING';
+export const QUERY_GRAPH_RUNNING = 'query/runQuery/pending';
 export const HEADER_ADD_SUCCESS = 'HEADER_ADD_SUCCESS';
 export const HEADER_REMOVE_SUCCESS = 'HEADER_REMOVE_SUCCESS';
 export const SET_SAMPLE_QUERY_SUCCESS = 'sampleQuery/setSampleQuery';

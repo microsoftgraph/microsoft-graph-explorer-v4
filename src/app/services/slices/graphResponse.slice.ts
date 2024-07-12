@@ -36,7 +36,7 @@ const initialState: IGraphResponse = {
 
 export const runQuery = createAsyncThunk(
   'query/runQuery',
-  async (query: IQuery, { dispatch, getState }) => {
+  async (query: IQuery, { dispatch, getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const tokenPresent = !!state?.auth?.authToken?.token;
     const respHeaders: { [key: string]: string } = {};
@@ -44,12 +44,13 @@ export const runQuery = createAsyncThunk(
 
     try {
       const response: Response = tokenPresent
-        ? await authenticatedRequest(query)
-        : await anonymousRequest(query, getState);
+        ? await authenticatedRequest(dispatch, query)
+        : await anonymousRequest(dispatch, query, getState);
 
-      await processResponse(response, respHeaders, dispatch, createdAt, query);
+      const result = await processResponse(response, respHeaders, dispatch, createdAt, query);
+      return { body: result, headers: respHeaders };
     } catch (error) {
-      return handleError(dispatch, error, query);
+      return rejectWithValue(await handleError(dispatch, error, query));
     }
   }
 );
@@ -59,21 +60,25 @@ const querySlice = createSlice({
   initialState,
   reducers: {
     setQueryResponse(state, action: PayloadAction<IGraphResponse>) {
-      state = action.payload;
+      state.body = action.payload.body;
+      state.headers = action.payload.headers;
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(runQuery.pending, (state, action) => {
-      // Handle fulfilled state if needed
-    });
-    builder.addCase(runQuery.rejected, (state, action) => {
-      // Handle rejected state if needed
-    });
+    builder
+      .addCase(runQuery.rejected, (state, action) => {
+        const payload = action.payload as IGraphResponse;
+        state.body = payload.body;
+        state.headers = payload.headers;
+      })
+      .addCase(runQuery.fulfilled, (state, action) => {
+        state.body = action.payload.body;
+        state.headers = action.payload.headers;
+      });
   }
 });
 
-const { setQueryResponse } = querySlice.actions;
-
+export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
 async function processResponse(
@@ -117,18 +122,12 @@ async function processResponse(
     const successful = await runReAuthenticatedRequest(response, query);
     if (successful) {
       dispatch(runQuery(query));
-      return;
+      return { body: null, headers: {} }; // returning an empty object for the original request
     }
   }
 
   dispatch(setQueryResponseStatus(status));
-
-  return dispatch(
-    setQueryResponse({
-      body: result,
-      headers: respHeaders
-    })
-  );
+  return { body: result, headers: respHeaders };
 }
 
 async function runReAuthenticatedRequest(response: Response, query: IQuery): Promise<boolean> {
@@ -149,7 +148,7 @@ async function createHistory(
   response: Response,
   respHeaders: any,
   query: IQuery,
-  createdAt: any,
+  createdAt: string,
   dispatch: Function,
   result: any,
   duration: number
@@ -188,7 +187,7 @@ async function createHistory(
   return result;
 }
 
-function handleError(dispatch: Function, error: any, query: IQuery) {
+async function handleError(dispatch: Function, error: any, query: IQuery) {
   let body = error;
   const status: IStatus = {
     messageType: MessageBarType.error,
@@ -216,6 +215,6 @@ function handleError(dispatch: Function, error: any, query: IQuery) {
     }
   }
 
-  dispatch(setQueryResponse({ body, headers: undefined }));
-  return dispatch(setQueryResponseStatus(status));
+  dispatch(setQueryResponse({ body, headers: {} }));
+  return { status, body };
 }
