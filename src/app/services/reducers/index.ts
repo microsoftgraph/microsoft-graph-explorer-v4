@@ -4,15 +4,13 @@ import autoComplete from '../slices/autocomplete.slice';
 import devxApi from '../slices/devxapi.slice';
 import dimensions from '../slices/dimensions.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
+import graphResponse from '../slices/graphResponse.slice';
+import proxyUrl from '../slices/proxy.slice';
 import resources from '../slices/resources.slice';
 import sampleQuery from '../slices/sample-query.slice';
 import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
-import dimensions from '../slices/dimensions.slice';
-import devxApi from '../slices/devxapi.slice';
-import graphResponse from '../slices/graphResponse.slice';
-import proxyUrl from '../slices/proxy.slice';
 
 import { collections } from './collections-reducer';
 import { profile } from './profile-reducer';
