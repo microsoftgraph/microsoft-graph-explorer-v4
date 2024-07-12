@@ -1,7 +1,10 @@
 
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
+import devxApi from '../slices/devxapi.slice';
+import dimensions from '../slices/dimensions.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
+import resources from '../slices/resources.slice';
 import sampleQuery from '../slices/sample-query.slice';
 import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
@@ -9,14 +12,13 @@ import themeChange from '../slices/theme.slice';
 import dimensions from '../slices/dimensions.slice';
 import devxApi from '../slices/devxapi.slice';
 import graphResponse from '../slices/graphResponse.slice';
+import proxyUrl from '../slices/proxy.slice';
 
 import { collections } from './collections-reducer';
 import { profile } from './profile-reducer';
-import { proxyUrl } from './proxy-url-reducer';
 import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
-import { resources } from './resources-reducer';
 import { responseAreaExpanded } from './response-expanded-reducer';
 import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';

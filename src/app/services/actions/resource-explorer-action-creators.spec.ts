@@ -1,9 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 
-import {
-  fetchResources, fetchResourcesError,
-  fetchResourcesPending, fetchResourcesSuccess
-} from '../../../app/services/actions/resource-explorer-action-creators';
+import { fetchResources } from '../slices/resources.slice';
 import {
   FETCH_RESOURCES_ERROR,
   FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
@@ -11,8 +8,12 @@ import {
 import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
+import { AnyAction, PayloadAction } from '@reduxjs/toolkit';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+import { path } from 'chromedriver';
+import { IResource } from '../../../types/resources';
 
-const mockStore = configureMockStore();
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 const mockState: ApplicationState = {
   devxApi: {
@@ -130,66 +131,32 @@ describe('Resource Explorer actions', () => {
     fetchMock.resetMocks();
   });
 
-  it('should dispatch FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess() is called', () => {
+  it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called',
+    async () => {
+      const expectedResults = paths;
+      const expectedActions = [
+        { type: FETCH_RESOURCES_PENDING, payload: undefined },
+        {
+          type: FETCH_RESOURCES_SUCCESS,
+          payload: { 'v1.0': paths, 'beta': paths }
+        }
+      ]
 
-    const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_SUCCESS,
-      response
-    };
+      const store_ = mockStore(mockState);
+      const mockFetch = jest.fn().mockImplementation(() => {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(expectedResults)
+        })
+      });
 
-    const action = fetchResourcesSuccess(response);
-    expect(action.type).toEqual(expectedAction.type);
-  });
+      window.fetch = mockFetch;
 
-  it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
-    // Arrange
-    const response = {};
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_ERROR,
-      response
-    }
+      await store_.dispatch(fetchResources() as unknown as AnyAction);
 
-    // Act
-    const action = fetchResourcesError(response);
-
-    // Assert
-    expect(action.type).toEqual(expectedAction.type);
-  })
-
-  it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
-    // Arrange
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_PENDING,
-      response: null
-    }
-
-    // Act
-    const action = fetchResourcesPending();
-
-    // Assert
-    expect(action.type).toEqual(expectedAction.type);
-  });
-
-  it.skip('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called', () => {
-    // Arrange
-    const expectedAction: AppAction[] = [
-      { type: FETCH_RESOURCES_PENDING, response: null },
-      {
-        type: FETCH_RESOURCES_SUCCESS,
-        response: { paths, ok: true }
-      }
-    ]
-
-    const store = mockStore(mockState);
-    fetchMock.mockResponseOnce(JSON.stringify({ paths, ok: true }));
-
-    // Act and Assert
-    // @ts-ignore
-    store.dispatch(fetchResources())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedAction);
-      })
-      .catch((e: Error) => { throw e })
-  });
+      expect(store_.getActions().map(action => {
+        const { meta, ...rest } = action;
+        return rest;
+      })).toEqual(expectedActions);
+    });
 });
