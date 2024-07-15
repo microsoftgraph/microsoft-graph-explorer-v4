@@ -90,7 +90,7 @@ function createAuthenticatedRequest(
   scopes: string[],
   query: IQuery
 ): GraphRequest {
-  const sampleHeaders: any = {};
+  const sampleHeaders: Record<string, string> = {};
   sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
   sampleHeaders.prefer = 'ms-graph-dev-mode';
 
@@ -121,7 +121,7 @@ export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
     let response;
 
-    const graphRequest = createAuthenticatedRequest(scopes, query);
+    const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
       case 'GET':

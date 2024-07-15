@@ -1,7 +1,5 @@
 import { AgeGroup } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 
-import { AppDispatch } from '../../../store';
-import { AppAction } from '../../../types/action';
 import { IUser } from '../../../types/profile';
 import { IQuery } from '../../../types/query-runner';
 import { translateMessage } from '../../utils/translate-messages';
@@ -9,7 +7,6 @@ import {
   ACCOUNT_TYPE, BETA_USER_INFO_URL, DEFAULT_USER_SCOPES, USER_INFO_URL,
   USER_ORGANIZATION_URL, USER_PICTURE_URL
 } from '../graph-constants';
-import { PROFILE_REQUEST_ERROR, PROFILE_REQUEST_SUCCESS } from '../redux-constants';
 import { makeGraphRequest, parseResponse } from './query-action-creator-util';
 
 interface IBetaProfile {
@@ -20,20 +17,6 @@ interface IBetaProfile {
 interface IProfileResponse {
   userInfo: any;
   response: any;
-}
-
-export function profileRequestSuccess(response: object): AppAction {
-  return {
-    type: PROFILE_REQUEST_SUCCESS,
-    response
-  };
-}
-
-export function profileRequestError(response: object): AppAction {
-  return {
-    type: PROFILE_REQUEST_ERROR,
-    response
-  };
 }
 
 const query: IQuery = {
@@ -47,22 +30,6 @@ const query: IQuery = {
   selectedVersion: '',
   sampleUrl: ''
 };
-
-export function getProfileInfo() {
-  return async (dispatch: AppDispatch) => {
-    try {
-      const profile: IUser = await getProfileInformation();
-      const { profileType, ageGroup } = await getBetaProfile();
-      profile.profileType = profileType;
-      profile.ageGroup = ageGroup;
-      profile.profileImageUrl = await getProfileImage();
-      profile.tenant = await getTenantInfo(profileType);
-      dispatch(profileRequestSuccess(profile));
-    } catch (error) {
-      dispatch(profileRequestError({ error }));
-    }
-  };
-}
 
 export async function getProfileInformation(): Promise<IUser> {
   const profile: IUser = {
@@ -81,8 +48,8 @@ export async function getProfileInformation(): Promise<IUser> {
     profile.displayName = userInfo.displayName;
     profile.emailAddress = userInfo.mail || userInfo.userPrincipalName;
     return profile;
-  } catch (error: any) {
-    throw new Error(translateMessage('Failed to get profile information') + '- ' + error.toString());
+  } catch (error: unknown) {
+    throw new Error(translateMessage('Failed to get profile information') + '- ' + error);
   }
 }
 
@@ -136,7 +103,7 @@ export async function getProfileImage(): Promise<string> {
 
 export async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
-  const respHeaders: any = {};
+  const respHeaders: Record<string, string> = {};
 
   const response = await makeGraphRequest(scopes)(query);
   const userInfo = await parseResponse(response, respHeaders);
@@ -146,7 +113,7 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
   };
 }
 
-export async function getTenantInfo(profileType: ACCOUNT_TYPE) {
+export async function getTenantInfo(profileType: ACCOUNT_TYPE): Promise<string> {
   if (profileType === ACCOUNT_TYPE.MSA) {
     return 'Personal';
   }

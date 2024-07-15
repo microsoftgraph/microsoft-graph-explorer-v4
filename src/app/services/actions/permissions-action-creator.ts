@@ -26,8 +26,8 @@ import {
   getConsentedScopesSuccess
 } from '../slices/auth.slice';
 import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
-import { getProfileInfo } from './profile-action-creators';
 import { setQueryResponseStatus } from '../slices/query-status.slice';
+import { getProfileInfo } from '../slices/profile.slice';
 
 export function getAllPrincipalGrantsPending(response: boolean) {
   return {
@@ -83,7 +83,7 @@ export function consentToScopes(scopes: string[]) {
         dispatch(getConsentedScopesSuccess(validatedScopes));
         if (
           authResponse.account &&
-          authResponse.account.localAccountId !== profile?.id
+          authResponse.account.localAccountId !== profile?.user?.id
         ) {
           dispatch(getProfileInfo());
         }
