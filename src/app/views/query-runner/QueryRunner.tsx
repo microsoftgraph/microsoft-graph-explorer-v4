@@ -6,7 +6,7 @@ import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
-import { runQuery } from '../../services/actions/query-action-creators';
+import { runQuery } from '../../services/slices/graphResponse.slice';
 import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
@@ -46,12 +46,13 @@ const QueryRunner = (props: any) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
-      const headers = sampleQuery.sampleHeaders;
+    let sample = { ...sampleQuery };
+    if (sampleBody && sample.selectedVerb !== 'GET') {
+      const headers = sample.sampleHeaders;
       const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
         try {
-          sampleQuery.sampleBody = JSON.parse(sampleBody);
+          sample.sampleBody = JSON.parse(sampleBody);
         } catch (error) {
           dispatch(setQueryResponseStatus({
             ok: false,
@@ -62,24 +63,27 @@ const QueryRunner = (props: any) => {
           return;
         }
       } else {
-        sampleQuery.sampleBody = sampleBody;
+        sample.sampleBody = sampleBody;
       }
     }
 
     if (query) {
-      sampleQuery.sampleUrl = query.sampleUrl;
-      sampleQuery.selectedVersion = query.selectedVersion;
-      sampleQuery.selectedVerb = query.selectedVerb;
+      sample = {
+        ...sample,
+        sampleUrl: query.sampleUrl,
+        selectedVersion: query.selectedVersion,
+        selectedVerb: query.selectedVerb
+      }
     }
 
-    dispatch(runQuery(sampleQuery));
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    dispatch(runQuery(sample));
+    const sanitizedUrl = sanitizeQueryUrl(sample.sampleUrl);
     const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.RUN_QUERY_BUTTON,
-        SelectedVersion: sampleQuery.selectedVersion,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+        SelectedVersion: sample.selectedVersion,
+        QuerySignature: `${sample.selectedVerb} ${sanitizedUrl}`,
         ...deviceCharacteristics
       });
   };
