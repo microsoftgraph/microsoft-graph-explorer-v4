@@ -17,6 +17,7 @@ import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/s
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
 import { fetchResources } from './app/services/slices/resources.slice';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { changeTheme } from './app/services/slices/theme.slice';
 import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
