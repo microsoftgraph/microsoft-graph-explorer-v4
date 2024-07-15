@@ -2,15 +2,15 @@ import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
 import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
   Label, MessageBarType, PrimaryButton, getId } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
+
 import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { ResourcePath } from '../../../../../types/resources';
-import { useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 
 export const UploadPostmanCollection = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);

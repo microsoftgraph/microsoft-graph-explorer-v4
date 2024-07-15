@@ -17,9 +17,7 @@ import { bulkAddHistoryItems } from './app/services/actions/request-history-acti
 import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
-import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { fetchResources } from './app/services/slices/resources.slice';
-import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { changeTheme } from './app/services/slices/theme.slice';
 import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';

@@ -1,6 +1,7 @@
 
 import authReducer from '../slices/auth.slice';
 import autoComplete from '../slices/autocomplete.slice';
+import collections from '../slices/collections.slice';
 import devxApi from '../slices/devxapi.slice';
 import dimensions from '../slices/dimensions.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
@@ -11,7 +12,6 @@ import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
 import proxyUrl from '../slices/proxy.slice';
 
-import { collections } from './collections-reducer';
 import { profile } from './profile-reducer';
 import { isLoadingData } from './query-loading-reducers';
 import { graphResponse } from './query-runner-reducers';

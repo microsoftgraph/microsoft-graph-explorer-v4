@@ -3,9 +3,8 @@ import {
   getId, getTheme, IButtonProps, ICommandBarItemProps, PrimaryButton
 } from '@fluentui/react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -16,7 +15,7 @@ interface ICommandOptions {
 }
 
 const CommandOptions = (props: ICommandOptions) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const { show: previewCollection } = usePopups('preview-collection', 'panel');
 
   const [isDialogHidden, setIsDialogHidden] = useState(true);
