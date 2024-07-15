@@ -7,20 +7,20 @@ import {
 export function addResourcePaths(response: object): AppAction {
   return {
     type: RESOURCEPATHS_ADD_SUCCESS,
-    response
+    payload: response
   };
 }
 
 export function createCollection(response: object): AppAction {
   return {
     type: COLLECTION_CREATE_SUCCESS,
-    response
+    payload: response
   };
 }
 
 export function removeResourcePaths(response: object): AppAction {
   return {
     type: RESOURCEPATHS_DELETE_SUCCESS,
-    response
-  };
+    payload: response
+  }
 }
