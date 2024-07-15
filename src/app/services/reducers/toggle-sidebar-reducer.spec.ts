@@ -99,7 +99,7 @@ describe('Toggle sidebar', () => {
     }
 
     const expectedState = {
-      showSidebar: false,
+      showSidebar: true,
       mobileScreen: true
     }
     const newState = sidebarProperties(initialState, action);

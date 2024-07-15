@@ -230,11 +230,11 @@ async function tryParseJson(textValue: string) {
 }
 
 export function parseResponse(
-  response: any,
-  respHeaders: any = {}
+  response: Response,
+  respHeaders: { [key: string]: string } = {}
 ): Promise<any> {
   if (response && response.headers) {
-    response.headers.forEach((val: any, key: any) => {
+    response.headers.forEach((val: string, key: string) => {
       respHeaders[key] = val;
     });
 
@@ -249,10 +249,10 @@ export function parseResponse(
         return response.text();
 
       default:
-        return response;
+        return Promise.resolve(response);
     }
   }
-  return response;
+  return Promise.resolve(response);
 }
 
 /**

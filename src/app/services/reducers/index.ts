@@ -6,6 +6,7 @@ import devxApi from '../slices/devxapi.slice';
 import dimensions from '../slices/dimensions.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
 import profile from '../slices/profile.slice';
+import graphResponse from '../slices/graphResponse.slice';
 import proxyUrl from '../slices/proxy.slice';
 import resources from '../slices/resources.slice';
 import sampleQuery from '../slices/sample-query.slice';
@@ -14,7 +15,6 @@ import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
 
 import { isLoadingData } from './query-loading-reducers';
-import { graphResponse } from './query-runner-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { history } from './request-history-reducers';
 import { responseAreaExpanded } from './response-expanded-reducer';
