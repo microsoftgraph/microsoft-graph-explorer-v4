@@ -49,7 +49,7 @@ describe('Collections actions', () => {
     const expectedActions = [
       {
         type: RESOURCEPATHS_ADD_SUCCESS,
-        response: paths
+        payload: paths
       }
     ];
 
@@ -68,7 +68,7 @@ describe('Collections actions', () => {
     const expectedActions = [
       {
         type: RESOURCEPATHS_DELETE_SUCCESS,
-        response: paths
+        payload: paths
       }
     ];
 
