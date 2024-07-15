@@ -23,11 +23,15 @@ const SuffixRenderer = () => {
 
   const getDocumentationLink = (): string | null => {
     const { queries } = samples;
-
+    const getChildren = ()=> {
+      if (resources.data && Object.keys(resources.data).length > 0 && sampleQuery.selectedVersion in resources.data){
+        return resources.data[sampleQuery.selectedVersion].children ?? [];
+      }
+      return [];
+    }
     const resourceDocumentationUrl = new DocumentationService({
       sampleQuery,
-      source: Object.keys(resources.data).length > 0 ?
-        resources.data[sampleQuery.selectedVersion].children! : []
+      source: getChildren()
     }).getDocumentationLink();
 
     const sampleDocumentationUrl = new DocumentationService({
