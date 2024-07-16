@@ -36,7 +36,7 @@ export const ResponseMessages = () => {
   const dispatch: AppDispatch = useDispatch();
   const messageBars = [];
 
-  const { graphResponse: { body, headers }, sampleQuery, auth: { authToken }, graphExplorerMode
+  const { graphResponse: { response: { body, headers } }, sampleQuery, auth: { authToken }, graphExplorerMode
   } = useAppSelector((state) => state);
   const [displayMessage, setDisplayMessage] = useState(true);
 

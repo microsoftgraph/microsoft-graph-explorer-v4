@@ -40,8 +40,11 @@ describe('Request History Action Creators', () => {
   it('should dispatch VIEW_HISTORY_ITEM_SUCCESS when viewHistoryItem() is called with a valid history item', () => {
     // Assert
     const response: IGraphResponse = {
-      body: undefined,
-      headers: undefined
+      isLoadingData: false,
+      response: {
+        body: undefined,
+        headers: undefined
+      }
     }
 
     const expectedAction: AppAction = {
