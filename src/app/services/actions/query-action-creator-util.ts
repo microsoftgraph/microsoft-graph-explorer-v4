@@ -20,7 +20,6 @@ import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES, GRAPH_URL } from '../graph-constants';
 import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
-import { queryRunningStatus } from './query-loading-action-creators';
 
 export function queryResponse(response: object): AppAction {
   return {
@@ -30,13 +29,11 @@ export function queryResponse(response: object): AppAction {
 }
 
 export async function anonymousRequest(
-  dispatch: Function,
   query: IQuery,
   getState: Function
 ) {
   const { proxyUrl, queryRunnerStatus } = getState();
   const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
-  dispatch(queryRunningStatus(true));
   return fetch(graphUrl, options)
     .catch(() => {
       throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });
@@ -78,11 +75,9 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
 }
 
 export function authenticatedRequest(
-  dispatch: Function,
   query: IQuery,
   scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
 ) {
-  dispatch(queryRunningStatus(true));
   return makeGraphRequest(scopes)(query);
 }
 

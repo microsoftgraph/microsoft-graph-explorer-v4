@@ -10,7 +10,6 @@ import { createLogger } from 'redux-logger';
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
 import { reducers } from '../app/services/reducers';
-import { graphResponse } from '../app/services/reducers/query-runner-reducers';
 
 const loggerMiddleware = createLogger({
   level: 'error',

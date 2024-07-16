@@ -24,7 +24,8 @@ import {
   queryResultsInCorsError
 } from '../actions/query-action-creator-util';
 import { addHistoryItem } from '../actions/request-history-action-creators';
-import { setQueryResponseStatus } from './query-status.slice';
+import { clearQueryStatus, setQueryResponseStatus } from './query-status.slice';
+import { signOutSuccess } from './auth.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -52,8 +53,8 @@ export const runQuery = createAsyncThunk(
 
     try {
       const response: Response = tokenPresent
-        ? await authenticatedRequest(dispatch, query)
-        : await anonymousRequest(dispatch, query, getState);
+        ? await authenticatedRequest(query)
+        : await anonymousRequest(query, getState);
 
       const result: Result = await processResponse(response, respHeaders, dispatch, query);
 
@@ -88,7 +89,7 @@ const querySlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(runQuery.pending, (state) => {
-        state.isLoadingData = false;
+        state.isLoadingData = true;
         state.response = {
           body: undefined,
           headers: undefined
@@ -100,6 +101,20 @@ const querySlice = createSlice({
         state.response = {
           body: actionPayload.body,
           headers: actionPayload.headers
+        };
+      })
+      .addCase(clearQueryStatus, (state) => {
+        state.isLoadingData = false;
+        state.response = {
+          body: undefined,
+          headers: undefined
+        };
+      })
+      .addCase(signOutSuccess, (state) => {
+        state.isLoadingData = false;
+        state.response = {
+          body: undefined,
+          headers: undefined
         };
       })
       .addCase(runQuery.fulfilled, (state, action) => {
