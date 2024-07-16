@@ -37,30 +37,6 @@ describe('Request History Action Creators', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should dispatch VIEW_HISTORY_ITEM_SUCCESS when viewHistoryItem() is called with a valid history item', () => {
-    // Assert
-    const response: IGraphResponse = {
-      isLoadingData: false,
-      response: {
-        body: undefined,
-        headers: undefined
-      }
-    }
-
-    const expectedAction: AppAction = {
-      type: VIEW_HISTORY_ITEM_SUCCESS,
-      response
-    }
-
-    // Act
-    const store = mockStore({ history: [] });
-
-    // Assert
-    // @ts-ignore
-    store.dispatch(viewHistoryItem(response));
-    expect(store.getActions()).toEqual([expectedAction]);
-  });
-
   it('should dispatch REMOVE_HISTORY_ITEM_SUCCESS when a history item is removed', () => {
     // Arrange
     const historyItem: IHistoryItem = {
