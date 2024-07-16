@@ -16,6 +16,9 @@ export interface IQueryResponseProps {
 }
 
 export interface IGraphResponse {
-  body: any | undefined;
-  headers: { [key: string]: string } | undefined;
+  isLoadingData: boolean;
+  response: {
+    body: any | undefined;
+    headers: { [key: string]: string } | undefined;
+  }
 }
