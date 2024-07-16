@@ -35,7 +35,8 @@ const QueryInput = (props: IQueryInputProps) => {
   });
 
   const { sampleQuery, auth: { authToken },
-    isLoadingData: submitting, sidebarProperties } = useAppSelector((state) => state);
+    graphResponse: { isLoadingData },
+    sidebarProperties } = useAppSelector((state) => state);
   const authenticated = !!authToken.token;
   const { mobileScreen } = sidebarProperties;
 
@@ -116,7 +117,7 @@ const QueryInput = (props: IQueryInputProps) => {
             disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
             role='button'
             handleOnClick={() => runQuery()}
-            submitting={submitting}
+            submitting={isLoadingData}
             allowDisabledFocus={true}
           />
         </Stack.Item>

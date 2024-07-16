@@ -10,6 +10,7 @@ import { createLogger } from 'redux-logger';
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
 import { reducers } from '../app/services/reducers';
+import { graphResponse } from '../app/services/reducers/query-runner-reducers';
 
 const loggerMiddleware = createLogger({
   level: 'error',
@@ -33,7 +34,6 @@ const initialState = {
     authToken: { token: false, pending: false },
     consentedScopes: []
   },
-  isLoadingData: false,
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
@@ -44,7 +44,14 @@ const initialState = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  collections: []
+  collections: [],
+  graphResponse: {
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
+  }
 }
 
 export const store = configureStore({
@@ -63,7 +70,6 @@ export const store = configureStore({
     graphResponse: undefined as undefined,
     history: undefined as undefined,
     samples: undefined as undefined,
-    isLoadingData: undefined as undefined,
     profile: undefined as undefined,
     sampleQuery: undefined as undefined,
     theme: undefined as undefined,
