@@ -33,7 +33,6 @@ const initialState = {
     authToken: { token: false, pending: false },
     consentedScopes: []
   },
-  isLoadingData: false,
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
@@ -44,7 +43,14 @@ const initialState = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  collections: []
+  collections: [],
+  graphResponse: {
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
+  }
 }
 
 export const store = configureStore({
@@ -63,7 +69,6 @@ export const store = configureStore({
     graphResponse: undefined as undefined,
     history: undefined as undefined,
     samples: undefined as undefined,
-    isLoadingData: undefined as undefined,
     profile: undefined as undefined,
     sampleQuery: undefined as undefined,
     theme: undefined as undefined,

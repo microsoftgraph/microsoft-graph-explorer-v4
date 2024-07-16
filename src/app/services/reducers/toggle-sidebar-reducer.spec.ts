@@ -1,8 +1,7 @@
-import { sidebarProperties } from './toggle-sidebar-reducer';
 import {
-  SET_SAMPLE_QUERY_SUCCESS, TOGGLE_SIDEBAR_SUCCESS,
-  VIEW_HISTORY_ITEM_SUCCESS
+  SET_SAMPLE_QUERY_SUCCESS, TOGGLE_SIDEBAR_SUCCESS
 } from '../redux-constants';
+import { sidebarProperties } from './toggle-sidebar-reducer';
 
 
 describe('Toggle sidebar', () => {
@@ -37,28 +36,6 @@ describe('Toggle sidebar', () => {
     const action = {
       type: SET_SAMPLE_QUERY_SUCCESS,
       response: {}
-    }
-
-    const expectedState = {
-      showSidebar: false,
-      mobileScreen: true
-    }
-    const newState = sidebarProperties(initialState, action);
-    expect(newState.showSidebar).toEqual(expectedState.showSidebar);
-  });
-
-  it('should handle VIEW_HISTORY_ITEM_SUCCESS', () => {
-    const initialState = {
-      showSidebar: true,
-      mobileScreen: true
-    }
-
-    const action = {
-      type: VIEW_HISTORY_ITEM_SUCCESS,
-      response: {
-        showSidebar: false,
-        mobileScreen: true
-      }
     }
 
     const expectedState = {

@@ -9,7 +9,6 @@ import App from './app/views/App';
 
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { queryRunningStatus } from './app/services/actions/query-loading-action-creators';
 import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
 import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
 import { CURRENT_THEME } from './app/services/graph-constants';
@@ -179,7 +178,6 @@ appStore.dispatch(setSampleQuery(
     selectedVersion: 'v1.0'
   }
 ));
-appStore.dispatch(queryRunningStatus(false));
 
 /**
  * Set's up Monaco Editor's Workers.
