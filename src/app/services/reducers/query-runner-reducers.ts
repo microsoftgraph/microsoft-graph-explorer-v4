@@ -9,8 +9,11 @@ import {
 } from '../redux-constants';
 
 const initialState: IGraphResponse = {
-  body: undefined,
-  headers: undefined
+  isLoadingData: false,
+  response: {
+    body: undefined,
+    headers: undefined
+  }
 };
 
 export function graphResponse(
