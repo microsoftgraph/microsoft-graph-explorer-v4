@@ -13,10 +13,10 @@ import sampleQuery from '../slices/sample-query.slice';
 import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
+import history from '../slices/history.slice';
 
 import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
-import { history } from './request-history-reducers';
 import { responseAreaExpanded } from './response-expanded-reducer';
 import { snippets } from './snippet-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
