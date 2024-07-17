@@ -8,7 +8,8 @@ import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
-import { ThemeContext } from '../../themes/theme-context';
+// import { ThemeContext } from '../../themes/theme-context';
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ApplicationState } from '../../types/root';
@@ -398,7 +399,8 @@ class App extends Component<IAppProps, IAppState> {
 
     return (
       // @ts-ignore
-      <ThemeContext.Provider value={this.props.appTheme}>
+      // <ThemeContext.Provider value={this.props.appTheme}>
+      <FluentProvider theme={this.props.appTheme}>
         <PopupsProvider>
           <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
             <MainHeader
@@ -486,7 +488,8 @@ class App extends Component<IAppProps, IAppState> {
           </div>
           <PopupsWrapper />
         </PopupsProvider>
-      </ThemeContext.Provider>
+      </FluentProvider>
+      // </ThemeContext.Provider>
     );
   }
 }

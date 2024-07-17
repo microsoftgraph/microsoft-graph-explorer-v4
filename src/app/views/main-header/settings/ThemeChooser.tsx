@@ -1,4 +1,5 @@
 import { ChoiceGroup, DefaultButton, DialogFooter } from '@fluentui/react';
+import { Button, DialogActions, DialogTrigger } from '@fluentui/react-components';
 
 import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../../store';
@@ -48,12 +49,11 @@ const ThemeChooser: React.FC<PopupsComponent<null>> = (props) => {
         },
         text: translateMessage('High Contrast')
       }]} onChange={(_event, selectedTheme) => handleChangeTheme(selectedTheme)} />
-      <DialogFooter>
-        <DefaultButton
-          text={translateMessage('Close')}
-          onClick={() => props.closePopup()}
-        />
-      </DialogFooter>
+      <DialogActions>
+        <DialogTrigger disableButtonEnhancement>
+          <Button children={translateMessage('Close')} onClick={() => props.closePopup()}></Button>
+        </DialogTrigger>
+      </DialogActions>
     </>
   );
 }
