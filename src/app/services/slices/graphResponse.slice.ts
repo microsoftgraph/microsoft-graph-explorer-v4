@@ -25,6 +25,7 @@ import {
 } from '../actions/query-action-creator-util';
 import { CLEAR_QUERY_STATUS, LOGOUT_SUCCESS } from '../redux-constants';
 import { setQueryResponseStatus } from './query-status.slice';
+import { addHistoryItemSuccess } from './history.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -61,8 +62,9 @@ export const runQuery = createAsyncThunk(
       const status = generateStatus({ duration, response });
       dispatch(setQueryResponseStatus(status));
 
-      generateHistoryItem(status, respHeaders,
+      const historyItem = generateHistoryItem(status, respHeaders,
         query, createdAt, result, duration);
+      dispatch(addHistoryItemSuccess(historyItem));
 
       return { body: result, headers: respHeaders };
     } catch (error) {
