@@ -15,10 +15,10 @@ const historySlice = createSlice({
       state.push(...action.payload);
     },
     removeHistoryItemSuccess(state, action: PayloadAction<IHistoryItem>) {
-      state = state.filter(item => item !== action.payload);
+      return state.filter(item => item.createdAt !== action.payload.createdAt);
     },
     removeAllHistoryItemsSuccess(state, action: PayloadAction<string[]>) {
-      state = state.filter(item => !action.payload.includes(item.createdAt));
+      return state.filter(item => !action.payload.includes(item.createdAt));
     }
   }
 });
