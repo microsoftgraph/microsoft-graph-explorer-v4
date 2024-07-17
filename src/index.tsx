@@ -13,7 +13,7 @@ import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-crea
 import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
-import { bulkAddHistoryItemsSuccess } from './app/services/slices/history.slice';
+import { bulkAddHistoryItems } from './app/services/slices/history.slice';
 import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
 import { fetchResources } from './app/services/slices/resources.slice';
 import { setSampleQuery } from './app/services/slices/sample-query.slice';
@@ -146,7 +146,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
 
 historyCache.readHistoryData().then((data: IHistoryItem[]) => {
   if (data && data.length > 0) {
-    appStore.dispatch(bulkAddHistoryItemsSuccess(data));
+    appStore.dispatch(bulkAddHistoryItems(data));
   }
 });
 

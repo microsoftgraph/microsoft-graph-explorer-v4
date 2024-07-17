@@ -17,7 +17,7 @@ import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { runQuery, setQueryResponse } from '../../../services/slices/graphResponse.slice';
-import { removeAllHistoryItemsSuccess, removeHistoryItemSuccess } from '../../../services/slices/history.slice';
+import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
@@ -354,7 +354,7 @@ const History = (props: any) => {
       listOfKeys.push(historyItem.createdAt);
     });
     historyCache.bulkRemoveHistoryData(listOfKeys)
-    dispatch(removeAllHistoryItemsSuccess(listOfKeys));
+    dispatch(removeAllHistoryItems(listOfKeys));
     closeDialog();
   };
 
@@ -416,7 +416,7 @@ const History = (props: any) => {
 
     delete query.category;
     historyCache.removeHistoryData(query);
-    dispatch(removeHistoryItemSuccess(query));
+    dispatch(removeHistoryItem(query));
     trackHistoryItemEvent(
       eventTypes.BUTTON_CLICK_EVENT,
       componentNames.DELETE_HISTORY_ITEM_BUTTON,
