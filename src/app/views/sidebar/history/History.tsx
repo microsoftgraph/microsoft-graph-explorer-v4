@@ -15,11 +15,9 @@ import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
-import {
-  bulkRemoveHistoryItems, removeHistoryItem
-} from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { runQuery, setQueryResponse } from '../../../services/slices/graphResponse.slice';
+import { runQuery, setQueryResponse } from '../../../services/slices/graph-response.slice';
+import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
@@ -54,7 +52,7 @@ const formatDate = (date: any) => {
   return `${year}-${month}-${day}`;
 };
 
-const sortItems = (content: History[]) => {
+const sortItems = (content: IHistoryItem[]) => {
   content.sort(dynamicSort('createdAt', SortOrder.DESC));
   content.forEach((value: any, index: number) => {
     value.index = index;
@@ -62,8 +60,8 @@ const sortItems = (content: History[]) => {
   return content;
 }
 
-const getItems = (content: IHistoryItem[]) => {
-  const list: History[] = [];
+const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
+  const list: IHistoryItem[] = [];
   const olderText = translateMessage('older');
   const todayText = translateMessage('today');
   const yesterdayText = translateMessage('yesterday');
@@ -74,14 +72,16 @@ const getItems = (content: IHistoryItem[]) => {
   yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
   const yesterday = formatDate(yesterdaysDate);
 
-  content.forEach((element: any) => {
-    if (element.createdAt.includes(today)) {
+  content.forEach((historyItem) => {
+    if (historyItem.createdAt.includes(today)) {
       date = todayText;
-    } else if (element.createdAt.includes(yesterday)) {
+    } else if (historyItem.createdAt.includes(yesterday)) {
       date = yesterdayText;
     }
-    element.category = date;
-    list.push(element);
+    list.push({
+      ...historyItem,
+      category: date
+    });
   });
   return sortItems(list);
 }
@@ -354,7 +354,7 @@ const History = (props: any) => {
       listOfKeys.push(historyItem.createdAt);
     });
     historyCache.bulkRemoveHistoryData(listOfKeys)
-    dispatch(bulkRemoveHistoryItems(listOfKeys));
+    dispatch(removeAllHistoryItems(listOfKeys));
     closeDialog();
   };
 
@@ -455,7 +455,7 @@ const History = (props: any) => {
     dispatch(setSampleQuery(sampleQuery));
     dispatch(setQueryResponse({
       body: query.result,
-      headers: query.responseHeaders as unknown as { [key: string]: string }
+      headers: query.responseHeaders
     }))
     dispatch(setQueryResponseStatus({
       duration,

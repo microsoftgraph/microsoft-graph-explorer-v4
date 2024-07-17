@@ -21,7 +21,7 @@ import { PopupsProvider } from '../services/context/popups-context';
 import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
 import { signIn, storeScopes } from '../services/slices/auth.slice';
-import { runQuery } from '../services/slices/graphResponse.slice';
+import { runQuery } from '../services/slices/graph-response.slice';
 import { setSampleQuery } from '../services/slices/sample-query.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
