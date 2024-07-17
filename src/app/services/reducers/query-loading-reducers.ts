@@ -11,22 +11,22 @@ import {
 
 export function isLoadingData(state = {}, action: AppAction): any {
   switch (action.type) {
-    case GET_CONSENT_ERROR:
-      return false;
-    case QUERY_GRAPH_RUNNING:
-      if (action.response) {
-        return action.response;
-      }
-    case QUERY_GRAPH_SUCCESS:
-      return false;
-    case QUERY_GRAPH_STATUS:
-      return false;
-    case FETCH_SCOPES_ERROR:
-      return false;
-    case PROFILE_REQUEST_ERROR:
-      return false;
-    case PROFILE_REQUEST_SUCCESS:
-      return false;
+    // case GET_CONSENT_ERROR:
+    //   return false;
+    // case QUERY_GRAPH_RUNNING:
+    //   if (action.response) {
+    //     return action.response;
+    //   }
+    // case QUERY_GRAPH_SUCCESS:
+    //   return false;
+    // case QUERY_GRAPH_STATUS:
+    //   return false;
+    // case FETCH_SCOPES_ERROR:
+    //   return false;
+    // case PROFILE_REQUEST_ERROR:
+    //   return false;
+    // case PROFILE_REQUEST_SUCCESS:
+    //   return false;
     default:
       return state;
   }

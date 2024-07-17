@@ -35,7 +35,6 @@ const mockState: ApplicationState = {
     authToken: { token: false, pending: false },
     consentedScopes: []
   },
-  isLoadingData: false,
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
@@ -59,8 +58,11 @@ const mockState: ApplicationState = {
   },
   history: [],
   graphResponse: {
-    body: undefined,
-    headers: undefined
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
   },
   snippets: {
     pending: false,

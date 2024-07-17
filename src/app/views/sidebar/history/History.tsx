@@ -16,10 +16,10 @@ import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import {
-  bulkRemoveHistoryItems, removeHistoryItem, viewHistoryItem
+  bulkRemoveHistoryItems, removeHistoryItem
 } from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { runQuery } from '../../../services/slices/graphResponse.slice';
+import { runQuery, setQueryResponse } from '../../../services/slices/graphResponse.slice';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
@@ -453,10 +453,10 @@ const History = (props: any) => {
     };
     const { duration, status, statusText } = query;
     dispatch(setSampleQuery(sampleQuery));
-    dispatch(viewHistoryItem({
-      ...query,
-      headers: query.responseHeaders
-    }));
+    dispatch(setQueryResponse({
+      body: query.result,
+      headers: query.responseHeaders as unknown as { [key: string]: string }
+    }))
     dispatch(setQueryResponseStatus({
       duration,
       messageType:

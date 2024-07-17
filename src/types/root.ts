@@ -30,7 +30,6 @@ export interface ApplicationState {
   scopes: IScopes;
   history: IHistoryItem[];
   graphResponse: IGraphResponse;
-  isLoadingData: boolean;
   snippets: ISnippet;
   responseAreaExpanded: boolean;
   dimensions: IDimensions;

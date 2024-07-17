@@ -23,15 +23,23 @@ import {
   parseResponse,
   queryResultsInCorsError
 } from '../actions/query-action-creator-util';
-import { addHistoryItem } from '../actions/request-history-action-creators';
+import { CLEAR_QUERY_STATUS, LOGOUT_SUCCESS } from '../redux-constants';
 import { setQueryResponseStatus } from './query-status.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 
+interface Result {
+  body: any;
+  headers: { [key: string]: string };
+}
+
 const initialState: IGraphResponse = {
-  body: undefined,
-  headers: undefined
+  isLoadingData: false,
+  response: {
+    body: undefined,
+    headers: undefined
+  }
 };
 
 export const runQuery = createAsyncThunk(
@@ -44,13 +52,23 @@ export const runQuery = createAsyncThunk(
 
     try {
       const response: Response = tokenPresent
-        ? await authenticatedRequest(dispatch, query)
-        : await anonymousRequest(dispatch, query, getState);
+        ? await authenticatedRequest(query)
+        : await anonymousRequest(query, getState);
 
-      const result = await processResponse(response, respHeaders, dispatch, createdAt, query);
+      const result: Result = await processResponse(response, respHeaders, dispatch, query);
+
+      const duration = new Date().getTime() - new Date(createdAt).getTime();
+      const status = generateStatus({ duration, response });
+      dispatch(setQueryResponseStatus(status));
+
+      generateHistoryItem(status, respHeaders,
+        query, createdAt, result, duration);
+
       return { body: result, headers: respHeaders };
     } catch (error) {
-      return rejectWithValue(await handleError(dispatch, error, query));
+      const { status, body, headers } = await handleError(error, query)
+      dispatch(setQueryResponseStatus(status));
+      return rejectWithValue({ body, headers });
     }
   }
 );
@@ -59,25 +77,51 @@ const querySlice = createSlice({
   name: 'query',
   initialState,
   reducers: {
-    setQueryResponse(state, action: PayloadAction<IGraphResponse>) {
-      state.body = action.payload.body;
-      state.headers = action.payload.headers;
+    setQueryResponse(state, action: PayloadAction<Result>) {
+      state.isLoadingData = false;
+      state.response = {
+        body: action.payload.body,
+        headers: action.payload.headers
+      };
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(runQuery.pending, (state) => {
-        state.body = undefined;
-        state.headers = undefined;
+        state.isLoadingData = true;
+        state.response = {
+          body: undefined,
+          headers: undefined
+        };
       })
       .addCase(runQuery.rejected, (state, action) => {
-        const payload = action.payload as IGraphResponse;
-        state.body = payload.body;
-        state.headers = payload.headers;
+        state.isLoadingData = false;
+        const actionPayload = action.payload as Result;
+        state.response = {
+          body: actionPayload.body,
+          headers: actionPayload.headers
+        };
+      })
+      .addCase(CLEAR_QUERY_STATUS, (state) => {
+        state.isLoadingData = false;
+        state.response = {
+          body: undefined,
+          headers: undefined
+        };
+      })
+      .addCase(LOGOUT_SUCCESS, (state) => {
+        state.isLoadingData = false;
+        state.response = {
+          body: undefined,
+          headers: undefined
+        };
       })
       .addCase(runQuery.fulfilled, (state, action) => {
-        state.body = action.payload.body;
-        state.headers = action.payload.headers;
+        state.isLoadingData = false;
+        state.response = {
+          body: action.payload.body,
+          headers: action.payload.headers
+        };
       });
   }
 });
@@ -85,17 +129,31 @@ const querySlice = createSlice({
 export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
-async function processResponse(
-  response: Response,
-  respHeaders: { [key: string]: string },
-  dispatch: Function,
-  createdAt: string,
-  query: IQuery
-) {
+async function processResponse(response: Response, respHeaders: { [key: string]: string },
+  dispatch: Function, query: IQuery): Promise<Result> {
   let result = await parseResponse(response, respHeaders);
-  const duration = new Date().getTime() - new Date(createdAt).getTime();
-  await createHistory(response, respHeaders, query, createdAt, dispatch, result, duration);
+  if (response && response.ok) {
+    CURRENT_RETRIES = 0;
+    if (isFileResponse(respHeaders)) {
+      const contentDownloadUrl = await generateResponseDownloadUrl(response, respHeaders);
+      if (contentDownloadUrl) {
+        result = { contentDownloadUrl };
+      }
+    }
+  }
 
+  if (response && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
+    const successful = await runReAuthenticatedRequest(response, query);
+    if (successful) {
+      dispatch(runQuery(query));
+      return { body: null, headers: {} }; // returning an empty object for the original request
+    }
+  }
+
+  return { body: result, headers: respHeaders };
+}
+
+const generateStatus = ({ duration, response }: { duration: number; response: Response }): IStatus => {
   const status: IStatus = {
     messageType: MessageBarType.error,
     ok: false,
@@ -113,25 +171,8 @@ async function processResponse(
     CURRENT_RETRIES = 0;
     status.ok = true;
     status.messageType = MessageBarType.success;
-
-    if (isFileResponse(respHeaders)) {
-      const contentDownloadUrl = await generateResponseDownloadUrl(response, respHeaders);
-      if (contentDownloadUrl) {
-        result = { contentDownloadUrl };
-      }
-    }
   }
-
-  if (response && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
-    const successful = await runReAuthenticatedRequest(response, query);
-    if (successful) {
-      dispatch(runQuery(query));
-      return { body: null, headers: {} }; // returning an empty object for the original request
-    }
-  }
-
-  dispatch(setQueryResponseStatus(status));
-  return { body: result, headers: respHeaders };
+  return status;
 }
 
 async function runReAuthenticatedRequest(response: Response, query: IQuery): Promise<boolean> {
@@ -148,17 +189,14 @@ async function runReAuthenticatedRequest(response: Response, query: IQuery): Pro
   return false;
 }
 
-async function createHistory(
-  response: Response,
+function generateHistoryItem(
+  status: IStatus,
   respHeaders: any,
   query: IQuery,
   createdAt: string,
-  dispatch: Function,
   result: any,
   duration: number
-) {
-  const status = response.status;
-  const statusText = response.statusText === '' ? setStatusMessage(status) : response.statusText;
+): IHistoryItem {
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 
@@ -179,19 +217,17 @@ async function createHistory(
     body: query.sampleBody,
     responseHeaders,
     createdAt,
-    status,
-    statusText,
+    status: status.status as number,
+    statusText: status.statusText,
     duration,
     result
   };
 
   historyCache.writeHistoryData(historyItem);
-
-  dispatch(addHistoryItem(historyItem));
-  return result;
+  return historyItem;
 }
 
-async function handleError(dispatch: Function, error: any, query: IQuery) {
+async function handleError(error: any, query: IQuery) {
   let body = error;
   const status: IStatus = {
     messageType: MessageBarType.error,
@@ -219,6 +255,5 @@ async function handleError(dispatch: Function, error: any, query: IQuery) {
     }
   }
 
-  dispatch(setQueryResponse({ body, headers: {} }));
-  return { status, body };
+  return { status, body, headers: {} };
 }

@@ -15,7 +15,6 @@ import scopes from '../slices/scopes.slice';
 import themeChange from '../slices/theme.slice';
 import history from '../slices/history.slice';
 
-import { isLoadingData } from './query-loading-reducers';
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { responseAreaExpanded } from './response-expanded-reducer';
 import { snippets } from './snippet-reducer';
@@ -31,7 +30,6 @@ const reducers = {
   graphExplorerMode,
   graphResponse,
   history,
-  isLoadingData,
   profile,
   proxyUrl,
   queryRunnerStatus,
