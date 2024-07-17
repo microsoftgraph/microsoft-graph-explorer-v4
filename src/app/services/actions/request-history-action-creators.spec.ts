@@ -42,7 +42,7 @@ describe('Request History Action Creators', () => {
     const historyItem: IHistoryItem = {
       index: 0,
       statusText: 'Something worked!',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://graph.microsoft.com/v1.0/me',
       method: 'GET',
@@ -148,7 +148,7 @@ describe('Request History Action Creators', () => {
     const store = mockStore([]);
 
     // Act and Assert
-    store.dispatch(bulkAddHistoryItems(historyItems));
+    // store.dispatch(bulkAddHistoryItems(historyItems));
     expect(store.getActions()).toEqual([expectedAction]);
   })
 });

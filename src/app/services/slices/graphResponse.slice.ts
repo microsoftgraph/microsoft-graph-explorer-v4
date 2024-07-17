@@ -193,22 +193,22 @@ async function runReAuthenticatedRequest(response: Response, query: IQuery): Pro
 
 function generateHistoryItem(
   status: IStatus,
-  respHeaders: any,
+  respHeaders: { [key: string]: string },
   query: IQuery,
   createdAt: string,
-  result: any,
+  result: Result,
   duration: number
 ): IHistoryItem {
   const responseHeaders = { ...respHeaders };
   const contentType = respHeaders['content-type'];
 
   if (isImageResponse(contentType)) {
-    result = { message: 'Run the query to view the image' };
+    result = { ...result, body: 'Run the query to view the image' };
     responseHeaders['content-type'] = ContentType.Json;
   }
 
   if (isFileResponse(respHeaders)) {
-    result = { message: 'Run the query to generate file download URL' };
+    result = { ...result, body: 'Run the query to generate file download URL' };
   }
 
   const historyItem: IHistoryItem = {
@@ -222,7 +222,7 @@ function generateHistoryItem(
     status: status.status as number,
     statusText: status.statusText,
     duration,
-    result
+    result: result.body
   };
 
   historyCache.writeHistoryData(historyItem);
