@@ -8,26 +8,26 @@ const historySlice = createSlice({
   name: 'history',
   initialState,
   reducers: {
-    addHistoryItemSuccess(state, action: PayloadAction<IHistoryItem>) {
+    addHistoryItem(state, action: PayloadAction<IHistoryItem>) {
       state.push(action.payload);
     },
-    bulkAddHistoryItemsSuccess(state, action: PayloadAction<IHistoryItem[]>) {
+    bulkAddHistoryItems(state, action: PayloadAction<IHistoryItem[]>) {
       state.push(...action.payload);
     },
-    removeHistoryItemSuccess(state, action: PayloadAction<IHistoryItem>) {
+    removeHistoryItem(state, action: PayloadAction<IHistoryItem>) {
       return state.filter(item => item.createdAt !== action.payload.createdAt);
     },
-    removeAllHistoryItemsSuccess(state, action: PayloadAction<string[]>) {
+    removeAllHistoryItems(state, action: PayloadAction<string[]>) {
       return state.filter(item => !action.payload.includes(item.createdAt));
     }
   }
 });
 
 export const {
-  addHistoryItemSuccess,
-  bulkAddHistoryItemsSuccess,
-  removeHistoryItemSuccess,
-  removeAllHistoryItemsSuccess
+  addHistoryItem,
+  bulkAddHistoryItems,
+  removeHistoryItem,
+  removeAllHistoryItems
 } = historySlice.actions;
 
 export default historySlice.reducer;
