@@ -16,7 +16,7 @@ import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { runQuery, setQueryResponse } from '../../../services/slices/graphResponse.slice';
+import { runQuery, setQueryResponse } from '../../../services/slices/graph-response.slice';
 import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';

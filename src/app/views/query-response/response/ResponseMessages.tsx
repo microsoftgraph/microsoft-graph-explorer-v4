@@ -7,7 +7,7 @@ import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
-import { runQuery } from '../../../services/slices/graphResponse.slice';
+import { runQuery } from '../../../services/slices/graph-response.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 

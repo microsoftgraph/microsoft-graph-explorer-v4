@@ -6,7 +6,7 @@ import devxApi from '../slices/devxapi.slice';
 import dimensions from '../slices/dimensions.slice';
 import graphExplorerMode from '../slices/explorer-mode.slice';
 import profile from '../slices/profile.slice';
-import graphResponse from '../slices/graphResponse.slice';
+import graphResponse from '../slices/graph-response.slice';
 import proxyUrl from '../slices/proxy.slice';
 import resources from '../slices/resources.slice';
 import sampleQuery from '../slices/sample-query.slice';
