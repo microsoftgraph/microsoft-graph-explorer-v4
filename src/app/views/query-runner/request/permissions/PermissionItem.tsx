@@ -7,17 +7,17 @@ import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../stor
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
 import {
   getAllPrincipalGrant,
-  getSinglePrincipalGrant,
-  revokeScopes
+  getSinglePrincipalGrant
 } from '../../../../services/actions/permissions-action-creator';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { consentToScopes } from '../../../../services/slices/auth.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
+import { revokeScopes } from '../../../../services/actions/revoke-scopes.action';
 
 interface PermissionItemProps {
-  item: any; index: any; column: IColumn | undefined;
+  item: IPermission; index: number; column: IColumn | undefined;
 }
 
 const buttonIcon: IIconProps = {
@@ -114,7 +114,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   }
 
   if (column) {
-    const content = item[column.fieldName as keyof any] as string;
+    const content = item[column.fieldName as keyof IPermission] as string;
     switch (column.key) {
 
       case 'value':

@@ -166,7 +166,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   }
 
   const handleRenderItemColumn = (item?: IPermission, index?: number, column?: IColumn) => {
-    return <PermissionItem column={column} index={index} item={item!} />;
+    return <PermissionItem column={column} index={index!} item={item!} />;
   }
 
   const columns = getColumns({ source: 'panel', tokenPresent });

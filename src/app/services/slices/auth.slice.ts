@@ -41,6 +41,17 @@ const authSlice = createSlice({
     getConsentedScopesSuccess(state, action: PayloadAction<string[]>) {
       state.consentedScopes = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(consentToScopes.pending, (state) => {
+      state.authToken.pending = true;
+    });
+    builder.addCase(consentToScopes.fulfilled, (state) => {
+      state.authToken.pending = false;
+    });
+    builder.addCase(consentToScopes.rejected, (state) => {
+      state.authToken.pending = false;
+    });
   }
 });
 
