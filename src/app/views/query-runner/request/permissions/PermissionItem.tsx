@@ -6,10 +6,12 @@ import {
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
 import {
-  consentToScopes, getAllPrincipalGrant,
-  getSinglePrincipalGrant, revokeScopes
+  getAllPrincipalGrant,
+  getSinglePrincipalGrant,
+  revokeScopes
 } from '../../../../services/actions/permissions-action-creator';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
+import { consentToScopes } from '../../../../services/slices/auth.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';

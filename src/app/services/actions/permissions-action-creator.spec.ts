@@ -15,10 +15,10 @@ import { ApplicationState } from '../../../types/root';
 import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
+import { consentToScopes } from '../slices/auth.slice';
 import { fetchScopes } from '../slices/scopes.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 import {
-  consentToScopes,
   revokeScopes
 } from './permissions-action-creator';
 import { RevokePermissionsUtil } from './permissions-action-creator.util';

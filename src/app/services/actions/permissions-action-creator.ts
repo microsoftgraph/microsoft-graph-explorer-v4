@@ -1,8 +1,4 @@
 
-import { MessageBarType } from '@fluentui/react';
-import { authenticationWrapper } from '../../../modules/authentication';
-import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { ApplicationState } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { AppAction } from '../../../types/action';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
@@ -22,12 +18,10 @@ import {
   REVOKE_SCOPES_SUCCESS
 } from '../redux-constants';
 import {
-  getAuthTokenSuccess,
   getConsentedScopesSuccess
 } from '../slices/auth.slice';
-import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
 import { setQueryResponseStatus } from '../slices/query-status.slice';
-import { getProfileInfo } from '../slices/profile.slice';
+import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
 
 export function getAllPrincipalGrantsPending(response: boolean) {
   return {
@@ -70,57 +64,6 @@ export function revokeScopesError(): AppAction {
     type: REVOKE_SCOPES_ERROR,
     response: null
   }
-}
-
-export function consentToScopes(scopes: string[]) {
-  return async (dispatch: Function, getState: Function) => {
-    try {
-      const { profile, auth: { consentedScopes } }: ApplicationState = getState();
-      const authResponse = await authenticationWrapper.consentToScopes(scopes);
-      if (authResponse && authResponse.accessToken) {
-        dispatch(getAuthTokenSuccess());
-        const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
-        dispatch(getConsentedScopesSuccess(validatedScopes));
-        if (
-          authResponse.account &&
-          authResponse.account.localAccountId !== profile?.user?.id
-        ) {
-          dispatch(getProfileInfo());
-        }
-        dispatch(
-          setQueryResponseStatus({
-            statusText: translateMessage('Success'),
-            status: translateMessage('Scope consent successful'),
-            ok: true,
-            messageType: MessageBarType.success
-          }))
-        dispatch(fetchAllPrincipalGrants());
-      }
-    } catch (error: any) {
-      const { errorCode } = error;
-      dispatch(
-        setQueryResponseStatus({
-          statusText: translateMessage('Scope consent failed'),
-          status: errorCode,
-          ok: false,
-          messageType: MessageBarType.error,
-          hint: getConsentAuthErrorHint(errorCode)
-        })
-      );
-    }
-  };
-}
-
-const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
-  consentedResponse: string[]) => {
-  if (!consentedScopes || !consentedResponse || !scopeToBeConsented) {
-    return consentedResponse;
-  }
-  const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
-  if (expectedScopes.length === consentedResponse.length) {
-    return consentedResponse;
-  }
-  return expectedScopes;
 }
 
 interface IPermissionUpdate {
