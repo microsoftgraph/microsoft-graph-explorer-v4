@@ -2,6 +2,7 @@
 import { AppAction } from '../../../types/action';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
+import { ApplicationState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
 import {
   GET_ALL_PRINCIPAL_GRANTS_ERROR,
@@ -37,16 +38,16 @@ export function fetchAllPrincipalGrants() {
   return async (dispatch: Function, getState: Function) => {
     dispatch(getAllPrincipalGrantsPending(true));
     try {
-      const { profile, consentedScopes, scopes } = getState();
-      const tenantWideGrant: IOAuthGrantPayload = scopes.data.tenantWidePermissionsGrant;
-      const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.id);
+      const { auth: { consentedScopes }, profile, scopes } = (getState() as ApplicationState);
+      const tenantWideGrant = scopes.data.tenantWidePermissionsGrant! as IOAuthGrantPayload;
+      const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.user!.id);
       if (revokePermissionUtil && revokePermissionUtil.getGrantsPayload() !== null) {
         const servicePrincipalAppId = revokePermissionUtil.getServicePrincipalAppId();
         dispatch(getAllPrincipalGrantsPending(true));
         const requestCounter = 0;
 
         await checkScopesConsentType(servicePrincipalAppId, tenantWideGrant,
-          revokePermissionUtil, consentedScopes, profile, requestCounter, dispatch);
+          revokePermissionUtil, consentedScopes, profile.user!, requestCounter, dispatch);
       }
       else {
         dispatch(getAllPrincipalGrantsPending(false));
