@@ -1,17 +1,13 @@
 import configureMockStore from 'redux-mock-store';
 
-import { fetchResources } from '../slices/resources.slice';
+import { AnyAction } from '@reduxjs/toolkit';
 import {
-  FETCH_RESOURCES_ERROR,
   FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
 } from '../../../app/services/redux-constants';
-import { AppAction } from '../../../types/action';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
-import { AnyAction, PayloadAction } from '@reduxjs/toolkit';
+import { fetchResources } from '../slices/resources.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
-import { path } from 'chromedriver';
-import { IResource } from '../../../types/resources';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);
 
@@ -46,6 +42,11 @@ const mockState: ApplicationState = {
   samples: {
     queries: [],
     status: 'idle',
+    error: null
+  },
+  permissionGrants: {
+    permissions: [],
+    pending: false,
     error: null
   },
   scopes: {

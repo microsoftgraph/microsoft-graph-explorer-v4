@@ -47,7 +47,7 @@ export interface IScopes {
 }
 
 export interface PermissionGrantsState {
-  loading: boolean;
+  pending: boolean;
   error: string | null;
   permissions: IPermissionGrant[];
 }

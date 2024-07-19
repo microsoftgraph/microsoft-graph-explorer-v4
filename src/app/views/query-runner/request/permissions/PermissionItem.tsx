@@ -5,16 +5,13 @@ import {
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
-import {
-  getAllPrincipalGrant,
-  getSinglePrincipalGrant
-} from '../../../../services/actions/permissions-action-creator';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { consentToScopes } from '../../../../services/slices/auth.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
 import { revokeScopes } from '../../../../services/actions/revoke-scopes.action';
+import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../services/slices/grants.slice';
 
 interface PermissionItemProps {
   item: IPermission; index: number; column: IColumn | undefined;
@@ -37,7 +34,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const theme = getTheme();
   const dispatch: AppDispatch = useAppDispatch();
   const hostId: string = getId('tooltipHost');
-  const { scopes, auth: { consentedScopes }, profile: {user} } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes }, profile: { user }, permissionGrants } = useAppSelector((state) => state);
   const { item, column } = props;
   const consented = !!item.consented;
 
@@ -55,8 +52,8 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   }
 
   const userHasRequiredPermissions = (): boolean => {
-    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0) {
-      const allPrincipalPermissions = getAllPrincipalPermissions(scopes.data.tenantWidePermissionsGrant);
+    if (permissionGrants && permissionGrants.permissions && permissionGrants.permissions.length > 0) {
+      const allPrincipalPermissions = getAllPrincipalPermissions(permissionGrants.permissions);
       const principalAndAllPrincipalPermissions = [...allPrincipalPermissions, ...consentedScopes];
       const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
       return requiredPermissions.every(scope => principalAndAllPrincipalPermissions.includes(scope));
@@ -66,10 +63,10 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
 
   const ConsentTypeProperty = (): JSX.Element | null => {
     if (scopes && consented && user?.id) {
-      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
+      const tenantWideGrant: IPermissionGrant[] = permissionGrants.permissions!;
       const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
       const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, user?.id);
-      const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
+      const tenantGrantFetchPending = permissionGrants.pending;
       const consentTypeProperties = {
         item, allPrincipalPermissions, singlePrincipalPermissions,
         tenantGrantFetchPending, dispatch

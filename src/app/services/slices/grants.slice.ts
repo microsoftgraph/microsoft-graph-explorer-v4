@@ -8,7 +8,7 @@ import { RevokePermissionsUtil } from '../actions/permissions-action-creator.uti
 import { setQueryResponseStatus } from '../slices/query-status.slice';
 
 const initialState: PermissionGrantsState = {
-  loading: false,
+  pending: false,
   error: null,
   permissions: []
 };
@@ -52,15 +52,15 @@ const permissionGrantsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPrincipalGrants.pending, (state) => {
-        state.loading = true;
+        state.pending = true;
         state.error = null;
       })
       .addCase(fetchAllPrincipalGrants.fulfilled, (state, action: PayloadAction<IPermissionGrant[]>) => {
-        state.loading = false;
+        state.pending = false;
         state.permissions = action.payload;
       })
       .addCase(fetchAllPrincipalGrants.rejected, (state) => {
-        state.loading = false;
+        state.pending = false;
       });
   }
 });

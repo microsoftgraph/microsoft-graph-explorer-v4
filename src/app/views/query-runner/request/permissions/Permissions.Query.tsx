@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/grants.slice';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';

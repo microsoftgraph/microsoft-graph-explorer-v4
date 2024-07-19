@@ -9,7 +9,7 @@ import { AuthenticateResult } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
 import { ApplicationState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
-import { fetchAllPrincipalGrants } from '../actions/permissions-action-creator';
+import { fetchAllPrincipalGrants } from './grants.slice';
 import { getProfileInfo } from './profile.slice';
 import { setQueryResponseStatus } from './query-status.slice';
 

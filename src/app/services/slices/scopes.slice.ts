@@ -13,14 +13,11 @@ type ScopesFetchType = 'full' | 'query';
 const initialState: IScopes = {
   pending: {
     isSpecificPermissions: false,
-    isFullPermissions: false,
-    isTenantWidePermissionsGrant: false,
-    isRevokePermissions: false
+    isFullPermissions: false
   },
   data: {
     specificPermissions: [],
-    fullPermissions: [],
-    tenantWidePermissionsGrant: []
+    fullPermissions: []
   },
   error: null
 }

@@ -119,6 +119,11 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
+  },
+  permissionGrants: {
+    pending: false,
+    permissions: [],
+    error: null
   }
 }
 const currentState = store.getState();
