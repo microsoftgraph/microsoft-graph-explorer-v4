@@ -4,7 +4,7 @@ import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
 import { IHistoryItem } from './history';
-import { IScopes } from './permissions';
+import { IPermissionGrant, IScopes } from './permissions';
 import { IProfileState } from './profile';
 import { IGraphResponse } from './query-response';
 import { IQuery, ISampleQuery } from './query-runner';
@@ -25,6 +25,11 @@ export interface ApplicationState {
   samples: {
     queries: ISampleQuery[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    error: string | null;
+  };
+  permissionGrants: {
+    permissions: IPermissionGrant[];
+    loading: boolean;
     error: string | null;
   };
   scopes: IScopes;
