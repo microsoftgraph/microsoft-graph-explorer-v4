@@ -1,7 +1,7 @@
 import { DirectionalHint, IconButton, IIconProps, Label, Spinner, TooltipHost } from '@fluentui/react';
 
 import { IPermission } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants } from '../../../../services/slices/grants.slice';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 interface IConsentType {

@@ -9,7 +9,7 @@ import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
-import { fetchAllPrincipalGrants } from '../../../../services/slices/grants.slice';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';

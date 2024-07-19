@@ -12,7 +12,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { fetchAllPrincipalGrants } from '../../../../services/slices/grants.slice';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';

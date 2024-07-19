@@ -8,7 +8,7 @@ import { IPermission, IPermissionGrant } from '../../../../../types/permissions'
 import { revokeScopes } from '../../../../services/actions/revoke-scopes.action';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
 import { consentToScopes } from '../../../../services/slices/auth.slice';
-import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../services/slices/grants.slice';
+import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
