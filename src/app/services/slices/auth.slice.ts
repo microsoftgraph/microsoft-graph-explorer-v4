@@ -12,6 +12,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { fetchAllPrincipalGrants } from './permission-grants.slice';
 import { getProfileInfo } from './profile.slice';
 import { setQueryResponseStatus } from './query-status.slice';
+import { revokeScopes } from '../actions/revoke-scopes.action';
 
 const initialState: AuthenticateResult = {
   authToken: {
@@ -51,6 +52,16 @@ const authSlice = createSlice({
       state.consentedScopes = action.payload!;
     });
     builder.addCase(consentToScopes.rejected, (state) => {
+      state.authToken.pending = false;
+    });
+    builder.addCase(revokeScopes.pending, (state) => {
+      state.authToken.pending = true;
+    });
+    builder.addCase(revokeScopes.fulfilled, (state, action) => {
+      state.authToken.pending = false;
+      state.consentedScopes = action.payload!;
+    });
+    builder.addCase(revokeScopes.rejected, (state) => {
       state.authToken.pending = false;
     });
   }
