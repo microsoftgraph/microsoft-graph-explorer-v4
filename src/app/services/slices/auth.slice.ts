@@ -46,8 +46,9 @@ const authSlice = createSlice({
     builder.addCase(consentToScopes.pending, (state) => {
       state.authToken.pending = true;
     });
-    builder.addCase(consentToScopes.fulfilled, (state) => {
+    builder.addCase(consentToScopes.fulfilled, (state, action) => {
       state.authToken.pending = false;
+      state.consentedScopes = action.payload!;
     });
     builder.addCase(consentToScopes.rejected, (state) => {
       state.authToken.pending = false;
@@ -93,11 +94,7 @@ export const consentToScopes = createAsyncThunk(
       if (authResponse && authResponse.accessToken) {
         dispatch(getAuthTokenSuccess());
         const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
-        dispatch(getConsentedScopesSuccess(validatedScopes));
-        if (
-          authResponse.account &&
-          authResponse.account.localAccountId !== profile?.user?.id
-        ) {
+        if (authResponse.account && authResponse.account.localAccountId !== profile?.user?.id) {
           dispatch(getProfileInfo());
         }
         dispatch(
@@ -109,6 +106,7 @@ export const consentToScopes = createAsyncThunk(
           })
         );
         dispatch(fetchAllPrincipalGrants());
+        return validatedScopes;
       }
     } catch (error: unknown) {
       const { errorCode } = error as BrowserAuthError;

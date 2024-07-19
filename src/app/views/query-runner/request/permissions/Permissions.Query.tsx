@@ -49,8 +49,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
-
   const permissionsTabStyles = {
     root: {
       padding: '17px'
@@ -82,10 +80,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       getPermissions();
     }
   }, [sampleQuery]);
-
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [consentedScopes]);
 
   useEffect(() => {
     if (tokenPresent && validation.isValid) {
@@ -155,6 +149,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       displayErrorFetchingPermissionsMessage();
   }
   permissions = sortPermissionsWithPrivilege(permissions);
+  permissions = setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   return (
     <div >
