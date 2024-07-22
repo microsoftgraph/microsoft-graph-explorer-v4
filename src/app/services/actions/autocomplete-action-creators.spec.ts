@@ -98,6 +98,11 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
+  },
+  permissionGrants: {
+    pending: false,
+    permissions: [],
+    error: null
   }
 }
 

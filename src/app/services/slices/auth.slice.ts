@@ -1,10 +1,18 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { BrowserAuthError } from '@azure/msal-browser';
+import { MessageBarType } from '@fluentui/react';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { Mode } from '../../../types/enums';
+import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
 import { AppDispatch } from '../../../store';
-import { ApplicationState } from '../../../types/root';
 import { AuthenticateResult } from '../../../types/authentication';
+import { Mode } from '../../../types/enums';
+import { ApplicationState } from '../../../types/root';
+import { translateMessage } from '../../utils/translate-messages';
+import { fetchAllPrincipalGrants } from './permission-grants.slice';
+import { getProfileInfo } from './profile.slice';
+import { setQueryResponseStatus } from './query-status.slice';
+import { revokeScopes } from '../actions/revoke-scopes.action';
 
 const initialState: AuthenticateResult = {
   authToken: {
@@ -34,6 +42,28 @@ const authSlice = createSlice({
     getConsentedScopesSuccess(state, action: PayloadAction<string[]>) {
       state.consentedScopes = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(consentToScopes.pending, (state) => {
+      state.authToken.pending = true;
+    });
+    builder.addCase(consentToScopes.fulfilled, (state, action) => {
+      state.authToken.pending = false;
+      state.consentedScopes = action.payload!;
+    });
+    builder.addCase(consentToScopes.rejected, (state) => {
+      state.authToken.pending = false;
+    });
+    builder.addCase(revokeScopes.pending, (state) => {
+      state.authToken.pending = true;
+    });
+    builder.addCase(revokeScopes.fulfilled, (state, action) => {
+      state.authToken.pending = false;
+      state.consentedScopes = action.payload!;
+    });
+    builder.addCase(revokeScopes.rejected, (state) => {
+      state.authToken.pending = false;
+    });
   }
 });
 
@@ -53,6 +83,56 @@ export function signOut() {
     dispatch(signOutSuccess());
   };
 }
+
+const validateConsentedScopes = (scopeToBeConsented: string[], consentedScopes: string[],
+  consentedResponse: string[]) => {
+  if (!consentedScopes || !consentedResponse || !scopeToBeConsented) {
+    return consentedResponse;
+  }
+  const expectedScopes = [...consentedScopes, ...scopeToBeConsented];
+  if (expectedScopes.length === consentedResponse.length) {
+    return consentedResponse;
+  }
+  return expectedScopes;
+}
+
+export const consentToScopes = createAsyncThunk(
+  'auth/consentToScopes',
+  async (scopes: string[], { dispatch, getState }) => {
+    try {
+      const { profile, auth: { consentedScopes } } = getState() as ApplicationState;
+      const authResponse = await authenticationWrapper.consentToScopes(scopes);
+      if (authResponse && authResponse.accessToken) {
+        dispatch(getAuthTokenSuccess());
+        const validatedScopes = validateConsentedScopes(scopes, consentedScopes, authResponse.scopes);
+        if (authResponse.account && authResponse.account.localAccountId !== profile?.user?.id) {
+          dispatch(getProfileInfo());
+        }
+        dispatch(
+          setQueryResponseStatus({
+            statusText: translateMessage('Success'),
+            status: translateMessage('Scope consent successful'),
+            ok: true,
+            messageType: MessageBarType.success
+          })
+        );
+        dispatch(fetchAllPrincipalGrants());
+        return validatedScopes;
+      }
+    } catch (error: unknown) {
+      const { errorCode } = error as BrowserAuthError;
+      dispatch(
+        setQueryResponseStatus({
+          statusText: translateMessage('Scope consent failed'),
+          status: errorCode,
+          ok: false,
+          messageType: MessageBarType.error,
+          hint: getConsentAuthErrorHint(errorCode)
+        })
+      );
+    }
+  }
+);
 
 export function signIn() {
   return (dispatch: AppDispatch) => dispatch(getAuthTokenSuccess());

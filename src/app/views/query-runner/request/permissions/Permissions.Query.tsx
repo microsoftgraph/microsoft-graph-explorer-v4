@@ -7,9 +7,9 @@ import { useDispatch } from 'react-redux';
 
 import { AppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants } from '../../../../services/actions/permissions-action-creator';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -49,8 +49,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
-
   const permissionsTabStyles = {
     root: {
       padding: '17px'
@@ -82,10 +80,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       getPermissions();
     }
   }, [sampleQuery]);
-
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [consentedScopes]);
 
   useEffect(() => {
     if (tokenPresent && validation.isValid) {
@@ -155,6 +149,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       displayErrorFetchingPermissionsMessage();
   }
   permissions = sortPermissionsWithPrivilege(permissions);
+  permissions = setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   return (
     <div >
@@ -182,8 +177,8 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns({ source: 'tab', tokenPresent })}
-          onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-            return <PermissionItem column={column} index={index} item={item} />
+          onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
+            return <PermissionItem column={column} index={index!} item={item!} />
           }}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}

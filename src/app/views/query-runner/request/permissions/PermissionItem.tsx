@@ -5,17 +5,16 @@ import {
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
-import {
-  consentToScopes, getAllPrincipalGrant,
-  getSinglePrincipalGrant, revokeScopes
-} from '../../../../services/actions/permissions-action-creator';
+import { revokeScopes } from '../../../../services/actions/revoke-scopes.action';
 import { REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../../../../services/graph-constants';
+import { consentToScopes } from '../../../../services/slices/auth.slice';
+import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { permissionStyles } from './Permission.styles';
 
 interface PermissionItemProps {
-  item: any; index: any; column: IColumn | undefined;
+  item: IPermission; index: number; column: IColumn | undefined;
 }
 
 const buttonIcon: IIconProps = {
@@ -35,7 +34,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const theme = getTheme();
   const dispatch: AppDispatch = useAppDispatch();
   const hostId: string = getId('tooltipHost');
-  const { scopes, auth: { consentedScopes }, profile: {user} } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes }, profile: { user }, permissionGrants } = useAppSelector((state) => state);
   const { item, column } = props;
   const consented = !!item.consented;
 
@@ -47,14 +46,14 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   };
 
   const getAllPrincipalPermissions = (tenantWidePermissionsGrant: IPermissionGrant[]): string[] => {
-    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: any) =>
+    const allPrincipalPermissions = tenantWidePermissionsGrant.find((permission: IPermissionGrant) =>
       permission.consentType.toLowerCase() === 'AllPrincipals'.toLowerCase());
     return allPrincipalPermissions ? allPrincipalPermissions.scope.split(' ') : [];
   }
 
   const userHasRequiredPermissions = (): boolean => {
-    if (scopes && scopes.data.tenantWidePermissionsGrant && scopes.data.tenantWidePermissionsGrant.length > 0) {
-      const allPrincipalPermissions = getAllPrincipalPermissions(scopes.data.tenantWidePermissionsGrant);
+    if (permissionGrants && permissionGrants.permissions && permissionGrants.permissions.length > 0) {
+      const allPrincipalPermissions = getAllPrincipalPermissions(permissionGrants.permissions);
       const principalAndAllPrincipalPermissions = [...allPrincipalPermissions, ...consentedScopes];
       const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
       return requiredPermissions.every(scope => principalAndAllPrincipalPermissions.includes(scope));
@@ -64,10 +63,10 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
 
   const ConsentTypeProperty = (): JSX.Element | null => {
     if (scopes && consented && user?.id) {
-      const tenantWideGrant: IPermissionGrant[] = scopes.data.tenantWidePermissionsGrant!;
+      const tenantWideGrant: IPermissionGrant[] = permissionGrants.permissions!;
       const allPrincipalPermissions = getAllPrincipalGrant(tenantWideGrant);
       const singlePrincipalPermissions: string[] = getSinglePrincipalGrant(tenantWideGrant, user?.id);
-      const tenantGrantFetchPending = scopes.pending.isTenantWidePermissionsGrant;
+      const tenantGrantFetchPending = permissionGrants.pending;
       const consentTypeProperties = {
         item, allPrincipalPermissions, singlePrincipalPermissions,
         tenantGrantFetchPending, dispatch
@@ -112,7 +111,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   }
 
   if (column) {
-    const content = item[column.fieldName as keyof any] as string;
+    const content = item[column.fieldName as keyof IPermission] as string;
     switch (column.key) {
 
       case 'value':

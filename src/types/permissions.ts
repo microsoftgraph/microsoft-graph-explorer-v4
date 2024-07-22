@@ -38,15 +38,18 @@ export interface IScopes {
   pending: {
     isSpecificPermissions: boolean;
     isFullPermissions: boolean;
-    isTenantWidePermissionsGrant?: boolean;
-    isRevokePermissions?: boolean;
   };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];
-    tenantWidePermissionsGrant?: IPermissionGrant[];
   };
   error: ScopesError | null;
+}
+
+export interface PermissionGrantsState {
+  pending: boolean;
+  error: string | null;
+  permissions: IPermissionGrant[];
 }
 
 export interface IPermissionGrant {
