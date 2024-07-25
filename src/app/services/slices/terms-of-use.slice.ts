@@ -1,10 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const termsOfUseSlice = createSlice({
   name: 'termsOfUse',
   initialState: true,
   reducers: {
-    clearTermsOfUse: (_, action: PayloadAction<boolean>) => action.payload
+    clearTermsOfUse: () => { return false }
   }
 })
 
