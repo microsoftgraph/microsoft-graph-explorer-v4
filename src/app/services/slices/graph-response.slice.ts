@@ -23,9 +23,9 @@ import {
   parseResponse,
   queryResultsInCorsError
 } from '../actions/query-action-creator-util';
-import { signOutSuccess } from './auth.slice';
+import { LOGOUT_SUCCESS } from '../redux-constants';
 import { addHistoryItem } from './history.slice';
-import { clearQueryStatus, setQueryResponseStatus } from './query-status.slice';
+import { setQueryResponseStatus } from './query-status.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -107,14 +107,7 @@ const querySlice = createSlice({
           headers: actionPayload.headers
         };
       })
-      .addCase(clearQueryStatus, (state) => {
-        state.isLoadingData = false;
-        state.response = {
-          body: undefined,
-          headers: undefined
-        };
-      })
-      .addCase(signOutSuccess, (state) => {
+      .addCase(LOGOUT_SUCCESS, (state) => {
         state.isLoadingData = false;
         state.response = {
           body: undefined,

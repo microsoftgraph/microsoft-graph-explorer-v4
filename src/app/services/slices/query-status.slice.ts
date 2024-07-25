@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IStatus } from '../../../types/status';
-import { signOutSuccess } from './auth.slice';
-import { runQuery } from './graph-response.slice';
+import { LOGOUT_SUCCESS, QUERY_GRAPH_RUNNING } from '../redux-constants';
 
 const queryRunnerStatusSlice = createSlice({
   name: 'queryRunnerStatus',
@@ -16,10 +15,10 @@ const queryRunnerStatusSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(runQuery.pending, () => {
+    builder.addCase(QUERY_GRAPH_RUNNING, () => {
       return null;
     });
-    builder.addCase(signOutSuccess, () => {
+    builder.addCase(LOGOUT_SUCCESS, () => {
       return null;
     });
   }

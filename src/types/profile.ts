@@ -11,7 +11,7 @@ export interface IProfileProps {
   };
 }
 
-export interface IProfileState{
+export interface IProfileState {
   status: 'unset' | 'success' | 'error',
   user?: IUser
   error?: Error

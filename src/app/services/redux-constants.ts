@@ -1,6 +1,6 @@
 export const QUERY_GRAPH_SUCCESS = 'query/runQuery/fulfilled';
-export const QUERY_GRAPH_STATUS = 'queryStatus/setQueryResponseStatus';
-export const CLEAR_QUERY_STATUS = 'queryStatus/clearQueryStatus';
+export const QUERY_GRAPH_STATUS = 'queryRunnerStatus/setQueryResponseStatus';
+export const CLEAR_QUERY_STATUS = 'queryRunnerStatus/clearQueryStatus';
 export const GET_AUTH_TOKEN_SUCCESS = 'auth/getAuthTokenSuccess';
 export const LOGOUT_SUCCESS = 'auth/signOutSuccess';
 export const QUERY_GRAPH_RUNNING = 'query/runQuery/pending';
