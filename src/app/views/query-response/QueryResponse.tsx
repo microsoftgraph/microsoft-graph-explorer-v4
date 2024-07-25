@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { telemetry } from '../../../telemetry';
 import { IQuery } from '../../../types/query-runner';
-import { expandResponseArea } from '../../services/actions/response-expanded-action-creator';
+import { expandResponseArea } from '../../services/slices/response-area-expanded.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { GetPivotItems } from './pivot-items/pivot-items';
