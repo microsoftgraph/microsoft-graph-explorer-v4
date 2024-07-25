@@ -1,16 +1,15 @@
 import { FontSizes, Label, Pivot, PivotItem } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
 import { useContext } from 'react';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
+import { setSnippetTabSuccess } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { renderSnippets } from './snippets-helper';
 
 function GetSnippets() {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
 
   const { snippets, sampleQuery } = useAppSelector((state) => state);
