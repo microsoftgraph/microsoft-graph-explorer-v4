@@ -4,10 +4,10 @@ import { useContext } from 'react';
 
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { setSnippetTabSuccess } from '../../../services/actions/snippet-action-creator';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { translateMessage } from '../../../utils/translate-messages';
 import { renderSnippets } from './snippets-helper';
+import { setSnippetTabSuccess } from '../../../services/slices/snippet.slice';
 
 function GetSnippets() {
   const dispatch: AppDispatch = useDispatch();

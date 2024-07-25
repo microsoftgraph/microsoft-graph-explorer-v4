@@ -3,14 +3,13 @@ import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { getSnippet } from '../../../services/actions/snippet-action-creator';
-import { Monaco } from '../../common';
-import { trackedGenericCopy } from '../../common/copy';
-
 import { AppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
+import { getSnippet } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
+import { Monaco } from '../../common';
+import { trackedGenericCopy } from '../../common/copy';
 import {
   convertVhToPx, getResponseEditorHeight,
   getResponseHeight
