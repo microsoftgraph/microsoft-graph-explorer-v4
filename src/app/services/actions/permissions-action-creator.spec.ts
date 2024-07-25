@@ -4,12 +4,8 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   FETCH_FULL_SCOPES_PENDING,
   FETCH_FULL_SCOPES_SUCCESS,
-  GET_ALL_PRINCIPAL_GRANTS_PENDING,
-  GET_AUTH_TOKEN_SUCCESS,
   GET_CONSENTED_SCOPES_PENDING,
-  GET_CONSENTED_SCOPES_SUCCESS,
   QUERY_GRAPH_STATUS,
-  REVOKE_SCOPES_ERROR,
   REVOKE_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';

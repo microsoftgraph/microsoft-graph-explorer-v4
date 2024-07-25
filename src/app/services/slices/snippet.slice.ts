@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Header, IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { ApplicationState } from '../../../types/root';
 import { ISnippet } from '../../../types/snippets';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
+import { constructHeaderString } from '../../utils/snippet.utils';
 
 const initialState: ISnippet = {
   pending: false,
@@ -102,30 +102,3 @@ const snippetSlice = createSlice({
 
 export const { setSnippetTabSuccess } = snippetSlice.actions;
 export default snippetSlice.reducer;
-
-function constructHeaderString(sampleQuery: IQuery): string {
-  const { sampleHeaders, selectedVerb } = sampleQuery;
-  let headersString = '';
-
-  const isContentTypeInHeaders: boolean = !!sampleHeaders.find(
-    (header) => header.name.toLocaleLowerCase() === 'content-type'
-  );
-
-  if (sampleHeaders && sampleHeaders.length > 0) {
-    headersString = getHeaderStringProperties(sampleHeaders);
-  }
-
-  headersString +=
-    !isContentTypeInHeaders && selectedVerb !== 'GET'
-      ? 'Content-Type: application/json\r\n'
-      : '';
-  return headersString;
-}
-
-function getHeaderStringProperties(sampleHeaders: Header[]): string {
-  let constructedHeader = '';
-  sampleHeaders.forEach((header: Header) => {
-    constructedHeader += `${header.name}: ${header.value}\r\n`;
-  });
-  return constructedHeader;
-}
