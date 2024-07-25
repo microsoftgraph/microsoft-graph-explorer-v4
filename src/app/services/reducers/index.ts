@@ -17,10 +17,10 @@ import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import snippets from '../slices/snippet.slice';
 import themeChange from '../slices/theme.slice';
+import sidebarProperties from '../slices/sidebar-properties.slice';
 
 import { queryRunnerStatus } from './query-runner-status-reducers';
 import { termsOfUse } from './terms-of-use-reducer';
-import { sidebarProperties } from './toggle-sidebar-reducer';
 
 const reducers = {
   auth,
