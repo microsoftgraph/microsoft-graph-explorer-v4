@@ -1,9 +1,8 @@
 /* eslint-disable max-len */
 import { ITheme, Label, Link, PivotItem, getTheme } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { getSnippet } from '../../../services/slices/snippet.slice';
@@ -92,7 +91,7 @@ function Snippet(props: ISnippetProps) {
 
   const monacoHeight = getResponseEditorHeight(235);
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setSnippetError(error?.error ? error.error : error);
