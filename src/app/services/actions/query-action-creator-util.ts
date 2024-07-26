@@ -9,7 +9,6 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { AppAction } from '../../../types/action';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -19,14 +18,6 @@ import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES, GRAPH_URL } from '../graph-constants';
-import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
-
-export function queryResponse(response: object): AppAction {
-  return {
-    type: QUERY_GRAPH_SUCCESS,
-    response
-  };
-}
 
 export async function anonymousRequest(
   query: IQuery,

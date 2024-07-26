@@ -1,7 +1,7 @@
 import configureMockStore from 'redux-mock-store';
 
 
-import { AppAction } from '../../../types/action';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { IHistoryItem } from '../../../types/history';
 import {
   ADD_HISTORY_ITEM_SUCCESS,
@@ -9,7 +9,7 @@ import {
   REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
   REMOVE_HISTORY_ITEM_SUCCESS
 } from '../redux-constants';
-import { bulkAddHistoryItems, removeAllHistoryItems, removeHistoryItem, addHistoryItem } from '../slices/history.slice';
+import { addHistoryItem, bulkAddHistoryItems, removeAllHistoryItems, removeHistoryItem } from '../slices/history.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
 const middlewares = [mockThunkMiddleware];
@@ -47,7 +47,7 @@ describe('Request History Action Creators', () => {
       duration: 200
     }
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<IHistoryItem> = {
       type: REMOVE_HISTORY_ITEM_SUCCESS,
       payload: historyItem
     }
@@ -94,7 +94,7 @@ describe('Request History Action Creators', () => {
       listOfKeys.push(historyItem.createdAt);
     });
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<string[]> = {
       type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
       payload: ['12345', '12345']
     }
@@ -135,7 +135,7 @@ describe('Request History Action Creators', () => {
       }
     ]
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<IHistoryItem[]> = {
       type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
       payload: historyItems
     }

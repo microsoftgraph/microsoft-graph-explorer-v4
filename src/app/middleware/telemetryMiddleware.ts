@@ -28,9 +28,9 @@ const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store
       trackException(
         componentNames.GET_SNIPPET_ACTION,
         state.sampleQuery,
-        action.response.error,
+        action.payload.error,
         {
-          Language: action.response.language
+          Language: action.payload.language
         }
       );
       break;
@@ -39,7 +39,7 @@ const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store
       trackException(
         componentNames.FETCH_PERMISSIONS_ACTION,
         state.sampleQuery,
-        action.response.error,
+        action.payload.error,
         {}
       );
       break;
@@ -48,7 +48,7 @@ const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store
       trackException(
         componentNames.FETCH_SAMPLES_ACTION,
         state.sampleQuery,
-        action.response,
+        action.payload,
         {}
       );
       break;
@@ -56,14 +56,14 @@ const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store
     case RESOURCEPATHS_ADD_SUCCESS: {
       telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
         ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-        ResourcePath: action.response[0].url
+        ResourcePath: action.payload[0].url
       });
       break;
     }
     case RESOURCEPATHS_DELETE_SUCCESS: {
       telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
         ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
-        ResourceCount: action.response.length
+        ResourceCount: action.payload.length
       });
       break;
     }

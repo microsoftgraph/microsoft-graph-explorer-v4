@@ -1,5 +1,6 @@
+import { PayloadAction } from '@reduxjs/toolkit';
+
 import { RESPONSE_EXPANDED } from '../../../app/services/redux-constants';
-import { AppAction } from '../../../types/action';
 import { expandResponseArea } from '../slices/response-area-expanded.slice';
 
 describe('Response Area Expansion', () => {
@@ -7,7 +8,7 @@ describe('Response Area Expansion', () => {
     //Arrange
     const payload: boolean = true;
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<boolean> = {
       type: RESPONSE_EXPANDED,
       payload
     }
