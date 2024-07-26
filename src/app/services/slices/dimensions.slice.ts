@@ -24,9 +24,9 @@ const dimensions = createSlice({
   name: 'dimensions',
   initialState,
   reducers: {
-    resizeSuccess: (state, action: PayloadAction<IDimensions>) => state = action.payload
+    setDimensions: (state, action: PayloadAction<IDimensions>) => state = action.payload
   }
 })
 
-export const {resizeSuccess} = dimensions.actions;
+export const { setDimensions } = dimensions.actions;
 export default dimensions.reducer;

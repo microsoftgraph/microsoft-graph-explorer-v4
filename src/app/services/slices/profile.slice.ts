@@ -4,7 +4,7 @@ import {
   getProfileInformation,
   getBetaProfile,
   getProfileImage,
-  getTenantInfo} from '../actions/profile-action-creators';
+  getTenantInfo} from '../actions/profile-actions';
 
 const initialState: IProfileState = {
   status: 'unset',

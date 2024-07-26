@@ -8,13 +8,13 @@ import { queries } from '../../views/sidebar/sample-queries/queries';
 
 interface SamplesState {
   queries: ISampleQuery[];
-  status: Status;
+  pending: boolean;
   error: object | null | string;
 }
 
 const initialState: SamplesState = {
   queries: [],
-  status: 'idle',
+  pending: false,
   error: null
 };
 
@@ -57,22 +57,20 @@ const samplesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchSamples.pending, (state) => {
-        state.status = 'loading';
+        state.pending = true;
         state.error = null;
       })
       .addCase(fetchSamples.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.pending = false;
         state.queries = action.payload;
       })
       .addCase(fetchSamples.rejected, (state, action) => {
         if (action.payload) {
           state.queries = action.payload;
         }
-        state.status = 'failed';
+        state.pending = false;
         state.error = 'failed';
       });
-
-
   }
 });
 
