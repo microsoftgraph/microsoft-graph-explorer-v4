@@ -92,7 +92,7 @@ const mockState: ApplicationState = {
   autoComplete: {
     data: null,
     error: null,
-    status: 'idle'
+    pending: false
   },
   resources: {
     pending: false,
