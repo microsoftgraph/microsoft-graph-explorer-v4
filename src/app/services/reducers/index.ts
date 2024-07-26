@@ -18,10 +18,8 @@ import samplesReducer from '../slices/samples.slice';
 import scopes from '../slices/scopes.slice';
 import snippets from '../slices/snippet.slice';
 import themeChange from '../slices/theme.slice';
+import termsOfUse from '../slices/terms-of-use.slice';
 import sidebarProperties from '../slices/sidebar-properties.slice';
-
-import { responseAreaExpanded } from './response-expanded-reducer';
-import { termsOfUse } from './terms-of-use-reducer';
 
 const reducers = {
   auth,

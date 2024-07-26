@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { geLocale } from '../../../appLocale';
 import { AppDispatch, useAppSelector } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
-import { clearTermsOfUse } from '../../services/actions/terms-of-use-action-creator';
+import { clearTermsOfUse } from '../../services/slices/terms-of-use.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { appStyles } from '../App.styles';
 
