@@ -67,7 +67,7 @@ const mockState: ApplicationState = {
   },
   samples: {
     queries: [],
-    status: 'idle',
+    pending: false,
     error: null
   },
   scopes: {

@@ -24,7 +24,7 @@ export interface ApplicationState {
   auth: AuthenticateResult;
   samples: {
     queries: ISampleQuery[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    pending: boolean;
     error: string | null;
   };
   permissionGrants: PermissionGrantsState;
