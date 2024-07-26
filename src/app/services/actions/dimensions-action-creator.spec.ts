@@ -1,4 +1,4 @@
-import { setDimensions } from '../../../app/services/actions/dimensions-action-creator';
+import { setDimensions } from '../../../app/services/slices/dimensions.slice';
 import { RESIZE_SUCCESS } from '../../../app/services/redux-constants';
 import { IDimensions } from '../../../types/dimensions';
 
