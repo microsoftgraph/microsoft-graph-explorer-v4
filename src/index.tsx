@@ -7,10 +7,10 @@ import { Provider } from 'react-redux';
 
 import App from './app/views/App';
 
-import { createCollection } from './app/services/actions/collections-action-creators';
-import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
+import { createCollection } from './app/services/slices/collections.slice';
+import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { bulkAddHistoryItems } from './app/services/slices/history.slice';
 import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
@@ -154,7 +154,7 @@ collectionsCache.read().then((data: Collection[]) => {
   if (!data || data.length === 0) {
     appStore.dispatch(createCollection({
       id: new Date().getTime().toString(),
-      title: 'My Collection',
+      name: 'My Collection',
       paths: [],
       isDefault: true
     }));

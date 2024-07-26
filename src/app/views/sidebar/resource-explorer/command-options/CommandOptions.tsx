@@ -5,8 +5,8 @@ import {
 import { useState } from 'react';
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
-import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { usePopups } from '../../../../services/hooks';
+import { removeResourcePaths } from '../../../../services/slices/collections.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { resourceExplorerStyles } from '../resources.styles';
 

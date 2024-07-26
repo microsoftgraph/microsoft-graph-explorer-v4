@@ -1,13 +1,15 @@
+import {
+  ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
+  Label, MessageBarType, PrimaryButton, getId
+} from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId } from '@fluentui/react';
 
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
-import { ResourcePath } from '../../../../../types/resources';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
+import { ResourcePath } from '../../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/slices/collections.slice';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
+import { translateMessage } from '../../../../utils/translate-messages';
 
 export const UploadPostmanCollection = () => {
   const dispatch = useAppDispatch();

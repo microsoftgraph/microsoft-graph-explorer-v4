@@ -14,8 +14,8 @@ import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-ru
 import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import { setDimensions } from '../services/actions/dimensions-action-creator';
-import { changeTheme } from '../services/actions/theme-action-creator';
+import { setDimensions } from '../services/slices/dimensions.slice';
+import { changeTheme } from '../services/slices/theme.slice';
 import { PopupsProvider } from '../services/context/popups-context';
 import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
