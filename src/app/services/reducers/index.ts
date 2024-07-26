@@ -10,6 +10,7 @@ import history from '../slices/history.slice';
 import permissionGrants from '../slices/permission-grants.slice';
 import profile from '../slices/profile.slice';
 import proxyUrl from '../slices/proxy.slice';
+import queryRunnerStatus from '../slices/query-status.slice';
 import resources from '../slices/resources.slice';
 import responseAreaExpanded from '../slices/response-area-expanded.slice';
 import sampleQuery from '../slices/sample-query.slice';
@@ -19,7 +20,7 @@ import snippets from '../slices/snippet.slice';
 import themeChange from '../slices/theme.slice';
 import sidebarProperties from '../slices/sidebar-properties.slice';
 
-import { queryRunnerStatus } from './query-runner-status-reducers';
+import { responseAreaExpanded } from './response-expanded-reducer';
 import { termsOfUse } from './terms-of-use-reducer';
 
 const reducers = {

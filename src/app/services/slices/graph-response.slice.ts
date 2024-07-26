@@ -23,9 +23,9 @@ import {
   parseResponse,
   queryResultsInCorsError
 } from '../actions/query-action-creator-util';
-import { CLEAR_QUERY_STATUS, LOGOUT_SUCCESS } from '../redux-constants';
-import { setQueryResponseStatus } from './query-status.slice';
+import { LOGOUT_SUCCESS } from '../redux-constants';
 import { addHistoryItem } from './history.slice';
+import { setQueryResponseStatus } from './query-status.slice';
 
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
@@ -67,10 +67,13 @@ export const runQuery = createAsyncThunk(
       dispatch(addHistoryItem(historyItem));
 
       return result;
-    } catch (error) {
-      const { status, body, headers } = await handleError(error, query)
+    } catch (err: unknown) {
+      const error = err as Error;
+      const { status, body } = await handleError(error, query);
       dispatch(setQueryResponseStatus(status));
-      return rejectWithValue({ body, headers });
+      if (body) {
+        return rejectWithValue({ body, headers: {} });
+      }
     }
   }
 );
@@ -100,15 +103,8 @@ const querySlice = createSlice({
         state.isLoadingData = false;
         const actionPayload = action.payload as Result;
         state.response = {
-          body: actionPayload.body,
+          body: actionPayload.body!,
           headers: actionPayload.headers
-        };
-      })
-      .addCase(CLEAR_QUERY_STATUS, (state) => {
-        state.isLoadingData = false;
-        state.response = {
-          body: undefined,
-          headers: undefined
         };
       })
       .addCase(LOGOUT_SUCCESS, (state) => {
@@ -120,10 +116,13 @@ const querySlice = createSlice({
       })
       .addCase(runQuery.fulfilled, (state, action) => {
         state.isLoadingData = false;
-        state.response = {
-          body: action.payload.body,
-          headers: action.payload.headers
-        };
+        if (action.payload) {
+          const actionPayload = action.payload as Result;
+          state.response = {
+            body: actionPayload.body,
+            headers: actionPayload.headers
+          };
+        }
       });
   }
 });
@@ -230,8 +229,8 @@ function generateHistoryItem(
   return historyItem;
 }
 
-async function handleError(error: any, query: IQuery) {
-  let body = error;
+async function handleError(error: Error, query: IQuery) {
+  let body = null;
   const status: IStatus = {
     messageType: MessageBarType.error,
     ok: false,
@@ -258,5 +257,5 @@ async function handleError(error: any, query: IQuery) {
     }
   }
 
-  return { status, body, headers: {} };
+  return { status, body };
 }
