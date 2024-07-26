@@ -6,10 +6,9 @@ import {
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { historyCache } from '../../../../modules/cache/history-utils';
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
@@ -87,7 +86,7 @@ const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
 }
 
 const History = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { history } = useAppSelector((state) => state);
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history);
   const [hideDialog, setHideDialog] = useState(true);

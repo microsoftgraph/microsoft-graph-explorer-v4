@@ -1,12 +1,11 @@
 import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { useContext } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-runner';
-import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -23,7 +22,7 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnVersionChange
   } = props;
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
 
   const urlVersions: IDropdownOption[] = [];

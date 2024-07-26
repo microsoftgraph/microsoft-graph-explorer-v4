@@ -1,16 +1,15 @@
-import { ChoiceGroup, DefaultButton, DialogFooter, IChoiceGroup, IChoiceGroupOption } from '@fluentui/react';
+import { ChoiceGroup, DefaultButton, DialogFooter, IChoiceGroupOption } from '@fluentui/react';
 
-import { useDispatch } from 'react-redux';
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { loadGETheme } from '../../../../themes';
 import { AppTheme } from '../../../../types/enums';
 import { PopupsComponent } from '../../../services/context/popups-context';
+import { changeTheme } from '../../../services/slices/theme.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { changeTheme } from '../../../services/slices/theme.slice'
 
 const ThemeChooser: React.FC<PopupsComponent<null>> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const appTheme = useAppSelector(state=> state.theme);
 
   const handleChangeTheme = (selectedTheme: IChoiceGroupOption | undefined) => {

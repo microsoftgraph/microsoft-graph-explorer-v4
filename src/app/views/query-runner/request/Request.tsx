@@ -5,9 +5,8 @@ import {
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { setDimensions } from '../../../services/slices/dimensions.slice';
@@ -18,7 +17,7 @@ import { RequestBody } from './body';
 import './request.scss';
 
 const Request = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
   const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');

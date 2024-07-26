@@ -1,12 +1,12 @@
 import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../store';
+
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
+import { GRAPH_URL } from '../../services/graph-constants';
 import { clearQueryStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
-import { GRAPH_URL } from '../../services/graph-constants';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
@@ -14,7 +14,7 @@ import {
 import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { queryRunnerStatus, sampleQuery } =
     useAppSelector((state) => state);
 

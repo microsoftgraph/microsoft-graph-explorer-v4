@@ -1,8 +1,7 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
@@ -17,7 +16,7 @@ import './query-runner.scss';
 import Request from './request/Request';
 
 const QueryRunner = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { sampleQuery } = useAppSelector((state) => state);
 
   const [sampleBody, setSampleBody] = useState('');

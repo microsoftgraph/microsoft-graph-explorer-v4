@@ -3,9 +3,8 @@ import {
   Label, Link, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
@@ -21,7 +20,7 @@ import PermissionItem from './PermissionItem';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
   const { sampleQuery, scopes, auth: { authToken, consentedScopes }, dimensions } =
     useAppSelector((state) => state);
