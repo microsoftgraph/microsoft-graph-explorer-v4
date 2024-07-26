@@ -9,7 +9,6 @@ import App from './app/views/App';
 
 import { createCollection } from './app/services/actions/collections-action-creators';
 import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { toggleSidebar } from './app/services/actions/toggle-sidebar-action-creator';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
@@ -17,6 +16,7 @@ import { bulkAddHistoryItems } from './app/services/slices/history.slice';
 import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
 import { fetchResources } from './app/services/slices/resources.slice';
 import { setSampleQuery } from './app/services/slices/sample-query.slice';
+import { toggleSidebar } from './app/services/slices/sidebar-properties.slice';
 import { changeTheme } from './app/services/slices/theme.slice';
 import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';

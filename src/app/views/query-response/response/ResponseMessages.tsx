@@ -54,7 +54,7 @@ export const ResponseMessages = () => {
   // Display link to step to next result
   if (odataLink) {
     messageBars.push(
-      <MessageBar messageBarType={MessageBarType.info}>
+      <MessageBar messageBarType={MessageBarType.info} key={'odataLink'}>
         {translateMessage('This response contains an @odata property.')}: @odata.{odataLink.name}
         <Link onClick={() => setQuery()} underline>
           &nbsp;{translateMessage('Click here to follow the link')}
@@ -66,7 +66,7 @@ export const ResponseMessages = () => {
   // Display link to download file response
   if (body?.contentDownloadUrl) {
     messageBars.push(
-      <div>
+      <div key={'contentDownloadUrl'}>
         <MessageBar messageBarType={MessageBarType.warning}>
           {translateMessage('This response contains unviewable content')}
           <Link href={body?.contentDownloadUrl} download underline>
@@ -80,7 +80,7 @@ export const ResponseMessages = () => {
   // Show CORS compliance message
   if (body?.throwsCorsError) {
     messageBars.push(
-      <div>
+      <div key={'throwsCorsError'}>
         <MessageBar messageBarType={MessageBarType.warning}>
           {translateMessage('Response content not available due to CORS policy')}
           <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} underline>
@@ -93,7 +93,7 @@ export const ResponseMessages = () => {
 
   if (body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
     messageBars.push(
-      <div>
+      <div key={'displayMessage'}>
         <MessageBar
           messageBarType={MessageBarType.warning}
           isMultiline={true}
@@ -109,7 +109,7 @@ export const ResponseMessages = () => {
 
   if (contentType === 'application/json' && typeof body === 'string') {
     messageBars.push(
-      <div>
+      <div key={'application/json'}>
         <MessageBar
           messageBarType={MessageBarType.info}
           onDismiss={() => setDisplayMessage(false)}

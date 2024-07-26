@@ -20,17 +20,17 @@ const proxyUrlSlice = createSlice({
   name: 'proxyUrl',
   initialState: GRAPH_API_SANDBOX_URL,
   reducers: {
-    setGraphProxyUrl: (state, action: PayloadAction<string>) => {
-      state = action.payload;
+    setGraphProxyUrl: (_state, action: PayloadAction<string>) => {
+      return action.payload;
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getGraphProxyUrl.fulfilled, (state, action) => {
-      state = action.payload as string;
+    builder.addCase(getGraphProxyUrl.fulfilled, (_state, action) => {
+      return action.payload as string;
     });
-    builder.addCase(getGraphProxyUrl.rejected, (state, action) => {
+    builder.addCase(getGraphProxyUrl.rejected, (_state, action) => {
       if (action.payload) {
-        state = action.payload as string;
+        return action.payload as string;
       }
     });
   }
