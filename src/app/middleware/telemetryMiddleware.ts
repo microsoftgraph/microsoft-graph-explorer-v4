@@ -1,13 +1,13 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Middleware } from 'redux';
+import { Dispatch, Middleware, UnknownAction } from '@reduxjs/toolkit';
 
-import { Dispatch, UnknownAction } from '@reduxjs/toolkit';
 import {
   componentNames,
   errorTypes,
   eventTypes,
   telemetry
 } from '../../telemetry';
+import { AppAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
 import { ApplicationState } from '../../types/root';
 import {
@@ -18,7 +18,6 @@ import {
   SAMPLES_FETCH_ERROR
 } from '../services/redux-constants';
 import { sanitizeQueryUrl } from '../utils/query-url-sanitization';
-import { AppAction } from '../../types/action';
 
 const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store) => (next) => async (value) => {
   const state: ApplicationState = store.getState();
