@@ -1,4 +1,4 @@
-import { setDevxApiUrl } from '../../../app/services/actions/devxApi-action-creators';
+import { setDevxApiUrl } from '../../../app/services/slices/devxapi.slice';
 import { SET_DEVX_API_URL_SUCCESS } from '../../../app/services/redux-constants';
 import { IDevxAPI } from '../../../types/devx-api';
 

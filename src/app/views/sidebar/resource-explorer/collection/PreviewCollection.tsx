@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../../store';
 import { IResourceLink } from '../../../../../types/resources';
-import { removeResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { removeResourcePaths } from '../../../../services/slices/collections.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';

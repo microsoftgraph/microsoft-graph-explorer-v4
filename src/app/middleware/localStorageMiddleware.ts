@@ -15,11 +15,11 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
   const action = value as AppAction;
   switch (action.type) {
     case CHANGE_THEME_SUCCESS:
-      saveToLocalStorage(CURRENT_THEME, action.response);
+      saveToLocalStorage(CURRENT_THEME, action.payload);
       break;
 
     case SAMPLES_FETCH_SUCCESS:
-      samplesCache.saveSamples(action.response);
+      samplesCache.saveSamples(action.payload);
       break;
 
     case RESOURCEPATHS_ADD_SUCCESS: {

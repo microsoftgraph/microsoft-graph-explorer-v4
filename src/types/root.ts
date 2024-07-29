@@ -1,5 +1,5 @@
 import { AuthenticateResult } from './authentication';
-import { AutocompleteResponse } from './auto-complete';
+import { IAutocompleteResponse } from './auto-complete';
 import { IDevxAPI } from './devx-api';
 import { IDimensions } from './dimensions';
 import { Mode } from './enums';
@@ -24,7 +24,7 @@ export interface ApplicationState {
   auth: AuthenticateResult;
   samples: {
     queries: ISampleQuery[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
+    pending: boolean;
     error: string | null;
   };
   permissionGrants: PermissionGrantsState;
@@ -34,7 +34,7 @@ export interface ApplicationState {
   snippets: ISnippet;
   responseAreaExpanded: boolean;
   dimensions: IDimensions;
-  autoComplete: AutocompleteResponse;
+  autoComplete: IAutocompleteResponse;
   devxApi: IDevxAPI;
   resources: IResources;
   collections?: Collection[];

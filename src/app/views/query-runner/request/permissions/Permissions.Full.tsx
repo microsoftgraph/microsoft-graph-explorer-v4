@@ -5,9 +5,8 @@ import {
   Label, SearchBox, SelectionMode, Stack, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
@@ -30,7 +29,7 @@ interface PermissionListItem extends IPermission {
 
 const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<Filter>('all-permissions');
 
   const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);

@@ -7,17 +7,17 @@ const collections = createSlice({
   name: 'collections',
   initialState,
   reducers: {
-    collectionCreateSuccess: (state, action: PayloadAction<Collection>) => {
+    createCollection: (state, action: PayloadAction<Collection>) => {
       state.push(action.payload);
       return state
     },
-    resourcepathsAddSuccess:(state, action: PayloadAction<ResourcePath[]>) => {
+    addResourcePaths:(state, action: PayloadAction<ResourcePath[]>) => {
       const index = state.findIndex(collection => collection.isDefault);
       if (index > -1) {
         state[index].paths.push(...action.payload)
       }
     },
-    resourcepathsDeleteSuccess: (state, action: PayloadAction<ResourcePath[]>)=>{
+    removeResourcePaths: (state, action: PayloadAction<ResourcePath[]>)=>{
       const index = state.findIndex(collection => collection.isDefault);
       if(index > -1) {
         const defaultResourcePaths = [...state[index].paths];
@@ -33,6 +33,6 @@ const collections = createSlice({
   }
 })
 
-export const {collectionCreateSuccess, resourcepathsAddSuccess, resourcepathsDeleteSuccess} = collections.actions
+export const {createCollection, addResourcePaths, removeResourcePaths} = collections.actions
 
 export default collections.reducer

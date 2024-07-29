@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { SignContext, suggestions } from '../../../modules/suggestions';
-import { AutocompleteResponse } from '../../../types/auto-complete';
+import { IAutocompleteResponse } from '../../../types/auto-complete';
 import { IParsedOpenApiResponse } from '../../../types/open-api';
 import { ApplicationState } from '../../../types/root';
 
@@ -28,8 +28,8 @@ export const fetchAutoCompleteOptions = createAsyncThunk(
   }
 );
 
-const initialState: AutocompleteResponse = {
-  status: 'idle',
+const initialState: IAutocompleteResponse = {
+  pending: false,
   data: null,
   error: null
 };
@@ -41,17 +41,17 @@ const autoCompleteSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAutoCompleteOptions.pending, (state) => {
-        state.status = 'loading';
+        state.pending = true;
         state.data = null;
         state.error = null;
       })
       .addCase(fetchAutoCompleteOptions.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.pending = false;
         state.data = action.payload as IParsedOpenApiResponse;
         state.error = null;
       })
       .addCase(fetchAutoCompleteOptions.rejected, (state, action) => {
-        state.status = 'failed';
+        state.pending = false;
         state.data = null;
         if (action.payload) {
           state.error = action.payload as Error;

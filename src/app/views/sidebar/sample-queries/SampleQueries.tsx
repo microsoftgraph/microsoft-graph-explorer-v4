@@ -39,7 +39,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const dispatch = useAppDispatch();
   const currentTheme = getTheme();
 
-  const { error, status, queries } = samples;
+  const { error, pending, queries } = samples;
 
   const classProps = {
     styles: sampleProps!.styles,
@@ -50,12 +50,12 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const shouldGenerateGroups = useRef(true);
 
   useEffect(() => {
-    if (status === 'idle') {
+    if (samples.queries.length === 0) {
       dispatch(fetchSamples());
     } else {
-      setSampleQueries(samples.queries);
+      setSampleQueries(samples.queries)
     }
-  }, [samples.queries, tokenPresent]);
+  }, [samples.queries, tokenPresent])
 
 
   useEffect(() => {
@@ -319,7 +319,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     return <div />;
   }
 
-  if (status === 'loading' && groups.length === 0) {
+  if (pending && groups.length === 0) {
     return (
       <Spinner
         className={classes.spinner}

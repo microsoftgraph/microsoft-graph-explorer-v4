@@ -28,8 +28,6 @@ export interface ISuggestionsList {
   onSuggestionSelected: (suggestion: string) => void;
 }
 
-export interface AutocompleteResponse {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  data?: IParsedOpenApiResponse | null;
-  error?: Error | null;
+export interface IAutocompleteResponse extends IApiResponse {
+  data: IParsedOpenApiResponse | null
 }

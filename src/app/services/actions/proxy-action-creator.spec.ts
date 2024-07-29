@@ -1,4 +1,4 @@
-import { AnyAction } from 'redux';
+import { AnyAction } from '@reduxjs/toolkit';
 import configureMockStore from 'redux-mock-store';
 import { getGraphProxyUrl, setGraphProxyUrl } from '../../../app/services/slices/proxy.slice';
 import { GRAPH_API_SANDBOX_URL } from '../graph-constants';

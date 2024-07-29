@@ -1,8 +1,7 @@
 import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
 import { IQuery } from '../../../../types/query-runner';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
@@ -33,7 +32,7 @@ function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
 }
 
 export const ResponseMessages = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const messageBars = [];
 
   const { graphResponse: { response: { body, headers } }, sampleQuery, auth: { authToken }, graphExplorerMode

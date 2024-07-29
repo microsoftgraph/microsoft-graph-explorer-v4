@@ -3,21 +3,20 @@ import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
-import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getVersion } from '../../../../utils/version';
 import CampaignDefinitions from './campaignDefinitions';
 import { uiStringMap } from './uiStrings';
 
 export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;

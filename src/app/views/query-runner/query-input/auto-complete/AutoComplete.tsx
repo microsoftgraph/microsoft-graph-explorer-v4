@@ -1,9 +1,8 @@
 import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
@@ -23,14 +22,14 @@ import { usePrevious } from './use-previous';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const focusRef = useRef<any>(null);
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, status: autoCompleteStatus } } = useAppSelector(
+  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
     (state) => state
   );
 
@@ -276,7 +275,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
 
   const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
-    if (!shouldShowSuggestions && autoCompleteStatus !== 'loading' && properties?.description) {
+    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
       return (
         <Text variant="small" >
           {properties?.description}

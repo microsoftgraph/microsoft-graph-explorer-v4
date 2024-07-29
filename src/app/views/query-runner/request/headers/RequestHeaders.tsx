@@ -1,8 +1,7 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import { createRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
@@ -26,7 +25,7 @@ const RequestHeaders = (props: any) => {
 
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const classes = classNames(props);
 
   const textfieldRef = createRef<ITextField>();

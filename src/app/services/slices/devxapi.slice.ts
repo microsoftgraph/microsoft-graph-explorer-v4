@@ -11,9 +11,9 @@ const devxApi = createSlice({
   name: 'devxApi',
   initialState,
   reducers: {
-    setUrlSuccess: (state, action: PayloadAction<IDevxAPI>) => state = action.payload
+    setDevxApiUrl: (state, action: PayloadAction<IDevxAPI>) => state = action.payload
   }
 })
 
-export const  {setUrlSuccess} = devxApi.actions;
+export const { setDevxApiUrl } = devxApi.actions;
 export default devxApi.reducer;
