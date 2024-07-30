@@ -1,5 +1,4 @@
 import {
-  AnyAction,
   Dispatch, Middleware, Store,
   ThunkDispatch, UnknownAction,
   combineReducers, configureStore
@@ -14,7 +13,7 @@ import { reducers } from '../app/services/reducers';
 const loggerMiddleware = createLogger({
   level: 'error',
   collapsed: true
-}) as Middleware<{}, any, Dispatch<UnknownAction>>;
+}) as Middleware<{}, unknown, Dispatch<UnknownAction>>;
 
 const middleware = [
   localStorageMiddleware,
@@ -85,9 +84,9 @@ export const store = configureStore({
 
 export type ApplicationState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = ThunkDispatch<ApplicationState, any, AnyAction>;
+export type AppDispatch = ThunkDispatch<ApplicationState, unknown, UnknownAction>;
 
-export type AppStore = Omit<Store<ApplicationState, AnyAction>, 'dispatch'> & {
+export type AppStore = Omit<Store<ApplicationState, UnknownAction>, 'dispatch'> & {
   dispatch: AppDispatch;
 };
 
