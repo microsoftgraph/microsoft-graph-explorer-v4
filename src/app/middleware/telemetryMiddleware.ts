@@ -1,6 +1,7 @@
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Dispatch, Middleware, UnknownAction } from '@reduxjs/toolkit';
 
+import { ApplicationState } from '../../store';
 import {
   componentNames,
   errorTypes,
@@ -9,7 +10,6 @@ import {
 } from '../../telemetry';
 import { AppAction } from '../../types/action';
 import { IQuery } from '../../types/query-runner';
-import { ApplicationState } from '../../types/root';
 import {
   FETCH_SCOPES_ERROR,
   GET_SNIPPET_ERROR,

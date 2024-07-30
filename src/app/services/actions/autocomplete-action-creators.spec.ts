@@ -2,11 +2,10 @@
 import { AnyAction } from '@reduxjs/toolkit';
 import configureMockStore from 'redux-mock-store';
 
-import { store } from '../../../../src/store/index';
+import { ApplicationState, store } from '../../../../src/store/index';
 import { fetchAutoCompleteOptions } from '../../../app/services/slices/autocomplete.slice';
 import { suggestions } from '../../../modules/suggestions/suggestions';
 import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
 import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
@@ -103,7 +102,9 @@ const mockState: ApplicationState = {
     pending: false,
     permissions: [],
     error: null
-  }
+  },
+  collections: [],
+  proxyUrl: ''
 }
 
 store.getState = () => ({

@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { SignContext, suggestions } from '../../../modules/suggestions';
+import { ApplicationState } from '../../../store';
 import { IAutocompleteResponse } from '../../../types/auto-complete';
 import { IParsedOpenApiResponse } from '../../../types/open-api';
-import { ApplicationState } from '../../../types/root';
 
 export const fetchAutoCompleteOptions = createAsyncThunk(
   'autoComplete/fetch',

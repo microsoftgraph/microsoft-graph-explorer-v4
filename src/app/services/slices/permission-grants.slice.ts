@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { ApplicationState } from '../../../store';
 import { IPermissionGrant, PermissionGrantsState } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
-import { ApplicationState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
 import { RevokePermissionsUtil } from '../actions/permissions-action-creator.util';
 import { setQueryResponseStatus } from '../slices/query-status.slice';

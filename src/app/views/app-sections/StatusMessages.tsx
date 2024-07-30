@@ -56,7 +56,7 @@ const StatusMessages = () => {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
     if (Object.keys(queryRunnerStatus).length === 0) { return null; }
 
-    let urls: any = {};
+    let urls: { [key: string]: string; } = {};
     let message = status.toString();
     const extractedUrls = extractUrl(status.toString());
     if (extractedUrls) {

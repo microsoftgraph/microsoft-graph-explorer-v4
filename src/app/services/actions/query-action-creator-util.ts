@@ -9,6 +9,7 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
+import { ApplicationState } from '../../../store';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -23,8 +24,8 @@ export async function anonymousRequest(
   query: IQuery,
   getState: Function
 ) {
-  const { proxyUrl, queryRunnerStatus } = getState();
-  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
+  const { proxyUrl, queryRunnerStatus } = getState() as ApplicationState;
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus!);
   return fetch(graphUrl, options)
     .catch(() => {
       throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });

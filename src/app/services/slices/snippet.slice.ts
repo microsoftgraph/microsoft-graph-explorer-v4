@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { ApplicationState } from '../../../store';
 import { IRequestOptions } from '../../../types/request';
-import { ApplicationState } from '../../../types/root';
 import { ISnippet } from '../../../types/snippets';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { constructHeaderString } from '../../utils/snippet.utils';

@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { resourcesCache } from '../../../modules/cache/resources.cache';
+import { ApplicationState } from '../../../store';
 import { IRequestOptions } from '../../../types/request';
 import { IResource, IResources } from '../../../types/resources';
-import { ApplicationState } from '../../../types/root';
 
 const initialState: IResources = {
   pending: false,

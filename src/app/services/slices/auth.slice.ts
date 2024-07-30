@@ -4,15 +4,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { getConsentAuthErrorHint } from '../../../modules/authentication/authentication-error-hints';
-import { AppDispatch } from '../../../store';
+import { AppDispatch, ApplicationState } from '../../../store';
 import { AuthenticateResult } from '../../../types/authentication';
 import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
 import { translateMessage } from '../../utils/translate-messages';
+import { revokeScopes } from '../actions/revoke-scopes.action';
 import { fetchAllPrincipalGrants } from './permission-grants.slice';
 import { getProfileInfo } from './profile.slice';
 import { setQueryResponseStatus } from './query-status.slice';
-import { revokeScopes } from '../actions/revoke-scopes.action';
 
 const initialState: AuthenticateResult = {
   authToken: {

@@ -4,8 +4,8 @@ import { AnyAction } from '@reduxjs/toolkit';
 import {
   FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
 } from '../../../app/services/redux-constants';
+import { ApplicationState } from '../../../store';
 import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
 import { fetchResources } from '../slices/resources.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
@@ -98,7 +98,9 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  collections: [],
+  proxyUrl: ''
 }
 
 const paths = [

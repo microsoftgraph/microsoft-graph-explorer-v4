@@ -35,7 +35,7 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptive
   }
 }
 
-function createCardFromTemplate(templatePayload: any, payload: string): AdaptiveCardsTemplateAPI.Template {
+function createCardFromTemplate(templatePayload: string, payload: string): AdaptiveCardsTemplateAPI.Template {
   const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
   const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
     $root: payload

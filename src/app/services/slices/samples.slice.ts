@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { samplesCache } from '../../../modules/cache/samples.cache';
+import { ApplicationState } from '../../../store';
 import { ISampleQuery } from '../../../types/query-runner';
-import { ApplicationState } from '../../../types/root';
 import { queries } from '../../views/sidebar/sample-queries/queries';
 
 interface SamplesState {

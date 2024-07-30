@@ -9,9 +9,8 @@ import {
   REVOKE_SCOPES_PENDING
 } from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
-import { store } from '../../../store/index';
+import { ApplicationState, store } from '../../../store/index';
 import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
 import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
@@ -124,7 +123,9 @@ const mockState: ApplicationState = {
     pending: false,
     permissions: [],
     error: null
-  }
+  },
+  collections: [],
+  proxyUrl: ''
 }
 const currentState = store.getState();
 store.getState = () => {
