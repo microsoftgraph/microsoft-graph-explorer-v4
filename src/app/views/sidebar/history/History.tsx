@@ -51,6 +51,11 @@ const formatDate = (date: any) => {
   return `${year}-${month}-${day}`;
 };
 
+const today = formatDate(new Date());
+const yesterdaysDate = new Date();
+const yesterday = formatDate(yesterdaysDate);
+yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
+
 const sortItems = (content: IHistoryItem[]) => {
   content.sort(dynamicSort('createdAt', SortOrder.DESC));
   content.forEach((value: any, index: number) => {
@@ -59,27 +64,25 @@ const sortItems = (content: IHistoryItem[]) => {
   return content;
 }
 
-const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
-  const list: IHistoryItem[] = [];
+const getCategory = (historyItem: IHistoryItem) => {
   const olderText = translateMessage('older');
   const todayText = translateMessage('today');
   const yesterdayText = translateMessage('yesterday');
+  let category = olderText;
+  if (historyItem.createdAt.includes(today)) {
+    category = todayText;
+  } else if (historyItem.createdAt.includes(yesterday)) {
+    category = yesterdayText;
+  }
+  return category;
+}
 
-  let date = olderText;
-  const today = formatDate(new Date());
-  const yesterdaysDate = new Date();
-  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
-  const yesterday = formatDate(yesterdaysDate);
-
+const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
+  const list: IHistoryItem[] = [];
   content.forEach((historyItem) => {
-    if (historyItem.createdAt.includes(today)) {
-      date = todayText;
-    } else if (historyItem.createdAt.includes(yesterday)) {
-      date = yesterdayText;
-    }
     list.push({
       ...historyItem,
-      category: date
+      category: getCategory(historyItem)
     });
   });
   return sortItems(list);
@@ -347,7 +350,7 @@ const History = (props: any) => {
   };
 
   const deleteHistoryCategory = (): void => {
-    const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
+    const itemsToDelete = historyItems.filter((query: IHistoryItem) => getCategory(query) === category);
     const listOfKeys: string[] = [];
     itemsToDelete.forEach(historyItem => {
       listOfKeys.push(historyItem.createdAt);
@@ -358,7 +361,7 @@ const History = (props: any) => {
   };
 
   const exportHistoryByCategory = (value: string) => {
-    const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === value);
+    const itemsToExport = historyItems.filter((query: IHistoryItem) => getCategory(query) === value);
     const entries: Entry[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
