@@ -63,6 +63,9 @@ resources:
     type: git
     name: 1ESPipelineTemplates/1ESPipelineTemplates
     ref: refs/tags/release
+  - repository: ReleasePipelines
+    type: git
+    name: "Graph Developer Experiences/release-pipelines"
 
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
@@ -71,6 +74,12 @@ extends:
       name: Azure-Pipelines-1ESPT-ExDShared
       image: windows-latest
       os: windows
+
+    sdl:
+      sourceRepositoriesToScan:
+        exclude:
+        - repository: ReleasePipelines
+
     customBuildTags:
     - ES365AIMigrationTooling
 
@@ -190,6 +199,7 @@ extends:
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
             REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
             REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+            REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
             REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for staging"
 
@@ -216,6 +226,7 @@ extends:
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
             REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
             REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+            REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
             REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for prod"
 
@@ -252,6 +263,14 @@ extends:
             contents: node_modules
           displayName: "Delete node_modules"
 
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
+            replaceExistingArchive: true
+
         templateContext:
           outputs:
           - output: pipelineArtifact
@@ -262,3 +281,9 @@ extends:
             displayName: 'Publish Artifact: drop'
             targetPath: "$(build.ArtifactStagingDirectory)/build"
             artifactName: drop
+
+      - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
+        parameters:
+          directory: 'microsoft-graph-explorer-v4'
+          repoName: ReleasePipelines
+          dependsOn: ['Three']
