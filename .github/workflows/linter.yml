@@ -156,8 +156,9 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: coverage-${{ matrix.shard }}-artifacts
           path: coverage
+          pattern: coverage-*
+          merge-multiple: true
 
       - name: Run sonar cloud analysis
         uses: SonarSource/sonarcloud-github-action@master
