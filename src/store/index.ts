@@ -1,35 +1,37 @@
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
-import { ActionCreator, applyMiddleware, createStore } from 'redux';
+import {
+  Dispatch, Middleware, Store,
+  ThunkDispatch, UnknownAction,
+  combineReducers, configureStore
+} from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { createLogger } from 'redux-logger';
-import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
-import reducers from '../app/services/reducers';
-import { AppAction } from '../types/action';
-import { ApplicationState } from '../types/root';
+import { reducers } from '../app/services/reducers';
 
 const loggerMiddleware = createLogger({
   level: 'error',
   collapsed: true
-});
+}) as Middleware<{}, unknown, Dispatch<UnknownAction>>;
 
-const { NODE_ENV } = process.env;
-
-const middlewares = [
-  thunkMiddleware,
+const middleware = [
   localStorageMiddleware,
   telemetryMiddleware
 ];
 
+const { NODE_ENV } = process.env;
 if (NODE_ENV === 'development') {
-  middlewares.push(loggerMiddleware);
+  middleware.push(loggerMiddleware);
 }
 
-const initialState: any = {
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
-  isLoadingData: false,
+const combinedReducer = combineReducers(reducers);
+
+const initialState = {
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   profile: null,
   queryRunnerStatus: null,
   sampleQuery: {
@@ -40,15 +42,53 @@ const initialState: any = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  collections: []
+  collections: [],
+  graphResponse: {
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
+  }
+}
+
+export const store = configureStore({
+  reducer: combinedReducer,
+  middleware: (getDefaultMiddleware: any) => getDefaultMiddleware().concat(...middleware),
+  preloadedState: {
+    ...initialState,
+    auth: {
+      authToken: { pending: false, token: false },
+      consentedScopes: []
+    },
+    autoComplete: undefined,
+    collections: [],
+    devxApi: undefined,
+    dimensions: undefined as undefined,
+    graphResponse: undefined as undefined,
+    history: undefined as undefined,
+    samples: undefined as undefined,
+    profile: undefined as undefined,
+    sampleQuery: undefined as undefined,
+    theme: undefined as undefined,
+    sidebarProperties: undefined as undefined,
+    termsOfUse: undefined as undefined,
+    snippets: undefined as undefined,
+    scopes: undefined as undefined,
+    queryRunnerStatus: undefined as undefined,
+    responseAreaExpanded: undefined as undefined,
+    resources: undefined as undefined,
+    graphExplorerMode: undefined as undefined
+  }
+});
+
+export type ApplicationState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = ThunkDispatch<ApplicationState, unknown, UnknownAction>;
+
+export type AppStore = Omit<Store<ApplicationState, UnknownAction>, 'dispatch'> & {
+  dispatch: AppDispatch;
 };
 
-export const store = createStore(
-  reducers,
-  initialState,
-  applyMiddleware(...middlewares)
-);
-
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<ApplicationState> = useSelector;
-export type AppThunk = ActionCreator<ThunkAction<void, ApplicationState, null, AppAction>>;

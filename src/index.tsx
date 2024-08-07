@@ -3,18 +3,24 @@ import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
-
 import { Provider } from 'react-redux';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/actions/auth-action-creators';
-import { createCollection } from './app/services/actions/collections-action-creators';
-import { setDevxApiUrl } from './app/services/actions/devxApi-action-creators';
-import { setGraphExplorerMode } from './app/services/actions/explorer-mode-action-creator';
-import { getGraphProxyUrl } from './app/services/actions/proxy-action-creator';
-import { bulkAddHistoryItems } from './app/services/actions/request-history-action-creators';
-import { fetchResources } from './app/services/actions/resource-explorer-action-creators';
-import { changeTheme, changeThemeSuccess } from './app/services/actions/theme-action-creator';
-import { isValidHttpsUrl } from './app/utils/external-link-validation';
+
 import App from './app/views/App';
+
+import { CURRENT_THEME } from './app/services/graph-constants';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
+import { createCollection } from './app/services/slices/collections.slice';
+import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
+import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
+import { bulkAddHistoryItems } from './app/services/slices/history.slice';
+import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
+import { fetchResources } from './app/services/slices/resources.slice';
+import { setSampleQuery } from './app/services/slices/sample-query.slice';
+import { toggleSidebar } from './app/services/slices/sidebar-properties.slice';
+import { changeTheme } from './app/services/slices/theme.slice';
+import variantService from './app/services/variant-service';
+import { isValidHttpsUrl } from './app/utils/external-link-validation';
+import { readFromLocalStorage } from './app/utils/local-storage';
 import { authenticationWrapper } from './modules/authentication';
 import { collectionsCache } from './modules/cache/collections.cache';
 import { historyCache } from './modules/cache/history-utils';
@@ -23,12 +29,10 @@ import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
 import { loadGETheme } from './themes';
-import { readFromLocalStorage } from './app/utils/local-storage';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
+import { IHistoryItem } from './types/history';
 import { Collection } from './types/resources';
-import variantService from './app/services/variant-service';
-import { CURRENT_THEME } from './app/services/graph-constants';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -97,7 +101,7 @@ appStore.dispatch(getGraphProxyUrl());
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
     if (authResponse && authResponse.accessToken) {
-      appStore.dispatch(getAuthTokenSuccess(true));
+      appStore.dispatch(getAuthTokenSuccess());
       appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   })
@@ -113,8 +117,14 @@ const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
   loadGETheme(theme);
-  appStore.dispatch(changeThemeSuccess(theme));
+  appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
+} else {
+  appStore.dispatch(setGraphExplorerMode(Mode.Complete));
+  appStore.dispatch(toggleSidebar({
+    mobileScreen: false,
+    showSidebar: true
+  }))
 }
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
@@ -134,7 +144,7 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-historyCache.readHistoryData().then((data: any) => {
+historyCache.readHistoryData().then((data: IHistoryItem[]) => {
   if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }
@@ -144,7 +154,7 @@ collectionsCache.read().then((data: Collection[]) => {
   if (!data || data.length === 0) {
     appStore.dispatch(createCollection({
       id: new Date().getTime().toString(),
-      title: 'My Collection',
+      name: 'My Collection',
       paths: [],
       isDefault: true
     }));
@@ -159,6 +169,16 @@ function loadResources() {
   appStore.dispatch(fetchResources());
 }
 loadResources();
+
+appStore.dispatch(setSampleQuery(
+  {
+    sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+    selectedVerb: 'GET',
+    sampleBody: undefined,
+    sampleHeaders: [],
+    selectedVersion: 'v1.0'
+  }
+));
 
 /**
  * Set's up Monaco Editor's Workers.

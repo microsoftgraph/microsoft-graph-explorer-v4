@@ -1,79 +1,30 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { AnyAction } from '@reduxjs/toolkit';
 
-import {
-  getSnippetSuccess, getSnippetError,
-  getSnippetPending,
-  getSnippet,
-  constructHeaderString
-} from './snippet-action-creator';
-import { GET_SNIPPET_SUCCESS, GET_SNIPPET_ERROR, GET_SNIPPET_PENDING } from '../redux-constants';
 import { Header, IQuery } from '../../../types/query-runner';
-import { AppAction } from '../../../types/action';
+import { constructHeaderString } from '../../utils/snippet.utils';
+import { GET_SNIPPET_PENDING, GET_SNIPPET_SUCCESS } from '../redux-constants';
+import { getSnippet } from '../slices/snippet.slice';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Snippet actions creators', () => {
-  it('should dispatch GET_SNIPPET_SUCCESS when getSnippetSuccess() is called', () => {
-    const snippet = 'GraphServiceClient graphClient = new GraphServiceClient( authProvider );';
-
-    const expectedAction: AppAction[] = [{
-      type: GET_SNIPPET_SUCCESS,
-      response: {
-        csharp: snippet
-      }
-    }];
-
-    const store = mockStore({ snippets: {} });
-
-    // @ts-ignore
-    store.dispatch(getSnippetSuccess({
-      csharp: snippet
-    }));
-
-    expect(store.getActions()).toEqual(expectedAction);
-  });
-
-  it('should dispatch GET_SNIPPET_PENDING when getSnippetPending() is called', () => {
-    const expectedAction: AppAction = {
-      type: GET_SNIPPET_PENDING,
-      response: null
-    };
-
-    const action = getSnippetPending();
-
-    expect(action).toEqual(expectedAction);
-  })
-
-  it('should dispatch GET_SNIPPET_ERROR when getSnippetError() is called', () => {
-    const response = {};
-    const expectedAction: AppAction = {
-      type: GET_SNIPPET_ERROR,
-      response
-    };
-
-    const action = getSnippetError(response);
-
-    expect(action).toEqual(expectedAction);
-  })
-
-  it('should dispatch GET_SNIPPET_ERROR when getSnippet() api call errors out', () => {
+  it('should dispatch GET_SNIPPET_ERROR when getSnippet() api call errors out', async () => {
     // Arrange
     const expectedActions = [
       {
-        type: 'GET_SNIPPET_PENDING',
-        response: null
+        type: GET_SNIPPET_PENDING
       },
       {
         type: GET_SNIPPET_SUCCESS,
-        response: {
+        payload: {
           CSharp: '{"ok":true}'
         }
       }
     ]
 
-    const store = mockStore({
+    const store_ = mockStore({
       devxApi: {
         baseUrl: 'https://graphexplorerapi.azurewebsites.net',
         parameters: ''
@@ -88,14 +39,14 @@ describe('Snippet actions creators', () => {
     });
     fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
 
-    // Act and Assert
-    // @ts-ignore
-    store.dispatch(getSnippet('CSharp'))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      })
-      .catch((e: Error) => { throw e });
+    // Act
+    await store_.dispatch(getSnippet('CSharp') as unknown as AnyAction);
 
+    // Assert
+    expect(store_.getActions().map(action => {
+      const { meta, error, ...rest } = action;
+      return rest;
+    })).toEqual(expectedActions);
   });
 
   it('should construct headers string to be sent with the request for obtaining code snippets', () => {

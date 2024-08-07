@@ -3,13 +3,14 @@ import {
   Label, Link, SelectionMode, TooltipHost
 } from '@fluentui/react';
 import { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionProps } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
+import { fetchScopes } from '../../../../services/slices/scopes.slice';
+import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -19,9 +20,9 @@ import PermissionItem from './PermissionItem';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 
 export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
-  const { sampleQuery, scopes, authToken, consentedScopes, dimensions } =
+  const { sampleQuery, scopes, auth: { authToken, consentedScopes }, dimensions } =
     useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
@@ -29,11 +30,11 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const { pending: loading, error } = scopes;
   let permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
   const [isScreenSizeReduced, setIsScreenSizeReduced] = useState(false);
-  const [permissionsError, setPermissionsError] = useState(error);
+  const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
 
   useEffect(() => {
-    if (error?.error && error?.error?.url.contains('permissions')) {
-      setPermissionsError(error?.error);
+    if (error && error?.url.contains('permissions')) {
+      setPermissionsError(error);
     }
   }, [error])
 
@@ -46,8 +47,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
   const theme = getTheme();
   const { tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
-
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   const permissionsTabStyles = {
     root: {
@@ -80,10 +79,6 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       getPermissions();
     }
   }, [sampleQuery]);
-
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [consentedScopes]);
 
   useEffect(() => {
     if (tokenPresent && validation.isValid) {
@@ -153,6 +148,7 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
       displayErrorFetchingPermissionsMessage();
   }
   permissions = sortPermissionsWithPrivilege(permissions);
+  permissions = setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   return (
     <div >
@@ -180,8 +176,8 @@ export const Permissions = (permissionProps?: IPermissionProps): JSX.Element => 
           } : { root: { height: tabHeight, overflowY: 'auto' } }}
           items={permissions}
           columns={getColumns({ source: 'tab', tokenPresent })}
-          onRenderItemColumn={(item?: any, index?: number, column?: IColumn) => {
-            return <PermissionItem column={column} index={index} item={item} />
+          onRenderItemColumn={(item?: IPermission, index?: number, column?: IColumn) => {
+            return <PermissionItem column={column} index={index!} item={item!} />
           }}
           selectionMode={SelectionMode.none}
           layoutMode={DetailsListLayoutMode.justified}

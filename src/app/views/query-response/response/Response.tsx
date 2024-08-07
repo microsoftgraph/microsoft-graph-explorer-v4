@@ -10,9 +10,8 @@ import ResponseDisplay from './ResponseDisplay';
 import { ResponseMessages } from './ResponseMessages';
 
 const Response = () => {
-  const { dimensions: { response }, graphResponse, responseAreaExpanded} =
+  const { dimensions: { response }, graphResponse: { response: { body, headers } }, responseAreaExpanded } =
     useAppSelector((state) => state);
-  const { body, headers } = graphResponse;
 
   const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
   const monacoHeight = getResponseEditorHeight(150);

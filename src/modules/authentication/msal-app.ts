@@ -1,5 +1,4 @@
 import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
-import { eventTypes, telemetry } from '../../telemetry';
 
 function getClientIdFromWindow() {
   return window?.ClientId ?? '';
@@ -28,7 +27,6 @@ export const configuration: Configuration = {
         if (containsPii) {
           return;
         }
-        telemetry.trackEvent(eventTypes.AUTH_REQUEST_EVENT, { message, level });
       },
       piiLoggingEnabled: false
     }

@@ -33,7 +33,7 @@ describe('History utils should', () => {
     const historyItem: IHistoryItem = {
       index: 0,
       statusText: 'OK',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://api.github.com/search/users?q=tom',
       createdAt: new Date().toUTCString(),
@@ -52,7 +52,7 @@ describe('History utils should', () => {
     const historyItem: IHistoryItem = {
       index: 1,
       statusText: 'OK',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://api.github.com/search/users?q=tom',
       createdAt: new Date().toString(),
@@ -72,7 +72,7 @@ describe('History utils should', () => {
     const historyItem: IHistoryItem = {
       index: 4,
       statusText: 'OK',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://api.github.com/search/users?q=tom',
       createdAt: '2019-06-22T08:09:06.852Z',
