@@ -1,18 +1,16 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
-import { toggleSidebar } from './toggle-sidebar-action-creator';
 import { TOGGLE_SIDEBAR_SUCCESS } from '../redux-constants';
+import { toggleSidebar } from '../slices/sidebar-properties.slice';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 describe('Toggle Sidebar Action Creators', () => {
   it('should dispatch TOGGLE_SIDEBAR_SUCCESS and  set sidebar toggle to visible when toggleSidebar() is called', () => {
     const expectedActions = [
       {
         type: TOGGLE_SIDEBAR_SUCCESS,
-        response: {
+        payload: {
           mobileScreen: true,
           showSidebar: false
         }

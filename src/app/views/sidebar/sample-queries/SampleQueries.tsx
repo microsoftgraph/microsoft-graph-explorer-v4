@@ -5,16 +5,15 @@ import {
   SelectionMode, Spinner, SpinnerSize, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { geLocale } from '../../../../appLocale';
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import { fetchSamples } from '../../../services/actions/samples-action-creators';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { getStyleFor } from '../../../utils/http-methods.utils';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
@@ -31,16 +30,16 @@ import {
 const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element => {
 
   const [selectedQuery, setSelectedQuery] = useState<ISampleQuery | null>(null)
-  const { authToken, profile, samples } =
+  const { auth: { authToken }, profile, samples } =
     useAppSelector((state) => state);
   const tokenPresent = authToken.token;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(samples.queries);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState<boolean>(false);
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const currentTheme = getTheme();
 
-  const { error, pending } = samples;
+  const { error, pending, queries } = samples;
 
   const classProps = {
     styles: sampleProps!.styles,
@@ -58,6 +57,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     }
   }, [samples.queries, tokenPresent])
 
+
   useEffect(() => {
     if (shouldGenerateGroups.current) {
       setGroups(generateGroupsFromList(sampleQueries, 'category'));
@@ -70,7 +70,6 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
   const searchValueChanged = (_event: any, value?: string): void => {
     shouldGenerateGroups.current = true;
     setSearchStarted(searchStatus => !searchStatus);
-    const { queries } = samples;
     const filteredQueries = value ? performSearch(queries, value) : queries;
     setSampleQueries(filteredQueries);
   };
@@ -109,7 +108,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
     dispatch(setQueryResponseStatus({
       messageType: MessageBarType.warning,
       statusText: 'Tip',
-      status: query.tip
+      status: query.tip!
     }));
   }
 

@@ -243,7 +243,7 @@ export function getResourcePaths(
 }
 
 function flatten(content: IResourceLink[]): ResourcePath[] {
-  let result: any[] = [];
+  let result: ResourcePath[] = [];
   content.forEach(function (item: IResourceLink) {
     const { key, paths, type, url, method, name } = item;
     result.push({ key, paths, type, url, method, name });

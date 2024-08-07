@@ -1,16 +1,18 @@
+import {
+  ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
+  Label, MessageBarType, PrimaryButton, getId
+} from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
+
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { ResourcePath } from '../../../../../types/resources';
-import { useAppSelector } from '../../../../../store';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/slices/collections.slice';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
+import { translateMessage } from '../../../../utils/translate-messages';
 
 export const UploadPostmanCollection = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
@@ -48,7 +50,7 @@ export const UploadPostmanCollection = () => {
           dispatch(
             setQueryResponseStatus({
               status: translateMessage('Invalid file format'),
-              statusMessage: translateMessage('Invalid file format'),
+              statusText: translateMessage('Invalid file format'),
               ok: true,
               messageType: MessageBarType.error
             })

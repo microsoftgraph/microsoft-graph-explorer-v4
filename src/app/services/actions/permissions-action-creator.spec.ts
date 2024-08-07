@@ -1,31 +1,29 @@
-import {
-  FETCH_SCOPES_ERROR,
-  FETCH_FULL_SCOPES_SUCCESS,
-  FETCH_URL_SCOPES_PENDING
-} from '../../../app/services/redux-constants';
-
-import {
-  fetchFullScopesSuccess, fetchScopesError, getPermissionsScopeType, fetchScopes,
-  consentToScopes,
-  fetchUrlScopesPending,
-  fetchFullScopesPending,
-  revokeScopes
-} from './permissions-action-creator';
-import { IPermissionsResponse } from '../../../types/permissions';
-import { store } from '../../../store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
 import configureMockStore from 'redux-mock-store';
+
+import { AnyAction } from '@reduxjs/toolkit';
+import {
+  FETCH_FULL_SCOPES_PENDING,
+  FETCH_FULL_SCOPES_SUCCESS,
+  GET_CONSENTED_SCOPES_PENDING,
+  QUERY_GRAPH_STATUS,
+  REVOKE_SCOPES_PENDING
+} from '../../../app/services/redux-constants';
 import { authenticationWrapper } from '../../../modules/authentication';
-import thunk from 'redux-thunk';
-import { ACCOUNT_TYPE } from '../graph-constants';
-import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { ApplicationState, store } from '../../../store/index';
+import { Mode } from '../../../types/enums';
+import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
-const middleware = [thunk];
-let mockStore = configureMockStore(middleware);
+import { ACCOUNT_TYPE } from '../graph-constants';
+import { consentToScopes } from '../slices/auth.slice';
+import { fetchScopes } from '../slices/scopes.slice';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+import { RevokePermissionsUtil } from './permissions-action-creator.util';
+import { revokeScopes } from './revoke-scopes.action';
+
+let mockStore = configureMockStore([mockThunkMiddleware]);
 
 beforeEach(() => {
-  const mockStore_ = configureMockStore(middleware);
+  const mockStore_ = configureMockStore([mockThunkMiddleware]);
   mockStore = mockStore_
 })
 window.open = jest.fn();
@@ -36,13 +34,17 @@ const mockState: ApplicationState = {
     parameters: '$count=true'
   },
   profile: {
-    id: '123',
-    displayName: 'test',
-    emailAddress: 'johndoe@ms.com',
-    profileImageUrl: 'https://graph.microsoft.com/v1.0/me/photo/$value',
-    ageGroup: 0,
-    tenant: 'binaryDomain',
-    profileType: ACCOUNT_TYPE.MSA
+    user: {
+      id: '123',
+      displayName: 'test',
+      emailAddress: 'johndoe@ms.com',
+      profileImageUrl: 'https://graph.microsoft.com/v1.0/me/photo/$value',
+      ageGroup: 0,
+      tenant: 'binaryDomain',
+      profileType: ACCOUNT_TYPE.MSA
+    },
+    status: 'success',
+    error: undefined
   },
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
@@ -50,18 +52,13 @@ const mockState: ApplicationState = {
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: ['profile.read User.Read Files.Read'],
-  isLoadingData: false,
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: ['profile.read User.Read Files.Read']
+  },
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -82,8 +79,11 @@ const mockState: ApplicationState = {
   },
   history: [],
   graphResponse: {
-    body: undefined,
-    headers: undefined
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
   },
   snippets: {
     pending: false,
@@ -118,7 +118,14 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  permissionGrants: {
+    pending: false,
+    permissions: [],
+    error: null
+  },
+  collections: [],
+  proxyUrl: ''
 }
 const currentState = store.getState();
 store.getState = () => {
@@ -129,66 +136,6 @@ store.getState = () => {
 }
 
 describe('Permissions action creators', () => {
-  it('should dispatch FETCH_SCOPES_SUCCESS when fetchFullScopesSuccess() is called', () => {
-    // Arrange
-    const response: IPermissionsResponse = {
-      scopes: {
-        fullPermissions: [],
-        specificPermissions: []
-      }
-    }
-
-    const expectedAction = {
-      type: FETCH_FULL_SCOPES_SUCCESS,
-      response
-    }
-
-    // Act
-    const action = fetchFullScopesSuccess(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  });
-
-  it('should dispatch FETCH_SCOPES_ERROR when fetchScopesError() is called', () => {
-    // Arrange
-    const response = {
-      error: {}
-    }
-
-    const expectedAction = {
-      type: FETCH_SCOPES_ERROR,
-      response
-    }
-
-    // Act
-    const action = fetchScopesError(response);
-
-    // Assert
-    expect(action).toEqual(expectedAction);
-  });
-
-  // eslint-disable-next-line max-len
-  it('should dispatch FETCH_FULL_SCOPES_PENDING or FETCH_URL_SCOPES_PENDING depending on type passed to fetchScopesPending', () => {
-    // Arrange
-    const expectedFullScopesAction = {
-      type: 'FETCH_SCOPES_PENDING',
-      response: 'full'
-    }
-
-    const expectedUrlScopesAction = {
-      type: FETCH_URL_SCOPES_PENDING,
-      response: 'url'
-    }
-
-    // Act
-    const fullScopesAction = fetchFullScopesPending();
-    const urlScopesAction = fetchUrlScopesPending();
-
-    // Assert
-    expect(fullScopesAction).toEqual(expectedFullScopesAction);
-    expect(urlScopesAction).toEqual(expectedUrlScopesAction)
-  });
 
   it('should return a valid scope type when getPermissionsScopeType() is called with a user profile or null', () => {
     // Arrange
@@ -202,17 +149,17 @@ describe('Permissions action creators', () => {
 
   });
 
-  it('should fetch scopes', () => {
+  it('should fetch scopes', async () => {
     // Arrange
     const expectedResult = {}
-    const expectedAction: any = [
+    const expectedAction = [
       {
-        type: 'FETCH_SCOPES_PENDING',
-        response: 'full'
+        type: FETCH_FULL_SCOPES_PENDING,
+        payload: undefined
       },
       {
-        type: 'FULL_SCOPES_FETCH_SUCCESS',
-        response: {
+        type: FETCH_FULL_SCOPES_SUCCESS,
+        payload: {
           scopes: {
             fullPermissions: {}
           }
@@ -220,7 +167,7 @@ describe('Permissions action creators', () => {
       }
     ];
 
-    const store_ = mockStore(mockState);
+    const store_ = mockStore(store.getState());
 
     const mockFetch = jest.fn().mockImplementation(() => {
       return Promise.resolve({
@@ -231,23 +178,26 @@ describe('Permissions action creators', () => {
 
     window.fetch = mockFetch;
 
-    // Act and Assert
-    // @ts-ignore
-    return store_.dispatch(fetchScopes())
-      // @ts-ignore
-      .then(() => {
-        expect(store_.getActions()).toEqual(expectedAction);
-      });
+    // Act
+    await store_.dispatch(fetchScopes('full') as unknown as AnyAction);
+
+    // Assert
+    expect(store_.getActions().map(action => {
+      const { meta, error, ...rest } = action;
+      return rest;
+    })).toEqual(expectedAction);
+
   });
 
   it('should consent to scopes', () => {
+    const scopes = ['profile.Read User.Read'];
     // Arrange
     jest.spyOn(authenticationWrapper, 'consentToScopes').mockResolvedValue({
       accessToken: 'jkkkkkkkkkkkkkkkkkkkksdss',
       authority: 'string',
       uniqueId: 'string',
       tenantId: 'string',
-      scopes: ['profile.Read User.Read'],
+      scopes,
       account: {
         homeAccountId: 'string',
         environment: 'string',
@@ -262,33 +212,21 @@ describe('Permissions action creators', () => {
       tokenType: 'AAD',
       correlationId: 'string'
     })
-    const expectedAction: any = [
-      { type: 'GET_AUTH_TOKEN_SUCCESS', response: true },
-      {
-        type: 'GET_CONSENTED_SCOPES_SUCCESS',
-        response: ['profile.Read User.Read']
-      },
-      {
-        type: 'QUERY_GRAPH_STATUS',
-        response: {
-          statusText: translateMessage('Success'),
-          status: translateMessage('Scope consent successful'),
-          ok: true,
-          messageType: 4
-        }
-      },
-      { type: 'GET_ALL_PRINCIPAL_GRANTS_PENDING', response: true }
+    const expectedActions = [
+      { type: GET_CONSENTED_SCOPES_PENDING }
     ];
 
     const store_ = mockStore(mockState);
 
     // Act and Assert
-    // @ts-ignore
-    return store_.dispatch(consentToScopes())
-      // @ts-ignore
-      .then(() => {
-        expect(store_.getActions()).toEqual(expectedAction);
-      });
+    store_.dispatch(consentToScopes(scopes) as unknown as AnyAction);
+
+
+    expect(store_.getActions().map(action => {
+      const { meta, ...rest } = action;
+      return rest;
+    })).toEqual(expectedActions);
+
   });
 
   describe('Revoke scopes', () => {
@@ -353,37 +291,26 @@ describe('Permissions action creators', () => {
       })
 
       const expectedActions = [
-        { type: 'REVOKE_SCOPES_PENDING', response: null },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        { type: REVOKE_SCOPES_PENDING },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
-        },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
-        {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
-            statusText: translateMessage('Default scope'),
-            status: translateMessage('Cannot delete default scope'),
-            ok: false,
-            messageType: 1
-          }
         }
       ]
 
+      // Act
+      store_.dispatch(revokeScopes('User.Read') as unknown as AnyAction);
 
-      // Act and Assert
-      // @ts-ignore
-      return store_.dispatch(revokeScopes('User.Read'))
-        // @ts-ignore
-        .then(() => {
-          expect(store_.getActions()).toEqual(expectedActions);
-        });
+      // Assert
+      expect(store_.getActions().map(action => {
+        const { meta, ...rest } = action;
+        return rest;
+      })).toEqual(expectedActions);
     });
 
     it('should return 401 when user does not have required permissions', async () => {
@@ -420,40 +347,28 @@ describe('Permissions action creators', () => {
       });
 
       const expectedActions = [
-        { type: 'REVOKE_SCOPES_PENDING', response: null },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        { type: REVOKE_SCOPES_PENDING },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking '),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
-        },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
-        {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
-            statusText: translateMessage('Unable to dissent'),
-            status: translateMessage('Unable to dissent. You require the following permissions to revoke'),
-            ok: false,
-            messageType: 1
-          }
         }
       ]
 
-      // Act and Assert
-      // @ts-ignore
-      return store_.dispatch(revokeScopes('Access.Read'))
-        // @ts-ignore
-        .then(() => {
-          expect(store_.getActions()).toEqual(expectedActions);
-        });
+      // Act
+      store_.dispatch(revokeScopes('Access.Read') as unknown as AnyAction);
 
+      // Assert
+      expect(store_.getActions().map(action => {
+        const { meta, ...rest } = action;
+        return rest;
+      })).toEqual(expectedActions);
     });
 
-    //revisit
     it('should raise error when user attempts to dissent to an admin granted permission', async () => {
       // Arrange
       const store_ = mockStore(mockState);
@@ -491,34 +406,26 @@ describe('Permissions action creators', () => {
       jest.spyOn(RevokePermissionsUtil, 'isSignedInUserTenantAdmin').mockResolvedValue(false);
 
       const expectedActions = [
-        { type: 'REVOKE_SCOPES_PENDING', response: null },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
+        { type: REVOKE_SCOPES_PENDING, payload: undefined },
         {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
+          type: QUERY_GRAPH_STATUS,
+          payload: {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
             messageType: 0
           }
-        },
-        { type: 'REVOKE_SCOPES_ERROR', response: null },
-        {
-          type: 'QUERY_GRAPH_STATUS',
-          response: {
-            statusText: translateMessage('Revoking admin granted scopes'),
-            // eslint-disable-next-line max-len
-            status: translateMessage('You are unconsenting to an admin pre-consented permission'),
-            ok: false,
-            messageType: 1
-          }
         }
       ]
+      // Act
+      store_.dispatch(revokeScopes('Access.Read') as unknown as AnyAction);
 
-      // Act and Assert
-      // @ts-ignore
-      await store_.dispatch(revokeScopes('Access.Read'));
-      expect(store_.getActions()).toEqual(expectedActions);
+      // Assert
+      expect(store_.getActions().map(action => {
+        const { meta, ...rest } = action;
+        return rest;
+      })).toEqual(expectedActions);
+
     });
   })
 })

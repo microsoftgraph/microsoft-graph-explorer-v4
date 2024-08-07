@@ -9,8 +9,8 @@ export function replaceLinks(message: string): string {
   return message;
 }
 
-export function convertArrayToObject(array: any[]): object {
-  const initialValue = {};
+export function convertArrayToObject<T>(array: T[]): { [key: string]: T } {
+  const initialValue: { [key: string]: T } = {};
   return array.reduce((obj, item, index) => {
     return {
       ...obj,

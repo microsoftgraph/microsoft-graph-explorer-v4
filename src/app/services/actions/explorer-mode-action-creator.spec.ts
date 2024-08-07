@@ -1,19 +1,17 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
-import { setGraphExplorerMode } from './explorer-mode-action-creator';
+import { setGraphExplorerMode } from '../slices/explorer-mode.slice';
 import { SET_GRAPH_EXPLORER_MODE_SUCCESS } from '../redux-constants';
 import { Mode } from '../../../types/enums';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
 describe('Graph Explorer Mode Action Creators', () => {
   it('should dispatch SET_GRAPH_EXPLORER_MODE_SUCCESS when setGraphExplorerMode() is called', () => {
     const expectedActions = [
       {
         type: SET_GRAPH_EXPLORER_MODE_SUCCESS,
-        response: Mode.TryIt
+        payload: Mode.TryIt
       }
     ];
 
