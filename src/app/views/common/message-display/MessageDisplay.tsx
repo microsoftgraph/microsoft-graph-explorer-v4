@@ -22,7 +22,7 @@ const parseStringToJSX = ({ input, onClick }: { input: string; onClick: (link: s
   });
 
   // Handle [label](url) pattern
-  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const linkPattern = /\[([^\]]+?)\]\(([^)]+?)\)/g;
   input.replace(linkPattern, (match, label, url, index) => {
     builder.addText(input.slice(lastIndex, index));
     builder.addLink({ label, url, onClick: url.includes(GRAPH_URL) ? onClick : undefined });
