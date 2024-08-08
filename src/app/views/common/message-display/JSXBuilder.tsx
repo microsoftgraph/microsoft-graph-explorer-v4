@@ -1,5 +1,7 @@
-import { FontWeights, Link } from '@fluentui/react';
+import { FontWeights, IStyle, ITheme, Link, getTheme } from '@fluentui/react';
 import { Fragment } from 'react';
+
+import { queryResponseStyles } from '../../query-response/queryResponse.styles';
 
 export class JSXBuilder {
   private elements: JSX.Element[] = [];
@@ -10,13 +12,21 @@ export class JSXBuilder {
   }
 
   addLink({ label, url, onClick }: { label: string; url: string; onClick?: (url: string) => void; }) {
+    const currentTheme: ITheme = getTheme();
+    const linkStyle = queryResponseStyles(currentTheme).link as IStyle;
+
     this.elements.push(
-      onClick ?
-        <Link key={this.elements.length} onClick={() => onClick(url)} underline>
-          {label}
-        </Link> : <Link key={this.elements.length} target='_blank' href={url} underline>
-          {label}
-        </Link>
+      <Link
+        styles={{ root: linkStyle }}
+        underline
+        key={this.elements.length}
+
+        onClick={onClick ? () => onClick(url) : undefined}
+        target={!onClick ? '_blank' : undefined}
+        href={!onClick ? url : undefined}
+      >
+        {label}
+      </Link>
     );
     return this;
   }
