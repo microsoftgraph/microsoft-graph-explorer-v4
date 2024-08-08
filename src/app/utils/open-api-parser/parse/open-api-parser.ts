@@ -1,42 +1,48 @@
 import {
   IOpenApiParseContent,
-  IParameters,
   IParameterValue,
+  IParameters,
   IParsedOpenApiResponse,
-  IPathValue,
-  IQueryParameter
-} from '../../types/open-api';
+  IQueryParameter,
+  MethodValue
+} from '../../../../types/open-api';
+import { generateRequestBody } from './request-body';
 
 export function parseOpenApiResponse(
   params: IOpenApiParseContent
 ): IParsedOpenApiResponse {
   const {
-    response: { paths },
+    response,
     url
   } = params;
 
   try {
     const parameters: IParameters[] = [];
-    const requestUrl = Object.keys(paths)[0];
-    const verbs = Object.keys(paths[`${requestUrl}`]);
-    const pathValues: any = Object.values(paths)[0];
+    const requestUrl = `/${url}`;
+    const verbs = Object.keys(response.paths[`${requestUrl}`]);
+    const pathValues: any = Object.values(response.paths)[0];
+    const requestBody: { [method: string]: any } = {}
 
     verbs.forEach((verb: string) => {
+      const methodValue: MethodValue = pathValues[`${verb}`];
+      if (methodValue.requestBody) {
+        requestBody[verb] = generateRequestBody(methodValue);
+      }
       parameters.push({
         verb,
-        values: getVerbParameterValues(pathValues[`${verb}`]),
-        links: getLinkValues(pathValues[`${verb}`])
+        values: getVerbParameterValues(methodValue),
+        links: getLinkValues(methodValue)
       });
     });
 
     const createdAt = new Date().toISOString();
-    return { url, parameters, createdAt };
+    return { url, parameters, createdAt, requestBody };
   } catch (error: any) {
     throw new Error(error);
   }
 }
 
-function getVerbParameterValues(values: IPathValue): IParameterValue[] {
+function getVerbParameterValues(values: MethodValue): IParameterValue[] {
   const parameterValues: IParameterValue[] = [];
   const queryParameters = values.parameters;
   if (queryParameters && queryParameters.length > 0) {
@@ -55,7 +61,7 @@ function getVerbParameterValues(values: IPathValue): IParameterValue[] {
   return parameterValues;
 }
 
-function getLinkValues(values: IPathValue): string[] {
+function getLinkValues(values: MethodValue): string[] {
   const responses = values.responses;
   if (responses) {
     const responsesAtIndex200 = responses['200'];
