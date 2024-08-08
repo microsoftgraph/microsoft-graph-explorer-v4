@@ -1,15 +1,9 @@
-import { Link, MessageBar } from '@fluentui/react';
-import { Fragment } from 'react';
+import { MessageBar } from '@fluentui/react';
 
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
-import { GRAPH_URL } from '../../services/graph-constants';
 import { clearQueryStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
-import {
-  convertArrayToObject, extractUrl, getMatchesAndParts,
-  matchIncludesLink, replaceLinks
-} from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
 import MessageDisplay from '../common/message-display/MessageDisplay';
 
@@ -28,15 +22,6 @@ const StatusMessages = () => {
 
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
-    if (Object.keys(queryRunnerStatus).length === 0) { return null; }
-
-    let urls: { [key: string]: string; } = {};
-    let message = status.toString();
-    const extractedUrls = extractUrl(status.toString());
-    if (extractedUrls) {
-      message = replaceLinks(status.toString());
-      urls = convertArrayToObject(extractedUrls);
-    }
 
     return <MessageBar messageBarType={messageType}
       isMultiline={true}
