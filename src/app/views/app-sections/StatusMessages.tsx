@@ -43,7 +43,7 @@ const StatusMessages = () => {
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
       aria-live={'assertive'}>
-      {`${statusText} - `}{<MessageDisplay message={status.toString()} onSetQuery={setQuery} />}
+      <MessageDisplay message={`**${statusText} - **${status.toString()}`} onSetQuery={setQuery} />
 
       {duration && <>
         {` - ${duration} ${translateMessage('milliseconds')}`}
