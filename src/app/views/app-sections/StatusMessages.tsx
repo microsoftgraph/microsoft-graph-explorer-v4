@@ -11,7 +11,7 @@ import {
   matchIncludesLink, replaceLinks
 } from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
-import MessageDisplay from '../common/MessageDisplay';
+import MessageDisplay from '../common/message-display/MessageDisplay';
 
 const StatusMessages = () => {
   const dispatch = useAppDispatch();
