@@ -16,8 +16,8 @@ function getRequestsFromPaths(paths: ResourcePath[], version: string, scope: str
   const requests: CollectionRequest[] = [];
   paths.forEach(path => {
     const { method, url } = path;
-    path.scope = path.scope ?? scopeOptions[0].key;
-    if (version === path.version && scope === path.scope) {
+    const pathScope = path.scope ?? scopeOptions[0].key;
+    if (version === path.version && scope === pathScope) {
       requests.push({
         method: method as Method,
         requestUrl: url
@@ -66,7 +66,7 @@ const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) =>
     if (hashCode !== code) {
       try {
         setIsFetching(true);
-        const perms = await getCollectionPermissions(devxApi.baseUrl, items);
+        const perms = await getCollectionPermissions(`${devxApi.baseUrl}/permissions`, items);
         setPermissions(perms);
         setIsFetching(false);
         setCode(hashCode);
