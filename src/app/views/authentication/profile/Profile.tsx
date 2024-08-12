@@ -4,18 +4,17 @@ import {
 } from '@fluentui/react';
 import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
-import { signOut } from '../../../services/actions/auth-action-creators';
-import { getProfileInfo } from '../../../services/actions/profile-action-creators';
+import { signOut } from '../../../services/slices/auth.slice';
 import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
 import { profileStyles } from './Profile.styles';
-const getInitials = (name: string) => {
+import { getProfileInfo } from '../../../services/slices/profile.slice';
+const getInitials = (name: string | undefined) => {
   let initials = '';
   if (name && name !== '') {
     const n = name.indexOf('(');
@@ -32,8 +31,9 @@ const getInitials = (name: string) => {
 };
 
 const Profile = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
-  const { profile, authToken, graphExplorerMode } = useAppSelector((state) => state);
+  const dispatch: AppDispatch = useAppDispatch();
+  const { profile, auth: { authToken }, graphExplorerMode } = useAppSelector((state) => state);
+  const user = profile.user;
 
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
   const authenticated = authToken.token;
@@ -67,10 +67,10 @@ const Profile = (props: any) => {
   }
 
   const persona: IPersonaSharedProps = {
-    imageUrl: profile.profileImageUrl,
-    imageInitials: getInitials(profile.displayName),
-    text: profile.displayName,
-    secondaryText: profile.emailAddress
+    imageUrl: user?.profileImageUrl,
+    imageInitials: getInitials(user?.displayName),
+    text: user?.displayName,
+    secondaryText: user?.emailAddress
   };
 
   const changePanelState = () => {
@@ -133,8 +133,8 @@ const Profile = (props: any) => {
           styles={{ root: { border: '1px solid' + theme.palette.neutralTertiary } }}
         >
           <Stack horizontal horizontalAlign='space-between' styles={{ root: { paddingBottom: 0 } }}>
-            {profile &&
-              <ActionButton text={`${profile.tenant}`} disabled={true} />
+            {user &&
+              <ActionButton text={`${user.tenant}`} disabled={true} />
             }
             <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
               {translateMessage('sign out')}

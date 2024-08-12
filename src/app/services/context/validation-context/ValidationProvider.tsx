@@ -34,6 +34,9 @@ export const ValidationProvider = ({ children }: ValidationProviderProps) => {
   }, [resources])
 
   useEffect(() => {
+    if (!queryVersion || !query || Object.keys(resources.data).length === 0) {
+      return;
+    }
     if (version !== queryVersion && GRAPH_API_VERSIONS.includes(queryVersion)
       && resources.data[queryVersion].children!.length > 0) {
       setVersionedResources(resources.data[queryVersion].children!);

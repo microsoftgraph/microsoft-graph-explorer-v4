@@ -17,7 +17,7 @@ import { mainHeaderStyles } from './MainHeader.styles';
 import { useAppSelector } from '../../../store';
 
 export const Help = () => {
-  const { authToken } = useAppSelector((state) => state);
+  const { auth: { authToken } } = useAppSelector((state) => state);
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
@@ -102,19 +102,19 @@ export const Help = () => {
     calloutProps: {
       style: calloutStyles
     },
-    styles:{container: {border: '1px solid' + currentTheme.palette.neutralTertiary}}
+    styles: { container: { border: '1px solid' + currentTheme.palette.neutralTertiary } }
   };
 
   return (
     <div style={helpContainerStyles}>
       <TooltipHost
         content={
-          <div style={{padding:'3px'}}>
+          <div style={{ padding: '3px' }}>
             {translateMessage('Help')}
           </div>}
         id={getId()}
         calloutProps={{ gapSpace: 0 }}
-        styles={ tooltipStyles }
+        styles={tooltipStyles}
       >
         <IconButton
           ariaLabel={translateMessage('Help')}

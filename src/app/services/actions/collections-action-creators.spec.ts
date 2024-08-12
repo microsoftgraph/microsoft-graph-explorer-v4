@@ -1,43 +1,26 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
 import {
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../redux-constants';
-import { addResourcePaths, removeResourcePaths } from './collections-action-creators';
+import { addResourcePaths, removeResourcePaths } from '../slices/collections.slice';
+import { ResourceLinkType, ResourcePath } from '../../../types/resources';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore();
 
-const paths = [
+const paths: ResourcePath[] = [
   {
     key: '5-{serviceHealth-id}-issues',
     url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues',
     name: 'issues (1)',
-    labels: [
-      { name: 'v1.0', methods: ['GET', 'POST'] },
-      { name: 'beta', methods: ['GET', 'POST'] }
-    ],
-    isExpanded: true,
-    parent: '{serviceHealth-id}',
-    level: 5,
-    paths: ['/', 'admin', 'serviceAnnouncement', 'healthOverviews', '{serviceHealth-id}'],
-    type: 'path',
-    links: []
+    type: ResourceLinkType.PATH,
+    paths: ['/', 'admin', 'serviceAnnouncement', 'healthOverviews', '{serviceHealth-id}']
   }, {
     key: '6-issues-{serviceHealthIssue-id}',
-    url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssue-id}',
+    url: '/admin/serviceAnnouncement/healthOverviews/{serviceHealth-id}/issues/{serviceHealthIssues}',
     name: '{serviceHealthIssue-id} (1)',
-    labels: [
-      { name: 'v1.0', methods: ['GET', 'PATCH', 'DELETE'] },
-      { name: 'beta', methods: ['GET', 'PATCH', 'DELETE'] }
-    ],
-    isExpanded: true,
-    parent: 'issues',
-    level: 6,
     paths: ['/', 'admin', 'serviceAnnouncement', 'healthOverviews', '{serviceHealth-id}', 'issues'],
-    type: 'path',
-    links: []
+    type: ResourceLinkType.PATH
   }
 ];
 
@@ -51,7 +34,7 @@ describe('Collections actions', () => {
     const expectedActions = [
       {
         type: RESOURCEPATHS_ADD_SUCCESS,
-        response: paths
+        payload: paths
       }
     ];
 
@@ -70,7 +53,7 @@ describe('Collections actions', () => {
     const expectedActions = [
       {
         type: RESOURCEPATHS_DELETE_SUCCESS,
-        response: paths
+        payload: paths
       }
     ];
 

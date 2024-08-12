@@ -1,50 +1,51 @@
-import { combineReducers } from 'redux';
 
-import { adaptiveCard } from './adaptive-cards-reducer';
-import { authToken, consentedScopes } from './auth-reducers';
-import { autoComplete } from './autocomplete-reducer';
-import { collections } from './collections-reducer';
-import { devxApi } from './devxApi-reducers';
-import { dimensions } from './dimensions-reducers';
-import { graphExplorerMode } from './graph-explorer-mode-reducer';
-import { scopes } from './permissions-reducer';
-import { profile } from './profile-reducer';
-import { proxyUrl } from './proxy-url-reducer';
-import { sampleQuery } from './query-input-reducers';
-import { isLoadingData } from './query-loading-reducers';
-import { graphResponse } from './query-runner-reducers';
-import { queryRunnerStatus } from './query-runner-status-reducers';
-import { history } from './request-history-reducers';
-import { resources } from './resources-reducer';
-import { responseAreaExpanded } from './response-expanded-reducer';
-import { samples } from './samples-reducers';
-import { snippets } from './snippet-reducer';
-import { termsOfUse } from './terms-of-use-reducer';
-import { theme } from './theme-reducer';
-import { sidebarProperties } from './toggle-sidebar-reducer';
+import auth from '../slices/auth.slice';
+import autoComplete from '../slices/autocomplete.slice';
+import collections from '../slices/collections.slice';
+import devxApi from '../slices/devxapi.slice';
+import dimensions from '../slices/dimensions.slice';
+import graphExplorerMode from '../slices/explorer-mode.slice';
+import graphResponse from '../slices/graph-response.slice';
+import history from '../slices/history.slice';
+import permissionGrants from '../slices/permission-grants.slice';
+import profile from '../slices/profile.slice';
+import proxyUrl from '../slices/proxy.slice';
+import queryRunnerStatus from '../slices/query-status.slice';
+import resources from '../slices/resources.slice';
+import responseAreaExpanded from '../slices/response-area-expanded.slice';
+import sampleQuery from '../slices/sample-query.slice';
+import samplesReducer from '../slices/samples.slice';
+import scopes from '../slices/scopes.slice';
+import snippets from '../slices/snippet.slice';
+import themeChange from '../slices/theme.slice';
+import termsOfUse from '../slices/terms-of-use.slice';
+import sidebarProperties from '../slices/sidebar-properties.slice';
 
-export default combineReducers({
-  adaptiveCard,
-  authToken,
+const reducers = {
+  auth,
   autoComplete,
   collections,
-  consentedScopes,
   devxApi,
   dimensions,
   graphExplorerMode,
   graphResponse,
   history,
-  isLoadingData,
+  permissionGrants,
   profile,
   proxyUrl,
   queryRunnerStatus,
   resources,
   responseAreaExpanded,
   sampleQuery,
-  samples,
+  samples: samplesReducer,
   scopes,
   sidebarProperties,
   snippets,
   termsOfUse,
-  theme
-});
+  theme: themeChange
+};
+
+export {
+  reducers
+};
+

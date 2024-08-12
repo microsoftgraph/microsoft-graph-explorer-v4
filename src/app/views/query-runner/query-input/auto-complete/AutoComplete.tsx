@@ -1,14 +1,13 @@
 import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
-import { fetchAutoCompleteOptions } from '../../../../services/actions/autocomplete-action-creators';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS, GRAPH_URL } from '../../../../services/graph-constants';
+import { fetchAutoCompleteOptions } from '../../../../services/slices/autocomplete.slice';
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -23,7 +22,7 @@ import { usePrevious } from './use-previous';
 
 const AutoComplete = (props: IAutoCompleteProps) => {
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const focusRef = useRef<any>(null);
@@ -190,11 +189,11 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     }
 
     if (!requestUrl) {
-      dispatch(fetchAutoCompleteOptions('', queryVersion));
+      dispatch(fetchAutoCompleteOptions({ url: '', version: queryVersion }));
       return;
     }
 
-    dispatch(fetchAutoCompleteOptions(requestUrl, queryVersion, context));
+    dispatch(fetchAutoCompleteOptions({ url: requestUrl, version: queryVersion, context }));
   }
 
   const displayAutoCompleteSuggestions = (url: string) => {
@@ -241,9 +240,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const appendSuggestionToUrl = (selected: string) => {
     if (!selected) { return; }
-
+    const { context } = getLastDelimiterInUrl(queryUrl);
     let query = selected;
-    if (selected.startsWith(delimiters.DOLLAR.symbol)) {
+    if (selected.startsWith(delimiters.DOLLAR.symbol) && context === 'parameters') {
       selected += delimiters.EQUALS.symbol;
       query = '';
     }

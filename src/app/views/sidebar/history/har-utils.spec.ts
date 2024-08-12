@@ -9,7 +9,7 @@ describe('Tests history items util functions', () => {
         const historyItem: IHistoryItem = {
             index: 0,
             statusText: 'OK',
-            responseHeaders: [],
+            responseHeaders: {},
             result: {},
             duration: 0,
             method: 'GET',

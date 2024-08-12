@@ -1,19 +1,23 @@
+import {
+  ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
+  MessageBarType, PrimaryButton, getId,
+  getTheme
+} from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
-import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  MessageBarType, PrimaryButton, getId, getTheme } from '@fluentui/react';
-import { useDispatch } from 'react-redux';
-import { addResourcePaths, removeResourcePaths } from '../../../../services/actions/collections-action-creators';
-import { translateMessage } from '../../../../utils/translate-messages';
-import { setQueryResponseStatus } from '../../../../services/actions/query-status-action-creator';
-import { ResourcePath } from '../../../../../types/resources';
-import { useAppSelector } from '../../../../../store';
-import { collectionStyles } from './Collection.styles';
-import { isGeneratedCollectionInCollection } from './upload-collection.util';
+
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
+import { ResourcePath } from '../../../../../types/resources';
+import { translateMessage } from '../../../../utils/translate-messages';
+import { collectionStyles } from './Collection.styles';
+import { generateResourcePathsFromPostmanCollection } from './postman.util';
+
+import { addResourcePaths, removeResourcePaths } from '../../../../services/slices/collections.slice';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
+import { isGeneratedCollectionInCollection } from './upload-collection.util';
 
 export const UploadPostmanCollection = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const { collections } = useAppSelector((state) => state);
@@ -39,28 +43,36 @@ export const UploadPostmanCollection = () => {
       const reader = new FileReader();
       reader.onload = function (e) {
         const fileContent = e!.target!.result!;
-        try{
+        try {
           const jsonData = JSON.parse(fileContent as string);
           const generatedCollection = generateResourcePathsFromPostmanCollection(jsonData);
-          if(collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0){
+          if (collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0) {
             const currentCollection = collections.find(k => k.isDefault)!.paths;
-            if(isGeneratedCollectionInCollection(currentCollection, generatedCollection)){
+            if (isGeneratedCollectionInCollection(currentCollection, generatedCollection)) {
               trackUploadAction('Collection exists');
               dispatchCollectionSelectionStatus('Collection items exist', 'Collection items exist');
             }
-            else{
+            else {
               setUploadedCollections(generatedCollection);
               toggleIsDialogHidden();
             }
           }
-          else{
+          else {
             trackUploadAction('Collection added')
             dispatch(addResourcePaths(generatedCollection));
           }
         }
-        catch(error){
+        catch (error) {
           trackUploadAction('Invalid file format');
           dispatchCollectionSelectionStatus('Invalid file format', 'Invalid file format');
+          dispatch(
+            setQueryResponseStatus({
+              status: translateMessage('Invalid file format'),
+              statusText: translateMessage('Invalid file format'),
+              ok: false,
+              messageType: MessageBarType.error
+            })
+          )
         }
       };
       reader.readAsText(file);
@@ -71,7 +83,7 @@ export const UploadPostmanCollection = () => {
     dispatch(
       setQueryResponseStatus({
         status: translateMessage(status),
-        statusMessage: translateMessage(statusMessage),
+        statusText: translateMessage(statusMessage),
         ok: false,
         messageType: MessageBarType.error
       })
@@ -112,7 +124,7 @@ export const UploadPostmanCollection = () => {
 
   const getPathsFromCollection = (): ResourcePath[] => {
     let resourcePaths: ResourcePath[] = [];
-    if(collections && collections.length > 0){
+    if (collections && collections.length > 0) {
       const paths = collections.find(k => k.isDefault)!.paths;
       resourcePaths = paths as ResourcePath[];
     }
@@ -120,7 +132,7 @@ export const UploadPostmanCollection = () => {
   }
 
   return (
-    <div style={{position: 'relative', bottom: '4px'}} >
+    <div style={{ position: 'relative', bottom: '4px' }} >
       <ActionButton iconProps={uploadIcon}
         title={translateMessage('Upload collection')}
         ariaLabel={translateMessage('Upload collection')}
@@ -128,7 +140,7 @@ export const UploadPostmanCollection = () => {
         onClick={() => selectFile()}
         styles={uploadButtonStyles}
       >
-        <input type="file" id="file-input" style={style_} onInput={handleFileSelect} value={''}/>
+        <input type="file" id="file-input" style={style_} onInput={handleFileSelect} value={''} />
       </ActionButton>
       <Dialog
         hidden={isDialogHidden}

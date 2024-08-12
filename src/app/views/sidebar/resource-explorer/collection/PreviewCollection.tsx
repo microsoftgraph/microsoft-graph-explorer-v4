@@ -4,13 +4,12 @@ import {
   Label, PrimaryButton
 } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IResourceLink, ResourcePath } from '../../../../../types/resources';
-import { removeResourcePaths, updateResourcePaths } from '../../../../services/actions/collections-action-creators';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { removeResourcePaths, updateResourcePaths } from '../../../../services/slices/collections.slice';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
@@ -23,8 +22,7 @@ export interface IPathsReview {
 }
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
-  const dispatch: AppDispatch = useDispatch();
-  const { show: showManifestDescription } = usePopups('manifest-description', 'panel')
+  const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { collections } = useAppSelector(
     (state) => state
@@ -86,15 +84,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     setSelectedItems(content);
   };
 
-  const createManifest = () => {
-    showManifestDescription({
-      settings: {
-        title: translateMessage('API manifest'),
-        width: 'lg'
-      }
-    });
-  }
-
   useEffect(() => {
     if (items.length === 0) {
       props.closePopup();
@@ -102,22 +91,23 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   }, [items]);
 
   const setSelectedScope = (resource: ResourcePath, scope: string): void => {
-    const itemResources = [...items]
-    itemResources[itemResources.findIndex((item) =>
-      item.key === resource.key)].scope = scope;
+    const itemResources = items.map(item =>
+      item.key === resource.key ? { ...item, scope } : item
+    );
     dispatch(updateResourcePaths(itemResources));
     setSelectedItems([]);
-  }
+  };
+
 
   const bulkSelectScope = (scope: string): void => {
-    const itemResources = [...items]
-    selectedItems.map((resource) => {
-      itemResources[itemResources.findIndex((item) =>
-        item.key === resource.key)].scope = scope;
-    })
+    const itemResources = items.map(item => {
+      const selectedItem = selectedItems.find(resource => resource.key === item.key);
+      return selectedItem ? { ...item, scope } : item;
+    });
     dispatch(updateResourcePaths(itemResources));
     setSelectedItems([]);
-  }
+  };
+
 
   return (
     <>
@@ -137,12 +127,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
           {translateMessage('Download postman collection')}
         </PrimaryButton>
-        <PrimaryButton
-          onClick={() => createManifest()}
-          disabled={selectedItems.length > 0}
-        >
-          {translateMessage('Create API manifest')}
-        </PrimaryButton>
+
         <PrimaryButton onClick={() => viewPermissions({
           settings: {
             title: translateMessage('Required Permissions')

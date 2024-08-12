@@ -4,14 +4,13 @@ import {
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { addResourcePaths, removeResourcePaths } from '../../../services/actions/collections-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
+import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { usePopups } from '../../../services/hooks';
 import { searchResources } from '../../../utils/resources/resources-filter';
@@ -30,10 +29,10 @@ const UnstyledResourceExplorer = (props: any) => {
     (state) => state
   );
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
   const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
-  const versions: any[] = [
+  const versions: {key: string, text: string}[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
@@ -109,7 +108,7 @@ const UnstyledResourceExplorer = (props: any) => {
     setQuery(item!);
   }
 
-  const resourceOptionSelected = (activity: string, context: any) => {
+  const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
     }
@@ -217,7 +216,7 @@ const UnstyledResourceExplorer = (props: any) => {
               return <ResourceLink
                 link={link!}
                 version={version}
-                resourceOptionSelected={(activity: string, context: unknown) =>
+                resourceOptionSelected={(activity: string, context: IResourceLink) =>
                   resourceOptionSelected(activity, context)}
                 classes={classes}
               />

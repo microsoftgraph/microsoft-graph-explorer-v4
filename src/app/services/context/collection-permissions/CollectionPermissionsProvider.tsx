@@ -4,10 +4,8 @@ import { CollectionPermission, Method, ResourcePath } from '../../../../types/re
 import {
   getScopesFromPaths, getVersionsFromPaths, scopeOptions
 } from '../../../views/sidebar/resource-explorer/collection/collection.util';
-import { DEVX_API_URL } from '../../graph-constants';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
-
-const DEVX_API_PERMISSIONS_URL = `${DEVX_API_URL}/api/permissions`;
+import { useAppSelector } from '../../../../store';
 
 interface CollectionRequest {
   method: Method;
@@ -29,7 +27,8 @@ function getRequestsFromPaths(paths: ResourcePath[], version: string, scope: str
   return requests;
 }
 
-async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: string]: CollectionPermission[] }> {
+async function getCollectionPermissions(permissionsUrl: string, paths: ResourcePath[]):
+Promise<{ [key: string]: CollectionPermission[] }> {
   const versions = getVersionsFromPaths(paths);
   const scopes = getScopesFromPaths(paths);
   const collectionPermissions: { [key: string]: CollectionPermission[] } = {};
@@ -40,7 +39,7 @@ async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: 
       if (requestPaths.length === 0) {
         continue;
       }
-      const url = `${DEVX_API_PERMISSIONS_URL}?version=${version}&scopeType=${scope}`;
+      const url = `${permissionsUrl}?version=${version}&scopeType=${scope}`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -56,6 +55,7 @@ async function getCollectionPermissions(paths: ResourcePath[]): Promise<{ [key: 
 }
 
 const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) => {
+  const { devxApi } = useAppSelector((state) => state);
   const [permissions, setPermissions] = useState<{ [key: string]: CollectionPermission[] } | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [code, setCode] = useState('');
@@ -66,7 +66,7 @@ const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) =>
     if (hashCode !== code) {
       try {
         setIsFetching(true);
-        const perms = await getCollectionPermissions(items);
+        const perms = await getCollectionPermissions(devxApi.baseUrl, items);
         setPermissions(perms);
         setIsFetching(false);
         setCode(hashCode);

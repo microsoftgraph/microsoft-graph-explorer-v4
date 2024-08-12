@@ -1,12 +1,12 @@
 import { Link, MessageBar } from '@fluentui/react';
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../store';
+
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { clearQueryStatus } from '../../services/actions/query-status-action-creator';
 import { GRAPH_URL } from '../../services/graph-constants';
+import { clearQueryStatus } from '../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import {
   convertArrayToObject, extractUrl, getMatchesAndParts,
   matchIncludesLink, replaceLinks
@@ -14,7 +14,7 @@ import {
 import { translateMessage } from '../../utils/translate-messages';
 
 const StatusMessages = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { queryRunnerStatus, sampleQuery } =
     useAppSelector((state) => state);
 
@@ -54,7 +54,9 @@ const StatusMessages = () => {
 
   if (queryRunnerStatus) {
     const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
-    let urls: any = {};
+    if (Object.keys(queryRunnerStatus).length === 0) { return null; }
+
+    let urls: { [key: string]: string; } = {};
     let message = status.toString();
     const extractedUrls = extractUrl(status.toString());
     if (extractedUrls) {

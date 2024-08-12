@@ -9,7 +9,7 @@ import {
 } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
 
 import { authenticationWrapper } from '../../../modules/authentication';
-import { AppAction } from '../../../types/action';
+import { ApplicationState } from '../../../store';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -19,24 +19,13 @@ import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
 import { DEFAULT_USER_SCOPES, GRAPH_URL } from '../graph-constants';
-import { QUERY_GRAPH_SUCCESS } from '../redux-constants';
-import { queryRunningStatus } from './query-loading-action-creators';
-
-export function queryResponse(response: object): AppAction {
-  return {
-    type: QUERY_GRAPH_SUCCESS,
-    response
-  };
-}
 
 export async function anonymousRequest(
-  dispatch: Function,
   query: IQuery,
   getState: Function
 ) {
-  const { proxyUrl, queryRunnerStatus } = getState();
-  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus);
-  dispatch(queryRunningStatus(true));
+  const { proxyUrl, queryRunnerStatus } = getState() as ApplicationState;
+  const { graphUrl, options } = createAnonymousRequest(query, proxyUrl, queryRunnerStatus!);
   return fetch(graphUrl, options)
     .catch(() => {
       throw new ClientError({ error: translateMessage('Could not connect to the sandbox') });
@@ -78,11 +67,9 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
 }
 
 export function authenticatedRequest(
-  dispatch: Function,
   query: IQuery,
   scopes: string[] = DEFAULT_USER_SCOPES.split(' ')
 ) {
-  dispatch(queryRunningStatus(true));
   return makeGraphRequest(scopes)(query);
 }
 
@@ -90,7 +77,7 @@ function createAuthenticatedRequest(
   scopes: string[],
   query: IQuery
 ): GraphRequest {
-  const sampleHeaders: any = {};
+  const sampleHeaders: Record<string, string> = {};
   sampleHeaders.SdkVersion = 'GraphExplorer/4.0';
   sampleHeaders.prefer = 'ms-graph-dev-mode';
 
@@ -121,7 +108,7 @@ export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
     let response;
 
-    const graphRequest = createAuthenticatedRequest(scopes, query);
+    const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
       case 'GET':
@@ -221,29 +208,38 @@ export async function generateResponseDownloadUrl(
   }
 }
 
+async function tryParseJson(textValue: string) {
+  try {
+    return JSON.parse(textValue);
+  } catch (error) {
+    return textValue;
+  }
+}
+
 export function parseResponse(
-  response: any,
-  respHeaders: any = {}
+  response: Response,
+  respHeaders: { [key: string]: string } = {}
 ): Promise<any> {
   if (response && response.headers) {
-    response.headers.forEach((val: any, key: any) => {
+    response.headers.forEach((val: string, key: string) => {
       respHeaders[key] = val;
     });
 
     const contentType = getContentType(response.headers);
     switch (contentType) {
       case ContentType.Json:
-        return response.json();
+        return response.text().then(tryParseJson);
       case ContentType.XML:
       case ContentType.HTML:
+      case ContentType.TextCsv:
       case ContentType.TextPlain:
         return response.text();
 
       default:
-        return response;
+        return Promise.resolve(response);
     }
   }
-  return response;
+  return Promise.resolve(response);
 }
 
 /**
