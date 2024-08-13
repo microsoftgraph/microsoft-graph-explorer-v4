@@ -34,6 +34,7 @@ const parseStringToJSX = ({ input, onClick }: { input: string; onClick: (link: s
   const standaloneUrlPattern = /(?:^|\s)(https?:\/\/\S+)(?!\S)/g;
   input.replace(standaloneUrlPattern, (match, url, index) => {
     builder.addText(input.slice(lastIndex, index));
+    builder.addText(' ');
     builder.addLink({ label: url, url, onClick: url.includes(GRAPH_URL) ? onClick : undefined });
     lastIndex = index + match.length;
     return '';
