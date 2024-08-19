@@ -1,5 +1,6 @@
 import { ITheme } from '@fluentui/react';
 import { IDimensions } from './dimensions';
+import { ScopesError } from '../app/utils/error-utils/ScopesError';
 
 export interface IPermission {
   value: string;
@@ -37,15 +38,18 @@ export interface IScopes {
   pending: {
     isSpecificPermissions: boolean;
     isFullPermissions: boolean;
-    isTenantWidePermissionsGrant?: boolean;
-    isRevokePermissions?: boolean;
   };
   data: {
     specificPermissions: IPermission[];
     fullPermissions: IPermission[];
-    tenantWidePermissionsGrant?: IPermissionGrant[];
   };
-  error: any | null;
+  error: ScopesError | null;
+}
+
+export interface PermissionGrantsState {
+  pending: boolean;
+  error: string | null;
+  permissions: IPermissionGrant[];
 }
 
 export interface IPermissionGrant {

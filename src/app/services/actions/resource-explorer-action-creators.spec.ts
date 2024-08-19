@@ -1,44 +1,39 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+
+import { AnyAction } from '@reduxjs/toolkit';
 import {
-  fetchResources, fetchResourcesError,
-  fetchResourcesPending, fetchResourcesSuccess
-} from '../../../app/services/actions/resource-explorer-action-creators';
-import {
-  FETCH_RESOURCES_ERROR,
   FETCH_RESOURCES_PENDING, FETCH_RESOURCES_SUCCESS
 } from '../../../app/services/redux-constants';
-import { AppAction } from '../../../types/action';
+import { ApplicationState } from '../../../store';
 import { Mode } from '../../../types/enums';
-import { ApplicationState } from '../../../types/root';
+import { fetchResources } from '../slices/resources.slice';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 const mockState: ApplicationState = {
   devxApi: {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  profile: null,
+  profile: {
+    user: undefined,
+    error: undefined,
+    status: 'unset'
+  },
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
     selectedVerb: 'GET',
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
-  isLoadingData: false,
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -46,6 +41,11 @@ const mockState: ApplicationState = {
   },
   samples: {
     queries: [],
+    pending: false,
+    error: null
+  },
+  permissionGrants: {
+    permissions: [],
     pending: false,
     error: null
   },
@@ -59,8 +59,11 @@ const mockState: ApplicationState = {
   },
   history: [],
   graphResponse: {
-    body: undefined,
-    headers: undefined
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
   },
   snippets: {
     pending: false,
@@ -95,7 +98,9 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  collections: [],
+  proxyUrl: ''
 }
 
 const paths = [
@@ -135,66 +140,32 @@ describe('Resource Explorer actions', () => {
     fetchMock.resetMocks();
   });
 
-  it('should dispatch FETCH_RESOURCES_SUCCESS when fetchResourcesSuccess() is called', () => {
+  it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called',
+    async () => {
+      const expectedResults = paths;
+      const expectedActions = [
+        { type: FETCH_RESOURCES_PENDING, payload: undefined },
+        {
+          type: FETCH_RESOURCES_SUCCESS,
+          payload: { 'v1.0': paths, 'beta': paths }
+        }
+      ]
 
-    const response = fetchMock.mockResponseOnce(JSON.stringify({ ok: true }));
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_SUCCESS,
-      response
-    };
+      const store_ = mockStore(mockState);
+      const mockFetch = jest.fn().mockImplementation(() => {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(expectedResults)
+        })
+      });
 
-    const action = fetchResourcesSuccess(response);
-    expect(action.type).toEqual(expectedAction.type);
-  });
+      window.fetch = mockFetch;
 
-  it('should dispatch FETCH_RESOURCES_ERROR when fetchResourcesError() is called', () => {
-    // Arrange
-    const response = {};
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_ERROR,
-      response
-    }
+      await store_.dispatch(fetchResources() as unknown as AnyAction);
 
-    // Act
-    const action = fetchResourcesError(response);
-
-    // Assert
-    expect(action.type).toEqual(expectedAction.type);
-  })
-
-  it('should dispatch FETCH_RESOURCES_PENDING when fetchResourcesPending() is called', () => {
-    // Arrange
-    const expectedAction: AppAction = {
-      type: FETCH_RESOURCES_PENDING,
-      response: null
-    }
-
-    // Act
-    const action = fetchResourcesPending();
-
-    // Assert
-    expect(action.type).toEqual(expectedAction.type);
-  });
-
-  it.skip('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called', () => {
-    // Arrange
-    const expectedAction: AppAction[] = [
-      { type: FETCH_RESOURCES_PENDING, response: null },
-      {
-        type: FETCH_RESOURCES_SUCCESS,
-        response: { paths, ok: true }
-      }
-    ]
-
-    const store = mockStore(mockState);
-    fetchMock.mockResponseOnce(JSON.stringify({ paths, ok: true }));
-
-    // Act and Assert
-    // @ts-ignore
-    store.dispatch(fetchResources())
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedAction);
-      })
-      .catch((e: Error) => { throw e })
-  });
+      expect(store_.getActions().map(action => {
+        const { meta, ...rest } = action;
+        return rest;
+      })).toEqual(expectedActions);
+    });
 });

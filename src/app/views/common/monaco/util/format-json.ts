@@ -15,7 +15,7 @@ export function formatJsonStringForAllBrowsers(
    * 3. format the string (works for all browsers)
    */
   try {
-    body = JSON.stringify(body).replace(/(?:\\[rnt]|[\r\n\t]+)+/g, '');
+    body = JSON.stringify(body);
     body = JSON.parse(body);
   } catch (error) {
     telemetry.trackException(

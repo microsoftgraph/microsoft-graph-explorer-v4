@@ -17,16 +17,13 @@ export function createHarEntry(query: IHistoryItem): Entry {
     });
   }
   const responseHeaders: HarHeader[] = [];
-  if (query.responseHeaders && query.responseHeaders.length > 0) {
-    query.responseHeaders.forEach((header) => {
-      const { name, value } = header;
-      const head: HarHeader = {
-        name,
-        value
-      };
-      responseHeaders.push(head);
-    });
-  }
+  Object.keys(query.responseHeaders).forEach((key) => {
+    const head: HarHeader = {
+      name: key,
+      value: query.responseHeaders[key]
+    };
+    responseHeaders.push(head);
+  });
 
   let harEntry: Entry = {
     startedDateTime: query.createdAt.toString(),

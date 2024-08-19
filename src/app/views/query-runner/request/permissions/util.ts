@@ -1,22 +1,24 @@
 import { IPermission } from '../../../../../types/permissions';
 
-export function setConsentedStatus(tokenPresent: any, permissions: IPermission[], consentedScopes: string[]) {
-  if (tokenPresent) {
-    if (permissions && permissions.length > 0) {
-      permissions.forEach((permission: IPermission) => {
-        permission.consented = (consentedScopes && consentedScopes.length > 0 &&
-          consentedScopes.indexOf(permission.value) !== -1);
-      });
-    }
+export function setConsentedStatus(tokenPresent: boolean,
+  permissions: IPermission[], consentedScopes: string[]): IPermission[] {
+  if (tokenPresent && permissions && permissions.length > 0) {
+    const clonedPermissions = JSON.parse(JSON.stringify(permissions)) as IPermission[];
+    clonedPermissions.forEach((permission: IPermission) => {
+      permission.consented = (consentedScopes && consentedScopes.length > 0 &&
+        consentedScopes.indexOf(permission.value) !== -1);
+    });
+    return clonedPermissions;
   }
+  return permissions;
 }
 
 export function sortPermissionsWithPrivilege(permissionsToSort: IPermission[]) {
-  const leastPrivilegedIndex = permissionsToSort.findIndex(permission => permission.isLeastPrivilege === true);
-  if (leastPrivilegedIndex < 1) {
-    return permissionsToSort;
+  const leastPrivileged = permissionsToSort.find(permission => permission.isLeastPrivilege === true);
+  if (leastPrivileged) {
+    const permissions: IPermission[] = permissionsToSort.filter(k => k.value !== leastPrivileged.value);
+    permissions.unshift(leastPrivileged);
+    return permissions;
   }
-  const removedPermissions: IPermission[] = permissionsToSort.splice(leastPrivilegedIndex, 1);
-  permissionsToSort.unshift(removedPermissions[0]);
   return permissionsToSort;
 }

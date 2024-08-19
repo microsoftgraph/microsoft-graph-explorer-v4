@@ -1,36 +1,37 @@
 import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
+import { ApplicationState } from '../../store';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
-import { ApplicationState } from '../../types/root';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import * as authActionCreators from '../services/actions/auth-action-creators';
-import { setDimensions } from '../services/actions/dimensions-action-creator';
-import { runQuery } from '../services/actions/query-action-creators';
-import { setSampleQuery } from '../services/actions/query-input-action-creators';
-import { changeTheme } from '../services/actions/theme-action-creator';
-import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
 import { PopupsProvider } from '../services/context/popups-context';
+import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
+import { signIn, storeScopes } from '../services/slices/auth.slice';
+import { setDimensions } from '../services/slices/dimensions.slice';
+import { runQuery } from '../services/slices/graph-response.slice';
+import { setSampleQuery } from '../services/slices/sample-query.slice';
+import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
+import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
 import { TermsOfUseMessage } from './app-sections';
-import { StatusMessages } from './common/lazy-loader/component-registry';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
+import { StatusMessages } from './common/lazy-loader/component-registry';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
 import { MainHeader } from './main-header/MainHeader';
@@ -38,7 +39,6 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
-import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -318,9 +318,17 @@ class App extends Component<IAppProps, IAppState> {
     const width = parseFloat(sidebarWidth.replace('%', ''));
 
     const { dimensions, actions }: any = this.props;
-    const dimensionsToUpdate = { ...dimensions };
-    dimensionsToUpdate.content.width = `${maxWidth - width}%`;
-    dimensionsToUpdate.sidebar.width = `${width}%`;
+    const dimensionsToUpdate = {
+      ...dimensions,
+      content: {
+        ...dimensions.content,
+        width: `${maxWidth - width}%`
+      },
+      sidebar: {
+        ...dimensions.sidebar,
+        width: `${width}%`
+      }
+    };
     if (actions) {
       actions.setDimensions(dimensionsToUpdate);
     }
@@ -492,7 +500,7 @@ class App extends Component<IAppProps, IAppState> {
 }
 
 const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, authToken, graphExplorerMode
+  profile, sampleQuery, auth: { authToken }, graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;
@@ -517,7 +525,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         runQuery,
         setSampleQuery,
         toggleSidebar,
-        ...authActionCreators,
+        signIn,
+        storeScopes,
         changeTheme,
         setDimensions
       },

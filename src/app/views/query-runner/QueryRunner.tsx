@@ -1,14 +1,13 @@
 import { IDropdownOption, MessageBarType } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../store';
+import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
 import { IQuery } from '../../../types/query-runner';
-import { runQuery } from '../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../services/actions/query-status-action-creator';
+import { runQuery } from '../../services/slices/graph-response.slice';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
@@ -17,7 +16,7 @@ import './query-runner.scss';
 import Request from './request/Request';
 
 const QueryRunner = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { sampleQuery } = useAppSelector((state) => state);
 
   const [sampleBody, setSampleBody] = useState('');
@@ -46,12 +45,13 @@ const QueryRunner = (props: any) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    if (sampleBody && sampleQuery.selectedVerb !== 'GET') {
-      const headers = sampleQuery.sampleHeaders;
-      const contentType = headers.find(k => k.name.toLowerCase() === 'content-type');
+    let sample = { ...sampleQuery };
+    if (sampleBody && sample.selectedVerb !== 'GET') {
+      const headers = sample.sampleHeaders;
+      const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
         try {
-          sampleQuery.sampleBody = JSON.parse(sampleBody);
+          sample.sampleBody = JSON.parse(sampleBody);
         } catch (error) {
           dispatch(setQueryResponseStatus({
             ok: false,
@@ -62,24 +62,27 @@ const QueryRunner = (props: any) => {
           return;
         }
       } else {
-        sampleQuery.sampleBody = sampleBody;
+        sample.sampleBody = sampleBody;
       }
     }
 
     if (query) {
-      sampleQuery.sampleUrl = query.sampleUrl;
-      sampleQuery.selectedVersion = query.selectedVersion;
-      sampleQuery.selectedVerb = query.selectedVerb;
+      sample = {
+        ...sample,
+        sampleUrl: query.sampleUrl,
+        selectedVersion: query.selectedVersion,
+        selectedVerb: query.selectedVerb
+      }
     }
 
-    dispatch(runQuery(sampleQuery));
-    const sanitizedUrl = sanitizeQueryUrl(sampleQuery.sampleUrl);
+    dispatch(runQuery(sample));
+    const sanitizedUrl = sanitizeQueryUrl(sample.sampleUrl);
     const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
       {
         ComponentName: componentNames.RUN_QUERY_BUTTON,
-        SelectedVersion: sampleQuery.selectedVersion,
-        QuerySignature: `${sampleQuery.selectedVerb} ${sanitizedUrl}`,
+        SelectedVersion: sample.selectedVersion,
+        QuerySignature: `${sample.selectedVerb} ${sanitizedUrl}`,
         ...deviceCharacteristics
       });
   };

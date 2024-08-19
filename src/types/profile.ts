@@ -12,7 +12,9 @@ export interface IProfileProps {
 }
 
 export interface IProfileState {
-  user: IUser;
+  status: 'unset' | 'success' | 'error',
+  user?: IUser
+  error?: Error
 }
 
 export interface IUser {

@@ -14,7 +14,8 @@ import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment'
 import { authStyles } from './Auth.styles';
 
 export function Auth(props: any) {
-  const { authToken, profile, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const { auth: { authToken }, profile, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const {user} = profile;
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,13 +46,13 @@ export function Auth(props: any) {
     </MessageBar>;
   }
 
-  const tokenDetailsDisabled = profile?.profileType === ACCOUNT_TYPE.MSA;
+  const tokenDetailsDisabled = user?.profileType === ACCOUNT_TYPE.MSA;
 
   return (<div className={classes.auth} style={{ height: requestHeight }}>
     {!loading ?
       <div>
         <div className={classes.accessTokenContainer}>
-          <Label className={classes.accessTokenLabel}>{translateMessage('Access Token' )}</Label>
+          <Label className={classes.accessTokenLabel}>{translateMessage('Access Token')}</Label>
           <CopyButton isIconButton={true} handleOnClick={handleCopy} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage(showMessage())}

@@ -1,6 +1,6 @@
 export interface AppAction {
   type: string;
-  response: object | string | any | undefined;
+  payload: object | string | any | undefined;
 }
 
 export interface IApiResponse {
