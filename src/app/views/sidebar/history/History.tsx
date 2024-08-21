@@ -5,6 +5,7 @@ import {
   IGroup,
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
+import { Button } from '@fluentui/react-components';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -528,11 +529,10 @@ const History = (props: any) => {
         }}
       >
         <DialogFooter>
-          <PrimaryButton
-            onClick={deleteHistoryCategory}
-            text={translateMessage('Delete')}
-          />
-          <DefaultButton onClick={closeDialog} text={translateMessage('Cancel')} />
+          <Button
+            appearance= 'primary'
+            onClick={deleteHistoryCategory}>{translateMessage('Delete')}</Button>
+          <Button onClick={closeDialog}>{translateMessage('Cancel')}</Button>
         </DialogFooter>
       </Dialog>
     </>
