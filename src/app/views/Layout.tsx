@@ -1,22 +1,21 @@
 import { Announced} from '@fluentui/react';
 import { useAnnounce, FluentProvider, AnnounceProvider } from '@fluentui/react-components';
 import { Resizable } from 're-resizable';
-import { useEffect} from 'react';
+import React,  { useEffect} from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
-import { ApplicationState } from '../../types/root';
+import { ApplicationState } from '../../store';
 import { ISharedQueryParams } from '../../types/share-query';
-import * as authActionCreators from '../services/actions/auth-action-creators';
-import { setDimensions } from '../services/actions/dimensions-action-creator';
-import { runQuery } from '../services/actions/query-action-creators';
-import { setSampleQuery } from '../services/actions/query-input-action-creators';
-import { toggleSidebar } from '../services/actions/toggle-sidebar-action-creator';
+import { setDimensions } from '../services/slices/dimensions.slice';
+import { runQuery } from '../services/slices/graph-response.slice';
+import { setSampleQuery } from '../services/slices/sample-query.slice';
+import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { PopupsProvider } from '../services/context/popups-context';
 import { GRAPH_URL } from '../services/graph-constants';
 import { parseSampleUrl } from '../utils/sample-url-generation';
@@ -485,7 +484,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         runQuery,
         setSampleQuery,
         toggleSidebar,
-        ...authActionCreators,
+        signIn,
+        storeScopes,
         setDimensions
       },
       dispatch
