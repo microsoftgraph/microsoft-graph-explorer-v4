@@ -2,6 +2,8 @@ import {
   ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
   Label, MessageBarType, PrimaryButton, getId
 } from '@fluentui/react';
+import { Button } from '@fluentui/react-components';
+import { ArrowUploadRegular } from '@fluentui/react-icons';
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
 
@@ -97,16 +99,18 @@ export const UploadPostmanCollection = () => {
   return (
     <div style={{position: 'relative', bottom: '4px'}} hidden={true}>
       <input type="file" id="file-input" style={style_} onChange={handleFileSelect}/>
-      <ActionButton iconProps={uploadIcon}
+      <Button
+        appearance='transparent'
+        icon = {<ArrowUploadRegular/>}
         title={translateMessage('Upload collection')}
-        ariaLabel={translateMessage('Upload collection')}
+        aria-label={translateMessage('Upload collection')}
         disabled={false}
         onClick={() => selectFile()}
       >
         <Label>
           {translateMessage('Upload collection')}
         </Label>
-      </ActionButton>
+      </Button>
       <Dialog
         hidden={isDialogHidden}
         onDismiss={toggleIsDialogHidden}

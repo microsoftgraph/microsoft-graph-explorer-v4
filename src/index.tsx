@@ -38,7 +38,7 @@ import { Collection } from './types/resources';
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
-let currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
+// const currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
 export function removeSpinners() {
   // removes the loading spinner from GE html after the app is loaded
   const spinner = document.getElementById('spinner');
@@ -56,46 +56,46 @@ export function removeSpinners() {
   appRoot.classList.remove('hidden');
 }
 
-function setCurrentSystemTheme(): void {
-  const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
+// function setCurrentSystemTheme(): void {
+//   const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
 
-  if (themeFromLocalStorage) {
-    currentTheme = themeFromLocalStorage;
-  } else {
-    currentTheme = getOSTheme();
-  }
+//   if (themeFromLocalStorage) {
+//     currentTheme = themeFromLocalStorage;
+//   } else {
+//     currentTheme = getOSTheme();
+//   }
 
-  applyCurrentSystemTheme(currentTheme);
-}
-function getOSTheme(): string {
-  let currentSystemTheme: string;
-  const currentSystemThemeDark = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  );
+//   applyCurrentSystemTheme(currentTheme);
+// }
+// function getOSTheme(): string {
+//   let currentSystemTheme: string;
+//   const currentSystemThemeDark = window.matchMedia(
+//     '(prefers-color-scheme: dark)'
+//   );
 
-  const currentSystemThemeLight = window.matchMedia(
-    '(prefers-color-scheme: light)'
-  );
+//   const currentSystemThemeLight = window.matchMedia(
+//     '(prefers-color-scheme: light)'
+//   );
 
-  if (currentSystemThemeDark.matches === true) {
-    currentSystemTheme = 'dark';
-  } else if (currentSystemThemeLight.matches === true) {
-    currentSystemTheme = 'light';
-  } else {
-    currentSystemTheme = 'high-contrast';
-  }
+//   if (currentSystemThemeDark.matches === true) {
+//     currentSystemTheme = 'dark';
+//   } else if (currentSystemThemeLight.matches === true) {
+//     currentSystemTheme = 'light';
+//   } else {
+//     currentSystemTheme = 'high-contrast';
+//   }
 
-  return currentSystemTheme;
-}
+//   return currentSystemTheme;
+// }
 
-function applyCurrentSystemTheme(themeToApply: string): void {
-  loadGETheme(themeToApply);
-  appStore.dispatch(changeTheme(themeToApply));
-}
+// function applyCurrentSystemTheme(themeToApply: string): void {
+//   // loadGETheme(themeToApply);
+//   appStore.dispatch(changeTheme(themeToApply));
+// }
 
 const appStore: any = store;
 
-setCurrentSystemTheme();
+// setCurrentSystemTheme();
 appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
@@ -113,19 +113,13 @@ refreshAccessToken();
 
 setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 10 minutes
 
-const theme = new URLSearchParams(location.search).get('theme');
+// const theme = new URLSearchParams(location.search).get('theme');
 
-if (theme) {
-  loadGETheme(theme);
-  appStore.dispatch(changeTheme(theme));
-  appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
-} else {
-  appStore.dispatch(setGraphExplorerMode(Mode.Complete));
-  appStore.dispatch(toggleSidebar({
-    mobileScreen: false,
-    showSidebar: true
-  }))
-}
+// if (theme) {
+//   // loadGETheme(theme);
+//   appStore.dispatch(changeThemeSuccess(theme));
+//   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
+// }
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
 

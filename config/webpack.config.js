@@ -17,6 +17,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -419,6 +420,8 @@ module.exports = function (webpackEnv) {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
       }),
+      // remove after comparing bundle sizes
+      // new BundleAnalyzerPlugin(),
       new MonacoWebpackPlugin({
         languages: [
           'json',
