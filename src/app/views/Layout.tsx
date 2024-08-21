@@ -12,6 +12,7 @@ import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ApplicationState } from '../../store';
 import { ISharedQueryParams } from '../../types/share-query';
+import { signIn, storeScopes } from '../services/slices/auth.slice';
 import { setDimensions } from '../services/slices/dimensions.slice';
 import { runQuery } from '../services/slices/graph-response.slice';
 import { setSampleQuery } from '../services/slices/sample-query.slice';
@@ -459,7 +460,7 @@ const mapStateToProps = ({
   dimensions,
   profile,
   sampleQuery,
-  authToken,
+  auth: { authToken },
   graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
