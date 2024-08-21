@@ -36,6 +36,7 @@ export interface ResourcePath {
   method?: string;
   key?: string;
   url: string;
+  scope?: string;
 }
 
 export enum ResourceLinkType {
@@ -54,4 +55,14 @@ export interface Collection {
   name: string;
   paths: ResourcePath[],
   isDefault?: boolean;
+}
+
+export interface CollectionPermission {
+  value: string;
+  scopeType: string;
+  consentDisplayName: string;
+  consentDescription: string;
+  isAdmin: boolean;
+  isLeastPrivilege: boolean;
+  isHidden: boolean;
 }

@@ -14,6 +14,7 @@ import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import CollectionPermissionsProvider from '../services/context/collection-permissions/CollectionPermissionsProvider';
 import { PopupsProvider } from '../services/context/popups-context';
 import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
@@ -26,12 +27,11 @@ import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
 import { translateMessage } from '../utils/translate-messages';
-import { TermsOfUseMessage } from './app-sections';
+import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
-import { StatusMessages } from './common/lazy-loader/component-registry';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
 import { MainHeader } from './main-header/MainHeader';
@@ -492,7 +492,9 @@ class App extends Component<IAppProps, IAppState> {
               <TermsOfUseMessage />
             </div>
           </div>
-          <PopupsWrapper />
+          <CollectionPermissionsProvider>
+            <PopupsWrapper />
+          </CollectionPermissionsProvider>
         </PopupsProvider>
       </ThemeContext.Provider>
     );

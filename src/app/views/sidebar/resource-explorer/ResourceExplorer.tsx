@@ -1,8 +1,6 @@
 import {
-  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
-  Stack,
-  styled,
-  Toggle
+  DefaultButton, Dialog, DialogFooter, DialogType, getId, getTheme, IconButton, INavLink, INavLinkGroup, Label,
+  Nav, PrimaryButton, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle, TooltipHost
 } from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -14,6 +12,7 @@ import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../ty
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { usePopups } from '../../../services/hooks';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -21,13 +20,9 @@ import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { UploadPostmanCollection } from './collection/UploadCollection';
-import CommandOptions from './command-options/CommandOptions';
-import {
-  createResourcesList, getResourcePaths,
-  getUrlFromLink
-} from './resource-explorer.utils';
+import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles } from './resources.styles';
+import { navStyles, resourceExplorerStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -45,14 +40,44 @@ const UnstyledResourceExplorer = (props: any) => {
   const [version, setVersion] = useState<string>(versions[0].key);
   const resourcesToUse = Object.keys(data[version]).length > 0 ? data[version].children! : [];
   const [searchText, setSearchText] = useState<string>('');
+  const [isDialogHidden, setIsDialogHidden] = useState(true);
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
-
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
+  const resourcesStyles = resourceExplorerStyles(getTheme());
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
 
   useEffect(() => {
     setItems(navigationGroup);
   }, [filteredPayload.length]);
+
+  const deleteResourcesDialogProps = {
+    type: DialogType.normal,
+    title: translateMessage('Delete collection'),
+    closeButtonAriaLabel: 'Close',
+    subText: translateMessage('Do you want to remove all the items you have added to the collection?')
+  };
+
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
+        width: 'xl'
+      },
+      data: {
+        version
+      }
+    })
+  }
+
+  const removeAllResources = () => {
+    dispatch(removeResourcePaths(selectedLinks));
+    toggleIsDialogHidden();
+  }
+
+  const toggleIsDialogHidden = () => {
+    setIsDialogHidden(!isDialogHidden);
+  }
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));
@@ -129,6 +154,9 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
+      <Label styles={{ root: { marginBottom: '10px' } }}>
+        {translateMessage('Microsoft Graph OpenAPI explorer')}
+      </Label>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={debouncedSearch}
@@ -136,22 +164,42 @@ const UnstyledResourceExplorer = (props: any) => {
       />
       <hr />
       <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
-        <Toggle label={`${translateMessage('Switch to beta')}`}
+        <Label styles={{ root: { position: 'relative', top: '2px' } }} >
+          {translateMessage('Switch to beta')}
+        </Label>
+        <Toggle
           onChange={changeVersion}
-          onText={translateMessage('On')}
-          offText={translateMessage('Off')}
           inlineLabel
-          styles={{ text: { position: 'relative', top: '4px' } }}
+          styles={{ root: { position: 'relative', top: '4px' } }}
         />
-        < UploadPostmanCollection />
       </Stack>
-
-      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-        {selectedLinks && selectedLinks.length > 0 && <>
-          <Label>{translateMessage('Selected Resources')} ({selectedLinks.length})</Label>
-          <CommandOptions version={version} />
-        </>
-        }
+      <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
+        <Label>{translateMessage('Collection')}</Label>
+        <TooltipHost
+          content={translateMessage('Preview collection')}
+        >
+          <IconButton
+            disabled={selectedLinks.length === 0}
+            iconProps={{ iconName: 'View' }}
+            onClick={() => openPreviewCollection()}
+            styles={resourcesStyles.iconButtons}
+          />
+        </TooltipHost>
+        <TooltipHost
+          content={translateMessage('Upload collection')}
+        >
+          < UploadPostmanCollection />
+        </TooltipHost>
+        <TooltipHost
+          content={translateMessage('Delete collection')}
+        >
+          <IconButton
+            iconProps={{ iconName: 'Delete' }}
+            disabled={selectedLinks.length === 0}
+            onClick={() => toggleIsDialogHidden()}
+            styles={resourcesStyles.iconButtons}
+          />
+        </TooltipHost>
       </Stack>
 
       {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
@@ -177,7 +225,22 @@ const UnstyledResourceExplorer = (props: any) => {
             className={classes.queryList} />
           )
       }
-    </section >
+      <Dialog
+        hidden={isDialogHidden}
+        onDismiss={toggleIsDialogHidden}
+        dialogContentProps={deleteResourcesDialogProps}
+        modalProps={{
+          titleAriaId: getId('dialogLabel'),
+          subtitleAriaId: getId('subTextLabel'),
+          isBlocking: false
+        }}
+      >
+        <DialogFooter>
+          <PrimaryButton onClick={removeAllResources} text={translateMessage('Yes')} />
+          <DefaultButton onClick={toggleIsDialogHidden} text={translateMessage('Cancel')} />
+        </DialogFooter>
+      </Dialog>
+    </section>
   );
 }
 
