@@ -37,13 +37,16 @@ const UnstyledResourceExplorer = (props: any) => {
   const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
   const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
-  const versions: {key: string, text: string}[] = [
+  const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
   ];
 
   const [version, setVersion] = useState<string>(versions[0].key);
-  const resourcesToUse = Object.keys(data[version]).length > 0 ? data[version].children! : [];
+  const resourcesToUse = data?.[version]?.children
+    && Object.keys(data[version]).length > 0
+    ? data[version].children
+    : [];
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
