@@ -40,7 +40,7 @@ import { ISidebarProps } from '../../types/sidebar';
 import { IUser } from '../../types/profile';
 
 export interface IAppProps {
-  profile: IUser | null | undefined;
+  profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
