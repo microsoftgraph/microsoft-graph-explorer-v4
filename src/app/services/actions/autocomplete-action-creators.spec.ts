@@ -1,13 +1,16 @@
-import thunk from 'redux-thunk';
-import configureMockStore from 'redux-mock-store';
-import { store } from '../../../../src/store/index';
-import { ApplicationState } from '../../../types/root';
-import { Mode } from '../../../types/enums';
-import { fetchAutoCompleteOptions } from '../../../app/services/actions/autocomplete-action-creators';
-import { suggestions } from '../../../modules/suggestions/suggestions';
 
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+import { AnyAction } from '@reduxjs/toolkit';
+import configureMockStore from 'redux-mock-store';
+
+import { ApplicationState, store } from '../../../../src/store/index';
+import { fetchAutoCompleteOptions } from '../../../app/services/slices/autocomplete.slice';
+import { suggestions } from '../../../modules/suggestions/suggestions';
+import { Mode } from '../../../types/enums';
+import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
+
+
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 jest.mock('../../../../src/store/index');
 window.fetch = jest.fn();
@@ -17,25 +20,24 @@ const mockState: ApplicationState = {
     baseUrl: 'https://graph.microsoft.com/v1.0/me',
     parameters: '$count=true'
   },
-  profile: null,
+  profile: {
+    user: undefined,
+    error: undefined,
+    status: 'unset'
+  },
   sampleQuery: {
     sampleUrl: 'http://localhost:8080/api/v1/samples/1',
     selectedVerb: 'GET',
     selectedVersion: 'v1',
     sampleHeaders: []
   },
-  authToken: { token: false, pending: false },
-  consentedScopes: [],
-  isLoadingData: false,
+  auth: {
+    authToken: { token: false, pending: false },
+    consentedScopes: []
+  },
   queryRunnerStatus: null,
   termsOfUse: true,
   theme: 'dark',
-  adaptiveCard: {
-    pending: false,
-    data: {
-      template: 'Template'
-    }
-  },
   graphExplorerMode: Mode.Complete,
   sidebarProperties: {
     showSidebar: true,
@@ -56,8 +58,11 @@ const mockState: ApplicationState = {
   },
   history: [],
   graphResponse: {
-    body: undefined,
-    headers: undefined
+    isLoadingData: false,
+    response: {
+      body: undefined,
+      headers: undefined
+    }
   },
   snippets: {
     pending: false,
@@ -92,13 +97,27 @@ const mockState: ApplicationState = {
     pending: false,
     data: {},
     error: null
-  }
+  },
+  permissionGrants: {
+    pending: false,
+    permissions: [],
+    error: null
+  },
+  collections: [],
+  proxyUrl: ''
 }
 
 store.getState = () => ({
   ...mockState,
   proxyUrl: '',
-  collections: []
+  collections: [],
+  graphExplorerMode: Mode.Complete,
+  queryRunnerStatus: null,
+  samples: {
+    queries: [],
+    pending: false,
+    error: null
+  }
 })
 
 describe('fetchAutoCompleteOptions', () => {
@@ -114,37 +133,43 @@ describe('fetchAutoCompleteOptions', () => {
     const store_ = mockStore(store.getState());
 
     // Call the function by dispatching the returned async function
-    await store_.dispatch(fetchAutoCompleteOptions(url, version));
+    await store_.dispatch(fetchAutoCompleteOptions({ url, version }) as unknown as AnyAction);
 
     // Assertions
     const expectedActions = [
-      { type: 'AUTOCOMPLETE_FETCH_PENDING', response: null },
+      { type: AUTOCOMPLETE_FETCH_PENDING, payload: undefined },
       {
-        type: 'AUTOCOMPLETE_FETCH_SUCCESS',
-        response: [ 'option1', 'option2', 'option3' ]
+        type: AUTOCOMPLETE_FETCH_SUCCESS,
+        payload: ['option1', 'option2', 'option3']
       }
     ];
-    expect(store_.getActions()).toEqual(expectedActions);
+    expect(store_.getActions().map(action => {
+      const { meta, ...rest } = action;
+      return rest;
+    })).toEqual(expectedActions);
   });
 
   it('dispatches fetchAutocompleteError when suggestions retrieval fails', async () => {
     const url = '/some/url';
     const version = '1.0';
 
-    // Mock a response with null
-    suggestions.getSuggestions = jest.fn().mockResolvedValue(null);
+    // Mock a response with an error
+    suggestions.getSuggestions = jest.fn().mockRejectedValue(new Error());
 
     // Create a mock store
     const store_ = mockStore(store.getState());
 
     // Call the function by dispatching the returned async function
-    await store_.dispatch(fetchAutoCompleteOptions(url, version));
+    await store_.dispatch(fetchAutoCompleteOptions({ url, version }) as unknown as AnyAction);
 
     // Assertions
     const expectedActions = [
-      { type: 'AUTOCOMPLETE_FETCH_PENDING', response: null },
-      { type: 'AUTOCOMPLETE_FETCH_ERROR', response: {} }
+      { type: AUTOCOMPLETE_FETCH_PENDING, payload: undefined },
+      { type: AUTOCOMPLETE_FETCH_ERROR, payload: new Error() }
     ];
-    expect(store_.getActions()).toEqual(expectedActions);
+    expect(store_.getActions().map(action => {
+      const { meta, error, ...rest } = action;
+      return rest;
+    })).toEqual(expectedActions);
   });
 });

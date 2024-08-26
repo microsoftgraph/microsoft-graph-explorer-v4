@@ -11,13 +11,15 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { Response } from '../response';
-import { AdaptiveCards, GraphToolkit, ResponseHeaders,
-  Snippets } from '../../common/lazy-loader/component-registry';
+import {
+  AdaptiveCards, GraphToolkit, ResponseHeaders,
+  Snippets
+} from '../../common/lazy-loader/component-registry';
 
 export const GetPivotItems = () => {
 
   const { graphExplorerMode: mode, sampleQuery,
-    graphResponse: { body } } = useAppSelector((state) => state);
+    graphResponse: { response: { body } } } = useAppSelector((state) => state);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;

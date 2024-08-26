@@ -32,9 +32,10 @@ function generateItemsFromPaths(resources: ResourcePath[]): Item[] {
       name,
       url,
       version,
-      paths: path
+      paths: resourcePaths
     } = resource;
 
+    const path = [...resourcePaths];
     path.shift();
     path.unshift(version!);
 

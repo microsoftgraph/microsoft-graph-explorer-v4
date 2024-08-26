@@ -5,20 +5,19 @@ import {
 } from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
-import { setDimensions } from '../../../services/actions/dimensions-action-creator';
+import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
+import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
-import { Permissions, Auth, RequestHeaders } from '../../common/lazy-loader/component-registry';
 
 const Request = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
   const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
   const pivot = selectedPivot.replace('.$', '');
@@ -140,12 +139,22 @@ const Request = (props: any) => {
     const heightInPx = requestHeight.replace('px', '').trim();
     const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
     const maxDeviceVerticalHeight = 90;
-    const dimen = { ...dimensions };
-    dimen.request.height = requestHeightInVh;
-    const response = maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''));
-    dimen.response.height = response + 'vh';
-    dispatch(setDimensions(dimen));
+
+    const dimensionsToUpdate = {
+      ...dimensions,
+      request: {
+        ...dimensions.request,
+        height: requestHeightInVh
+      },
+      response: {
+        ...dimensions.response,
+        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
+      }
+    };
+
+    dispatch(setDimensions(dimensionsToUpdate));
   };
+
 
   // Resizable element does not update it's size when the browser window is resized.
   // This is a workaround to reset the height

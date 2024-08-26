@@ -20,18 +20,18 @@ jobs:
         if: ${{ github.event.inputs.release-type != 'major' && github.event.inputs.release-type != 'minor' && github.event.inputs.release-type != 'patch' }}
 
       - name: Checkout dev for ${{ github.event.inputs.release-type }} release
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         if: ${{ github.event.inputs.release-type == 'major' || github.event.inputs.release-type == 'minor' }}
         with:
           ref: dev
 
       - name: Checkout master for ${{ github.event.inputs.release-type }} release
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         if: ${{ github.event.inputs.release-type == 'patch' }}
         with:
           ref: master
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Create release branch and generate PR body
         id: create-release
         env:

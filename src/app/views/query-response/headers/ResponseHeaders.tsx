@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../../store';
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
     useAppSelector((state) => state);
-  const { headers } = graphResponse;
+  const { headers } = graphResponse.response;
 
   const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
   const monacoHeight = getResponseEditorHeight(120);

@@ -4,15 +4,15 @@ import {
   IContextualMenuProps,
   Label, SearchBox, SelectionMode, Stack, TooltipHost
 } from '@fluentui/react';
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants, fetchScopes } from '../../../../services/actions/permissions-action-creator';
 import { PopupsComponent } from '../../../../services/context/popups-context';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
+import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { searchBoxStyles } from '../../../../utils/searchbox.styles';
@@ -29,20 +29,21 @@ interface PermissionListItem extends IPermission {
 
 const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   const theme = getTheme();
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [filter, setFilter] = useState<Filter>('all-permissions');
 
   const { panelContainer: panelStyles, tooltipStyles, detailsHeaderStyles } = permissionStyles(theme);
-  const { consentedScopes, scopes, authToken } = useAppSelector((state) => state);
+  const { scopes, auth: { consentedScopes, authToken } } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!authToken.token;
   const loading = scopes.pending.isFullPermissions;
 
   const [permissions, setPermissions] = useState<IPermission[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  let listOfPermissions: IPermission[] = permissions;
 
   const getPermissions = (): void => {
-    dispatch(fetchScopes());
+    dispatch(fetchScopes('full'));
     fetchPermissionGrants();
   }
 
@@ -56,12 +57,13 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     getPermissions();
   }, []);
 
-  useEffect(() => {
-    setConsentedStatus(tokenPresent, permissions, consentedScopes);
-  }, [consentedScopes]);
-
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
-    return permissionsToSort ? permissionsToSort.sort(dynamicSort('value', SortOrder.ASC)) : [];
+    try {
+      return [...permissionsToSort].sort(dynamicSort('value', SortOrder.ASC));
+    } catch (error) {
+      // ignore
+    }
+    return permissionsToSort;
   }
 
   const renderDetailsHeader = (properties: any, defaultRender?: any): JSX.Element => {
@@ -81,8 +83,6 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
       setPermissions(sortPermissions(fullPermissions));
     }
   }, [scopes.data]);
-
-  setConsentedStatus(tokenPresent, permissions, consentedScopes);
 
   const searchValueChanged = (value?: string): void => {
     setSearchValue(value!);
@@ -141,18 +141,19 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const chooseFilter = (chosenFilter: Filter) => {
     setFilter(chosenFilter);
+    const searchResults = searchPermissions(searchValue);
     switch (chosenFilter) {
       case 'all-permissions': {
-        setPermissions(searchPermissions(searchValue));
+        setPermissions(searchResults);
         break;
       }
       case 'consented-permissions': {
-        setPermissions(searchPermissions(searchValue)
+        setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
           .filter((permission: IPermission) => permission.consented));
         break;
       }
       case 'unconsented-permissions': {
-        setPermissions(searchPermissions(searchValue)
+        setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
           .filter((permission: IPermission) => !permission.consented));
         break;
       }
@@ -160,12 +161,13 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
   }
 
   const handleRenderItemColumn = (item?: IPermission, index?: number, column?: IColumn) => {
-    return <PermissionItem column={column} index={index} item={item!} />;
+    return <PermissionItem column={column} index={index!} item={item!} />;
   }
 
   const columns = getColumns({ source: 'panel', tokenPresent });
+  listOfPermissions = setConsentedStatus(tokenPresent, sortPermissions(permissions), consentedScopes);
   const permissionsList: PermissionListItem[] = [];
-  permissions.map((perm: IPermission) => {
+  listOfPermissions.map((perm: IPermission) => {
     const permission: PermissionListItem = { ...perm };
     const permissionValue = permission.value;
     permission.groupName = permissionValue.split('.')[0];
@@ -198,6 +200,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
       ComponentName: componentNames.FILTER_PERMISSIONS_BUTTON
     });
   }
+
 
   return (
     <div data-is-scrollable={true} style={panelStyles}>
@@ -243,12 +246,12 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
               onClear={() => clearSearchBox()}
               value={searchValue}
             />
-            <Announced message={`${permissions.length} search results available.`} />
+            <Announced message={`${listOfPermissions.length} search results available.`} />
           </Stack>
           <hr />
           <DetailsList
             onShouldVirtualize={() => false}
-            items={permissions}
+            items={listOfPermissions}
             columns={columns}
             groups={groups}
             onRenderItemColumn={handleRenderItemColumn}
@@ -268,8 +271,8 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
           />
         </>}
 
-      {!loading && permissions && permissions.length === 0 && scopes?.error && scopes?.error?.error &&
-        scopes?.error?.error?.status && scopes?.error?.error?.status === 404 ?
+      {!loading && listOfPermissions && listOfPermissions.length === 0 && scopes?.error &&
+        scopes?.error?.status && scopes?.error?.status === 404 ?
         <Label style={{
           display: 'flex',
           width: '100%',
@@ -279,7 +282,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
         }}>
           {translateMessage('permissions not found')}
         </Label> :
-        !loading && permissions && permissions.length === 0 && scopes.error && scopes.error.error &&
+        !loading && permissions && permissions.length === 0 && scopes.error &&
         <Label>
           {translateMessage('Fetching permissions failing')}
         </Label>
