@@ -54,6 +54,7 @@ class Suggestions implements ISuggestions {
   private createOpenApiResponse(versionedResources: IResource[], url: string): IParsedOpenApiResponse {
     const response: IParsedOpenApiResponse = {
       createdAt: '',
+      version: '',
       parameters: [{
         verb: 'get',
         values: [],

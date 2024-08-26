@@ -182,7 +182,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url;
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url &&
+      queryVersion === autoCompleteOptions.version;
     if (urlExistsInStore) {
       displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
