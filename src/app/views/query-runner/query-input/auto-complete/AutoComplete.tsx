@@ -1,4 +1,4 @@
-import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
+import { getTheme, ITextField, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
@@ -24,8 +24,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const focusRef = useRef<any>(null);
+  const focusRef = useRef<ITextField>(null);
 
   let element: HTMLDivElement | null | undefined = null;
 
@@ -99,7 +98,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (event.keyCode) {
+    switch (parseInt(event.code, 10)) {
       case KeyCodes.enter:
         event.preventDefault();
         handleEnterKeyPressed();
