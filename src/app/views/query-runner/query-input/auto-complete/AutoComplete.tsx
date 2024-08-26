@@ -98,34 +98,35 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (parseInt(event.code, 10)) {
-      case KeyCodes.enter:
+    const keyCode = event.code
+    switch (keyCode) {
+      case 'Enter':
         event.preventDefault();
         handleEnterKeyPressed();
         break;
 
-      case KeyCodes.tab:
+      case 'Tab':
         if (shouldShowSuggestions) {
           event.preventDefault();
           handleTabKeyPressed();
         }
         break;
 
-      case KeyCodes.up:
+      case 'ArrowUp':
         event.preventDefault();
         handleUpKeyPressed();
         break;
 
-      case KeyCodes.down:
+      case 'ArrowDown':
         event.preventDefault();
         handleDownKeyPressed();
         break;
 
-      case KeyCodes.escape:
+      case 'Escape':
         handleEscapeKeyPressed();
         break;
 
-      case KeyCodes.backspace:
+      case 'Backspace':
         setBackspacing(true);
         break;
 
