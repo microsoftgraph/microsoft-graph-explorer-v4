@@ -1,19 +1,20 @@
 import {
   DirectionalHint,
   FontSizes,
-  getTheme,
-  IconButton,
   Pivot,
   PivotItem,
   Stack,
   TooltipDelay,
   TooltipHost
 } from '@fluentui/react';
+import { Button } from '@fluentui/react-components';
+import { HistoryRegular, RocketRegular } from '@fluentui/react-icons';
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
-import SampleQueries from './sample-queries/SampleQueries';
+import UnstyledSampleQueries from './sample-queries/SampleQueries';
 import { sidebarStyles } from './Sidebar.styles';
 import { ResourceExplorer, History } from '../common/lazy-loader/component-registry';
+import { ExploreContentIcon } from '@fluentui/react-icons-mdl2';
 interface ISidebar {
   currentTab: string;
   setSidebarTabSelection: Function;
@@ -23,8 +24,7 @@ interface ISidebar {
 }
 
 export const Sidebar = (props: ISidebar) => {
-  const theme = getTheme();
-  const styles = sidebarStyles(theme).sidebarButtons;
+  const styles = sidebarStyles();
 
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
@@ -55,7 +55,7 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'sample-queries-tab'
             }}
           >
-            <div id={'sample-queries-tab'}><SampleQueries /></div>
+            <div id={'sample-queries-tab'}><UnstyledSampleQueries /></div>
           </PivotItem>
           <PivotItem
             headerText={translateMessage('Resources')}
@@ -91,11 +91,12 @@ export const Sidebar = (props: ISidebar) => {
             styles={{ root: { display: 'inline-block' } }}
             delay={TooltipDelay.zero}
           >
-            <IconButton
-              iconProps={{ iconName: 'Rocket' }}
-              ariaLabel={translateMessage('Sample Queries')}
+            <Button
+              appearance='transparent'
+              icon={<RocketRegular />}
+              aria-label={translateMessage('Sample Queries')}
               onClick={() => openComponent('sample-queries')}
-              styles={styles}
+              className={styles.sidebarButtons}
             />
           </TooltipHost>
           <TooltipHost
@@ -108,11 +109,11 @@ export const Sidebar = (props: ISidebar) => {
             styles={{ root: { display: 'inline-block' } }}
             delay={TooltipDelay.zero}
           >
-            <IconButton
-              iconProps={{ iconName: 'ExploreData' }}
-              ariaLabel={translateMessage('Resources')}
+            <Button
+              icon={<ExploreContentIcon/>}
+              aria-label={translateMessage('Resources')}
               onClick={() => openComponent('resources')}
-              styles={styles}
+              className={styles.sidebarButtons}
             />
           </TooltipHost>
           <TooltipHost
@@ -125,11 +126,11 @@ export const Sidebar = (props: ISidebar) => {
             styles={{ root: { display: 'inline-block' } }}
             delay={TooltipDelay.zero}
           >
-            <IconButton
-              iconProps={{ iconName: 'History' }}
-              ariaLabel={translateMessage('History')}
+            <Button
+              icon={<HistoryRegular/>}
+              aria-label={translateMessage('History')}
               onClick={() => openComponent('history')}
-              styles={styles}
+              className={styles.sidebarButtons}
             />
           </TooltipHost>
         </Stack>)

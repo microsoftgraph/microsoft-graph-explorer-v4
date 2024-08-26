@@ -288,9 +288,17 @@ const Layout: React.FC<IAppProps> = (props) => {
     const width = parseFloat(sidebarWidth.replace('%', ''));
 
     const { dimensions, actions }: any = props;
-    const dimensionsToUpdate = { ...dimensions };
-    dimensionsToUpdate.content.width = `${maxWidth - width}%`;
-    dimensionsToUpdate.sidebar.width = `${width}%`;
+    const dimensionsToUpdate = {
+      ...dimensions,
+      content: {
+        ...dimensions.content,
+        width: `${maxWidth - width}%`
+      },
+      sidebar: {
+        ...dimensions.sidebar,
+        width: `${width}%`
+      }
+    };
     if (actions) {
       actions.setDimensions(dimensionsToUpdate);
     }
