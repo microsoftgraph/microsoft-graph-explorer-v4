@@ -1,4 +1,4 @@
-import { getTheme, ITextField, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
+import { getTheme, ITextField, ITextFieldProps, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
