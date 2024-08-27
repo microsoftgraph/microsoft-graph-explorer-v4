@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
 import { clearTermsOfUse } from '../../services/slices/terms-of-use.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import { appStyles } from '../App.styles';
+// import { appStyles } from '../App.styles';
 
 const StyledTermsOfUseMessage = () => {
 
@@ -42,5 +42,5 @@ const StyledTermsOfUseMessage = () => {
   return <div />;
 }
 // @ts-ignore
-const TermsOfUseMessage = styled(StyledTermsOfUseMessage, appStyles);
-export default TermsOfUseMessage;
+// const TermsOfUseMessage = styled(StyledTermsOfUseMessage, appStyles);
+export default StyledTermsOfUseMessage;

@@ -43,7 +43,7 @@ const UnstyledResourceExplorer = (props: any) => {
   ];
 
   const [version, setVersion] = useState<string>(versions[0].key);
-  const resourcesToUse = Object.keys(data[version]).length > 0 ? data[version].children! : [];
+  const resourcesToUse = data[version] && Object.keys(data[version]).length > 0 ? data[version].children! : [];
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);

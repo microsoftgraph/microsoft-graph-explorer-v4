@@ -1,125 +1,126 @@
-import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
+// import { FontSizes, FontWeights, ITheme } from '@fluentui/react';
 
-export const sidebarStyles = (theme: ITheme) => {
-  const height = '85dvh'
-  return {
-    searchBox: {
-      marginTop: theme.spacing.s1
-    },
-    spinner: {
-      display: 'flex',
-      width: '100%',
-      height,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    queryList: {
-      marginBottom: theme.spacing.s1,
-      cursor: 'pointer',
-      height,
-      overflow: 'hidden',
-      fontSize: FontSizes.medium,
-      background: 'inherit',
-      selectors: {
-        ':hover': {
-          overflow: 'scroll'
-        }
-      }
-    },
-    pullLeft: {
-      float: 'left'
-    },
-    pullRight: {
-      float: 'right'
-    },
+import { makeStyles, tokens } from '@fluentui/react-components';
 
-    /* Group Headers */
-
-    groupHeader: {
-      fontSize: FontSizes.medium,
-      position: 'relative'
-    },
-    groupHeaderRow: {
-      lineHeight: '50px',
-      fontSize: FontSizes.medium,
-      textAlign: 'left',
-      paddingTop: '0px',
-      paddingRight: '4px',
-      paddingBottom: '0px',
-      paddingLeft: '4px'
-    },
-    groupHeaderRowIcon: {
-      height: '24px',
-      marginTop: '2%',
-      fontSize: FontSizes.xSmall,
-      fontWeight: FontWeights.light
-    },
-    groupTitle: {
-      fontSize: FontSizes.medium,
-      fontWeight: FontWeights.semibold,
-      cursor: 'pointer',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      outline: '0px',
-      display: 'inline-block'
-    },
-    headerCount: {
-      paddingTop: '0px',
-      paddingRight: '4px',
-      paddingBottom: '0px',
-      paddingLeft: '4px'
-    },
-
-    /* Row */
-
-    queryRow: {
-      background: 'inherit',
-      lineHeight: '100%',
-      fontSize: FontSizes.medium,
-      borderBottom: '1px solid ' + theme.palette.neutralLight,
-      color: theme.palette.black,
-      selectors: {
-        ':hover': {
-          background: theme.palette.neutralLight
-        }
-      }
-    },
-    queryContent: {
-      textAlign: 'left',
-      textOverflow: 'ellipsis',
-      marginLeft: theme.spacing.s1
-    },
-    rowDisabled: {
-      cursor: 'not-allowed'
-    },
-    badge: {
-      fontWeight: FontWeights.bold,
-      fontSize: FontSizes.small,
-      display: 'inline-block',
-      padding: 3,
-      color: '#fff',
-      minWidth: '55px',
-      marginRight: '-10%'
-    },
-    docLink: {
-      float: 'right',
-      fontSize: FontSizes.icon,
-      textAlign: 'left',
-      verticalAlign: 'center',
-      cursor: 'pointer',
-      color: theme.palette.themePrimary
-    },
-    links: {
-      color: `${theme.palette.blueMid} !important`
-    },
-    sidebarButtons: {
-      root:{
-        height: 40,
-        width: 40,
-        ':hover': {
-          background: `${theme.palette.neutralLight} !important`
-        }
+const height = '85dvh'
+export const sidebarStyles = makeStyles({
+  searchBox: {
+    marginTop: tokens.spacingVerticalS
+  },
+  spinner: {
+    display: 'flex',
+    width: '100%',
+    height,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  queryList: {
+    marginBottom: tokens.spacingVerticalS,
+    cursor: 'pointer',
+    height,
+    overflow: 'hidden',
+    fontSize: tokens.fontSizeBase300,
+    background: 'inherit',
+    selectors: {
+      ':hover': {
+        overflow: 'scroll'
       }
     }
-  };
-};
+  },
+  pullLeft: {
+    float: 'left'
+  },
+  pullRight: {
+    float: 'right'
+  },
+
+  /* Group Headers */
+
+  groupHeader: {
+    fontSize: tokens.fontSizeBase300,
+    position: 'relative',
+    color: tokens.colorNeutralForeground1
+  },
+  groupHeaderRow: {
+    lineHeight: '50px',
+    fontSize: tokens.fontSizeBase300,
+    textAlign: 'left',
+    paddingTop: '0px',
+    paddingRight: '4px',
+    paddingBottom: '0px',
+    paddingLeft: '4px'
+  },
+  groupHeaderRowIcon: {
+    height: '24px',
+    marginTop: '2%',
+    fontSize: tokens.fontSizeBase100,
+    fontWeight: tokens.fontWeightMedium
+  },
+  groupTitle: {
+    fontSize: tokens.fontSizeBase300,
+    fontWeight: tokens.fontWeightSemibold,
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    outline: '0px',
+    display: 'inline-block'
+  },
+  headerCount: {
+    paddingTop: '0px',
+    paddingRight: '4px',
+    paddingBottom: '0px',
+    paddingLeft: '4px'
+  },
+
+  /* Row */
+
+  queryRow: {
+    background: 'inherit',
+    lineHeight: '100%',
+    fontSize: tokens.fontSizeBase300,
+    borderBottom: '1px solid ' + tokens.colorNeutralForeground2,
+    color: tokens.colorNeutralForeground1,
+    selectors: {
+      ':hover': {
+        background: tokens.colorNeutralBackground1
+      }
+    }
+  },
+  queryContent: {
+    textAlign: 'left',
+    textOverflow: 'ellipsis',
+    marginLeft: tokens.spacingVerticalS
+  },
+  rowDisabled: {
+    cursor: 'not-allowed'
+  },
+  badge: {
+    fontWeight: tokens.fontWeightBold,
+    fontSize: tokens.fontSizeBase100,
+    display: 'inline-block',
+    padding: '3',
+    color: '#fff',
+    minWidth: '55px',
+    marginRight: '-10%'
+  },
+  docLink: {
+    float: 'right',
+    fontSize: tokens.fontSizeBase100,
+    textAlign: 'left',
+    verticalAlign: 'center',
+    cursor: 'pointer',
+    color: tokens.colorNeutralForeground1
+  },
+  links: {
+    color: `${tokens.colorNeutralForeground2Link} !important`
+  },
+  sidebarButtons: {
+    root:{
+      height: '40',
+      width: '40',
+      ':hover': {
+        background: `${tokens.colorNeutralBackground2} !important`
+      }
+    }
+  }
+});

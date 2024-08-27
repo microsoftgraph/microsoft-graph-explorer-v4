@@ -1,6 +1,7 @@
 import {
   Announced, FontSizes, getTheme, IconButton, ITheme, Modal, Pivot, PivotItem
 } from '@fluentui/react';
+import { Button } from '@fluentui/react-components';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 
@@ -13,6 +14,15 @@ import { convertVhToPx } from '../common/dimensions/dimensions-adjustment';
 import { GetPivotItems } from './pivot-items/pivot-items';
 import './query-response.scss';
 import { queryResponseStyles } from './queryResponse.styles';
+import { makeStyles } from '@fluentui/react-components';
+import { CancelIcon } from '@fluentui/react-icons-mdl2';
+
+const useStyles = makeStyles({
+  root: {
+    float: 'right',
+    zIndex: 1
+  }
+})
 
 const QueryResponse = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +32,7 @@ const QueryResponse = () => {
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);
+  const cancelButtonStyles = useStyles()
 
   useEffect(() => {
     setResponseHeight(convertVhToPx(dimensions.response.height, 220));
@@ -133,15 +144,10 @@ const QueryResponse = () => {
           styles={modalStyles}
           layerProps={{ eventBubblingEnabled: true }}
         >
-          <IconButton
-            styles={{
-              root: {
-                float: 'right',
-                zIndex: 1
-              }
-            }}
-            iconProps={{ iconName: 'Cancel' }}
-            ariaLabel={translateMessage('Close expanded response area')}
+          <Button
+            className={cancelButtonStyles.root}
+            icon={<CancelIcon/>}
+            aria-label={translateMessage('Close expanded response area')}
             onClick={toggleExpandResponse}
           />
           <Pivot className='pivot-response'
