@@ -25,6 +25,7 @@ const delimiters: Delimiters = {
 };
 
 function getLastDelimiterInUrl(url: string): Delimiter {
+  if (!url) { return delimiters.SLASH; }
   const symbols: Delimiter[] = Object.values(delimiters);
   for (let i = url.length - 1; i >= 0; i--) {
     const symbol = symbols.find((s) => s.symbol === url[i]);
@@ -32,7 +33,7 @@ function getLastDelimiterInUrl(url: string): Delimiter {
       const prevCharacter = url[i - 1];
       const characterSymbol = symbols.find((s) => s.symbol === prevCharacter);
       if (prevCharacter && characterSymbol) {
-        if (symbol.context === characterSymbol.context){
+        if (symbol.context === characterSymbol.context) {
           symbol.index = i - 1;
           return symbol;
         }

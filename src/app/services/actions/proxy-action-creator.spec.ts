@@ -1,48 +1,46 @@
-import { SET_GRAPH_PROXY_URL } from '../../../app/services/redux-constants';
-import { setGraphProxyUrl, getGraphProxyUrl } from '../../../app/services/actions/proxy-action-creator';
+import { AnyAction } from '@reduxjs/toolkit';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import { AppAction } from '../../../types/action';
+import { getGraphProxyUrl, setGraphProxyUrl } from '../../../app/services/slices/proxy.slice';
+import { GRAPH_API_SANDBOX_URL } from '../graph-constants';
+import { GET_GRAPH_PROXY_URL_ERROR, GET_GRAPH_PROXY_URL_PENDING, SET_GRAPH_PROXY_URL } from '../redux-constants';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middleware = [thunk];
-const mockStore = configureMockStore(middleware);
+const mockStore = configureMockStore([mockThunkMiddleware]);
 
 describe('Tests Proxy-Action-Creators', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
+
   it('should dispatch SET_GRAPH_PROXY_URL when setGraphProxyUrl is called', () => {
     // Arrange
-    const response: string = 'https://proxy.apisandbox.msdn.microsoft.com/svc';
-    const expectedAction: AppAction = {
+    const payload: string = 'https://proxy.apisandbox.msdn.microsoft.com/svc';
+    const expectedAction = {
       type: SET_GRAPH_PROXY_URL,
-      response
+      payload
     }
 
     // Act
-    const action = setGraphProxyUrl(response);
+    const action = setGraphProxyUrl(payload);
 
     // Assert
     expect(action).toEqual(expectedAction);
   })
 
-  it('should dispatch SET_GRAPH_PROXY_URL when getGraphProxyUrl() is called', () => {
+  it('should dispatch GET_GRAPH_PROXY_URL when getGraphProxyUrl() is called', async () => {
     // Arrange
-    fetchMock.mockResponseOnce(JSON.stringify({ ok: false }));
-    const expectedAction: AppAction = {
-      type: SET_GRAPH_PROXY_URL,
-      response: {
-        ok: false
-      }
-    }
+    fetchMock.mockResponseOnce(GRAPH_API_SANDBOX_URL);
+    const store_ = mockStore({});
+    await store_.dispatch(getGraphProxyUrl() as unknown as AnyAction);
 
-    const store = mockStore({});
+    const expectedActions = [
+      { type: GET_GRAPH_PROXY_URL_PENDING, payload: undefined },
+      { type: GET_GRAPH_PROXY_URL_ERROR, payload: GRAPH_API_SANDBOX_URL }
+    ];
+    expect(store_.getActions().map(action => {
+      const { meta, error, ...rest } = action;
+      return rest;
+    })).toEqual(expectedActions);
 
-    // Act and Assert
-    // @ts-ignore
-    store.dispatch(getGraphProxyUrl()).then(() => {
-      expect(store.getActions()).toEqual([expectedAction]);
-    })
-      .catch((e: Error) => { throw e });
   })
 })

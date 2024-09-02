@@ -1,23 +1,23 @@
 import { ITheme } from '@fluentui/react';
 import { Header } from './query-runner';
 
-export interface IHistoryItem extends History {
+export interface IHistoryItem extends IHistory {
   index: number;
-  statusText: string;
-  responseHeaders: Header[];
-  result: object;
 }
 
-interface History {
+interface IHistory {
   url: string;
+  result: object;
   method: string;
   headers: Header[];
   createdAt: string;
   status: number;
+  statusText: string;
   response?: Response;
   duration: number;
   body?: string;
   category?: string;
+  responseHeaders: { [key: string]: string };
 }
 
 export interface IHistoryProps {

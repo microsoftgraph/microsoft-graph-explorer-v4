@@ -1,9 +1,8 @@
 import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
 import { createRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../../store';
-import * as queryInputActionCreators from '../../../../services/actions/query-input-action-creators';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
+import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
@@ -26,7 +25,7 @@ const RequestHeaders = (props: any) => {
 
   const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const classes = classNames(props);
 
   const textfieldRef = createRef<ITextField>();
@@ -44,7 +43,7 @@ const RequestHeaders = (props: any) => {
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
 
-    dispatch(queryInputActionCreators.setSampleQuery(query));
+    dispatch(setSampleQuery(query));
     setAnnouncedMessage(translateMessage('Request Header deleted'));
     onSetFocus(); //set focus to textfield after an item is deleted
   };
@@ -67,7 +66,7 @@ const RequestHeaders = (props: any) => {
 
       const query = { ...sampleQuery };
       query.sampleHeaders = newHeaders;
-      dispatch(queryInputActionCreators.setSampleQuery(query));
+      dispatch(setSampleQuery(query));
     }
   };
 
@@ -86,7 +85,7 @@ const RequestHeaders = (props: any) => {
     headers = headers.filter(head => head.name !== headerToRemove.name);
     const query = { ...sampleQuery };
     query.sampleHeaders = headers;
-    dispatch(queryInputActionCreators.setSampleQuery(query));
+    dispatch(setSampleQuery(query));
   }
 
   return (

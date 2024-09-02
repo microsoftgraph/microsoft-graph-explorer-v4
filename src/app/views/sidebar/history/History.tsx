@@ -6,21 +6,19 @@ import {
   Label, MessageBar, MessageBarType, PrimaryButton, SearchBox, SelectionMode, styled, TooltipHost
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { AppDispatch, useAppSelector } from '../../../../store';
+import { historyCache } from '../../../../modules/cache/history-utils';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
-import { runQuery } from '../../../services/actions/query-action-creators';
-import { setSampleQuery } from '../../../services/actions/query-input-action-creators';
-import { setQueryResponseStatus } from '../../../services/actions/query-status-action-creator';
-import {
-  bulkRemoveHistoryItems, removeHistoryItem, viewHistoryItem
-} from '../../../services/actions/request-history-action-creators';
 import { GRAPH_URL } from '../../../services/graph-constants';
+import { runQuery, setQueryResponse } from '../../../services/slices/graph-response.slice';
+import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
@@ -53,7 +51,12 @@ const formatDate = (date: any) => {
   return `${year}-${month}-${day}`;
 };
 
-const sortItems = (content: History[]) => {
+const today = formatDate(new Date());
+const yesterdaysDate = new Date();
+const yesterday = formatDate(yesterdaysDate);
+yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
+
+const sortItems = (content: IHistoryItem[]) => {
   content.sort(dynamicSort('createdAt', SortOrder.DESC));
   content.forEach((value: any, index: number) => {
     value.index = index;
@@ -61,32 +64,32 @@ const sortItems = (content: History[]) => {
   return content;
 }
 
-const getItems = (content: IHistoryItem[]) => {
-  const list: History[] = [];
+const getCategory = (historyItem: IHistoryItem) => {
   const olderText = translateMessage('older');
   const todayText = translateMessage('today');
   const yesterdayText = translateMessage('yesterday');
+  let category = olderText;
+  if (historyItem.createdAt.includes(today)) {
+    category = todayText;
+  } else if (historyItem.createdAt.includes(yesterday)) {
+    category = yesterdayText;
+  }
+  return category;
+}
 
-  let date = olderText;
-  const today = formatDate(new Date());
-  const yesterdaysDate = new Date();
-  yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
-  const yesterday = formatDate(yesterdaysDate);
-
-  content.forEach((element: any) => {
-    if (element.createdAt.includes(today)) {
-      date = todayText;
-    } else if (element.createdAt.includes(yesterday)) {
-      date = yesterdayText;
-    }
-    element.category = date;
-    list.push(element);
+const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
+  const list: IHistoryItem[] = [];
+  content.forEach((historyItem) => {
+    list.push({
+      ...historyItem,
+      category: getCategory(historyItem)
+    });
   });
   return sortItems(list);
 }
 
 const History = (props: any) => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { history } = useAppSelector((state) => state);
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history);
   const [hideDialog, setHideDialog] = useState(true);
@@ -346,14 +349,19 @@ const History = (props: any) => {
     setHideDialog(true);
   };
 
-  const deleteHistoryCategory = (): any => {
-    const itemsToDelete = historyItems.filter((query: IHistoryItem) => query.category === category);
-    dispatch(bulkRemoveHistoryItems(itemsToDelete));
+  const deleteHistoryCategory = (): void => {
+    const itemsToDelete = historyItems.filter((query: IHistoryItem) => getCategory(query) === category);
+    const listOfKeys: string[] = [];
+    itemsToDelete.forEach(historyItem => {
+      listOfKeys.push(historyItem.createdAt);
+    });
+    historyCache.bulkRemoveHistoryData(listOfKeys)
+    dispatch(removeAllHistoryItems(listOfKeys));
     closeDialog();
   };
 
   const exportHistoryByCategory = (value: string) => {
-    const itemsToExport = historyItems.filter((query: IHistoryItem) => query.category === value);
+    const itemsToExport = historyItems.filter((query: IHistoryItem) => getCategory(query) === value);
     const entries: Entry[] = [];
 
     itemsToExport.forEach((query: IHistoryItem) => {
@@ -408,6 +416,8 @@ const History = (props: any) => {
 
   const deleteQuery = async (query: IHistoryItem) => {
 
+    delete query.category;
+    historyCache.removeHistoryData(query);
     dispatch(removeHistoryItem(query));
     trackHistoryItemEvent(
       eventTypes.BUTTON_CLICK_EVENT,
@@ -445,10 +455,10 @@ const History = (props: any) => {
     };
     const { duration, status, statusText } = query;
     dispatch(setSampleQuery(sampleQuery));
-    dispatch(viewHistoryItem({
-      ...query,
+    dispatch(setQueryResponse({
+      body: query.result,
       headers: query.responseHeaders
-    }));
+    }))
     dispatch(setQueryResponseStatus({
       duration,
       messageType:

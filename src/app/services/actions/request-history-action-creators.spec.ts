@@ -1,22 +1,18 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 
-import {
-  addHistoryItem, viewHistoryItem, removeHistoryItem,
-  bulkRemoveHistoryItems,
-  bulkAddHistoryItems
-} from './request-history-action-creators';
-import {
-  ADD_HISTORY_ITEM_SUCCESS, VIEW_HISTORY_ITEM_SUCCESS,
-  REMOVE_HISTORY_ITEM_SUCCESS,
-  REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
-  BULK_ADD_HISTORY_ITEMS_SUCCESS
-} from '../redux-constants';
+
+import { PayloadAction } from '@reduxjs/toolkit';
 import { IHistoryItem } from '../../../types/history';
-import { AppAction } from '../../../types/action';
-import { IGraphResponse } from '../../../types/query-response';
+import {
+  ADD_HISTORY_ITEM_SUCCESS,
+  BULK_ADD_HISTORY_ITEMS_SUCCESS,
+  REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
+  REMOVE_HISTORY_ITEM_SUCCESS
+} from '../redux-constants';
+import { addHistoryItem, bulkAddHistoryItems, removeAllHistoryItems, removeHistoryItem } from '../slices/history.slice';
+import { mockThunkMiddleware } from './mockThunkMiddleware';
 
-const middlewares = [thunk];
+const middlewares = [mockThunkMiddleware];
 const mockStore = configureMockStore(middlewares);
 
 describe('Request History Action Creators', () => {
@@ -25,7 +21,7 @@ describe('Request History Action Creators', () => {
     const expectedActions = [
       {
         type: ADD_HISTORY_ITEM_SUCCESS,
-        response: historyItem
+        payload: historyItem
       }
     ];
 
@@ -36,33 +32,12 @@ describe('Request History Action Creators', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should dispatch VIEW_HISTORY_ITEM_SUCCESS when viewHistoryItem() is called with a valid history item', () => {
-    // Assert
-    const response: IGraphResponse = {
-      body: undefined,
-      headers: undefined
-    }
-
-    const expectedAction: AppAction = {
-      type: VIEW_HISTORY_ITEM_SUCCESS,
-      response
-    }
-
-    // Act
-    const store = mockStore({ history: [] });
-
-    // Assert
-    // @ts-ignore
-    store.dispatch(viewHistoryItem(response));
-    expect(store.getActions()).toEqual([expectedAction]);
-  });
-
   it('should dispatch REMOVE_HISTORY_ITEM_SUCCESS when a history item is removed', () => {
     // Arrange
     const historyItem: IHistoryItem = {
       index: 0,
       statusText: 'Something worked!',
-      responseHeaders: [],
+      responseHeaders: {},
       result: {},
       url: 'https://graph.microsoft.com/v1.0/me',
       method: 'GET',
@@ -72,19 +47,16 @@ describe('Request History Action Creators', () => {
       duration: 200
     }
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<IHistoryItem> = {
       type: REMOVE_HISTORY_ITEM_SUCCESS,
-      response: historyItem
+      payload: historyItem
     }
 
     const store = mockStore([historyItem]);
 
     // Act and Assert
-    // @ts-ignore
     store.dispatch(removeHistoryItem(historyItem))
-      .then(() => {
-        expect(store.getActions()).toEqual([expectedAction]);
-      })
+    expect(store.getActions()).toEqual([expectedAction]);
 
   });
 
@@ -117,28 +89,30 @@ describe('Request History Action Creators', () => {
       }
     ]
 
-    const expectedAction: AppAction = {
+    const listOfKeys: string[] = [];
+    historyItems.forEach(historyItem => {
+      listOfKeys.push(historyItem.createdAt);
+    });
+
+    const expectedAction: PayloadAction<string[]> = {
       type: REMOVE_ALL_HISTORY_ITEMS_SUCCESS,
-      response: ['12345', '12345']
+      payload: ['12345', '12345']
     }
 
     const store = mockStore(historyItems);
 
     // Act and Assert
-    // @ts-ignore
-    store.dispatch(bulkRemoveHistoryItems(historyItems))
-      .then(() => {
-        expect(store.getActions()).toEqual([expectedAction]);
-      })
+    store.dispatch(removeAllHistoryItems(listOfKeys))
+    expect(store.getActions()).toEqual([expectedAction]);
   });
 
   it('should dispatch BULK_ADD_HISTORY_ITEMS_SUCCESS when bulkAddHistoryItems() is called', () => {
     // Arrange
-    const historyItems = [
+    const historyItems: IHistoryItem[] = [
       {
         index: 0,
         statusText: 'OK',
-        responseHeaders: [],
+        responseHeaders: {},
         result: {},
         url: 'https://graph.microsoft.com/v1.0/me',
         method: 'GET',
@@ -150,7 +124,7 @@ describe('Request History Action Creators', () => {
       {
         index: 1,
         statusText: 'OK',
-        responseHeaders: [],
+        responseHeaders: {},
         result: {},
         url: 'https://graph.microsoft.com/v1.0/me/events',
         method: 'GET',
@@ -161,9 +135,9 @@ describe('Request History Action Creators', () => {
       }
     ]
 
-    const expectedAction: AppAction = {
+    const expectedAction: PayloadAction<IHistoryItem[]> = {
       type: BULK_ADD_HISTORY_ITEMS_SUCCESS,
-      response: historyItems
+      payload: historyItems
     }
 
     const store = mockStore([]);
