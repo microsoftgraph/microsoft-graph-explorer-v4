@@ -62,7 +62,7 @@
                 "sass": "1.72.0",
                 "sass-loader": "14.2.1",
                 "style-loader": "4.0.0",
-                "typescript": "5.4.5",
+                "typescript": "5.5.4",
                 "url": "0.11.3",
                 "url-loader": "4.1.1",
                 "webpack": "5.91.0",
