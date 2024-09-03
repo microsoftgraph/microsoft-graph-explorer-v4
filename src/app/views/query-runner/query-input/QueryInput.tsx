@@ -13,7 +13,6 @@ import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
-import { ShareButton } from './share-query';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -121,7 +120,6 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
-          <ShareButton />
         </Stack.Item>
       </Stack>
     </>

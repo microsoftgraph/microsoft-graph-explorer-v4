@@ -1,11 +1,10 @@
 import {
-  DirectionalHint,
-  IconButton, IIconProps, TooltipHost
+  IconButton, IIconProps, ITooltipHostStyles, TooltipHost
 } from '@fluentui/react';
 
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { shareQueryStyles } from './ShareQuery.styles';
+import { styles } from '../auto-complete/suffix/suffix.styles';
 
 const ShareButton = () => {
 
@@ -15,7 +14,7 @@ const ShareButton = () => {
     iconName: 'Share'
   }
 
-  const shareButtonStyles = shareQueryStyles().iconButton;
+  const shareButtonStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
 
   const content = <div style={{ padding: '3px' }}>{translateMessage('Share Query')}</div>
   const calloutProps = {
@@ -27,7 +26,7 @@ const ShareButton = () => {
       <TooltipHost
         content={content}
         calloutProps={calloutProps}
-        directionalHint={DirectionalHint.leftBottomEdge}
+        styles={shareButtonStyles}
       >
         <IconButton
           onClick={() => showShareQuery({
@@ -37,8 +36,7 @@ const ShareButton = () => {
             }
           })}
           iconProps={iconProps}
-          styles={shareButtonStyles}
-          role={'button'}
+          className={styles.iconButton}
           ariaLabel={translateMessage('Share Query')}
         />
       </TooltipHost>
