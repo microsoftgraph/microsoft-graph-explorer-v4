@@ -13,6 +13,17 @@ export const resourceExplorerStyles = (theme: ITheme) => {
       root: {
         backgroundColor: theme.palette.neutralLighter
       }
+    },
+    iconButtons: {
+      root: {
+        '&:hover': {
+          border: `1px solid ${theme.palette.themePrimary} !important`
+        },
+        cursor: 'pointer',
+        height: '40px',
+        position: 'relative' as 'relative',
+        bottom: '5px'
+      }
     }
   }
 }

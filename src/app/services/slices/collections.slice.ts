@@ -11,18 +11,30 @@ const collections = createSlice({
       state.push(action.payload);
       return state
     },
-    addResourcePaths:(state, action: PayloadAction<ResourcePath[]>) => {
+    addResourcePaths: (state, action: PayloadAction<ResourcePath[]>) => {
       const index = state.findIndex(collection => collection.isDefault);
       if (index > -1) {
         state[index].paths.push(...action.payload)
       }
+    },updateResourcePaths: (state, action: PayloadAction<ResourcePath[]>) => {
+      const collectionIndex = state.findIndex(k => k.isDefault);
+      if (collectionIndex > -1) {
+        const context = [...state];
+        context[collectionIndex] = {
+          ...context[collectionIndex],
+          paths: action.payload
+        };
+        return context;
+      }
+      return state;
     },
-    removeResourcePaths: (state, action: PayloadAction<ResourcePath[]>)=>{
+
+    removeResourcePaths: (state, action: PayloadAction<ResourcePath[]>) => {
       const index = state.findIndex(collection => collection.isDefault);
-      if(index > -1) {
+      if (index > -1) {
         const defaultResourcePaths = [...state[index].paths];
-        action.payload.forEach((resourcePath: ResourcePath)=>{
-          const delIndex = defaultResourcePaths.findIndex(p=>p.key === resourcePath.key)
+        action.payload.forEach((resourcePath: ResourcePath) => {
+          const delIndex = defaultResourcePaths.findIndex(p => p.key === resourcePath.key)
           if (delIndex > -1) {
             defaultResourcePaths.splice(delIndex, 1)
           }
@@ -33,6 +45,6 @@ const collections = createSlice({
   }
 })
 
-export const {createCollection, addResourcePaths, removeResourcePaths} = collections.actions
+export const { createCollection, addResourcePaths, removeResourcePaths, updateResourcePaths } = collections.actions
 
 export default collections.reducer
