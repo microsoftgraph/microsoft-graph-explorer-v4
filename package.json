@@ -95,7 +95,7 @@
                 "not op_mini all"
         ],
         "devDependencies": {
-                "@axe-core/playwright": "4.7.3",
+                "@axe-core/playwright": "4.10.0",
                 "@playwright/test": "1.46.1",
                 "@types/chromedriver": "81.0.1",
                 "@types/isomorphic-fetch": "0.0.39",
