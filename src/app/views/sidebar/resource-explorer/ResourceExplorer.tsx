@@ -154,58 +154,27 @@ const UnstyledResourceExplorer = (props: any) => {
 
   return (
     <section style={{ marginTop: '8px' }}>
-      <Label styles={{ root: { marginBottom: '10px' } }}>
-        {translateMessage('Microsoft Graph OpenAPI explorer')}
-      </Label>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={debouncedSearch}
         styles={searchBoxStyles}
       />
       <hr />
-      <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
-        <Label styles={{ root: { position: 'relative', top: '2px' } }} >
-          {translateMessage('Switch to beta')}
+      <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
+        <Label styles={{ root: { position: 'relative'} }}>
+          {translateMessage('Resources available')}
         </Label>
-        <Toggle
-          onChange={changeVersion}
-          inlineLabel
-          styles={{ root: { position: 'relative', top: '4px' } }}
-        />
-      </Stack>
-      <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }}>
-        <Label>{translateMessage('Collection')}</Label>
-        <TooltipHost
-          content={translateMessage('Preview collection')}
-        >
-          <IconButton
-            disabled={selectedLinks.length === 0}
-            iconProps={{ iconName: 'View' }}
-            onClick={() => openPreviewCollection()}
-            styles={resourcesStyles.iconButtons}
+        <Stack horizontal tokens={{ childrenGap: 10}}>
+          <Toggle
+            onChange={changeVersion}
+            inlineLabel
+            styles={{ root: { position: 'relative', top: '2px' } }}
           />
-        </TooltipHost>
-        <TooltipHost
-          content={translateMessage('Upload collection')}
-        >
-          < UploadPostmanCollection />
-        </TooltipHost>
-        <TooltipHost
-          content={translateMessage('Delete collection')}
-        >
-          <IconButton
-            iconProps={{ iconName: 'Delete' }}
-            disabled={selectedLinks.length === 0}
-            onClick={() => toggleIsDialogHidden()}
-            styles={resourcesStyles.iconButtons}
-          />
-        </TooltipHost>
+          <Label styles={{ root: { position: 'relative', top: '2px' } }} >
+            {translateMessage('Switch to beta')}
+          </Label>
+        </Stack>
       </Stack>
-
-      {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
-        {translateMessage('Resources available')}
-      </Label>
-      }
 
       {
         items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
@@ -225,21 +194,6 @@ const UnstyledResourceExplorer = (props: any) => {
             className={classes.queryList} />
           )
       }
-      <Dialog
-        hidden={isDialogHidden}
-        onDismiss={toggleIsDialogHidden}
-        dialogContentProps={deleteResourcesDialogProps}
-        modalProps={{
-          titleAriaId: getId('dialogLabel'),
-          subtitleAriaId: getId('subTextLabel'),
-          isBlocking: false
-        }}
-      >
-        <DialogFooter>
-          <PrimaryButton onClick={removeAllResources} text={translateMessage('Yes')} />
-          <DefaultButton onClick={toggleIsDialogHidden} text={translateMessage('Cancel')} />
-        </DialogFooter>
-      </Dialog>
     </section>
   );
 }

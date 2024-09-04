@@ -77,5 +77,3 @@ export const ResourceExplorer = (props?: any) => {
     <LazyResourceExplorer {...props} />
   )
 }
-
-

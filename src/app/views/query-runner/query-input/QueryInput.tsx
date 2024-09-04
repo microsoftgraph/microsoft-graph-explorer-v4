@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
+import { DefaultButton, Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { useContext } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -13,6 +13,7 @@ import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
+import { usePopups } from '../../../services/hooks/usePopups';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -23,6 +24,8 @@ const QueryInput = (props: IQueryInputProps) => {
 
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
+
 
   const urlVersions: IDropdownOption[] = [];
   GRAPH_API_VERSIONS.forEach(version => {
@@ -80,6 +83,15 @@ const QueryInput = (props: IQueryInputProps) => {
     childrenGap: 7
   };
 
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
+        width: 'xl'
+      }
+    })
+  }
+
 
   return (
     <>
@@ -120,6 +132,11 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
+          <DefaultButton
+            text={translateMessage('My API Collection')}
+            iconProps={{ iconName: 'View' }}
+            onClick={() => openPreviewCollection()}
+          />
         </Stack.Item>
       </Stack>
     </>
