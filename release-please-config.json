@@ -8,14 +8,10 @@
       "release-type": "node",
       "bump-minor-pre-major": false,
       "bump-patch-for-minor-pre-major": false,
+      "include-v-in-tag": true,
       "draft": false,
       "prerelease": false
     }
   },
-  "extra-files": [
-    {
-      "type": "generic",
-      "path": "sonar-project.properties"
-    }
-  ]
+  "extra-files": [ "sonar-project.properties" ]
 }
