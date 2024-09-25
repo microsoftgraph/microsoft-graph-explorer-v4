@@ -1,7 +1,27 @@
 export interface IOpenApiResponse {
   paths: any;
+  info: IOpenApiInfo;
 }
 
+export interface IOpenApiInfo {
+  version: string;
+  title: string;
+  description?: string;
+  termsOfService?: string;
+  contact?: IOpenApiContact;
+  license?: IOpenApiLicense;
+}
+
+export interface IOpenApiContact {
+  name: string;
+  url: string;
+  email: string;
+}
+
+export interface IOpenApiLicense {
+  name: string;
+  url: string;
+}
 export interface IOpenApiParseContent {
   response: IOpenApiResponse;
   url: string;
@@ -10,6 +30,7 @@ export interface IOpenApiParseContent {
 export interface IParsedOpenApiResponse {
   url: string;
   parameters: IParameters[];
+  version: string;
   createdAt: string;
 }
 
