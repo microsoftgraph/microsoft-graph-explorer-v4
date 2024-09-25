@@ -38,8 +38,6 @@ export const fetchResources = createAsyncThunk(
           fetch(v1Url, options),
           fetch(betaUrl, options)
         ]);
-        console.log(v1Url,options)
-        console.log(betaUrl, options)
 
         if (v1Response.ok && betaResponse.ok) {
           const [v1Data, betaData] = await Promise.all([
@@ -60,7 +58,6 @@ export const fetchResources = createAsyncThunk(
       }
     } catch (err) {
       const error = err as Error;
-      console.error(err)
       return rejectWithValue(error);
     }
   });

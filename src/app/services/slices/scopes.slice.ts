@@ -51,7 +51,6 @@ export const fetchScopes = createAsyncThunk(
 
     const options: IRequestOptions = { headers };
     try {
-      console.log({permissionsUrl, options})
       const response = await fetch(permissionsUrl, options);
       if (response.ok) {
         const scopes = await response.json() as IPermission[];
