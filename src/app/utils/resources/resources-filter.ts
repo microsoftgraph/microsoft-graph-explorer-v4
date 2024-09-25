@@ -3,26 +3,21 @@ import { hasPlaceHolders } from '../sample-url-generation';
 
 function searchResources(resources: IResource[], needle: string): IResource[] {
   const foundResources: IResource[] = [];
-
-  const segmentMatched = (resources: IResource[]): IResource[] => {
-    return resources.filter((resource: IResource) => resource.segment.contains(needle))
-  }
-
-  const cloneResources: IResource[] = Object.assign([], resources)
-  for (const resource of cloneResources) {
-    if (resource) {
-      if (resource.segment.contains(needle)) {foundResources.push(resource);}
-      else if (resource.children) {
-        const found = segmentMatched(resource.children);
-        if (found.length > 0) {
-          const cloneResource = Object.assign({}, resource)
-          cloneResource.children = found;
-          foundResources.push(cloneResource)
-        }
+  resources.forEach((resource: IResource) => {
+    if (resource.segment.contains(needle)) {
+      foundResources.push(resource);
+      return;
+    }
+    if (resource.children) {
+      const foundChildResources = searchResources(resource.children, needle);
+      if (foundChildResources.length > 0) {
+        const res = Object.assign({}, resource)
+        res.children = foundChildResources;
+        foundResources.push(res);
       }
     }
-  }
-  return foundResources;
+  });
+  return foundResources
 }
 
 function getMatchingResourceForUrl(url: string, resources: IResource[]): IResource | undefined {
