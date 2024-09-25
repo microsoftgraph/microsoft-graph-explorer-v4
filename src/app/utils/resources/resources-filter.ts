@@ -11,7 +11,7 @@ function searchResources(haystack: IResource[], needle: string): IResource[] {
     if (resource.children) {
       const foundChildResources = searchResources(resource.children, needle);
       if (foundChildResources.length > 0) {
-        resource.children = foundChildResources;
+        Object.assign(resource.children, foundChildResources)
         foundResources.push(resource);
       }
     }
