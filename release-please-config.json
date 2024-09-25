@@ -14,11 +14,6 @@
   },
   "extra-files": [
     {
-      "type": "json",
-      "path": "package.json",
-      "jsonpath": "$.version"
-    },
-    {
       "type": "generic",
       "path": "sonar-project.properties"
     }
