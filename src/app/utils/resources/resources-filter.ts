@@ -11,7 +11,7 @@ function searchResources(resources: IResource[], needle: string): IResource[] {
   const cloneResources: IResource[] = Object.assign([], resources)
   for (const resource of cloneResources) {
     if (resource) {
-      if (resource.segment.contains(needle)) foundResources.push(resource);
+      if (resource.segment.contains(needle)) {foundResources.push(resource);}
       else if (resource.children) {
         const found = segmentMatched(resource.children);
         if (found.length > 0) {
