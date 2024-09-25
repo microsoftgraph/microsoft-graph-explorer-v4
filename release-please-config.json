@@ -13,5 +13,5 @@
       "prerelease": false
     }
   },
-  "extra-files": [ "sonar-project.properties" ]
+  "extra-files": [ "package.json", "sonar-project.properties" ]
 }
