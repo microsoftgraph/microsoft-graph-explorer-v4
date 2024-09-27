@@ -17,7 +17,7 @@ function searchResources(resources: IResource[], needle: string): IResource[] {
       }
     }
   });
-  return foundResources
+  return foundResources;
 }
 
 function getMatchingResourceForUrl(url: string, resources: IResource[]): IResource | undefined {
