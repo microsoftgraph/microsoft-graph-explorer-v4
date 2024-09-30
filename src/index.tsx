@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import App from './app/views/App';
 
-import { CURRENT_THEME } from './app/services/graph-constants';
+import { CURRENT_THEME, ODATA_ABNF_RULES_OBJECT_KEY } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/slices/collections.slice';
 import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
@@ -18,6 +18,7 @@ import { fetchResources } from './app/services/slices/resources.slice';
 import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { toggleSidebar } from './app/services/slices/sidebar-properties.slice';
 import { changeTheme } from './app/services/slices/theme.slice';
+import { getRulesText } from './app/services/slices/odataabnf.slice';
 import variantService from './app/services/variant-service';
 import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import { readFromLocalStorage } from './app/utils/local-storage';
@@ -33,6 +34,7 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { Collection } from './types/resources';
+import { odataAbnfCache } from './modules/cache/odataAbnfRules.cache';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -97,6 +99,11 @@ const appStore: any = store;
 
 setCurrentSystemTheme();
 appStore.dispatch(getGraphProxyUrl());
+
+const odataAbnfRules = await odataAbnfCache.readGrammar()
+if (!odataAbnfRules) {
+  appStore.dispatch(getRulesText())
+}
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {

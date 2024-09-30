@@ -56,3 +56,4 @@ export const REVOKE_SCOPES_PENDING = 'auth/revokeScopes/pending';
 export const REVOKE_SCOPES_SUCCESS = 'auth/revokeScopes/fulfilled';
 export const REVOKE_SCOPES_ERROR = 'auth/revokeScopes/rejected';
 export const COLLECTION_CREATE_SUCCESS = 'collections/createCollection';
+export const ODATA_ABNF_RULES_CREATE_SUCCESS = 'odataAbnf/getRulesText/fulfilled';

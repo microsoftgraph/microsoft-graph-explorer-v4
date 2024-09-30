@@ -7,9 +7,11 @@ import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS,
+  ODATA_ABNF_RULES_CREATE_SUCCESS,
   RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
+import { odataAbnfCache } from '../../modules/cache/odataAbnfRules.cache';
 
 const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () => (next) => async (value) => {
   const action = value as AppAction;
@@ -48,6 +50,10 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
       await collectionsCache.create(action.payload as Collection);
       break;
     }
+
+    case ODATA_ABNF_RULES_CREATE_SUCCESS:
+      odataAbnfCache.saveGrammar(action.payload as string);
+      break;
 
     default:
       break;

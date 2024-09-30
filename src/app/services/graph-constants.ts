@@ -35,3 +35,4 @@ export const CONSENT_TYPE_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/ap
 export const CURRENT_THEME='CURRENT_THEME';
 export const EXP_URL='https://default.exp-tas.com/exptas76/9b835cbf-9742-40db-84a7-7a323a77f3eb-gedev/api/v1/tas'
 export const ODATA_ABNF_CONSTRUCTION_RULES_ENDPOINT = 'https://raw.githubusercontent.com/oasis-tcs/odata-abnf/refs/heads/main/abnf/odata-abnf-construction-rules.txt'
+export const ODATA_ABNF_RULES_OBJECT_KEY = 'odata-abnf-rules-object';
