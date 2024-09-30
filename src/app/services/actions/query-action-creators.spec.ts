@@ -4,7 +4,7 @@ import configureMockStore from 'redux-mock-store';
 import { ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { runQuery } from '../slices/graph-response.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
-import { AnyAction } from '@reduxjs/toolkit';
+import { Action } from '@reduxjs/toolkit';
 import { IQuery } from '../../../types/query-runner';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);
@@ -68,7 +68,7 @@ describe('Query action creators', () => {
       selectedVersion: 'v1.0'
     }
     const store_ = mockStore({ graphResponse: '' });
-    store_.dispatch(runQuery(query) as unknown as AnyAction);
+    store_.dispatch(runQuery(query) as unknown as Action);
     expect(store_.getActions().map(action => {
       const { meta, ...rest } = action;
       return rest;
@@ -125,7 +125,7 @@ describe('Query action creators', () => {
     }
 
     const store_ = mockStore({ graphResponse: '' });
-    store_.dispatch(runQuery(query) as unknown as AnyAction);
+    store_.dispatch(runQuery(query) as unknown as Action);
     const mockFetch = jest.fn().mockImplementation(() => {
       return Promise.resolve({
         ok: false,
@@ -137,7 +137,7 @@ describe('Query action creators', () => {
 
     window.fetch = mockFetch;
 
-    store_.dispatch(runQuery(query) as unknown as AnyAction)
+    store_.dispatch(runQuery(query) as unknown as Action)
       .then((response: { type: any; payload: { ok: boolean; }; }) => {
         expect(response.type).toBe(QUERY_GRAPH_STATUS);
         expect(response.payload.ok).toBe(false);

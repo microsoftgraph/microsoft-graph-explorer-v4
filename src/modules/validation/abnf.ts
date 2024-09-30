@@ -35,12 +35,20 @@ export class ValidatedUrl {
     let decodedGraphUrl = graphUrl;
     try { decodedGraphUrl = decodeURI(graphUrl); } catch (error) { /* empty */ }
     const grammar = ValidatedUrl.getGrammar()
-    const result = ValidatedUrl.parser.parse(
+    let result = ValidatedUrl.parser.parse(
       grammar,
       'odataUri',
       decodedGraphUrl
     );
-    console.log(result)
+
+    if (!result.success) {
+      const pathname = new URL(decodedGraphUrl).pathname.replace('/v1.0/','').replace('/beta/', '');
+      result = ValidatedUrl.parser.parse(
+        grammar,
+        'odataRelativeUri',
+        pathname
+      );
+    }
     return result;
   }
 }
