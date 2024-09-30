@@ -101,7 +101,7 @@ setCurrentSystemTheme();
 appStore.dispatch(getGraphProxyUrl());
 
 const odataAbnfRules = await odataAbnfCache.readGrammar()
-if (!odataAbnfRules) {
+if (Object.keys(odataAbnfRules).length === 0) {
   appStore.dispatch(getRulesText())
 }
 

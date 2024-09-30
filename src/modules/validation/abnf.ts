@@ -1,5 +1,5 @@
 import 'apg-js/dist/apg-api-bundle';
-import { rules } from './definition';
+import { odataAbnfCache } from '../cache/odataAbnfRules.cache';
 
 interface ValidationResult {
   inputLength: number;
@@ -15,36 +15,32 @@ interface ValidationResult {
   success: boolean;
 }
 
-const { apgLib, apgApi } = globalThis as any;
+const { apgLib } = globalThis as any;
 export class ValidatedUrl {
   private static grammar: any;
   private static parser = new apgLib.parser();
 
   public static getGrammar() {
     if (!ValidatedUrl.grammar) {
-      ValidatedUrl.grammar = this.generateGrammarObject();
+      this.generateGrammarObject().then(grammar=>{ ValidatedUrl.grammar = grammar});
     }
     return ValidatedUrl.grammar;
   }
-
-  private static generateGrammarObject() {
-    const api = new apgApi(rules);
-    api.generate();
-
-    if (api.errors.length) {
-      throw Error('ABNF grammar has errors');
-    }
-    return api.toObject();
+  private static async generateGrammarObject() {
+    const grammar = await odataAbnfCache.readGrammar();
+    return grammar;
   }
 
   public validate(graphUrl: string): ValidationResult {
     let decodedGraphUrl = graphUrl;
     try { decodedGraphUrl = decodeURI(graphUrl); } catch (error) { /* empty */ }
+    const grammar = ValidatedUrl.getGrammar()
     const result = ValidatedUrl.parser.parse(
-      ValidatedUrl.getGrammar(),
+      grammar,
       'odataUri',
       decodedGraphUrl
     );
+    console.log(result)
     return result;
   }
 }
