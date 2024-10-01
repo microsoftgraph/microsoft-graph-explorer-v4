@@ -1,5 +1,6 @@
 import {
   CommandBar,
+  DefaultButton,
   DialogFooter, ICommandBarItemProps,
   Label, PrimaryButton
 } from '@fluentui/react';
@@ -59,15 +60,15 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const options: ICommandBarItemProps[] = [
     {
       key: 'remove',
-      text: translateMessage('remove'),
+      text: translateMessage('Edit collection'),
       iconProps: { iconName: 'Delete' },
       disabled: selectedItems.length === 0,
       onClick: () => removeSelectedItems()
     },
     {
       key: 'set-scope',
-      text: translateMessage('Set scope'),
-      iconProps: { iconName: 'AzureKeyVault' },
+      text: translateMessage('Edit scope'),
+      iconProps: { iconName: 'Permissions' },
       disabled: selectedItems.length === 0,
       subMenuProps: {
         items: scopeOptions.map((option) => {
@@ -77,18 +78,31 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           }
         })
       }
+    },
+    {
+      key: 'upload',
+      text: translateMessage('Upload a new list'),
+      iconProps: { iconName: 'Upload' }
+      //onClick: () => {}
     }
+  ];
+
+  const farItems: ICommandBarItemProps[] = [
+    {
+      key: 'preview-permissions',
+      text: translateMessage('Preview permissions'),
+      iconProps: { iconName: 'ListMirrored' },
+      disabled: selectedItems.length === 0,
+      onClick: () => viewPermissions({
+        settings: {
+          title: translateMessage('Required Permissions')
+        }
+      })}
   ];
 
   const selectItems = (content: IResourceLink[]) => {
     setSelectedItems(content);
   };
-
-  useEffect(() => {
-    if (items.length === 0) {
-      props.closePopup();
-    }
-  }, [items]);
 
   const setSelectedScope = (resource: ResourcePath, scope: string): void => {
     const itemResources = items.map(item =>
@@ -111,32 +125,15 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
 
   return (
     <>
-      <Label>
-        {translateMessage('Export list as a Postman collection message')}
-      </Label>
       <CommandBar
         items={options}
         ariaLabel='Selection actions'
         primaryGroupAriaLabel='Selection actions'
         farItemsGroupAriaLabel='More selection actions'
+        farItems={farItems}
       />
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
-        }}>
-        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
-          {translateMessage('Download postman collection')}
-        </PrimaryButton>
 
-        <PrimaryButton onClick={() => viewPermissions({
-          settings: {
-            title: translateMessage('Required Permissions')
-          }
-        })} disabled={selectedItems.length > 0}>
-          {translateMessage('View permissions')}
-        </PrimaryButton>
-      </DialogFooter>
-      {items && items.length > 0 && <div style={{ height: '81vh' }}>
+      {items && items.length > 0 && <div style={{ height: '80vh' }}>
         <Paths
           resources={items}
           columns={columns}
@@ -145,6 +142,30 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         />
       </div>
       }
+      {
+        <Label
+          style={{ display: 'flex', width: '100%',
+            height: '80vh',
+            justifyContent: 'center',
+            alignItems: 'center' }}>
+          {translateMessage('Add queries in the Resources tab')}
+        </Label>
+      }
+      <DialogFooter
+        styles={{
+          actionsRight: { bottom: 0, justifyContent: 'start' }
+        }}>
+        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
+          {translateMessage('Download postman collection')}
+        </PrimaryButton>
+
+        <DefaultButton
+          onClick={
+            () => props.closePopup()
+          }>
+          {translateMessage('Close')}
+        </DefaultButton>
+      </DialogFooter>
     </>
   )
 }

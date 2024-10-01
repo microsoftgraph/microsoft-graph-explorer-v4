@@ -80,13 +80,13 @@ const QueryInput = (props: IQueryInputProps) => {
   };
 
   const queryInputStackTokens: IStackTokens = {
-    childrenGap: 7
+    childrenGap: 10
   };
 
   const openPreviewCollection = () => {
     previewCollection({
       settings: {
-        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
+        title: translateMessage('My API collection'),
         width: 'xl'
       }
     })
@@ -95,7 +95,7 @@ const QueryInput = (props: IQueryInputProps) => {
 
   return (
     <>
-      <Stack horizontal={mobileScreen ? false : true} tokens={queryInputStackTokens}>
+      <Stack horizontal={mobileScreen ? false : true} tokens={queryInputStackTokens} horizontalAlign='space-between'>
         <Stack.Item styles={!mobileScreen ? queryButtonStyles : {}}>
           <Dropdown
             ariaLabel={translateMessage('HTTP request method option')}
@@ -133,8 +133,8 @@ const QueryInput = (props: IQueryInputProps) => {
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
           <DefaultButton
+            iconProps={{ iconName: 'Share' }}
             text={translateMessage('My API Collection')}
-            iconProps={{ iconName: 'View' }}
             onClick={() => openPreviewCollection()}
           />
         </Stack.Item>
