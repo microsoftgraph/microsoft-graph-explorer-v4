@@ -11,7 +11,7 @@ export function parseOpenApiResponse(
   params: IOpenApiParseContent
 ): IParsedOpenApiResponse {
   const {
-    response: { paths },
+    response: { paths, info },
     url
   } = params;
 
@@ -29,8 +29,9 @@ export function parseOpenApiResponse(
       });
     });
 
+    const version = info?.version || '';
     const createdAt = new Date().toISOString();
-    return { url, parameters, createdAt };
+    return { url, parameters, version, createdAt };
   } catch (error: any) {
     throw new Error(error);
   }
