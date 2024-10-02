@@ -62,14 +62,14 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       key: 'remove',
       text: translateMessage('Edit collection'),
       iconProps: { iconName: 'Delete' },
-      disabled: selectedItems.length === 0,
+      disabled: items.length === 0,
       onClick: () => removeSelectedItems()
     },
     {
       key: 'set-scope',
       text: translateMessage('Edit scope'),
       iconProps: { iconName: 'Permissions' },
-      disabled: selectedItems.length === 0,
+      disabled: items.length === 0,
       subMenuProps: {
         items: scopeOptions.map((option) => {
           return {
@@ -133,29 +133,30 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         farItems={farItems}
       />
 
-      {items && items.length > 0 && <div style={{ height: '80vh' }}>
-        <Paths
-          resources={items}
-          columns={columns}
-          selectItems={selectItems}
-          setSelectedScope={setSelectedScope}
-        />
-      </div>
-      }
-      {
-        <Label
-          style={{ display: 'flex', width: '100%',
-            height: '80vh',
-            justifyContent: 'center',
-            alignItems: 'center' }}>
-          {translateMessage('Add queries in the Resources tab')}
-        </Label>
-      }
+      {items && items.length > 0 ?
+        (<div style={{ height: '80vh' }}>
+          <Paths
+            resources={items}
+            columns={columns}
+            selectItems={selectItems}
+            setSelectedScope={setSelectedScope}
+          />
+        </div>
+        ) :
+        (
+          <Label
+            style={{ display: 'flex', width: '100%',
+              height: '80vh',
+              justifyContent: 'center',
+              alignItems: 'center' }}>
+            {translateMessage('Add queries in the Resources and History tab')}
+          </Label>
+        )}
       <DialogFooter
         styles={{
           actionsRight: { bottom: 0, justifyContent: 'start' }
         }}>
-        <PrimaryButton onClick={generateCollection} disabled={selectedItems.length > 0}>
+        <PrimaryButton onClick={generateCollection} disabled={items.length === 0}>
           {translateMessage('Download postman collection')}
         </PrimaryButton>
 
