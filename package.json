@@ -22,7 +22,7 @@
                 "ajv": "8.17.1",
                 "ajv-keywords": "5.1.0",
                 "apg-js": "4.3.0",
-                "babel-loader": "9.1.3",
+                "babel-loader": "9.2.1",
                 "babel-preset-react-app": "10.0.1",
                 "bfj": "8.0.0",
                 "bootstrap": "5.3.3",
