@@ -1,8 +1,6 @@
 import { ISuggestions, SignContext } from '.';
 import { parseOpenApiResponse } from '../../app/utils/open-api-parser';
-import {
-  getMatchingResourceForUrl
-} from '../../app/utils/resources/resources-filter';
+import { getResourceFromURL } from '../../app/utils/resources/resources-filter';
 import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '../../types/open-api';
 import { IRequestOptions } from '../../types/request';
 import { IResource } from '../../types/resources';
@@ -12,7 +10,6 @@ class Suggestions implements ISuggestions {
 
   public async getSuggestions(url: string, api: string,
     version: string, context: SignContext, resources?: IResource): Promise<IParsedOpenApiResponse | null> {
-
     if (context === 'paths') {
       const resourceOptions = await this.getSuggestionsFromResources(url, resources!);
       if (resourceOptions) {
@@ -43,7 +40,8 @@ class Suggestions implements ISuggestions {
     if (!url) {
       return this.createOpenApiResponse(resources.children, url);
     } else {
-      const matching = getMatchingResourceForUrl(url, resources.children);
+      // const matching = getMatchingResourceForUrl(url, resources.children);
+      const matching = getResourceFromURL(url, resources)
       if (matching && matching.children && matching.children.length > 0) {
         return this.createOpenApiResponse(matching.children, url)
       }

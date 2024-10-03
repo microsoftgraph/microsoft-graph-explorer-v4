@@ -36,7 +36,18 @@ function getMatchingResourceForUrl(url: string, resources: IResource[]): IResour
   return node;
 }
 
+const getResourceFromURL = (url: string, resource: IResource): IResource | null =>{
+  url.split('/').filter(u=>u!=='').forEach((segment:string)=>{
+    const foundResource = resource?.children?.find(res=> res.segment === segment);
+    if(foundResource){
+      resource = foundResource
+    }
+  })
+  return resource;
+}
+
 export {
   searchResources,
-  getMatchingResourceForUrl
+  getMatchingResourceForUrl,
+  getResourceFromURL
 }

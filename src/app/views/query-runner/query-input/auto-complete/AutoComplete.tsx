@@ -1,4 +1,4 @@
-import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
+import { getTheme, ITextField, ITextFieldProps, mergeStyles, Text, TextField } from '@fluentui/react';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
@@ -24,8 +24,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const focusRef = useRef<any>(null);
+  const focusRef = useRef<ITextField>(null);
 
   let element: HTMLDivElement | null | undefined = null;
 
@@ -99,34 +98,35 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (event.keyCode) {
-      case KeyCodes.enter:
+    const keyCode = event.code
+    switch (keyCode) {
+      case 'Enter':
         event.preventDefault();
         handleEnterKeyPressed();
         break;
 
-      case KeyCodes.tab:
+      case 'Tab':
         if (shouldShowSuggestions) {
           event.preventDefault();
           handleTabKeyPressed();
         }
         break;
 
-      case KeyCodes.up:
+      case 'ArrowUp':
         event.preventDefault();
         handleUpKeyPressed();
         break;
 
-      case KeyCodes.down:
+      case 'ArrowDown':
         event.preventDefault();
         handleDownKeyPressed();
         break;
 
-      case KeyCodes.escape:
+      case 'Escape':
         handleEscapeKeyPressed();
         break;
 
-      case KeyCodes.backspace:
+      case 'Backspace':
         setBackspacing(true);
         break;
 
