@@ -4,7 +4,7 @@ import {
   DialogFooter, ICommandBarItemProps,
   Label, PrimaryButton
 } from '@fluentui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
