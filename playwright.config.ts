@@ -19,7 +19,7 @@ const config: PlaywrightTestConfig = {
     screenshot: 'only-on-failure'
   },
   testDir: './src/tests',
-  testIgnore: './src/tests/authenticated-experiences/**',
+  testIgnore: './src/tests/ui/authenticated-experiences/**',
   reporter: [
     [
       'html',
