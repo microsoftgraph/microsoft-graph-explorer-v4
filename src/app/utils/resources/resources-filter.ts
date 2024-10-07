@@ -1,9 +1,9 @@
 import { IResource } from '../../../types/resources';
 import { hasPlaceHolders } from '../sample-url-generation';
 
-function searchResources(haystack: IResource[], needle: string): IResource[] {
+function searchResources(resources: IResource[], needle: string): IResource[] {
   const foundResources: IResource[] = [];
-  haystack.forEach((resource: IResource) => {
+  resources.forEach((resource: IResource) => {
     if (resource.segment.contains(needle)) {
       foundResources.push(resource);
       return;
@@ -11,8 +11,9 @@ function searchResources(haystack: IResource[], needle: string): IResource[] {
     if (resource.children) {
       const foundChildResources = searchResources(resource.children, needle);
       if (foundChildResources.length > 0) {
-        resource.children = foundChildResources;
-        foundResources.push(resource);
+        const res = Object.assign({}, resource)
+        res.children = foundChildResources;
+        foundResources.push(res);
       }
     }
   });

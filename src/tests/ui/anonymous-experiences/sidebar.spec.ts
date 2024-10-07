@@ -14,7 +14,7 @@ test.describe('Resources Explorer', () => {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByLabel('admin (6)').click();
+    await page.getByLabel('admin (8)').click();
     await page.getByRole('link', { name: 'GET' }).click();
     await page.waitForTimeout(200);
     await page.evaluate(() => document.fonts.ready);
