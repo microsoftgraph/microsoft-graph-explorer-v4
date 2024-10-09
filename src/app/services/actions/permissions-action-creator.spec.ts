@@ -125,7 +125,8 @@ const mockState: ApplicationState = {
     error: null
   },
   collections: [],
-  proxyUrl: ''
+  proxyUrl: '',
+  odataAbnf: ''
 }
 const currentState = store.getState();
 store.getState = () => {

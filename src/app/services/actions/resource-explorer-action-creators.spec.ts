@@ -100,7 +100,8 @@ const mockState: ApplicationState = {
     error: null
   },
   collections: [],
-  proxyUrl: ''
+  proxyUrl: '',
+  odataAbnf: ''
 }
 
 const paths = [
