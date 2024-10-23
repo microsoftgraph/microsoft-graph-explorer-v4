@@ -8,7 +8,6 @@ import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { ApplicationState } from '../../store';
 import { componentNames, eventTypes, telemetry } from '../../telemetry';
-import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
@@ -195,8 +194,6 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    loadGETheme(msg.theme);
-
     // @ts-ignore
     this.props.actions!.changeTheme(msg.theme);
   };

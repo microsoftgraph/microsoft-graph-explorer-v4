@@ -4,6 +4,7 @@ import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { FluentProvider, webLightTheme, webDarkTheme } from '@fluentui/react-components';
 
 import App from './app/views/App';
 
@@ -28,7 +29,6 @@ import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
-import { loadGETheme } from './themes';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
@@ -89,7 +89,6 @@ function getOSTheme(): string {
 }
 
 function applyCurrentSystemTheme(themeToApply: string): void {
-  loadGETheme(themeToApply);
   appStore.dispatch(changeTheme(themeToApply));
 }
 
@@ -116,7 +115,6 @@ setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 1
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
-  loadGETheme(theme);
   appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 } else {
@@ -233,7 +231,9 @@ window.onerror = (message, url, lineNumber, columnNumber, error) => {
 const Root = () => {
   return (
     <Provider store={appStore}>
-      <App />
+      <FluentProvider theme={webDarkTheme}>
+        <App />
+      </FluentProvider>
     </Provider>
   );
 };

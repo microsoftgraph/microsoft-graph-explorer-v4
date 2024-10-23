@@ -1,76 +1,75 @@
-import { ITheme } from '@fluentui/react'
+import { makeStyles, shorthands, tokens } from '@fluentui/react-components';
 
-export const profileStyles = (theme: ITheme) => {
-  return {
-    linkStyles: {
-      root: {
-        marginRight: '50px',
-        height: '24px',
-        color: `${theme.palette.black} !important`,
-        '&:hover': { textDecoration: 'none', color: `${theme.palette.themeDarkAlt} !important` }
-      }
-    },
-    personaStyleToken: {
-      primaryText: {
-        paddingBottom: 5
-      },
-      secondaryText:
-      {
-        paddingBottom: 10,
-        textTransform: 'lowercase'
-      },
-      root: {
-        height: '100%',
-        paddingLeft: '3px'
-      }
-    },
-    profileSpinnerStyles: {
-      root: {
-        position: 'relative' as 'relative',
-        top: '2px'
-      }
-    },
-    permissionsLabelStyles: {
-      root: {
-        position: 'relative' as 'relative',
-        bottom: '25px',
-        left: '92px',
-        textDecoration: 'underline',
-        color: `${theme.palette.themePrimary} !important`
-      }
-    },
-    personaButtonStyles: {
-      root: {
-        ':hover': {
-          background: `${theme.palette.neutralLight} !important`
-        },
-        height: '100%',
-        flex: 1,
-        display: 'flex',
-        alignItems: 'stretch'
-      }
-    },
-    profileContainerStyles: {
-      display: 'flex',
-      alignItems: 'stretch',
-      flex: 1,
-      height: '100%'
-    },
-    permissionPanelStyles: {
-      footer: {
-        backgroundColor: theme.palette.white
-      },
-      commands: {
-        backgroundColor: theme.palette.white
-      }
-    },
-    inactiveConsentStyles: {
-      marginRight: 10,
-      backgroundColor: theme.palette.themeSecondary
-    },
-    activeConsentStyles: {
-      marginRight: 10,
-      backgroundColor: theme.palette.themeDarker
+export const useProfileStyles = makeStyles({
+  linkStyles: {
+    root: {
+      marginRight: '50px',
+      height: '24px',
+      color: `${tokens.colorNeutralForeground1} !important`,
+      '&:hover': { textDecoration: 'none', color: `${tokens.colorBrandForeground2Hover} !important` }
     }
+  },
+  personaStyleToken: {
+    primaryText: {
+      paddingBottom: '5px'
+    },
+    secondaryText: {
+      paddingBottom: '10px',
+      textTransform: 'lowercase'
+    },
+    root: {
+      height: '100%',
+      paddingLeft: '3px'
+    }
+  },
+  profileSpinnerStyles: {
+    root: {
+      position: 'relative',
+      top: '2px'
+    }
+  },
+  permissionsLabelStyles: {
+    root: {
+      position: 'relative',
+      bottom: '25px',
+      left: '92px',
+      textDecoration: 'underline',
+      color: `${tokens.colorBrandForeground1} !important`
+    }
+  },
+  personaButtonStyles: {
+    root: {
+      ':hover': {
+        background: `${tokens.colorNeutralBackground1Hover} !important`
+      },
+      height: '100%',
+      flex: 1,
+      display: 'flex',
+      alignItems: 'stretch'
+    }
+  },
+  profileContainerStyles: {
+    display: 'flex',
+    alignItems: 'stretch',
+    flex: 1,
+    height: '100%'
+  },
+  permissionPanelStyles: {
+    footer: {
+      backgroundColor: tokens.colorNeutralBackground1
+    },
+    commands: {
+      backgroundColor: tokens.colorNeutralBackground1
+    }
+  },
+  inactiveConsentStyles: {
+    marginRight: '10px',
+    backgroundColor: tokens.colorBrandBackground2
+  },
+  activeConsentStyles: {
+    marginRight: '10px',
+    backgroundColor: tokens.colorBrandBackground3Static
   }
-}
+});
+
+export default useProfileStyles;

@@ -2,6 +2,7 @@ import {
   ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
   Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
 } from '@fluentui/react';
+import { Button, Popover} from '@fluentui/react-components';
 import { useId } from '@fluentui/react-hooks';
 import { useEffect, useState } from 'react';
 
@@ -12,8 +13,9 @@ import { usePopups } from '../../../services/hooks';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { authenticationStyles } from '../Authentication.styles';
-import { profileStyles } from './Profile.styles';
+import { useProfileStyles } from './Profile.styles';
 import { getProfileInfo } from '../../../services/slices/profile.slice';
+import { Guest20Filled } from '@fluentui/react-icons';
 const getInitials = (name: string | undefined) => {
   let initials = '';
   if (name && name !== '') {
@@ -45,7 +47,7 @@ const Profile = (props: any) => {
   const descriptionId = useId('callout-description');
   const theme = getTheme();
   const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
-    profileContainerStyles } = profileStyles(theme);
+    profileContainerStyles } = useProfileStyles();
 
   useEffect(() => {
     if (authenticated) {
@@ -55,7 +57,7 @@ const Profile = (props: any) => {
 
 
   if (!profile) {
-    return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
+    return (<Spinner size={SpinnerSize.medium} className={profileSpinnerStyles} />);
   }
 
   const handleSignOut = () => {
@@ -109,14 +111,14 @@ const Profile = (props: any) => {
       styles={personaStyleToken} />
 
     return (<>
-      <ActionButton ariaLabel='profile'
+      <Button aria-label='profile'
         id={buttonId}
         onClick={toggleIsCalloutVisible}
         role='button'
-        styles={personaButtonStyles}
+        className={personaButtonStyles}
       >
         {smallPersona}
-      </ActionButton>
+      </Button>
 
       {isCalloutVisible && (
         <Callout
@@ -134,25 +136,25 @@ const Profile = (props: any) => {
         >
           <Stack horizontal horizontalAlign='space-between' styles={{ root: { paddingBottom: 0 } }}>
             {user &&
-              <ActionButton text={`${user.tenant}`} disabled={true} />
+              <Button disabled={true}>{`${user.tenant}`}</Button>
             }
-            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
+            <Button key={'sign-out'} onClick={() => handleSignOut()}>
               {translateMessage('sign out')}
-            </ActionButton>
+            </Button>
           </Stack>
           <Stack styles={{ root: { paddingLeft: 10 } }}>{fullPersona}</Stack>
           {graphExplorerMode === Mode.Complete &&
-            <ActionButton key={'view-all-permissions'}
-              onClick={() => changePanelState()} styles={permissionsLabelStyles}>
+            <Button key={'view-all-permissions'}
+              onClick={() => changePanelState()} className={permissionsLabelStyles}>
               {translateMessage('view all permissions')}
-            </ActionButton>
+            </Button>
           }
           <Stack styles={{ root: { background: theme.palette.neutralLighter, padding: 10 } }}>
-            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
-              iconProps={{ iconName: 'AddFriend' }}
+            <Button key={'sign-other-account'} onClick={() => handleSignInOther()}
+              icon = {<Guest20Filled />}
             >
               {translateMessage('sign in other account')}
-            </ActionButton>
+            </Button>
 
           </Stack>
         </Callout>
@@ -162,7 +164,7 @@ const Profile = (props: any) => {
   }
 
   return (
-    <div className={classes.profile} style={profileContainerStyles}>
+    <div className={`${classes.profile} ${profileContainerStyles}`}>
       {showProfileComponent(persona)}
     </div>
   );
