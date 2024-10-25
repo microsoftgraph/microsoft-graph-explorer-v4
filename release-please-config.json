@@ -1,0 +1,18 @@
+{
+  "bootstrap-sha": "439726b8e93371c61bb3ad76836603b1e822481f",
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "pull-request-header": ":rocket: A new Graph Explorer release is coming up!",
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node",
+      "bump-minor-pre-major": false,
+      "bump-patch-for-minor-pre-major": false,
+      "include-v-in-tag": true,
+      "draft": false,
+      "prerelease": false
+    }
+  },
+  "extra-files": [ "package.json", "sonar-project.properties" ]
+}
