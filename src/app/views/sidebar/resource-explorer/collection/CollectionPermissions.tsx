@@ -1,14 +1,22 @@
-import { DefaultButton, DetailsList, DialogFooter, IGroup, Label, PrimaryButton, SelectionMode } from '@fluentui/react';
+import { DefaultButton,
+  DetailsList,
+  DialogFooter,
+  IGroup,
+  Label,
+  Link,
+  PrimaryButton,
+  SelectionMode } from '@fluentui/react';
 import { FC, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../../store';
-import { componentNames } from '../../../../../telemetry';
+import { componentNames, telemetry } from '../../../../../telemetry';
 import { CollectionPermission } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackDownload } from '../../../common/download';
+import { geLocale } from '../../../../../appLocale';
 
 const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
@@ -71,6 +79,19 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   return (
     <>
+    <Label style={{ padding: '12px 0px' }}>
+        {translateMessage('list of permissions')}
+        <Link
+          target='_blank'
+          rel="noopener noreferrer"
+          onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
+            componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+          href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          underline
+        >
+          {translateMessage('Microsoft Graph API Reference docs')}
+        </Link>
+    </Label>
       <DetailsList
         items={permissionsArray}
         columns={columns}

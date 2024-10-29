@@ -149,7 +149,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
               height: '80vh',
               justifyContent: 'center',
               alignItems: 'center' }}>
-            {translateMessage('Add queries in the Resources and History tab')}
+            {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
       <DialogFooter
