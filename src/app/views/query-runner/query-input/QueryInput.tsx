@@ -133,7 +133,6 @@ const QueryInput = (props: IQueryInputProps) => {
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
           <DefaultButton
-            iconProps={{ iconName: 'Share' }}
             text={translateMessage('My API Collection')}
             onClick={() => openPreviewCollection()}
           />
