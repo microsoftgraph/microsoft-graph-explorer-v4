@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption, MarqueeSelection, TooltipHost, getId } from '@fluentui/react';
+import { Dropdown, IDropdownOption, TooltipHost, getId } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
@@ -11,37 +11,30 @@ import { ScopeOption, scopeOptions } from './collection.util';
 interface IPathProps {
   resources: ResourcePath[];
   columns: IColumn[];
-  selectItems: Function;
   setSelectedScope: (resource: ResourcePath, scope: string) => void;
+  isSelectable?: boolean; // New prop to control selection
+  onSelectionChange?: (selectedItems: ResourcePath[]) => void; // Optional callback for selection changes
 }
 
 export default class Paths extends Component<IPathProps> {
-  private _selection: Selection;
+  private _selection: Selection | null = null;
 
   constructor(props: IPathProps) {
     super(props);
 
-    this._selection = new Selection({
-      onSelectionChanged: () => {
-        const selected = this._selection.getSelection();
-        this.props.selectItems(selected);
-      }
-    });
-  }
-
-  public componentDidUpdate(prevProps: IPathProps): void {
-    if (prevProps.resources !== this.props.resources) {
-      this._selection.setAllSelected(false);
+    if(props.isSelectable) {
+      this._selection = new Selection({
+        onSelectionChanged: () => {
+          const selected = this._selection!.getSelection() as ResourcePath[];
+          props.onSelectionChange && props.onSelectionChange(selected);
+        }
+      });
     }
   }
 
   private renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
-
-    const selectedItems = this._selection.getSelection();
-
     const handleOnScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<ScopeOption>) => {
       this.props.setSelectedScope(item, option?.key as string)
-      this.props.selectItems([]);
     };
 
     if (column) {
@@ -50,7 +43,6 @@ export default class Paths extends Component<IPathProps> {
           selectedKey={item.scope ?? scopeOptions[0].key}
           options={scopeOptions}
           onChange={handleOnScopeChange}
-          disabled={selectedItems.length > 1}
           styles={{ dropdown: { width: 300 } }}
         />;
       }
@@ -80,30 +72,20 @@ export default class Paths extends Component<IPathProps> {
   }
 
   public render(): JSX.Element {
-    const { resources, columns } = this.props;
+    const { resources, columns, isSelectable } = this.props;
     return (
-      <MarqueeSelection selection={this._selection}>
-        <DetailsList
-          items={resources}
-          columns={columns}
-          setKey='set'
-          onRenderItemColumn={this.renderItemColumn}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={this._selection}
-          selectionPreservedOnEmptyClick={true}
-          ariaLabelForSelectionColumn='Toggle selection'
-          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-          checkButtonAriaLabel='select row'
-          styles={{
-            root: {
-              maxHeight: '80vh',
-              overflowY: 'auto',
-              overflowX: 'hidden'
-            }
-          }}
-          onShouldVirtualize={() => false}
-        />
-      </MarqueeSelection>
+      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
+          <DetailsList
+            items={resources}
+            columns={columns}
+            setKey='set'
+            onRenderItemColumn={this.renderItemColumn}
+            layoutMode={DetailsListLayoutMode.justified}
+            selection={isSelectable ? this._selection! : undefined}
+            selectionMode={isSelectable ? 2 : 0}
+            onShouldVirtualize={() => false}
+          />
+      </div>
     );
   }
 }

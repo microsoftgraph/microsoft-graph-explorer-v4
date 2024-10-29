@@ -1,7 +1,6 @@
 import {
-  DefaultButton, Dialog, DialogFooter, DialogType, getId, getTheme, IconButton, INavLink, INavLinkGroup, Label,
-  Nav, PrimaryButton, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle, TooltipHost
-} from '@fluentui/react';
+  INavLink, INavLinkGroup, Label,
+  Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle} from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -12,17 +11,15 @@ import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../ty
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { usePopups } from '../../../services/hooks';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles, resourceExplorerStyles } from './resources.styles';
+import { navStyles } from './resources.styles';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -31,7 +28,6 @@ const UnstyledResourceExplorer = (props: any) => {
 
   const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
-  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -43,44 +39,13 @@ const UnstyledResourceExplorer = (props: any) => {
     ? data[version].children
     : [];
   const [searchText, setSearchText] = useState<string>('');
-  const [isDialogHidden, setIsDialogHidden] = useState(true);
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
-  const { show: previewCollection } = usePopups('preview-collection', 'panel');
-  const resourcesStyles = resourceExplorerStyles(getTheme());
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
 
   useEffect(() => {
     setItems(navigationGroup);
   }, [filteredPayload.length]);
-
-  const deleteResourcesDialogProps = {
-    type: DialogType.normal,
-    title: translateMessage('Delete collection'),
-    closeButtonAriaLabel: 'Close',
-    subText: translateMessage('Do you want to remove all the items you have added to the collection?')
-  };
-
-  const openPreviewCollection = () => {
-    previewCollection({
-      settings: {
-        title: translateMessage('Selected Resources') + ' ' + translateMessage('Preview'),
-        width: 'xl'
-      },
-      data: {
-        version
-      }
-    })
-  }
-
-  const removeAllResources = () => {
-    dispatch(removeResourcePaths(selectedLinks));
-    toggleIsDialogHidden();
-  }
-
-  const toggleIsDialogHidden = () => {
-    setIsDialogHidden(!isDialogHidden);
-  }
 
   const addToCollection = (item: IResourceLink) => {
     dispatch(addResourcePaths(getResourcePaths(item, version)));

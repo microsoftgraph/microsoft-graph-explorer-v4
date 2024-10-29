@@ -4,13 +4,12 @@ import {
   DialogFooter, ICommandBarItemProps,
   Label, PrimaryButton
 } from '@fluentui/react';
-import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { IResourceLink, ResourcePath } from '../../../../../types/resources';
+import { ResourcePath } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { removeResourcePaths, updateResourcePaths } from '../../../../services/slices/collections.slice';
+import { updateResourcePaths } from '../../../../services/slices/collections.slice';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
@@ -25,13 +24,12 @@ export interface IPathsReview {
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
+  const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
   const { collections } = useAppSelector(
     (state) => state
   );
   const items = collections && collections.length >
     0 ? collections.find(k => k.isDefault)!.paths : [];
-
-  const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
@@ -52,10 +50,14 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     });
   }
 
-  const removeSelectedItems = () => {
-    dispatch(removeResourcePaths(selectedItems));
-    setSelectedItems([]);
-  }
+  const openEditCollectionPanel = () => {
+    showPopup({
+      settings: {
+        title: translateMessage('Edit Collection'),
+        width: 'xl'
+      }
+    });
+  };
 
   const options: ICommandBarItemProps[] = [
     {
@@ -63,7 +65,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       text: translateMessage('Edit collection'),
       iconProps: { iconName: 'Delete' },
       disabled: items.length === 0,
-      onClick: () => removeSelectedItems()
+      onClick: openEditCollectionPanel
     },
     {
       key: 'set-scope',
@@ -73,8 +75,8 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       subMenuProps: {
         items: scopeOptions.map((option) => {
           return {
-            key: option.key, text: option.text,
-            onClick: () => bulkSelectScope(option.key as string)
+            key: option.key, text: option.text
+            //onClick: () => bulkSelectScope(option.key as string)
           }
         })
       }
@@ -92,7 +94,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       key: 'preview-permissions',
       text: translateMessage('Preview permissions'),
       iconProps: { iconName: 'ListMirrored' },
-      disabled: selectedItems.length === 0,
+      disabled: items.length === 0,
       onClick: () => viewPermissions({
         settings: {
           title: translateMessage('Required Permissions')
@@ -100,28 +102,12 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       })}
   ];
 
-  const selectItems = (content: IResourceLink[]) => {
-    setSelectedItems(content);
-  };
-
   const setSelectedScope = (resource: ResourcePath, scope: string): void => {
     const itemResources = items.map(item =>
       item.key === resource.key ? { ...item, scope } : item
     );
     dispatch(updateResourcePaths(itemResources));
-    setSelectedItems([]);
   };
-
-
-  const bulkSelectScope = (scope: string): void => {
-    const itemResources = items.map(item => {
-      const selectedItem = selectedItems.find(resource => resource.key === item.key);
-      return selectedItem ? { ...item, scope } : item;
-    });
-    dispatch(updateResourcePaths(itemResources));
-    setSelectedItems([]);
-  };
-
 
   return (
     <>
@@ -138,7 +124,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <Paths
             resources={items}
             columns={columns}
-            selectItems={selectItems}
             setSelectedScope={setSelectedScope}
           />
         </div>

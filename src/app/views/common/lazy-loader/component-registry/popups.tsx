@@ -5,7 +5,8 @@ export const popups = new Map<string, any>([
   ['theme-chooser', lazy(() => import('../../../main-header/settings/ThemeChooser'))],
   ['preview-collection', lazy(() => import('../../../sidebar/resource-explorer/collection/APICollection'))],
   ['full-permissions', lazy(() => import('../../../query-runner/request/permissions/Permissions.Full'))],
-  ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))]
+  ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))],
+  ['edit-collection-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditCollectionPanel'))]
 ]);
 
 export type PopupItem =
@@ -13,4 +14,5 @@ export type PopupItem =
   'theme-chooser' |
   'preview-collection' |
   'full-permissions' |
-  'collection-permissions'
+  'collection-permissions' |
+  'edit-collection-panel'
