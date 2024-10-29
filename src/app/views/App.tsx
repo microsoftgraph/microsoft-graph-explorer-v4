@@ -39,6 +39,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import { Notification } from './common/banners/Notification';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -472,6 +473,7 @@ class App extends Component<IAppProps, IAppState> {
                     display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                   }}
                 >
+                  <Notification header='New to Graph Explorer' content='You will love it here'/>
                   <ValidationProvider>
                     <div style={{ marginBottom: 2 }} >
                       <QueryRunner onSelectVerb={this.handleSelectVerb} />
