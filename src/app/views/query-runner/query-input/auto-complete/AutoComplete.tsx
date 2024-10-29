@@ -29,9 +29,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
-    (state) => state
-  );
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const autoCompleteOptions = useAppSelector((state)=> state.autoComplete.data);
+  const autoCompletePending = useAppSelector((state)=> state.autoComplete.pending);
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
