@@ -290,6 +290,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     validation.validate(queryUrl);
     return validation.error;
   }
+  const [descriptionError, setDescriptionError] = useState('');
+
+  useEffect(()=>{
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setDescriptionError(errorMessage)
+    }
+  }, [getErrorMessage])
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -310,7 +318,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
           onRenderDescription={handleRenderDescription}
-          description={getErrorMessage()}
+          description={descriptionError}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
