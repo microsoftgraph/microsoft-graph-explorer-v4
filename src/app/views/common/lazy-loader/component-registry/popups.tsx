@@ -6,7 +6,8 @@ export const popups = new Map<string, any>([
   ['preview-collection', lazy(() => import('../../../sidebar/resource-explorer/collection/APICollection'))],
   ['full-permissions', lazy(() => import('../../../query-runner/request/permissions/Permissions.Full'))],
   ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))],
-  ['edit-collection-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditCollectionPanel'))]
+  ['edit-collection-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditCollectionPanel'))],
+  ['edit-scope-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditScopePanel'))]
 ]);
 
 export type PopupItem =
@@ -15,4 +16,5 @@ export type PopupItem =
   'preview-collection' |
   'full-permissions' |
   'collection-permissions' |
-  'edit-collection-panel'
+  'edit-collection-panel' |
+  'edit-scope-panel'

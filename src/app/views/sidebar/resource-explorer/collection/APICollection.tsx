@@ -5,16 +5,13 @@ import {
   Label, PrimaryButton
 } from '@fluentui/react';
 
-import { useAppDispatch, useAppSelector } from '../../../../../store';
+import { useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
-import { ResourcePath } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
-import { updateResourcePaths } from '../../../../services/slices/collections.slice';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
-import { scopeOptions } from './collection.util';
 import { generatePostmanCollection } from './postman.util';
 
 export interface IPathsReview {
@@ -22,9 +19,9 @@ export interface IPathsReview {
 }
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
-  const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
+  const { show: showEditScopePanel } = usePopups('edit-scope-panel', 'panel');
   const { collections } = useAppSelector(
     (state) => state
   );
@@ -59,6 +56,15 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     });
   };
 
+  const openEditScopePanel = () => {
+    showEditScopePanel({
+      settings: {
+        title: translateMessage('Edit Scope'),
+        width: 'xl'
+      }
+    });
+  };
+
   const options: ICommandBarItemProps[] = [
     {
       key: 'remove',
@@ -72,14 +78,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       text: translateMessage('Edit scope'),
       iconProps: { iconName: 'Permissions' },
       disabled: items.length === 0,
-      subMenuProps: {
-        items: scopeOptions.map((option) => {
-          return {
-            key: option.key, text: option.text
-            //onClick: () => bulkSelectScope(option.key as string)
-          }
-        })
-      }
+      onClick: openEditScopePanel
     },
     {
       key: 'upload',
@@ -102,13 +101,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       })}
   ];
 
-  const setSelectedScope = (resource: ResourcePath, scope: string): void => {
-    const itemResources = items.map(item =>
-      item.key === resource.key ? { ...item, scope } : item
-    );
-    dispatch(updateResourcePaths(itemResources));
-  };
-
   return (
     <>
       <CommandBar
@@ -124,7 +116,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           <Paths
             resources={items}
             columns={columns}
-            setSelectedScope={setSelectedScope}
           />
         </div>
         ) :

@@ -36,8 +36,6 @@ interface EditCollectionPanelProps {
          <Paths
            resources={items}
            columns={columns}
-           // eslint-disable-next-line @typescript-eslint/no-empty-function
-           setSelectedScope={() => {}}
            isSelectable={true}
            onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
          />

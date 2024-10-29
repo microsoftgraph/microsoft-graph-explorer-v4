@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption, Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
+import { Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
@@ -6,12 +6,11 @@ import {
 import { Component } from 'react';
 
 import { ResourcePath } from '../../../../../types/resources';
-import { ScopeOption, scopeOptions } from './collection.util';
+import { scopeOptions } from './collection.util';
 
 interface IPathProps {
   resources: ResourcePath[];
   columns: IColumn[];
-  setSelectedScope: (resource: ResourcePath, scope: string) => void;
   isSelectable?: boolean;
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
@@ -43,9 +42,6 @@ export default class Paths extends Component<IPathProps> {
   }
 
   private renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
-    const handleOnScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<ScopeOption>) => {
-      this.props.setSelectedScope(item, option?.key as string)
-    };
 
     if (column) {
       if (column.key === 'scope') {
