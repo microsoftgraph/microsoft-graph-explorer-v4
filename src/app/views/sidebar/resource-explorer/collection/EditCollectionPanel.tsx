@@ -20,8 +20,8 @@ interface EditCollectionPanelProps {
         0 ? collections.find(k => k.isDefault)!.paths : [];
 
     const columns = [
-        { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 350, isResizable: true },
-        { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 300, maxWidth: 350, isResizable: true }
+        { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+        { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
       ];
 
     const removeSelectedItems = () => {

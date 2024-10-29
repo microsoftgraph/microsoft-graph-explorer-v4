@@ -1,4 +1,4 @@
-import { Dropdown, IDropdownOption, TooltipHost, getId } from '@fluentui/react';
+import { Dropdown, IDropdownOption, Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
@@ -12,9 +12,19 @@ interface IPathProps {
   resources: ResourcePath[];
   columns: IColumn[];
   setSelectedScope: (resource: ResourcePath, scope: string) => void;
-  isSelectable?: boolean; // New prop to control selection
-  onSelectionChange?: (selectedItems: ResourcePath[]) => void; // Optional callback for selection changes
+  isSelectable?: boolean;
+  onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
+
+const scopeLabelClass = mergeStyles({
+  backgroundColor: '#616161',
+  color: 'white',
+  padding: '4px 12px',
+  borderRadius: '16px',
+  fontSize: '12px',
+  display: 'inline-block',
+  textAlign: 'center'
+});
 
 export default class Paths extends Component<IPathProps> {
   private _selection: Selection | null = null;
@@ -39,12 +49,9 @@ export default class Paths extends Component<IPathProps> {
 
     if (column) {
       if (column.key === 'scope') {
-        return <Dropdown
-          selectedKey={item.scope ?? scopeOptions[0].key}
-          options={scopeOptions}
-          onChange={handleOnScopeChange}
-          styles={{ dropdown: { width: 300 } }}
-        />;
+        return <Label className={scopeLabelClass}>
+          {item.scope ?? scopeOptions[0].key}
+        </Label>
       }
       return (
         <TooltipHost
