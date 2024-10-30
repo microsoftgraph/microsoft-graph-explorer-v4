@@ -18,7 +18,9 @@ const QueryResponse = () => {
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
   const [responseHeight, setResponseHeight] = useState('610px');
-  const { sampleQuery, dimensions, snippets } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const dimensions = useAppSelector((state)=> state.dimensions);
+  const snippets = useAppSelector((state)=> state.snippets);
   const [currentTab, setCurrentTab] = useState<string>('response-preview');
   const currentTheme: ITheme = getTheme();
   const { modalStyles, modalPivotStyles } = queryResponseStyles(currentTheme);

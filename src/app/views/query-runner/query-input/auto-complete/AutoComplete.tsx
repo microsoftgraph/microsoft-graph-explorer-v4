@@ -29,9 +29,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
-    (state) => state
-  );
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const autoCompleteOptions = useAppSelector((state)=> state.autoComplete.data);
+  const autoCompletePending = useAppSelector((state)=> state.autoComplete.pending);
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
@@ -290,6 +290,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     validation.validate(queryUrl);
     return validation.error;
   }
+  const [descriptionError, setDescriptionError] = useState('');
+
+  useEffect(()=>{
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setDescriptionError(errorMessage)
+    }
+  }, [getErrorMessage])
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -310,7 +318,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
           onRenderDescription={handleRenderDescription}
-          description={getErrorMessage()}
+          description={descriptionError}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&

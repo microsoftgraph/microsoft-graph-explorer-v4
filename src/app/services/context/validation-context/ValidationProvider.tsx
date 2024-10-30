@@ -13,7 +13,7 @@ interface ValidationProviderProps {
 }
 
 export const ValidationProvider = ({ children }: ValidationProviderProps) => {
-  const { resources } = useAppSelector((state) => state);
+  const resources = useAppSelector((state) => state.resources);
   const base = Object.keys(resources.data).length > 0 ?
     resources.data[GRAPH_API_VERSIONS[0]].children! : [];
 

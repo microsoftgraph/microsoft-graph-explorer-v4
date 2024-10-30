@@ -17,9 +17,9 @@ import {
 } from '../../common/lazy-loader/component-registry';
 
 export const GetPivotItems = () => {
-
-  const { graphExplorerMode: mode, sampleQuery,
-    graphResponse: { response: { body } } } = useAppSelector((state) => state);
+  const mode = useAppSelector((state)=> state.graphExplorerMode);
+  const sampleQuery= useAppSelector((state)=> state.sampleQuery);
+  const body = useAppSelector((state)=> state.graphResponse.response.body);
 
   const currentTheme: ITheme = getTheme();
   const dotStyle = queryResponseStyles(currentTheme).dot;
