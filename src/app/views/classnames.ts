@@ -1,5 +1,4 @@
-import { classNamesFunction, IProcessedStyleSet, ITheme} from '@fluentui/react';
-import {IStyleSetBase} from '@fluentui/merge-styles'
+import { classNamesFunction, ITheme } from '@fluentui/react';
 
 interface IClassNames {
   [prop: string]: unknown;
@@ -7,7 +6,7 @@ interface IClassNames {
   styles?: object;
 }
 
-export function classNames({ styles, theme }: IClassNames): IProcessedStyleSet<IStyleSetBase> {
+export function classNames({ styles, theme }: IClassNames): any {
   const getClassNames = classNamesFunction();
   return getClassNames(styles, theme);
 }
