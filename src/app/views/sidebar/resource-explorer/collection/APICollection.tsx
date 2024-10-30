@@ -13,6 +13,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection } from './postman.util';
+import { useFileUpload } from './upload-collection.util';
 
 export interface IPathsReview {
   version: string;
@@ -22,9 +23,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
   const { show: showEditScopePanel } = usePopups('edit-scope-panel', 'panel');
-  const { collections } = useAppSelector(
-    (state) => state
-  );
+  const { collections } = useAppSelector((state) => state);
   const items = collections && collections.length >
     0 ? collections.find(k => k.isDefault)!.paths : [];
 
@@ -46,6 +45,8 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       filename
     });
   }
+
+  const { selectFile, handleFileSelect } = useFileUpload();
 
   const openEditCollectionPanel = () => {
     showPopup({
@@ -83,8 +84,8 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     {
       key: 'upload',
       text: translateMessage('Upload a new list'),
-      iconProps: { iconName: 'Upload' }
-      //onClick: () => {}
+      iconProps: { iconName: 'Upload' },
+      onClick: selectFile
     }
   ];
 
@@ -143,6 +144,11 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           {translateMessage('Close')}
         </DefaultButton>
       </DialogFooter>
+      <input
+      type="file"
+      id="file-input"
+      style={{ display: 'none' }}
+      onInput={handleFileSelect}  />
     </>
   )
 }
