@@ -1,10 +1,11 @@
-import { ITheme } from '@fluentui/react';
+import { mergeStyleSets } from '@fluentui/react';
 
-export const NotificationStyles = (theme: ITheme) => {
-    return {
+export const useNotificationStyles = ()=>{
+    return mergeStyleSets({
         container: {
+            borderRadius: '8px',
             backgroundColor: 'blue',
             textColor: '#ffffff'
         }
-    }
+    })
 }
