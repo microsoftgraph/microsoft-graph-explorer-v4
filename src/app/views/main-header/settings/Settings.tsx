@@ -14,7 +14,8 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { mainHeaderStyles } from '../MainHeader.styles';
 
 export const Settings: React.FunctionComponent<ISettingsProps> = () => {
-  const { auth: { authToken } } = useAppSelector((state) => state);
+  const auth = useAppSelector((state)=> state.auth)
+  const authToken = auth.authToken;
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
