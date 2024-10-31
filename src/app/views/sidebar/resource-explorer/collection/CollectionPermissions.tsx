@@ -4,6 +4,7 @@ import { DefaultButton,
   IGroup,
   Label,
   Link,
+  MessageBar,
   PrimaryButton,
   SelectionMode } from '@fluentui/react';
 import { FC, useEffect } from 'react';
@@ -28,7 +29,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   const columns = [
     {
-      key: 'value', name: translateMessage('Value'), fieldName: 'value',
+      key: 'value', name: translateMessage('Permissions'), fieldName: 'value',
       minWidth: 300,
       ariaLabel: translateMessage('Value')
     }
@@ -79,7 +80,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   return (
     <>
-    <Label style={{ padding: '12px 0px' }}>
+    <MessageBar isMultiline={true}>
         {translateMessage('list of permissions')}
         <Link
           target='_blank'
@@ -91,13 +92,15 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         >
           {translateMessage('Microsoft Graph API Reference docs')}
         </Link>
-    </Label>
+    </MessageBar>
+    <div style={{ height: '80vh' }}>
       <DetailsList
         items={permissionsArray}
         columns={columns}
         groups={groups}
         selectionMode={SelectionMode.none}
       />
+      </div>
       {permissions &&
         <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
           <PrimaryButton onClick={downloadPermissions}>

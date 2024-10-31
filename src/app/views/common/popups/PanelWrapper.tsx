@@ -46,6 +46,22 @@ export function PanelWrapper(props: WrapperProps) {
     return renderFooter ? renderFooter() : null;
   }
 
+  const showBackButton = title === 'Edit Scope' || title === 'Edit Collection';
+
+  const onRenderHeader = (): JSX.Element => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <IconButton
+        iconProps={{ iconName: 'Back' }}
+        ariaLabel={translateMessage('Back')}
+        onClick={() => dismissPopup()}
+        styles={{ root: { marginRight: 8 } }}
+      />
+      <span style={{ fontSize: theme.fonts.xLarge.fontSize, fontWeight: theme.fonts.xLarge.fontWeight }}>
+        {title}
+      </span>
+    </div>
+  );
+
   return (
     <div>
       <Panel
@@ -59,6 +75,7 @@ export function PanelWrapper(props: WrapperProps) {
         closeButtonAriaLabel='Close'
         overlayProps={panelOverlayProps}
         onRenderFooterContent={onRenderFooterContent}
+        onRenderHeader={showBackButton ? onRenderHeader: undefined}
       >
         <IconButton
           styles={{

@@ -1,4 +1,4 @@
-import { DefaultButton, DialogFooter, Label, PrimaryButton } from '@fluentui/react';
+import { DefaultButton, DialogFooter, IconButton, Label, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -32,7 +32,7 @@ interface EditCollectionPanelProps {
     return (
         <>
         {items && items.length > 0 ? (
-         <div>
+         <div style={{ height: '80vh' }}>
          <Paths
            resources={items}
            columns={columns}
@@ -41,6 +41,7 @@ interface EditCollectionPanelProps {
          />
        </div>
      ) : (
+      <div style={{height: '80vh'}}>
        <Label
          style={{
            display: 'flex',
@@ -51,6 +52,7 @@ interface EditCollectionPanelProps {
        >
          {translateMessage('No items available')}
        </Label>
+       </div>
      )}
      <DialogFooter
       styles={{

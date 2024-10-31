@@ -51,7 +51,7 @@ interface EditScopePanelProps {
             styles={{ dropdown: { width: 200 } }}
             />
         </div>
-        <div>
+        <div style={{ height: '80vh' }}>
             <Paths
             resources={items}
             columns={columns}

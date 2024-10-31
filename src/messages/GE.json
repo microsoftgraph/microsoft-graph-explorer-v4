@@ -521,5 +521,6 @@
   "Open in VS Code": "Open in VS Code",
   "More request area items": "More request area items",
   "More response items": "More response area items",
-  "list of permissions": "The following is the list of least-privileged permissions required to call the operations in your API Collection. For more information, see "
+  "list of permissions": "The following is the list of least-privileged permissions required to call the operations in your API Collection. For more information, see ",
+  "Preview permissions": "Preview permissions"
 }

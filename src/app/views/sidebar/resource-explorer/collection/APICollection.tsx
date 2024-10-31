@@ -194,7 +194,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       disabled: items.length === 0,
       onClick: () => viewPermissions({
         settings: {
-          title: translateMessage('Required Permissions')
+          title: translateMessage('Preview Permissions')
         }
       })}
   ];
