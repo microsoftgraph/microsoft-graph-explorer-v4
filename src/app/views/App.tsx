@@ -3,6 +3,7 @@ import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import { FluentProvider, webDarkTheme } from '@fluentui/react-components';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
@@ -44,6 +45,7 @@ export interface IAppProps {
   theme?: ITheme;
   styles?: object;
   profile: object;
+  appTheme: string;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
@@ -407,6 +409,7 @@ class App extends Component<IAppProps, IAppState> {
 
     return (
       // @ts-ignore
+      <FluentProvider theme={webDarkTheme}>
       <ThemeContext.Provider value={this.props.appTheme}>
         <PopupsProvider>
           <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
@@ -473,7 +476,13 @@ class App extends Component<IAppProps, IAppState> {
                     display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                   }}
                 >
-                  <Notification header='New to Graph Explorer' content='You will love it here'/>
+                  <div className='ms-Grid-row'>
+                    <Notification
+                      header={translateMessage('Banner notification 1 header')}
+                      content={translateMessage('Banner notification 1 content')}
+                      link={translateMessage('Banner notificatication 1 link')}
+                      linkText={translateMessage('Banner notification 1 link text')}/>
+                  </div>
                   <ValidationProvider>
                     <div style={{ marginBottom: 2 }} >
                       <QueryRunner onSelectVerb={this.handleSelectVerb} />
@@ -497,6 +506,7 @@ class App extends Component<IAppProps, IAppState> {
           <PopupsWrapper />
         </PopupsProvider>
       </ThemeContext.Provider>
+      </FluentProvider>
     );
   }
 }
