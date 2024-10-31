@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { FluentProvider, webDarkTheme } from '@fluentui/react-components';
+import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
@@ -407,9 +407,14 @@ class App extends Component<IAppProps, IAppState> {
     this.removeFlexBasisProperty();
     this.removeSidebarHeightProperty();
 
+    const fluentV9Themes: Record<string, Theme>= {
+      'light': webLightTheme,
+      'dark': webDarkTheme,
+      'high-contrast': teamsHighContrastTheme
+    }
     return (
       // @ts-ignore
-      <FluentProvider theme={webDarkTheme}>
+      <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
       <ThemeContext.Provider value={this.props.appTheme}>
         <PopupsProvider>
           <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
