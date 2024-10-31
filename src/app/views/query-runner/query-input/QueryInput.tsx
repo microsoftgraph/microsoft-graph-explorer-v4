@@ -45,7 +45,7 @@ const QueryInput = (props: IQueryInputProps) => {
     method: sampleQuery.selectedVerb, authenticated,
     url: sampleQuery.sampleUrl
   });
-  const { queryButtonStyles, verbSelector, shareQueryButtonStyles } = queryRunnerStyles();
+  const { queryButtonStyles, verbSelector } = queryRunnerStyles();
   verbSelector.title = {
     ...verbSelector.title,
     background: getStyleFor(sampleQuery.selectedVerb)
@@ -114,7 +114,7 @@ const QueryInput = (props: IQueryInputProps) => {
             onChange={(event, method) => handleOnVersionChange(method)}
           />
         </Stack.Item>
-        <Stack.Item grow disableShrink>
+        <Stack.Item grow>
           <AutoComplete
             contentChanged={contentChanged}
             runQuery={runQuery}
@@ -131,10 +131,13 @@ const QueryInput = (props: IQueryInputProps) => {
             allowDisabledFocus={true}
           />
         </Stack.Item>
-        <Stack.Item shrink styles={!mobileScreen ? shareQueryButtonStyles : {}}>
+        <Stack.Item shrink styles={!mobileScreen ? queryButtonStyles : {}}>
           <DefaultButton
             text={translateMessage('My API Collection')}
             onClick={() => openPreviewCollection()}
+            styles={{root: {
+              whiteSpace: 'nowrap'
+            }}}
           />
         </Stack.Item>
       </Stack>
