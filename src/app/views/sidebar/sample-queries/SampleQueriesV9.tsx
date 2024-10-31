@@ -21,16 +21,12 @@ const useStyles = makeStyles({
 })
 
 export const SampleQueriesV9 = ()=>{
-    const dispatch = useAppDispatch();
     const sampleQueriesStyles = useStyles();
     const samples = useAppSelector(s => s.samples);
     const {error, pending, queries} = samples
-    const token = useAppSelector(s => s.auth.authToken.token);
 
 
     const shouldGenerateGroups = useRef(true);
-    const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
-    console.log(sampleQueries)
 
     const handleSearchValueChange = (_: SearchBoxChangeEvent, data: InputOnChangeData)=>{
         const value = data.value;
@@ -38,15 +34,6 @@ export const SampleQueriesV9 = ()=>{
         const filteredQueries = value ? performSearch(queries, value) : [];
         setSampleQueries(filteredQueries);
     }
-
-    useEffect(() => {
-        if (queries.length === 0) {
-          dispatch(fetchSamples());
-        } else {
-          setSampleQueries(queries)
-        }
-      }, [queries])
-
 
     return <>
         <SearchBox
@@ -56,8 +43,8 @@ export const SampleQueriesV9 = ()=>{
         <hr />
         {error && <CachedSetMessageBar />}
         <MoreQueriesMessageBar/>
-        <AriaLiveAnnouncer><Text>{`${sampleQueries.length} search results available.`}</Text></AriaLiveAnnouncer>
-        {sampleQueries.length === 0 ? NoResultsFound('No samples found'): <Samples />}
+        <AriaLiveAnnouncer><Text>{`${queries.length} search results available.`}</Text></AriaLiveAnnouncer>
+        {queries.length === 0 ? NoResultsFound('No samples found'): <Samples />}
     </>
 }
 
@@ -86,7 +73,22 @@ const MoreQueriesMessageBar = ()=>{
     )
 }
 
-const Samples = () =>{
+interface SamplesProps {
+    queries: ISampleQuery[]
+}
+
+const Samples = (props: SamplesProps) =>{
+    const dispatch = useAppDispatch();
+    const {queries} = props
+    const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
+
+    useEffect(() => {
+        if (queries.length === 0) {
+          dispatch(fetchSamples());
+        } else {
+          setSampleQueries(queries)
+        }
+      }, [queries])
     return (
     <></>
     )
