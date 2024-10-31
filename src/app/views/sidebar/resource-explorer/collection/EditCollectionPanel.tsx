@@ -1,4 +1,4 @@
-import { DefaultButton, DialogFooter, IconButton, Label, PrimaryButton } from '@fluentui/react';
+import { DefaultButton, DialogFooter, Label, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
