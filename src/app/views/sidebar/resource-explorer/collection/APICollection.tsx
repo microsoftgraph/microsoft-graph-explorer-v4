@@ -20,11 +20,11 @@ import { ResourcePath } from '../../../../../types/resources';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
 
-export interface IPathsReview {
+export interface APICollection {
   version: string;
 }
 
-const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
+const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
@@ -271,4 +271,4 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
   )
 }
 
-export default PathsReview;
+export default APICollection;
