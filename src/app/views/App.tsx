@@ -39,9 +39,11 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
+  appTheme: string;
   profile: object;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
@@ -404,8 +406,15 @@ class App extends Component<IAppProps, IAppState> {
     this.removeFlexBasisProperty();
     this.removeSidebarHeightProperty();
 
+    const fluentV9Themes: Record<string, Theme> = {
+      'light': webLightTheme,
+      'dark': webDarkTheme,
+      'high-contrast': teamsHighContrastTheme
+    }
     return (
       // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
       <ThemeContext.Provider value={this.props.appTheme}>
         <PopupsProvider>
           <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
@@ -495,6 +504,7 @@ class App extends Component<IAppProps, IAppState> {
           <PopupsWrapper />
         </PopupsProvider>
       </ThemeContext.Provider>
+      </FluentProvider>
     );
   }
 }
