@@ -1,31 +1,44 @@
 import {
   CommandBar,
   DefaultButton,
-  DialogFooter, ICommandBarItemProps,
-  Label, PrimaryButton
+  Dialog,
+  DialogFooter, DialogType, ICommandBarItemProps,
+  Label, MessageBarType, PrimaryButton
 } from '@fluentui/react';
 
-import { useAppSelector } from '../../../../../store';
+import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal } from '../../../common/download';
 import Paths from './Paths';
-import { generatePostmanCollection } from './postman.util';
-import { useFileUpload } from './upload-collection.util';
+import { generatePostmanCollection, generateResourcePathsFromPostmanCollection } from './postman.util';
+import { addResourcePaths, removeResourcePaths } from '../../../../services/slices/collections.slice';
+import { useEffect, useState } from 'react';
+import { ResourcePath } from '../../../../../types/resources';
+import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
+import { isGeneratedCollectionInCollection } from './upload-collection.util';
 
 export interface IPathsReview {
   version: string;
 }
 
 const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
+  const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
   const { show: showEditScopePanel } = usePopups('edit-scope-panel', 'panel');
   const { collections } = useAppSelector((state) => state);
-  const items = collections && collections.length >
-    0 ? collections.find(k => k.isDefault)!.paths : [];
+  const [isDialogHidden, setIsDialogHidden] = useState(true);
+  const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
+  const [fileInputKey, setFileInputKey] = useState(Date.now());
+  const[items, setItems] = useState<ResourcePath[]>([]);
+
+  useEffect(() => {
+    setItems(collections && collections.length >
+      0 ? collections.find(k => k.isDefault)!.paths : []);
+  }, [collections]);
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
@@ -46,7 +59,91 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
     });
   }
 
-  const { selectFile, handleFileSelect } = useFileUpload();
+  const handleFileSelect = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const fileContent = e!.target!.result!;
+        try {
+          const jsonData = JSON.parse(fileContent as string);
+          const generatedCollection = generateResourcePathsFromPostmanCollection(jsonData);
+          if (collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0) {
+            const currentCollection = collections.find(k => k.isDefault)!.paths;
+            if (isGeneratedCollectionInCollection(currentCollection, generatedCollection)) {
+              trackUploadAction('Collection exists');
+              dispatchCollectionSelectionStatus('Collection items exist', 'Collection items exist');
+            }
+            else {
+              setUploadedCollections(generatedCollection);
+              toggleIsDialogHidden();
+            }
+          }
+          else {
+            trackUploadAction('Collection added')
+            dispatch(addResourcePaths(generatedCollection));
+            setItems(generatedCollection);
+          }
+        }
+        catch (error) {
+          trackUploadAction('Invalid file format');
+          dispatchCollectionSelectionStatus('Invalid file format', 'Invalid file format');
+          dispatch(
+            setQueryResponseStatus({
+              status: translateMessage('Invalid file format'),
+              statusText: translateMessage('Invalid file format'),
+              ok: false,
+              messageType: MessageBarType.error
+            })
+          )
+        }
+      };
+      reader.readAsText(file);
+      setFileInputKey(Date.now());
+    }
+  }
+
+  const dispatchCollectionSelectionStatus = (status: string, statusMessage: string) => {
+    dispatch(
+      setQueryResponseStatus({
+        status: translateMessage(status),
+        statusText: translateMessage(statusMessage),
+        ok: false,
+        messageType: MessageBarType.error
+      })
+    )
+  }
+
+  const trackUploadAction = (status: string) => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      componentName: componentNames.UPLOAD_COLLECTIONS_BUTTON,
+      status
+    });
+  }
+
+  const toggleIsDialogHidden = () => {
+    setIsDialogHidden(!isDialogHidden);
+  }
+  const mergeWithExistingCollection = () => {
+    trackUploadAction('Collection merged');
+    dispatch(addResourcePaths(uploadedCollections));
+    setIsDialogHidden(!isDialogHidden);
+  }
+  const overwriteCollection = () => {
+    trackUploadAction('Collection replaced');
+    const resourcePaths = getPathsFromCollection();
+    dispatch(removeResourcePaths(resourcePaths));
+    setIsDialogHidden(!isDialogHidden);
+    dispatch(addResourcePaths(uploadedCollections));
+  }
+  const getPathsFromCollection = (): ResourcePath[] => {
+    let resourcePaths: ResourcePath[] = [];
+    if (collections && collections.length > 0) {
+      const paths = collections.find(k => k.isDefault)!.paths;
+      resourcePaths = paths as ResourcePath[];
+    }
+    return resourcePaths;
+  }
 
   const openEditCollectionPanel = () => {
     showPopup({
@@ -85,7 +182,7 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
       key: 'upload',
       text: translateMessage('Upload a new list'),
       iconProps: { iconName: 'Upload' },
-      onClick: selectFile
+      onClick: () => document.getElementById('file-input')?.click()
     }
   ];
 
@@ -111,6 +208,32 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
         farItemsGroupAriaLabel='More selection actions'
         farItems={farItems}
       />
+
+<input
+        key={fileInputKey}
+        type="file"
+        id="file-input"
+        style={{ display: 'none' }}
+        onChange={handleFileSelect}
+      />
+
+      {!isDialogHidden && (
+        <Dialog
+          hidden={isDialogHidden}
+          onDismiss={() => setIsDialogHidden(true)}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: translateMessage('Upload collection'),
+            closeButtonAriaLabel: 'Close',
+            subText: translateMessage('You have an existing collection. Would you like to merge or replace it?')
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Merge with existing')} />
+            <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
+          </DialogFooter>
+        </Dialog>
+      )}
 
       {items && items.length > 0 ?
         (<div style={{ height: '80vh' }}>
@@ -144,11 +267,6 @@ const PathsReview: React.FC<PopupsComponent<IPathsReview>> = (props) => {
           {translateMessage('Close')}
         </DefaultButton>
       </DialogFooter>
-      <input
-      type="file"
-      id="file-input"
-      style={{ display: 'none' }}
-      onInput={handleFileSelect}  />
     </>
   )
 }

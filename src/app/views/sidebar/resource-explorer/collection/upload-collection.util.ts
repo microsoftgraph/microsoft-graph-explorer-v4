@@ -1,12 +1,5 @@
 import { ResourcePath } from '../../../../../types/resources';
-import { generateResourcePathsFromPostmanCollection } from './postman.util';
-import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
-import { MessageBarType } from '@fluentui/react';
-import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { telemetry, eventTypes, componentNames } from '../../../../../telemetry';
-import { addResourcePaths } from '../../../../services/slices/collections.slice';
-import { translateMessage } from '../../../../utils/translate-messages';
 
 export const isGeneratedCollectionInCollection = (path1: ResourcePath[], path2: ResourcePath[]): boolean => {
   const smallerPaths = path1.length < path2.length ? path1 : path2;
@@ -65,69 +58,3 @@ export const trackUploadAction = (status: string) => {
     status
   });
 }
-
-export const useFileUpload = () => {
-  const dispatch = useAppDispatch();
-  const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
-  const { collections } = useAppSelector((state) => state);
-
-  const selectFile = () => {
-    const fileInput = document.getElementById('file-input');
-    fileInput?.click();
-  };
-
-  const handleFileSelect = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const fileContent = e!.target!.result!;
-        try {
-          const jsonData = JSON.parse(fileContent as string);
-          const generatedCollection = generateResourcePathsFromPostmanCollection(jsonData);
-          if (collections && collections.length > 0 && collections.find(k => k.isDefault)!.paths.length > 0) {
-            const currentCollection = collections.find(k => k.isDefault)!.paths;
-            if (isGeneratedCollectionInCollection(currentCollection, generatedCollection)) {
-              trackUploadAction('Collection exists');
-              dispatchCollectionSelectionStatus('Collection items exist', 'Collection items exist');
-            }
-            else {
-              setUploadedCollections(generatedCollection);
-              //toggleIsDialogHidden();
-            }
-          }
-          else {
-            trackUploadAction('Collection added')
-            dispatch(addResourcePaths(generatedCollection));
-          }
-        }
-        catch (error) {
-          trackUploadAction('Invalid file format');
-          dispatchCollectionSelectionStatus('Invalid file format', 'Invalid file format');
-          dispatch(
-            setQueryResponseStatus({
-              status: translateMessage('Invalid file format'),
-              statusText: translateMessage('Invalid file format'),
-              ok: false,
-              messageType: MessageBarType.error
-            })
-          )
-        }
-      };
-      reader.readAsText(file);
-    }
-  };
-
-  const dispatchCollectionSelectionStatus = (status: string, statusMessage: string) => {
-    dispatch(
-      setQueryResponseStatus({
-        status: translateMessage(status),
-        statusText: translateMessage(statusMessage),
-        ok: false,
-        messageType: MessageBarType.error
-      })
-    )
-  }
-
-  return { selectFile, handleFileSelect, uploadedCollections };
-};
