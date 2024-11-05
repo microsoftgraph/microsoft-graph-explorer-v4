@@ -46,6 +46,7 @@ interface EditScopePanelProps {
             }}>
             <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
             <Dropdown
+            placeholder={translateMessage('Select one scope')}
             options={scopeOptions}
             onChange={handleScopeChange}
             styles={{ dropdown: { width: 200 } }}

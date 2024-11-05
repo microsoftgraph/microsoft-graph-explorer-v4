@@ -87,6 +87,7 @@ export default class Paths extends Component<IPathProps> {
             selection={isSelectable ? this._selection! : undefined}
             selectionMode={isSelectable ? 2 : 0}
             onShouldVirtualize={() => false}
+            checkboxVisibility={isSelectable ? 1 : 0}
           />
       </div>
     );
