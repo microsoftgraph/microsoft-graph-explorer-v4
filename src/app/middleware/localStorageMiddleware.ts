@@ -7,9 +7,11 @@ import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS,
-  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
+  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS,
+  SAMPLES_FETCH_SUCCESS, SET_BANNER_STATE
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
+import { bannerCache } from '../../modules/cache/banner.cache';
 
 const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () => (next) => async (value) => {
   const action = value as AppAction;
@@ -48,6 +50,10 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
       await collectionsCache.create(action.payload as Collection);
       break;
     }
+
+    case SET_BANNER_STATE:
+      await bannerCache.update(action.payload as Boolean)
+      break;
 
     default:
       break;
