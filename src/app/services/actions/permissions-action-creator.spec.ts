@@ -126,7 +126,7 @@ const mockState: ApplicationState = {
   },
   collections: [],
   proxyUrl: '',
-  banner: {isVisible: false}
+  banner: {isVisible: true}
 }
 const currentState = store.getState();
 store.getState = () => {

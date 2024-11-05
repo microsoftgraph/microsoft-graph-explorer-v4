@@ -50,7 +50,7 @@ const initialState = {
       headers: undefined
     }
   },
-  banner: {isVisible: false}
+  banner: {isVisible: true}
 }
 
 export const store = configureStore({

@@ -8,9 +8,10 @@ import {
     Link
   } from '@fluentui/react-components';
 import { useNotificationStyles } from './Notification.styles';
-import { useState } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 import { componentNames, telemetry } from '../../../../telemetry';
+import { useAppDispatch, useAppSelector } from '../../../../store';
+import { setBannerState } from '../../../services/slices/banner.slice';
 
 interface NotificationProps {
     header: string;
@@ -26,14 +27,15 @@ const handleOnClickLink = (e: React.MouseEvent<HTMLAnchorElement>)=>{
 
 export const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
     const styles = useNotificationStyles();
-    const [isVisible, setIsVisible] = useState(true);
+    const banner = useAppSelector(state=> state.banner);
+    console.log({banner})
+    const dispatch = useAppDispatch()
 
     const handleDismiss = () => {
-        // TODO: don't show again. Persist choice to state
-        setIsVisible(false);
+        dispatch(setBannerState(false))
     };
 
-    if (!isVisible) {
+    if (!banner.isVisible) {
         return null;
     }
 
