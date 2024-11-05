@@ -87,10 +87,10 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
           rel="noopener noreferrer"
           onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
             componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-          href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+          href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
           underline
         >
-          {translateMessage('Microsoft Graph API Reference docs')}
+          {translateMessage('Microsoft Graph permissions reference')}
         </Link>
     </MessageBar>
     <div style={{ height: '80vh' }}>
