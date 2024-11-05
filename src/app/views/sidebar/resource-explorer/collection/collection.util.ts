@@ -21,4 +21,17 @@ function getVersionsFromPaths(paths: ResourcePath[]): string[] {
   return [...new Set(versions)];
 }
 
-export { getVersionsFromPaths, scopeOptions, ScopeOption, getScopesFromPaths };
+const formatScopeLabel = (scope: PERMS_SCOPE) => {
+  switch (scope) {
+    case PERMS_SCOPE.WORK:
+      return 'Delegated Work';
+    case PERMS_SCOPE.APPLICATION:
+      return 'Application';
+    case PERMS_SCOPE.PERSONAL:
+      return 'Delegated Personal';
+    default:
+      return scope; // fallback in case of an unknown value
+  }
+};
+
+export { getVersionsFromPaths, scopeOptions, ScopeOption, getScopesFromPaths, formatScopeLabel };

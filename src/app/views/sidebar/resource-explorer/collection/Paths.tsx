@@ -6,7 +6,8 @@ import {
 import { Component } from 'react';
 
 import { ResourcePath } from '../../../../../types/resources';
-import { scopeOptions } from './collection.util';
+import { formatScopeLabel, scopeOptions } from './collection.util';
+import { PERMS_SCOPE } from '../../../../services/graph-constants';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -46,7 +47,7 @@ export default class Paths extends Component<IPathProps> {
     if (column) {
       if (column.key === 'scope') {
         return <Label className={scopeLabelClass}>
-          {item.scope ?? scopeOptions[0].key}
+          {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key as PERMS_SCOPE)}
         </Label>
       }
       return (

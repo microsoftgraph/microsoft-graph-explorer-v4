@@ -6,7 +6,7 @@ import { updateResourcePaths } from '../../../../services/slices/collections.sli
 import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
-import { scopeOptions } from './collection.util';
+import { formatScopeLabel, scopeOptions } from './collection.util';
 
 interface EditScopePanelProps {
     closePopup: () => void;
@@ -47,7 +47,9 @@ interface EditScopePanelProps {
             <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
             <Dropdown
             placeholder={translateMessage('Select one scope')}
-            options={scopeOptions}
+            options={
+                scopeOptions.map(option => ({ key: option.key, text: formatScopeLabel(option.key as PERMS_SCOPE) }))
+            }
             onChange={handleScopeChange}
             styles={{ dropdown: { width: 200 } }}
             />
