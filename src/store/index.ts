@@ -49,8 +49,7 @@ const initialState = {
       body: undefined,
       headers: undefined
     }
-  },
-  banner: {isVisible: true}
+  }
 }
 
 export const store = configureStore({

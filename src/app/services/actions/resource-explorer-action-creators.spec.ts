@@ -100,8 +100,7 @@ const mockState: ApplicationState = {
     error: null
   },
   collections: [],
-  proxyUrl: '',
-  banner: {isVisible: true}
+  proxyUrl: ''
 }
 
 const paths = [

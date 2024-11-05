@@ -10,8 +10,7 @@ import {
 import { useNotificationStyles } from './Notification.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { useAppDispatch, useAppSelector } from '../../../../store';
-import { setBannerState } from '../../../services/slices/banner.slice';
+import { BANNER_IS_VISIBLE } from '../../../services/graph-constants';
 
 interface NotificationProps {
     header: string;
@@ -27,15 +26,13 @@ const handleOnClickLink = (e: React.MouseEvent<HTMLAnchorElement>)=>{
 
 export const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
     const styles = useNotificationStyles();
-    const banner = useAppSelector(state=> state.banner);
-    console.log({banner})
-    const dispatch = useAppDispatch()
+    const storageBanner = localStorage.getItem(BANNER_IS_VISIBLE);
 
     const handleDismiss = () => {
-        dispatch(setBannerState(false))
+        localStorage.setItem(BANNER_IS_VISIBLE, 'false');
     };
 
-    if (!banner.isVisible) {
+    if (storageBanner === 'false') {
         return null;
     }
 

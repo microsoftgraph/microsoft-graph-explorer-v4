@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import App from './app/views/App';
 
-import { BANNER_IS_VISIBLE, CURRENT_THEME } from './app/services/graph-constants';
+import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/slices/collections.slice';
 import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
@@ -33,8 +33,6 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { Collection } from './types/resources';
-import { setBannerState } from './app/services/slices/banner.slice';
-import { bannerCache } from './modules/cache/banner.cache';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
@@ -231,15 +229,6 @@ window.onerror = (message, url, lineNumber, columnNumber, error) => {
     columnNumber
   });
 }
-
-(async () => {
-  const bannerState = await bannerCache.read();
-  console.log({bannerState})
-  if(bannerState === null) {
-    appStore.dispatch(setBannerState(true))
-  }
-})()
-
 
 const Root = () => {
   return (

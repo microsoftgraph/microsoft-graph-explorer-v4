@@ -104,8 +104,7 @@ const mockState: ApplicationState = {
     error: null
   },
   collections: [],
-  proxyUrl: '',
-  banner: {isVisible: true}
+  proxyUrl: ''
 }
 
 store.getState = () => ({

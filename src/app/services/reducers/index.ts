@@ -20,7 +20,6 @@ import snippets from '../slices/snippet.slice';
 import themeChange from '../slices/theme.slice';
 import termsOfUse from '../slices/terms-of-use.slice';
 import sidebarProperties from '../slices/sidebar-properties.slice';
-import banner from '../slices/banner.slice';
 
 const reducers = {
   auth,
@@ -43,8 +42,7 @@ const reducers = {
   sidebarProperties,
   snippets,
   termsOfUse,
-  theme: themeChange,
-  banner
+  theme: themeChange
 };
 
 export {
