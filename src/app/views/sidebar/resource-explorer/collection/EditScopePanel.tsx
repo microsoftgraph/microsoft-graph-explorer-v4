@@ -46,7 +46,7 @@ interface EditScopePanelProps {
             }}>
             <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
             <Dropdown
-            placeholder={translateMessage('Select one scope')}
+            placeholder={translateMessage('[Select one scope]')}
             options={
                 scopeOptions.map(option => ({ key: option.key, text: formatScopeLabel(option.key as PERMS_SCOPE) }))
             }
