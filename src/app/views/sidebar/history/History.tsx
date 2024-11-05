@@ -169,8 +169,6 @@ const History = (props: any) => {
     const exportQueryText = translateMessage('Export');
     const inCollection = isInCollection(item);
 
-    console.log('Collections:', collections);
-
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
       let color = currentTheme.palette.green;
