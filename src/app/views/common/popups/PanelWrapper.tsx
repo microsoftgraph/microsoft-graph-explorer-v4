@@ -46,7 +46,7 @@ export function PanelWrapper(props: WrapperProps) {
     return renderFooter ? renderFooter() : null;
   }
 
-  const showBackButton = title === 'Edit Scope' || title === 'Edit Collection';
+  const showBackButton = title === 'Edit Scope' || title === 'Edit Collection' || title === 'Preview Permissions';
 
   const onRenderHeader = (): JSX.Element => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
