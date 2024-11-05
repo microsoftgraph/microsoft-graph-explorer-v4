@@ -15,18 +15,27 @@ import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions
 import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
+import { IQuery } from '../../../../types/query-runner';
 
-const Request = (props: any) => {
+interface IRequestProps {
+  handleOnEditorChange: ()=> void
+  sampleQuery: IQuery
+}
+
+const Request = (props: IRequestProps) => {
   const dispatch = useAppDispatch();
   const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const { graphExplorerMode: mode, dimensions, sidebarProperties } = useAppSelector((state) => state);
+  const mode = useAppSelector((state)=> state.graphExplorerMode);
+  const dimensions= useAppSelector((state)=> state.dimensions);
+  const sidebarProperties = useAppSelector((state)=> state.sidebarProperties);
   const pivot = selectedPivot.replace('.$', '');
   const minHeight = 60;
   const maxHeight = 800;
 
   const {
-    handleOnEditorChange
-  }: any = props;
+    handleOnEditorChange,
+    sampleQuery
+  }: IRequestProps = props;
 
   useEffect(() => {
     if(sidebarProperties && sidebarProperties.mobileScreen){
@@ -129,7 +138,6 @@ const Request = (props: any) => {
   const onPivotItemClick = (item?: PivotItem) => {
     if (!item) { return; }
     const tabKey = item.props.itemKey;
-    const { sampleQuery }: any = props;
     if (tabKey) {
       telemetry.trackTabClickEvent(tabKey, sampleQuery);
     }
