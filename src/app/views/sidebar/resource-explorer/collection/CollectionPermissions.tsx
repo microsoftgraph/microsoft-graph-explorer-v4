@@ -102,7 +102,9 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
       />
       </div>
       {permissions &&
-        <DialogFooter styles={{ actionsRight: { justifyContent: 'start' } }}>
+        <DialogFooter styles={{
+          actionsRight: { bottom: 0, justifyContent: 'start' }
+          }}>
           <PrimaryButton onClick={downloadPermissions}>
             {translateMessage('Download permissions')}
           </PrimaryButton>
