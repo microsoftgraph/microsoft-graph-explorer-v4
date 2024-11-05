@@ -127,7 +127,8 @@ const History = (props: any) => {
     const defaultCollection = collections.find((collection) => collection.isDefault);
     if (!defaultCollection) { return false; }
     return defaultCollection.paths.some((path) => {
-      return path.url === item.url && path.method === item.method;
+      const { relativeUrl } = processUrlAndVersion(item.url);
+      return path.url === relativeUrl && path.method === item.method;
     });
   };
 
@@ -532,7 +533,7 @@ const History = (props: any) => {
       version,
       method: item.method,
       url: relativeUrl,
-      key: item.index.toString()
+      key: `${item.index}-${item.url}`
     };
   };
 
