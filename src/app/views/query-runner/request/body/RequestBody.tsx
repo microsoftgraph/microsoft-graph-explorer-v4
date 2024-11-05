@@ -4,13 +4,18 @@ import { useAppSelector } from '../../../../../store';
 import { Monaco } from '../../../common';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
-const RequestBody = ({ handleOnEditorChange }: any) => {
-  const { dimensions: { request: { height } }, sampleQuery } = useAppSelector((state) => state);
+interface IRequestBodyProps {
+  handleOnEditorChange: (v: string | undefined)=> void;
+}
+
+const RequestBody = ({ handleOnEditorChange }: IRequestBodyProps) => {
+  const height = useAppSelector((state)=> state.dimensions.request.height);
+  const sampleBody = useAppSelector((state)=> state.sampleQuery.sampleBody);
 
   return (
     <FocusZone>
       <Monaco
-        body={sampleQuery.sampleBody}
+        body={sampleBody}
         height={convertVhToPx(height, 60)}
         onChange={(value) => handleOnEditorChange(value)} />
     </FocusZone>
