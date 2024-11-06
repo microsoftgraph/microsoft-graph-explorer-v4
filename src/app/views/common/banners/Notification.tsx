@@ -10,7 +10,8 @@ import {
 import { useNotificationStyles } from './Notification.styles';
 import { translateMessage } from '../../../utils/translate-messages';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { BANNER_IS_VISIBLE, CURRENT_THEME } from '../../../services/graph-constants';
+import { BANNER_IS_VISIBLE } from '../../../services/graph-constants';
+import { useAppSelector } from '../../../../store';
 
 interface NotificationProps {
     header: string;
@@ -27,8 +28,7 @@ const handleOnClickLink = (e: React.MouseEvent<HTMLAnchorElement>)=>{
 export const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
     const styles = useNotificationStyles();
     const storageBanner = localStorage.getItem(BANNER_IS_VISIBLE);
-    const theme = localStorage.getItem(CURRENT_THEME);
-    console.log(theme)
+    const theme = useAppSelector(s => s.theme)
 
     const handleDismiss = () => {
         localStorage.setItem(BANNER_IS_VISIBLE, 'false');
@@ -39,8 +39,8 @@ export const Notification: React.FunctionComponent<NotificationProps> = (props: 
     }
 
     return (
-        <MessageBar className={styles.container} icon={''}>
-            <MessageBarBody>
+        <MessageBar className={`${styles.container} ${theme}`} icon={''}>
+            <MessageBarBody className={styles.body}>
                 <MessageBarTitle>{props.header}</MessageBarTitle><br></br>
                 {props.content}{' '}
                 <Link
