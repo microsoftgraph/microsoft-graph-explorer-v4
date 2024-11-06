@@ -296,6 +296,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     const errorMessage = getErrorMessage();
     if (errorMessage) {
       setDescriptionError(errorMessage)
+    } else {
+      setDescriptionError('')
     }
   }, [getErrorMessage])
 
