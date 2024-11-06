@@ -1,5 +1,5 @@
 // custom.d.ts
 declare module '*.txt' {
-    const content: any;
-    export default content;
-  }
+  const content: string;
+  export default content;
+}
