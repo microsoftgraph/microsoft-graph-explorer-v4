@@ -28,7 +28,10 @@ interface EditScopePanelProps {
       ];
 
     const handleScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-        setSelectedScope(option?.key as PERMS_SCOPE);
+        const newScope = option?.key as PERMS_SCOPE;
+        setSelectedScope(newScope);
+        const updateSelectedItems = selectedItems.map(item => ({...item, scope: newScope}));
+        setSelectedItems(updateSelectedItems);
     };
       const saveAllScopes = () => {
         if (selectedScope) {
@@ -36,6 +39,7 @@ interface EditScopePanelProps {
                 selectedItems.some(selected => selected.key === item.key) ? {...item, scope:selectedScope} : item );
             dispatch(updateResourcePaths(updatedItems));
             setSelectedItems([]);
+            setSelectedScope(undefined);
         }
     };
 
@@ -56,7 +60,7 @@ interface EditScopePanelProps {
         </div>
         <div style={{ height: '80vh' }}>
             <Paths
-            resources={items}
+            resources={items.map(item => selectedItems.find(selected => selected.key === item.key) || item)}
             columns={columns}
             isSelectable={true}
             onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
