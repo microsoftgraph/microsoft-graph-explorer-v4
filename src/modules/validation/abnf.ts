@@ -1,5 +1,5 @@
 import 'apg-js/dist/apg-api-bundle';
-import { rules } from './definition';
+import rules from './ODataUrlABNF.txt';
 
 interface ValidationResult {
   inputLength: number;
