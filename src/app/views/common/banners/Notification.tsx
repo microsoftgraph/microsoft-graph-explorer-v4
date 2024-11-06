@@ -1,17 +1,18 @@
-import { DismissRegular, OpenRegular } from '@fluentui/react-icons';
 import {
+    Button,
+    Link,
     MessageBar,
     MessageBarActions,
-    MessageBarTitle,
     MessageBarBody,
-    Button,
-    Link
-  } from '@fluentui/react-components';
-import { useNotificationStyles } from './Notification.styles';
-import { translateMessage } from '../../../utils/translate-messages';
+    MessageBarTitle
+} from '@fluentui/react-components';
+import { DismissRegular, OpenRegular } from '@fluentui/react-icons';
+import { useState } from 'react';
+import { useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { BANNER_IS_VISIBLE } from '../../../services/graph-constants';
-import { useAppSelector } from '../../../../store';
+import { translateMessage } from '../../../utils/translate-messages';
+import { useNotificationStyles } from './Notification.styles';
 
 interface NotificationProps {
     header: string;
@@ -28,13 +29,15 @@ const handleOnClickLink = (e: React.MouseEvent<HTMLAnchorElement>)=>{
 export const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
     const styles = useNotificationStyles();
     const storageBanner = localStorage.getItem(BANNER_IS_VISIBLE);
-    const theme = useAppSelector(s => s.theme)
+    const [isVisible, setIsVisible] = useState(storageBanner === null || storageBanner === 'true');
+    const theme = useAppSelector(s => s.theme);
 
     const handleDismiss = () => {
         localStorage.setItem(BANNER_IS_VISIBLE, 'false');
+        setIsVisible(false);
     };
 
-    if (storageBanner === 'false') {
+    if (!isVisible) {
         return null;
     }
 
