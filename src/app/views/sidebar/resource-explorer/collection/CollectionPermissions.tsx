@@ -23,7 +23,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
 
   const { collections } = useAppSelector(
-    (state) => state
+    (state) => state.collections
   );
   const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
 

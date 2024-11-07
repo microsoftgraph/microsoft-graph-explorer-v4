@@ -14,7 +14,7 @@ interface EditCollectionPanelProps {
     const dispatch = useAppDispatch();
     const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
     const { collections } = useAppSelector(
-        (state) => state
+        (state) => state.collections
       );
       const items = collections && collections.length >
         0 ? collections.find(k => k.isDefault)!.paths : [];

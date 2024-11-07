@@ -21,7 +21,7 @@ interface IResourceLinkProps {
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { version } = props;
-  const { collections } = useAppSelector(state => state);
+  const { collections } = useAppSelector(state => state.collections);
   const link = props.link as IResourceLink;
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };

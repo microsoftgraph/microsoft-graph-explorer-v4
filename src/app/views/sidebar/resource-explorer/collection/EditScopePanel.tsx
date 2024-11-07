@@ -1,8 +1,8 @@
 import { DefaultButton, DialogFooter, Dropdown, IDropdownOption, Label, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
-import { updateResourcePaths } from '../../../../services/slices/collections.slice';
+import { resetSaveState, updateResourcePaths } from '../../../../services/slices/collections.slice';
 import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
@@ -16,11 +16,19 @@ interface EditScopePanelProps {
     const dispatch = useAppDispatch();
     const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
     const [selectedScope, setSelectedScope] = useState<PERMS_SCOPE | undefined>();
-    const { collections } = useAppSelector(
-        (state) => state
+    const { collections, saved } = useAppSelector(
+        (state) => state.collections
       );
-      const items = collections && collections.length >
-        0 ? collections.find(k => k.isDefault)!.paths : [];
+      const items = collections && collections.length > 0
+        ? collections.find(k => k.isDefault)!.paths
+        : [];
+
+        useEffect(() => {
+            if (saved) {
+                setSelectedItems([]);
+                setSelectedScope(undefined);
+            }
+        }, [saved]);
 
     const columns = [
         { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
@@ -33,13 +41,17 @@ interface EditScopePanelProps {
         const updateSelectedItems = selectedItems.map(item => ({...item, scope: newScope}));
         setSelectedItems(updateSelectedItems);
     };
-      const saveAllScopes = () => {
+    const saveAllScopes = () => {
         if (selectedScope) {
+            dispatch(resetSaveState());
+
             const updatedItems = items.map(item =>
-                selectedItems.some(selected => selected.key === item.key) ? {...item, scope:selectedScope} : item );
+                selectedItems.some(selected => selected.key === item.key)
+                    ? { ...item, scope: selectedScope }
+                    : item
+            );
+
             dispatch(updateResourcePaths(updatedItems));
-            setSelectedItems([]);
-            setSelectedScope(undefined);
         }
     };
 

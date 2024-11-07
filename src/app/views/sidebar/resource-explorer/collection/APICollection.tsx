@@ -29,7 +29,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
   const { show: showPopup } = usePopups('edit-collection-panel', 'panel');
   const { show: showEditScopePanel } = usePopups('edit-scope-panel', 'panel');
-  const collections = useAppSelector((state) => state.collections);
+  const { collections } = useAppSelector((state) => state.collections);
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const [fileInputKey, setFileInputKey] = useState(Date.now());

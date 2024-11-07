@@ -98,7 +98,7 @@ const History = (props: any) => {
   const [category, setCategory] = useState('');
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
-  const collections = useAppSelector((state) => state.collections);
+  const {collections} = useAppSelector((state) => state.collections);
 
   const shouldGenerateGroups = useRef(true);
 
