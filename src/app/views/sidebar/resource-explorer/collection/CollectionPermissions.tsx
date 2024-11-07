@@ -93,7 +93,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
           {translateMessage('Microsoft Graph permissions reference')}
         </Link>
     </MessageBar>
-    <div style={{ height: '80vh' }}>
+    <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
       <DetailsList
         items={permissionsArray}
         columns={columns}
