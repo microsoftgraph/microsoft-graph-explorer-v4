@@ -34,11 +34,23 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const[items, setItems] = useState<ResourcePath[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setItems(collections && collections.length >
-      0 ? collections.find(k => k.isDefault)!.paths : []);
+    const timeoutId = setTimeout(() => {
+      if (collections && collections.length > 0) {
+        const defaultPaths = collections.find(k => k.isDefault)?.paths || [];
+        setItems(defaultPaths);
+        setLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [collections]);
+
+  if (loading) {
+    return <Label>{translateMessage('Loading collections...')}</Label>;
+  }
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
