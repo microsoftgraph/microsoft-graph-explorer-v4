@@ -1,4 +1,4 @@
-import { Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
+import { Checkbox, Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
@@ -41,6 +41,14 @@ export default class Paths extends Component<IPathProps> {
       });
     }
   }
+
+  private renderCustomCheckbox = (props: any): JSX.Element => {
+    return (
+      <div style={{ pointerEvents: 'none' }}>
+        <Checkbox checked={props ? props.checked : false} />
+      </div>
+    );
+  };
 
   private renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
 
@@ -89,6 +97,7 @@ export default class Paths extends Component<IPathProps> {
             selectionMode={isSelectable ? 2 : 0}
             onShouldVirtualize={() => false}
             checkboxVisibility={isSelectable ? 1 : 0}
+            onRenderCheckbox={this.renderCustomCheckbox}
           />
       </div>
     );
