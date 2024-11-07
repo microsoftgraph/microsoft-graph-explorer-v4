@@ -99,7 +99,10 @@ const mockState: ApplicationState = {
     data: {},
     error: null
   },
-  collections: [],
+  collections: {
+    collections: [],
+    saved: false
+  },
   proxyUrl: ''
 }
 

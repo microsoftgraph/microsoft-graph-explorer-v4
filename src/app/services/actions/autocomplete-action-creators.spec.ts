@@ -103,14 +103,20 @@ const mockState: ApplicationState = {
     permissions: [],
     error: null
   },
-  collections: [],
+  collections: {
+    collections: [],
+    saved: false
+  },
   proxyUrl: ''
 }
 
 store.getState = () => ({
   ...mockState,
   proxyUrl: '',
-  collections: [],
+  collections: {
+    collections: [],
+    saved: false
+  },
   graphExplorerMode: Mode.Complete,
   queryRunnerStatus: null,
   samples: {
