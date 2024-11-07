@@ -6,7 +6,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { WrapperProps } from './popups.types';
 
 export function PanelWrapper(props: WrapperProps) {
-  const { theme: appTheme } = useAppSelector((state) => state);
+  const appTheme  = useAppSelector((state) => state.theme);
   const theme = getTheme();
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { title, renderFooter } = popupsProps.settings;

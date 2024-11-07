@@ -55,7 +55,7 @@ Promise<{ [key: string]: CollectionPermission[] }> {
 }
 
 const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) => {
-  const { devxApi } = useAppSelector((state) => state);
+  const { baseUrl } = useAppSelector((state) => state.devxApi);
   const [permissions, setPermissions] = useState<{ [key: string]: CollectionPermission[] } | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [code, setCode] = useState('');
@@ -66,7 +66,7 @@ const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) =>
     if (hashCode !== code) {
       try {
         setIsFetching(true);
-        const perms = await getCollectionPermissions(`${devxApi.baseUrl}/permissions`, items);
+        const perms = await getCollectionPermissions(`${baseUrl}/permissions`, items);
         setPermissions(perms);
         setIsFetching(false);
         setCode(hashCode);

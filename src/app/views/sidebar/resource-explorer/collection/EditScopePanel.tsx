@@ -25,7 +25,7 @@ interface EditScopePanelProps {
     const columns = [
         { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
         { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
-      ];
+    ];
 
     const handleScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
         const newScope = option?.key as PERMS_SCOPE;
