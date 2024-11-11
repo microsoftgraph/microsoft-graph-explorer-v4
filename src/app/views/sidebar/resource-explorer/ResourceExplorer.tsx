@@ -1,5 +1,7 @@
 import {
   INavLink, INavLinkGroup, Label,
+  MessageBar,
+  MessageBarType,
   Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle} from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
@@ -128,6 +130,9 @@ const UnstyledResourceExplorer = (props: any) => {
         styles={searchBoxStyles}
       />
       <hr />
+      <MessageBar messageBarType={MessageBarType.info}>
+          {translateMessage('expand resources to view details')}
+        </MessageBar>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
         <Label styles={{ root: { position: 'relative'} }}>
           {translateMessage('Resources available')}
