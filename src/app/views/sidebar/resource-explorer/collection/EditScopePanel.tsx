@@ -1,4 +1,10 @@
-import { DefaultButton, DialogFooter, Dropdown, IDropdownOption, Label, PrimaryButton } from '@fluentui/react';
+import { DefaultButton,
+    DialogFooter,
+    Dropdown,
+    IDropdownOption,
+    Label,
+    MessageBar,
+    PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useEffect, useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -57,6 +63,10 @@ interface EditScopePanelProps {
 
     return (
         <>
+        <MessageBar isMultiline={true}>
+            {translateMessage('edit query scopes')}
+            <span style={{ fontWeight: 'bold' }}>{translateMessage('Save all')}</span>
+            </MessageBar>
         <div style={{
             display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 0px'
             }}>

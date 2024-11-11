@@ -1,4 +1,4 @@
-import { DefaultButton, DialogFooter, Label, PrimaryButton } from '@fluentui/react';
+import { DefaultButton, DialogFooter, Label, MessageBar, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -31,6 +31,10 @@ interface EditCollectionPanelProps {
 
     return (
         <>
+        <MessageBar isMultiline={true}>
+        {translateMessage('edit collections')}
+        <span style={{ fontWeight: 'bold' }}>{translateMessage('Delete all selected')}</span>
+        </MessageBar>
         {items && items.length > 0 ? (
          <div style={{ height: '80vh' }}>
          <Paths
