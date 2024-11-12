@@ -216,23 +216,6 @@ const History = (props: any) => {
             },
             onClick: () => onExportQuery(item)
           },
-          ...(inCollection
-            ? [
-              {
-                key: 'removeFromCollection',
-                text: translateMessage('Remove from Collection'),
-                iconProps: { iconName: 'BoxSubtractSolid' },
-                onClick: () => handleRemoveFromCollection(item)
-              }
-            ]
-            : [
-              {
-                key: 'addToCollection',
-                text: translateMessage('Add to Collection'),
-                iconProps: { iconName: 'BoxAdditionSolid' },
-                onClick: () => handleAddToCollection(item)
-              }
-            ]),
           {
             key: 'remove',
             text: removeText,
