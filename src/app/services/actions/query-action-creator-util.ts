@@ -111,23 +111,23 @@ export function makeGraphRequest(scopes: string[]) {
     const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
-      case 'GET':
-        response = await graphRequest.get();
-        break;
-      case 'POST':
-        response = await graphRequest.post(query.sampleBody);
-        break;
-      case 'PUT':
-        response = await graphRequest.put(query.sampleBody);
-        break;
-      case 'PATCH':
-        response = await graphRequest.patch(query.sampleBody);
-        break;
-      case 'DELETE':
-        response = await graphRequest.delete();
-        break;
-      default:
-        return;
+    case 'GET':
+      response = await graphRequest.get();
+      break;
+    case 'POST':
+      response = await graphRequest.post(query.sampleBody);
+      break;
+    case 'PUT':
+      response = await graphRequest.put(query.sampleBody);
+      break;
+    case 'PATCH':
+      response = await graphRequest.patch(query.sampleBody);
+      break;
+    case 'DELETE':
+      response = await graphRequest.delete();
+      break;
+    default:
+      return;
     }
     return Promise.resolve(response);
   };
@@ -227,16 +227,16 @@ export function parseResponse(
 
     const contentType = getContentType(response.headers);
     switch (contentType) {
-      case ContentType.Json:
-        return response.text().then(tryParseJson);
-      case ContentType.XML:
-      case ContentType.HTML:
-      case ContentType.TextCsv:
-      case ContentType.TextPlain:
-        return response.text();
+    case ContentType.Json:
+      return response.text().then(tryParseJson);
+    case ContentType.XML:
+    case ContentType.HTML:
+    case ContentType.TextCsv:
+    case ContentType.TextPlain:
+      return response.text();
 
-      default:
-        return Promise.resolve(response);
+    default:
+      return Promise.resolve(response);
     }
   }
   return Promise.resolve(response);
