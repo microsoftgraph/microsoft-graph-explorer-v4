@@ -19,6 +19,7 @@ import {
   SearchBox,
   SearchBoxChangeEvent,
   Text,
+  Tooltip,
   TreeItemLayout,
   TreeItemValue,
   TreeOpenChangeData,
@@ -36,6 +37,7 @@ import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { translateMessage } from '../../../utils/translate-messages';
 import { performSearch } from './sample-query-utils';
+import { queries } from './queries';
 
 const useStyles = makeStyles({
   searchBox: {
@@ -168,21 +170,33 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
 
   return (
     <>
-      {leafs.map((query: ISampleQuery, id: number) => (
-        <FlatTreeItem
-          key={id}
-          parentValue={group.name}
-          value={query.humanName}
-          aria-level={2}
-          aria-setsize={leafs.length}
-          aria-posinset={id + 1}
-          itemType='leaf'
-        >
-          <TreeItemLayout
-            iconBefore={<MethodIcon method={query.method} />}
-            aside={<DocumentText20Regular />}>{query.humanName}</TreeItemLayout>
-        </FlatTreeItem>
-      ))}
+      {leafs.map((query: ISampleQuery) => {
+        return (
+          <FlatTreeItem
+            key={query.id}
+            parentValue={group.name}
+            value={query.humanName}
+            aria-level={2}
+            aria-setsize={leafs.length}
+            aria-posinset={leafs.findIndex((q) => q.id === query.id) + 1}
+            itemType='leaf'
+          >
+            <TreeItemLayout
+              iconBefore={<MethodIcon method={query.method} />}
+              aside={<DocumentText20Regular />}
+            >
+              <Tooltip
+                withArrow
+                content={query.humanName}
+                relationship='label'
+                positioning='above-start'
+              >
+                <Text>{query.humanName}</Text>
+              </Tooltip>
+            </TreeItemLayout>
+          </FlatTreeItem>
+        );
+      })}
     </>
   );
 };
