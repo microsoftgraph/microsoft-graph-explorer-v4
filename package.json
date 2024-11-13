@@ -50,7 +50,7 @@
                 "office-ui-fabric-core": "11.1.0",
                 "postcss-flexbugs-fixes": "5.0.2",
                 "postcss-loader": "8.1.1",
-                "postcss-preset-env": "9.5.13",
+                "postcss-preset-env": "10.1.0",
                 "re-resizable": "6.10.0",
                 "react": "18.2.0",
                 "react-app-polyfill": "3.0.0",
