@@ -11,7 +11,7 @@ import { componentNames, eventTypes, telemetry } from '../../../../../telemetry'
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { usePopups } from '../../../../services/hooks';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { downloadToLocal } from '../../../common/download';
+import { downloadToLocal, trackDownload } from '../../../common/download';
 import Paths from './Paths';
 import { generatePostmanCollection, generateResourcePathsFromPostmanCollection } from './postman.util';
 import { addResourcePaths, removeResourcePaths } from '../../../../services/slices/collections.slice';
@@ -64,12 +64,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
   }
 
-  function trackDownload(filename: string, componentName: string) {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      componentName,
-      filename
-    });
-  }
 
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];

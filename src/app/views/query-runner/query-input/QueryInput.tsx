@@ -135,7 +135,7 @@ const QueryInput = (props: IQueryInputProps) => {
         <Stack.Item shrink styles={!mobileScreen ? queryButtonStyles : {}}>
           <DefaultButton
             text={translateMessage('My API Collection')}
-            onClick={() => openPreviewCollection()}
+            onClick={openPreviewCollection}
             styles={{root: {
               whiteSpace: 'nowrap'
             }}}
