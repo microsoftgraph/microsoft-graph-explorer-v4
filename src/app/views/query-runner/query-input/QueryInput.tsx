@@ -33,10 +33,11 @@ const QueryInput = (props: IQueryInputProps) => {
     })
   });
 
-  const { sampleQuery, auth: { authToken },
-    graphResponse: { isLoadingData },
-    sidebarProperties } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const authToken = useAppSelector((state) => state.auth.authToken);
   const authenticated = !!authToken.token;
+  const isLoadingData = useAppSelector((state) => state.graphResponse.isLoadingData);
+  const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
   const { mobileScreen } = sidebarProperties;
 
   const showError = !shouldRunQuery({
