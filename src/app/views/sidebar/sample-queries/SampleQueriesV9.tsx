@@ -45,13 +45,21 @@ import {
   isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
 } from './sample-query-utils';
 
+type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
+
 const useStyles = makeStyles({
   searchBox: {
     width: '100%',
     maxWidth: '100%'
   },
-
-  treeHeader: typographyStyles.body1Strong
+  treeHeader: typographyStyles.body1Strong,
+  iconBefore: {
+    width: '52px',
+    maxWidth: '52px'
+  },
+  badge: {
+    width: '100%'
+  }
 });
 
 export const SampleQueriesV9 = () => {
@@ -227,6 +235,7 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
   )
 }
 
+
 /**
  * A functional component that returns a JSX element representing an HTTP method badge.
  *
@@ -236,14 +245,22 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
  * @returns {JSX.Element} A JSX element representing the HTTP method badge.
  */
 const MethodIcon = ({ method }: { method: string }) => {
-  const methods: Record<string, JSX.Element> = {
-    'GET': <Badge appearance="filled" color="brand">GET</Badge>,
-    'POST': <Badge appearance="filled" color="success">POST</Badge>,
-    'PATCH': <Badge appearance="filled" color="severe">PATCH</Badge>,
-    'DELETE': <Badge appearance="filled" color="danger">DELETE</Badge>,
-    'PUT': <Badge appearance="filled" color="warning">PUT</Badge>
+  const sampleQueriesStyles = useStyles();
+  const colors: Record<string, Colors> = {
+    'GET': 'brand',
+    'POST': 'success',
+    'PATCH': 'severe',
+    'DELETE': 'danger',
+    'PUT': 'warning'
   }
-  return methods[method]
+  return (
+    <div className={sampleQueriesStyles.iconBefore}>
+      <Badge
+        appearance="filled"
+        color={colors[method]}
+        className={sampleQueriesStyles.badge}>{method}</Badge>
+    </div>
+  )
 }
 
 /**
