@@ -36,7 +36,7 @@ import { ISampleQuery } from '../../../../types/query-runner';
 import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { translateMessage } from '../../../utils/translate-messages';
-import { performSearch } from './sample-query-utils';
+import { performSearch, trackDocumentLinkClickedEvent } from './sample-query-utils';
 import { queries } from './queries';
 
 const useStyles = makeStyles({
@@ -183,7 +183,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
           >
             <TreeItemLayout
               iconBefore={<MethodIcon method={query.method} />}
-              aside={<DocumentText20Regular />}
+              aside={<ResourceLink item={query}/>}
             >
               <Tooltip
                 withArrow
@@ -200,6 +200,22 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
     </>
   );
 };
+
+/**
+ * Component that renders a link to a resource document.
+ *
+ * @param {Object} props - The component props.
+ * @param {ISampleQuery} props.item - The sample query item containing the document link.
+ * @returns {JSX.Element} The rendered link component.
+ */
+const ResourceLink = ({item}: {item: ISampleQuery}) =>{
+  const href = item.docLink ?? '';
+  return (
+    <Link aria-label={href} target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+      <DocumentText20Regular />
+    </Link>
+  )
+}
 
 /**
  * A functional component that returns a JSX element representing an HTTP method badge.
