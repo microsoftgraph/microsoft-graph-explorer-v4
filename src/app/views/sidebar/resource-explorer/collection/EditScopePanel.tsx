@@ -21,7 +21,8 @@ interface EditScopePanelProps {
 const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
     const dispatch = useAppDispatch();
     const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
-    const [selectedScope, setSelectedScope] = useState<PERMS_SCOPE | undefined>();
+    const [selectedScope, setSelectedScope] = useState<PERMS_SCOPE | null>(null);
+    const [dropdownKey, setDropdownKey] = useState(0);
     const [pendingChanges, setPendingChanges] = useState<IResourceLink[]>([]);
     const { collections, saved } = useAppSelector((state) => state.collections);
     const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
@@ -29,7 +30,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
     useEffect(() => {
         if (saved) {
             setSelectedItems([]);
-            setSelectedScope(undefined);
+            setSelectedScope(null);
             setPendingChanges([]);
         }
     }, [saved]);
@@ -40,8 +41,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
     ];
 
     const handleScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-        const newScope = option?.key as PERMS_SCOPE;
-        setSelectedScope(newScope);
+        if (!option) {return;}
+        const newScope = option.key as PERMS_SCOPE;
         const updatedSelectedItems = selectedItems.map(item => ({ ...item, scope: newScope }));
         setSelectedItems(updatedSelectedItems);
         const newPendingChanges = [...pendingChanges];
@@ -54,6 +55,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
             }
         });
         setPendingChanges(newPendingChanges);
+        setSelectedScope(null);
+        setDropdownKey(prevKey => prevKey + 1);
     };
 
     const saveAllScopes = () => {
@@ -78,11 +81,13 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 0px' }}>
                 <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
                 <Dropdown
+                    key={dropdownKey}
                     placeholder={translateMessage('[Select one scope]')}
                     options={scopeOptions.map(option =>
                         ({ key: option.key, text: formatScopeLabel(option.key as PERMS_SCOPE) }))}
                     onChange={handleScopeChange}
                     selectedKey={selectedScope}
+                    disabled={selectedItems.length === 0}
                     styles={{ dropdown: { width: 200 } }}
                 />
             </div>
