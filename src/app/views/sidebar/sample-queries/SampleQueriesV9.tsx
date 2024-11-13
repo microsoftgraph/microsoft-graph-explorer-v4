@@ -179,12 +179,31 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
           aria-posinset={id + 1}
           itemType='leaf'
         >
-          <TreeItemLayout>{query.humanName}</TreeItemLayout>
+          <TreeItemLayout iconBefore={<MethodIcon method={query.method} />}>{query.humanName}</TreeItemLayout>
         </FlatTreeItem>
       ))}
     </>
   );
 };
+
+/**
+ * A functional component that returns a JSX element representing an HTTP method badge.
+ *
+ * @param {Object} props - The props object.
+ * @param {string} props.method - The HTTP method (e.g., 'GET', 'POST', 'PATCH', 'DELETE', 'PUT').
+ *
+ * @returns {JSX.Element} A JSX element representing the HTTP method badge.
+ */
+const MethodIcon = ({ method }: { method: string }) => {
+  const methods: Record<string, JSX.Element> = {
+    'GET': <Badge appearance="filled" color="brand">GET</Badge>,
+    'POST': <Badge appearance="filled" color="success">POST</Badge>,
+    'PATCH': <Badge appearance="filled" color="severe">PATCH</Badge>,
+    'DELETE': <Badge appearance="filled" color="danger">DELETE</Badge>,
+    'PUT': <Badge appearance="filled" color="warning">PUT</Badge>
+  }
+  return methods[method]
+}
 
 /**
  * Props for the Samples component.
