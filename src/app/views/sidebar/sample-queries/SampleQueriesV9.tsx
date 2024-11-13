@@ -1,6 +1,8 @@
 import {
     Button, InputOnChangeData, makeStyles, MessageBar, MessageBarActions, MessageBarBody,
     SearchBox, SearchBoxChangeEvent, Link, AriaLiveAnnouncer, Text } from '@fluentui/react-components';
+    import {
+        DetailsList, DetailsListLayoutMode, IGroup, SelectionMode } from '@fluentui/react/lib/DetailsList';
 import { DismissRegular } from '@fluentui/react-icons';
 import { useRef, useState, useEffect } from 'react';
 
@@ -9,9 +11,10 @@ import { ISampleQuery } from '../../../../types/query-runner';
 import { translateMessage } from '../../../utils/translate-messages';
 import { performSearch } from './sample-query-utils';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { geLocale } from '../../../../appLocale';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { fetchSamples } from '../../../services/slices/samples.slice';
+import { generateGroupsFromList } from '../../../utils/generate-groups';
+
 
 const useStyles = makeStyles({
     searchBox: {
@@ -23,18 +26,35 @@ const useStyles = makeStyles({
 export const SampleQueriesV9 = ()=>{
     const sampleQueriesStyles = useStyles();
     const samples = useAppSelector(s => s.samples);
-    const {error, pending, queries} = samples
-
-
+    // TODO: use a shimmer when pending is true
+    const {error, pending, queries} = samples;
+    const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries)
     const shouldGenerateGroups = useRef(true);
+    const [groups, setGroups] = useState<IGroup[]>([]);
+  const [searchStarted, setSearchStarted] = useState<boolean>(false);
+
+
+    useEffect(() => {
+        setSampleQueries(queries);
+    }, [queries]);
+
+    useEffect(() => {
+        if (shouldGenerateGroups.current) {
+          setGroups(generateGroupsFromList(sampleQueries, 'category'));
+          if (groups && groups.length > 0) {
+            shouldGenerateGroups.current = false;
+          }
+        }
+      }, [sampleQueries, searchStarted]);
+
 
     const handleSearchValueChange = (_: SearchBoxChangeEvent, data: InputOnChangeData)=>{
         const value = data.value;
         shouldGenerateGroups.current = true;
+        setSearchStarted(searchStatus => !searchStatus);
         const filteredQueries = value ? performSearch(queries, value) : [];
         setSampleQueries(filteredQueries);
     }
-
     return <>
         <SearchBox
             className={sampleQueriesStyles.searchBox}
@@ -42,9 +62,9 @@ export const SampleQueriesV9 = ()=>{
             onChange={handleSearchValueChange} />
         <hr />
         {error && <CachedSetMessageBar />}
-        <MoreQueriesMessageBar/>
+        <SeeMoreQueriesMessageBar/>
         <AriaLiveAnnouncer><Text>{`${queries.length} search results available.`}</Text></AriaLiveAnnouncer>
-        {queries.length === 0 ? NoResultsFound('No samples found'): <Samples />}
+        <Samples queries={sampleQueries} groups={groups} />
     </>
 }
 
@@ -57,7 +77,7 @@ const CachedSetMessageBar = ()=>{
     )
 }
 
-const MoreQueriesMessageBar = ()=>{
+const SeeMoreQueriesMessageBar = ()=>{
     return (
         <MessageBar intent={'info'}>
             <MessageBarBody>{translateMessage('see more queries')}{' '}
@@ -66,7 +86,7 @@ const MoreQueriesMessageBar = ()=>{
                 rel="noopener noreferrer"
                 onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
                     componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
-                href={`https://learn.microsoft.com/${geLocale}/graph/api/overview?view=graph-rest-1.0`}
+                href="https://learn.microsoft.com/graph/api/overview?view=graph-rest-1.0"
                 inline={true}>{translateMessage('Microsoft Graph API Reference docs')}</Link>
             </MessageBarBody>
       </MessageBar>
@@ -75,11 +95,12 @@ const MoreQueriesMessageBar = ()=>{
 
 interface SamplesProps {
     queries: ISampleQuery[]
+    groups: IGroup[]
 }
 
 const Samples = (props: SamplesProps) =>{
     const dispatch = useAppDispatch();
-    const {queries} = props
+    const {queries, groups} = props
     const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
 
     useEffect(() => {
@@ -88,8 +109,20 @@ const Samples = (props: SamplesProps) =>{
         } else {
           setSampleQueries(queries)
         }
-      }, [queries])
+    }, [queries])
     return (
-    <></>
+    <div>
+        {sampleQueries.length === 0 ? NoResultsFound('No samples found'):
+        <DetailsList
+        items={sampleQueries}
+        groups={groups}
+        compact={true}
+        selectionMode={SelectionMode.none}
+        setKey="none"
+        layoutMode={DetailsListLayoutMode.justified}
+        isHeaderVisible={true}
+        />
+    }
+    </div>
     )
 }
