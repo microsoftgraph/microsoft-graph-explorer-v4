@@ -5,22 +5,22 @@ export function getStyleFor(method: string) {
   method = method?.toUpperCase();
 
   switch (method) {
-    case 'GET':
-      return currentTheme.palette.blue;
+  case 'GET':
+    return currentTheme.palette.blue;
 
-    case 'POST':
-      return currentTheme.palette.green;
+  case 'POST':
+    return currentTheme.palette.green;
 
-    case 'PUT':
-      return currentTheme.palette.magentaDark;
+  case 'PUT':
+    return currentTheme.palette.magentaDark;
 
-    case 'PATCH':
-      return currentTheme.palette.orange;
+  case 'PATCH':
+    return currentTheme.palette.orange;
 
-    case 'DELETE':
-      return currentTheme.palette.redDark;
+  case 'DELETE':
+    return currentTheme.palette.redDark;
 
-    default:
-      return currentTheme.palette.orangeLight;
+  default:
+    return currentTheme.palette.orangeLight;
   }
 }

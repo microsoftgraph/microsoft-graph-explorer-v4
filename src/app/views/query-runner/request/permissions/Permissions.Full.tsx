@@ -143,20 +143,20 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
     setFilter(chosenFilter);
     const searchResults = searchPermissions(searchValue);
     switch (chosenFilter) {
-      case 'all-permissions': {
-        setPermissions(searchResults);
-        break;
-      }
-      case 'consented-permissions': {
-        setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
-          .filter((permission: IPermission) => permission.consented));
-        break;
-      }
-      case 'unconsented-permissions': {
-        setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
-          .filter((permission: IPermission) => !permission.consented));
-        break;
-      }
+    case 'all-permissions': {
+      setPermissions(searchResults);
+      break;
+    }
+    case 'consented-permissions': {
+      setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
+        .filter((permission: IPermission) => permission.consented));
+      break;
+    }
+    case 'unconsented-permissions': {
+      setPermissions(setConsentedStatus(tokenPresent, searchResults, consentedScopes)
+        .filter((permission: IPermission) => !permission.consented));
+      break;
+    }
     }
   }
 
