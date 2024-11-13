@@ -21,7 +21,9 @@ import {
   TreeItemValue,
   TreeOpenChangeData,
   TreeOpenChangeEvent,
-  TreeItemLayout
+  TreeItemLayout,
+  typographyStyles,
+  Badge
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 import { DismissRegular } from '@fluentui/react-icons';
@@ -40,7 +42,9 @@ const useStyles = makeStyles({
   searchBox: {
     width: '100%',
     maxWidth: '100%'
-  }
+  },
+
+  treeHeader: typographyStyles.body1Strong
 });
 
 export const SampleQueriesV9 = () => {
@@ -210,6 +214,7 @@ const Samples = (props: SamplesProps) => {
   const dispatch = useAppDispatch();
   const { queries, groups } = props;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
+  const sampleQueriesStyles = useStyles();
 
   useEffect(() => {
     if (queries.length === 0) {
@@ -244,7 +249,16 @@ const Samples = (props: SamplesProps) => {
             aria-posinset={pos}
             itemType='branch'
           >
-            <TreeItemLayout>{group.name}</TreeItemLayout>
+            <TreeItemLayout
+              className={sampleQueriesStyles.treeHeader}
+              aside={
+                <Badge appearance='tint' color='informative'>
+                  {group.count}
+                </Badge>
+              }
+            >
+              {group.name}
+            </TreeItemLayout>
           </FlatTreeItem>
           {openItems.has(group.name) && (
             <RenderSampleLeafs
