@@ -17,7 +17,8 @@ import { mainHeaderStyles } from './MainHeader.styles';
 import { useAppSelector } from '../../../store';
 
 export const Help = () => {
-  const { auth: { authToken } } = useAppSelector((state) => state);
+  const auth = useAppSelector((state)=> state.auth)
+  const authToken = auth.authToken;
   const authenticated = authToken.token;
   const [items, setItems] = useState([]);
   const currentTheme = getTheme();
