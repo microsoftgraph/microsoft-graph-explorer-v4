@@ -5,38 +5,37 @@
  * @returns {JSX.Element} The rendered SampleQueriesV9 component.
  */
 import {
+  AriaLiveAnnouncer,
+  Badge,
   Button,
+  FlatTree,
+  FlatTreeItem,
   InputOnChangeData,
+  Link,
   makeStyles,
   MessageBar,
   MessageBarActions,
   MessageBarBody,
   SearchBox,
   SearchBoxChangeEvent,
-  Link,
-  AriaLiveAnnouncer,
   Text,
-  FlatTree,
-  FlatTreeItem,
+  TreeItemLayout,
   TreeItemValue,
   TreeOpenChangeData,
   TreeOpenChangeEvent,
-  TreeItemLayout,
-  typographyStyles,
-  Badge
+  typographyStyles
 } from '@fluentui/react-components';
+import { DismissRegular, DocumentText20Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
-import { DismissRegular } from '@fluentui/react-icons';
-import { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { useAppSelector, useAppDispatch } from '../../../../store';
-import { ISampleQuery } from '../../../../types/query-runner';
-import { translateMessage } from '../../../utils/translate-messages';
-import { performSearch } from './sample-query-utils';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
+import { ISampleQuery } from '../../../../types/query-runner';
 import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
-import React from 'react';
+import { translateMessage } from '../../../utils/translate-messages';
+import { performSearch } from './sample-query-utils';
 
 const useStyles = makeStyles({
   searchBox: {
@@ -179,7 +178,9 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
           aria-posinset={id + 1}
           itemType='leaf'
         >
-          <TreeItemLayout iconBefore={<MethodIcon method={query.method} />}>{query.humanName}</TreeItemLayout>
+          <TreeItemLayout
+            iconBefore={<MethodIcon method={query.method} />}
+            aside={<DocumentText20Regular />}>{query.humanName}</TreeItemLayout>
         </FlatTreeItem>
       ))}
     </>
