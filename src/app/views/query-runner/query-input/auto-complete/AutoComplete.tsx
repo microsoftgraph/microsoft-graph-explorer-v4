@@ -41,6 +41,8 @@ const AutoComplete = (props: IAutoCompleteProps) => {
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [backSpacing, setBackspacing] = useState<boolean>(false);
+  const [descriptionError, setDescriptionError] = useState('');
+
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
@@ -290,12 +292,13 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     validation.validate(queryUrl);
     return validation.error;
   }
-  const [descriptionError, setDescriptionError] = useState('');
 
   useEffect(()=>{
     const errorMessage = getErrorMessage();
     if (errorMessage) {
       setDescriptionError(errorMessage)
+    } else {
+      setDescriptionError('')
     }
   }, [getErrorMessage])
 

@@ -30,14 +30,20 @@ import { DismissRegular, DocumentText20Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { MessageBarType } from '@fluentui/react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
-import { ISampleQuery } from '../../../../types/query-runner';
+import { IQuery, ISampleQuery } from '../../../../types/query-runner';
+import { GRAPH_URL } from '../../../services/graph-constants';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
-import { performSearch, trackDocumentLinkClickedEvent } from './sample-query-utils';
-import { queries } from './queries';
+import {
+  isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
+} from './sample-query-utils';
 
 const useStyles = makeStyles({
   searchBox: {
@@ -81,6 +87,7 @@ export const SampleQueriesV9 = () => {
     const filteredQueries = value ? performSearch(queries, value) : [];
     setSampleQueries(filteredQueries);
   };
+
   return (
     <>
       <SearchBox
@@ -154,6 +161,7 @@ const SeeMoreQueriesMessageBar = () => {
 interface SampleLeaf {
   leafs: ISampleQuery[];
   group: IGroup;
+  handleSelectedSample: (item: ISampleQuery)=> void;
 }
 
 /**
@@ -166,7 +174,8 @@ interface SampleLeaf {
  * @returns {JSX.Element} A React fragment containing the rendered sample leaf items.
  */
 const RenderSampleLeafs = (props: SampleLeaf) => {
-  const { leafs, group } = props;
+  const { leafs, group, handleSelectedSample } = props;
+
 
   return (
     <>
@@ -182,6 +191,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             itemType='leaf'
           >
             <TreeItemLayout
+            onClick={()=>handleSelectedSample(query)}
               iconBefore={<MethodIcon method={query.method} />}
               aside={<ResourceLink item={query}/>}
             >
@@ -265,6 +275,7 @@ const Samples = (props: SamplesProps) => {
   const { queries, groups } = props;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
   const sampleQueriesStyles = useStyles();
+  const profile = useAppSelector(state=>state.profile)
 
   useEffect(() => {
     if (queries.length === 0) {
@@ -283,6 +294,44 @@ const Samples = (props: SamplesProps) => {
   ) => {
     setOpenItems(data.openItems);
   };
+
+  const sampleQueryItemSelected = (item: ISampleQuery)=>{
+    const queryVersion = item.requestUrl.substring(1, 5);
+    const sampleQuery: IQuery = {
+      sampleUrl: GRAPH_URL + item.requestUrl,
+      selectedVerb: item.method,
+      sampleBody: item.postBody,
+      sampleHeaders: item.headers || [],
+      selectedVersion: queryVersion
+    };
+    substituteTokens(sampleQuery, profile!);
+    sampleQuery.sampleBody = getSampleBody(sampleQuery);
+
+    if (item.tip) {
+      displayTipMessage(item);
+    }
+
+    trackSampleQueryClickEvent(item);
+    dispatch(setSampleQuery(sampleQuery));
+  }
+
+  const getSampleBody = (query: IQuery): string => {
+    return query.sampleBody ? parseSampleBody() : undefined;
+
+    function parseSampleBody() {
+      return isJsonString(query.sampleBody!)
+        ? JSON.parse(query.sampleBody!)
+        : query.sampleBody;
+    }
+  }
+
+  const displayTipMessage = (query: ISampleQuery) => {
+    dispatch(setQueryResponseStatus({
+      messageType: MessageBarType.warning,
+      statusText: 'Tip',
+      status: query.tip!
+    }));
+  }
 
   return (
     <FlatTree
@@ -317,6 +366,7 @@ const Samples = (props: SamplesProps) => {
                 group.startIndex + group.count
               )}
               group={group}
+              handleSelectedSample={sampleQueryItemSelected}
             />
           )}
         </React.Fragment>
