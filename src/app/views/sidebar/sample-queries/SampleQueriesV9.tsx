@@ -261,6 +261,16 @@ const MethodIcon = ({ method }: { method: string }) => {
   )
 }
 
+const getSampleBody = (query: IQuery): string => {
+  return query.sampleBody ? parseSampleBody(query.sampleBody) : '';
+}
+
+const parseSampleBody = (sampleBody: string) => {
+  return isJsonString(sampleBody)
+    ? JSON.parse(sampleBody)
+    : sampleBody;
+}
+
 /**
  * Props for the Samples component.
  *
@@ -279,17 +289,11 @@ interface SamplesProps {
  * respective queries. The component fetches sample queries if none are provided
  * through props.
  *
- * @param {SamplesProps} props - The properties passed to the component.
- * @param {ISampleQuery[]} props.queries - The list of sample queries to display.
- * @param {Group[]} props.groups - The groups to organize the sample queries.
- *
  * @returns {JSX.Element} The rendered component.
  */
-const Samples = (props: SamplesProps) => {
+const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
   const dispatch = useAppDispatch();
-  const { queries, groups } = props;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
-  const sampleQueriesStyles = useStyles();
   const profile = useAppSelector(state=>state.profile)
 
   useEffect(() => {
@@ -300,8 +304,12 @@ const Samples = (props: SamplesProps) => {
     }
   }, [queries]);
 
+  const openSampleItems = new Set<string>()
+  'Getting Started'.split('').forEach(ch=> openSampleItems.add(ch))
+  openSampleItems.add('Getting Started')
+
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(
-    () => new Set()
+    () => openSampleItems
   );
   const handleOpenChange = (
     _event: TreeOpenChangeEvent,
@@ -330,15 +338,6 @@ const Samples = (props: SamplesProps) => {
     dispatch(setSampleQuery(sampleQuery));
   }
 
-  const getSampleBody = (query: IQuery): string => {
-    return query.sampleBody ? parseSampleBody() : undefined;
-
-    function parseSampleBody() {
-      return isJsonString(query.sampleBody!)
-        ? JSON.parse(query.sampleBody!)
-        : query.sampleBody;
-    }
-  }
 
   const displayTipMessage = (query: ISampleQuery) => {
     dispatch(setQueryResponseStatus({
