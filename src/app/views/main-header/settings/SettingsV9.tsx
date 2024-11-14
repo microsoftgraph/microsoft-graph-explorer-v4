@@ -1,5 +1,5 @@
 import {
-  Button, makeStyles, Menu, MenuItem, MenuList, MenuPopover, MenuTrigger, Tooltip
+  Button, Link, makeStyles, Menu, MenuItem, MenuItemLink, MenuList, MenuPopover, MenuTrigger, Tooltip
 } from '@fluentui/react-components'
 import { Color20Regular, Settings20Regular, WindowDevTools20Regular } from '@fluentui/react-icons'
 
@@ -15,11 +15,19 @@ const useStyles = makeStyles({
   }
 })
 
+const officeLink = 'https://developer.microsoft.com/office/dev-program'
+
 const trackSettingsButtonClickEvent = () => {
   telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
     ComponentName: componentNames.SETTINGS_BUTTON
   });
 }
+
+const trackOfficeDevProgramLinkClickEvent = () => {
+  telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+    ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+  });
+};
 
 const SettingsV9 = ()=>{
   const styles = useStyles();
@@ -50,7 +58,11 @@ const SettingsV9 = ()=>{
           <MenuItem
             icon={<Color20Regular />}
             onClick={toggleThemeChooserDialogState}>{translateMessage('Change theme')}</MenuItem>
-          <MenuItem icon={<WindowDevTools20Regular />}>{translateMessage('Office Dev Program')}</MenuItem>
+          <MenuItemLink
+            as='a'
+            href={officeLink} target="_blank"
+            onClick={trackOfficeDevProgramLinkClickEvent}
+            icon={<WindowDevTools20Regular />}>{translateMessage('Office Dev Program')}</MenuItemLink>
         </MenuList>
       </MenuPopover>
     </Menu>
