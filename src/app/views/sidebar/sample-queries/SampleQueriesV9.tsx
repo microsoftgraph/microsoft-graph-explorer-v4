@@ -273,7 +273,8 @@ const MethodIcon = ({ method }: { method: string }) => {
       <Badge
         appearance="filled"
         color={colors[method]}
-        className={sampleQueriesStyles.badge}>{method}</Badge>
+        className={sampleQueriesStyles.badge}
+        aria-label={'http method ' + method + ' for'}>{method}</Badge>
     </div>
   )
 }
@@ -380,10 +381,12 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
             aria-setsize={2}
             aria-posinset={pos + 1}
             itemType='branch'
+            aria-label={
+              group.name + translateMessage('sample queries group has ') + group.count + translateMessage('Resources')}
           >
             <TreeItemLayout
               aside={
-                <Badge appearance='tint' color='informative'>
+                <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
                   {group.count}
                 </Badge>
               }
