@@ -1,4 +1,5 @@
 import { makeStyles, Text, tokens } from '@fluentui/react-components';
+import { AuthenticationV9 } from '../authentication/AuthenticationV9';
 import { FeedbackButtonV9 } from './FeedbackButtonV9';
 import { HelpV9 } from './HelpV9';
 import { SettingsV9 } from './settings/SettingsV9';
@@ -8,7 +9,7 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 24px',
+    padding: '0 0 0 24px',
     height: '48px',
     background: tokens.colorNeutralBackground4,
     marginBottom: '8px' // TODO: remove when sidebar and query areas are updated
@@ -45,6 +46,7 @@ const HeaderIcons = () => {
       <SettingsV9 />
       <HelpV9 />
       <FeedbackButtonV9 />
+      <AuthenticationV9 />
     </div>
   )
 }
