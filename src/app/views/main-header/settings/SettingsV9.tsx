@@ -6,14 +6,7 @@ import { Color20Regular, Settings20Regular, WindowDevTools20Regular } from '@flu
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry'
 import { usePopups } from '../../../services/hooks'
 import { translateMessage } from '../../../utils/translate-messages'
-
-const useStyles = makeStyles({
-  button: {
-    height: '100%',
-    minWidth: '48px',
-    maxWidth: '48px'
-  }
-})
+import { useHeaderStyles } from '../utils'
 
 const officeLink = 'https://developer.microsoft.com/office/dev-program'
 
@@ -30,7 +23,7 @@ const trackOfficeDevProgramLinkClickEvent = () => {
 };
 
 const SettingsV9 = ()=>{
-  const styles = useStyles();
+  const styles = useHeaderStyles();
   const {show: showThemeChooser} = usePopups('theme-chooser', 'dialog')
   const toggleThemeChooserDialogState = () => {
     showThemeChooser({
@@ -49,7 +42,7 @@ const SettingsV9 = ()=>{
         <MenuTrigger disableButtonEnhancement>
           <Button
             onClick={trackSettingsButtonClickEvent}
-            className={styles.button} appearance="subtle" icon={<Settings20Regular />} />
+            className={styles.iconButton} appearance="subtle" icon={<Settings20Regular />} />
         </MenuTrigger>
       </Tooltip>
 
