@@ -33,6 +33,7 @@ module.exports = {
         accessibility: 'explicit'
       }
     ],
+    'indent': ['error', 2],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/member-delimiter-style': [
       'off',
