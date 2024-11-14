@@ -1,14 +1,14 @@
 import { makeStyles, Text, tokens } from '@fluentui/react-components';
 import { FeedbackButton } from './FeedbackButton';
 import { Help } from './Help';
-import { Settings } from './settings/Settings';
+import { SettingsV9 } from './settings/SettingsV9';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 24px',
-    height: '50px',
+    height: '48px',
     background: tokens.colorNeutralBackground4,
     marginBottom: '8px' // TODO: remove when sidebar and query areas are updated
   },
@@ -16,7 +16,8 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     height: '100%',
-    maxHeight: '100%'
+    maxHeight: '100%',
+    columnGap: '4px'
   },
   headerText: {
     color: tokens.colorBrandForeground1,
@@ -39,7 +40,7 @@ const HeaderIcons = () => {
   const styles = useStyles()
   return (
     <div className={styles.headerIcons}>
-      <Settings />
+      <SettingsV9 />
       <Help />
       <FeedbackButton />
     </div>
