@@ -27,9 +27,10 @@ import {
 } from '@fluentui/react-components';
 import { DismissRegular, DocumentText20Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
+// TODO: update these checks for @fluentui/react@9.0.0+
+import { MessageBarType, Spinner, SpinnerSize } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { MessageBarType } from '@fluentui/react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQuery } from '../../../../types/query-runner';
@@ -63,7 +64,6 @@ const useStyles = makeStyles({
 export const SampleQueriesV9 = () => {
   const sampleQueriesStyles = useStyles();
   const samples = useAppSelector((s) => s.samples);
-  // TODO: use a shimmer when pending is true
   const { error, pending, queries } = samples;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
   const shouldGenerateGroups = useRef(true);
@@ -89,9 +89,13 @@ export const SampleQueriesV9 = () => {
   ) => {
     const value = data.value;
     shouldGenerateGroups.current = true;
-    setSearchStarted((searchStatus) => !searchStatus);
+    setSearchStarted(true);
     const filteredQueries = value ? performSearch(queries, value) : [];
-    setSampleQueries(filteredQueries);
+    if(value && filteredQueries.length > 0) {
+      setSampleQueries(filteredQueries);
+    } else {
+      setSampleQueries(queries);
+    }
   };
 
   return (
@@ -107,10 +111,21 @@ export const SampleQueriesV9 = () => {
       <AriaLiveAnnouncer>
         <Text>{`${queries.length} search results available.`}</Text>
       </AriaLiveAnnouncer>
-      <Samples queries={sampleQueries} groups={groups} />
+      {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} />}
     </>
   );
 };
+
+const LoadingSamples = ()=> {
+  return (
+    <Spinner
+      size={SpinnerSize.large}
+      label={`${translateMessage('loading samples')} ...`}
+      ariaLive='assertive'
+      labelPosition='top'
+    />
+  )
+}
 
 /**
  * CachedSetMessageBar component displays a warning message bar indicating
@@ -227,7 +242,9 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
 const ResourceLink = ({item}: {item: ISampleQuery}) =>{
   const href = item.docLink ?? '';
   return (
-    <Link aria-label={href} target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+    <Link
+      aria-label={item.humanName + translateMessage('Read documentation')}
+      target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
       <DocumentText20Regular />
     </Link>
   )
@@ -319,7 +336,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
   };
 
   const sampleQueryItemSelected = (item: ISampleQuery)=>{
-    const queryVersion = item.requestUrl.substring(1, 5);
+    const queryVersion = item.requestUrl.substring(1, 4);
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + item.requestUrl,
       selectedVerb: item.method,
@@ -327,7 +344,9 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
       sampleHeaders: item.headers || [],
       selectedVersion: queryVersion
     };
-    substituteTokens(sampleQuery, profile!);
+    if (profile) {
+      substituteTokens(sampleQuery, profile);
+    }
     sampleQuery.sampleBody = getSampleBody(sampleQuery);
 
     if (item.tip) {
@@ -351,15 +370,15 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
     <FlatTree
       openItems={openItems}
       onOpenChange={handleOpenChange}
-      aria-label='Flat Tree'
+      aria-label={translateMessage('Sample Queries')}
     >
       {groups.map((group, pos) => (
-        <React.Fragment key={pos}>
+        <React.Fragment key={group.key}>
           <FlatTreeItem
             value={group.name}
             aria-level={1}
             aria-setsize={2}
-            aria-posinset={pos}
+            aria-posinset={pos + 1}
             itemType='branch'
           >
             <TreeItemLayout
