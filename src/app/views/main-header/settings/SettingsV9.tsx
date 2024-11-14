@@ -16,11 +16,11 @@ const SettingsV9 = ()=>{
 
   return (
     <Menu>
-      <MenuTrigger disableButtonEnhancement>
-        <Tooltip content={translateMessage('Settings')} relationship="label">
+      <Tooltip content={translateMessage('Settings')} relationship="description">
+        <MenuTrigger disableButtonEnhancement>
           <Button className={styles.button} appearance="subtle" icon={<Settings20Regular />} />
-        </Tooltip>
-      </MenuTrigger>
+        </MenuTrigger>
+      </Tooltip>
 
       <MenuPopover>
         <MenuList>
