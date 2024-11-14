@@ -23,8 +23,7 @@ import {
   TreeItemLayout,
   TreeItemValue,
   TreeOpenChangeData,
-  TreeOpenChangeEvent,
-  typographyStyles
+  TreeOpenChangeEvent
 } from '@fluentui/react-components';
 import { DismissRegular, DocumentText20Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
@@ -52,7 +51,6 @@ const useStyles = makeStyles({
     width: '100%',
     maxWidth: '100%'
   },
-  treeHeader: typographyStyles.body1Strong,
   iconBefore: {
     width: '52px',
     maxWidth: '52px'
@@ -366,14 +364,13 @@ const Samples = (props: SamplesProps) => {
             itemType='branch'
           >
             <TreeItemLayout
-              className={sampleQueriesStyles.treeHeader}
               aside={
                 <Badge appearance='tint' color='informative'>
                   {group.count}
                 </Badge>
               }
             >
-              {group.name}
+              <Text weight='semibold'>{group.name}</Text>
             </TreeItemLayout>
           </FlatTreeItem>
           {openItems.has(group.name) && (
