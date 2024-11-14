@@ -199,7 +199,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             itemType='leaf'
           >
             <TreeItemLayout
-            onClick={()=>handleSelectedSample(query)}
+              onClick={()=>handleSelectedSample(query)}
               iconBefore={<MethodIcon method={query.method} />}
               aside={<ResourceLink item={query}/>}
             >
