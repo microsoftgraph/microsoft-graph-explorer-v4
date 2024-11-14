@@ -1,7 +1,7 @@
 import { Button, Persona, PersonaProps, Tooltip } from '@fluentui/react-components';
 import { translateMessage } from '../../../utils/translate-messages';
 import { useHeaderStyles } from '../../main-header/utils';
-import Profile from '../profile/Profile';
+import { ProfileV9 } from '../profile/ProfileV9';
 
 export const PersonaSignIn = (props: Partial<PersonaProps>) => {
   return (
@@ -32,12 +32,12 @@ const SignInButton = ({signIn}: {signIn: ()=> void})=>{
 export function showSignInButtonOrProfile(
   tokenPresent: boolean,
   signIn: () => void,
-  signInWithOther: Function
+  signInWithOther: ()=>Promise<void>
 ) {
   return (
     <>
       {!tokenPresent && <SignInButton signIn={signIn}/>}
-      {tokenPresent && <Profile signInWithOther={signInWithOther}/>}
+      {tokenPresent && <ProfileV9 signInWithOther={signInWithOther} />}
     </>
   );
 }

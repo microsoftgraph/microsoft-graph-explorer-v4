@@ -1,5 +1,5 @@
 import { makeStyles, Text, tokens } from '@fluentui/react-components';
-import { Authentication } from '../authentication';
+import AuthenticationV9 from '../authentication/AuthenticationV9';
 import { FeedbackButtonV9 } from './FeedbackButtonV9';
 import { HelpV9 } from './HelpV9';
 import { SettingsV9 } from './settings/SettingsV9';
@@ -46,7 +46,7 @@ const HeaderIcons = () => {
       <SettingsV9 />
       <HelpV9 />
       <FeedbackButtonV9 />
-      <Authentication />
+      <AuthenticationV9 />
     </div>
   )
 }
