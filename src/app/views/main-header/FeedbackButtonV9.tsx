@@ -30,11 +30,9 @@ const FeedbackButtonV9 = ()=>{
   return (user?.profileType !== ACCOUNT_TYPE.AAD ? (
     <>
       <Tooltip content={translateMessage('Feedback')} relationship="description">
-        <MenuTrigger disableButtonEnhancement>
-          <Button
-            onClick={activateSurvey}
-            className={styles.iconButton} appearance="subtle" icon={<PersonFeedback20Regular />} />
-        </MenuTrigger>
+        <Button
+          onClick={activateSurvey}
+          className={styles.iconButton} appearance="subtle" icon={<PersonFeedback20Regular />} />
       </Tooltip>
       <FeedbackForm onDismissSurvey={disableSurvey}
         activated={enableSurvey} onDisableSurvey={disableSurvey} />
@@ -43,3 +41,4 @@ const FeedbackButtonV9 = ()=>{
 }
 
 export { FeedbackButtonV9 }
+
