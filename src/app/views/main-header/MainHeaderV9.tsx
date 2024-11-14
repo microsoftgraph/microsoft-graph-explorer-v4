@@ -1,5 +1,5 @@
 import { makeStyles, Text, tokens } from '@fluentui/react-components';
-import { FeedbackButton } from './FeedbackButton';
+import { FeedbackButtonV9 } from './FeedbackButtonV9';
 import { HelpV9 } from './HelpV9';
 import { SettingsV9 } from './settings/SettingsV9';
 const useStyles = makeStyles({
@@ -42,7 +42,7 @@ const HeaderIcons = () => {
     <div className={styles.headerIcons}>
       <SettingsV9 />
       <HelpV9 />
-      <FeedbackButton />
+      <FeedbackButtonV9 />
     </div>
   )
 }
