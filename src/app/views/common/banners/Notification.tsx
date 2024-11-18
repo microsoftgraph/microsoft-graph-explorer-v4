@@ -9,7 +9,7 @@ import {
 import { DismissRegular, OpenRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { useAppSelector } from '../../../../store';
-import { componentNames, telemetry } from '../../../../telemetry';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { BANNER_IS_VISIBLE } from '../../../services/graph-constants';
 import { translateMessage } from '../../../utils/translate-messages';
 import { useNotificationStyles } from './Notification.styles';
@@ -33,6 +33,9 @@ const Notification: React.FunctionComponent<NotificationProps> = (props: Notific
   const theme = useAppSelector(s => s.theme);
 
   const handleDismiss = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.NOTIFICATION_BANNER_DISMISS_BUTTON
+    });
     localStorage.setItem(BANNER_IS_VISIBLE, 'false');
     setIsVisible(false);
   };
