@@ -1,5 +1,5 @@
-import { Notification } from './Notification'
+import Notification from './Notification'
 
 export default {
-    Notification
+  Notification
 }
