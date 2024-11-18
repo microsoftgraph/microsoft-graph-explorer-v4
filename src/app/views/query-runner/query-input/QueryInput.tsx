@@ -1,4 +1,4 @@
-import { DefaultButton, Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
+import { Dropdown, IDropdownOption, IStackTokens, Stack } from '@fluentui/react';
 import { useContext } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
