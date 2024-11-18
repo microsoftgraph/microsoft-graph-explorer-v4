@@ -13,7 +13,6 @@ import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { queryRunnerStyles } from '../QueryRunner.styles';
 import { AutoComplete } from './auto-complete';
-import { usePopups } from '../../../services/hooks/usePopups';
 
 const QueryInput = (props: IQueryInputProps) => {
   const {
@@ -24,7 +23,6 @@ const QueryInput = (props: IQueryInputProps) => {
 
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
-  const { show: previewCollection } = usePopups('preview-collection', 'panel');
 
 
   const urlVersions: IDropdownOption[] = [];
@@ -84,15 +82,6 @@ const QueryInput = (props: IQueryInputProps) => {
     childrenGap: 10
   };
 
-  const openPreviewCollection = () => {
-    previewCollection({
-      settings: {
-        title: translateMessage('My API collection'),
-        width: 'xl'
-      }
-    })
-  }
-
 
   return (
     <>
@@ -133,13 +122,7 @@ const QueryInput = (props: IQueryInputProps) => {
           />
         </Stack.Item>
         <Stack.Item shrink styles={!mobileScreen ? queryButtonStyles : {}}>
-          <DefaultButton
-            text={translateMessage('My API Collection')}
-            onClick={openPreviewCollection}
-            styles={{root: {
-              whiteSpace: 'nowrap'
-            }}}
-          />
+
         </Stack.Item>
       </Stack>
     </>

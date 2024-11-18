@@ -1,4 +1,5 @@
 import {
+  DefaultButton,
   INavLink, INavLinkGroup, Label,
   MessageBar,
   MessageBarType,
@@ -22,6 +23,7 @@ import { sidebarStyles } from '../Sidebar.styles';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { navStyles } from './resources.styles';
+import { usePopups } from '../../../services/hooks/usePopups';
 
 const UnstyledResourceExplorer = (props: any) => {
   const { resources: { data, pending }, collections } = useAppSelector(
@@ -44,6 +46,7 @@ const UnstyledResourceExplorer = (props: any) => {
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
 
   useEffect(() => {
     setItems(navigationGroup);
@@ -110,6 +113,15 @@ const UnstyledResourceExplorer = (props: any) => {
     });
   }
 
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('My API collection'),
+        width: 'xl'
+      }
+    })
+  }
+
   if (pending) {
     return (
       <Spinner
@@ -148,6 +160,13 @@ const UnstyledResourceExplorer = (props: any) => {
           </Label>
         </Stack>
       </Stack>
+      <DefaultButton
+            text={translateMessage('My API Collection')}
+            onClick={openPreviewCollection}
+            styles={{root: {
+              whiteSpace: 'nowrap'
+            }}}
+          />
 
       {
         items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
