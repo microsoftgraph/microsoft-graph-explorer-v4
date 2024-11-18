@@ -502,6 +502,6 @@
   "Banner notification 1 header": "New to Graph Explorer?",
   "Banner notification 1 content": "Graph Explorer is a developer tool that let's you learn about Microsoft Graph APIs. Use Graph Explorer to try the APIs on the default sample tenat to explore capabilities.",
   "Banner notification 1 link text": "Follow a step-by-step tutorial",
-  "Banner notification 1 link": "https://aka.ms/ge",
+  "Banner notification 1 link": "https://learn.microsoft.com/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0",
   "Dismiss banner": "Dismiss banner"
 }
