@@ -9,8 +9,8 @@ import MessageDisplay from '../common/message-display/MessageDisplay';
 
 const StatusMessages = () => {
   const dispatch = useAppDispatch();
-    const queryRunnerStatus = useAppSelector((state)=> state.queryRunnerStatus);
-    const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const queryRunnerStatus = useAppSelector((state)=> state.queryRunnerStatus);
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
 
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };

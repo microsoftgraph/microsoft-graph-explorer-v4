@@ -87,68 +87,68 @@ function sanitizeQueryParameter(queryParameter: string): string {
     .trim();
 
   switch (key) {
-    case '$top':
-    case '$skip': {
-      if (!isPositiveInteger(value)) {
-        value = '<invalid-value>';
-      }
-      break;
+  case '$top':
+  case '$skip': {
+    if (!isPositiveInteger(value)) {
+      value = '<invalid-value>';
     }
+    break;
+  }
 
-    case '$skiptoken':
-    case '$deltatoken': {
-      value = '<value>';
-      break;
+  case '$skiptoken':
+  case '$deltatoken': {
+    value = '<value>';
+    break;
+  }
+
+  case '$count': {
+    if (!isBooleanString(value)) {
+      value = '<invalid-value>';
     }
+    break;
+  }
 
-    case '$count': {
-      if (!isBooleanString(value)) {
-        value = '<invalid-value>';
-      }
-      break;
-    }
+  case '$select': {
+    value = sanitizeSelectQueryOptionValue(value);
+    break;
+  }
 
-    case '$select': {
-      value = sanitizeSelectQueryOptionValue(value);
-      break;
-    }
+  case '$format': {
+    value = sanitizeFormatQueryOptionValue(value);
+    break;
+  }
 
-    case '$format': {
-      value = sanitizeFormatQueryOptionValue(value);
-      break;
-    }
+  case '$orderby': {
+    value = sanitizeOrderByQueryOptionValue(value);
+    break;
+  }
 
-    case '$orderby': {
-      value = sanitizeOrderByQueryOptionValue(value);
-      break;
-    }
+  case '$search': {
+    value = sanitizeSearchQueryOptionValue(value);
+    break;
+  }
 
-    case '$search': {
-      value = sanitizeSearchQueryOptionValue(value);
-      break;
-    }
+  case '$expand': {
+    value = sanitizeExpandQueryOptionValue(value);
+    break;
+  }
 
-    case '$expand': {
-      value = sanitizeExpandQueryOptionValue(value);
-      break;
-    }
+  case '$filter': {
+    value = sanitizeFilterQueryOptionValue(value);
+    break;
+  }
 
-    case '$filter': {
-      value = sanitizeFilterQueryOptionValue(value);
-      break;
-    }
-
-    default: {
-      // Parameters like $id, $levels will be left as they are
-      if (
-        !isAllAlpha(key) &&
+  default: {
+    // Parameters like $id, $levels will be left as they are
+    if (
+      !isAllAlpha(key) &&
         !key.startsWith('$') &&
         !isAllAlpha(key.substring(1))
-      ) {
-        key = '<invalid-key>';
-      }
-      value = '<value>';
+    ) {
+      key = '<invalid-key>';
     }
+    value = '<value>';
+  }
   }
   return `${key}=${value}`;
 }

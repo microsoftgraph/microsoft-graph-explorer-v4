@@ -114,69 +114,69 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     const content = item[column.fieldName as keyof IPermission] as string;
     switch (column.key) {
 
-      case 'value':
-        if (props.index === 0) {
-          return <div>
-            {content}
-            <TooltipHost
-              content={translateMessage('Least privileged permission')}
-              id={'leastPrivilegedPermissionsTooltipHost'}
-              calloutProps={{ gapSpace: 0 }}
-            >
-              <IconButton
-                iconProps={infoIcon}
-                styles={{
-                  root: {
-                    position: 'relative',
-                    top: '4px'
-                  }
-                }}
-              />
-            </TooltipHost>
-          </div>
-        }
-        return <div>{content}</div>
-
-      case 'isAdmin':
-        return <div style={adminLabelStyles}>
-          <Label>{translateMessage(item.isAdmin ? 'Yes' : 'No')}</Label>
-        </div>;
-
-      case 'consented':
-        return <ConsentButton />;
-
-      case 'consentDescription':
-        return (
-          <>
-            <TooltipHost
-              content={item.consentDescription}
-              id={hostId}
-              calloutProps={{ gapSpace: 0 }}
-              styles={{
-                root: { display: 'block' }
-              }}
-            >
-              <span aria-labelledby={hostId}>
-                {item.consentDescription}
-              </span>
-            </TooltipHost></>
-        );
-
-      case 'consentType':
-        return <ConsentTypeProperty />;
-
-      default:
-        return (
+    case 'value':
+      if (props.index === 0) {
+        return <div>
+          {content}
           <TooltipHost
-            content={content}
-            id={hostId}
+            content={translateMessage('Least privileged permission')}
+            id={'leastPrivilegedPermissionsTooltipHost'}
             calloutProps={{ gapSpace: 0 }}
           >
-            <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium }}>
-              {content}
-            </span>
+            <IconButton
+              iconProps={infoIcon}
+              styles={{
+                root: {
+                  position: 'relative',
+                  top: '4px'
+                }
+              }}
+            />
           </TooltipHost>
-        );
+        </div>
+      }
+      return <div>{content}</div>
+
+    case 'isAdmin':
+      return <div style={adminLabelStyles}>
+        <Label>{translateMessage(item.isAdmin ? 'Yes' : 'No')}</Label>
+      </div>;
+
+    case 'consented':
+      return <ConsentButton />;
+
+    case 'consentDescription':
+      return (
+        <>
+          <TooltipHost
+            content={item.consentDescription}
+            id={hostId}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{
+              root: { display: 'block' }
+            }}
+          >
+            <span aria-labelledby={hostId}>
+              {item.consentDescription}
+            </span>
+          </TooltipHost></>
+      );
+
+    case 'consentType':
+      return <ConsentTypeProperty />;
+
+    default:
+      return (
+        <TooltipHost
+          content={content}
+          id={hostId}
+          calloutProps={{ gapSpace: 0 }}
+        >
+          <span aria-labelledby={hostId} style={{ fontSize: FontSizes.medium }}>
+            {content}
+          </span>
+        </TooltipHost>
+      );
     }
   }
   return null;

@@ -23,49 +23,49 @@ const telemetryMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = (store
   const state: ApplicationState = store.getState();
   const action = value as AppAction;
   switch (action.type) {
-    case GET_SNIPPET_ERROR: {
-      trackException(
-        componentNames.GET_SNIPPET_ACTION,
-        state.sampleQuery,
-        action.payload.error,
-        {
-          Language: action.payload.language
-        }
-      );
-      break;
-    }
-    case FETCH_SCOPES_ERROR: {
-      trackException(
-        componentNames.FETCH_PERMISSIONS_ACTION,
-        state.sampleQuery,
-        action.payload.error,
-        {}
-      );
-      break;
-    }
-    case SAMPLES_FETCH_ERROR: {
-      trackException(
-        componentNames.FETCH_SAMPLES_ACTION,
-        state.sampleQuery,
-        action.payload,
-        {}
-      );
-      break;
-    }
-    case RESOURCEPATHS_ADD_SUCCESS: {
-      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-        ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
-        ResourcePath: action.payload[0].url
-      });
-      break;
-    }
-    case RESOURCEPATHS_DELETE_SUCCESS: {
-      telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
-        ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
-        ResourceCount: action.payload.length
-      });
-      break;
-    }
+  case GET_SNIPPET_ERROR: {
+    trackException(
+      componentNames.GET_SNIPPET_ACTION,
+      state.sampleQuery,
+      action.payload.error,
+      {
+        Language: action.payload.language
+      }
+    );
+    break;
+  }
+  case FETCH_SCOPES_ERROR: {
+    trackException(
+      componentNames.FETCH_PERMISSIONS_ACTION,
+      state.sampleQuery,
+      action.payload.error,
+      {}
+    );
+    break;
+  }
+  case SAMPLES_FETCH_ERROR: {
+    trackException(
+      componentNames.FETCH_SAMPLES_ACTION,
+      state.sampleQuery,
+      action.payload,
+      {}
+    );
+    break;
+  }
+  case RESOURCEPATHS_ADD_SUCCESS: {
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+      ComponentName: componentNames.ADD_RESOURCE_TO_COLLECTION_LIST_ITEM,
+      ResourcePath: action.payload[0].url
+    });
+    break;
+  }
+  case RESOURCEPATHS_DELETE_SUCCESS: {
+    telemetry.trackEvent(eventTypes.LISTITEM_CLICK_EVENT, {
+      ComponentName: componentNames.REMOVE_RESOURCE_FROM_COLLECTION_BUTTON,
+      ResourceCount: action.payload.length
+    });
+    break;
+  }
   }
   return next(action);
 };
