@@ -8,6 +8,7 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
+  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -25,7 +26,7 @@ import {
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { DismissRegular, DocumentText20Regular } from '@fluentui/react-icons';
+import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 // TODO: update these checks for @fluentui/react@9.0.0+
 import { MessageBarType, Spinner, SpinnerSize } from '@fluentui/react';
@@ -53,8 +54,12 @@ const useStyles = makeStyles({
     maxWidth: '100%'
   },
   iconBefore: {
-    width: '52px',
-    maxWidth: '52px'
+    width: '74px',
+    maxWidth: '74px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: '2px'
   },
   badge: {
     width: '100%'
@@ -180,6 +185,7 @@ const SeeMoreQueriesMessageBar = () => {
 };
 
 interface SampleLeaf {
+  isSignedIn: boolean;
   leafs: ISampleQuery[];
   group: IGroup;
   handleSelectedSample: (item: ISampleQuery)=> void;
@@ -195,9 +201,9 @@ interface SampleLeaf {
  * @returns {JSX.Element} A React fragment containing the rendered sample leaf items.
  */
 const RenderSampleLeafs = (props: SampleLeaf) => {
-  const { leafs, group, handleSelectedSample } = props;
+  const { leafs, group, handleSelectedSample, isSignedIn } = props;
 
-
+  // TODO: make the tree items that are not GET disabled unless signed in
   return (
     <>
       {leafs.map((query: ISampleQuery) => {
@@ -213,7 +219,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
           >
             <TreeItemLayout
               onClick={()=>handleSelectedSample(query)}
-              iconBefore={<MethodIcon method={query.method} />}
+              iconBefore={<MethodIcon isSignedIn={isSignedIn} method={query.method} />}
               aside={<ResourceLink item={query}/>}
             >
               <Tooltip
@@ -259,7 +265,7 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
  *
  * @returns {JSX.Element} A JSX element representing the HTTP method badge.
  */
-const MethodIcon = ({ method }: { method: string }) => {
+const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolean }) => {
   const sampleQueriesStyles = useStyles();
   const colors: Record<string, Colors> = {
     'GET': 'brand',
@@ -268,13 +274,19 @@ const MethodIcon = ({ method }: { method: string }) => {
     'DELETE': 'danger',
     'PUT': 'warning'
   }
+
   return (
     <div className={sampleQueriesStyles.iconBefore}>
       <Badge
+        className={sampleQueriesStyles.badge}
         appearance="filled"
         color={colors[method]}
-        className={sampleQueriesStyles.badge}
-        aria-label={'http method ' + method + ' for'}>{method}</Badge>
+        aria-label={'http method ' + method + ' for'}>
+        {method}
+        {method !== 'GET' && !isSignedIn && (
+          <><Divider vertical style={{ height: '100%' }} /><LockClosed16Regular/></>
+        )}</Badge>
+
     </div>
   )
 }
@@ -313,6 +325,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
   const dispatch = useAppDispatch();
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
   const profile = useAppSelector(state=>state.profile)
+  const authToken= useAppSelector((state) => state.auth.authToken);
+  const authenticated = authToken.token
 
   useEffect(() => {
     if (queries.length === 0) {
@@ -396,6 +410,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
           </FlatTreeItem>
           {openItems.has(group.name) && (
             <RenderSampleLeafs
+              isSignedIn={authenticated}
               leafs={sampleQueries.slice(
                 group.startIndex,
                 group.startIndex + group.count
