@@ -19,6 +19,7 @@ import {
   MessageBarBody,
   SearchBox,
   SearchBoxChangeEvent,
+  Spinner,
   Text,
   Tooltip,
   TreeItemLayout,
@@ -29,7 +30,7 @@ import {
 import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 // TODO: update these checks for @fluentui/react@9.0.0+
-import { MessageBarType, Spinner, SpinnerSize } from '@fluentui/react';
+import { MessageBarType } from '@fluentui/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -124,10 +125,9 @@ export const SampleQueriesV9 = () => {
 const LoadingSamples = ()=> {
   return (
     <Spinner
-      size={SpinnerSize.large}
+      size="large"
       label={`${translateMessage('loading samples')} ...`}
-      ariaLive='assertive'
-      labelPosition='top'
+      labelPosition='below'
     />
   )
 }
