@@ -40,6 +40,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 import { Sidebar } from './sidebar/Sidebar';
+import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -455,10 +456,11 @@ class App extends Component<IAppProps, IAppState> {
                       height: ''
                     }}
                   >
-                    <Sidebar currentTab={this.state.sidebarTabSelection}
+                    {/* <Sidebar currentTab={this.state.sidebarTabSelection}
                       setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
                       toggleSidebar={this.toggleSidebar}
-                      mobileScreen={mobileScreen} />
+                      mobileScreen={mobileScreen} /> */}
+                    <SidebarV9/>
                   </Resizable>
                 )}
                 {graphExplorerMode === Mode.TryIt &&
