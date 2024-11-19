@@ -4,6 +4,7 @@ import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { ApplicationState } from '../../store';
@@ -35,11 +36,14 @@ import { StatusMessages } from './common/lazy-loader/component-registry';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
 import { MainHeader } from './main-header/MainHeader';
+import { MainHeaderV9 } from './main-header/MainHeaderV9';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
+// import { Sidebar } from './sidebar/Sidebar';
+import { query } from 'express';
 import { Sidebar } from './sidebar/Sidebar';
-import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
+import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -418,7 +422,7 @@ class App extends Component<IAppProps, IAppState> {
         <ThemeContext.Provider value={this.props.appTheme}>
           <PopupsProvider>
             <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
-              <MainHeader
+              {/* <MainHeader
                 toggleSidebar={this.toggleSidebar}
               />
               <Announced
@@ -427,7 +431,9 @@ class App extends Component<IAppProps, IAppState> {
                     ? translateMessage('Sidebar minimized')
                     : translateMessage('Sidebar maximized')
                 }
-              />
+              /> */}
+
+              <MainHeaderV9 />
               <div className={`ms-Grid-row ${classes.appRow}`} style={{
                 flexWrap: mobileScreen && 'wrap',
                 marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
@@ -455,10 +461,11 @@ class App extends Component<IAppProps, IAppState> {
                       height: ''
                     }}
                   >
-                    <Sidebar currentTab={this.state.sidebarTabSelection}
+                    {/* <Sidebar currentTab={this.state.sidebarTabSelection}
                       setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
                       toggleSidebar={this.toggleSidebar}
-                      mobileScreen={mobileScreen} />
+                      mobileScreen={mobileScreen} /> */}
+                    <SidebarV9/>
                   </Resizable>
                 )}
                 {graphExplorerMode === Mode.TryIt &&

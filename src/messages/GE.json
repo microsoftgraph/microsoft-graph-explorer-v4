@@ -499,5 +499,6 @@
   "Revoking default scopes": "Revoking default scopes",
   "More request area items": "More request area items",
   "More response items": "More response area items",
-  "sample queries group has ": "sample queries group has "
+  "sample queries group has ": "sample queries group has ",
+  "Getting profile details":"Getting profile details"
 }
