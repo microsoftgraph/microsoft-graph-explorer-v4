@@ -1,4 +1,4 @@
-import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
+import { getTheme, ITheme, styled } from '@fluentui/react';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
@@ -26,7 +26,6 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { translateMessage } from '../utils/translate-messages';
 import { TermsOfUseMessage } from './app-sections';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { appStyles } from './App.styles';
@@ -35,12 +34,12 @@ import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
 import { StatusMessages } from './common/lazy-loader/component-registry';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
-import { MainHeader } from './main-header/MainHeader';
+// import { MainHeader } from './main-header/MainHeader';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
-import { Sidebar } from './sidebar/Sidebar';
+// import { Sidebar } from './sidebar/Sidebar';
 import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
