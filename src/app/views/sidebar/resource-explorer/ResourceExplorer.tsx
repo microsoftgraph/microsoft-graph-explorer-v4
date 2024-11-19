@@ -3,7 +3,8 @@ import {
   INavLink, INavLinkGroup, Label,
   MessageBar,
   MessageBarType,
-  Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle} from '@fluentui/react';
+  Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle,
+  useTheme} from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -22,16 +23,19 @@ import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles } from './resources.styles';
+import { navStyles, resourceExplorerStyles } from './resources.styles';
 import { usePopups } from '../../../services/hooks/usePopups';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const { resources: { data, pending }, collections } = useAppSelector(
+  const { resources: { data, pending }, collections: {collections} } = useAppSelector(
     (state) => state
   );
 
   const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
+  const theme = useTheme();
+  const styles = resourceExplorerStyles(theme);
+  const selectedLinks = collections  && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -160,13 +164,20 @@ const UnstyledResourceExplorer = (props: any) => {
           </Label>
         </Stack>
       </Stack>
-      <DefaultButton
-            text={translateMessage('My API Collection')}
-            onClick={openPreviewCollection}
-            styles={{root: {
-              whiteSpace: 'nowrap'
-            }}}
-          />
+      <DefaultButton onClick={openPreviewCollection}
+      iconProps={{iconName: 'AddBookmark'}}
+      ariaLabel={translateMessage('My API Collection')}
+      styles={styles.apiCollectionButton}
+      text={translateMessage('My API Collection')}
+      >
+      <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
+          <Stack.Item align='auto'>
+            <div style={styles.apiCollectionCount}>
+              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : '0'}
+            </div>
+          </Stack.Item>
+      </Stack>
+      </DefaultButton>
 
       {
         items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :

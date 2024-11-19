@@ -24,6 +24,37 @@ export const resourceExplorerStyles = (theme: ITheme) => {
         position: 'relative' as 'relative',
         bottom: '5px'
       }
+    },
+    apiCollectionButton: {
+      root: {
+        width: '100%',
+        padding: '8px 12px',
+        border: `1px solid ${theme.palette.neutralLight}`,
+        borderRadius: '4px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        backgroundColor: 'transparent',
+        textAlign: 'left',
+        height: '40px'
+      },
+      label: {
+        marginLeft: '8px',
+        fontWeight: 'bold',
+        color: theme.palette.neutralPrimary,
+        fontSize: '14px'
+      }
+    },
+    apiCollectionLabel: {
+      root:{
+        fontWeight: 'bold',
+        color: theme.palette.neutralPrimary,
+        fontSize: '14px'
+      }
+    },
+    apiCollectionCount: {
+      fontSize: '14px',
+      color: theme.palette.black
     }
   }
 }
