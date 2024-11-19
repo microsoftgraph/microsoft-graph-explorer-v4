@@ -50,6 +50,9 @@ import {
 type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
 
 const useStyles = makeStyles({
+  container: {
+    marginTop: '6px'
+  },
   searchBox: {
     width: '100%',
     maxWidth: '100%'
@@ -105,7 +108,7 @@ export const SampleQueriesV9 = () => {
   };
 
   return (
-    <>
+    <div className={sampleQueriesStyles.container}>
       <SearchBox
         className={sampleQueriesStyles.searchBox}
         placeholder={translateMessage('Search sample queries')}
@@ -118,7 +121,7 @@ export const SampleQueriesV9 = () => {
         <Text>{`${queries.length} search results available.`}</Text>
       </AriaLiveAnnouncer>
       {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} />}
-    </>
+    </div>
   );
 };
 
