@@ -178,109 +178,109 @@ const History = (props: any) => {
       }
 
       switch (column.key) {
-        case 'status':
-          return (
-            <span style={{ color }} className={classes.badge}>
-              {item.status}
-            </span>
-          );
+      case 'status':
+        return (
+          <span style={{ color }} className={classes.badge}>
+            {item.status}
+          </span>
+        );
 
-        case 'button':
-          const buttonActions = [
-            {
-              key: 'actions',
-              itemType: ContextualMenuItemType.Header,
-              text: actionsText
+      case 'button':
+        const buttonActions = [
+          {
+            key: 'actions',
+            itemType: ContextualMenuItemType.Header,
+            text: actionsText
+          },
+          {
+            key: 'view',
+            text: viewText,
+            iconProps: {
+              iconName: 'View'
             },
-            {
-              key: 'view',
-              text: viewText,
-              iconProps: {
-                iconName: 'View'
-              },
-              onClick: () => onViewQueryButton(item)
+            onClick: () => onViewQueryButton(item)
+          },
+          {
+            key: 'runQuery',
+            text: runQueryText,
+            iconProps: {
+              iconName: 'Refresh'
             },
-            {
-              key: 'runQuery',
-              text: runQueryText,
-              iconProps: {
-                iconName: 'Refresh'
-              },
-              onClick: () => onRunQuery(item)
+            onClick: () => onRunQuery(item)
+          },
+          {
+            key: 'exportQuery',
+            text: exportQueryText,
+            iconProps: {
+              iconName: 'Download'
             },
-            {
-              key: 'exportQuery',
-              text: exportQueryText,
-              iconProps: {
-                iconName: 'Download'
-              },
-              onClick: () => onExportQuery(item)
+            onClick: () => onExportQuery(item)
+          },
+          ...(inCollection
+            ? [
+              {
+                key: 'removeFromCollection',
+                text: translateMessage('Remove from Collection'),
+                iconProps: { iconName: 'BoxSubtractSolid' },
+                onClick: () => handleRemoveFromCollection(item)
+              }
+            ]
+            : [
+              {
+                key: 'addToCollection',
+                text: translateMessage('Add to Collection'),
+                iconProps: { iconName: 'BoxAdditionSolid' },
+                onClick: () => handleAddToCollection(item)
+              }
+            ]),
+          {
+            key: 'remove',
+            text: removeText,
+            iconProps: {
+              iconName: 'Delete'
             },
-            ...(inCollection
-              ? [
-                  {
-                    key: 'removeFromCollection',
-                    text: translateMessage('Remove from Collection'),
-                    iconProps: { iconName: 'BoxSubtractSolid' },
-                    onClick: () => handleRemoveFromCollection(item)
-                  }
-                ]
-              : [
-                  {
-                    key: 'addToCollection',
-                    text: translateMessage('Add to Collection'),
-                    iconProps: { iconName: 'BoxAdditionSolid' },
-                    onClick: () => handleAddToCollection(item)
-                  }
-                ]),
-            {
-              key: 'remove',
-              text: removeText,
-              iconProps: {
-                iconName: 'Delete'
-              },
-              onClick: () => deleteQuery(item)
-            }
-          ];
+            onClick: () => deleteQuery(item)
+          }
+        ];
 
-          return (
+        return (
+          <TooltipHost
+            content={translateMessage('Actions')}
+            id={getId()}
+            calloutProps={{ gapSpace: 0 }}
+            styles={{ root: { display: 'inline-block' } }}>
+            <IconButton
+              className={classes.docLink}
+              ariaLabel={translateMessage('Actions menu')}
+              menuIconProps={{ iconName: 'More' }}
+              menuProps={{
+                shouldFocusOnMount: true,
+                items: buttonActions
+              }}
+              styles={{ root: { paddingBottom: 10, marginLeft: 1 } }}
+            />
+          </TooltipHost>
+        );
+
+      default:
+        const shortQueryContent = queryContent.replace(GRAPH_URL, '');
+        return (
+          <>
             <TooltipHost
-              content={translateMessage('Actions')}
-              id={getId()}
+              content={`${item.method} - ${queryContent}`}
+              id={hostId}
               calloutProps={{ gapSpace: 0 }}
-              styles={{ root: { display: 'inline-block' } }}>
-              <IconButton
-                className={classes.docLink}
-                ariaLabel={translateMessage('Actions menu')}
-                menuIconProps={{ iconName: 'More' }}
-                menuProps={{
-                  shouldFocusOnMount: true,
-                  items: buttonActions
-                }}
-                styles={{ root: { paddingBottom: 10, marginLeft: 1 } }}
-              />
-            </TooltipHost>
-          );
-
-        default:
-          const shortQueryContent = queryContent.replace(GRAPH_URL, '');
-          return (
-            <>
-              <TooltipHost
-                content={`${item.method} - ${queryContent}`}
-                id={hostId}
-                calloutProps={{ gapSpace: 0 }}
-                styles={{ root: { display: 'inline-block' } }}
+              styles={{ root: { display: 'inline-block' } }}
+            >
+              <span
+                aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
+                className={classes.queryContent}
               >
-                <span
-                  aria-label={`${shortQueryContent}. ${translateMessage('Navigation help')}`}
-                  className={classes.queryContent}
-                >
-                  {shortQueryContent}
-                </span>
-              </TooltipHost>
-            </>
-          );
+                {shortQueryContent}
+              </span>
+            </TooltipHost>
+          </>
+        );
       }
     }
   };
@@ -538,13 +538,13 @@ const History = (props: any) => {
   };
 
   const handleAddToCollection = (item: IHistoryItem) => {
-  const resourcePath = formatHistoryItem(item);
-  dispatch(addResourcePaths([resourcePath]));
+    const resourcePath = formatHistoryItem(item);
+    dispatch(addResourcePaths([resourcePath]));
   };
 
   const handleRemoveFromCollection = (item: IHistoryItem) => {
-  const resourcePath = formatHistoryItem(item);
-  dispatch(removeResourcePaths([resourcePath]));
+    const resourcePath = formatHistoryItem(item);
+    dispatch(removeResourcePaths([resourcePath]));
   };
 
 

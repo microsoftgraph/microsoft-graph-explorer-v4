@@ -205,14 +205,14 @@ class App extends Component<IAppProps, IAppState> {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
 
     switch (msgEvent.type) {
-      case 'init':
-        this.handleInitMsg(msgEvent);
-        break;
-      case 'theme-changed':
-        this.handleThemeChangeMsg(msgEvent);
-        break;
-      default:
-        return;
+    case 'init':
+      this.handleInitMsg(msgEvent);
+      break;
+    case 'theme-changed':
+      this.handleThemeChangeMsg(msgEvent);
+      break;
+    default:
+      return;
     }
   };
 

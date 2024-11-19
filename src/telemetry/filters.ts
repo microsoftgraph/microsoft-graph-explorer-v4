@@ -47,14 +47,14 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
 
     const target = baseData.target || '';
     switch (urlObject.origin) {
-      case GRAPH_URL:
-        baseData.name = sanitizeQueryUrl(target);
-        break;
-      case GRAPH_API_SANDBOX_URL:
-        baseData.name = sanitizeGraphAPISandboxUrl(target);
-        break;
-      default:
-        break;
+    case GRAPH_URL:
+      baseData.name = sanitizeQueryUrl(target);
+      break;
+    case GRAPH_API_SANDBOX_URL:
+      baseData.name = sanitizeGraphAPISandboxUrl(target);
+      break;
+    default:
+      break;
     }
   }
   return true;

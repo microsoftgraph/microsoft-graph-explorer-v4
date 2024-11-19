@@ -28,14 +28,14 @@ export function PanelWrapper(props: WrapperProps) {
 
   const getPanelType = () => {
     switch (popupsProps.settings.width) {
-      case 'sm':
-        return PanelType.smallFluid;
-      case 'md':
-        return PanelType.medium;
-      case 'lg':
-        return PanelType.largeFixed;
-      case 'xl':
-        return PanelType.large;
+    case 'sm':
+      return PanelType.smallFluid;
+    case 'md':
+      return PanelType.medium;
+    case 'lg':
+      return PanelType.largeFixed;
+    case 'xl':
+      return PanelType.large;
     }
     return PanelType.medium;
   }

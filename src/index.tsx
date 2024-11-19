@@ -194,16 +194,16 @@ enum Workers {
 window.MonacoEnvironment = {
   getWorkerUrl(moduleId: any, label: string) {
     switch (label) {
-      case 'json':
-        return getWorkerFor(Workers.Json);
-      case 'css':
-        return getWorkerFor(Workers.Css);
-      case 'html':
-        return getWorkerFor(Workers.Html);
-      case 'typescript':
-        return getWorkerFor(Workers.Typescript);
-      default:
-        return getWorkerFor(Workers.Editor);
+    case 'json':
+      return getWorkerFor(Workers.Json);
+    case 'css':
+      return getWorkerFor(Workers.Css);
+    case 'html':
+      return getWorkerFor(Workers.Html);
+    case 'typescript':
+      return getWorkerFor(Workers.Typescript);
+    default:
+      return getWorkerFor(Workers.Editor);
     }
   }
 };
