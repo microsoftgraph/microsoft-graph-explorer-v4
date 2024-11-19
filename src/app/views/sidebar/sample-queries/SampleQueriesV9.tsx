@@ -21,6 +21,7 @@ import {
   SearchBoxChangeEvent,
   Spinner,
   Text,
+  tokens,
   Tooltip,
   TreeItemLayout,
   TreeItemValue,
@@ -43,6 +44,7 @@ import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
+import { NoResultsFoundV9 } from '../sidebar-utils/SearchResultsV9';
 import {
   isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
 } from './sample-query-utils';
@@ -66,7 +68,14 @@ const useStyles = makeStyles({
     gap: '2px'
   },
   badge: {
-    width: '100%'
+    width: '58px',
+    maxWidth: '58px'
+  },
+  disabled: {
+    backgroundColor: tokens.colorSubtleBackgroundHover,
+    '&:hover': {
+      cursor: 'not-allowed'
+    }
   }
 });
 
@@ -78,6 +87,7 @@ export const SampleQueriesV9 = () => {
   const shouldGenerateGroups = useRef(true);
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect(() => {
     setSampleQueries(queries);
@@ -97,15 +107,17 @@ export const SampleQueriesV9 = () => {
     data: InputOnChangeData
   ) => {
     const value = data.value;
+    setSearchValue(value);
     shouldGenerateGroups.current = true;
     setSearchStarted(true);
     const filteredQueries = value ? performSearch(queries, value) : [];
-    if(value && filteredQueries.length > 0) {
+    if(value && filteredQueries.length >= 0) {
       setSampleQueries(filteredQueries);
     } else {
       setSampleQueries(queries);
     }
   };
+
 
   return (
     <div className={sampleQueriesStyles.container}>
@@ -118,9 +130,9 @@ export const SampleQueriesV9 = () => {
       {error && <CachedSetMessageBar />}
       <SeeMoreQueriesMessageBar />
       <AriaLiveAnnouncer>
-        <Text>{`${queries.length} search results available.`}</Text>
+        <Text>{`${sampleQueries.length} search results available.`}</Text>
       </AriaLiveAnnouncer>
-      {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} />}
+      {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} searchValue={searchValue} />}
     </div>
   );
 };
@@ -205,11 +217,16 @@ interface SampleLeaf {
  */
 const RenderSampleLeafs = (props: SampleLeaf) => {
   const { leafs, group, handleSelectedSample, isSignedIn } = props;
+  const leafStyles = useStyles()
 
-  // TODO: make the tree items that are not GET disabled unless signed in
   return (
     <>
       {leafs.map((query: ISampleQuery) => {
+        const notSignedIn = !isSignedIn && query.method !== 'GET';
+        const handleOnClick = (item:ISampleQuery)=>{
+          if(isSignedIn) {handleSelectedSample(item)}
+        }
+
         return (
           <FlatTreeItem
             key={query.id}
@@ -219,9 +236,11 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             aria-setsize={leafs.length}
             aria-posinset={leafs.findIndex((q) => q.id === query.id) + 1}
             itemType='leaf'
+            className={notSignedIn ? leafStyles.disabled : ''}
+            id={query.id}
           >
             <TreeItemLayout
-              onClick={()=>handleSelectedSample(query)}
+              onClick={()=>handleOnClick(query)}
               iconBefore={<MethodIcon isSignedIn={isSignedIn} method={query.method} />}
               aside={<ResourceLink item={query}/>}
             >
@@ -283,13 +302,19 @@ const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolea
       <Badge
         className={sampleQueriesStyles.badge}
         appearance="filled"
+        size='small'
         color={colors[method]}
         aria-label={'http method ' + method + ' for'}>
         {method}
-        {method !== 'GET' && !isSignedIn && (
-          <><Divider vertical style={{ height: '100%' }} /><LockClosed16Regular/></>
-        )}</Badge>
-
+      </Badge>
+      {method !== 'GET' && !isSignedIn && <Tooltip
+        withArrow
+        content={translateMessage('Sign In to try this sample')}
+        relationship='label'
+        positioning='above-start'
+      >
+        <LockClosed16Regular/>
+      </Tooltip>}
     </div>
   )
 }
@@ -314,6 +339,7 @@ const parseSampleBody = (sampleBody: string) => {
 interface SamplesProps {
   queries: ISampleQuery[];
   groups: IGroup[];
+  searchValue: string
 }
 
 /**
@@ -324,7 +350,7 @@ interface SamplesProps {
  *
  * @returns {JSX.Element} The rendered component.
  */
-const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
+const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const dispatch = useAppDispatch();
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
   const profile = useAppSelector(state=>state.profile)
@@ -332,7 +358,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
   const authenticated = authToken.token
 
   useEffect(() => {
-    if (queries.length === 0) {
+    if (!searchValue && queries.length === 0) {
       dispatch(fetchSamples());
     } else {
       setSampleQueries(queries);
@@ -385,45 +411,49 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups }) => {
   }
 
   return (
-    <FlatTree
-      openItems={openItems}
-      onOpenChange={handleOpenChange}
-      aria-label={translateMessage('Sample Queries')}
-    >
-      {groups.map((group, pos) => (
-        <React.Fragment key={group.key}>
-          <FlatTreeItem
-            value={group.name}
-            aria-level={1}
-            aria-setsize={2}
-            aria-posinset={pos + 1}
-            itemType='branch'
-            aria-label={
-              group.name + translateMessage('sample queries group has ') + group.count + translateMessage('Resources')}
-          >
-            <TreeItemLayout
-              aside={
-                <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
-                  {group.count}
-                </Badge>
-              }
+    <>
+      {sampleQueries.length=== 0 && <NoResultsFoundV9 message='No sample queries'/>}
+      <FlatTree
+        openItems={openItems}
+        onOpenChange={handleOpenChange}
+        aria-label={translateMessage('Sample Queries')}
+      >
+        {groups.map((group, pos) => (
+          <React.Fragment key={group.key}>
+            <FlatTreeItem
+              value={group.name}
+              aria-level={1}
+              aria-setsize={2}
+              aria-posinset={pos + 1}
+              itemType='branch'
+              aria-label={
+                group.name + translateMessage('sample queries group has ') +
+                group.count + translateMessage('Resources')}
             >
-              <Text weight='semibold'>{group.name}</Text>
-            </TreeItemLayout>
-          </FlatTreeItem>
-          {openItems.has(group.name) && (
-            <RenderSampleLeafs
-              isSignedIn={authenticated}
-              leafs={sampleQueries.slice(
-                group.startIndex,
-                group.startIndex + group.count
-              )}
-              group={group}
-              handleSelectedSample={sampleQueryItemSelected}
-            />
-          )}
-        </React.Fragment>
-      ))}
-    </FlatTree>
+              <TreeItemLayout
+                aside={
+                  <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
+                    {group.count}
+                  </Badge>
+                }
+              >
+                <Text weight='semibold'>{group.name}</Text>
+              </TreeItemLayout>
+            </FlatTreeItem>
+            {openItems.has(group.name) && (
+              <RenderSampleLeafs
+                isSignedIn={authenticated}
+                leafs={sampleQueries.slice(
+                  group.startIndex,
+                  group.startIndex + group.count
+                )}
+                group={group}
+                handleSelectedSample={sampleQueryItemSelected}
+              />
+            )}
+          </React.Fragment>
+        ))}
+      </FlatTree>
+    </>
   );
 };
