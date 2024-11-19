@@ -216,7 +216,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         farItems={farItems}
       />
 
-<input
+      <input
         key={fileInputKey}
         type="file"
         id="file-input"

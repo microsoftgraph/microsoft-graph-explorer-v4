@@ -145,6 +145,20 @@ const UnstyledResourceExplorer = (props: any) => {
         onChange={debouncedSearch}
         styles={searchBoxStyles}
       />
+      <DefaultButton onClick={openPreviewCollection}
+        iconProps={{iconName: 'AddBookmark'}}
+        ariaLabel={translateMessage('My API Collection')}
+        styles={styles.apiCollectionButton}
+        text={translateMessage('My API Collection')}
+      >
+        <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
+          <Stack.Item align='auto'>
+            <div style={styles.apiCollectionCount}>
+              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : '0'}
+            </div>
+          </Stack.Item>
+        </Stack>
+      </DefaultButton>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
         <Label styles={{ root: { position: 'relative'} }}>
           {translateMessage('Resources available')}
@@ -160,21 +174,6 @@ const UnstyledResourceExplorer = (props: any) => {
           </Label>
         </Stack>
       </Stack>
-      <DefaultButton onClick={openPreviewCollection}
-        iconProps={{iconName: 'AddBookmark'}}
-        ariaLabel={translateMessage('My API Collection')}
-        styles={styles.apiCollectionButton}
-        text={translateMessage('My API Collection')}
-      >
-        <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
-          <Stack.Item align='auto'>
-            <div style={styles.apiCollectionCount}>
-              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : '0'}
-            </div>
-          </Stack.Item>
-        </Stack>
-      </DefaultButton>
-
       {
         items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav

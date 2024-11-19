@@ -36,7 +36,8 @@ export const resourceExplorerStyles = (theme: ITheme) => {
         justifyContent: 'flex-start',
         backgroundColor: theme.palette.neutralLighterAlt,
         textAlign: 'left',
-        height: '40px'
+        height: '40px',
+        marginTop: '10px'
       },
       label: {
         marginLeft: '8px',

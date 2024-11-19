@@ -80,7 +80,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   return (
     <>
-    <MessageBar isMultiline={true}>
+      <MessageBar isMultiline={true}>
         {translateMessage('list of permissions')}
         <Link
           target='_blank'
@@ -92,19 +92,19 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         >
           {translateMessage('Microsoft Graph permissions reference')}
         </Link>
-    </MessageBar>
-    <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
-      <DetailsList
-        items={permissionsArray}
-        columns={columns}
-        groups={groups}
-        selectionMode={SelectionMode.none}
-      />
+      </MessageBar>
+      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
+        <DetailsList
+          items={permissionsArray}
+          columns={columns}
+          groups={groups}
+          selectionMode={SelectionMode.none}
+        />
       </div>
       {permissions &&
         <DialogFooter styles={{
           actionsRight: { bottom: 0, justifyContent: 'start' }
-          }}>
+        }}>
           <PrimaryButton onClick={downloadPermissions}>
             {translateMessage('Download permissions')}
           </PrimaryButton>
