@@ -498,5 +498,6 @@
   "Revoking admin granted scopes": "Revoking admin granted scopes",
   "Revoking default scopes": "Revoking default scopes",
   "More request area items": "More request area items",
-  "More response items": "More response area items"
+  "More response items": "More response area items",
+  "Getting profile details":"Getting profile details"
 }
