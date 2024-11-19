@@ -145,10 +145,6 @@ const UnstyledResourceExplorer = (props: any) => {
         onChange={debouncedSearch}
         styles={searchBoxStyles}
       />
-      <hr />
-      <MessageBar messageBarType={MessageBarType.info}>
-        {translateMessage('expand resources to view details')}
-      </MessageBar>
       <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
         <Label styles={{ root: { position: 'relative'} }}>
           {translateMessage('Resources available')}

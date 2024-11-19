@@ -34,7 +34,7 @@ export const resourceExplorerStyles = (theme: ITheme) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        backgroundColor: 'transparent',
+        backgroundColor: theme.palette.neutralLighterAlt,
         textAlign: 'left',
         height: '40px'
       },
