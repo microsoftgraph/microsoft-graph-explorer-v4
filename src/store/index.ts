@@ -68,7 +68,7 @@ export const store = configureStore({
     collections: {
       collections: [],
       saved: false
-  },
+    },
     devxApi: undefined,
     dimensions: undefined as undefined,
     graphResponse: undefined as undefined,

@@ -87,18 +87,18 @@ export default class Paths extends Component<IPathProps> {
     const { resources, columns, isSelectable } = this.props;
     return (
       <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
-          <DetailsList
-            items={resources}
-            columns={columns}
-            setKey='set'
-            onRenderItemColumn={this.renderItemColumn}
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={isSelectable ? this._selection! : undefined}
-            selectionMode={isSelectable ? 2 : 0}
-            onShouldVirtualize={() => false}
-            checkboxVisibility={isSelectable ? 1 : 0}
-            onRenderCheckbox={this.renderCustomCheckbox}
-          />
+        <DetailsList
+          items={resources}
+          columns={columns}
+          setKey='set'
+          onRenderItemColumn={this.renderItemColumn}
+          layoutMode={DetailsListLayoutMode.justified}
+          selection={isSelectable ? this._selection! : undefined}
+          selectionMode={isSelectable ? 2 : 0}
+          onShouldVirtualize={() => false}
+          checkboxVisibility={isSelectable ? 1 : 0}
+          onRenderCheckbox={this.renderCustomCheckbox}
+        />
       </div>
     );
   }

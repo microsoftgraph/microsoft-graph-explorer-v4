@@ -57,6 +57,10 @@ const collections = createSlice({
 });
 
 export const
-{ createCollection, addResourcePaths, updateResourcePaths, removeResourcePaths, resetSaveState } = collections.actions;
+  { createCollection,
+    addResourcePaths,
+    updateResourcePaths,
+    removeResourcePaths,
+    resetSaveState } = collections.actions;
 
 export default collections.reducer;

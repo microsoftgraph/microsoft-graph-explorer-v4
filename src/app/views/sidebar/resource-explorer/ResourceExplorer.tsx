@@ -154,7 +154,7 @@ const UnstyledResourceExplorer = (props: any) => {
         <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
           <Stack.Item align='auto'>
             <div style={styles.apiCollectionCount}>
-              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : '0'}
+              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : '(0)'}
             </div>
           </Stack.Item>
         </Stack>
