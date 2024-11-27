@@ -7,7 +7,7 @@ import LazyAdaptiveCard from  '../../../query-response/adaptive-cards/AdaptiveCa
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
 import LazySnippets from  '../../../query-response/snippets/Snippets';
 import LazyCopyButton from  '../../copy-button/CopyButton';
-import LazyAuth from  '../../../query-runner/request/auth/Auth';
+import LazyAuth from  '../../../query-runner/request/auth/AuthV9';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeadersV9';
 import LazyHistory from  '../../../sidebar/history/History';
 import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
