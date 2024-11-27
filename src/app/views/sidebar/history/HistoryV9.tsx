@@ -1,6 +1,10 @@
 import {
   AriaLiveAnnouncer,
+  Badge,
+  Button,
   Divider,
+  FlatTree,
+  FlatTreeItem,
   InputOnChangeData,
   Label,
   makeStyles,
@@ -8,11 +12,16 @@ import {
   MessageBarBody,
   SearchBox,
   SearchBoxChangeEvent,
-  Text
+  Text,
+  TreeItemLayout,
+  TreeItemValue,
+  TreeOpenChangeData,
+  TreeOpenChangeEvent
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 
-import { useEffect, useRef, useState } from 'react';
+import { ArrowDownloadRegular } from '@fluentui/react-icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../../../store';
 import { SortOrder } from '../../../../types/enums';
 import { IHistoryItem } from '../../../../types/history';
@@ -47,6 +56,10 @@ const useStyles = makeStyles({
   }
 })
 
+const DownloadHistoryIcon = ()=>{
+  return <Button icon={ArrowDownloadRegular}></Button>
+}
+
 interface HistoryProps {
   history: IHistoryItem[]
   groups: IGroup[]
@@ -54,8 +67,59 @@ interface HistoryProps {
 }
 
 const History = (props: HistoryProps)=>{
-  console.log(props)
-  return <p>Items</p>
+  const {groups, history} = props
+
+  const openHistoryItems = new Set<string>()
+  'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
+  openHistoryItems.add('Today')
+
+  const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
+    () => openHistoryItems
+  );
+  const handleOpenChange = (_: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
+    setOpenItems(data.openItems);
+  };
+
+  return(
+    <FlatTree openItems={openItems} aria-label={translateMessage('History')} onOpenChange={handleOpenChange}>
+      {groups.map((group, pos) => {
+        const historyLeafs = history.slice(group.startIndex, group.startIndex + group.count)
+        return (
+          <React.Fragment key={group.key}>
+            <FlatTreeItem
+              value={group.name}
+              itemType='branch'
+              aria-level={1}
+              aria-setsize={2}
+              aria-posinset={pos+1}
+              aria-label={group.ariaLabel}>
+              <TreeItemLayout aside={<DownloadHistoryIcon />}>
+                <Text weight='semibold'>{group.name}
+                  <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('History')}>
+                    {group.count}
+                  </Badge></Text>
+              </TreeItemLayout>
+            </FlatTreeItem>
+            {openItems.has(group.name) &&
+              historyLeafs.map((h: IHistoryItem) => (
+                <FlatTreeItem
+                  value={h.statusText}
+                  parentValue={group.name}
+                  itemType='leaf'
+                  key={h.createdAt}
+                  id={h.createdAt}
+                  aria-level={2}
+                  aria-setsize={historyLeafs.length}
+                  aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
+                >
+                  <TreeItemLayout>{h.statusText}</TreeItemLayout>
+                </FlatTreeItem>
+              ))}
+          </React.Fragment>
+        )
+      })}
+    </FlatTree>
+  )
 }
 
 const sortItems = (content: IHistoryItem[]) => {
@@ -145,7 +209,5 @@ export const HistoryV9 = ()=>{
     {historyItems.length === 0 && <Label size='medium'>{translateMessage('We did not find any history items')}</Label>}
     <AriaLiveAnnouncer><Text>{`${historyItems.length} search results available.`}</Text></AriaLiveAnnouncer>
     <History history={historyItems} searchValue={searchValue} groups={groups}></History>
-    <div>
-    </div>
   </div>
 }
