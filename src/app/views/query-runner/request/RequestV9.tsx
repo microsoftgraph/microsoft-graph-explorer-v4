@@ -13,6 +13,7 @@ import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
 import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 
+
   interface IRequestProps {
     handleOnEditorChange: ()=> void
     sampleQuery: IQuery

@@ -8,7 +8,7 @@ import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolki
 import LazySnippets from  '../../../query-response/snippets/Snippets';
 import LazyCopyButton from  '../../copy-button/CopyButton';
 import LazyAuth from  '../../../query-runner/request/auth/Auth';
-import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
+import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeadersV9';
 import LazyHistory from  '../../../sidebar/history/History';
 import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
 
