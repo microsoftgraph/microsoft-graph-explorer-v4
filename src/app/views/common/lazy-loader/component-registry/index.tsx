@@ -6,7 +6,7 @@ import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeader
 import LazyAdaptiveCard from  '../../../query-response/adaptive-cards/AdaptiveCard';
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
 import LazySnippets from  '../../../query-response/snippets/Snippets';
-import LazyCopyButton from  '../../copy-button/CopyButton';
+import LazyCopyButton from  '../../copy-button/CopyButtonV9';
 import LazyAuth from  '../../../query-runner/request/auth/AuthV9';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeadersV9';
 import LazyHistory from  '../../../sidebar/history/History';
