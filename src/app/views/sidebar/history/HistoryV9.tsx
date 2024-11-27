@@ -2,6 +2,13 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
   Divider,
   FlatTree,
   FlatTreeItem,
@@ -23,10 +30,12 @@ import { IGroup } from '@fluentui/react/lib/DetailsList';
 
 import { ArrowDownloadRegular, DeleteRegular } from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppSelector } from '../../../../store';
+import { historyCache } from '../../../../modules/cache/history-utils';
+import { useAppDispatch, useAppSelector } from '../../../../store';
 import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
+import { removeAllHistoryItems } from '../../../services/slices/history.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -59,19 +68,13 @@ const useStyles = makeStyles({
   },
   titleAside: {
     display: 'flex',
-    gap: '4px'
+    gap: '2px'
   }
 })
 
-
-const handleDeleteHistoryGroup = (event: React.MouseEvent<HTMLButtonElement>)=>{
-  event.preventDefault()
-  console.log('deleting history')
-}
-
 const handleDownloadHistoryGroup = (
   event: React.MouseEvent<HTMLButtonElement>, value: string,
-  historyItems: IHistoryItem[], category: string)=>{
+  historyItems: IHistoryItem[])=>{
   event.preventDefault()
   const itemsToExport = historyItems.filter((query: IHistoryItem) => getCategory(query) === value);
   const entries: Entry[] = [];
@@ -83,7 +86,7 @@ const handleDownloadHistoryGroup = (
 
   const generatedHarData = generateHar(entries);
   const { origin } = new URL(itemsToExport[0].url);
-  const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.slice(0, 10)}/`;
+  const exportTitle = `${origin}/${value.toLowerCase()}/${itemsToExport[0].createdAt.slice(0, 10)}/`;
 
   exportQuery(generatedHarData, exportTitle);
 }
@@ -91,22 +94,58 @@ const handleDownloadHistoryGroup = (
 interface AsideGroupIconsProps {
   groupName: string
   historyItems: IHistoryItem[]
-  category: string
 }
 
 const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
-  const {groupName, historyItems, category} = props
+  const dispatch = useAppDispatch()
+  const {groupName, historyItems} = props
+  const [open, setOpen] = useState(false);
   const styles = useStyles()
+
+  const handleDeleteHistoryGroup = (event: React.MouseEvent<HTMLButtonElement>)=>{
+    event.preventDefault()
+    const itemsToDelete = historyItems.filter((query: IHistoryItem) => getCategory(query) === groupName);
+    const listOfKeys: string[] = [];
+    itemsToDelete.forEach(historyItem => {
+      listOfKeys.push(historyItem.createdAt);
+    });
+    historyCache.bulkRemoveHistoryData(listOfKeys)
+    dispatch(removeAllHistoryItems(listOfKeys));
+    setOpen(false)
+  }
+
   return <div className={styles.titleAside}>
     <Tooltip withArrow relationship="label" content={`${translateMessage('Export')} ${groupName} queries`}>
       <Button onClick={
-        (event: React.MouseEvent<HTMLButtonElement>)=>
-          handleDownloadHistoryGroup(event,groupName, historyItems, category )}
+        (e) => handleDownloadHistoryGroup(e,groupName, historyItems )}
       appearance="subtle" icon={<ArrowDownloadRegular/>}></Button>
     </Tooltip>
-    <Tooltip withArrow relationship="label" content={`${translateMessage('Delete')} ${groupName} queries`}>
-      <Button onClick={handleDeleteHistoryGroup}appearance="subtle" icon={<DeleteRegular/>}></Button>
-    </Tooltip>
+    <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
+      <DialogTrigger disableButtonEnhancement>
+        <Tooltip withArrow relationship="label" content={`${translateMessage('Delete')} ${groupName} queries`}>
+          <Button appearance="subtle" icon={<DeleteRegular/>}></Button>
+        </Tooltip>
+      </DialogTrigger>
+      <DialogSurface>
+        <DialogBody>
+          <DialogTitle>{translateMessage('Delete requests')} "{groupName}"</DialogTitle>
+          <DialogContent>{translateMessage('Are you sure you want to delete these requests?')}
+          </DialogContent>
+          <DialogActions>
+            <DialogTrigger disableButtonEnhancement>
+              <Button appearance="secondary">{translateMessage('Cancel')}</Button>
+            </DialogTrigger>
+            <Button
+              onClick={handleDeleteHistoryGroup}
+              appearance="primary"
+            >
+              {translateMessage('Delete')}
+            </Button>
+          </DialogActions>
+        </DialogBody>
+      </DialogSurface>
+    </Dialog>
+
   </div>
 }
 
@@ -144,7 +183,7 @@ const History = (props: HistoryProps)=>{
               aria-setsize={2}
               aria-posinset={pos+1}
               aria-label={ariaLabel}>
-              <TreeItemLayout aside={<AsideGroupIcons groupName={name} historyItems={history} category={name} />}>
+              <TreeItemLayout aside={<AsideGroupIcons groupName={name} historyItems={history} />}>
                 <Text weight='semibold'>{name}{' '}
                   <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
                     {count}
