@@ -13,6 +13,7 @@ import {
   SearchBox,
   SearchBoxChangeEvent,
   Text,
+  Tooltip,
   TreeItemLayout,
   TreeItemValue,
   TreeOpenChangeData,
@@ -20,14 +21,16 @@ import {
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 
-import { ArrowDownloadRegular } from '@fluentui/react-icons';
+import { ArrowDownloadRegular, DeleteRegular } from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../../../store';
 import { SortOrder } from '../../../../types/enums';
+import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { translateMessage } from '../../../utils/translate-messages';
+import { createHarEntry, exportQuery, generateHar } from './har-utils';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -53,11 +56,58 @@ const useStyles = makeStyles({
   searchBox: {
     width: '100%',
     maxWidth: '100%'
+  },
+  titleAside: {
+    display: 'flex',
+    gap: '4px'
   }
 })
 
-const DownloadHistoryIcon = ()=>{
-  return <Button icon={ArrowDownloadRegular}></Button>
+
+const handleDeleteHistoryGroup = (event: React.MouseEvent<HTMLButtonElement>)=>{
+  event.preventDefault()
+  console.log('deleting history')
+}
+
+const handleDownloadHistoryGroup = (
+  event: React.MouseEvent<HTMLButtonElement>, value: string,
+  historyItems: IHistoryItem[], category: string)=>{
+  event.preventDefault()
+  const itemsToExport = historyItems.filter((query: IHistoryItem) => getCategory(query) === value);
+  const entries: Entry[] = [];
+
+  itemsToExport.forEach((query: IHistoryItem) => {
+    const harPayload = createHarEntry(query);
+    entries.push(harPayload);
+  });
+
+  const generatedHarData = generateHar(entries);
+  const { origin } = new URL(itemsToExport[0].url);
+  const exportTitle = `${origin}/${category.toLowerCase()}/${itemsToExport[0].createdAt.slice(0, 10)}/`;
+
+  exportQuery(generatedHarData, exportTitle);
+}
+
+interface AsideGroupIconsProps {
+  groupName: string
+  historyItems: IHistoryItem[]
+  category: string
+}
+
+const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
+  const {groupName, historyItems, category} = props
+  const styles = useStyles()
+  return <div className={styles.titleAside}>
+    <Tooltip withArrow relationship="label" content={`${translateMessage('Export')} ${groupName} queries`}>
+      <Button onClick={
+        (event: React.MouseEvent<HTMLButtonElement>)=>
+          handleDownloadHistoryGroup(event,groupName, historyItems, category )}
+      appearance="subtle" icon={<ArrowDownloadRegular/>}></Button>
+    </Tooltip>
+    <Tooltip withArrow relationship="label" content={`${translateMessage('Delete')} ${groupName} queries`}>
+      <Button onClick={handleDeleteHistoryGroup}appearance="subtle" icon={<DeleteRegular/>}></Button>
+    </Tooltip>
+  </div>
 }
 
 interface HistoryProps {
@@ -83,28 +133,29 @@ const History = (props: HistoryProps)=>{
   return(
     <FlatTree openItems={openItems} aria-label={translateMessage('History')} onOpenChange={handleOpenChange}>
       {groups.map((group, pos) => {
-        const historyLeafs = history.slice(group.startIndex, group.startIndex + group.count)
+        const {name, ariaLabel, count, key, startIndex} = group
+        const historyLeafs = history.slice(startIndex, startIndex + count)
         return (
-          <React.Fragment key={group.key}>
+          <React.Fragment key={key}>
             <FlatTreeItem
-              value={group.name}
+              value={name}
               itemType='branch'
               aria-level={1}
               aria-setsize={2}
               aria-posinset={pos+1}
-              aria-label={group.ariaLabel}>
-              <TreeItemLayout aside={<DownloadHistoryIcon />}>
-                <Text weight='semibold'>{group.name}
-                  <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('History')}>
-                    {group.count}
+              aria-label={ariaLabel}>
+              <TreeItemLayout aside={<AsideGroupIcons groupName={name} historyItems={history} category={name} />}>
+                <Text weight='semibold'>{name}{' '}
+                  <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
+                    {count}
                   </Badge></Text>
               </TreeItemLayout>
             </FlatTreeItem>
-            {openItems.has(group.name) &&
+            {openItems.has(name) &&
               historyLeafs.map((h: IHistoryItem) => (
                 <FlatTreeItem
                   value={h.statusText}
-                  parentValue={group.name}
+                  parentValue={name}
                   itemType='leaf'
                   key={h.createdAt}
                   id={h.createdAt}
