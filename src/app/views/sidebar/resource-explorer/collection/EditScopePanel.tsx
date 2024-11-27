@@ -72,12 +72,12 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   };
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column',
+      overflow: 'hidden' }}>
       <MessageBar isMultiline={true}>
         {translateMessage('edit query scopes')}
         <span style={{ fontWeight: 'bold' }}>{translateMessage('Save all')}</span>
       </MessageBar>
-
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 0px' }}>
         <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
         <Dropdown
@@ -91,7 +91,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           styles={{ dropdown: { width: 200 } }}
         />
       </div>
-      <div style={{ height: '80vh' }}>
+      <div style={{ flex: 1, marginBottom: '1px',  maxHeight: '80vh' }}>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}
@@ -100,7 +100,14 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
         />
       </div>
 
-      <DialogFooter styles={{ actionsRight: { bottom: 0, justifyContent: 'start' } }}>
+      <DialogFooter
+        styles={{
+          actionsRight: {
+            display: 'flex',
+            justifyContent: 'flex-start',
+            padding: '5px'
+          }
+        }}>
         <PrimaryButton onClick={saveAllScopes} disabled={pendingChanges.length === 0}>
           {translateMessage('Save all')}
         </PrimaryButton>
@@ -108,7 +115,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           {translateMessage('Close')}
         </DefaultButton>
       </DialogFooter>
-    </>
+    </div>
   );
 };
 
