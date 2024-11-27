@@ -57,7 +57,7 @@ const yesterday = formatDate(yesterdaysDate);
 yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
 
 const sortItems = (content: IHistoryItem[]) => {
-  content.sort(dynamicSort('createdAt', SortOrder.DESC));
+  content.sort(dynamicSort<IHistoryItem>('createdAt', SortOrder.DESC));
   content.forEach((value: any, index: number) => {
     value.index = index;
   });
