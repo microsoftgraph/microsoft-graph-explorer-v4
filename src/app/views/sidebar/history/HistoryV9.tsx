@@ -15,6 +15,13 @@ import {
   InputOnChangeData,
   Label,
   makeStyles,
+  Menu,
+  MenuGroup,
+  MenuGroupHeader,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
   MessageBar,
   MessageBarBody,
   SearchBox,
@@ -28,19 +35,35 @@ import {
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 
-import { ArrowDownloadRegular, DeleteRegular } from '@fluentui/react-icons';
+import { MessageBarType } from '@fluentui/react';
+import {
+  ArrowDownloadRegular,
+  ArrowRepeatAllRegular,
+  DeleteRegular,
+  EyeRegular,
+  MoreHorizontalRegular
+} from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { historyCache } from '../../../../modules/cache/history-utils';
 import { useAppDispatch, useAppSelector } from '../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { SortOrder } from '../../../../types/enums';
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
-import { removeAllHistoryItems } from '../../../services/slices/history.slice';
+import { IQuery } from '../../../../types/query-runner';
+import { GRAPH_URL } from '../../../services/graph-constants';
+import { runQuery, setQueryResponse } from '../../../services/slices/graph-response.slice';
+import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
+import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { dynamicSort } from '../../../utils/dynamic-sort';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
+import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
 
+type BadgeColors =  'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning';
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -156,6 +179,7 @@ interface HistoryProps {
 }
 
 const History = (props: HistoryProps)=>{
+  const dispatch = useAppDispatch()
   const {groups, history} = props
 
   const openHistoryItems = new Set<string>()
@@ -168,6 +192,38 @@ const History = (props: HistoryProps)=>{
   const handleOpenChange = (_: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
     setOpenItems(data.openItems);
   };
+
+  const handleViewQuery = (query: IHistoryItem)=>{
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const sampleQuery: IQuery = {
+      sampleUrl,
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion
+    };
+    const { duration, status, statusText } = query;
+    dispatch(setSampleQuery(sampleQuery));
+    dispatch(setQueryResponse({
+      body: query.result,
+      headers: query.responseHeaders
+    }))
+    // TODO: change the message bar type to v9 types
+    dispatch(setQueryResponseStatus({
+      duration,
+      messageType:
+        status < 300 ? MessageBarType.success : MessageBarType.error,
+      ok: status < 300,
+      status,
+      statusText
+    }));
+    trackHistoryItemEvent(
+      eventTypes.LISTITEM_CLICK_EVENT,
+      componentNames.HISTORY_LIST_ITEM,
+      query
+    );
+  }
+
 
   return(
     <FlatTree openItems={openItems} aria-label={translateMessage('History')} onOpenChange={handleOpenChange}>
@@ -202,7 +258,14 @@ const History = (props: HistoryProps)=>{
                   aria-setsize={historyLeafs.length}
                   aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
                 >
-                  <TreeItemLayout>{h.statusText}</TreeItemLayout>
+                  <TreeItemLayout
+                    onClick={()=>handleViewQuery(h)}
+                    iconBefore={<HistoryStatusCodes status={h.status}/>}
+                    aside={<HistoryItemActionMenu item={h}/>}>
+                    <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
+                      <Text>{h.url.replace(GRAPH_URL, '')}</Text>
+                    </Tooltip>
+                  </TreeItemLayout>
                 </FlatTreeItem>
               ))}
           </React.Fragment>
@@ -210,6 +273,134 @@ const History = (props: HistoryProps)=>{
       })}
     </FlatTree>
   )
+}
+
+const HistoryStatusCodes = ({status}:{status: number})=>{
+  const getBadgeColor = (): BadgeColors =>{
+    if(status >= 100 && status < 199) {return 'informative'}
+    if(status >= 200 && status < 299) {return 'success'}
+    if(status >= 300 && status < 399) {return 'important'}
+    if(status >= 400 && status < 599) {return 'danger'}
+    return 'success'
+  }
+  return <Badge color={getBadgeColor()} appearance="ghost">{status}</Badge>
+}
+
+const trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
+  const sanitizedUrl = sanitizeQueryUrl(query.url);
+  telemetry.trackEvent(
+    eventName,
+    {
+      ComponentName: componentName,
+      ItemIndex: query.index,
+      QuerySignature: `${query.method} ${sanitizedUrl}`
+    });
+}
+
+interface HistoryItemActionMenuProps {
+  item: IHistoryItem
+}
+
+
+const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
+  const dispatch = useAppDispatch()
+  const {item} = props
+
+  const handleViewQuery = (query: IHistoryItem)=>{
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const sampleQuery: IQuery = {
+      sampleUrl,
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion
+    };
+    const { duration, status, statusText } = query;
+    dispatch(setSampleQuery(sampleQuery));
+    dispatch(setQueryResponse({
+      body: query.result,
+      headers: query.responseHeaders
+    }))
+    // TODO: change the message bar type to v9 types
+    dispatch(setQueryResponseStatus({
+      duration,
+      messageType:
+        status < 300 ? MessageBarType.success : MessageBarType.error,
+      ok: status < 300,
+      status,
+      statusText
+    }));
+    trackHistoryItemEvent(
+      eventTypes.LISTITEM_CLICK_EVENT,
+      componentNames.HISTORY_LIST_ITEM,
+      query
+    );
+  }
+
+  const handleRunQuery = (query: IHistoryItem) =>{
+    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
+    const sampleQuery: IQuery = {
+      sampleUrl,
+      selectedVerb: query.method,
+      sampleBody: query.body,
+      sampleHeaders: query.headers,
+      selectedVersion: queryVersion
+    };
+
+    if (sampleQuery.selectedVerb === 'GET') {
+      sampleQuery.sampleBody = JSON.parse('{}') as string;
+    }
+    dispatch(setSampleQuery(sampleQuery));
+    dispatch(runQuery(sampleQuery));
+
+    trackHistoryItemEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.RUN_HISTORY_ITEM_BUTTON,
+      query
+    );
+  }
+
+  const handleExportQuery = (query: IHistoryItem)=>{
+    const harPayload = createHarEntry(query);
+    const generatedHarData = generateHar([harPayload]);
+    exportQuery(generatedHarData, `${query.url}/`);
+    trackHistoryItemEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.EXPORT_HISTORY_ITEM_BUTTON,
+      query
+    );
+  }
+
+  const handleDeleteQuery = (query:IHistoryItem)=>{
+    delete query.category;
+    historyCache.removeHistoryData(query);
+    dispatch(removeHistoryItem(query));
+    trackHistoryItemEvent(
+      eventTypes.BUTTON_CLICK_EVENT,
+      componentNames.DELETE_HISTORY_ITEM_BUTTON,
+      query
+    );
+  }
+  return <Menu>
+    <MenuTrigger disableButtonEnhancement>
+      <Button appearance='subtle' icon={<MoreHorizontalRegular/>}></Button>
+    </MenuTrigger>
+
+    <MenuPopover>
+      <MenuList>
+        <MenuGroup>
+          <MenuGroupHeader>{translateMessage('actions')}</MenuGroupHeader>
+          <MenuItem icon={<EyeRegular/>} onClick={()=>handleViewQuery(item)}>{translateMessage('view')}</MenuItem>
+          <MenuItem icon={<ArrowRepeatAllRegular/>}
+            onClick={()=>handleRunQuery(item)}>{translateMessage('Run Query')}</MenuItem>
+          <MenuItem icon={<ArrowDownloadRegular/>}
+            onClick={()=>handleExportQuery(item)}>{translateMessage('Export')}</MenuItem>
+          <MenuItem icon={<DeleteRegular/>}
+            onClick={()=>handleDeleteQuery(item)}>{translateMessage('Delete')}</MenuItem>
+        </MenuGroup>
+      </MenuList>
+    </MenuPopover>
+  </Menu>
 }
 
 const sortItems = (content: IHistoryItem[]) => {
