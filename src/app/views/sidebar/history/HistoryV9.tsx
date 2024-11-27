@@ -1,10 +1,23 @@
-import { InputOnChangeData, makeStyles, SearchBox, SearchBoxChangeEvent } from '@fluentui/react-components'
+import {
+  Divider,
+  InputOnChangeData,
+  makeStyles,
+  MessageBar,
+  MessageBarBody,
+  SearchBox,
+  SearchBoxChangeEvent
+} from '@fluentui/react-components'
 import { useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '../../../../store'
 import { IHistoryItem } from '../../../../types/history'
 import { translateMessage } from '../../../utils/translate-messages'
 
 const useStyles = makeStyles({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '4px'
+  },
   searchBox: {
     width: '100%',
     maxWidth: '100%'
@@ -36,14 +49,20 @@ export const HistoryV9 = ()=>{
     setHistoryItems(content)
     console.log(historyItems)
   }
-  return <>
+  return <div className={styles.container}>
     <SearchBox
       placeholder={translateMessage('Search history items')}
       onChange={handleSearchValueChanged}
       className={styles.searchBox}
     >
     </SearchBox>
+    <Divider />
+    <MessageBar>
+      <MessageBarBody>
+        {translateMessage('Your history includes queries made in the last 30 days')}
+      </MessageBarBody>
+    </MessageBar>
     <div>
     </div>
-  </>
+  </div>
 }
