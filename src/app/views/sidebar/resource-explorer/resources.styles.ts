@@ -2,29 +2,6 @@ import { ITheme } from '@fluentui/react'
 
 export const resourceExplorerStyles = (theme: ITheme) => {
   return {
-    itemStyles: {
-      root: {
-        border: '1px solid',
-        borderColor: theme.palette.themePrimary,
-        marginLeft: '-15px'
-      }
-    },
-    commandBarStyles: {
-      root: {
-        backgroundColor: theme.palette.neutralLighter
-      }
-    },
-    iconButtons: {
-      root: {
-        '&:hover': {
-          border: `1px solid ${theme.palette.themePrimary} !important`
-        },
-        cursor: 'pointer',
-        height: '40px',
-        position: 'relative' as 'relative',
-        bottom: '5px'
-      }
-    },
     apiCollectionButton: {
       root: {
         width: '100%',
@@ -41,13 +18,6 @@ export const resourceExplorerStyles = (theme: ITheme) => {
       },
       label: {
         marginLeft: '8px',
-        fontWeight: 'bold',
-        color: theme.palette.neutralPrimary,
-        fontSize: '14px'
-      }
-    },
-    apiCollectionLabel: {
-      root:{
         fontWeight: 'bold',
         color: theme.palette.neutralPrimary,
         fontSize: '14px'
