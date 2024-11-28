@@ -70,7 +70,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
-        const fileContent = e!.target!.result!;
+        const fileContent = e.target!.result!;
         try {
           const jsonData = JSON.parse(fileContent as string);
           const generatedCollection = generateResourcePathsFromPostmanCollection(jsonData);

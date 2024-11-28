@@ -84,7 +84,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           key={dropdownKey}
           placeholder={translateMessage('[Select one scope]')}
           options={scopeOptions.map(option =>
-            ({ key: option.key, text: formatScopeLabel(option.key as PERMS_SCOPE) }))}
+            ({ key: option.key, text: formatScopeLabel(option.key) }))}
           onChange={handleScopeChange}
           selectedKey={selectedScope}
           disabled={selectedItems.length === 0}
