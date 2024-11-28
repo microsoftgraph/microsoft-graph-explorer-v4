@@ -27,7 +27,7 @@ const scopeLabelClass = mergeStyles({
 });
 
 export default class Paths extends Component<IPathProps> {
-  private _selection: Selection | null = null;
+  readonly _selection: Selection | null = null;
 
   constructor(props: IPathProps) {
     super(props);
@@ -42,7 +42,7 @@ export default class Paths extends Component<IPathProps> {
     }
   }
 
-  private renderCustomCheckbox = (props: any): JSX.Element => {
+  readonly renderCustomCheckbox = (props: any): JSX.Element => {
     return (
       <div style={{ pointerEvents: 'none' }}>
         <Checkbox checked={props ? props.checked : false} />
@@ -50,12 +50,12 @@ export default class Paths extends Component<IPathProps> {
     );
   };
 
-  private renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
+  readonly renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
 
     if (column) {
       if (column.key === 'scope') {
         return <Label className={scopeLabelClass}>
-          {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key as PERMS_SCOPE)}
+          {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
         </Label>
       }
       return (
