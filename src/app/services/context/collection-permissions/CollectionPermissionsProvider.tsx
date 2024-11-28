@@ -59,28 +59,33 @@ const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) =>
   const [permissions, setPermissions] = useState<{ [key: string]: CollectionPermission[] } | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
   const [code, setCode] = useState('');
-  const valueObject = useMemo(() => ({ permissions, isFetching }), [permissions, isFetching]);
 
-  async function getPermissions(items: ResourcePath[]): Promise<void> {
+  const getPermissions = async (items: ResourcePath[]): Promise<void> => {
     const hashCode = window.btoa(JSON.stringify([...items]));
     if (hashCode !== code) {
       try {
         setIsFetching(true);
         const perms = await getCollectionPermissions(`${baseUrl}/permissions`, items);
         setPermissions(perms);
-        setIsFetching(false);
         setCode(hashCode);
       } catch (error) {
-        setIsFetching(false);
         setPermissions(undefined);
+      } finally {
+        setIsFetching(false);
       }
     }
-  }
+  };
+
+  const contextValue = useMemo(
+    () => ({ getPermissions, permissions, isFetching }),
+    [getPermissions, permissions, isFetching]
+  );
 
   return (
-    <CollectionPermissionsContext.Provider
-      value={{ getPermissions, ...valueObject }}>{children}</CollectionPermissionsContext.Provider>
+    <CollectionPermissionsContext.Provider value={contextValue}>
+      {children}
+    </CollectionPermissionsContext.Provider>
   );
-}
+};
 
-export default CollectionPermissionsProvider
+export default CollectionPermissionsProvider;
