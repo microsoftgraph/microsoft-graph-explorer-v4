@@ -31,11 +31,5 @@ export const REVOKING_PERMISSIONS_REQUIRED_SCOPES = 'DelegatedPermissionGrant.Re
 export const ADMIN_CONSENT_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/security-authorization#:~:text=If%20you%27re%20calling%20the%20Microsoft%20Graph%20Security%20API%20from%20Graph%20Explorer'
 // eslint-disable-next-line max-len
 export const CONSENT_TYPE_DOC_LINK = 'https://learn.microsoft.com/en-us/graph/api/resources/oauth2permissiongrant?view=graph-rest-1.0#:~:text=(eq%20only).-,consentType,-String'
-export const GRAPH_BETA_DESCRIPTION_URL =
-  'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/beta/openapi.yaml';
-export const GRAPH_V1_DESCRIPTION_URL =
-  'https://raw.githubusercontent.com/microsoftgraph/msgraph-metadata/master/openapi/v1.0/openapi.yaml';
-export const API_MANIFEST_SPEC_PAGE =
-  'https://darrelmiller.github.io/api-manifest/draft-miller-api-manifest.html#name-publisher-object';
 export const CURRENT_THEME='CURRENT_THEME';
 export const EXP_URL='https://default.exp-tas.com/exptas76/9b835cbf-9742-40db-84a7-7a323a77f3eb-gedev/api/v1/tas';

@@ -26,8 +26,6 @@ export const SIGN_IN_BUTTON = 'Sign in button';
 export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
 export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
 export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
-export const COPY_API_MANIFEST_BUTTON = 'Copy API manifest button';
-export const OPEN_MANIFEST_IN_VISUAL_STUDIO_CODE_BUTTON = 'Open manifest in Visual Studio Code button';
 export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
 
 // List items
@@ -111,5 +109,4 @@ export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
 export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';
-export const DOWNLOAD_API_MANIFEST_BUTTON = 'Download api manifest button';
 export const DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON = 'Download collection permissions button';
