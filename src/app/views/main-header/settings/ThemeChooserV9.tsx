@@ -1,4 +1,4 @@
-import { makeStyles, shorthands, RadioGroup, Radio} from '@fluentui/react-components';
+import { makeStyles, RadioGroup, Radio} from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { PopupsComponent } from '../../../services/context/popups-context';
@@ -29,14 +29,17 @@ const useIconOptionStyles = makeStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
-    ...shorthands.gap('5px')
+    gap: '5px'
+  },
+  icon: {
+    fontSize: '30px'
   }
 });
 
 const useLabelStyles = makeStyles({
   root: {
     display: 'flex',
-    ...shorthands.gap('5px')
+    gap: '5px'
   }
 });
 
@@ -70,7 +73,7 @@ const ThemeChooserV9: React.FC<PopupsComponent<null>> = () => {
               className: labelStyles.root,
               children: (
                 <>
-                  {theme.icon} {translateMessage(theme.displayName)}
+                  <span className={iconOptionStyles.icon}>{theme.icon}</span> {translateMessage(theme.displayName)}
                 </>
               )
             }}
