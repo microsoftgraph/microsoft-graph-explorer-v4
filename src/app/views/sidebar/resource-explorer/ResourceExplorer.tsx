@@ -1,8 +1,6 @@
 import {
   DefaultButton,
   INavLink, INavLinkGroup, Label,
-  MessageBar,
-  MessageBarType,
   Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle,
   useTheme} from '@fluentui/react';
 import debouce from 'lodash.debounce';
