@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { PopupsComponent } from '../../../services/context/popups-context';
 import { changeTheme } from '../../../services/slices/theme.slice';
+import { loadGETheme } from '../../../../themes';
 import { BrightnessHighRegular, WeatherMoonFilled, CircleHalfFillFilled } from '@fluentui/react-icons';
 
 const availableThemes = [
@@ -29,16 +30,10 @@ const ThemeChooserV9: React.FC<PopupsComponent<null>> = () => {
 
 
   const handleChangeTheme = (selectedTheme: { key: string; displayName: string; icon: JSX.Element }) => {
-    const newTheme: string = selectedTheme?.key ?? '';
+    const newTheme: string = selectedTheme.key;
     // Applies the theme to the Fluent UI components
-    switch (newTheme) {
-    case 'light':
-      return dispatch(changeTheme('light'));
-    case 'dark':
-      return dispatch(changeTheme('dark'));
-    case 'high-contrast':
-      return dispatch(changeTheme('high-contrast'));
-    }
+    dispatch(changeTheme(newTheme));
+    loadGETheme(newTheme); //Remove when cleaning up
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SELECT_THEME_BUTTON,
       SelectedTheme: newTheme.replace('-', ' ').toSentenceCase()
