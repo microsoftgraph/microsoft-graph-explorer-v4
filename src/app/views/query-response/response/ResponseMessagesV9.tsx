@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
+import { CustomBody } from '../../../../types/query-response';
 import { IQuery } from '../../../../types/query-runner';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constants';
@@ -65,12 +66,13 @@ export const ResponseMessagesV9 = () => {
   }
 
   // Display link to download file response
-  if (body?.contentDownloadUrl) {
+  const contentDownloadUrl = (body as CustomBody)?.contentDownloadUrl
+  if (contentDownloadUrl) {
     messageBars.push(
       <div key={'contentDownloadUrl'}>
         <MessageBar messageBarType={MessageBarType.warning}>
           {translateMessage('This response contains unviewable content')}
-          <Link href={body?.contentDownloadUrl} download underline>
+          <Link href={contentDownloadUrl} download underline>
             {translateMessage('Click to download file')}
           </Link>&nbsp;
         </MessageBar>
@@ -79,7 +81,8 @@ export const ResponseMessagesV9 = () => {
   }
 
   // Show CORS compliance message
-  if (body?.throwsCorsError) {
+  const throwsCorsError = (body as CustomBody)?.throwsCorsError
+  if (throwsCorsError) {
     messageBars.push(
       <div key={'throwsCorsError'}>
         <MessageBar messageBarType={MessageBarType.warning}>

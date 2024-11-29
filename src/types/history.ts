@@ -1,4 +1,5 @@
 import { ITheme } from '@fluentui/react';
+import { ContentType } from './enums';
 import { Header } from './query-runner';
 
 export interface IHistoryItem extends IHistory {
@@ -17,7 +18,7 @@ interface IHistory {
   duration: number;
   body?: string;
   category?: string;
-  responseHeaders: { [key: string]: string };
+  responseHeaders: Headers | Record<string, ContentType>;
 }
 
 export interface IHistoryProps {

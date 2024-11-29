@@ -82,7 +82,7 @@ const mockState: ApplicationState = {
     isLoadingData: false,
     response: {
       body: undefined,
-      headers: undefined
+      headers: {}
     }
   },
   snippets: {

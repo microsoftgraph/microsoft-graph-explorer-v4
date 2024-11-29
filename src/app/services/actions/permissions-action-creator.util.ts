@@ -235,16 +235,14 @@ export class RevokePermissionsUtil {
 
   private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
   (args?: any) => Promise<boolean>) {
-    const respHeaders: any = {};
     const response = await exponentialFetchRetry(() => makeGraphRequest(scopes)(query),
       8, 100, condition);
-    return parseResponse(response, respHeaders);
+    return parseResponse(response);
   }
 
   private static async makeGraphRequest(scopes: string[], query: IQuery) {
-    const respHeaders: any = {};
     const response = await makeGraphRequest(scopes)(query);
-    return parseResponse(response, respHeaders);
+    return parseResponse(response);
   }
 
   private trackRevokeConsentEvent = (status: string, permissionObject: any) => {

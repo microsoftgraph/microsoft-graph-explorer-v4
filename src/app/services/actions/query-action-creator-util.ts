@@ -11,6 +11,7 @@ import {
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ApplicationState } from '../../../store';
 import { ContentType } from '../../../types/enums';
+import { ResponseBody } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
@@ -146,32 +147,35 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: any) {
-  let contentType = null;
+export function getContentType(headers: Headers | Record<string, ContentType>): ContentType {
+  let contentType: ContentType = '' as unknown as ContentType;
 
   if (headers) {
-    let contentTypes = headers['content-type'];
+    let contentTypes: string | null = null;
     if (headers instanceof Headers) {
       contentTypes = headers.get('content-type');
+    } else {
+      contentTypes = headers['content-type'];
     }
     if (contentTypes) {
       /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
        * Take the first option after splitting since it is the only value useful in the description of the content
        */
       const splitContentTypes = contentTypes.split(';');
-      if (splitContentTypes.length > 0) {
-        contentType = splitContentTypes[0].toLowerCase();
-      }
+      contentType = (splitContentTypes.length > 0) ?
+        splitContentTypes[0].toLowerCase() as ContentType : contentTypes as ContentType;
     }
   }
   return contentType;
 }
 
-export function isFileResponse(headers: any) {
-  const contentDisposition = headers['content-disposition'];
+export function isFileResponse(headers: Headers | Record<string, ContentType>) {
+  const contentDisposition: string |  null = (headers instanceof Headers) ?
+    headers.get('content-disposition') : headers['content-disposition'];
+
   if (contentDisposition) {
     const directives = contentDisposition.split(';');
-    if (directives.contains('attachment')) {
+    if (directives.includes('attachment')) {
       return true;
     }
   }
@@ -191,19 +195,16 @@ export function isFileResponse(headers: any) {
   return false;
 }
 
-export async function generateResponseDownloadUrl(
-  response: Response,
-  respHeaders: any
-) {
+export async function generateResponseDownloadUrl(response: Response) {
   try {
-    const fileContents = await parseResponse(response, respHeaders);
-    const contentType = getContentType(respHeaders);
+    const fileContents = await parseResponse(response);
+    const contentType = getContentType(response.headers);
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
       return URL.createObjectURL(blob);
     }
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -211,20 +212,13 @@ export async function generateResponseDownloadUrl(
 async function tryParseJson(textValue: string) {
   try {
     return JSON.parse(textValue);
-  } catch (error) {
+  } catch {
     return textValue;
   }
 }
 
-export function parseResponse(
-  response: Response,
-  respHeaders: { [key: string]: string } = {}
-): Promise<any> {
+export const parseResponse = (response: Response): Promise<ResponseBody> => {
   if (response && response.headers) {
-    response.headers.forEach((val: string, key: string) => {
-      respHeaders[key] = val;
-    });
-
     const contentType = getContentType(response.headers);
     switch (contentType) {
     case ContentType.Json:

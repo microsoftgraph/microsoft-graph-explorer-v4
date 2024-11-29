@@ -6,7 +6,7 @@ import { formatXml } from '../../common/monaco/util/format-xml';
 interface ResponseDisplayProps {
   contentType: ContentType;
   body: string;
-  height: number;
+  height: string;
 }
 
 const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
@@ -14,10 +14,10 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
 
   switch (contentType) {
   case ContentType.XML:
-    return <MonacoV9 body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height.toString()} />;
+    return <MonacoV9 body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
 
   case ContentType.HTML:
-    return <MonacoV9 body={body} language={ContentType.HTML} readOnly={true} height={height.toString()} />;
+    return <MonacoV9 body={body} language={ContentType.HTML} readOnly={true} height={height} />;
 
   default:
     if (isImageResponse(contentType)) {
@@ -26,7 +26,7 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
         body={body}
         alt='profile image' />;
     }
-    return <MonacoV9 body={body} readOnly={true} language={ContentType.Json} height={height.toString()} />;
+    return <MonacoV9 body={body} readOnly={true} language={ContentType.Json} height={height} />;
   }
 }
 

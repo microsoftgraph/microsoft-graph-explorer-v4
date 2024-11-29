@@ -1,4 +1,4 @@
-import { Mode } from './enums';
+import { ContentType, Mode } from './enums';
 import { IQuery } from './query-runner';
 
 export interface IQueryResponseProps {
@@ -18,7 +18,14 @@ export interface IQueryResponseProps {
 export interface IGraphResponse {
   isLoadingData: boolean;
   response: {
-    body: any | undefined;
-    headers: { [key: string]: string } | undefined;
+    body: ResponseBody;
+    headers: Headers | Record<string, ContentType>;
   }
 }
+
+
+export interface CustomBody {
+  throwsCorsError: boolean,
+  contentDownloadUrl: string
+}
+export type ResponseBody = Partial<CustomBody> | Response | string | object | null | undefined;

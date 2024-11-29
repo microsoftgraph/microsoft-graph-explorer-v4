@@ -1,34 +1,35 @@
 
 
 import { useAppSelector } from '../../../../store';
+import { CustomBody, ResponseBody } from '../../../../types/query-response';
 import { getContentType } from '../../../services/actions/query-action-creator-util';
 import {
   convertVhToPx, getResponseEditorHeight,
   getResponseHeight
 } from '../../common/dimensions/dimensions-adjustment';
-import ResponseDisplay from './ResponseDisplay';
+import ResponseDisplayV9 from './ResponseDisplayV9';
 import { ResponseMessagesV9 } from './ResponseMessagesV9';
 
 const ResponseV9 = () => {
   const response = useAppSelector((state) => state.dimensions.response);
-  const body = useAppSelector((state) => state.graphResponse.response.body);
+  const body = useAppSelector<ResponseBody>((state) => state.graphResponse.response.body);
   const headers = useAppSelector((state) => state.graphResponse.response.headers);
   const responseAreaExpanded = useAppSelector((state) => state.responseAreaExpanded);
 
   const defaultHeight = convertVhToPx(getResponseHeight(response.height, responseAreaExpanded), 220);
   const monacoHeight = getResponseEditorHeight(150);
 
-  const contentDownloadUrl = body?.contentDownloadUrl;
-  const throwsCorsError = body?.throwsCorsError;
+  const contentDownloadUrl = (body as CustomBody)?.contentDownloadUrl;
+  const throwsCorsError = (body as CustomBody)?.throwsCorsError;
   const contentType = getContentType(headers);
 
   return (
-    <div style={{ display: 'block' }}>
+    <div>
       <ResponseMessagesV9 />
       {!contentDownloadUrl && !throwsCorsError && headers &&
-        <ResponseDisplay
+        <ResponseDisplayV9
           contentType={contentType}
-          body={body}
+          body={body as string}
           height={responseAreaExpanded ? defaultHeight : monacoHeight}
         />}
     </div>

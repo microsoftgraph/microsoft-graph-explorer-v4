@@ -8,7 +8,7 @@ import { historyCache } from '../../../modules/cache/history-utils';
 import { ApplicationState } from '../../../store';
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
-import { IGraphResponse } from '../../../types/query-response';
+import { IGraphResponse, ResponseBody } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
@@ -31,15 +31,15 @@ const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 
 interface Result {
-  body: any;
-  headers: { [key: string]: string };
+  body: ResponseBody;
+  headers: Headers | Record<string, ContentType>;
 }
 
 const initialState: IGraphResponse = {
   isLoadingData: false,
   response: {
     body: undefined,
-    headers: undefined
+    headers: {}
   }
 };
 
@@ -48,7 +48,7 @@ export const runQuery = createAsyncThunk(
   async (query: IQuery, { dispatch, getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const tokenPresent = !!state?.auth?.authToken?.token;
-    const respHeaders: { [key: string]: string } = {};
+    const respHeaders = {};
     const createdAt = new Date().toISOString();
 
     try {
@@ -56,12 +56,13 @@ export const runQuery = createAsyncThunk(
         ? await authenticatedRequest(query)
         : await anonymousRequest(query, getState);
 
-      const result: Result = await processResponse(response, respHeaders, dispatch, query);
+      const result: Result = await processResponse(response, dispatch, query);
 
       const duration = new Date().getTime() - new Date(createdAt).getTime();
       const status = generateStatus({ duration, response });
       dispatch(setQueryResponseStatus(status));
 
+      // TODO: fix this api args
       const historyItem = generateHistoryItem(status, respHeaders,
         query, createdAt, result, duration);
       dispatch(addHistoryItem(historyItem));
@@ -96,7 +97,7 @@ const querySlice = createSlice({
         state.isLoadingData = true;
         state.response = {
           body: undefined,
-          headers: undefined
+          headers: {}
         };
       })
       .addCase(runQuery.rejected, (state, action) => {
@@ -111,7 +112,7 @@ const querySlice = createSlice({
         state.isLoadingData = false;
         state.response = {
           body: undefined,
-          headers: undefined
+          headers: {}
         };
       })
       .addCase(runQuery.fulfilled, (state, action) => {
@@ -130,13 +131,12 @@ const querySlice = createSlice({
 export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
-async function processResponse(response: Response, respHeaders: { [key: string]: string },
-  dispatch: Function, query: IQuery): Promise<Result> {
-  let result = await parseResponse(response, respHeaders);
+async function processResponse(response: Response, dispatch: Function, query: IQuery): Promise<Result> {
+  let result = await parseResponse(response);
   if (response && response.ok) {
     CURRENT_RETRIES = 0;
-    if (isFileResponse(respHeaders)) {
-      const contentDownloadUrl = await generateResponseDownloadUrl(response, respHeaders);
+    if (isFileResponse(response.headers)) {
+      const contentDownloadUrl = await generateResponseDownloadUrl(response);
       if (contentDownloadUrl) {
         result = { contentDownloadUrl };
       }
@@ -151,7 +151,7 @@ async function processResponse(response: Response, respHeaders: { [key: string]:
     }
   }
 
-  return { body: result, headers: respHeaders };
+  return { body: result, headers: response.headers };
 }
 
 const generateStatus = ({ duration, response }: { duration: number; response: Response }): IStatus => {
@@ -192,23 +192,27 @@ async function runReAuthenticatedRequest(response: Response, query: IQuery): Pro
 
 function generateHistoryItem(
   status: IStatus,
-  respHeaders: { [key: string]: string },
+  respHeaders: Headers | Record<string, ContentType>,
   query: IQuery,
   createdAt: string,
   result: Result,
   duration: number
 ): IHistoryItem {
-  let response = { ...result };
-  const responseHeaders = { ...respHeaders };
-  const contentType = respHeaders['content-type'];
+  let response: Result = {body: {}, headers: {}};
+  let contentType_: ContentType = '' as ContentType;
+  if (respHeaders instanceof Headers) {
+    contentType_ = respHeaders.get('content-type') as ContentType;
+  } else {
+    contentType_ = respHeaders['content-type']
+  }
 
-  if (isImageResponse(contentType)) {
-    response = { ...response, body: 'Run the query to view the image' };
-    responseHeaders['content-type'] = ContentType.Json;
+  if (isImageResponse(contentType_)) {
+    response = { ...result, body: 'Run the query to view the image' };
+    Object.assign(respHeaders, {'content-type': ContentType.Json})
   }
 
   if (isFileResponse(respHeaders)) {
-    response = { ...response, body: 'Run the query to generate file download URL' };
+    response = { ...result, body: 'Run the query to generate file download URL' };
   }
 
   const historyItem: IHistoryItem = {
@@ -217,12 +221,12 @@ function generateHistoryItem(
     method: query.selectedVerb,
     headers: query.sampleHeaders,
     body: query.sampleBody,
-    responseHeaders,
+    responseHeaders: respHeaders,
     createdAt,
     status: status.status as number,
     statusText: status.statusText,
     duration,
-    result: response.body
+    result: response.body as object
   };
 
   historyCache.writeHistoryData(historyItem);
@@ -230,7 +234,7 @@ function generateHistoryItem(
 }
 
 async function handleError(error: Error, query: IQuery) {
-  let body = null;
+  let body: ResponseBody = {};
   const status: IStatus = {
     messageType: MessageBarType.error,
     ok: false,
