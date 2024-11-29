@@ -75,7 +75,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     Object.keys(permissions).forEach(key => {
       permissionsArray.push(...permissions[key]);
     });
-    groups = generateGroupsFromList(permissionsArray, 'scopeType')
+    groups = generateGroupsFromList(permissionsArray, 'scopeType');
   }
 
   return (
