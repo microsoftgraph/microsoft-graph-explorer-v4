@@ -37,13 +37,14 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     }
   ];
 
-  function downloadPermissions(): void {
+  const downloadPermissions = (): void => {
     const filename = 'collection-permissions.json';
     downloadToLocal(permissions, filename);
     trackDownload(filename, componentNames.DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON);
   }
 
-  function handleTelemetryClick(e: React.MouseEvent<HTMLElement | HTMLAnchorElement | HTMLButtonElement, MouseEvent>) {
+  const handleTelemetryClick =
+  (e: React.MouseEvent<HTMLElement | HTMLAnchorElement | HTMLButtonElement, MouseEvent>) => {
     telemetry.trackLinkClickEvent(
       (e.currentTarget as HTMLAnchorElement).href,
       componentNames.MICROSOFT_GRAPH_PERMISSIONS_REFERENCE_DOCS_LINK
