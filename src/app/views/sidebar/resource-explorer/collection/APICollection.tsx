@@ -69,7 +69,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = (e) => {
         const fileContent = e.target!.result!;
         try {
           const jsonData = JSON.parse(fileContent as string);
