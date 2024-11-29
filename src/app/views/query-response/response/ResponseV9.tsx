@@ -7,11 +7,11 @@ import {
   getResponseHeight
 } from '../../common/dimensions/dimensions-adjustment';
 import ResponseDisplay from './ResponseDisplay';
-import { ResponseMessages } from './ResponseMessages';
+import { ResponseMessagesV9 } from './ResponseMessagesV9';
 
-const Response = () => {
+const ResponseV9 = () => {
   const response = useAppSelector((state) => state.dimensions.response);
-  const body = useAppSelector<string|object>((state) => state.graphResponse.response.body);
+  const body = useAppSelector((state) => state.graphResponse.response.body);
   const headers = useAppSelector((state) => state.graphResponse.response.headers);
   const responseAreaExpanded = useAppSelector((state) => state.responseAreaExpanded);
 
@@ -24,7 +24,7 @@ const Response = () => {
 
   return (
     <div style={{ display: 'block' }}>
-      <ResponseMessages />
+      <ResponseMessagesV9 />
       {!contentDownloadUrl && !throwsCorsError && headers &&
         <ResponseDisplay
           contentType={contentType}
@@ -36,4 +36,4 @@ const Response = () => {
 
 };
 
-export default Response;
+export default ResponseV9;
