@@ -25,8 +25,8 @@ import { navStyles, resourceExplorerStyles } from './resources.styles';
 import { usePopups } from '../../../services/hooks/usePopups';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const resources = useAppSelector(state=>state.resources)
-  const collections = useAppSelector(state=>state.collections)
+  const { data, pending } = useAppSelector((state) => state.resources);
+  const { collections } = useAppSelector((state) => state.collections);
 
   const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
