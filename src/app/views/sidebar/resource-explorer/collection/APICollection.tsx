@@ -33,7 +33,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const [isDialogHidden, setIsDialogHidden] = useState(true);
   const [uploadedCollections, setUploadedCollections] = useState<ResourcePath[]>([]);
   const [fileInputKey, setFileInputKey] = useState(Date.now());
-  const[items, setItems] = useState<ResourcePath[]>([]);
+  const [items, setItems] = useState<ResourcePath[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
