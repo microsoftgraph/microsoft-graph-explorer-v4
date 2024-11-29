@@ -25,7 +25,9 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   const { collections } = useAppSelector(
     (state) => state.collections
   );
-  const paths = collections ? collections.find(k => k.isDefault)!.paths : [];
+  const defaultCollection = collections ? collections.find(k => k.isDefault) : null;
+  const paths = defaultCollection ? defaultCollection.paths : [];
+
 
   const columns = [
     {
