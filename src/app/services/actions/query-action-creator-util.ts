@@ -107,30 +107,30 @@ function createAuthenticatedRequest(
 
 export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
-    let response;
+    let response: ResponseBody;
 
     const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
     case 'GET':
-      response = await graphRequest.get();
+      response = await graphRequest.get() as ResponseBody;
       break;
     case 'POST':
-      response = await graphRequest.post(query.sampleBody);
+      response = await graphRequest.post(query.sampleBody) as ResponseBody;
       break;
     case 'PUT':
-      response = await graphRequest.put(query.sampleBody);
+      response = await graphRequest.put(query.sampleBody) as ResponseBody;
       break;
     case 'PATCH':
-      response = await graphRequest.patch(query.sampleBody);
+      response = await graphRequest.patch(query.sampleBody) as ResponseBody;
       break;
     case 'DELETE':
-      response = await graphRequest.delete();
+      response = await graphRequest.delete() as ResponseBody;
       break;
     default:
       return;
     }
-    return Promise.resolve(response);
+    return Promise.resolve(response) as ResponseBody;
   };
 }
 

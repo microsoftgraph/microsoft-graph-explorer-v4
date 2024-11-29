@@ -105,7 +105,7 @@ export async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
 
   const response = await makeGraphRequest(scopes)(query);
-  const userInfo = await parseResponse(response);
+  const userInfo = await parseResponse(response as Response);
   return {
     userInfo,
     response

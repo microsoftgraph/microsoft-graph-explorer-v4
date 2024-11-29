@@ -1,3 +1,4 @@
+import { Person, ResponseType, User } from '@microsoft/microsoft-graph-types';
 import { ContentType, Mode } from './enums';
 import { IQuery } from './query-runner';
 
@@ -23,9 +24,15 @@ export interface IGraphResponse {
   }
 }
 
+export interface ResponseValue {
+  id: string
+}
 
 export interface CustomBody {
   throwsCorsError: boolean,
-  contentDownloadUrl: string
+  contentDownloadUrl: string,
+  error: Error,
+  value: Partial<User & Person>[] | undefined
+
 }
 export type ResponseBody = Partial<CustomBody> | Response | string | object | null | undefined;

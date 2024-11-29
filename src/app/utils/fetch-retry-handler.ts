@@ -1,4 +1,4 @@
-export async function exponentialFetchRetry<T>( fn: () => Promise<any>, retriesLeft: number,
+export async function exponentialFetchRetry<T>( fn: () => Promise<T>, retriesLeft: number,
   interval: number, condition?: (result: T, retriesLeft?: number) => Promise<boolean>
 ): Promise<T> {
   try {
@@ -6,10 +6,10 @@ export async function exponentialFetchRetry<T>( fn: () => Promise<any>, retriesL
     if (condition) {
       const isConditionSatisfied = await condition(result, retriesLeft);
       if(isConditionSatisfied){
-        throw new Error('An error occured during the execution of the request');
+        throw new Error('An error occurred during the execution of the request');
       }
     }
-    if (result && result.status && result.status >= 500){
+    if (result && result instanceof Response && result.status && result.status >= 500){
       throw new Error('Encountered a server error during execution of the request');
     }
     return result;

@@ -48,23 +48,22 @@ export const runQuery = createAsyncThunk(
   async (query: IQuery, { dispatch, getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const tokenPresent = !!state?.auth?.authToken?.token;
-    const respHeaders = {};
     const createdAt = new Date().toISOString();
 
     try {
-      const response: Response = tokenPresent
+      const response: ResponseBody = tokenPresent
         ? await authenticatedRequest(query)
         : await anonymousRequest(query, getState);
+      const resp = response as Response;
+      const respHeaders = (resp).headers;
 
-      const result: Result = await processResponse(response, dispatch, query);
+      const result: Result = await processResponse(resp, dispatch, query);
 
       const duration = new Date().getTime() - new Date(createdAt).getTime();
-      const status = generateStatus({ duration, response });
+      const status = generateStatus({ duration, response: resp });
       dispatch(setQueryResponseStatus(status));
 
-      // TODO: fix this api args
-      const historyItem = generateHistoryItem(status, respHeaders,
-        query, createdAt, result, duration);
+      const historyItem = generateHistoryItem(status, respHeaders, query, createdAt, result, duration);
       dispatch(addHistoryItem(historyItem));
 
       return result;
