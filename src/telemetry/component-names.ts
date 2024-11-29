@@ -100,6 +100,7 @@ export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
 export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
 export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
+export const MICROSOFT_GRAPH_PERMISSIONS_REFERENCE_DOCS_LINK = 'Microsoft Graph permissions reference docs link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';

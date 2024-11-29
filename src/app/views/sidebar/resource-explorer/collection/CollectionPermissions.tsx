@@ -43,6 +43,13 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     trackDownload(filename, componentNames.DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON);
   }
 
+  function handleTelemetryClick(e: React.MouseEvent<HTMLElement | HTMLAnchorElement | HTMLButtonElement, MouseEvent>) {
+    telemetry.trackLinkClickEvent(
+      (e.currentTarget as HTMLAnchorElement).href,
+      componentNames.MICROSOFT_GRAPH_PERMISSIONS_REFERENCE_DOCS_LINK
+    );
+  }
+
   useEffect(() => {
     if (paths.length > 0) {
       getPermissions(paths)
@@ -87,8 +94,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         <Link
           target='_blank'
           rel="noopener noreferrer"
-          onClick={(e) => telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
-            componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK)}
+          onClick={handleTelemetryClick}
           href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
           underline
         >
