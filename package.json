@@ -100,7 +100,7 @@
                 "@types/react-dom": "18.2.19",
                 "@types/react-redux": "7.1.30",
                 "@types/redux-logger": "3.0.11",
-                "@types/redux-mock-store": "1.0.3",
+                "@types/redux-mock-store": "1.5.0",
                 "@types/selenium-webdriver": "4.1.27",
                 "@typescript-eslint/eslint-plugin": "8.14.0",
                 "@typescript-eslint/parser": "8.14.0",
@@ -119,7 +119,7 @@
                 "node-notifier": "10.0.1",
                 "react-dev-utils": "12.0.1",
                 "redux-logger": "3.0.6",
-                "redux-mock-store": "1.5.4",
+                "redux-mock-store": "1.5.5",
                 "selenium-webdriver": "4.26.0",
                 "start-server-and-test": "2.0.8",
                 "ts-jest": "29.2.5"
