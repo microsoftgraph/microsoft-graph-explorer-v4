@@ -1,14 +1,18 @@
-import { DismissRegular, OpenRegular } from '@fluentui/react-icons';
 import {
-    MessageBar,
-    MessageBarActions,
-    MessageBarTitle,
-    MessageBarBody,
-    Button,
-    Link
-  } from '@fluentui/react-components';
-import { useNotificationStyles } from './Notification.styles';
+  Button,
+  Link,
+  MessageBar,
+  MessageBarActions,
+  MessageBarBody,
+  MessageBarTitle
+} from '@fluentui/react-components';
+import { DismissRegular, OpenRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
+import { useAppSelector } from '../../../../store';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
+import { BANNER_IS_VISIBLE } from '../../../services/graph-constants';
+import { translateMessage } from '../../../utils/translate-messages';
+import { useNotificationStyles } from './Notification.styles';
 
 interface NotificationProps {
     header: string;
@@ -17,37 +21,51 @@ interface NotificationProps {
     linkText: string;
 }
 
-export const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
-    const styles = useNotificationStyles();
-    const [isVisible, setIsVisible] = useState(true);
+const handleOnClickLink = (e: React.MouseEvent<HTMLAnchorElement>)=>{
+  telemetry.trackLinkClickEvent(
+    (e.currentTarget as HTMLAnchorElement).href, componentNames.GRAPH_EXPLORER_TUTORIAL_LINK)
+}
 
-    const handleDismiss = () => {
-        // TODO: track as dismissed in telemetry
-        // TODO: don't show again. Persist choice to state
-        setIsVisible(false);
-    };
+const Notification: React.FunctionComponent<NotificationProps> = (props: NotificationProps) => {
+  const styles = useNotificationStyles();
+  const storageBanner = localStorage.getItem(BANNER_IS_VISIBLE);
+  const [isVisible, setIsVisible] = useState(storageBanner === null || storageBanner === 'true');
+  const theme = useAppSelector(s => s.theme);
 
-    if (!isVisible) {
-        return null;
-    }
+  const handleDismiss = () => {
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.NOTIFICATION_BANNER_DISMISS_BUTTON
+    });
+    localStorage.setItem(BANNER_IS_VISIBLE, 'false');
+    setIsVisible(false);
+  };
 
-    return (
-        <MessageBar className={styles.container} icon={''}>
-            <MessageBarBody>
-                <MessageBarTitle>{props.header}</MessageBarTitle><br></br>
-                {props.content}{' '}
-                <Link href={props.link} target='_blank'>{props.linkText} <OpenRegular /></Link>
-            </MessageBarBody>
-            <MessageBarActions
-            containerAction={
-                <Button
-                onClick={handleDismiss}
-                aria-label="dismiss"
-                appearance="transparent"
-                icon={<DismissRegular />}
-                />
-            }
-            />
-        </MessageBar>
-    );
+  if (!isVisible) {
+    return null;
+  }
+
+  return (
+    <MessageBar className={`${styles.container} ${theme}`} icon={''}>
+      <MessageBarBody className={styles.body}>
+        <MessageBarTitle>{props.header}</MessageBarTitle><br></br>
+        {props.content}{' '}
+        <Link
+          onClick={handleOnClickLink}
+          href={props.link}
+          target='_blank'>{props.linkText} <OpenRegular /></Link>
+      </MessageBarBody>
+      <MessageBarActions
+        containerAction={
+          <Button
+            onClick={handleDismiss}
+            aria-label={translateMessage('Dismiss banner')}
+            appearance="transparent"
+            icon={<DismissRegular />}
+          />
+        }
+      />
+    </MessageBar>
+  );
 };
+
+export default telemetry.trackReactComponent(Notification, componentNames.NOTIFICATION_COMPONENT)
