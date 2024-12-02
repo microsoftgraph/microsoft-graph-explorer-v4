@@ -1,17 +1,23 @@
 import { ContentType } from '../../../../types/enums';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
-import { Image, Monaco } from '../../common';
+import { Image, MonacoV9 } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
-const ResponseDisplay = (properties: any) => {
+interface ResponseDisplayProps {
+  contentType: string;
+  body: string;
+  height: string;
+}
+
+const ResponseDisplay = (properties: ResponseDisplayProps) => {
   const { contentType, body, height } = properties;
 
   switch (contentType) {
-  case ContentType.XML:
-    return <Monaco body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'application/xml':
+    return <MonacoV9 body={formatXml(body)} language={'application/xml'} readOnly={true} height={height} />;
 
-  case ContentType.HTML:
-    return <Monaco body={body} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'text/hmtl':
+    return <MonacoV9 body={body} language={'text/hmtl'} readOnly={true} height={height} />;
 
   default:
     if (isImageResponse(contentType)) {
@@ -20,7 +26,7 @@ const ResponseDisplay = (properties: any) => {
         body={body}
         alt='profile image' />;
     }
-    return <Monaco body={body} readOnly={true} language={ContentType.Json} height={height} />;
+    return <MonacoV9 body={body} readOnly={true} language={ContentType.Json} height={height} />;
   }
 }
 
