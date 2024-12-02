@@ -68,7 +68,6 @@ const ThemeChooserV9: React.FC<PopupsComponent<null>> = () => {
         <div key={theme.key} className={iconOptionStyles.root}>
           <Radio
             value={theme.key}
-            checked={appTheme === theme.key}
             label={{
               className: labelStyles.root,
               children: (
