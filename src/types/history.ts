@@ -1,5 +1,6 @@
 import { ITheme } from '@fluentui/react';
 import { Header } from './query-runner';
+import { IGraphResponseExtra } from './query-response';
 
 export interface IHistoryItem extends IHistory {
   index: number;
@@ -7,7 +8,7 @@ export interface IHistoryItem extends IHistory {
 
 interface IHistory {
   url: string;
-  result: object;
+  result: string | ReadableStream | IGraphResponseExtra;
   method: string;
   headers: Header[];
   createdAt: string;

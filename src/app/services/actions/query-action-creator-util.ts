@@ -45,7 +45,7 @@ export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRun
   }
 
   const authToken = `{token:${GRAPH_URL}/}`;
-  let headers = {
+  let headers: Record<string, string> = {
     Authorization: `Bearer ${authToken}`,
     'Content-Type': 'application/json',
     SdkVersion: 'GraphExplorer/4.0',
@@ -105,31 +105,21 @@ function createAuthenticatedRequest(
 }
 
 export function makeGraphRequest(scopes: string[]) {
-  return async (query: IQuery) => {
-    let response;
-
+  return async function (query: IQuery): Promise<Response> {
     const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
+    const method = query.selectedVerb.toUpperCase();
+    const body = query.sampleBody;
 
-    switch (query.selectedVerb) {
-    case 'GET':
-      response = await graphRequest.get();
-      break;
-    case 'POST':
-      response = await graphRequest.post(query.sampleBody);
-      break;
-    case 'PUT':
-      response = await graphRequest.put(query.sampleBody);
-      break;
-    case 'PATCH':
-      response = await graphRequest.patch(query.sampleBody);
-      break;
-    case 'DELETE':
-      response = await graphRequest.delete();
-      break;
-    default:
-      return;
-    }
-    return Promise.resolve(response);
+    const requestMethods: { [key: string]: () => Promise<Response> } = {
+      'GET': () => graphRequest.get() as Promise<Response>,
+      'POST': () => graphRequest.post(body) as Promise<Response>,
+      'PUT': () => graphRequest.put(body) as Promise<Response>,
+      'PATCH': () => graphRequest.patch(body) as Promise<Response>,
+      'DELETE': () => graphRequest.delete() as Promise<Response>
+    };
+
+    const response = requestMethods[method] ? await requestMethods[method]() : null;
+    return response as Response;
   };
 }
 
@@ -146,64 +136,46 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: any) {
-  let contentType = null;
-
-  if (headers) {
-    let contentTypes = headers['content-type'];
-    if (headers instanceof Headers) {
-      contentTypes = headers.get('content-type');
-    }
-    if (contentTypes) {
-      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
-       * Take the first option after splitting since it is the only value useful in the description of the content
-       */
-      const splitContentTypes = contentTypes.split(';');
-      if (splitContentTypes.length > 0) {
-        contentType = splitContentTypes[0].toLowerCase();
-      }
-    }
+export function getContentType(headers: Record<string, string>) {
+  let contentType = headers['content-type'] ?? ''
+  /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+   * Take the first option after splitting since it is the only value useful in the description of the content
+   */
+  const splitContentType = contentType.split(';');
+  if (splitContentType.length > 0) {
+    contentType = splitContentType[0].toLowerCase();
   }
   return contentType;
 }
 
-export function isFileResponse(headers: any) {
-  const contentDisposition = headers['content-disposition'];
+export function isFileResponse(headers: Record<string, string>) {
+  const contentDisposition = headers['content-disposition'] ?? ''
   if (contentDisposition) {
     const directives = contentDisposition.split(';');
-    if (directives.contains('attachment')) {
-      return true;
-    }
+    return directives.includes('attachment')
   }
-
   // use content type to determine if response is file
   const contentType = getContentType(headers);
-  if (contentType) {
-    return (
-      contentType === 'application/octet-stream' ||
+  return (
+    contentType === 'application/octet-stream' ||
       contentType === 'application/onenote' ||
       contentType === 'application/pdf' ||
       contentType.includes('application/vnd.') ||
       contentType.includes('video/') ||
       contentType.includes('audio/')
-    );
-  }
-  return false;
+  );
 }
 
 export async function generateResponseDownloadUrl(
   response: Response,
-  respHeaders: any
-) {
+  respHeaders: Record<string, string>
+): Promise<string | null> {
   try {
-    const fileContents = await parseResponse(response, respHeaders);
     const contentType = getContentType(respHeaders);
-    if (fileContents) {
-      const buffer = await response.arrayBuffer();
-      const blob = new Blob([buffer], { type: contentType });
-      return URL.createObjectURL(blob);
-    }
-  } catch (error) {
+    const buffer = await response.arrayBuffer();
+    const blob = new Blob([buffer], { type: contentType });
+    return URL.createObjectURL(blob);
+  } catch {
     return null;
   }
 }
@@ -211,35 +183,38 @@ export async function generateResponseDownloadUrl(
 async function tryParseJson(textValue: string) {
   try {
     return JSON.parse(textValue);
-  } catch (error) {
+  } catch {
     return textValue;
   }
 }
+/**
+ * Parses a response to a format that can be displayed in the UI0
+ * @param response
+ * @param respHeaders
+ * @returns
+ */
+export async function parseResponse(
+  response: Response, respHeaders: Record<string, string> = {}
+): Promise<string | ReadableStream | null> {
+  const contentType = getContentType(respHeaders);
 
-export function parseResponse(
-  response: Response,
-  respHeaders: { [key: string]: string } = {}
-): Promise<any> {
-  if (response && response.headers) {
-    response.headers.forEach((val: string, key: string) => {
-      respHeaders[key] = val;
-    });
-
-    const contentType = getContentType(response.headers);
-    switch (contentType) {
-    case ContentType.Json:
-      return response.text().then(tryParseJson);
-    case ContentType.XML:
-    case ContentType.HTML:
-    case ContentType.TextCsv:
-    case ContentType.TextPlain:
-      return response.text();
-
-    default:
-      return Promise.resolve(response);
-    }
+  if (contentType === ContentType.Json) {
+    const text = await response.text();
+    return tryParseJson(text);
   }
-  return Promise.resolve(response);
+
+  const textContentTypes = [
+    ContentType.XML,
+    ContentType.HTML,
+    ContentType.TextCsv,
+    ContentType.TextPlain
+  ];
+
+  if (textContentTypes.includes(contentType as ContentType)) {
+    return response.text();
+  }
+
+  return Promise.resolve(response.body);
 }
 
 /**

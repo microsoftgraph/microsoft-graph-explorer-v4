@@ -15,10 +15,21 @@ export interface IQueryResponseProps {
   mobileScreen: boolean;
 }
 
+
+export interface IGraphResponseExtra {
+  contentDownloadUrl: string;
+  throwsCorsError: boolean;
+}
+
 export interface IGraphResponse {
   isLoadingData: boolean;
   response: {
-    body: any | undefined;
-    headers: { [key: string]: string } | undefined;
+    body: string | ReadableStream | IGraphResponseExtra
+    headers: Record<string, string>;
   }
 }
+
+export const isIgraphExtra = (body: string | ReadableStream | IGraphResponseExtra): body is IGraphResponseExtra => {
+  return (body as IGraphResponseExtra).contentDownloadUrl !== undefined;
+}
+

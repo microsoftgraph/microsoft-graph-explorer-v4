@@ -14,7 +14,7 @@ import {
 } from '../../common/lazy-loader/component-registry';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
-import { Response, ResponseV9 } from '../response';
+import { ResponseV9 } from '../response';
 
 export const GetPivotItems = () => {
   const mode = useAppSelector((state)=> state.graphExplorerMode);

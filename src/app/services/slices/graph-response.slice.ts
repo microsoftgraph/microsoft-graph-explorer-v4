@@ -8,7 +8,7 @@ import { historyCache } from '../../../modules/cache/history-utils';
 import { ApplicationState } from '../../../store';
 import { ContentType } from '../../../types/enums';
 import { IHistoryItem } from '../../../types/history';
-import { IGraphResponse } from '../../../types/query-response';
+import { IGraphResponse, IGraphResponseExtra } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
@@ -30,16 +30,17 @@ import { setQueryResponseStatus } from './query-status.slice';
 const MAX_NUMBER_OF_RETRIES = 3;
 let CURRENT_RETRIES = 0;
 
+
 interface Result {
-  body: any;
-  headers: { [key: string]: string };
+  body: string | ReadableStream | IGraphResponseExtra;
+  headers: Record<string, string>;
 }
 
 const initialState: IGraphResponse = {
   isLoadingData: false,
   response: {
-    body: undefined,
-    headers: undefined
+    body: '',
+    headers: {}
   }
 };
 
@@ -48,7 +49,6 @@ export const runQuery = createAsyncThunk(
   async (query: IQuery, { dispatch, getState, rejectWithValue }) => {
     const state = getState() as ApplicationState;
     const tokenPresent = !!state?.auth?.authToken?.token;
-    const respHeaders: { [key: string]: string } = {};
     const createdAt = new Date().toISOString();
 
     try {
@@ -56,14 +56,24 @@ export const runQuery = createAsyncThunk(
         ? await authenticatedRequest(query)
         : await anonymousRequest(query, getState);
 
-      const result: Result = await processResponse(response, respHeaders, dispatch, query);
+      if (response && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
+        const successful = await runReAuthenticatedRequest(response, query);
+        if (successful) {
+          dispatch(runQuery(query));
+          return { body: null, headers: {} }; // returning an empty object for the original request
+        }
+      }
 
       const duration = new Date().getTime() - new Date(createdAt).getTime();
       const status = generateStatus({ duration, response });
       dispatch(setQueryResponseStatus(status));
 
-      const historyItem = generateHistoryItem(status, respHeaders,
-        query, createdAt, result, duration);
+      const respHeaders: Record<string, string> = {};
+      response.headers.forEach((header)=>{
+        respHeaders[header[0]] = header[1];
+      })
+      const result: Result = await processResponse(response, respHeaders);
+      const historyItem = generateHistoryItem(status, respHeaders, query, createdAt, result, duration);
       dispatch(addHistoryItem(historyItem));
 
       return result;
@@ -95,8 +105,8 @@ const querySlice = createSlice({
       .addCase(runQuery.pending, (state) => {
         state.isLoadingData = true;
         state.response = {
-          body: undefined,
-          headers: undefined
+          body: '',
+          headers: {}
         };
       })
       .addCase(runQuery.rejected, (state, action) => {
@@ -110,8 +120,8 @@ const querySlice = createSlice({
       .addCase(LOGOUT_SUCCESS, (state) => {
         state.isLoadingData = false;
         state.response = {
-          body: undefined,
-          headers: undefined
+          body: '',
+          headers: {}
         };
       })
       .addCase(runQuery.fulfilled, (state, action) => {
@@ -130,28 +140,20 @@ const querySlice = createSlice({
 export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
-async function processResponse(response: Response, respHeaders: { [key: string]: string },
-  dispatch: Function, query: IQuery): Promise<Result> {
-  let result = await parseResponse(response, respHeaders);
+async function processResponse(
+  response: Response, respHeaders: Record<string, string>): Promise<Result> {
   if (response && response.ok) {
     CURRENT_RETRIES = 0;
     if (isFileResponse(respHeaders)) {
       const contentDownloadUrl = await generateResponseDownloadUrl(response, respHeaders);
       if (contentDownloadUrl) {
-        result = { contentDownloadUrl };
+        return {body: {contentDownloadUrl, throwsCorsError: false}, headers: respHeaders};
       }
     }
   }
 
-  if (response && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
-    const successful = await runReAuthenticatedRequest(response, query);
-    if (successful) {
-      dispatch(runQuery(query));
-      return { body: null, headers: {} }; // returning an empty object for the original request
-    }
-  }
-
-  return { body: result, headers: respHeaders };
+  const result = await parseResponse(response, respHeaders);
+  return { body: result ?? '', headers: respHeaders };
 }
 
 const generateStatus = ({ duration, response }: { duration: number; response: Response }): IStatus => {

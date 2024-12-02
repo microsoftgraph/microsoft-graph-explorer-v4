@@ -9,6 +9,7 @@ import { MOZILLA_CORS_DOCUMENTATION_LINK } from '../../../services/graph-constan
 import { runQuery } from '../../../services/slices/graph-response.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../utils/translate-messages';
+import { isIgraphExtra } from '../../../../types/query-response';
 
 interface ODataLink {
   link: string;
@@ -65,7 +66,7 @@ export const ResponseMessagesV9 = () => {
   }
 
   // Display link to download file response
-  if (body?.contentDownloadUrl) {
+  if (isIgraphExtra(body) && body?.contentDownloadUrl) {
     messageBars.push(
       <div key={'contentDownloadUrl'}>
         <MessageBar messageBarType={MessageBarType.warning}>
@@ -79,7 +80,7 @@ export const ResponseMessagesV9 = () => {
   }
 
   // Show CORS compliance message
-  if (body?.throwsCorsError) {
+  if (isIgraphExtra(body) && body?.throwsCorsError) {
     messageBars.push(
       <div key={'throwsCorsError'}>
         <MessageBar messageBarType={MessageBarType.warning}>

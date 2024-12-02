@@ -1,11 +1,12 @@
 import { ContentType } from '../../../../types/enums';
+import { IGraphResponseExtra } from '../../../../types/query-response';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
 import { Image, MonacoV9 } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
 interface ResponseDisplayProps {
-  contentType: ContentType;
-  body: string;
+  contentType: string;
+  body: string | ReadableStream | IGraphResponseExtra;
   height: number;
 }
 
@@ -14,7 +15,8 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
 
   switch (contentType) {
   case ContentType.XML:
-    return <MonacoV9 body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height.toString()} />;
+    return <MonacoV9
+      body={formatXml(body as string)} language={ContentType.HTML} readOnly={true} height={height.toString()} />;
 
   case ContentType.HTML:
     return <MonacoV9 body={body} language={ContentType.HTML} readOnly={true} height={height.toString()} />;
