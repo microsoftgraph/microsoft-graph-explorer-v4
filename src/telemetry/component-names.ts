@@ -27,6 +27,7 @@ export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account but
 export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
 export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
+export const NOTIFICATION_BANNER_DISMISS_BUTTON = 'Notification banner dismiss button'
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -75,6 +76,7 @@ export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
+export const GRAPH_EXPLORER_TUTORIAL_LINK = 'Graph Explorer Tutorial Link';
 export const CODE_SNIPPET_LANGUAGES = {
   CSharp: {
     sdk: 'C# SDK link', doc: 'C# snippet docs link'
@@ -111,3 +113,6 @@ export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
 export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';
 export const DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON = 'Download collection permissions button';
+
+// Component names
+export const NOTIFICATION_COMPONENT = 'Notification'
