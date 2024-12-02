@@ -25,6 +25,7 @@ export const HELP_BUTTON = 'Help button';
 export const SIGN_IN_BUTTON = 'Sign in button';
 export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
 export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
+export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
 
 // List items
@@ -99,6 +100,7 @@ export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
 export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
 export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
+export const MICROSOFT_GRAPH_PERMISSIONS_REFERENCE_DOCS_LINK = 'Microsoft Graph permissions reference docs link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
@@ -108,3 +110,4 @@ export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
 export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';
+export const DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON = 'Download collection permissions button';
