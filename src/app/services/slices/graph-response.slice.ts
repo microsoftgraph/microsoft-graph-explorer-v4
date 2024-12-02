@@ -39,6 +39,7 @@ const initialState: IGraphResponse = {
   isLoadingData: false,
   response: {
     body: undefined,
+    
     headers: {}
   }
 };
@@ -55,7 +56,6 @@ export const runQuery = createAsyncThunk(
         ? await authenticatedRequest(query)
         : await anonymousRequest(query, getState);
       const resp = response as Response;
-      const respHeaders = (resp).headers;
 
       const result: Result = await processResponse(resp, dispatch, query);
 
@@ -63,7 +63,7 @@ export const runQuery = createAsyncThunk(
       const status = generateStatus({ duration, response: resp });
       dispatch(setQueryResponseStatus(status));
 
-      const historyItem = generateHistoryItem(status, respHeaders, query, createdAt, result, duration);
+      const historyItem = generateHistoryItem(status, {}, query, createdAt, result, duration);
       dispatch(addHistoryItem(historyItem));
 
       return result;
