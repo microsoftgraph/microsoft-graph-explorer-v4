@@ -485,7 +485,7 @@ class App extends Component<IAppProps, IAppState> {
                       <Notification
                         header={translateMessage('Banner notification 1 header')}
                         content={translateMessage('Banner notification 1 content')}
-                        link={translateMessage('Banner notificatication 1 link')}
+                        link={translateMessage('Banner notification 1 link')}
                         linkText={translateMessage('Banner notification 1 link text')}/>
                     </div>
                     <ValidationProvider>
