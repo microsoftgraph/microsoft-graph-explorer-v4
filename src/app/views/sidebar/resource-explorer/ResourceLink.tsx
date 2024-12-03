@@ -6,7 +6,7 @@ import { CSSProperties, useEffect } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { Collection, IResourceLink, ResourceOptions } from '../../../../types/resources';
+import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
