@@ -22,4 +22,7 @@
     "*.tsx": "$(capture).ts, $(capture).d.ts, $(capture).spec.tsx, $(capture).styles.ts",
     "package.json": "package-lock.json, .npmrc"
   },
+  "cSpell.words": [
+    "fluentui"
+  ],
 }

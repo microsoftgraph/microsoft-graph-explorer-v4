@@ -11,11 +11,12 @@ import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import DocumentationService from './documentation';
 import { styles } from './suffix.styles';
+import ShareButton from '../../share-query/ShareButton';
 
 const SuffixRenderer = () => {
-  const { sampleQuery, samples, resources } = useAppSelector(
-    (state) => state
-  );
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const samples = useAppSelector((state)=> state.samples);
+  const resources = useAppSelector((state)=> state.resources);
 
   const buttonId = getId('callout-button');
   const calloutProps = { gapSpace: 0 };
@@ -91,6 +92,7 @@ const SuffixRenderer = () => {
           disabled={!documentationLinkAvailable}
         />
       </TooltipHost>
+      <ShareButton />
     </>
   );
 }

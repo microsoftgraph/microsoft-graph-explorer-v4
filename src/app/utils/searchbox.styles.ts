@@ -1,6 +1,6 @@
 export const searchBoxStyles: any = () => ({
   root: {
-    width: '97%'
+    width: '100%'
   },
   field: [
     {

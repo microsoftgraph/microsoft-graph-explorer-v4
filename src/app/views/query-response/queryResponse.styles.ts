@@ -3,8 +3,9 @@ import { useAppSelector } from '../../../store';
 import { convertVhToPx, getResponseHeight } from '../common/dimensions/dimensions-adjustment';
 
 export const queryResponseStyles = (theme: ITheme) => {
-  const { dimensions: { response }, responseAreaExpanded} =
-    useAppSelector((state) => state);
+  const response = useAppSelector((state)=> state.dimensions.response);
+  const responseAreaExpanded = useAppSelector((state)=> state.responseAreaExpanded);
+
 
   const height = convertVhToPx(getResponseHeight( response.height, responseAreaExpanded), 220);
 

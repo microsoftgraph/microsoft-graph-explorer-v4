@@ -34,9 +34,11 @@ function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
 export const ResponseMessages = () => {
   const dispatch = useAppDispatch();
   const messageBars = [];
-
-  const { graphResponse: { response: { body, headers } }, sampleQuery, auth: { authToken }, graphExplorerMode
-  } = useAppSelector((state) => state);
+  const body = useAppSelector((state)=> state.graphResponse.response.body);
+  const headers = useAppSelector((state)=> state.graphResponse.response.headers);
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const authToken= useAppSelector((state)=> state.auth.authToken);
+  const graphExplorerMode = useAppSelector((state)=> state.graphExplorerMode);
   const [displayMessage, setDisplayMessage] = useState(true);
 
   const tokenPresent = !!authToken.token;

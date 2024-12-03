@@ -17,7 +17,7 @@ import Request from './request/Request';
 
 const QueryRunner = (props: any) => {
   const dispatch = useAppDispatch();
-  const { sampleQuery } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
   const [sampleBody, setSampleBody] = useState('');
 

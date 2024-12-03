@@ -20,7 +20,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
   const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
-  const { profile: { user } } = useAppSelector((state) => state);
+  const user = useAppSelector((state) => state.profile.user);
 
   function surveyActivated(launcher: any, surveyItem: any) {
     return surveyItem;

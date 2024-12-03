@@ -9,10 +9,10 @@ export function DialogWrapper(props: WrapperProps) {
 
   const getDialogType = () => {
     switch (popupsProps.settings.width) {
-      case 'md':
-        return DialogType.normal;
-      case 'lg':
-        return DialogType.largeHeader;
+    case 'md':
+      return DialogType.normal;
+    case 'lg':
+      return DialogType.largeHeader;
     }
     return DialogType.normal;
   }

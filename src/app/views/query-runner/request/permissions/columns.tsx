@@ -20,14 +20,14 @@ const trackLinkClickedEvent = (link: string, componentName: string) => {
 
 const openExternalWebsite = (url: string) => {
   switch (url) {
-    case 'Consent type':
-      window.open(CONSENT_TYPE_DOC_LINK, '_blank');
-      trackLinkClickedEvent(CONSENT_TYPE_DOC_LINK, componentNames.CONSENT_TYPE_DOC_LINK)
-      break;
-    case 'Admin consent required':
-      window.open(ADMIN_CONSENT_DOC_LINK, '_blank');
-      trackLinkClickedEvent(ADMIN_CONSENT_DOC_LINK, componentNames.ADMIN_CONSENT_DOC_LINK);
-      break;
+  case 'Consent type':
+    window.open(CONSENT_TYPE_DOC_LINK, '_blank');
+    trackLinkClickedEvent(CONSENT_TYPE_DOC_LINK, componentNames.CONSENT_TYPE_DOC_LINK)
+    break;
+  case 'Admin consent required':
+    window.open(ADMIN_CONSENT_DOC_LINK, '_blank');
+    trackLinkClickedEvent(ADMIN_CONSENT_DOC_LINK, componentNames.ADMIN_CONSENT_DOC_LINK);
+    break;
   }
 }
 

@@ -29,9 +29,9 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   let element: HTMLDivElement | null | undefined = null;
 
-  const { sampleQuery, autoComplete: { data: autoCompleteOptions, pending: autoCompletePending } } = useAppSelector(
-    (state) => state
-  );
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const autoCompleteOptions = useAppSelector((state)=> state.autoComplete.data);
+  const autoCompletePending = useAppSelector((state)=> state.autoComplete.pending);
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
@@ -100,39 +100,39 @@ const AutoComplete = (props: IAutoCompleteProps) => {
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     switch (event.keyCode) {
-      case KeyCodes.enter:
+    case KeyCodes.enter:
+      event.preventDefault();
+      handleEnterKeyPressed();
+      break;
+
+    case KeyCodes.tab:
+      if (shouldShowSuggestions) {
         event.preventDefault();
-        handleEnterKeyPressed();
-        break;
+        handleTabKeyPressed();
+      }
+      break;
 
-      case KeyCodes.tab:
-        if (shouldShowSuggestions) {
-          event.preventDefault();
-          handleTabKeyPressed();
-        }
-        break;
+    case KeyCodes.up:
+      event.preventDefault();
+      handleUpKeyPressed();
+      break;
 
-      case KeyCodes.up:
-        event.preventDefault();
-        handleUpKeyPressed();
-        break;
+    case KeyCodes.down:
+      event.preventDefault();
+      handleDownKeyPressed();
+      break;
 
-      case KeyCodes.down:
-        event.preventDefault();
-        handleDownKeyPressed();
-        break;
+    case KeyCodes.escape:
+      handleEscapeKeyPressed();
+      break;
 
-      case KeyCodes.escape:
-        handleEscapeKeyPressed();
-        break;
+    case KeyCodes.backspace:
+      setBackspacing(true);
+      break;
 
-      case KeyCodes.backspace:
-        setBackspacing(true);
-        break;
-
-      default:
-        setBackspacing(false);
-        break;
+    default:
+      setBackspacing(false);
+      break;
     }
   };
 
@@ -290,6 +290,14 @@ const AutoComplete = (props: IAutoCompleteProps) => {
     validation.validate(queryUrl);
     return validation.error;
   }
+  const [descriptionError, setDescriptionError] = useState('');
+
+  useEffect(()=>{
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setDescriptionError(errorMessage)
+    }
+  }, [getErrorMessage])
 
   return (
     <div onBlur={closeSuggestionDialog}>
@@ -310,7 +318,7 @@ const AutoComplete = (props: IAutoCompleteProps) => {
           ariaLabel={translateMessage('Query Sample Input')}
           role='textbox'
           onRenderDescription={handleRenderDescription}
-          description={getErrorMessage()}
+          description={descriptionError}
         />
       </div>
       {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&

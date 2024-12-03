@@ -9,8 +9,7 @@ import { appStyles } from '../App.styles';
 
 const StyledTermsOfUseMessage = () => {
 
-  const { termsOfUse } =
-    useAppSelector((state) => state);
+  const  termsOfUse = useAppSelector((state) => state.termsOfUse);
 
   const dispatch = useAppDispatch();
   if (termsOfUse) {

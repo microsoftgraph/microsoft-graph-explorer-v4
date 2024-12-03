@@ -29,9 +29,10 @@ registerIcons({
   }
 });
 export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: MainHeaderProps) => {
-  const { profile: { user }, graphExplorerMode, sidebarProperties } = useAppSelector(
-    (state) => state
-  );
+  const profile = useAppSelector((state)=> state.profile)
+  const user = profile.user;
+  const graphExplorerMode = useAppSelector((state)=> state.graphExplorerMode)
+  const sidebarProperties = useAppSelector((state)=> state.sidebarProperties)
 
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;

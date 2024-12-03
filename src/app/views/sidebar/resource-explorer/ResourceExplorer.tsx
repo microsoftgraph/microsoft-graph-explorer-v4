@@ -1,9 +1,8 @@
 import {
-  INavLink, INavLinkGroup, Label, Nav, SearchBox, Spinner, SpinnerSize,
-  Stack,
-  styled,
-  Toggle
-} from '@fluentui/react';
+  DefaultButton,
+  INavLink, INavLinkGroup, Label,
+  Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle,
+  useTheme} from '@fluentui/react';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -20,23 +19,20 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
-import { UploadPostmanCollection } from './collection/UploadCollection';
-import CommandOptions from './command-options/CommandOptions';
-import {
-  createResourcesList, getResourcePaths,
-  getUrlFromLink
-} from './resource-explorer.utils';
+import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles } from './resources.styles';
+import { navStyles, resourceExplorerStyles } from './resources.styles';
+import { usePopups } from '../../../services/hooks/usePopups';
 
 const UnstyledResourceExplorer = (props: any) => {
-  const { resources: { data, pending }, collections } = useAppSelector(
-    (state) => state
-  );
+  const { data, pending } = useAppSelector((state) => state.resources);
+  const { collections } = useAppSelector((state) => state.collections);
 
   const dispatch: AppDispatch = useAppDispatch();
   const classes = classNames(props);
-  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
+  const theme = useTheme();
+  const styles = resourceExplorerStyles(theme);
+  const selectedLinks = collections  && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -50,8 +46,8 @@ const UnstyledResourceExplorer = (props: any) => {
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = searchText ? searchResources(resourcesToUse!, searchText) : resourcesToUse!;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
-
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
+  const { show: previewCollection } = usePopups('preview-collection', 'panel');
 
   useEffect(() => {
     setItems(navigationGroup);
@@ -118,6 +114,15 @@ const UnstyledResourceExplorer = (props: any) => {
     });
   }
 
+  const openPreviewCollection = () => {
+    previewCollection({
+      settings: {
+        title: translateMessage('My API collection'),
+        width: 'xl'
+      }
+    })
+  }
+
   if (pending) {
     return (
       <Spinner
@@ -137,31 +142,35 @@ const UnstyledResourceExplorer = (props: any) => {
         onChange={debouncedSearch}
         styles={searchBoxStyles}
       />
-      <hr />
-      <Stack horizontal tokens={{ childrenGap: 13, padding: 10 }}>
-        <Toggle label={`${translateMessage('Switch to beta')}`}
-          onChange={changeVersion}
-          onText={translateMessage('On')}
-          offText={translateMessage('Off')}
-          inlineLabel
-          styles={{ text: { position: 'relative', top: '4px' } }}
-        />
-        < UploadPostmanCollection />
+      <DefaultButton onClick={openPreviewCollection}
+        iconProps={{iconName: 'AddBookmark'}}
+        ariaLabel={translateMessage('My API Collection')}
+        styles={styles.apiCollectionButton}
+        text={translateMessage('My API Collection')}
+      >
+        <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
+          <Stack.Item align='auto'>
+            <div style={styles.apiCollectionCount}>
+              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
+            </div>
+          </Stack.Item>
+        </Stack>
+      </DefaultButton>
+      <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
+        <Label styles={{ root: { position: 'relative'} }}>
+          {translateMessage('Resources available')}
+        </Label>
+        <Stack horizontal tokens={{ childrenGap: 10}}>
+          <Toggle
+            onChange={changeVersion}
+            inlineLabel
+            styles={{ root: { position: 'relative', top: '2px' } }}
+          />
+          <Label styles={{ root: { position: 'relative', top: '2px' } }} >
+            {translateMessage('Switch to beta')}
+          </Label>
+        </Stack>
       </Stack>
-
-      <Stack wrap tokens={{ childrenGap: 10, padding: 10 }}>
-        {selectedLinks && selectedLinks.length > 0 && <>
-          <Label>{translateMessage('Selected Resources')} ({selectedLinks.length})</Label>
-          <CommandOptions version={version} />
-        </>
-        }
-      </Stack>
-
-      {items[0].links.length > 0 && <Label styles={{ root: { position: 'relative', left: '10px' } }}>
-        {translateMessage('Resources available')}
-      </Label>
-      }
-
       {
         items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           (<Nav
@@ -180,7 +189,7 @@ const UnstyledResourceExplorer = (props: any) => {
             className={classes.queryList} />
           )
       }
-    </section >
+    </section>
   );
 }
 

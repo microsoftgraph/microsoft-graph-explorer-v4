@@ -8,7 +8,8 @@ import { useAppSelector } from '../../../store';
 
 export const FeedbackButton = () => {
   const [enableSurvey, setEnableSurvey] = useState(false);
-  const { profile: { user } } = useAppSelector((state) => state);
+  const user = useAppSelector((state) => state.profile.user)
+
   const currentTheme = getTheme();
   const feedbackIcon : IIconProps = {
     iconName : 'Feedback'
