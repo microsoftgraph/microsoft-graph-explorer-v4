@@ -461,8 +461,7 @@ const History = (props: any) => {
     }))
     dispatch(setQueryResponseStatus({
       duration,
-      messageType:
-        status < 300 ? MessageBarType.success : MessageBarType.error,
+      messageBarType: status < 300 ? 'success' : 'error',
       ok: status < 300,
       status,
       statusText

@@ -47,7 +47,7 @@ const Authentication = (props: any) => {
           ok: false,
           statusText: translateMessage('Authentication failed'),
           status: removeUnderScore(errorCode),
-          messageType: MessageBarType.error,
+          messageBarType: 'error',
           hint: getSignInAuthErrorHint(errorCode)
         })
       );

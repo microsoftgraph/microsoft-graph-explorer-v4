@@ -1,4 +1,4 @@
-import { MessageBar } from '@fluentui/react';
+import { MessageBar, MessageBarType } from '@fluentui/react';
 
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
@@ -21,9 +21,9 @@ const StatusMessages = () => {
   }
 
   if (queryRunnerStatus) {
-    const { messageType, statusText, status, duration, hint } = queryRunnerStatus;
+    const { statusText, status, duration, hint } = queryRunnerStatus;
 
-    return <MessageBar messageBarType={messageType}
+    return <MessageBar messageBarType={MessageBarType.info}
       isMultiline={true}
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
