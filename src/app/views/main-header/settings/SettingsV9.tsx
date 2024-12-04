@@ -28,7 +28,8 @@ const SettingsV9 = ()=>{
   const toggleThemeChooserDialogState = () => {
     showThemeChooser({
       settings: {
-        title: translateMessage('Change theme')
+        title: translateMessage('Change theme'),
+        width: 'xl'
       }
     });
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
