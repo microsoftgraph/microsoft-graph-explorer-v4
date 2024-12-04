@@ -15,7 +15,7 @@ import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 
 
   interface IRequestProps {
-    handleOnEditorChange: ()=> void
+    handleOnEditorChange: () => void
     sampleQuery: IQuery
   }
 

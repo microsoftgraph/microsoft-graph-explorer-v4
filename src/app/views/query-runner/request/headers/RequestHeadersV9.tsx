@@ -39,7 +39,8 @@ const useStyles = makeStyles({
 });
 
 const RequestHeaders = () => {
-  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const height = useAppSelector((state) => state.dimensions.request.height);
   const [header, setHeader] = useState<IHeader>({ name: '', value: '' });
   const [isUpdatingHeader, setIsUpdatingHeader] = useState(false);
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);

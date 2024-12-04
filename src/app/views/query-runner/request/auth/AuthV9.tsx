@@ -54,7 +54,9 @@ const useStyles = makeStyles({
 });
 
 export function Auth() {
-  const { auth: { authToken }, profile, dimensions: {request:{height}}} = useAppSelector((state) => state);
+  const profile = useAppSelector((state) => state.profile);
+  const height: string = useAppSelector((state) => state.dimensions.request.height);
+  const authToken = useAppSelector((state) => state.auth.authToken);
   const { user } = profile;
   const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
