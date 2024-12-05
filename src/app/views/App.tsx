@@ -26,8 +26,8 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { TermsOfUseMessage } from './app-sections';
-import { headerMessaging } from './app-sections/HeaderMessaging';
+import { TermsOfUseMessageV9 } from './app-sections';
+import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
@@ -466,7 +466,7 @@ class App extends Component<IAppProps, IAppState> {
                   </Resizable>
                 )}
                 {graphExplorerMode === Mode.TryIt &&
-                headerMessaging(query)}
+                headerMessagingV9(query)}
 
                 {displayContent && (
                   <Resizable
@@ -502,7 +502,7 @@ class App extends Component<IAppProps, IAppState> {
                 )}
               </div>
               <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                <TermsOfUseMessage />
+                <TermsOfUseMessageV9 />
               </div>
             </div>
             <PopupsWrapper />

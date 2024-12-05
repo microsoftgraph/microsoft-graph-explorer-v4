@@ -31,7 +31,7 @@ import {
 import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 // TODO: update these checks for @fluentui/react@9.0.0+
-import { MessageBarType } from '@fluentui/react';
+
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -404,7 +404,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
 
   const displayTipMessage = (query: ISampleQuery) => {
     dispatch(setQueryResponseStatus({
-      messageType: MessageBarType.warning,
+      messageBarType: 'warning',
       statusText: 'Tip',
       status: query.tip!
     }));

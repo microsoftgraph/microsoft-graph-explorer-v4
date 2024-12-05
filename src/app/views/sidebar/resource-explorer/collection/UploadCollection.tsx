@@ -1,6 +1,6 @@
 import {
   ActionButton, DefaultButton, Dialog, DialogFooter, DialogType, IIconProps,
-  Label, MessageBarType, PrimaryButton, getId
+  Label, PrimaryButton, getId
 } from '@fluentui/react';
 import { CSSProperties, useState } from 'react';
 import { generateResourcePathsFromPostmanCollection } from './postman.util';
@@ -52,7 +52,7 @@ export const UploadPostmanCollection = () => {
               status: translateMessage('Invalid file format'),
               statusText: translateMessage('Invalid file format'),
               ok: true,
-              messageType: MessageBarType.error
+              messageBarType: 'error'
             })
           )
         }
