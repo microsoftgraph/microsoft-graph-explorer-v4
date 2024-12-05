@@ -21,9 +21,11 @@ const StatusMessages = () => {
   }
 
   if (queryRunnerStatus) {
-    const { statusText, status, duration, hint } = queryRunnerStatus;
+    const { messageBarType, statusText, status, duration, hint } = queryRunnerStatus; // remove when cleaning up
 
-    return <MessageBar messageBarType={MessageBarType.info}
+    const messageBarTypeKey = messageBarType as keyof typeof MessageBarType;
+
+    return <MessageBar messageBarType={MessageBarType[messageBarTypeKey]}
       isMultiline={true}
       onDismiss={() => dispatch(clearQueryStatus())}
       dismissButtonAriaLabel='Close'
