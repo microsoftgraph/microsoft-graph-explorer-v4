@@ -9,8 +9,7 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import {
-  AdaptiveCards, GraphToolkit, ResponseHeaders,
-  Snippets
+  AdaptiveCards, GraphToolkit, ResponseHeadersV9, Snippets
 } from '../../common/lazy-loader/component-registry';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
@@ -87,7 +86,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
+      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeadersV9 /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
