@@ -12,6 +12,7 @@ import { IGraphResponse, ResponseBody } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
+import { getHeaders } from '../../utils/http-methods.utils';
 import { setStatusMessage } from '../../utils/status-message';
 import { translateMessage } from '../../utils/translate-messages';
 import {
@@ -32,14 +33,13 @@ let CURRENT_RETRIES = 0;
 
 interface Result {
   body: ResponseBody;
-  headers: Headers | Record<string, ContentType>;
+  headers: Record<string, string>;
 }
 
 const initialState: IGraphResponse = {
   isLoadingData: false,
   response: {
     body: undefined,
-    
     headers: {}
   }
 };
@@ -132,9 +132,10 @@ export default querySlice.reducer;
 
 async function processResponse(response: Response, dispatch: Function, query: IQuery): Promise<Result> {
   let result = await parseResponse(response);
+  const headers: Record<string, string> = getHeaders(response);
   if (response && response.ok) {
     CURRENT_RETRIES = 0;
-    if (isFileResponse(response.headers)) {
+    if (isFileResponse(headers)) {
       const contentDownloadUrl = await generateResponseDownloadUrl(response);
       if (contentDownloadUrl) {
         result = { contentDownloadUrl };
@@ -150,7 +151,7 @@ async function processResponse(response: Response, dispatch: Function, query: IQ
     }
   }
 
-  return { body: result, headers: response.headers };
+  return { body: result, headers };
 }
 
 const generateStatus = ({ duration, response }: { duration: number; response: Response }): IStatus => {
@@ -191,19 +192,14 @@ async function runReAuthenticatedRequest(response: Response, query: IQuery): Pro
 
 function generateHistoryItem(
   status: IStatus,
-  respHeaders: Headers | Record<string, ContentType>,
+  respHeaders: Record<string, string>,
   query: IQuery,
   createdAt: string,
   result: Result,
   duration: number
 ): IHistoryItem {
   let response: Result = {body: {}, headers: {}};
-  let contentType_: ContentType = '' as ContentType;
-  if (respHeaders instanceof Headers) {
-    contentType_ = respHeaders.get('content-type') as ContentType;
-  } else {
-    contentType_ = respHeaders['content-type']
-  }
+  const contentType_ = respHeaders['content-type'];
 
   if (isImageResponse(contentType_)) {
     response = { ...result, body: 'Run the query to view the image' };

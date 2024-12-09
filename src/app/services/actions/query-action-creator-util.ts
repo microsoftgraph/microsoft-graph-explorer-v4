@@ -16,6 +16,7 @@ import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
+import { getHeaders } from '../../utils/http-methods.utils';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
@@ -147,7 +148,7 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: Headers | Record<string, ContentType>): ContentType {
+export function getContentType(headers: Record<string, string>): ContentType {
   let contentType: ContentType = '' as unknown as ContentType;
 
   if (headers) {
@@ -169,7 +170,7 @@ export function getContentType(headers: Headers | Record<string, ContentType>): 
   return contentType;
 }
 
-export function isFileResponse(headers: Headers | Record<string, ContentType>) {
+export function isFileResponse(headers: Record<string, string>) {
   const contentDisposition: string |  null = (headers instanceof Headers) ?
     headers.get('content-disposition') : headers['content-disposition'];
 
@@ -196,9 +197,10 @@ export function isFileResponse(headers: Headers | Record<string, ContentType>) {
 }
 
 export async function generateResponseDownloadUrl(response: Response) {
+  const headers = getHeaders(response)
   try {
     const fileContents = await parseResponse(response);
-    const contentType = getContentType(response.headers);
+    const contentType = getContentType(headers);
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
@@ -219,7 +221,8 @@ async function tryParseJson(textValue: string) {
 
 export const parseResponse = (response: Response): Promise<ResponseBody> => {
   if (response && response.headers) {
-    const contentType = getContentType(response.headers);
+    const headers = getHeaders(response)
+    const contentType = getContentType(headers);
     switch (contentType) {
     case ContentType.Json:
       return response.text().then(tryParseJson);

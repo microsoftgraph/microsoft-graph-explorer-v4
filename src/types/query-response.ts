@@ -20,7 +20,7 @@ export interface IGraphResponse {
   isLoadingData: boolean;
   response: {
     body: ResponseBody;
-    headers: Headers | Record<string, ContentType>;
+    headers: Record<string, string>;
   }
 }
 

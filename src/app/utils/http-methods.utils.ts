@@ -24,3 +24,14 @@ export function getStyleFor(method: string) {
     return currentTheme.palette.orangeLight;
   }
 }
+
+export function getHeaders(response: Response) {
+  const headers: Record<string, string> = {};
+  for (const entry of response.headers.entries()) {
+    if (Object.prototype.hasOwnProperty.call(response.headers, entry[0])) {
+      headers[entry[0]] = entry[1];
+    }
+  }
+  return headers;
+}
+
