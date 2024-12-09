@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.4.1...v10.5.0) (2024-12-02)
+
+
+### Features
+
+* add a notification banner to display for first time users ([#3396](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3396)) ([79e3b85](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/79e3b85083d305cbe2b8f851c48b3069aa180bdb))
+* API Permissions and Collections redesign ([#3391](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3391)) ([d239f8f](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d239f8fd53c2a937ef5d4c15a8e0ffd505c664f1))
+
+
+### Bug Fixes
+
+* select only the required values from state and useEffect to get description error message ([#3395](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3395)) ([9141255](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/914125564325f74f5e739835cfdf4afb353188fd))
+
 ## [10.4.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.4.0...v10.4.1) (2024-10-07)
 
 

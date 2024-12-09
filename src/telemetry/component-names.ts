@@ -25,7 +25,9 @@ export const HELP_BUTTON = 'Help button';
 export const SIGN_IN_BUTTON = 'Sign in button';
 export const SIGN_IN_WITH_OTHER_ACCOUNT_BUTTON = 'Sign in with other account button';
 export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions button'
+export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
+export const NOTIFICATION_BANNER_DISMISS_BUTTON = 'Notification banner dismiss button'
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -74,6 +76,7 @@ export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
+export const GRAPH_EXPLORER_TUTORIAL_LINK = 'Graph Explorer Tutorial Link';
 export const CODE_SNIPPET_LANGUAGES = {
   CSharp: {
     sdk: 'C# SDK link', doc: 'C# snippet docs link'
@@ -99,6 +102,7 @@ export const GITHUB_LINK = 'Github link';
 export const GRAPH_DOCUMENTATION_LINK = 'Graph documentation link'
 export const CONSENT_TYPE_DOC_LINK = 'Consent type doc link';
 export const ADMIN_CONSENT_DOC_LINK = 'Admin consent doc link';
+export const MICROSOFT_GRAPH_PERMISSIONS_REFERENCE_DOCS_LINK = 'Microsoft Graph permissions reference docs link';
 
 // Actions
 export const GET_SNIPPET_ACTION = 'Get snippet action';
@@ -108,3 +112,7 @@ export const GET_ADAPTIVE_CARD_ACTION = 'Get adaptive card action';
 export const FETCH_PERMISSIONS_ACTION = 'Fetch permissions action';
 export const MONACO_EDITOR_FORMAT_JSON_ACTION = 'Monaco editor format JSON action';
 export const LAUNCH_FEEDBACK_POPUP_ACTION = 'Launch feedback popup action';
+export const DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON = 'Download collection permissions button';
+
+// Component names
+export const NOTIFICATION_COMPONENT = 'Notification'

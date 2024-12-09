@@ -9,9 +9,15 @@ import {
 } from '@microsoft/applicationinsights-web';
 import { ComponentType } from 'react';
 
-import '../app/utils/string-operations';
+import variantService from '../app/services/variant-service';
+import {
+  getBrowserScreenSize,
+  getDeviceScreenScale
+} from '../app/utils/device-characteristics-telemetry';
 import { validateExternalLink } from '../app/utils/external-link-validation';
 import { sanitizeQueryUrl } from '../app/utils/query-url-sanitization';
+import '../app/utils/string-operations';
+import { getVersion } from '../app/utils/version';
 import { IQuery } from '../types/query-runner';
 import {
   BUTTON_CLICK_EVENT,
@@ -22,22 +28,16 @@ import {
 import {
   addCommonTelemetryItemProperties,
   filterRemoteDependencyData,
+  filterResizeObserverExceptions,
   filterTelemetryTypes,
-  sanitizeTelemetryItemUriProperty,
-  filterResizeObserverExceptions
+  sanitizeTelemetryItemUriProperty
 } from './filters';
 import ITelemetry from './ITelemetry';
-import { getVersion } from '../app/utils/version';
-import {
-  getBrowserScreenSize,
-  getDeviceScreenScale
-} from '../app/utils/device-characteristics-telemetry';
-import variantService from '../app/services/variant-service';
 
 class Telemetry implements ITelemetry {
   private appInsights: ApplicationInsights;
   private config: any;
-  private reactPlugin: any;
+  private reactPlugin: ReactPlugin;
 
   constructor() {
     this.reactPlugin = new ReactPlugin();
@@ -81,10 +81,10 @@ class Telemetry implements ITelemetry {
     this.appInsights.trackException({ error, severityLevel, properties });
   }
 
-  public trackReactComponent(
-    ComponentToTrack: ComponentType,
+  public trackReactComponent<T>(
+    ComponentToTrack: ComponentType<T>,
     componentName?: string
-  ): ComponentType {
+  ): ComponentType<T> {
     return withAITracking(this.reactPlugin, ComponentToTrack, componentName);
   }
 
@@ -136,7 +136,7 @@ class Telemetry implements ITelemetry {
     };
   }
 
-  private getInstrumentationKey() {
+  private getInstrumentationKey(): string {
     return (
       (window as any).InstrumentationKey ||
       process.env.REACT_APP_INSTRUMENTATION_KEY ||

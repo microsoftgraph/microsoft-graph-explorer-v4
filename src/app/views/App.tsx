@@ -1,10 +1,10 @@
-import { getTheme, ITheme, styled } from '@fluentui/react';
+import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
+import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { ApplicationState } from '../../store';
@@ -15,6 +15,7 @@ import { Mode } from '../../types/enums';
 import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
+import CollectionPermissionsProvider from '../services/context/collection-permissions/CollectionPermissionsProvider';
 import { PopupsProvider } from '../services/context/popups-context';
 import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
@@ -26,12 +27,13 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { TermsOfUseMessage } from './app-sections';
+import { translateMessage } from '../utils/translate-messages';
+import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { headerMessaging } from './app-sections/HeaderMessaging';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
+import Notification from './common/banners/Notification';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
-import { StatusMessages } from './common/lazy-loader/component-registry';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
 // import { MainHeader } from './main-header/MainHeader';
@@ -46,6 +48,7 @@ export interface IAppProps {
   styles?: object;
   appTheme: string;
   profile: object;
+  appTheme: string;
   graphExplorerMode: Mode;
   sidebarProperties: ISidebarProps;
   sampleQuery: IQuery;
@@ -485,6 +488,13 @@ class App extends Component<IAppProps, IAppState> {
                       display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                     }}
                   >
+                    <div className='ms-Grid-row'>
+                      <Notification
+                        header={translateMessage('Banner notification 1 header')}
+                        content={translateMessage('Banner notification 1 content')}
+                        link={translateMessage('Banner notification 1 link')}
+                        linkText={translateMessage('Banner notification 1 link text')}/>
+                    </div>
                     <ValidationProvider>
                       <div style={{ marginBottom: 2 }} >
                         <QueryRunner onSelectVerb={this.handleSelectVerb} />
@@ -505,7 +515,9 @@ class App extends Component<IAppProps, IAppState> {
                 <TermsOfUseMessage />
               </div>
             </div>
-            <PopupsWrapper />
+            <CollectionPermissionsProvider>
+              <PopupsWrapper />
+            </CollectionPermissionsProvider>
           </PopupsProvider>
         </ThemeContext.Provider>
       </FluentProvider>
