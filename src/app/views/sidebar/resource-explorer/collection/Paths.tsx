@@ -1,32 +1,63 @@
-import { Component } from 'react';
+import { Checkbox, Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
 import {
   DetailsList, DetailsListLayoutMode,
   IColumn, Selection
 } from '@fluentui/react/lib/DetailsList';
-import { getId, MarqueeSelection, TooltipHost } from '@fluentui/react';
+import { Component } from 'react';
+
 import { ResourcePath } from '../../../../../types/resources';
+import { formatScopeLabel, scopeOptions } from './collection.util';
+import { PERMS_SCOPE } from '../../../../services/graph-constants';
 
 interface IPathProps {
   resources: ResourcePath[];
   columns: IColumn[];
-  selectItems: Function;
+  isSelectable?: boolean;
+  onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
+
+const scopeLabelClass = mergeStyles({
+  backgroundColor: '#616161',
+  color: 'white',
+  padding: '4px 12px',
+  borderRadius: '16px',
+  fontSize: '12px',
+  display: 'inline-block',
+  textAlign: 'center'
+});
+
 export default class Paths extends Component<IPathProps> {
-  private _selection: Selection;
+  readonly _selection: Selection | null = null;
 
   constructor(props: IPathProps) {
     super(props);
 
-    this._selection = new Selection({
-      onSelectionChanged: () => {
-        const selected = this._selection.getSelection();
-        this.props.selectItems(selected);
-      }
-    });
+    if(props.isSelectable) {
+      this._selection = new Selection({
+        onSelectionChanged: () => {
+          const selected = this._selection!.getSelection() as ResourcePath[];
+          props.onSelectionChange && props.onSelectionChange(selected);
+        }
+      });
+    }
   }
-  private renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
+
+  readonly renderCustomCheckbox = (props: any): JSX.Element => {
+    return (
+      <div style={{ pointerEvents: 'none' }}>
+        <Checkbox checked={props ? props.checked : false} />
+      </div>
+    );
+  };
+
+  readonly renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
+
     if (column) {
-      const itemContent = item[column.fieldName as keyof any] as string;
+      if (column.key === 'scope') {
+        return <Label className={scopeLabelClass}>
+          {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
+        </Label>
+      }
       return (
         <TooltipHost
           tooltipProps={{
@@ -46,31 +77,29 @@ export default class Paths extends Component<IPathProps> {
           >
             {item.method}
           </span>
-          {`/${item.version}${itemContent}`}
+          {`/${item.version}${item.url}`}
         </TooltipHost>
       );
     }
   }
 
-
   public render(): JSX.Element {
-    const { resources, columns } = this.props;
-
+    const { resources, columns, isSelectable } = this.props;
     return (
-      <MarqueeSelection selection={this._selection}>
+      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
         <DetailsList
           items={resources}
           columns={columns}
           setKey='set'
           onRenderItemColumn={this.renderItemColumn}
           layoutMode={DetailsListLayoutMode.justified}
-          selection={this._selection}
-          selectionPreservedOnEmptyClick={true}
-          ariaLabelForSelectionColumn='Toggle selection'
-          ariaLabelForSelectAllCheckbox='Toggle selection for all items'
-          checkButtonAriaLabel='select row'
+          selection={isSelectable ? this._selection! : undefined}
+          selectionMode={isSelectable ? 2 : 0}
+          onShouldVirtualize={() => false}
+          checkboxVisibility={isSelectable ? 1 : 0}
+          onRenderCheckbox={this.renderCustomCheckbox}
         />
-      </MarqueeSelection>
+      </div>
     );
   }
 }

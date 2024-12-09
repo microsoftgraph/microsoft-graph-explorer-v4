@@ -56,3 +56,4 @@ export const REVOKE_SCOPES_PENDING = 'auth/revokeScopes/pending';
 export const REVOKE_SCOPES_SUCCESS = 'auth/revokeScopes/fulfilled';
 export const REVOKE_SCOPES_ERROR = 'auth/revokeScopes/rejected';
 export const COLLECTION_CREATE_SUCCESS = 'collections/createCollection';
+export const SET_BANNER_STATE = 'banner/setBannerState';

@@ -124,7 +124,10 @@ const mockState: ApplicationState = {
     permissions: [],
     error: null
   },
-  collections: [],
+  collections: {
+    collections: [],
+    saved: false
+  },
   proxyUrl: ''
 }
 const currentState = store.getState();
