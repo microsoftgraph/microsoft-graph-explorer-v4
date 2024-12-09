@@ -10,7 +10,6 @@ import {
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ApplicationState } from '../../../store';
-import { ContentType } from '../../../types/enums';
 import { ResponseBody } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
@@ -38,7 +37,7 @@ export async function anonymousRequest(
 export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
-  const sampleHeaders: any = {};
+  const sampleHeaders: Record<string, string> = {};
 
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
@@ -148,26 +147,17 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: Record<string, string>): ContentType {
-  let contentType: ContentType = '' as unknown as ContentType;
-
-  if (headers) {
-    let contentTypes: string | null = null;
-    if (headers instanceof Headers) {
-      contentTypes = headers.get('content-type');
-    } else {
-      contentTypes = headers['content-type'];
-    }
-    if (contentTypes) {
-      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
-       * Take the first option after splitting since it is the only value useful in the description of the content
-       */
-      const splitContentTypes = contentTypes.split(';');
-      contentType = (splitContentTypes.length > 0) ?
-        splitContentTypes[0].toLowerCase() as ContentType : contentTypes as ContentType;
-    }
+export function getContentType(headers: Record<string, string>): string {
+  const contentTypeHeader = Object.keys(headers).find(header => header.toLowerCase() === 'content-type');
+  let contentType = contentTypeHeader ? headers[contentTypeHeader] : '';
+  /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+   * Take the first option after splitting since it is the only value useful in the description of the content
+  */
+  if (contentType) {
+    const splitContentTypes = contentType.split(';');
+    contentType = (splitContentTypes.length > 0) ? splitContentTypes[0].toLowerCase() : contentType;
   }
-  return contentType;
+  return contentType.toLowerCase();
 }
 
 export function isFileResponse(headers: Record<string, string>) {
@@ -219,23 +209,27 @@ async function tryParseJson(textValue: string) {
   }
 }
 
-export const parseResponse = (response: Response): Promise<ResponseBody> => {
-  if (response && response.headers) {
+export const parseResponse = (response: ResponseBody): Promise<ResponseBody> => {
+  if (response instanceof Response && response.headers) {
     const headers = getHeaders(response)
     const contentType = getContentType(headers);
     switch (contentType) {
-    case ContentType.Json:
+    case 'application/json':
       return response.text().then(tryParseJson);
-    case ContentType.XML:
-    case ContentType.HTML:
-    case ContentType.TextCsv:
-    case ContentType.TextPlain:
+    case 'application/xml':
+    case 'text/html':
+    case 'text/csv':
+    case 'text/plain':
       return response.text();
 
     default:
+      console.log('what default response', contentType, response.headers.get('Content-Type'), response.headers.entries())
+      console.log(response)
       return Promise.resolve(response);
     }
   }
+  console.log('what response')
+  console.log(response)
   return Promise.resolve(response);
 }
 

@@ -35,4 +35,4 @@ export interface CustomBody {
   value: Partial<User & Person>[] | undefined
 
 }
-export type ResponseBody = Partial<CustomBody> | Response | string | object | null | undefined;
+export type ResponseBody = Partial<CustomBody> | string | object | null | undefined;

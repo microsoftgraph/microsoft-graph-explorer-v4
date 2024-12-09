@@ -1,6 +1,6 @@
 import { BrowserAuthError } from '@azure/msal-browser';
 import { MessageBarType } from '@fluentui/react';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
@@ -55,12 +55,11 @@ export const runQuery = createAsyncThunk(
       const response: ResponseBody = tokenPresent
         ? await authenticatedRequest(query)
         : await anonymousRequest(query, getState);
-      const resp = response as Response;
 
-      const result: Result = await processResponse(resp, dispatch, query);
+      const result: Result = await processResponse(response, dispatch, query);
 
       const duration = new Date().getTime() - new Date(createdAt).getTime();
-      const status = generateStatus({ duration, response: resp });
+      const status = generateStatus({ duration, response });
       dispatch(setQueryResponseStatus(status));
 
       const historyItem = generateHistoryItem(status, {}, query, createdAt, result, duration);
@@ -130,10 +129,11 @@ const querySlice = createSlice({
 export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
-async function processResponse(response: Response, dispatch: Function, query: IQuery): Promise<Result> {
+async function processResponse(
+  response: ResponseBody, dispatch: ThunkDispatch<unknown, unknown, UnknownAction>, query: IQuery): Promise<Result> {
   let result = await parseResponse(response);
   const headers: Record<string, string> = getHeaders(response);
-  if (response && response.ok) {
+  if (response instanceof Response && response.ok) {
     CURRENT_RETRIES = 0;
     if (isFileResponse(headers)) {
       const contentDownloadUrl = await generateResponseDownloadUrl(response);
@@ -143,7 +143,7 @@ async function processResponse(response: Response, dispatch: Function, query: IQ
     }
   }
 
-  if (response && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
+  if (response instanceof Response  && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
     const successful = await runReAuthenticatedRequest(response, query);
     if (successful) {
       dispatch(runQuery(query));
@@ -154,25 +154,31 @@ async function processResponse(response: Response, dispatch: Function, query: IQ
   return { body: result, headers };
 }
 
-const generateStatus = ({ duration, response }: { duration: number; response: Response }): IStatus => {
+interface Status {
+  duration: number
+  response: ResponseBody
+}
+
+const generateStatus = (statusValues: Status): IStatus => {
+  const {duration, response} = statusValues;
   const status: IStatus = {
     messageType: MessageBarType.error,
     ok: false,
     duration,
-    status: response.status || 400,
+    status: 400,
     statusText: ''
-  };
-
-  if (response) {
-    status.status = response.status;
-    status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
   }
+  if(response instanceof Response) {
+    if (response) {
+      status.status = response.status;
+      status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
+    }
 
-  if (response && response.ok) {
-    CURRENT_RETRIES = 0;
-    status.ok = true;
-    status.messageType = MessageBarType.success;
-  }
+    if (response && response.ok) {
+      CURRENT_RETRIES = 0;
+      status.ok = true;
+      status.messageType = MessageBarType.success;
+    }}
   return status;
 }
 

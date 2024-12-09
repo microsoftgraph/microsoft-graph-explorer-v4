@@ -4,7 +4,7 @@ import { Image, MonacoV9 } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
 interface ResponseDisplayProps {
-  contentType: ContentType;
+  contentType: string;
   body: string;
   height: string;
 }
@@ -13,11 +13,11 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
   const { contentType, body, height } = props;
 
   switch (contentType) {
-  case ContentType.XML:
-    return <MonacoV9 body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'application/xml':
+    return <MonacoV9 body={formatXml(body)} language="text/html" readOnly={true} height={height} />;
 
-  case ContentType.HTML:
-    return <MonacoV9 body={body} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'text/html':
+    return <MonacoV9 body={body} language="text/html" readOnly={true} height={height} />;
 
   default:
     if (isImageResponse(contentType)) {

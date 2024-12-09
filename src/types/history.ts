@@ -1,5 +1,4 @@
 import { ITheme } from '@fluentui/react';
-import { ContentType } from './enums';
 import { Header } from './query-runner';
 
 export interface IHistoryItem extends IHistory {
