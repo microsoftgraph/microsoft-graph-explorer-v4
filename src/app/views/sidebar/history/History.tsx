@@ -29,6 +29,8 @@ import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { sidebarStyles } from '../Sidebar.styles';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
+import { ResourceLinkType } from '../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 
 const columns = [
   { key: 'button', name: '', fieldName: '', minWidth: 20, maxWidth: 20 },
@@ -96,6 +98,7 @@ const History = (props: any) => {
   const [category, setCategory] = useState('');
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [searchStarted, setSearchStarted] = useState(false);
+  const {collections} = useAppSelector((state) => state.collections);
 
   const shouldGenerateGroups = useRef(true);
 
@@ -119,6 +122,15 @@ const History = (props: any) => {
   if (!history || history.length === 0) {
     return NoResultsFound('We did not find any history items');
   }
+
+  const isInCollection = (item: IHistoryItem) => {
+    const defaultCollection = collections.find((collection) => collection.isDefault);
+    if (!defaultCollection) { return false; }
+    return defaultCollection.paths.some((path) => {
+      const { relativeUrl } = processUrlAndVersion(item.url);
+      return path.url === relativeUrl && path.method === item.method;
+    });
+  };
 
   const searchValueChanged = (_event: any, value?: string): void => {
     shouldGenerateGroups.current = true;
@@ -146,6 +158,7 @@ const History = (props: any) => {
     );
   };
 
+
   const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
     const hostId: string = getId('tooltipHost');
     const currentTheme = getTheme();
@@ -155,6 +168,7 @@ const History = (props: any) => {
     const viewText = translateMessage('view');
     const removeText = translateMessage('Delete');
     const exportQueryText = translateMessage('Export');
+    const inCollection = isInCollection(item);
 
     if (column) {
       const queryContent = item[column.fieldName as keyof any] as string;
@@ -202,6 +216,23 @@ const History = (props: any) => {
             },
             onClick: () => onExportQuery(item)
           },
+          ...(inCollection
+            ? [
+              {
+                key: 'removeFromCollection',
+                text: translateMessage('Remove from Collection'),
+                iconProps: { iconName: 'BoxSubtractSolid' },
+                onClick: () => handleRemoveFromCollection(item)
+              }
+            ]
+            : [
+              {
+                key: 'addToCollection',
+                text: translateMessage('Add to Collection'),
+                iconProps: { iconName: 'BoxAdditionSolid' },
+                onClick: () => handleAddToCollection(item)
+              }
+            ]),
           {
             key: 'remove',
             text: removeText,
@@ -477,7 +508,43 @@ const History = (props: any) => {
         ItemIndex: query.index,
         QuerySignature: `${query.method} ${sanitizedUrl}`
       });
-  }
+  };
+
+  const processUrlAndVersion = (url: string) => {
+    let version = 'v1.0';
+    if (url.includes('graph.microsoft.com/beta')) {
+      version = 'beta';
+      url = url.replace('https://graph.microsoft.com/beta', '');
+    } else {
+      url = url.replace('https://graph.microsoft.com/v1.0', '');
+    }
+    return { relativeUrl: url, version };
+  };
+  const formatHistoryItem = (item: IHistoryItem) => {
+    const { relativeUrl, version } = processUrlAndVersion(item.url);
+    const pathSegments = relativeUrl.split('/').filter(Boolean);
+    const name = pathSegments[pathSegments.length - 1] || relativeUrl;
+
+    return {
+      paths: pathSegments,
+      name,
+      type: ResourceLinkType.PATH,
+      version,
+      method: item.method,
+      url: relativeUrl,
+      key: `${item.index}-${item.url}`
+    };
+  };
+
+  const handleAddToCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(addResourcePaths([resourcePath]));
+  };
+
+  const handleRemoveFromCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(removeResourcePaths([resourcePath]));
+  };
 
 
   return (

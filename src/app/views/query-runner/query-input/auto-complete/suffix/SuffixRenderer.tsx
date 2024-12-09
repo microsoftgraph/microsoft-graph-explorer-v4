@@ -11,6 +11,7 @@ import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import DocumentationService from './documentation';
 import { styles } from './suffix.styles';
+import ShareButton from '../../share-query/ShareButton';
 
 const SuffixRenderer = () => {
   const sampleQuery = useAppSelector((state)=> state.sampleQuery);
@@ -91,6 +92,7 @@ const SuffixRenderer = () => {
           disabled={!documentationLinkAvailable}
         />
       </TooltipHost>
+      <ShareButton />
     </>
   );
 }
