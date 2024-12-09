@@ -13,7 +13,7 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
-import Request from './request/Request';
+import Request from './request/RequestV9';
 
 const QueryRunner = (props: any) => {
   const dispatch = useAppDispatch();
