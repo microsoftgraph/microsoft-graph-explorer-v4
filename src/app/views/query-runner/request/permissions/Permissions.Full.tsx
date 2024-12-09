@@ -59,7 +59,7 @@ const FullPermissions: React.FC<PopupsComponent<null>> = (): JSX.Element => {
 
   const sortPermissions = (permissionsToSort: IPermission[]): IPermission[] => {
     try {
-      return [...permissionsToSort].sort(dynamicSort('value', SortOrder.ASC));
+      return [...permissionsToSort].sort(dynamicSort<IPermission>('value', SortOrder.ASC));
     } catch (error) {
       // ignore
     }
