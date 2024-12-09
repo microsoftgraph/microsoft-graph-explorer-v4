@@ -1,4 +1,4 @@
-import { Announced, getTheme, ITheme, styled } from '@fluentui/react';
+import { getTheme, ITheme, styled } from '@fluentui/react';
 import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
@@ -46,7 +46,6 @@ import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
-  appTheme: string;
   profile: object;
   appTheme: string;
   graphExplorerMode: Mode;
