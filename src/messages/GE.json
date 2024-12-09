@@ -509,6 +509,8 @@
   "Revoking default scopes": "Revoking default scopes",
   "More request area items": "More request area items",
   "More response items": "More response area items",
+  "sample queries group has ": "sample queries group has ",
+  "Getting profile details":"Getting profile details",
   "Banner notification 1 header": "New to Graph Explorer?",
   "Banner notification 1 content": "Graph Explorer is a developer tool that let's you learn about Microsoft Graph APIs. Use Graph Explorer to try the APIs on the default sample tenant to explore capabilities.",
   "Banner notification 1 link text": "Follow a step-by-step tutorial",

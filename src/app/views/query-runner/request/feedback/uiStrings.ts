@@ -1,6 +1,6 @@
 import { translateMessage } from '../../../../utils/translate-messages';
 
-export const uiStringMap: any = {
+export const uiStringMap: Record<string, string> = {
   Prompt_Title: translateMessage('love your feedback'),
   Prompt_Question: translateMessage('We have just two questions.'),
   Prompt_YesLabel: translateMessage('Sure'),
