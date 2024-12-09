@@ -8,7 +8,7 @@ describe('Tests history items util functions', () => {
       index: 0,
       statusText: 'OK',
       responseHeaders: {},
-      result: {},
+      result: '',
       duration: 0,
       method: 'GET',
       url: 'http://localhost:8080/',

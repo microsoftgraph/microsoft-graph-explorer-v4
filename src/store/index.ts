@@ -49,8 +49,8 @@ const initialState = {
   graphResponse: {
     isLoadingData: false,
     response: {
-      body: undefined,
-      headers: undefined
+      body: '',
+      headers: {}
     }
   }
 }
