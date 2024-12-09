@@ -1,12 +1,12 @@
 import { Resizable } from 're-resizable';
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
 import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh } from '../../common/dimensions/dimensions-adjustment';
+import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
@@ -27,13 +27,6 @@ const useStyles = makeStyles({
     paddingBottom: '4px',
     marginBottom: '8px'
   },
-  tabContent: {
-    overflow: 'hidden',
-    padding: '8px',
-    height: '100%',
-    border: '1px solid #ddd',
-    borderRadius: '4px'
-  },
   tab: {
     fontWeight: 'bold',
     padding: '8px 16px',
@@ -52,6 +45,14 @@ const Request = (props: IRequestProps) => {
   const maxHeight = 800;
 
   const { handleOnEditorChange, sampleQuery }: IRequestProps = props;
+  const newHeight = convertVhToPx(dimensions.request.height, 55);
+  const containerStyle: CSSProperties = {
+    height: newHeight,
+    overflow: 'hidden',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    padding: '8px'
+  }
 
   useEffect(() => {
     if (sidebarProperties && sidebarProperties.mobileScreen) {
@@ -137,7 +138,7 @@ const Request = (props: IRequestProps) => {
           )}
         </TabList>
 
-        <div className={styles.tabContent}>
+        <div style={containerStyle}>
           {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
           {selectedTab === 'request-headers' && <RequestHeaders />}
           {selectedTab === 'modify-permissions' && <Permissions />}
