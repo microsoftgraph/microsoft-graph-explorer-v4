@@ -5,7 +5,7 @@ import LazyAdaptiveCard from '../../../query-response/adaptive-cards/AdaptiveCar
 import LazyGraphToolkit from '../../../query-response/graph-toolkit/GraphToolkit';
 import LazyResponseHeaders from '../../../query-response/headers/ResponseHeaders';
 import LazyResponseHeadersV9 from '../../../query-response/headers/ResponseHeadersV9';
-import LazySnippets from '../../../query-response/snippets/Snippets';
+import LazySnippetsV9 from '../../../query-response/snippets/SnippetsV9';
 import LazyAuth from '../../../query-runner/request/auth/Auth';
 import LazyRequestHeaders from '../../../query-runner/request/headers/RequestHeaders';
 import LazySpecificPermissions from '../../../query-runner/request/permissions';
@@ -50,9 +50,9 @@ export const ResponseHeadersV9 = (props?: any) => {
   )
 }
 
-export const Snippets = (props?: any) => {
+export const SnippetsV9 = (props?: any) => {
   return (
-    <LazySnippets {...props} />
+    <LazySnippetsV9 {...props} />
   )
 }
 

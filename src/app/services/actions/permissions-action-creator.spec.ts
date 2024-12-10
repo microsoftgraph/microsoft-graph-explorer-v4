@@ -11,6 +11,7 @@ import {
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ApplicationState, store } from '../../../store/index';
 import { Mode } from '../../../types/enums';
+import { SnippetError } from '../../../types/snippets';
 import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
@@ -87,8 +88,8 @@ const mockState: ApplicationState = {
   },
   snippets: {
     pending: false,
-    data: [],
-    error: null
+    data: {},
+    error: {} as SnippetError
   },
   responseAreaExpanded: false,
   dimensions: {

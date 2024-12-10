@@ -1,2 +1,3 @@
 import CopyButton from './CopyButton';
-export default CopyButton;
+import CopyButtonV9 from './CopyButtonV9';
+export { CopyButton, CopyButtonV9 };

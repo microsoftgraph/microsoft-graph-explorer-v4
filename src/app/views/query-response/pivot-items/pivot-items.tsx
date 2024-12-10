@@ -9,7 +9,7 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
 import {
-  AdaptiveCards, GraphToolkit, ResponseHeadersV9, Snippets
+  AdaptiveCards, GraphToolkit, ResponseHeadersV9, SnippetsV9
 } from '../../common/lazy-loader/component-registry';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
@@ -102,7 +102,8 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
+        {/* <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div> */}
+        <div id={'code-snippets-tab'} tabIndex={0}><SnippetsV9 /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
