@@ -1,4 +1,5 @@
-import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { MessageBarType, styled } from '@fluentui/react';
+import { Spinner } from '@fluentui/react-components';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { useState } from 'react';
 
@@ -13,14 +14,23 @@ import { classNames } from '../classnames';
 import { showSignInButtonOrProfile } from './auth-util-components/ProfileButtonV9';
 import { authenticationStyles } from './Authentication.styles';
 
+const showProgressSpinner = (): React.ReactNode => {
+  return (
+    <Spinner/>
+  );
+};
+
+const removeUnderScore = (statusString: string): string => {
+  return statusString ? statusString.replace(/_/g, ' ') : statusString;
+}
+
+
 const Authentication = (props: any) => {
   const dispatch: AppDispatch = useAppDispatch();
   const [loginInProgress, setLoginInProgress] = useState(false);
   const authToken = useAppSelector((state) => state.auth.authToken);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
-
-  const classes = classNames(props);
 
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
@@ -81,19 +91,6 @@ const Authentication = (props: any) => {
       setLoginInProgress(false);
     }
   }
-
-
-  const removeUnderScore = (statusString: string): string => {
-    return statusString ? statusString.replace(/_/g, ' ') : statusString;
-  }
-
-  const showProgressSpinner = (): React.ReactNode => {
-    return (
-      <div className={classes.spinnerContainer}>
-        <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-      </div>
-    );
-  };
 
   if (logoutInProgress) {
     return showProgressSpinner();

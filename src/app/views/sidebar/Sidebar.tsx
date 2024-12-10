@@ -12,6 +12,7 @@ import {
 import { telemetry } from '../../../telemetry';
 import { translateMessage } from '../../utils/translate-messages';
 import SampleQueries from './sample-queries/SampleQueries';
+import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
 import { sidebarStyles } from './Sidebar.styles';
 import { ResourceExplorer, History } from '../common/lazy-loader/component-registry';
 interface ISidebar {
@@ -55,7 +56,9 @@ export const Sidebar = (props: ISidebar) => {
               'aria-controls': 'sample-queries-tab'
             }}
           >
-            <div id={'sample-queries-tab'}><SampleQueries /></div>
+            {/* <div id={'sample-queries-tab'}><SampleQueries /></div> */}
+            <div id={'sample-queries-tab'}><SampleQueriesV9 /></div>
+
           </PivotItem>
           <PivotItem
             headerText={translateMessage('Resources')}
