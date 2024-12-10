@@ -224,7 +224,13 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
       {leafs.map((query: ISampleQuery) => {
         const notSignedIn = !isSignedIn && query.method !== 'GET';
         const handleOnClick = (item:ISampleQuery)=>{
-          if(isSignedIn) {handleSelectedSample(item)}
+          if (!isSignedIn) {
+            if (query.method === 'GET') {
+              handleSelectedSample(item)
+            }
+          } else {
+            handleSelectedSample(item)
+          }
         }
 
         return (
