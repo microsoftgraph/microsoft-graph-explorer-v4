@@ -1,7 +1,7 @@
 import { IPermissionProps } from '../../../../../types/permissions';
 
 import LazyStatusMessages from '../../../app-sections/StatusMessages';
-import LazyAdaptiveCard from '../../../query-response/adaptive-cards/AdaptiveCard';
+// import LazyAdaptiveCard from '../../../query-response/adaptive-cards/AdaptiveCard';
 import LazyGraphToolkit from '../../../query-response/graph-toolkit/GraphToolkit';
 import LazyResponseHeaders from '../../../query-response/headers/ResponseHeaders';
 import LazyResponseHeadersV9 from '../../../query-response/headers/ResponseHeadersV9';
@@ -26,11 +26,11 @@ export const StatusMessages = () => {
   )
 }
 
-export const AdaptiveCards = (props?: any) => {
-  return (
-    <LazyAdaptiveCard {...props} />
-  )
-}
+// export const AdaptiveCards = (props?: any) => {
+//   return (
+//     <LazyAdaptiveCard {...props} />
+//   )
+// }
 
 export const GraphToolkit = (props?: any) => {
   return (
