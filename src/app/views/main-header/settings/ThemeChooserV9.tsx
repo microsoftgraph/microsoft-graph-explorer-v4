@@ -6,7 +6,7 @@ import { PopupsComponent } from '../../../services/context/popups-context';
 import { changeTheme } from '../../../services/slices/theme.slice';
 import { loadGETheme } from '../../../../themes';
 import { translateMessage } from '../../../utils/translate-messages';
-import { BrightnessHighRegular, WeatherMoonFilled, CircleHalfFillFilled } from '@fluentui/react-icons';
+import { BrightnessHighRegular, WeatherMoonFilled, CircleHalfFillFilled, SettingsFilled} from '@fluentui/react-icons';
 
 const availableThemes = [
   {
@@ -23,6 +23,11 @@ const availableThemes = [
     key: 'high-contrast',
     displayName: 'Teams High Contrast',
     icon: <CircleHalfFillFilled />
+  },
+  {
+    key: 'system',
+    displayName: 'System Default',
+    icon: <SettingsFilled />
   }
 ];
 
@@ -32,7 +37,11 @@ const useIconOptionStyles = makeStyles({
     alignItems: 'center'
   },
   icon: {
-    fontSize: '30px'
+    fontSize: '30px',
+    display: 'block'
+  },
+  name: {
+    display: 'block'
   },
   radio: {
     '&:checked ~ .fui-Radio__indicator::after': {
@@ -44,13 +53,10 @@ const useIconOptionStyles = makeStyles({
 
 const useLabelStyles = makeStyles({
   root: {
-    display: 'flex',
-    textAlign: 'center'
-  },
-  container: {
     display: 'block',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    textAlign: 'center'
   }
 });
 
@@ -100,9 +106,10 @@ const ThemeChooserV9: React.FC<PopupsComponent<null>> = () => {
             label={{
               className: labelStyles.root,
               children: (
-                <div className={labelStyles.container}>
-                  <span className={iconOptionStyles.icon}>{theme.icon}</span> {translateMessage(theme.displayName)}
-                </div>
+                <>
+                  <div className={iconOptionStyles.icon}>{theme.icon}</div>
+                  <div className={iconOptionStyles.name}>{translateMessage(theme.displayName)} </div>
+                </>
               )
             }}
             onClick={() => handleChangeTheme(theme)}>
