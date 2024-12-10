@@ -17,7 +17,7 @@ interface IHistory {
   duration: number;
   body?: string;
   category?: string;
-  responseHeaders: { [key: string]: string };
+  responseHeaders: Record<string, string>;
 }
 
 export interface IHistoryProps {

@@ -45,6 +45,7 @@ const QueryRunner = (props: any) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
+    console.log('query stuff', query)
     let sample = { ...sampleQuery };
     if (sampleBody && sample.selectedVerb !== 'GET') {
       const headers = sample.sampleHeaders;
@@ -75,6 +76,7 @@ const QueryRunner = (props: any) => {
       }
     }
 
+    console.log('sample before dispatch', sample)
     dispatch(runQuery(sample));
     const sanitizedUrl = sanitizeQueryUrl(sample.sampleUrl);
     const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();

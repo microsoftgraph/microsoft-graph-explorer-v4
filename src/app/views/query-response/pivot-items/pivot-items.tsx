@@ -8,13 +8,12 @@ import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
+import {
+  AdaptiveCards, GraphToolkit, ResponseHeadersV9, SnippetsV9
+} from '../../common/lazy-loader/component-registry';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
 import { queryResponseStyles } from '../queryResponse.styles';
-import { Response } from '../response';
-import {
-  AdaptiveCards, GraphToolkit, ResponseHeaders,
-  Snippets
-} from '../../common/lazy-loader/component-registry';
+import { ResponseV9 } from '../response';
 
 export const GetPivotItems = () => {
   const mode = useAppSelector((state)=> state.graphExplorerMode);
@@ -73,7 +72,8 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-tab'
       }}
     >
-      <div id={'response-tab'} tabIndex={0}><Response /></div>
+      {/* <div id={'response-tab'} tabIndex={0}><Response /></div> */}
+      <div id={'response-tab'} tabIndex={0}><ResponseV9 /></div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -86,7 +86,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
+      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeadersV9 /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -102,7 +102,8 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
+        {/* <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div> */}
+        <div id={'code-snippets-tab'} tabIndex={0}><SnippetsV9 /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'

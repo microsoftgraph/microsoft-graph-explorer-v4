@@ -1,4 +1,5 @@
 import { getTheme } from '@fluentui/react';
+import { ResponseBody } from '../../types/query-response';
 
 export function getStyleFor(method: string) {
   const currentTheme = getTheme();
@@ -24,3 +25,14 @@ export function getStyleFor(method: string) {
     return currentTheme.palette.orangeLight;
   }
 }
+
+export function getHeaders(response: ResponseBody) {
+  const headers: Record<string, string> = {};
+  if(response instanceof Response){
+    for (const entry of response.headers.entries()) {
+      headers[entry[0]] = entry[1];
+    }
+  }
+  return headers;
+}
+

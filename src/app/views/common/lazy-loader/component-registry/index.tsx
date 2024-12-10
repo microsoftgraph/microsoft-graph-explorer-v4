@@ -1,16 +1,18 @@
 import { IPermissionProps } from '../../../../../types/permissions';
 
-import LazySpecificPermissions from  '../../../query-runner/request/permissions';
-import LazyStatusMessages from  '../../../app-sections/StatusMessages';
-import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
-import LazyAdaptiveCard from  '../../../query-response/adaptive-cards/AdaptiveCard';
-import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
-import LazySnippets from  '../../../query-response/snippets/Snippets';
-import LazyCopyButton from  '../../copy-button/CopyButton';
-import LazyAuth from  '../../../query-runner/request/auth/Auth';
-import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
-import LazyHistory from  '../../../sidebar/history/History';
-import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
+import LazyStatusMessages from '../../../app-sections/StatusMessages';
+import LazyAdaptiveCard from '../../../query-response/adaptive-cards/AdaptiveCard';
+import LazyGraphToolkit from '../../../query-response/graph-toolkit/GraphToolkit';
+import LazyResponseHeaders from '../../../query-response/headers/ResponseHeaders';
+import LazyResponseHeadersV9 from '../../../query-response/headers/ResponseHeadersV9';
+import LazySnippetsV9 from '../../../query-response/snippets/SnippetsV9';
+import LazyAuth from '../../../query-runner/request/auth/Auth';
+import LazyRequestHeaders from '../../../query-runner/request/headers/RequestHeaders';
+import LazySpecificPermissions from '../../../query-runner/request/permissions';
+import LazyHistory from '../../../sidebar/history/History';
+import LazyResourceExplorer from '../../../sidebar/resource-explorer/ResourceExplorer';
+import LazyCopyButton from '../../copy-button/CopyButton';
+import LazyCopyButtonV9 from '../../copy-button/CopyButtonV9';
 
 export const Permissions = (props?: IPermissionProps) => {
   return (
@@ -42,15 +44,27 @@ export const ResponseHeaders = (props?: any) => {
   )
 }
 
-export const Snippets = (props?: any) => {
+export const ResponseHeadersV9 = (props?: any) => {
   return (
-    <LazySnippets {...props} />
+    <LazyResponseHeadersV9 {...props} />
+  )
+}
+
+export const SnippetsV9 = (props?: any) => {
+  return (
+    <LazySnippetsV9 {...props} />
   )
 }
 
 export const CopyButton = (props?: any) => {
   return (
     <LazyCopyButton {...props} />
+  )
+}
+
+export const CopyButtonV9 = (props?: any) => {
+  return (
+    <LazyCopyButtonV9 {...props} />
   )
 }
 
