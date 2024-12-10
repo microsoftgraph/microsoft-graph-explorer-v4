@@ -1,5 +1,6 @@
 import {
-  Label, Link, makeStyles, SelectTabData, SelectTabEvent, Spinner, Tab, TabList, TabValue
+  Label, Link, makeStyles, SelectTabData, SelectTabEvent, Spinner, Tab, TabList, TabValue,
+  Text
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -9,7 +10,7 @@ import { SnippetError } from '../../../../types/snippets';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { getSnippet } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { MonacoV9 } from '../../common';
+import { Monaco, MonacoV9 } from '../../common';
 import { copyAndTrackText } from '../../common/copy';
 import { getResponseEditorHeight } from '../../common/dimensions/dimensions-adjustment';
 import { CopyButtonV9 } from '../../common/lazy-loader/component-registry';
@@ -59,12 +60,17 @@ const supportedLanguages: LanguageSnippet= {
 const useSnippetStyles = makeStyles({
   container: {
     margin: '0 40px'
+  },
+  extraInformation: {
+    color: 'rgb(0, 128, 0)',
+    marginLeft: '28px',
+    lineHeight: '1.5'
   }
 })
 
 const setCommentSymbol = (language: string): string => {
   const lang = language.trim().toLowerCase()
-  return (lang=== 'powershell' || lang === 'python') ? '#' : '//';
+  return (lang=== 'powershell' || lang === 'python') ? '# ' : '// ';
 }
 
 const getLanguageComponentName = (
@@ -87,20 +93,27 @@ const trackLinkClickedEvent = (
 }
 
 const addExtraSnippetInformation = (language: string) : JSX.Element => {
+  const styles = useSnippetStyles()
   const { sdkDownloadLink, sdkDocLink } = supportedLanguages[language];
-  const paragraph = sdkDownloadLink + setCommentSymbol(language) +
-    translateMessage('Leverage libraries') + language + translateMessage('Client library')
-  const sdkParagraph = setCommentSymbol(language) + translateMessage('SDKs documentation')
+  const libParagraph = setCommentSymbol(language) + translateMessage('Leverage libraries') +
+    translateMessage('Client library') + ' '
+  const sdkParagraph = setCommentSymbol(language) + translateMessage('SDKs documentation') + ' '
   return (
-    <div>
-      <p>{paragraph}</p>
-      <Link
-        onClick={(e) => trackLinkClickedEvent(language, sdkDownloadLink, e)}
-        href={sdkDownloadLink} inline rel='norefferer noopener' target='_blank'>{sdkDownloadLink}</Link>
-      <p>{sdkParagraph}</p>
-      <Link
-        onClick={(e) => trackLinkClickedEvent(language, sdkDownloadLink, e)}
-        href={sdkDocLink} inline rel='norefferer noopener' target='_blank'>{sdkDocLink}</Link>
+    <div id="extra-info" className={styles.extraInformation}>
+      <Text font='monospace' weight='medium'>
+        {libParagraph}
+        <Link
+          onClick={(e) => trackLinkClickedEvent(language, sdkDownloadLink, e)}
+          href={sdkDownloadLink} inline rel='norefferer noopener' target='_blank'>
+          {sdkDownloadLink}</Link>
+      </Text>
+      <br/>
+      <Text font='monospace' weight='medium'>
+        {sdkParagraph}
+        <Link
+          onClick={(e) => trackLinkClickedEvent(language, sdkDocLink, e)}
+          href={sdkDocLink} inline rel='norefferer noopener' target='_blank'>{sdkDocLink}</Link>
+      </Text>
     </div>
   )
 }
@@ -137,48 +150,47 @@ interface SnippetContentProps {
   language: string
 }
 
-const SnippetContent = (props: SnippetContentProps)=>{
-  const dispatch = useAppDispatch()
+const SnippetContent: React.FC<SnippetContentProps> = (props: SnippetContentProps) => {
+  const dispatch = useAppDispatch();
   const language = props.language.toLowerCase();
-  const snippets = useAppSelector(state => state.snippets)
+  const snippets = useAppSelector(state => state.snippets);
   const { data, pending: loadingState, error } = snippets;
-  const [snippetError, setSnippetError] = useState<SnippetError>(error as SnippetError)
-  const hasSnippetError= (snippetError?.status && snippetError.status === 404) ||
-  (snippetError?.status && snippetError.status === 400)
+  const hasSnippetError = (error?.status && error.status === 404) ||
+    (error?.status && error.status === 400);
 
   const snippet = (!loadingState && data) ? data[language] : '';
 
   const monacoHeight = getResponseEditorHeight(235);
 
   const handleCopy = async () => {
-    copyAndTrackText(snippet, CODE_SNIPPETS_COPY_BUTTON, {Language: language})
-  }
+    copyAndTrackText(snippet, CODE_SNIPPETS_COPY_BUTTON, { Language: language });
+  };
 
   useEffect(() => {
     dispatch(getSnippet(language));
-  }, [language]);
+  }, [language, dispatch]);
 
-  useEffect(()=>{
-    setSnippetError(error)
-  }, [error])
+  const showSpinner = loadingState && !hasSnippetError;
+  const notAvailable = !loadingState && hasSnippetError;
 
-  return <div>
-    {loadingState && !hasSnippetError &&
-      <Spinner labelPosition="below" label={translateMessage('Fetching code snippet' )} />}
-    {!loadingState && hasSnippetError &&
-      <Label weight="semibold">{translateMessage('Snippet not available' )}</Label>}
+  return (
     <div>
-      <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy}></CopyButtonV9>
-      <MonacoV9
-        body={snippet}
-        language={language}
-        readOnly={true}
-        height={monacoHeight}
-        extraInfoElement={addExtraSnippetInformation(props.language)}
-      />
+      {showSpinner && <Spinner labelPosition="below" label={translateMessage('Fetching code snippet')} />}
+      {notAvailable && <Label weight="semibold">{translateMessage('Snippet not available')}!</Label>}
+      <>
+        <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
+        <MonacoV9
+          body={snippet}
+          language={language}
+          readOnly={true}
+          height={monacoHeight}
+          extraInfoElement={addExtraSnippetInformation(props.language)}
+        />
+      </>
     </div>
-  </div>
-}
+  );
+};
+
 
 const Snippets = telemetry.trackReactComponent(
   GetSnippets,

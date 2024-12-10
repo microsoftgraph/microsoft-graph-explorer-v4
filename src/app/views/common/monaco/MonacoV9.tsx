@@ -36,14 +36,16 @@ const MonacoV9 = (props: MonacoProps)=>{
   }
 
 
-  return <div className='monaco-editor'><Editor
-    language={language?language:'json'}
-    width='800 !important'
-    height={editorHeight}
-    value={body}
-    options={editorOptions}
-    onChange={onChange}>
-  </Editor></div>
+  return <div className='monaco-editor'>
+    {props.extraInfoElement}
+    <Editor
+      language={language?language:'json'}
+      width='800 !important'
+      height={editorHeight}
+      value={body}
+      options={editorOptions}
+      onChange={onChange}>
+    </Editor></div>
 }
 
 export { MonacoV9 };
