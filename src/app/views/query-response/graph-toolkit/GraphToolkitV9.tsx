@@ -50,5 +50,4 @@ const GraphToolkitV9 = () => {
   );
 }
 
-// const styledGraphToolkit = styled(GraphToolkitV9, queryResponseStyles as any);
 export default GraphToolkitV9;
