@@ -10,7 +10,7 @@ import MarkdownIt from 'markdown-it';
 import { useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardContent } from '../../../../types/adaptivecard';
-import { IQuery, IQuery } from '../../../../types/query-runner';
+import { IQuery } from '../../../../types/query-runner';
 import { translateMessage } from '../../../utils/translate-messages';
 import { MonacoV9 } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
@@ -48,8 +48,9 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
   const [cardContent, setCardContent] = useState<AdaptiveCardResponse | undefined>(undefined);
 
   const { body, hostConfig } = props;
-  const { queryRunnerStatus: queryStatus, theme } = useAppSelector((state) => state);
   const sampleQuery = useAppSelector(state => state.sampleQuery)
+  const theme = useAppSelector(state => state.theme)
+  const queryStatus = useAppSelector(state => state.queryRunnerStatus)
 
   const currentTheme: ITheme = getTheme();
 
