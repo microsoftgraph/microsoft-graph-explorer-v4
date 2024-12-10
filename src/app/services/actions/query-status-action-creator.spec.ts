@@ -12,7 +12,7 @@ describe('Query Action Creators', () => {
       ok: false,
       statusText: 'Something worked!',
       status: 200,
-      messageType: 1,
+      messageBarType: 'success',
       hint: 'Something worked!'
     }
 

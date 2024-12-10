@@ -27,9 +27,9 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
+import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
 import { translateMessage } from '../utils/translate-messages';
-import { StatusMessages, TermsOfUseMessage } from './app-sections';
-import { headerMessaging } from './app-sections/HeaderMessaging';
+import { StatusMessagesV9, TermsOfUseMessageV9 } from './app-sections';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import Notification from './common/banners/Notification';
@@ -468,7 +468,7 @@ class App extends Component<IAppProps, IAppState> {
                   </Resizable>
                 )}
                 {graphExplorerMode === Mode.TryIt &&
-                headerMessaging(query)}
+                headerMessagingV9(query)}
 
                 {displayContent && (
                   <Resizable
@@ -502,7 +502,7 @@ class App extends Component<IAppProps, IAppState> {
                         display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                       }}>
                         <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                          <StatusMessages />
+                          <StatusMessagesV9 />
                         </div>
                         <QueryResponse />
                       </div>
@@ -511,7 +511,7 @@ class App extends Component<IAppProps, IAppState> {
                 )}
               </div>
               <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                <TermsOfUseMessage />
+                <TermsOfUseMessageV9 />
               </div>
             </div>
             <CollectionPermissionsProvider>

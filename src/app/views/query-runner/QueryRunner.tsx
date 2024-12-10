@@ -1,4 +1,4 @@
-import { IDropdownOption, MessageBarType } from '@fluentui/react';
+import { IDropdownOption } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -57,7 +57,7 @@ const QueryRunner = (props: any) => {
             ok: false,
             statusText: translateMessage('Malformed JSON body'),
             status: `${translateMessage('Review the request body')} ${error}`,
-            messageType: MessageBarType.error
+            messageBarType: 'error'
           }));
           return;
         }
