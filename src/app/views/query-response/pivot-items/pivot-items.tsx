@@ -12,6 +12,7 @@ import {
   AdaptiveCards, GraphToolkit, ResponseHeadersV9, SnippetsV9
 } from '../../common/lazy-loader/component-registry';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
+import GraphToolkitV9 from '../graph-toolkit/GraphToolkitV9';
 import { queryResponseStyles } from '../queryResponse.styles';
 import { ResponseV9 } from '../response';
 
@@ -117,7 +118,8 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div>
+        {/* <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div> */}
+        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkitV9 /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
