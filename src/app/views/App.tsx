@@ -70,6 +70,13 @@ interface IAppState {
   sidebarTabSelection: string;
 }
 
+const getSystemTheme = (): string => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+};
+
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
@@ -130,6 +137,12 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
+
+    // Load the theme from local storage or use the system theme as the default
+    const savedTheme = localStorage.getItem('appTheme') ?? getSystemTheme();
+    // @ts-ignore
+    this.props.actions.changeTheme(savedTheme);
+    loadGETheme(savedTheme); // Remove when cleaning up
   };
 
   public handleSharedQueries() {
@@ -412,7 +425,8 @@ class App extends Component<IAppProps, IAppState> {
     const fluentV9Themes: Record<string, Theme> = {
       'light': webLightTheme,
       'dark': webDarkTheme,
-      'high-contrast': teamsHighContrastTheme
+      'high-contrast': teamsHighContrastTheme,
+      'system': getSystemTheme() === 'dark' ? webDarkTheme : webLightTheme
     }
     return (
       // @ts-ignore
