@@ -7,7 +7,8 @@ import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS,
-  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS, SAMPLES_FETCH_SUCCESS
+  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS,
+  SAMPLES_FETCH_SUCCESS
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
 

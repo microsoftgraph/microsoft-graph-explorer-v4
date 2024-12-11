@@ -42,7 +42,10 @@ const initialState = {
     selectedVersion: 'v1.0'
   },
   termsOfUse: true,
-  collections: [],
+  collections: {
+    collections: [],
+    saved: false
+  },
   graphResponse: {
     isLoadingData: false,
     response: {
@@ -62,7 +65,10 @@ export const store = configureStore({
       consentedScopes: []
     },
     autoComplete: undefined,
-    collections: [],
+    collections: {
+      collections: [],
+      saved: false
+    },
     devxApi: undefined,
     dimensions: undefined as undefined,
     graphResponse: undefined as undefined,
