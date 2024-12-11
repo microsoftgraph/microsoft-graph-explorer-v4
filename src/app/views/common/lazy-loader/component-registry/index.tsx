@@ -1,7 +1,7 @@
 import { IPermissionProps } from '../../../../../types/permissions';
 
 import LazySpecificPermissions from  '../../../query-runner/request/permissions';
-import LazyStatusMessages from  '../../../app-sections/StatusMessages';
+import LazyStatusMessages from  '../../../app-sections/StatusMessagesV9';
 import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
 import LazyAdaptiveCard from  '../../../query-response/adaptive-cards/AdaptiveCard';
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';

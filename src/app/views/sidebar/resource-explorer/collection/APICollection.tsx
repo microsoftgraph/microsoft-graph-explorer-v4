@@ -99,7 +99,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
               status: translateMessage('Invalid file format'),
               statusText: translateMessage('Invalid file format'),
               ok: false,
-              messageType: MessageBarType.error
+              messageBarType: 'error'
             })
           )
         }
@@ -115,7 +115,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         status: translateMessage(status),
         statusText: translateMessage(statusMessage),
         ok: false,
-        messageType: MessageBarType.error
+        messageBarType: 'error'
       })
     )
   }

@@ -1,4 +1,4 @@
-import { getTheme, MessageBarType } from '@fluentui/react';
+import { getTheme } from '@fluentui/react';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
@@ -112,7 +112,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
             status: translateMessage('Submitted Successfully'),
             statusText: translateMessage('Graph Explorer Feedback'),
             ok: true,
-            messageType: MessageBarType.success
+            messageBarType: 'success'
           }));
           trackSurveyPopup({...telemetryData, IsSubmitted: true}, campaignId);
         }

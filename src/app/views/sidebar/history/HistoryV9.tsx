@@ -34,8 +34,6 @@ import {
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
-
-import { MessageBarType } from '@fluentui/react';
 import {
   ArrowDownloadRegular,
   ArrowRepeatAllRegular,
@@ -211,8 +209,7 @@ const History = (props: HistoryProps)=>{
     // TODO: change the message bar type to v9 types
     dispatch(setQueryResponseStatus({
       duration,
-      messageType:
-        status < 300 ? MessageBarType.success : MessageBarType.error,
+      messageBarType: status < 300 ? 'success' : 'error',
       ok: status < 300,
       status,
       statusText
@@ -324,8 +321,7 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
     // TODO: change the message bar type to v9 types
     dispatch(setQueryResponseStatus({
       duration,
-      messageType:
-        status < 300 ? MessageBarType.success : MessageBarType.error,
+      messageBarType: status < 300 ? 'success' : 'error',
       ok: status < 300,
       status,
       statusText
