@@ -23,11 +23,6 @@ const availableThemes = [
     key: 'high-contrast',
     displayName: 'Teams High Contrast',
     icon: <CircleHalfFillFilled />
-  },
-  {
-    key: 'system',
-    displayName: 'System Default',
-    icon: <SettingsFilled />
   }
 ];
 

@@ -425,8 +425,7 @@ class App extends Component<IAppProps, IAppState> {
     const fluentV9Themes: Record<string, Theme> = {
       'light': webLightTheme,
       'dark': webDarkTheme,
-      'high-contrast': teamsHighContrastTheme,
-      'system': getSystemTheme() === 'dark' ? webDarkTheme : webLightTheme
+      'high-contrast': teamsHighContrastTheme
     }
     return (
       // @ts-ignore
