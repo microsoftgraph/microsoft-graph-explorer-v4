@@ -1,3 +1,3 @@
-import RequestHeaders from './RequestHeaders';
+import RequestHeaders from './RequestHeadersV9';
 
 export default RequestHeaders;
