@@ -59,7 +59,7 @@ const yesterday = formatDate(yesterdaysDate);
 yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
 
 const sortItems = (content: IHistoryItem[]) => {
-  content.sort(dynamicSort('createdAt', SortOrder.DESC));
+  content.sort(dynamicSort<IHistoryItem>('createdAt', SortOrder.DESC));
   content.forEach((value: any, index: number) => {
     value.index = index;
   });
@@ -492,8 +492,7 @@ const History = (props: any) => {
     }))
     dispatch(setQueryResponseStatus({
       duration,
-      messageType:
-        status < 300 ? MessageBarType.success : MessageBarType.error,
+      messageBarType: status < 300 ? 'success' : 'error',
       ok: status < 300,
       status,
       statusText
