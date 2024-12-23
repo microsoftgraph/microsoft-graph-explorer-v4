@@ -1,0 +1,29 @@
+.container {
+  height: 80vh;
+}
+
+.label {
+  display: flex;
+  width: 100%;
+  height: 80vh;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1200px) {
+  .container, .label {
+    height: 70vh; /* Adjust height for medium screens */
+  }
+}
+
+@media (max-width: 900px) {
+  .container, .label {
+    height: 60vh; /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 700px) {
+  .container, .label {
+    height: 50vh; /* Adjust height for very small screens */
+  }
+}

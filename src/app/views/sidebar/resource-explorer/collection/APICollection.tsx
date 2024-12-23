@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { ResourcePath } from '../../../../../types/resources';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
+import './api-collections.scss';
 
 export interface APICollection {
   version: string;
@@ -190,6 +191,13 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       iconProps: { iconName: 'Upload' },
       onClick: () => document.getElementById('file-input')?.click()
     }
+    // {
+    //   key: 'download-permissions',
+    //   text: translateMessage('Download postman collection'),
+    //   iconProps: { iconName: 'Download' },
+    //   disabled: items.length === 0,
+    //   onClick: generateCollection
+    // }
   ];
 
   const farItems: ICommandBarItemProps[] = [
@@ -243,7 +251,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       )}
 
       {items && items.length > 0 ?
-        (<div style={{ height: '80vh' }}>
+        (<div className='container'>
           <Paths
             resources={items}
             columns={columns}
@@ -252,16 +260,13 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         ) :
         (
           <Label
-            style={{ display: 'flex', width: '100%',
-              height: '80vh',
-              justifyContent: 'center',
-              alignItems: 'center' }}>
+            className='label'>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
       <DialogFooter
         styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
+          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1  }
         }}>
         <PrimaryButton onClick={generateCollection} disabled={items.length === 0}>
           {translateMessage('Download postman collection')}

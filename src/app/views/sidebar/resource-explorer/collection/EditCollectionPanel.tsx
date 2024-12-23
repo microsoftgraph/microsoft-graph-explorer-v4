@@ -60,7 +60,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
       )}
       <DialogFooter
         styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
+          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1 }
         }}>
         <PrimaryButton onClick={removeSelectedItems} disabled={selectedItems.length === 0}>
           {translateMessage('Delete all selected')}
