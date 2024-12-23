@@ -54,8 +54,8 @@ export function createResourcesList(
     const type = getLinkType({ ...info, links: versionedChildren });
     const enclosedCounter =
       versionedChildren && versionedChildren.length > 0
-        ? ` (${versionedChildren.length})`
-        : '';
+        ? versionedChildren.length
+        : null;
 
     // if segment name does not contain search text, then found text is in child, so expand this link
     const isExpanded =
@@ -70,7 +70,7 @@ export function createResourcesList(
     return {
       key,
       url: key,
-      name: `${segment}${enclosedCounter}`,
+      name: segment,
       labels,
       isExpanded,
       parent,
@@ -79,7 +79,8 @@ export function createResourcesList(
       method: method?.toUpperCase(),
       type,
       links: versionedChildren,
-      docLink: docLink ? docLink : getLink(labels, version, method)
+      docLink: docLink ? docLink : getLink(labels, version, method),
+      count: enclosedCounter
     };
   }
 
