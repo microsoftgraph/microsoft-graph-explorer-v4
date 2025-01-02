@@ -8,6 +8,7 @@
                 "@azure/msal-browser": "3.26.1",
                 "@babel/core": "7.26.0",
                 "@babel/runtime": "7.26.0",
+                "@fluentui-contrib/react-resize-handle": "^0.6.1",
                 "@fluentui/react": "8.121.1",
                 "@fluentui/react-components": "9.56.1",
                 "@fluentui/react-icons": "2.0.265",

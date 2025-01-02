@@ -1,5 +1,8 @@
 import { getTheme, ITheme, styled } from '@fluentui/react';
-import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
+import {
+  FluentProvider, makeStyles,
+  teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme
+} from '@fluentui/react-components';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
@@ -42,6 +45,7 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 // import { Sidebar } from './sidebar/Sidebar';
+import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
@@ -70,7 +74,38 @@ interface IAppState {
   sidebarTabSelection: string;
 }
 
-class App extends Component<IAppProps, IAppState> {
+interface ComponentProps {
+  maxWidth: number;
+  onDragStart: (value: number, eventType: string) => void;
+  onDragEnd: (value: number, eventType: string) => void;
+  onChange: (value: number, eventType: string) => void;
+}
+
+const useAppStyles = makeStyles({
+  mainHeader: {
+    gridArea:'main-header'
+  },
+  nav: {
+    gridArea: 'nav'
+  },
+  notification: {
+    gridArea: 'notification'
+  },
+  query: {
+    gridArea: 'query'
+  },
+  requestArea: {
+    gridArea: 'request-area'
+  },
+  responseArea: {
+    gridArea: 'response-area'
+  },
+  footer: {
+    gridArea: 'footer'
+  }
+})
+
+class App extends Component<IAppProps, IAppState, ComponentProps> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
   private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
@@ -414,109 +449,136 @@ class App extends Component<IAppProps, IAppState> {
       'dark': webDarkTheme,
       'high-contrast': teamsHighContrastTheme
     }
+    const {
+      handleRef: navHandleRef,
+      wrapperRef: navWrapperRef,
+      elementRef: navElementRef,
+      setValue: setLeftColumnSize
+    } = useResizeHandle({
+      variableName: NAV_SIZE_CSS_VAR,
+      growDirection: 'end',
+      relative: true,
+      onChange: (_, { value, type }) => {
+        props.onChange(value, String(type));
+      },
+      onDragStart: (_, { value, type }) => {
+        props.onDragStart(value, String(type));
+      },
+      onDragEnd: (_, { value, type }) => {
+        props.onDragEnd(value, String(type));
+      }
+    });
+
     return (
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
+    //   <ThemeContext.Provider value={this.props.appTheme}>
+    //     <PopupsProvider>
+    //       <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
+    //         {/* <MainHeader
+    //           toggleSidebar={this.toggleSidebar}
+    //         />
+    //         <Announced
+    //           message={
+    //             !showSidebar
+    //               ? translateMessage('Sidebar minimized')
+    //               : translateMessage('Sidebar maximized')
+    //           }
+    //         /> */}
+
+    //         <MainHeaderV9 />
+    //         <div className={`ms-Grid-row ${classes.appRow}`} style={{
+    //           flexWrap: mobileScreen && 'wrap',
+    //           marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
+    //           flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
+    //         }}>
+    //           {graphExplorerMode === Mode.Complete && (
+    //             <Resizable
+    //               onResize={(e: any, direction: any, ref: any) => {
+    //                 if (ref?.style?.width) {
+    //                   this.resizeSideBar(ref.style.width);
+    //                 }
+    //               }}
+    //               className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
+    //               minWidth={'71'}
+    //               maxWidth={maxWidth}
+    //               enable={{
+    //                 right: true
+    //               }}
+    //               handleClasses={{
+    //                 right: classes.vResizeHandle
+    //               }}
+    //               bounds={'parent'}
+    //               size={{
+    //                 width: sideWidth,
+    //                 height: ''
+    //               }}
+    //             >
+    //               {/* <Sidebar currentTab={this.state.sidebarTabSelection}
+    //                 setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
+    //                 toggleSidebar={this.toggleSidebar}
+    //                 mobileScreen={mobileScreen} /> */}
+    //               <SidebarV9/>
+    //             </Resizable>
+    //           )}
+    //           {graphExplorerMode === Mode.TryIt &&
+    //           headerMessaging(query)}
+
+      //           {displayContent && (
+      //             <Resizable
+      //               bounds={'window'}
+      //               className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
+      //               enable={{
+      //                 right: false
+      //               }}
+      //               size={{
+      //                 width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
+      //                 height: ''
+      //               }}
+      //               style={!sidebarProperties.showSidebar && !mobileScreen ? {
+      //                 marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+      //               } : {
+      //                 display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+      //               }}
+      //             >
+      //               <div className='ms-Grid-row'>
+      //                 <Notification
+      //                   header={translateMessage('Banner notification 1 header')}
+      //                   content={translateMessage('Banner notification 1 content')}
+      //                   link={translateMessage('Banner notification 1 link')}
+      //                   linkText={translateMessage('Banner notification 1 link text')}/>
+      //               </div>
+      //               <ValidationProvider>
+      //                 <div style={{ marginBottom: 2 }} >
+      //                   <QueryRunner onSelectVerb={this.handleSelectVerb} />
+      //                 </div>
+      //                 <div style={{
+      //                   display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+      //                 }}>
+      //                   <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+      //                     <StatusMessages />
+      //                   </div>
+      //                   <QueryResponse />
+      //                 </div>
+      //               </ValidationProvider>
+      //             </Resizable>
+      //           )}
+      //         </div>
+      //         <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+      //           <TermsOfUseMessage />
+      //         </div>
+      //       </div>
+      //       <CollectionPermissionsProvider>
+      //         <PopupsWrapper />
+      //       </CollectionPermissionsProvider>
+      //     </PopupsProvider>
+      //   </ThemeContext.Provider>
+      // </FluentProvider>
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
           <PopupsProvider>
-            <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
-              {/* <MainHeader
-                toggleSidebar={this.toggleSidebar}
-              />
-              <Announced
-                message={
-                  !showSidebar
-                    ? translateMessage('Sidebar minimized')
-                    : translateMessage('Sidebar maximized')
-                }
-              /> */}
-
-              <MainHeaderV9 />
-              <div className={`ms-Grid-row ${classes.appRow}`} style={{
-                flexWrap: mobileScreen && 'wrap',
-                marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
-                flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
-              }}>
-                {graphExplorerMode === Mode.Complete && (
-                  <Resizable
-                    onResize={(e: any, direction: any, ref: any) => {
-                      if (ref?.style?.width) {
-                        this.resizeSideBar(ref.style.width);
-                      }
-                    }}
-                    className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
-                    minWidth={'71'}
-                    maxWidth={maxWidth}
-                    enable={{
-                      right: true
-                    }}
-                    handleClasses={{
-                      right: classes.vResizeHandle
-                    }}
-                    bounds={'parent'}
-                    size={{
-                      width: sideWidth,
-                      height: ''
-                    }}
-                  >
-                    {/* <Sidebar currentTab={this.state.sidebarTabSelection}
-                      setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
-                      toggleSidebar={this.toggleSidebar}
-                      mobileScreen={mobileScreen} /> */}
-                    <SidebarV9/>
-                  </Resizable>
-                )}
-                {graphExplorerMode === Mode.TryIt &&
-                headerMessaging(query)}
-
-                {displayContent && (
-                  <Resizable
-                    bounds={'window'}
-                    className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
-                    enable={{
-                      right: false
-                    }}
-                    size={{
-                      width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                      height: ''
-                    }}
-                    style={!sidebarProperties.showSidebar && !mobileScreen ? {
-                      marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                    } : {
-                      display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                    }}
-                  >
-                    <div className='ms-Grid-row'>
-                      <Notification
-                        header={translateMessage('Banner notification 1 header')}
-                        content={translateMessage('Banner notification 1 content')}
-                        link={translateMessage('Banner notification 1 link')}
-                        linkText={translateMessage('Banner notification 1 link text')}/>
-                    </div>
-                    <ValidationProvider>
-                      <div style={{ marginBottom: 2 }} >
-                        <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                      </div>
-                      <div style={{
-                        display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                      }}>
-                        <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                          <StatusMessages />
-                        </div>
-                        <QueryResponse />
-                      </div>
-                    </ValidationProvider>
-                  </Resizable>
-                )}
-              </div>
-              <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                <TermsOfUseMessage />
-              </div>
-            </div>
-            <CollectionPermissionsProvider>
-              <PopupsWrapper />
-            </CollectionPermissionsProvider>
+            <p>Something</p>
           </PopupsProvider>
         </ThemeContext.Provider>
       </FluentProvider>
