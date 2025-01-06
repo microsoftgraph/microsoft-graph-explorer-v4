@@ -191,13 +191,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       iconProps: { iconName: 'Upload' },
       onClick: () => document.getElementById('file-input')?.click()
     }
-    // {
-    //   key: 'download-permissions',
-    //   text: translateMessage('Download postman collection'),
-    //   iconProps: { iconName: 'Download' },
-    //   disabled: items.length === 0,
-    //   onClick: generateCollection
-    // }
   ];
 
   const farItems: ICommandBarItemProps[] = [
