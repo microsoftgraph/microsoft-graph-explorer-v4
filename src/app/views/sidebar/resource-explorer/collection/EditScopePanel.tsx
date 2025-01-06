@@ -108,7 +108,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
             padding: '5px',
             position: 'fixed',
             width: '100%',
-            zIndex: 1          }
+            bottom: 0,
+            zIndex: 1}
         }}>
         <PrimaryButton onClick={saveAllScopes} disabled={pendingChanges.length === 0}>
           {translateMessage('Save all')}
