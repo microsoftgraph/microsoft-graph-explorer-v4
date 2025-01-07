@@ -1,5 +1,11 @@
 import { BrowserAuthError } from '@azure/msal-browser';
-import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+  ThunkDispatch,
+  UnknownAction
+} from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ClaimsChallenge } from '../../../modules/authentication/ClaimsChallenge';
@@ -61,7 +67,14 @@ export const runQuery = createAsyncThunk(
       const status = generateStatus({ duration, response });
       dispatch(setQueryResponseStatus(status));
 
-      const historyItem = generateHistoryItem(status, {}, query, createdAt, result, duration);
+      const historyItem = generateHistoryItem(
+        status,
+        {},
+        query,
+        createdAt,
+        result,
+        duration
+      );
       dispatch(addHistoryItem(historyItem));
 
       return result;
@@ -75,6 +88,97 @@ export const runQuery = createAsyncThunk(
     }
   }
 );
+
+async function runReAuthenticatedRequest(
+  response: Response,
+  query: IQuery
+): Promise<boolean> {
+  if (response.headers.get('www-authenticate')) {
+    const account = authenticationWrapper.getAccount();
+    if (!account) {
+      return false;
+    }
+    new ClaimsChallenge(query, account).handle(response.headers);
+    const authResult = await authenticationWrapper.logIn('', query);
+    if (authResult.accessToken) {
+      CURRENT_RETRIES += 1;
+      return true;
+    }
+  }
+  return false;
+}
+
+function generateHistoryItem(
+  status: IStatus,
+  respHeaders: Record<string, string>,
+  query: IQuery,
+  createdAt: string,
+  result: Result,
+  duration: number
+): IHistoryItem {
+  let response: Result = { body: {}, headers: {} };
+  const contentType_ = respHeaders['content-type'];
+
+  if (isImageResponse(contentType_)) {
+    response = { ...result, body: 'Run the query to view the image' };
+    Object.assign(respHeaders, { 'content-type': ContentType.Json });
+  }
+
+  if (isFileResponse(respHeaders)) {
+    response = {
+      ...result,
+      body: 'Run the query to generate file download URL'
+    };
+  }
+
+  const historyItem: IHistoryItem = {
+    index: -1,
+    url: query.sampleUrl,
+    method: query.selectedVerb,
+    headers: query.sampleHeaders,
+    body: query.sampleBody,
+    responseHeaders: respHeaders,
+    createdAt,
+    status: status.status as number,
+    statusText: status.statusText,
+    duration,
+    result: response.body as object
+  };
+
+  historyCache.writeHistoryData(historyItem);
+  return historyItem;
+}
+
+async function handleError(error: Error, query: IQuery) {
+  let body: ResponseBody = {};
+  const status: IStatus = {
+    messageBarType: 'error',
+    ok: false,
+    status: 400,
+    statusText: 'Bad Request'
+  };
+
+  if (error instanceof ClientError) {
+    status.status = error.message;
+    status.statusText = error.name;
+  }
+
+  if (queryResultsInCorsError(query.sampleUrl)) {
+    status.status = 0;
+    status.statusText = 'CORS error';
+    body = { throwsCorsError: true };
+  }
+
+  if (error instanceof BrowserAuthError) {
+    if (error.errorCode === 'user_cancelled') {
+      status.hint = translateMessage('user_cancelled');
+    } else {
+      status.statusText = `${error.name}: ${error.message}`;
+    }
+  }
+
+  return { status, body };
+}
 
 const querySlice = createSlice({
   name: 'query',
@@ -129,7 +233,10 @@ export const { setQueryResponse } = querySlice.actions;
 export default querySlice.reducer;
 
 async function processResponse(
-  response: ResponseBody, dispatch: ThunkDispatch<unknown, unknown, UnknownAction>, query: IQuery): Promise<Result> {
+  response: ResponseBody,
+  dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
+  query: IQuery
+): Promise<Result> {
   let result = await parseResponse(response);
   const headers: Record<string, string> = getHeaders(response);
   if (response instanceof Response && response.ok) {
@@ -142,7 +249,11 @@ async function processResponse(
     }
   }
 
-  if (response instanceof Response  && response.status === 401 && CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES) {
+  if (
+    response instanceof Response &&
+    response.status === 401 &&
+    CURRENT_RETRIES < MAX_NUMBER_OF_RETRIES
+  ) {
     const successful = await runReAuthenticatedRequest(response, query);
     if (successful) {
       dispatch(runQuery(query));
@@ -154,112 +265,33 @@ async function processResponse(
 }
 
 interface Status {
-  duration: number
-  response: ResponseBody
+  duration: number;
+  response: ResponseBody;
 }
 
 const generateStatus = (statusValues: Status): IStatus => {
-  const {duration, response} = statusValues;
+  const { duration, response } = statusValues;
   const status: IStatus = {
     messageBarType: 'error',
     ok: false,
     duration,
     status: 400,
     statusText: ''
-  }
-  if(response instanceof Response) {
+  };
+  if (response instanceof Response) {
     if (response) {
       status.status = response.status;
-      status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
+      status.statusText =
+        response.statusText === ''
+          ? setStatusMessage(response.status)
+          : response.statusText;
     }
 
-  if (response && response.ok) {
-    CURRENT_RETRIES = 0;
-    status.ok = true;
-    status.messageBarType = 'success';
+    if (response && response.ok) {
+      CURRENT_RETRIES = 0;
+      status.ok = true;
+      status.messageBarType = 'success';
+    }
   }
   return status;
-}
-
-async function runReAuthenticatedRequest(response: Response, query: IQuery): Promise<boolean> {
-  if (response.headers.get('www-authenticate')) {
-    const account = authenticationWrapper.getAccount();
-    if (!account) { return false; }
-    new ClaimsChallenge(query, account).handle(response.headers);
-    const authResult = await authenticationWrapper.logIn('', query);
-    if (authResult.accessToken) {
-      CURRENT_RETRIES += 1;
-      return true;
-    }
-  }
-  return false;
-}
-
-function generateHistoryItem(
-  status: IStatus,
-  respHeaders: Record<string, string>,
-  query: IQuery,
-  createdAt: string,
-  result: Result,
-  duration: number
-): IHistoryItem {
-  let response: Result = {body: {}, headers: {}};
-  const contentType_ = respHeaders['content-type'];
-
-  if (isImageResponse(contentType_)) {
-    response = { ...result, body: 'Run the query to view the image' };
-    Object.assign(respHeaders, {'content-type': ContentType.Json})
-  }
-
-  if (isFileResponse(respHeaders)) {
-    response = { ...result, body: 'Run the query to generate file download URL' };
-  }
-
-  const historyItem: IHistoryItem = {
-    index: -1,
-    url: query.sampleUrl,
-    method: query.selectedVerb,
-    headers: query.sampleHeaders,
-    body: query.sampleBody,
-    responseHeaders: respHeaders,
-    createdAt,
-    status: status.status as number,
-    statusText: status.statusText,
-    duration,
-    result: response.body as object
-  };
-
-  historyCache.writeHistoryData(historyItem);
-  return historyItem;
-}
-
-async function handleError(error: Error, query: IQuery) {
-  let body: ResponseBody = {};
-  const status: IStatus = {
-    messageBarType: 'error',
-    ok: false,
-    status: 400,
-    statusText: 'Bad Request'
-  };
-
-  if (error instanceof ClientError) {
-    status.status = error.message;
-    status.statusText = error.name;
-  }
-
-  if (queryResultsInCorsError(query.sampleUrl)) {
-    status.status = 0;
-    status.statusText = 'CORS error';
-    body = { throwsCorsError: true };
-  }
-
-  if (error instanceof BrowserAuthError) {
-    if (error.errorCode === 'user_cancelled') {
-      status.hint = translateMessage('user_cancelled');
-    } else {
-      status.statusText = `${error.name}: ${error.message}`;
-    }
-  }
-
-  return { status, body };
-}
+};
