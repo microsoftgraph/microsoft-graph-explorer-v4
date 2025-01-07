@@ -48,10 +48,12 @@ import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
 // import { MainHeader } from './main-header/MainHeader';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
-import { QueryResponse } from './query-response';
+// import { QueryResponse } from './query-response';
+import { QueryResponseV9 } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 // import { Sidebar } from './sidebar/Sidebar';
+// import { QueryResponse } from './query-response';
 import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
@@ -583,7 +585,7 @@ class App extends Component<IAppProps, IAppState> {
                         >
                           <StatusMessagesV9 />
                         </div>
-                        <QueryResponse />
+                        <QueryResponseV9 />
                       </div>
                     </ValidationProvider>
                   </Resizable>

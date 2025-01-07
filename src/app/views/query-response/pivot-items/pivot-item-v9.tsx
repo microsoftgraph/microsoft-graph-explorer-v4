@@ -204,7 +204,7 @@ export const GetPivotItems = () => {
         <Tab value={translateMessage('Response Headers')}>
           {translateMessage('Response Headers')}
         </Tab>
-        <Tab value={translateMessage('Response Snippets')}>
+        <Tab value={translateMessage('Snippets')}>
           {translateMessage('Snippets')}
         </Tab>
         <Tab value={translateMessage('Graph Toolkit')}>
@@ -213,7 +213,6 @@ export const GetPivotItems = () => {
         <Tab value={translateMessage('Adaptive Cards')}>
           {translateMessage('Adaptive Cards')}
         </Tab>
-        <Button>Expand</Button>
       </TabList>
       <div>
         {selectedValue === translateMessage('Response Preview') && (
