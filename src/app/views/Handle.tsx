@@ -23,27 +23,27 @@ export const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
           ? 'left'
           : 'right'
         : position === 'start'
-          ? 'right'
-          : 'left';
+        ? 'right'
+        : 'left';
 
     const positioningProps =
       position === 'start' || position === 'end'
         ? {
-          [positioningAttr]: '-12px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          width: '8px',
-          height: '100px',
-          cursor: 'ew-resize'
-        }
+            [positioningAttr]: '-8px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: '6px',
+            height: '100px',
+            cursor: 'ew-resize'
+          }
         : {
-          ...(position === 'top' ? { top: '-12px' } : { bottom: '-12px' }),
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100px',
-          height: '8px',
-          cursor: 'ns-resize'
-        };
+            ...(position === 'top' ? { top: '-8px' } : { bottom: '-8px' }),
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '100px',
+            height: '6px',
+            cursor: 'ns-resize'
+          };
 
     return (
       <div
@@ -53,7 +53,7 @@ export const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
         tabIndex={0}
         style={{
           position: 'absolute',
-          borderRadius: '4px',
+          borderRadius: '2px',
           backgroundColor: 'gray',
           ...positioningProps
         }}

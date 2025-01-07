@@ -54,6 +54,7 @@ import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 // import { Sidebar } from './sidebar/Sidebar';
 // import { QueryResponse } from './query-response';
+import Layout from './Layout';
 import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
@@ -461,21 +462,10 @@ class App extends Component<IAppProps, IAppState> {
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
           <PopupsProvider>
-            <div
+            {/* <div
               className={`ms-Grid ${classes.app}`}
               style={{ paddingLeft: mobileScreen && '15px' }}
             >
-              {/* <MainHeader
-                toggleSidebar={this.toggleSidebar}
-              />
-              <Announced
-                message={
-                  !showSidebar
-                    ? translateMessage('Sidebar minimized')
-                    : translateMessage('Sidebar maximized')
-                }
-              /> */}
-
               <MainHeaderV9 />
               <div
                 className={`ms-Grid-row ${classes.appRow}`}
@@ -510,10 +500,6 @@ class App extends Component<IAppProps, IAppState> {
                       height: ''
                     }}
                   >
-                    {/* <Sidebar currentTab={this.state.sidebarTabSelection}
-                      setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
-                      toggleSidebar={this.toggleSidebar}
-                      mobileScreen={mobileScreen} /> */}
                     <SidebarV9 />
                   </Resizable>
                 )}
@@ -600,7 +586,19 @@ class App extends Component<IAppProps, IAppState> {
               >
                 <TermsOfUseMessageV9 />
               </div>
-            </div>
+            </div> */}
+            <Layout
+              maxWidth={0}
+              onDragStart={(event) => {
+                console.log('Drag started', event);
+              }}
+              onDragEnd={() => {
+                console.log('Drag ended');
+              }}
+              onChange={(value, eventType) => {
+                console.log('Changed', value, eventType);
+              }}
+            />
             <CollectionPermissionsProvider>
               <PopupsWrapper />
             </CollectionPermissionsProvider>
