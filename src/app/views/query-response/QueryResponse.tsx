@@ -97,89 +97,90 @@ const QueryResponse = () => {
     }
   };
 
-  return (
-    <div style={flexQueryElement}>
-      <Resizable
-        style={{
-          marginBottom: 20,
-          marginTop: 10,
-          flex: 1
-        }}
-        bounds={'window'}
-        minHeight={350}
-        size={{
-          height: responseHeight,
-          width: '100%'
-        }}
-        enable={{
-          bottom: false
-        }}
-      >
-        <div
-          className='query-response'
-          style={{
-            minHeight: 350,
-            height: '100%',
-            flex: 1
-          }}
-          onScroll={onScroll}
-        >
-          <Pivot
-            overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More response items')}
-            onLinkClick={handlePivotItemClick}
-            className={'pivot-response'}
-            selectedKey={currentTab}
-            styles={{ text: { fontSize: FontSizes.size14 } }}
-          >
-            {GetPivotItems()}
-            <PivotItem
-              headerText={translateMessage('Expand')}
-              key='expand'
-              itemIcon='MiniExpandMirrored'
-              itemKey='expand-response'
-              ariaLabel={translateMessage('Expand response')}
-              title={translateMessage('Expand response')}
-            />
-          </Pivot>
-        </div>
-      </Resizable>
-      <Announced
-        message={showModal ? translateMessage('Response area expanded') : ''}
-      />
-      {
-        // @ts-ignore
-        <Modal
-          isOpen={showModal}
-          onDismiss={toggleExpandResponse}
-          styles={modalStyles}
-          layerProps={{ eventBubblingEnabled: true }}
-        >
-          <IconButton
-            styles={{
-              root: {
-                float: 'right',
-                zIndex: 1
-              }
-            }}
-            iconProps={{ iconName: 'Cancel' }}
-            ariaLabel={translateMessage('Close expanded response area')}
-            onClick={toggleExpandResponse}
-          />
-          <Pivot
-            className='pivot-response'
-            onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
-            overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More items')}
-            selectedKey={currentTab}
-            styles={modalPivotStyles}
-          >
-            {GetPivotItems()}
-          </Pivot>
-        </Modal>
-      }
-    </div>
-  );
+  // return (
+  //   <div style={flexQueryElement}>
+  //     <Resizable
+  //       style={{
+  //         marginBottom: 20,
+  //         marginTop: 10,
+  //         flex: 1
+  //       }}
+  //       bounds={'window'}
+  //       minHeight={350}
+  //       size={{
+  //         height: responseHeight,
+  //         width: '100%'
+  //       }}
+  //       enable={{
+  //         bottom: false
+  //       }}
+  //     >
+  //       <div
+  //         className='query-response'
+  //         style={{
+  //           minHeight: 350,
+  //           height: '100%',
+  //           flex: 1
+  //         }}
+  //         onScroll={onScroll}
+  //       >
+  //         <Pivot
+  //           overflowBehavior='menu'
+  //           overflowAriaLabel={translateMessage('More response items')}
+  //           onLinkClick={handlePivotItemClick}
+  //           className={'pivot-response'}
+  //           selectedKey={currentTab}
+  //           styles={{ text: { fontSize: FontSizes.size14 } }}
+  //         >
+  //           <GetPivotItems />
+  //           <PivotItem
+  //             headerText={translateMessage('Expand')}
+  //             key='expand'
+  //             itemIcon='MiniExpandMirrored'
+  //             itemKey='expand-response'
+  //             ariaLabel={translateMessage('Expand response')}
+  //             title={translateMessage('Expand response')}
+  //           />
+  //         </Pivot>
+  //       </div>
+  //     </Resizable>
+  //     <Announced
+  //       message={showModal ? translateMessage('Response area expanded') : ''}
+  //     />
+  //     {
+  //       // @ts-ignore
+  //       <Modal
+  //         isOpen={showModal}
+  //         onDismiss={toggleExpandResponse}
+  //         styles={modalStyles}
+  //         layerProps={{ eventBubblingEnabled: true }}
+  //       >
+  //         <IconButton
+  //           styles={{
+  //             root: {
+  //               float: 'right',
+  //               zIndex: 1
+  //             }
+  //           }}
+  //           iconProps={{ iconName: 'Cancel' }}
+  //           ariaLabel={translateMessage('Close expanded response area')}
+  //           onClick={toggleExpandResponse}
+  //         />
+  //         <Pivot
+  //           className='pivot-response'
+  //           onLinkClick={(pivotItem) => onModalPivotItemClicked(pivotItem)}
+  //           overflowBehavior='menu'
+  //           overflowAriaLabel={translateMessage('More items')}
+  //           selectedKey={currentTab}
+  //           styles={modalPivotStyles}
+  //         >
+  //           {GetPivotItems()}
+  //         </Pivot>
+  //       </Modal>
+  //     }
+  //   </div>
+  // );
+  return <GetPivotItems />;
 };
 
 export default QueryResponse;
