@@ -1,5 +1,4 @@
 import { BrowserAuthError } from '@azure/msal-browser';
-import { MessageBarType } from '@fluentui/react';
 import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
@@ -162,7 +161,7 @@ interface Status {
 const generateStatus = (statusValues: Status): IStatus => {
   const {duration, response} = statusValues;
   const status: IStatus = {
-    messageType: MessageBarType.error,
+    messageBarType: 'error',
     ok: false,
     duration,
     status: 400,
@@ -174,11 +173,11 @@ const generateStatus = (statusValues: Status): IStatus => {
       status.statusText = response.statusText === '' ? setStatusMessage(response.status) : response.statusText;
     }
 
-    if (response && response.ok) {
-      CURRENT_RETRIES = 0;
-      status.ok = true;
-      status.messageType = MessageBarType.success;
-    }}
+  if (response && response.ok) {
+    CURRENT_RETRIES = 0;
+    status.ok = true;
+    status.messageBarType = 'success';
+  }
   return status;
 }
 
@@ -237,7 +236,7 @@ function generateHistoryItem(
 async function handleError(error: Error, query: IQuery) {
   let body: ResponseBody = {};
   const status: IStatus = {
-    messageType: MessageBarType.error,
+    messageBarType: 'error',
     ok: false,
     status: 400,
     statusText: 'Bad Request'

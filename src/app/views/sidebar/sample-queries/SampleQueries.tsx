@@ -107,7 +107,7 @@ const UnstyledSampleQueries = (sampleProps?: ISampleQueriesProps): JSX.Element =
 
   const displayTipMessage = (query: ISampleQuery) => {
     dispatch(setQueryResponseStatus({
-      messageType: MessageBarType.warning,
+      messageBarType: 'warning',
       statusText: 'Tip',
       status: query.tip!
     }));

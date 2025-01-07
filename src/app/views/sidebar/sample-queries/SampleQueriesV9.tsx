@@ -31,7 +31,7 @@ import {
 import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 // TODO: update these checks for @fluentui/react@9.0.0+
-import { MessageBarType } from '@fluentui/react';
+
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -224,7 +224,13 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
       {leafs.map((query: ISampleQuery) => {
         const notSignedIn = !isSignedIn && query.method !== 'GET';
         const handleOnClick = (item:ISampleQuery)=>{
-          if(isSignedIn) {handleSelectedSample(item)}
+          if (!isSignedIn) {
+            if (query.method === 'GET') {
+              handleSelectedSample(item)
+            }
+          } else {
+            handleSelectedSample(item)
+          }
         }
 
         return (
@@ -404,7 +410,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
 
   const displayTipMessage = (query: ISampleQuery) => {
     dispatch(setQueryResponseStatus({
-      messageType: MessageBarType.warning,
+      messageBarType: 'warning',
       statusText: 'Tip',
       status: query.tip!
     }));

@@ -302,7 +302,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]
@@ -358,7 +358,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking '),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]
@@ -417,7 +417,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]

@@ -8,12 +8,13 @@ interface ICopyButtonProps {
   isIconButton: boolean;
 }
 
-export default function CopyButton(props:ICopyButtonProps) {
+export default function CopyButton(props: ICopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const CopyIcon = !copied ? CopyRegular : CheckmarkRegular;
-  const copyLabel: string = !copied ? translateMessage('Copy') : translateMessage('Copied');
-
+  const copyLabel: string = !copied
+    ? translateMessage('Copy')
+    : translateMessage('Copied');
 
   const handleCopyClick = async () => {
     props.handleOnClick();
@@ -22,16 +23,25 @@ export default function CopyButton(props:ICopyButtonProps) {
   };
 
   const handleTimeout = () => {
-    const timer = setTimeout(() => { setCopied(false) }, 3000); // 3 seconds
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 3000); // 3 seconds
     return () => clearTimeout(timer);
-  }
+  };
 
   return (
     <>
-      {props.isIconButton ?
-        <Button appearance='transparent' onClick={handleCopyClick} icon={<CopyIcon/>}/>:
-        <Button appearance='transparent' onClick={handleCopyClick}>{copyLabel}</Button>
-      }
+      {props.isIconButton ? (
+        <Button
+          appearance='transparent'
+          onClick={handleCopyClick}
+          icon={<CopyIcon />}
+        />
+      ) : (
+        <Button appearance='transparent' onClick={handleCopyClick}>
+          {copyLabel}
+        </Button>
+      )}
     </>
-  )
+  );
 }
