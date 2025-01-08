@@ -8,7 +8,6 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
-  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -28,11 +27,15 @@ import {
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
+import {
+  DismissRegular,
+  DocumentText20Regular,
+  LockClosed16Regular
+} from '@fluentui/react-icons';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 // TODO: update these checks for @fluentui/react@9.0.0+
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
@@ -46,10 +49,21 @@ import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFoundV9 } from '../sidebar-utils/SearchResultsV9';
 import {
-  isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
+  isJsonString,
+  performSearch,
+  trackDocumentLinkClickedEvent,
+  trackSampleQueryClickEvent
 } from './sample-query-utils';
 
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
+type Colors =
+  | 'brand'
+  | 'danger'
+  | 'important'
+  | 'informative'
+  | 'severe'
+  | 'subtle'
+  | 'success'
+  | 'warning';
 
 const useStyles = makeStyles({
   container: {
@@ -76,6 +90,10 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'not-allowed'
     }
+  },
+  samplesTree: {
+    overflowY: 'auto',
+    maxHeight: '900px'
   }
 });
 
@@ -111,13 +129,12 @@ export const SampleQueriesV9 = () => {
     shouldGenerateGroups.current = true;
     setSearchStarted(true);
     const filteredQueries = value ? performSearch(queries, value) : [];
-    if(value && filteredQueries.length >= 0) {
+    if (value && filteredQueries.length >= 0) {
       setSampleQueries(filteredQueries);
     } else {
       setSampleQueries(queries);
     }
   };
-
 
   return (
     <div className={sampleQueriesStyles.container}>
@@ -132,20 +149,28 @@ export const SampleQueriesV9 = () => {
       <AriaLiveAnnouncer>
         <Text>{`${sampleQueries.length} search results available.`}</Text>
       </AriaLiveAnnouncer>
-      {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} searchValue={searchValue} />}
+      {pending ? (
+        <LoadingSamples />
+      ) : (
+        <Samples
+          queries={sampleQueries}
+          groups={groups}
+          searchValue={searchValue}
+        />
+      )}
     </div>
   );
 };
 
-const LoadingSamples = ()=> {
+const LoadingSamples = () => {
   return (
     <Spinner
-      size="large"
+      size='large'
       label={`${translateMessage('loading samples')} ...`}
       labelPosition='below'
     />
-  )
-}
+  );
+};
 
 /**
  * CachedSetMessageBar component displays a warning message bar indicating
@@ -203,7 +228,7 @@ interface SampleLeaf {
   isSignedIn: boolean;
   leafs: ISampleQuery[];
   group: IGroup;
-  handleSelectedSample: (item: ISampleQuery)=> void;
+  handleSelectedSample: (item: ISampleQuery) => void;
 }
 
 /**
@@ -217,21 +242,21 @@ interface SampleLeaf {
  */
 const RenderSampleLeafs = (props: SampleLeaf) => {
   const { leafs, group, handleSelectedSample, isSignedIn } = props;
-  const leafStyles = useStyles()
+  const leafStyles = useStyles();
 
   return (
     <>
       {leafs.map((query: ISampleQuery) => {
         const notSignedIn = !isSignedIn && query.method !== 'GET';
-        const handleOnClick = (item:ISampleQuery)=>{
+        const handleOnClick = (item: ISampleQuery) => {
           if (!isSignedIn) {
             if (query.method === 'GET') {
-              handleSelectedSample(item)
+              handleSelectedSample(item);
             }
           } else {
-            handleSelectedSample(item)
+            handleSelectedSample(item);
           }
-        }
+        };
 
         return (
           <FlatTreeItem
@@ -246,9 +271,11 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             id={query.id}
           >
             <TreeItemLayout
-              onClick={()=>handleOnClick(query)}
-              iconBefore={<MethodIcon isSignedIn={isSignedIn} method={query.method} />}
-              aside={<ResourceLink item={query}/>}
+              onClick={() => handleOnClick(query)}
+              iconBefore={
+                <MethodIcon isSignedIn={isSignedIn} method={query.method} />
+              }
+              aside={<ResourceLink item={query} />}
             >
               <Tooltip
                 withArrow
@@ -273,17 +300,19 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
  * @param {ISampleQuery} props.item - The sample query item containing the document link.
  * @returns {JSX.Element} The rendered link component.
  */
-const ResourceLink = ({item}: {item: ISampleQuery}) =>{
+const ResourceLink = ({ item }: { item: ISampleQuery }) => {
   const href = item.docLink ?? '';
   return (
     <Link
       aria-label={item.humanName + translateMessage('Read documentation')}
-      target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+      target='_blank'
+      href={href}
+      onClick={() => trackDocumentLinkClickedEvent(item)}
+    >
       <DocumentText20Regular />
     </Link>
-  )
-}
-
+  );
+};
 
 /**
  * A functional component that returns a JSX element representing an HTTP method badge.
@@ -293,47 +322,54 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
  *
  * @returns {JSX.Element} A JSX element representing the HTTP method badge.
  */
-const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolean }) => {
+const MethodIcon = ({
+  method,
+  isSignedIn
+}: {
+  method: string;
+  isSignedIn: boolean;
+}) => {
   const sampleQueriesStyles = useStyles();
   const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
+    GET: 'brand',
+    POST: 'success',
+    PATCH: 'severe',
+    DELETE: 'danger',
+    PUT: 'warning'
+  };
 
   return (
     <div className={sampleQueriesStyles.iconBefore}>
       <Badge
         className={sampleQueriesStyles.badge}
-        appearance="filled"
+        appearance='filled'
         size='small'
         color={colors[method]}
-        aria-label={'http method ' + method + ' for'}>
+        aria-label={'http method ' + method + ' for'}
+      >
         {method}
       </Badge>
-      {method !== 'GET' && !isSignedIn && <Tooltip
-        withArrow
-        content={translateMessage('Sign In to try this sample')}
-        relationship='label'
-        positioning='above-start'
-      >
-        <LockClosed16Regular/>
-      </Tooltip>}
+      {method !== 'GET' && !isSignedIn && (
+        <Tooltip
+          withArrow
+          content={translateMessage('Sign In to try this sample')}
+          relationship='label'
+          positioning='above-start'
+        >
+          <LockClosed16Regular />
+        </Tooltip>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const getSampleBody = (query: IQuery): string => {
   return query.sampleBody ? parseSampleBody(query.sampleBody) : '';
-}
+};
 
 const parseSampleBody = (sampleBody: string) => {
-  return isJsonString(sampleBody)
-    ? JSON.parse(sampleBody)
-    : sampleBody;
-}
+  return isJsonString(sampleBody) ? JSON.parse(sampleBody) : sampleBody;
+};
 
 /**
  * Props for the Samples component.
@@ -345,7 +381,7 @@ const parseSampleBody = (sampleBody: string) => {
 interface SamplesProps {
   queries: ISampleQuery[];
   groups: IGroup[];
-  searchValue: string
+  searchValue: string;
 }
 
 /**
@@ -357,11 +393,12 @@ interface SamplesProps {
  * @returns {JSX.Element} The rendered component.
  */
 const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
+  const sampleStyles = useStyles();
   const dispatch = useAppDispatch();
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
-  const profile = useAppSelector(state=>state.profile)
-  const authToken= useAppSelector((state) => state.auth.authToken);
-  const authenticated = authToken.token
+  const profile = useAppSelector((state) => state.profile);
+  const authToken = useAppSelector((state) => state.auth.authToken);
+  const authenticated = authToken.token;
 
   useEffect(() => {
     if (!searchValue && queries.length === 0) {
@@ -371,9 +408,9 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     }
   }, [queries]);
 
-  const openSampleItems = new Set<string>()
-  'Getting Started'.split('').forEach(ch=> openSampleItems.add(ch))
-  openSampleItems.add('Getting Started')
+  const openSampleItems = new Set<string>();
+  'Getting Started'.split('').forEach((ch) => openSampleItems.add(ch));
+  openSampleItems.add('Getting Started');
 
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(
     () => openSampleItems
@@ -385,7 +422,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     setOpenItems(data.openItems);
   };
 
-  const sampleQueryItemSelected = (item: ISampleQuery)=>{
+  const sampleQueryItemSelected = (item: ISampleQuery) => {
     const queryVersion = item.requestUrl.substring(1, 4);
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + item.requestUrl,
@@ -405,24 +442,28 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
 
     trackSampleQueryClickEvent(item);
     dispatch(setSampleQuery(sampleQuery));
-  }
-
+  };
 
   const displayTipMessage = (query: ISampleQuery) => {
-    dispatch(setQueryResponseStatus({
-      messageBarType: 'warning',
-      statusText: 'Tip',
-      status: query.tip!
-    }));
-  }
+    dispatch(
+      setQueryResponseStatus({
+        messageBarType: 'warning',
+        statusText: 'Tip',
+        status: query.tip!
+      })
+    );
+  };
 
   return (
-    <>
-      {sampleQueries.length=== 0 && <NoResultsFoundV9 message='No sample queries'/>}
+    <Fragment>
+      {sampleQueries.length === 0 && (
+        <NoResultsFoundV9 message='No sample queries' />
+      )}
       <FlatTree
         openItems={openItems}
         onOpenChange={handleOpenChange}
         aria-label={translateMessage('Sample Queries')}
+        className={sampleStyles.samplesTree}
       >
         {groups.map((group, pos) => (
           <React.Fragment key={group.key}>
@@ -433,12 +474,19 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
               aria-posinset={pos + 1}
               itemType='branch'
               aria-label={
-                group.name + translateMessage('sample queries group has ') +
-                group.count + translateMessage('Resources')}
+                group.name +
+                translateMessage('sample queries group has ') +
+                group.count +
+                translateMessage('Resources')
+              }
             >
               <TreeItemLayout
                 aside={
-                  <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
+                  <Badge
+                    appearance='tint'
+                    color='informative'
+                    aria-label={group.count + translateMessage('Resources')}
+                  >
                     {group.count}
                   </Badge>
                 }
@@ -460,6 +508,6 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
           </React.Fragment>
         ))}
       </FlatTree>
-    </>
+    </Fragment>
   );
 };

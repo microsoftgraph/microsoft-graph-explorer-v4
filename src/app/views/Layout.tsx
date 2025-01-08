@@ -3,17 +3,19 @@ import {
   makeResetStyles,
   makeStyles,
   mergeClasses,
+  tokens,
   useMergedRefs
 } from '@fluentui/react-components';
 import { Handle } from './Handle';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
+import { SidebarV9 } from './sidebar/SidebarV9';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 const usePageStyles = makeResetStyles({
   height: '100vh',
-  backgroundColor: 'red'
+  backgroundColor: tokens.colorNeutralBackground1
 });
 
 const useMainWrapperStyles = makeResetStyles({
@@ -42,7 +44,8 @@ const useStyles = makeStyles({
   areaSidebar: {
     gridArea: 'sidebar',
     height: '100%',
-    backgroundColor: 'orange'
+    overflow: 'hidden',
+    padding: '4px'
   },
   areaNotifications: {
     gridArea: 'notifications',
@@ -132,6 +135,7 @@ const Layout = (props: ComponentProps) => {
           className={mergeClasses(boxStyles, styles.areaSidebar)}
           ref={sidebarElementRef}
         >
+          <SidebarV9 />
           <Handle
             position='end'
             ref={sidebarHandleRef}
