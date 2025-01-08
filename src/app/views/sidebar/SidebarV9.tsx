@@ -11,8 +11,8 @@ import {
 import {
   GroupList20Regular,
   History20Regular,
-  PanelLeftContract20Regular,
-  PanelLeftExpand20Regular,
+  PanelLeftContractRegular,
+  PanelLeftExpandRegular,
   Rocket20Regular
 } from '@fluentui/react-icons';
 
@@ -50,7 +50,7 @@ const useStyles = makeStyles({
 const SidebarToggle = (props: IShowSidebar & ButtonProps) => {
   const { show, handleShow } = props;
   const PanelIcon = () =>
-    show ? <PanelLeftContract20Regular /> : <PanelLeftExpand20Regular />;
+    show ? <PanelLeftContractRegular /> : <PanelLeftExpandRegular />;
 
   return (
     <Button
