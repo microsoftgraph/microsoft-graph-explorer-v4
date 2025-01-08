@@ -44,7 +44,7 @@ const useStyles = makeStyles({
   areaSidebar: {
     gridArea: 'sidebar',
     height: '100%',
-    padding: '6px'
+    padding: '0 6px'
   },
   areaNotifications: {
     gridArea: 'notifications',

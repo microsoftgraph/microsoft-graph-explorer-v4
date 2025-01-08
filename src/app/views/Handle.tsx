@@ -29,7 +29,7 @@ export const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
     const positioningProps =
       position === 'start' || position === 'end'
         ? {
-            [positioningAttr]: '-8px',
+            [positioningAttr]: '-4px',
             top: '50%',
             transform: 'translateY(-50%)',
             width: '6px',
@@ -37,7 +37,7 @@ export const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
             cursor: 'ew-resize'
           }
         : {
-            ...(position === 'top' ? { top: '-8px' } : { bottom: '-8px' }),
+            ...(position === 'top' ? { top: '-7px' } : { bottom: '-7px' }),
             left: '50%',
             transform: 'translateX(-50%)',
             width: '100px',
