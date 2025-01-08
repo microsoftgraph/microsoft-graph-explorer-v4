@@ -6,6 +6,8 @@ import {
   tokens,
   useMergedRefs
 } from '@fluentui/react-components';
+import { translateMessage } from '../utils/translate-messages';
+import Notification from './common/banners/Notification';
 import { Handle } from './Handle';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
 import { SidebarV9 } from './sidebar/SidebarV9';
@@ -33,7 +35,7 @@ const useMainWrapperStyles = makeResetStyles({
   "sidebar responseArea"
   "footer footer"
   `,
-  gridTemplateRows: `48px 10% 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
+  gridTemplateRows: `48px minmax(0, auto) 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
   gridTemplateColumns: `clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%) 1fr`
 });
 
@@ -48,7 +50,7 @@ const useStyles = makeStyles({
   },
   areaNotifications: {
     gridArea: 'notifications',
-    backgroundColor: 'yellow'
+    padding: '6px'
   },
   areaQuery: {
     gridArea: 'queryArea',
@@ -142,9 +144,14 @@ const Layout = (props: ComponentProps) => {
           />
         </div>
 
-        <div
-          className={mergeClasses(boxStyles, styles.areaNotifications)}
-        ></div>
+        <div className={mergeClasses(boxStyles, styles.areaNotifications)}>
+          <Notification
+            header={translateMessage('Banner notification 1 header')}
+            content={translateMessage('Banner notification 1 content')}
+            link={translateMessage('Banner notification 1 link')}
+            linkText={translateMessage('Banner notification 1 link text')}
+          />
+        </div>
         <div className={mergeClasses(boxStyles, styles.areaQuery)}></div>
         <div className={mergeClasses(boxStyles, styles.areaRequest)}></div>
 
