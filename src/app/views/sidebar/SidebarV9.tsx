@@ -5,7 +5,8 @@ import {
   SelectTabData,
   SelectTabEvent,
   Tab,
-  TabList
+  TabList,
+  tokens
 } from '@fluentui/react-components';
 import {
   GroupList20Regular,
@@ -32,7 +33,12 @@ interface IShowSidebar {
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderRightStyle: 'solid',
+    borderRightColor: tokens.colorNeutralStroke1,
+    borderRightWidth: '2px',
+    padding: '0 3px',
+    height: '100%'
   },
   sidebarToggle: {
     marginLeft: 'auto'
