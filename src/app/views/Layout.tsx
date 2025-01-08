@@ -30,7 +30,7 @@ const useMainWrapperStyles = makeResetStyles({
   "footer footer"
   `,
   gridTemplateRows: `60px 10% 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
-  gridTemplateColumns: `clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 40%) 1fr`
+  gridTemplateColumns: `clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%) 1fr`
 });
 
 const useStyles = makeStyles({
@@ -105,7 +105,8 @@ const Layout = (props: ComponentProps) => {
   const {
     handleRef: responseAreaHandleRef,
     wrapperRef: responseAreaWrapperRef,
-    elementRef: responseAreaElementRef
+    elementRef: responseAreaElementRef,
+    setValue: setResponseAreaRowSize
   } = useResizeHandle({
     variableName: RESPONSE_AREA_SIZE_CSS_VAR,
     growDirection: 'up'
@@ -113,8 +114,12 @@ const Layout = (props: ComponentProps) => {
 
   const wrapperRef = useMergedRefs(sidebarWrapperRef, responseAreaWrapperRef);
 
-  const resetToInitial = () => {
+  const resetSidebarArea = () => {
     setSidebarColumnSize(40);
+  };
+
+  const resetResponseArea = () => {
+    setResponseAreaRowSize(460);
   };
   return (
     <div className={pageStyles}>
@@ -125,9 +130,9 @@ const Layout = (props: ComponentProps) => {
           ref={sidebarElementRef}
         >
           <Handle
-            position='start'
+            position='end'
             ref={sidebarHandleRef}
-            onDoubleClick={resetToInitial}
+            onDoubleClick={resetSidebarArea}
           />
         </div>
 
@@ -141,7 +146,11 @@ const Layout = (props: ComponentProps) => {
           className={mergeClasses(boxStyles, styles.areaResponse)}
           ref={responseAreaElementRef}
         >
-          <Handle position='top' ref={responseAreaHandleRef} />
+          <Handle
+            position='top'
+            ref={responseAreaHandleRef}
+            onDoubleClick={resetResponseArea}
+          />
         </div>
         <div className={mergeClasses(boxStyles, styles.areaFooter)}></div>
       </div>
