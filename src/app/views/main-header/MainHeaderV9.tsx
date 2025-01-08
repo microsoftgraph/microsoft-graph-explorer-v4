@@ -11,8 +11,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     padding: '0 0 0 24px',
     height: '48px',
-    background: tokens.colorNeutralBackground4,
-    marginBottom: '8px' // TODO: remove when sidebar and query areas are updated
+    background: tokens.colorNeutralBackground4
   },
   headerIcons: {
     display: 'flex',
@@ -27,29 +26,29 @@ const useStyles = makeStyles({
   }
 });
 
-const MainHeaderV9 = ()=>{
-  const styles = useStyles()
+const MainHeaderV9 = () => {
+  const styles = useStyles();
   return (
     <div className={styles.root}>
-      <Text size={600} as="h1" className={styles.headerText}>Graph Explorer</Text>
+      <Text size={600} as='h1' className={styles.headerText}>
+        Graph Explorer
+      </Text>
       <HeaderIcons />
     </div>
-  )
-}
+  );
+};
 
 const HeaderIcons = () => {
-
-  const styles = useStyles()
+  const styles = useStyles();
   return (
     <div className={styles.headerIcons}>
-      <Tenant/>
+      <Tenant />
       <SettingsV9 />
       <HelpV9 />
       <FeedbackButtonV9 />
       <AuthenticationV9 />
     </div>
-  )
-}
+  );
+};
 
 export { MainHeaderV9 };
-

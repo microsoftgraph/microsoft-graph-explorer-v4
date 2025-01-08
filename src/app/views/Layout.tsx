@@ -6,12 +6,14 @@ import {
   useMergedRefs
 } from '@fluentui/react-components';
 import { Handle } from './Handle';
+import { MainHeaderV9 } from './main-header/MainHeaderV9';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 const usePageStyles = makeResetStyles({
-  height: '100vh'
+  height: '100vh',
+  backgroundColor: 'red'
 });
 
 const useMainWrapperStyles = makeResetStyles({
@@ -29,14 +31,13 @@ const useMainWrapperStyles = makeResetStyles({
   "sidebar responseArea"
   "footer footer"
   `,
-  gridTemplateRows: `60px 10% 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
+  gridTemplateRows: `48px 10% 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
   gridTemplateColumns: `clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%) 1fr`
 });
 
 const useStyles = makeStyles({
   areaHeader: {
-    gridArea: 'header',
-    backgroundColor: 'red'
+    gridArea: 'header'
   },
   areaSidebar: {
     gridArea: 'sidebar',
@@ -124,7 +125,9 @@ const Layout = (props: ComponentProps) => {
   return (
     <div className={pageStyles}>
       <div className={wrapperStyles} ref={wrapperRef}>
-        <div className={mergeClasses(boxStyles, styles.areaHeader)}></div>
+        <div className={mergeClasses(boxStyles, styles.areaHeader)}>
+          <MainHeaderV9 />
+        </div>
         <div
           className={mergeClasses(boxStyles, styles.areaSidebar)}
           ref={sidebarElementRef}
