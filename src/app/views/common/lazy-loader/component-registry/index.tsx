@@ -12,9 +12,9 @@ import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHe
 import LazyHistory from  '../../../sidebar/history/History';
 import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
 
-export const Permissions = (props?: IPermissionProps) => {
+export const Permissions =() => {
   return (
-    <LazySpecificPermissions {...props} />
+    <LazySpecificPermissions />
   )
 }
 
