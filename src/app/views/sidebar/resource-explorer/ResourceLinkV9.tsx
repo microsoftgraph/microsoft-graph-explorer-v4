@@ -26,7 +26,12 @@ const useStyles = makeStyles({
     lineHeight: 'normal',
     width: '100%',
     overflow: 'hidden',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginRight: '8px',
+    position: 'relative',
+    ':hover .actions': {
+      visibility: 'visible'
+    }
   },
   resourceLinkNameContainer: {
     textAlign: 'left',
@@ -44,6 +49,11 @@ const useStyles = makeStyles({
   },
   badge: {
     maxWidth: '50px'
+  },
+  actions: {
+    visibility: 'hidden',
+    display: 'flex',
+    alignItems: 'center'
   }
 });
 
@@ -106,78 +116,120 @@ const ResourceLink = (props: IResourceLinkProps) => {
     props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link);
   }
 
-  return <span className={linkStyles.link} tabIndex={0}>
-    {resourceLink.method ?
-      <span className={linkStyles.resourceLinkNameContainer}>
-        <Badge
-          className={linkStyles.badge}
-          size='medium'
-          color={colors[resourceLink.method]}
-          aria-label={'http method ' + resourceLink.method + ' for'}>
-          {resourceLink.method}
-        </Badge>
-      </span>
-      :
-      <span className={linkStyles.resourceLinkNameContainer}>
-        <span className={linkStyles.resourceLinkText}>
-          {resourceLink.name}
-        </span>
-      </span>
-    }
-
-    {resourceLink.count && resourceLink.count > 0 ?
-      <Badge appearance='tint' color='informative' aria-label={resourceLink.count + translateMessage('Resources')}>
-        {resourceLink.count}
-      </Badge> : ''}
-
-    <div>
-      {resourceLink.method &&
-        <Tooltip
-          withArrow
-          content={resourceLink.docLink ? translateMessage('Read documentation')
-            : translateMessage('Query documentation not found')}
-          relationship='label'
-        >
-          <Button
-            aria-label={translateMessage('Read documentation')}
-            id='documentButton'
-            aria-disabled={!resourceLink.docLink}
-            className={iconButtonStyles.root}
-            icon={<DocumentText20Regular />}
-            onClick={() => openDocumentationLink()}
-          />
-        </Tooltip>
-      }
-      {resourceLink.isInCollection ?
-        <Tooltip
-          withArrow
-          content={translateMessage('Remove from collection')}
-          relationship='label'>
-          <Button
-            aria-label={translateMessage('Remove from collection')}
-            id='removeCollectionButton'
-            className={iconButtonStyles.root}
-            icon={<SubtractSquare20Regular />}
-            onClick={handleRemoveFromCollectionClick}
-          />
-        </Tooltip>:
-        <Tooltip
-          withArrow
-          content={translateMessage('Add to collection')}
-          relationship='label'
-        >
-          <Button
-            aria-label={translateMessage('Add to collection')}
-            id='targetButton'
-            aria-describedby='tooltip'
-            className={iconButtonStyles.root}
-            icon={<AddSquare20Regular />}
-            onClick={handleAddToCollectionClick}
-          />
-        </Tooltip>}
-    </div>
-      &nbsp;
-  </span>
+  return (
+    <span className={linkStyles.link} tabIndex={0}>
+      <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} colors={colors} />
+      <ResourceLinkCountBadge resourceLink={resourceLink} />
+      <ResourceLinkActions
+        resourceLink={resourceLink}
+        iconButtonStyles={linkStyles}
+        openDocumentationLink={openDocumentationLink}
+        handleAddToCollectionClick={handleAddToCollectionClick}
+        handleRemoveFromCollectionClick={handleRemoveFromCollectionClick}
+      />
+        &nbsp;
+    </span>
+  );
 }
 
+const ResourceLinkNameContainer = ({
+  resourceLink,
+  linkStyles,
+  colors
+}: {
+  resourceLink: IResourceLink,
+  linkStyles: any,
+  colors: Record<string, Colors>
+}) => (
+  resourceLink.method ? (
+    <span className={linkStyles.resourceLinkNameContainer}>
+      <Badge
+        className={linkStyles.badge}
+        size='medium'
+        color={colors[resourceLink.method]}
+        aria-label={'http method ' + resourceLink.method + ' for'}>
+        {resourceLink.method}
+      </Badge>
+    </span>
+  ) : (
+    <span className={linkStyles.resourceLinkNameContainer}>
+      <span className={linkStyles.resourceLinkText}>
+        {resourceLink.name}
+      </span>
+    </span>
+  )
+);
+
+const ResourceLinkCountBadge = ({ resourceLink }: { resourceLink: IResourceLink }) => (
+  resourceLink.count && resourceLink.count > 0 ? (
+    <Badge appearance='tint' color='informative' aria-label={resourceLink.count + translateMessage('Resources')}>
+      {resourceLink.count}
+    </Badge>
+  ) : null
+);
+
+const ResourceLinkActions = ({
+  resourceLink,
+  iconButtonStyles,
+  openDocumentationLink,
+  handleAddToCollectionClick,
+  handleRemoveFromCollectionClick
+}: {
+  resourceLink: IResourceLink,
+  iconButtonStyles: any,
+  openDocumentationLink: () => void,
+  handleAddToCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  handleRemoveFromCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+}) => (
+  <div className={`${iconButtonStyles.actions} actions`}>
+    {resourceLink.method && (
+      <Tooltip
+        withArrow
+        content={
+          resourceLink.docLink? translateMessage('Read documentation')
+            : translateMessage('Query documentation not found')
+        }
+        relationship='label'
+      >
+        <Button
+          aria-label={translateMessage('Read documentation')}
+          id='documentButton'
+          aria-disabled={!resourceLink.docLink}
+          className={iconButtonStyles.root}
+          icon={<DocumentText20Regular />}
+          onClick={() => openDocumentationLink()}
+        />
+      </Tooltip>
+    )}
+    {resourceLink.isInCollection ? (
+      <Tooltip
+        withArrow
+        content={translateMessage('Remove from collection')}
+        relationship='label'>
+        <Button
+          aria-label={translateMessage('Remove from collection')}
+          id='removeCollectionButton'
+          className={iconButtonStyles.root}
+          icon={<SubtractSquare20Regular />}
+          onClick={handleRemoveFromCollectionClick}
+        />
+      </Tooltip>
+    ) : (
+      <Tooltip
+        withArrow
+        content={translateMessage('Add to collection')}
+        relationship='label'
+      >
+        <Button
+          aria-label={translateMessage('Add to collection')}
+          id='targetButton'
+          aria-describedby='tooltip'
+          className={iconButtonStyles.root}
+          icon={<AddSquare20Regular />}
+          onClick={handleAddToCollectionClick}
+        />
+      </Tooltip>
+    )}
+  </div>
+);
 export default ResourceLink;
