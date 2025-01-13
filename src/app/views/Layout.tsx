@@ -10,7 +10,15 @@ import { translateMessage } from '../utils/translate-messages';
 import Notification from './common/banners/Notification';
 import { Handle } from './Handle';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
-import { QueryRunner } from './query-runner';
+// import { QueryRunner } from './query-runner';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { setSampleQuery } from '../services/slices/sample-query.slice';
+import QueryRunnerV9 from './query-runner/QueryRunnerV9';
+import {
+  default as Request,
+  default as RequestV9
+} from './query-runner/request/RequestV9';
 import { SidebarV9 } from './sidebar/SidebarV9';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
@@ -36,7 +44,7 @@ const useMainWrapperStyles = makeResetStyles({
   "sidebar responseArea"
   "footer footer"
   `,
-  gridTemplateRows: `48px minmax(0, auto) 5% 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
+  gridTemplateRows: `48px minmax(0, auto) minmax(0, auto) 1fr clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%) 60px`,
   gridTemplateColumns: `clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%) 1fr`
 });
 
@@ -55,7 +63,8 @@ const useStyles = makeStyles({
   },
   areaQuery: {
     gridArea: 'queryArea',
-    backgroundColor: 'green'
+    backgroundColor: 'green',
+    padding: '6px'
   },
   areaRequest: {
     gridArea: 'requestArea',
@@ -128,6 +137,23 @@ const Layout = (props: ComponentProps) => {
   const resetResponseArea = () => {
     setResponseAreaRowSize(460);
   };
+
+  const dispatch = useAppDispatch();
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const [sampleBody, setSampleBody] = useState('');
+
+  useEffect(() => {
+    if (sampleQuery.selectedVerb !== 'GET') {
+      const query = { ...sampleQuery };
+      query.sampleBody = sampleBody;
+      dispatch(setSampleQuery(query));
+    }
+  }, [sampleBody]);
+
+  const handleOnEditorChange = (value?: string) => {
+    setSampleBody(value!);
+  };
+
   return (
     <div className={pageStyles}>
       <div className={wrapperStyles} ref={wrapperRef}>
@@ -155,9 +181,14 @@ const Layout = (props: ComponentProps) => {
           />
         </div>
         <div className={mergeClasses(boxStyles, styles.areaQuery)}>
-          <QueryRunner onSelectVerb={props.handleSelectVerb} />
+          <QueryRunnerV9 onSelectVerb={props.handleSelectVerb} />
         </div>
-        <div className={mergeClasses(boxStyles, styles.areaRequest)}></div>
+        <div className={mergeClasses(boxStyles, styles.areaRequest)}>
+          <RequestV9
+            handleOnEditorChange={handleOnEditorChange}
+            sampleQuery={sampleQuery}
+          ></RequestV9>
+        </div>
 
         <div
           className={mergeClasses(boxStyles, styles.areaResponse)}
