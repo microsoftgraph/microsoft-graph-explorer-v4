@@ -11,6 +11,7 @@ import {
   Option,
   useId
 } from '@fluentui/react-components';
+import { DocumentRegular, ShareRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 
 const HTTP_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
@@ -26,6 +27,10 @@ const useStyles = makeStyles({
   },
   input: {
     width: '-webkit-fill-available'
+  },
+  contentAfter: {
+    display: 'flex',
+    gap: '2px'
   }
 });
 
@@ -94,7 +99,21 @@ const InputArea = () => {
 
   return (
     <div className={styles.input}>
-      <Input className={styles.input} id={inputId} />
+      <Input
+        className={styles.input}
+        id={inputId}
+        contentAfter={<InputContentAfter />}
+      />
+    </div>
+  );
+};
+
+const InputContentAfter = () => {
+  const styles = useStyles();
+  return (
+    <div className={styles.contentAfter}>
+      <Button icon={<DocumentRegular />} appearance='transparent'></Button>
+      <Button icon={<ShareRegular />} appearance='transparent'></Button>
     </div>
   );
 };

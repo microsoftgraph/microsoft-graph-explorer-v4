@@ -51,13 +51,13 @@ const RequestV9 = (props: IRequestProps) => {
 
   const { handleOnEditorChange, sampleQuery }: IRequestProps = props;
   const newHeight = convertVhToPx(dimensions.request.height, 55);
-  const containerStyle: CSSProperties = {
-    height: newHeight,
-    overflow: 'hidden',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    padding: '8px'
-  };
+  // const containerStyle: CSSProperties = {
+  //   height: newHeight,
+  //   overflow: 'hidden',
+  //   borderRadius: '4px',
+  //   border: '1px solid #ddd',
+  //   padding: '8px'
+  // };
 
   // useEffect(() => {
   //   if (sidebarProperties && sidebarProperties.mobileScreen) {

@@ -59,16 +59,16 @@ const useStyles = makeStyles({
   },
   areaNotifications: {
     gridArea: 'notifications',
-    padding: '6px'
+    padding: '0 6px'
   },
   areaQuery: {
     gridArea: 'queryArea',
-    backgroundColor: 'green',
-    padding: '6px'
+    padding: '0 6px'
   },
   areaRequest: {
     gridArea: 'requestArea',
-    backgroundColor: 'blue'
+    backgroundColor: 'blue',
+    padding: '0 6px'
   },
   areaResponse: {
     gridArea: 'responseArea',
