@@ -587,18 +587,21 @@ class App extends Component<IAppProps, IAppState> {
                 <TermsOfUseMessageV9 />
               </div>
             </div> */}
-            <Layout
-              maxWidth={0}
-              onDragStart={(event) => {
-                console.log('Drag started', event);
-              }}
-              onDragEnd={() => {
-                console.log('Drag ended');
-              }}
-              onChange={(value, eventType) => {
-                console.log('Changed', value, eventType);
-              }}
-            />
+            <ValidationProvider>
+              <Layout
+                handleSelectVerb={this.handleSelectVerb}
+                maxWidth={0}
+                onDragStart={(event) => {
+                  console.log('Drag started', event);
+                }}
+                onDragEnd={() => {
+                  console.log('Drag ended');
+                }}
+                onChange={(value, eventType) => {
+                  console.log('Changed', value, eventType);
+                }}
+              />
+            </ValidationProvider>
             <CollectionPermissionsProvider>
               <PopupsWrapper />
             </CollectionPermissionsProvider>

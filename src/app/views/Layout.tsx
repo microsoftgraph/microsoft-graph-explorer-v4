@@ -10,6 +10,7 @@ import { translateMessage } from '../utils/translate-messages';
 import Notification from './common/banners/Notification';
 import { Handle } from './Handle';
 import { MainHeaderV9 } from './main-header/MainHeaderV9';
+import { QueryRunner } from './query-runner';
 import { SidebarV9 } from './sidebar/SidebarV9';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
@@ -75,6 +76,7 @@ const useMainBoxStyles = makeResetStyles({
 });
 
 interface ComponentProps {
+  handleSelectVerb: (verb: string) => void;
   maxWidth: number;
   onDragStart: (value: number, eventType: string) => void;
   onDragEnd: (value: number, eventType: string) => void;
@@ -152,7 +154,9 @@ const Layout = (props: ComponentProps) => {
             linkText={translateMessage('Banner notification 1 link text')}
           />
         </div>
-        <div className={mergeClasses(boxStyles, styles.areaQuery)}></div>
+        <div className={mergeClasses(boxStyles, styles.areaQuery)}>
+          <QueryRunner onSelectVerb={props.handleSelectVerb} />
+        </div>
         <div className={mergeClasses(boxStyles, styles.areaRequest)}></div>
 
         <div

@@ -15,7 +15,11 @@ import { QueryInput } from './query-input';
 import './query-runner.scss';
 import Request from './request/RequestV9';
 
-const QueryRunner = (props: any) => {
+interface QueryRunnerProps {
+  onSelectVerb: (verb: string) => void;
+}
+
+const QueryRunner = (props: QueryRunnerProps) => {
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
@@ -27,7 +31,7 @@ const QueryRunner = (props: any) => {
       query.sampleBody = sampleBody;
       dispatch(setSampleQuery(query));
     }
-  }, [sampleBody])
+  }, [sampleBody]);
 
   const handleOnMethodChange = (method?: IDropdownOption) => {
     const query = { ...sampleQuery };
@@ -45,21 +49,24 @@ const QueryRunner = (props: any) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    console.log('query stuff', query)
     let sample = { ...sampleQuery };
     if (sampleBody && sample.selectedVerb !== 'GET') {
       const headers = sample.sampleHeaders;
-      const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
-      if (!contentType || (contentType.value === ContentType.Json)) {
+      const contentType = headers.find(
+        (k: { name: string }) => k.name.toLowerCase() === 'content-type'
+      );
+      if (!contentType || contentType.value === ContentType.Json) {
         try {
           sample.sampleBody = JSON.parse(sampleBody);
         } catch (error) {
-          dispatch(setQueryResponseStatus({
-            ok: false,
-            statusText: translateMessage('Malformed JSON body'),
-            status: `${translateMessage('Review the request body')} ${error}`,
-            messageBarType: 'error'
-          }));
+          dispatch(
+            setQueryResponseStatus({
+              ok: false,
+              statusText: translateMessage('Malformed JSON body'),
+              status: `${translateMessage('Review the request body')} ${error}`,
+              messageBarType: 'error'
+            })
+          );
           return;
         }
       } else {
@@ -73,20 +80,18 @@ const QueryRunner = (props: any) => {
         sampleUrl: query.sampleUrl,
         selectedVersion: query.selectedVersion,
         selectedVerb: query.selectedVerb
-      }
+      };
     }
 
-    console.log('sample before dispatch', sample)
     dispatch(runQuery(sample));
     const sanitizedUrl = sanitizeQueryUrl(sample.sampleUrl);
     const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.RUN_QUERY_BUTTON,
-        SelectedVersion: sample.selectedVersion,
-        QuerySignature: `${sample.selectedVerb} ${sanitizedUrl}`,
-        ...deviceCharacteristics
-      });
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.RUN_QUERY_BUTTON,
+      SelectedVersion: sample.selectedVersion,
+      QuerySignature: `${sample.selectedVerb} ${sanitizedUrl}`,
+      ...deviceCharacteristics
+    });
   };
 
   const handleOnVersionChange = (urlVersion?: IDropdownOption) => {
@@ -98,11 +103,13 @@ const QueryRunner = (props: any) => {
         sampleQuery.sampleUrl,
         urlVersion.text
       );
-      dispatch(setSampleQuery({
-        ...sampleQuery,
-        sampleUrl,
-        selectedVersion: newQueryVersion
-      }));
+      dispatch(
+        setSampleQuery({
+          ...sampleQuery,
+          sampleUrl,
+          selectedVersion: newQueryVersion
+        })
+      );
       if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
           ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
@@ -136,6 +143,6 @@ const QueryRunner = (props: any) => {
       </div>
     </>
   );
-}
+};
 
 export default QueryRunner;
