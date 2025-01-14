@@ -43,8 +43,11 @@ const useStyles = makeStyles({
 export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
-  const { sampleQuery, scopes, auth: { authToken, consentedScopes }, dimensions } =
-      useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const scopes = useAppSelector((state) => state.scopes);
+  const authToken = useAppSelector((state) => state.auth.authToken);
+  const consentedScopes = useAppSelector((state) => state.auth.consentedScopes);
+  const dimensions = useAppSelector((state) => state.dimensions);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;

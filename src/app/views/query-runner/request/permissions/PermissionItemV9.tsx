@@ -41,7 +41,10 @@ const useStyles = makeStyles({
 
 const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const { scopes, auth: { consentedScopes }, profile: { user }, permissionGrants } = useAppSelector((state) => state);
+  const scopes = useAppSelector((state) => state.scopes);
+  const consentedScopes  = useAppSelector((state) => state.auth.consentedScopes);
+  const user  = useAppSelector((state) => state.profile.user);
+  const permissionGrants = useAppSelector((state) => state.permissionGrants);
   const { item, column } = props;
   const styles = useStyles();
 
