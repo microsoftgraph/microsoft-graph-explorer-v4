@@ -1,6 +1,6 @@
 import {
-  Table, TableHeader, TableRow, TableCell, TableBody, TableColumnDefinition,
-  Label, Button, makeStyles, shorthands
+  Table, TableHeader, TableRow, TableCell, TableBody,
+  Label, makeStyles
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -14,20 +14,28 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { getColumns } from './columnsV9';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
+import { FontSizes, Link } from '@fluentui/react';
 
 const useStyles = makeStyles({
   root: {
-    ...shorthands.padding('17px')
+    padding: '17px'
   },
   label: {
     marginLeft: '12px'
   },
+  errorLabel: {
+    marginTop: '10px',
+    paddingLeft: '10px',
+    paddingRight: '20px',
+    minHeight: '200px'
+  },
+  permissionText: {
+    fontSize: FontSizes.small,
+    marginBottom: '5px',
+    paddingLeft: '10px'
+  },
   tableWrapper: {
     flex: 1,
-    overflowY: 'auto'
-  },
-  reducedScreenSize: {
-    height: '100%',
     overflowY: 'auto'
   }
 });
@@ -36,12 +44,12 @@ export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
   const { sampleQuery, scopes, auth: { authToken, consentedScopes }, dimensions } =
-        useAppSelector((state) => state);
+      useAppSelector((state) => state);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;
   const { pending: loading, error } = scopes;
-  let permissions: IPermission[] = scopes.data.specificPermissions ? scopes.data.specificPermissions : [];
+  const [permissions, setPermissions] = useState<{ item: IPermission; index: number }[]>([]);
   const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
 
   const styles = useStyles();
@@ -64,6 +72,10 @@ export const Permissions = (): JSX.Element => {
 
   const getPermissions = (): void => {
     dispatch(fetchScopes('query'));
+    fetchPermissionGrants();
+  };
+
+  const fetchPermissionGrants = (): void => {
     if (tokenPresent) {
       dispatch(fetchAllPrincipalGrants());
     }
@@ -81,10 +93,14 @@ export const Permissions = (): JSX.Element => {
     }
   }, []);
 
-  const columns: TableColumnDefinition<IPermission>[] = getColumns({
-    source: 'tab',
-    tokenPresent
-  });
+  useEffect(() => {
+    let updatedPermissions = scopes.data.specificPermissions || [];
+    updatedPermissions = sortPermissionsWithPrivilege(updatedPermissions);
+    updatedPermissions = setConsentedStatus(tokenPresent, updatedPermissions, consentedScopes);
+    setPermissions(updatedPermissions.map((item, index) => ({ item, index })));
+  }, [scopes.data.specificPermissions, tokenPresent, consentedScopes]);
+
+  const columns = getColumns({ source: 'tab', tokenPresent });
 
   if (loading.isSpecificPermissions) {
     return <Label className={styles.label}>{translateMessage('Fetching permissions')}...</Label>;
@@ -97,9 +113,9 @@ export const Permissions = (): JSX.Element => {
   const displayNoPermissionsFoundMessage = (): JSX.Element => (
     <Label className={styles.root}>
       {translateMessage('permissions not found in permissions tab')}
-      <Button appearance="transparent" onClick={openPermissionsPanel}>
+      <Link underline onClick={openPermissionsPanel}>
         {translateMessage('open permissions panel')}
-      </Button>
+      </Link>
       {translateMessage('permissions list')}
     </Label>
   );
@@ -111,7 +127,7 @@ export const Permissions = (): JSX.Element => {
   );
 
   const displayErrorFetchingPermissionsMessage = (): JSX.Element => (
-    <Label className={styles.label}>{translateMessage('Fetching permissions failing')}</Label>
+    <Label className={styles.errorLabel}>{translateMessage('Fetching permissions failing')}</Label>
   );
 
   if (!tokenPresent && permissions.length === 0) {
@@ -124,21 +140,13 @@ export const Permissions = (): JSX.Element => {
       : displayErrorFetchingPermissionsMessage();
   }
 
-  permissions = sortPermissionsWithPrivilege(permissions);
-  permissions = setConsentedStatus(tokenPresent, permissions, consentedScopes);
-
   return (
     <div>
-      <Label className={styles.label}>
+      <Label className={styles.permissionText}>
         {translateMessage(tokenPresent ? 'permissions required to run the query' : 'sign in to consent to permissions')}
       </Label>
-      <div
-        className={styles.tableWrapper}
-        style={{ height: tabHeight }}
-      >
-        <Table
-          aria-label={translateMessage('Permissions Table')}
-        >
+      <div className={styles.tableWrapper} style={{ height: tabHeight }}>
+        <Table aria-label={translateMessage('Permissions Table')}>
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
@@ -147,10 +155,10 @@ export const Permissions = (): JSX.Element => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {permissions.map((permission) => (
-              <TableRow key={permission.value}>
+            {permissions.map(({ item, index }) => (
+              <TableRow key={item.value}>
                 {columns.map((column) => (
-                  <TableCell key={column.columnId}>{column.renderCell(permission)}</TableCell>
+                  <TableCell key={column.columnId}>{column.renderCell({ item, index })}</TableCell>
                 ))}
               </TableRow>
             ))}

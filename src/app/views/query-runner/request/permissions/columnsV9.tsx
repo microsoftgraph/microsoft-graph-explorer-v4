@@ -1,22 +1,39 @@
 import {
-  TableColumnDefinition,
   createTableColumn,
+  TableColumnDefinition,
   Tooltip,
   Button,
   makeStyles
 } from '@fluentui/react-components';
-
-import { componentNames, telemetry } from '../../../../../telemetry';
+import { telemetry, componentNames } from '../../../../../telemetry';
 import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { IPermission } from '../../../../../types/permissions';
+import { InfoRegular } from '@fluentui/react-icons';
+import PermissionItem from './PermissionItemV9';
 
-  type Source = 'panel' | 'tab';
+type source = 'panel' | 'tab';
 
-  interface ColumnProps {
-    source: Source;
-    tokenPresent?: boolean;
+interface ColumnProps {
+  source: source;
+  tokenPresent?: boolean;
+}
+
+const useStyles = makeStyles({
+  iconButton: {
+    position: 'relative',
+    left: '4px',
+    top: '2px'
+  },
+  headerContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'left'
+  },
+  headerText: {
+    marginLeft: '8px'
   }
+});
 
 const trackLinkClickedEvent = (link: string, componentName: string) => {
   telemetry.trackLinkClickEvent(link, componentName);
@@ -35,38 +52,44 @@ const openExternalWebsite = (url: string) => {
   }
 };
 
-const useStyles = makeStyles({
-  columnHeader: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  headerIcon: {
-    marginLeft: '4px'
-  }
-});
+const createRenderColumnHeader = (styles: ReturnType<typeof useStyles>) => {
+  const RenderColumnHeader = (headerText: string): JSX.Element => {
+    const tooltipMessage =
+    headerText === 'Admin consent required'
+      ? translateMessage('Administrator permission')
+      : translateMessage('Permission consent type');
+    return (
+      <div className={styles.headerContainer}>
+        <Tooltip
+          content={tooltipMessage}
+          relationship='label'>
+          <Button
+            icon={<InfoRegular />}
+            appearance="subtle"
+            size="small"
+            className={styles.iconButton}
+            aria-label={translateMessage(headerText)}
+            onClick={() => openExternalWebsite(headerText)}
+          />
+        </Tooltip>
+        <span className={styles.headerText}>{translateMessage(headerText)}</span>
+      </div>
+    );
+  };
+  RenderColumnHeader.displayName = 'RenderColumnHeader';
+  return RenderColumnHeader;
+};
 
-const getColumns = ({ source, tokenPresent }: ColumnProps): TableColumnDefinition<IPermission>[] => {
+const getColumns = ({ source, tokenPresent }: ColumnProps):
+ TableColumnDefinition<{item: IPermission; index: number }>[] => {
   const styles = useStyles();
-
-  const renderColumnHeader = (headerText: string) => (
-    <div className={styles.columnHeader}>
-      {translateMessage(headerText)}
-      <Button
-        icon={<Tooltip content={translateMessage(`Learn more about ${headerText}`)} relationship='label'/>}
-        appearance="transparent"
-        onClick={() => openExternalWebsite(headerText)}
-        className={styles.headerIcon}
-        aria-label={translateMessage(headerText)}
-      />
-    </div>
-  );
-
-  const columns: TableColumnDefinition<IPermission>[] = [
+  const renderColumnHeader = createRenderColumnHeader(styles);
+  const columns: TableColumnDefinition<{ item: IPermission; index: number }>[] = [
     createTableColumn({
       columnId: 'value',
       renderHeaderCell: () => translateMessage('Permission'),
-      renderCell: (item) => item.value,
-      compare: (a, b) => a.value.localeCompare(b.value)
+      renderCell: ({item, index}) => (
+        <PermissionItem column={{ key: 'value', fieldName: 'value' }} index={index} item={item} />)
     })
   ];
 
@@ -75,7 +98,12 @@ const getColumns = ({ source, tokenPresent }: ColumnProps): TableColumnDefinitio
       createTableColumn({
         columnId: 'consentDescription',
         renderHeaderCell: () => translateMessage('Description'),
-        renderCell: (item) => item.consentDescription
+        renderCell: ({item, index}) => (
+          <PermissionItem
+            column={{ key: 'consentDescription', fieldName: 'consentDescription' }}
+            index={index}
+            item={item} />
+        )
       })
     );
   }
@@ -84,7 +112,9 @@ const getColumns = ({ source, tokenPresent }: ColumnProps): TableColumnDefinitio
     createTableColumn({
       columnId: 'isAdmin',
       renderHeaderCell: () => renderColumnHeader('Admin consent required'),
-      renderCell: (item) => (item.isAdmin ? translateMessage('Yes') : translateMessage('No'))
+      renderCell: ({item, index}) => (
+        <PermissionItem column={{ key: 'isAdmin', fieldName: 'isAdmin' }} index={index} item={item} />
+      )
     })
   );
 
@@ -92,13 +122,17 @@ const getColumns = ({ source, tokenPresent }: ColumnProps): TableColumnDefinitio
     columns.push(
       createTableColumn({
         columnId: 'consented',
-        renderHeaderCell: () => renderColumnHeader('Status'),
-        renderCell: (item) => (item.consented ? translateMessage('Granted') : translateMessage('Not Granted'))
+        renderHeaderCell: () => translateMessage('Status'),
+        renderCell: ({item, index}) => (
+          <PermissionItem column={{ key: 'consented', fieldName: 'consented' }} index={index} item={item} />
+        )
       }),
       createTableColumn({
         columnId: 'consentType',
         renderHeaderCell: () => renderColumnHeader('Consent type'),
-        renderCell: (item) => item.consentType
+        renderCell: ({item, index}) => (
+          <PermissionItem column={{ key: 'consentType', fieldName: 'consentType' }} index={index} item={item} />
+        )
       })
     );
   }
