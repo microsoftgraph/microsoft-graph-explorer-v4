@@ -23,9 +23,11 @@ const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 const usePageStyles = makeResetStyles({
   [SIDEBAR_SIZE_CSS_VAR]: '20%',
   [RESPONSE_AREA_SIZE_CSS_VAR]: '40%',
+  height: '100vh',
+  margin: '0',
   display: 'flex',
   flexDirection: 'column',
-  width: '100%'
+  flex: '1'
 })
 
 const useSidebarStyles = makeResetStyles({
@@ -34,7 +36,10 @@ const useSidebarStyles = makeResetStyles({
   borderRightStyle: 'solid',
   borderRightColor: tokens.colorNeutralStroke1,
   borderRightWidth: '2px',
-  position: 'relative'
+  position: 'relative',
+  flexShrink: '0',
+  backgroundColor: 'lightcoral',
+  overflow: 'hidden'
 });
 
 const useResponseAreaStyles = makeResetStyles({
@@ -44,16 +49,30 @@ const useResponseAreaStyles = makeResetStyles({
 
 const useLayoutStyles = makeStyles({
   header: {
-    flex: '0 0 auto'
+    flexShrink: '0',
+    height: '60px',
+    background: 'orange'
   },
   body: {
     display: 'flex',
-    flex: '1 1 auto',
-    gap: '0.5rem'
+    flex: '1',
+    gap: '0.5rem',
+    overflow: 'hidden',
+    backgroundColor: 'lightblue'
   },
-  content: {
-    flex: '1 1 auto',
-    padding: '0.5rem'
+  main: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '0.5rem',
+    flex: '1',
+    backgroundColor: 'lightpink',
+    height: 'calc(100vh - 110px)',
+    overflowY: 'auto'
+  },
+  footer: {
+    flexShrink: '0',
+    height: '50px',
+    backgroundColor: 'lightgreen'
   }
 })
 
@@ -128,49 +147,69 @@ const Layout = (props: LayoutProps) =>{
     setSampleBody(value!);
   };
 
-  return <div className={pageStyles}>
-    <div className={layoutStyles.header}><MainHeaderV9/></div>
-    {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
-    <div className={layoutStyles.body} ref={wrapperRef}>
-      <div className={sidebarStyles} ref={sidebarElementRef}>
-        <SidebarV9/>
-        <LayoutResizeHandler
-          position='end'
-          ref={sidebarHandleRef}
-          onDoubleClick={resetSidebarArea}
-        />
-      </div>
-      <div className={layoutStyles.content}>
-        <Notification
-          header={translateMessage('Banner notification 1 header')}
-          content={translateMessage('Banner notification 1 content')}
-          link={translateMessage('Banner notification 1 link')}
-          linkText={translateMessage('Banner notification 1 link text')}/>
-        <ValidationProvider>
-          <QueryRunner onSelectVerb={props.handleSelectVerb} />
-          <RequestV9
-            handleOnEditorChange={handleOnEditorChange}
-            sampleQuery={sampleQuery}
+  // return (
+  //   <div className={pageStyles}>
+  //     <div className={layoutStyles.header}><MainHeaderV9/></div>
+  //     {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
+  //     <div className={layoutStyles.body} ref={wrapperRef}>
+  //       <div className={sidebarStyles} ref={sidebarElementRef}>
+  //         {/* <SidebarV9/> */}
+  //         <LayoutResizeHandler
+  //           position='end'
+  //           ref={sidebarHandleRef}
+  //           onDoubleClick={resetSidebarArea}
+  //         />
+  //       </div>
+  //       <div className={layoutStyles.content}>
+  //         {/* <Notification
+  //           header={translateMessage('Banner notification 1 header')}
+  //           content={translateMessage('Banner notification 1 content')}
+  //           link={translateMessage('Banner notification 1 link')}
+  //           linkText={translateMessage('Banner notification 1 link text')}/> */}
+  //         {/* <ValidationProvider>
+  //           <QueryRunner onSelectVerb={props.handleSelectVerb} />
+  //           <RequestV9
+  //             handleOnEditorChange={handleOnEditorChange}
+  //             sampleQuery={sampleQuery}
+  //           />
+  //           <StatusMessagesV9 /> */}
+  //         {/* TODO: Implement resizing for the response area */}
+  //         {/* <div className={responseAreaStyles}
+  //             ref={responseAreaElementRef}>
+  //             <QueryResponse />
+  //             <LayoutResizeHandler
+  //               position='top'
+  //               ref={responseAreaHandleRef}
+  //               onDoubleClick={resetResponseArea}
+  //             />
+  //           </div>
+  //         </ValidationProvider> */}
+  //         <CollectionPermissionsProvider>
+  //           <PopupsWrapper />
+  //         </CollectionPermissionsProvider>
+  //       </div>
+  //     </div>
+  //     <div id="footer" className={layoutStyles.footer}><TermsOfUseMessageV9 /></div>
+  //   </div>)
+
+  return (
+    <div id="container" className={pageStyles}>
+      <div id="header" className={layoutStyles.header}><MainHeaderV9/></div>
+      {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
+      <div id="body" className={layoutStyles.body} ref={wrapperRef}>
+        <div className={sidebarStyles}>
+          <SidebarV9/>
+          <LayoutResizeHandler
+            position='end'
+            ref={sidebarHandleRef}
+            onDoubleClick={resetSidebarArea}
           />
-          <StatusMessagesV9 />
-          {/* TODO: Implement resizing for the response area */}
-          <div className={responseAreaStyles}
-            ref={responseAreaElementRef}>
-            <QueryResponse />
-            <LayoutResizeHandler
-              position='top'
-              ref={responseAreaHandleRef}
-              onDoubleClick={resetResponseArea}
-            />
-          </div>
-        </ValidationProvider>
-        <TermsOfUseMessageV9 />
-        <CollectionPermissionsProvider>
-          <PopupsWrapper />
-        </CollectionPermissionsProvider>
+        </div>
+        <div className={layoutStyles.main}>someMain</div>
       </div>
+      <div id="footer" className={layoutStyles.footer}><TermsOfUseMessageV9 /></div>
     </div>
-  </div>
+  )
 }
 
 export {Layout}

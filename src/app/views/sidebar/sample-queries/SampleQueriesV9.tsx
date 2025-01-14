@@ -56,7 +56,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     marginTop: '6px',
-    height: '100vh'
+    height: 'calc(100vh - 310px)' // NOTE: use this height for API explorer and History tree views
   },
   searchBox: {
     width: '100%',
@@ -82,7 +82,7 @@ const useStyles = makeStyles({
   },
   tree:{
     overflowY: 'auto',
-    flex: '1 1 auto'
+    flex: '1 1 0'
   }
 });
 

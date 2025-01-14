@@ -81,8 +81,8 @@ const getSystemTheme = (): string => {
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
   private currentTheme: ITheme = getTheme();
-  private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
-  private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
+  // private statusAreaMobileStyle = appStyles(this.currentTheme).statusAreaMobileScreen;
+  // private statusAreaFullScreenStyle = appStyles(this.currentTheme).statusAreaFullScreen;
 
   constructor(props: IAppProps) {
     super(props);
