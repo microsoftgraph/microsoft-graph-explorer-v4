@@ -38,8 +38,7 @@ const useSidebarStyles = makeResetStyles({
   borderRightWidth: '2px',
   position: 'relative',
   flexShrink: '0',
-  backgroundColor: tokens.colorNeutralBackground6,
-  overflow: 'hidden'
+  backgroundColor: tokens.colorNeutralBackground6
 });
 
 const useResponseAreaStyles = makeResetStyles({
@@ -61,7 +60,7 @@ const useLayoutStyles = makeStyles({
   main: {
     display: 'flex',
     flexDirection: 'column',
-    padding: '0.5rem',
+    padding: '0.5rem 0.5rem 0 0',
     flex: '1',
     height: 'calc(100vh - 110px)',
     overflowY: 'auto'

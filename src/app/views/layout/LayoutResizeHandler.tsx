@@ -1,4 +1,4 @@
-import { useFluent } from '@fluentui/react-components';
+import { useFluent , makeResetStyles, tokens} from '@fluentui/react-components';
 import * as React from 'react';
 
 interface HandleProps {
@@ -6,10 +6,16 @@ interface HandleProps {
   onDoubleClick?: () => void;
 }
 
+const useHoverStyles = makeResetStyles({
+  ':hover': {
+    backgroundColor: tokens.colorBrandForegroundOnLightHover
+  }
+})
 export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>(
   (props, ref) => {
     const { position, ...rest } = props;
     const { dir } = useFluent();
+    const hoverStyles = useHoverStyles()
 
     const handleClick = (event: React.MouseEvent) => {
       if (event.detail === 2) {
@@ -29,19 +35,19 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
     const positioningProps =
       position === 'start' || position === 'end'
         ? {
-          [positioningAttr]: '-12px',
+          [positioningAttr]: '-7px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '6px',
-          height: '100px',
+          width: '3px',
+          height: '100%',
           cursor: 'col-resize'
         }
         : {
-          ...(position === 'top' ? { top: '14px' } : { bottom: '14px' }),
+          ...(position === 'top' ? { top: '15px' } : { bottom: '15px' }),
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '100px',
-          height: '6px',
+          width: '100%',
+          height: '3px',
           cursor: 'row-resize'
         };
 
@@ -51,10 +57,10 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
         ref={ref}
         onClick={handleClick}
         tabIndex={0}
+        className={hoverStyles}
         style={{
           position: 'absolute',
           borderRadius: '2px',
-          backgroundColor: 'gray',
           ...positioningProps
         }}
       />
