@@ -2,8 +2,7 @@ import {
   createTableColumn,
   TableColumnDefinition,
   Tooltip,
-  Button,
-  makeStyles
+  Button
 } from '@fluentui/react-components';
 import { telemetry, componentNames } from '../../../../../telemetry';
 import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK } from '../../../../services/graph-constants';
@@ -11,6 +10,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { IPermission } from '../../../../../types/permissions';
 import { InfoRegular } from '@fluentui/react-icons';
 import PermissionItem from './PermissionItemV9';
+import permissionStyles from './Permission.stylesV9';
 
 type source = 'panel' | 'tab';
 
@@ -18,22 +18,6 @@ interface ColumnProps {
   source: source;
   tokenPresent?: boolean;
 }
-
-const useStyles = makeStyles({
-  iconButton: {
-    position: 'relative',
-    left: '4px',
-    top: '2px'
-  },
-  headerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'left'
-  },
-  headerText: {
-    marginLeft: '8px'
-  }
-});
 
 const trackLinkClickedEvent = (link: string, componentName: string) => {
   telemetry.trackLinkClickEvent(link, componentName);
@@ -52,7 +36,7 @@ const openExternalWebsite = (url: string) => {
   }
 };
 
-const createRenderColumnHeader = (styles: ReturnType<typeof useStyles>) => {
+const createRenderColumnHeader = (styles: ReturnType<typeof permissionStyles>) => {
   const RenderColumnHeader = (headerText: string): JSX.Element => {
     const tooltipMessage =
     headerText === 'Admin consent required'
@@ -82,7 +66,7 @@ const createRenderColumnHeader = (styles: ReturnType<typeof useStyles>) => {
 
 const getColumns = ({ source, tokenPresent }: ColumnProps):
  TableColumnDefinition<{item: IPermission; index: number }>[] => {
-  const styles = useStyles();
+  const styles = permissionStyles();
   const renderColumnHeader = createRenderColumnHeader(styles);
   const columns: TableColumnDefinition<{ item: IPermission; index: number }>[] = [
     createTableColumn({

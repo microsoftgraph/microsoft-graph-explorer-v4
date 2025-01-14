@@ -1,6 +1,6 @@
 import {
   Table, TableHeader, TableRow, TableCell, TableBody,
-  Label, makeStyles
+  Link, Text
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -14,31 +14,8 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { getColumns } from './columnsV9';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
-import { FontSizes, Link } from '@fluentui/react';
+import permissionStyles  from './Permission.stylesV9';
 
-const useStyles = makeStyles({
-  root: {
-    padding: '17px'
-  },
-  label: {
-    marginLeft: '12px'
-  },
-  errorLabel: {
-    marginTop: '10px',
-    paddingLeft: '10px',
-    paddingRight: '20px',
-    minHeight: '200px'
-  },
-  permissionText: {
-    fontSize: FontSizes.small,
-    marginBottom: '5px',
-    paddingLeft: '10px'
-  },
-  tableWrapper: {
-    flex: 1,
-    overflowY: 'auto'
-  }
-});
 
 export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -55,7 +32,7 @@ export const Permissions = (): JSX.Element => {
   const [permissions, setPermissions] = useState<{ item: IPermission; index: number }[]>([]);
   const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
 
-  const styles = useStyles();
+  const styles = permissionStyles();
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   useEffect(() => {
@@ -106,31 +83,33 @@ export const Permissions = (): JSX.Element => {
   const columns = getColumns({ source: 'tab', tokenPresent });
 
   if (loading.isSpecificPermissions) {
-    return <Label className={styles.label}>{translateMessage('Fetching permissions')}...</Label>;
+    return <div className={styles.label}><Text>{translateMessage('Fetching permissions')}... </Text></div>;
   }
 
   if (!validation.isValid) {
-    return <Label className={styles.label}>{translateMessage('Invalid URL')}!</Label>;
+    return <div className={styles.label}><Text>{translateMessage('Invalid URL')}!</Text></div>;
   }
 
   const displayNoPermissionsFoundMessage = (): JSX.Element => (
-    <Label className={styles.root}>
-      {translateMessage('permissions not found in permissions tab')}
-      <Link underline onClick={openPermissionsPanel}>
-        {translateMessage('open permissions panel')}
-      </Link>
-      {translateMessage('permissions list')}
-    </Label>
+    <div className={styles.root}>
+      <Text>
+        {translateMessage('permissions not found in permissions tab')}
+        <Link inline onClick={openPermissionsPanel}>
+          {translateMessage('open permissions panel')}
+        </Link>
+        {translateMessage('permissions list')}
+      </Text>
+    </div>
   );
 
   const displayNotSignedInMessage = (): JSX.Element => (
-    <Label className={styles.root}>
-      {translateMessage('sign in to view a list of all permissions')}
-    </Label>
+    <div className={styles.root}>
+      <Text>{translateMessage('sign in to view a list of all permissions')}</Text>
+    </div>
   );
 
   const displayErrorFetchingPermissionsMessage = (): JSX.Element => (
-    <Label className={styles.errorLabel}>{translateMessage('Fetching permissions failing')}</Label>
+    <div className={styles.errorLabel}><Text>{translateMessage('Fetching permissions failing')}</Text></div>
   );
 
   if (!tokenPresent && permissions.length === 0) {
@@ -145,9 +124,11 @@ export const Permissions = (): JSX.Element => {
 
   return (
     <div>
-      <Label className={styles.permissionText}>
-        {translateMessage(tokenPresent ? 'permissions required to run the query' : 'sign in to consent to permissions')}
-      </Label>
+      <div className={styles.permissionText}>
+        <Text>
+          {translateMessage(tokenPresent ? 'permissions required to run the query':'sign in to consent to permissions')}
+        </Text>
+      </div>
       <div className={styles.tableWrapper} style={{ height: tabHeight }}>
         <Table aria-label={translateMessage('Permissions Table')}>
           <TableHeader>

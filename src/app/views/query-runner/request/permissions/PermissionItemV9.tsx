@@ -1,9 +1,7 @@
 import {
   Button,
   Tooltip,
-  Label,
-  makeStyles,
-  tokens
+  Label
 } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
@@ -14,30 +12,13 @@ import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../servi
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { InfoRegular } from '@fluentui/react-icons';
+import permissionStyles from './Permission.stylesV9';
 
 interface PermissionItemProps {
   item: IPermission;
   index: number;
   column: { key: string; fieldName?: string } | undefined;
 }
-
-const useStyles = makeStyles({
-  adminLabel: {
-    fontSize: tokens.fontSizeBase300,
-    padding: tokens.spacingVerticalXS
-  },
-  button: {
-    margin: tokens.spacingVerticalXXS
-  },
-  tooltip: {
-    display: 'block'
-  },
-  icon: {
-    position: 'relative',
-    top: '4px',
-    cursor: 'pointer'
-  }
-});
 
 const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -46,7 +27,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
   const user  = useAppSelector((state) => state.profile.user);
   const permissionGrants = useAppSelector((state) => state.permissionGrants);
   const { item, column } = props;
-  const styles = useStyles();
+  const styles = permissionStyles();
 
   const consented = !!item.consented;
 
