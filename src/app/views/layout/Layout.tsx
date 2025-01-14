@@ -1,4 +1,4 @@
-import { makeStyles } from '@fluentui/react-components'
+import { makeResetStyles, makeStyles, mergeClasses, useMergedRefs } from '@fluentui/react-components'
 import { translateMessage } from '../../utils/translate-messages'
 import Notification from '../common/banners/Notification'
 import { MainHeaderV9 } from '../main-header/MainHeaderV9'
@@ -13,14 +13,32 @@ import { useState, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store'
 import { setSampleQuery } from '../../services/slices/sample-query.slice'
 import RequestV9 from '../query-runner/request/RequestV9'
+import { useResizeHandle } from '@fluentui-contrib/react-resize-handle'
+import { LayoutResizeHandler } from './LayoutResizeHandler'
 
-const layoutStyles = makeStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%'
-  },
+
+const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
+const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
+
+const usePageStyles = makeResetStyles({
+  [SIDEBAR_SIZE_CSS_VAR]: '20%',
+  [RESPONSE_AREA_SIZE_CSS_VAR]: '40%',
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '100%'
+})
+
+const useSidebarStyles = makeResetStyles({
+  flex: `0 0 clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%)`,
+  height: '100%'
+});
+
+const useResponseAreaStyles = makeResetStyles({
+  flex: `1 1 clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%)`
+});
+
+const useLayoutStyles = makeStyles({
   header: {
     flex: '0 0 auto'
   },
@@ -29,21 +47,70 @@ const layoutStyles = makeStyles({
     flex: '1 1 auto',
     gap: '0.5rem'
   },
-  sidebar: {
-    flex: '0 0 auto',
-    height: '100%',
-    overflow: 'auto'
-  },
   content: {
     flex: '1 1 auto'
   }
 })
 
+const useMainBoxStyles = makeResetStyles({
+  position: 'relative'
+});
+
 interface LayoutProps {
-    handleSelectVerb: (verb: string) => void
+  handleSelectVerb: (verb: string) => void
+  maxWidth: number;
+  onDragStart: (value: number, eventType: string) => void;
+  onDragEnd: (value: number, eventType: string) => void;
+  onChange: (value: number, eventType: string) => void;
 }
 
 const Layout = (props: LayoutProps) =>{
+  const {
+    handleRef: sidebarHandleRef,
+    wrapperRef: sidebarWrapperRef,
+    elementRef: sidebarElementRef,
+    setValue: setSidebarColumnSize
+  } = useResizeHandle({
+    variableName: SIDEBAR_SIZE_CSS_VAR,
+    growDirection: 'end',
+    relative: true,
+    onChange: (_, { value, type }) => {
+      props.onChange(value, String(type));
+    },
+    onDragStart: (_, { value, type }) => {
+      props.onDragStart(value, String(type));
+    },
+    onDragEnd: (_, { value, type }) => {
+      props.onDragEnd(value, String(type));
+    }
+  });
+
+  const {
+    handleRef: responseAreaHandleRef,
+    wrapperRef: responseAreaWrapperRef,
+    elementRef: responseAreaElementRef,
+    setValue: setResponseAreaRowSize
+  } = useResizeHandle({
+    variableName: RESPONSE_AREA_SIZE_CSS_VAR,
+    growDirection: 'up'
+  });
+
+  const resetSidebarArea = () => {
+    setSidebarColumnSize(416);
+  };
+
+  const resetResponseArea = () => {
+    setResponseAreaRowSize(460);
+  };
+
+  const pageStyles = usePageStyles();
+  const layoutStyles = useLayoutStyles();
+  const mainBoxStyles = useMainBoxStyles();
+  const sidebarStyles = useSidebarStyles();
+  const responseAreaStyles = useResponseAreaStyles();
+
+  const wrapperRef = useMergedRefs(sidebarWrapperRef, responseAreaWrapperRef);
+
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
@@ -61,13 +128,19 @@ const Layout = (props: LayoutProps) =>{
     setSampleBody(value!);
   };
 
-  const styles = layoutStyles();
-  return <div className={styles.root}>
-    <div className={styles.header}><MainHeaderV9/></div>
+  return <div className={pageStyles}>
+    <div className={layoutStyles.header}><MainHeaderV9/></div>
     {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
-    <div className={styles.body}>
-      <div className={styles.sidebar}><SidebarV9/></div>
-      <div className={styles.content}>
+    <div className={layoutStyles.body} ref={wrapperRef}>
+      <div className={mergeClasses(mainBoxStyles, sidebarStyles)} ref={sidebarElementRef}>
+        <SidebarV9/>
+        <LayoutResizeHandler
+          position='end'
+          ref={sidebarHandleRef}
+          onDoubleClick={resetSidebarArea}
+        />
+      </div>
+      <div className={layoutStyles.content}>
         <Notification
           header={translateMessage('Banner notification 1 header')}
           content={translateMessage('Banner notification 1 content')}
@@ -80,7 +153,17 @@ const Layout = (props: LayoutProps) =>{
             sampleQuery={sampleQuery}
           />
           <StatusMessagesV9 />
-          <QueryResponse />
+          {/* TODO: Implement resizing for the response area */}
+          <div className={
+            mergeClasses(mainBoxStyles,responseAreaStyles)}
+          ref={responseAreaElementRef}>
+            <QueryResponse />
+            <LayoutResizeHandler
+              position='top'
+              ref={responseAreaHandleRef}
+              onDoubleClick={resetResponseArea}
+            />
+          </div>
         </ValidationProvider>
         <TermsOfUseMessageV9 />
         <CollectionPermissionsProvider>

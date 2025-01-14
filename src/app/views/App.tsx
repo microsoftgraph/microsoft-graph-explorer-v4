@@ -434,84 +434,90 @@ class App extends Component<IAppProps, IAppState> {
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
           <PopupsProvider>
-            <Layout handleSelectVerb={this.handleSelectVerb}/>
+            <Layout
+              handleSelectVerb={(verb: string) => {
+                console.log('Selected verb:', verb);
+                this.handleSelectVerb(verb);
+              }}
+              maxWidth={100}
+              onDragStart={(value: number, eventType: string) => {
+                console.log('Drag started', value, eventType);
+              }}
+              onDragEnd={(value: number, eventType: string) => {
+                console.log('Drag ended', value, eventType);
+              }}
+              onChange={(value: number, eventType: string) => {
+                console.log('Layout changed', value, eventType);
+              }}
+            />
             {/* <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
               <MainHeaderV9 />
               <div className={`ms-Grid-row ${classes.appRow}`} style={{
-                flexWrap: mobileScreen && 'wrap',
-                marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
-                flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
+              flexWrap: mobileScreen && 'wrap',
+              marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
+              flexDirection: (graphExplorerMode === Mode.TryIt) ? 'column' : 'row'
               }}>
-                {graphExplorerMode === Mode.Complete && (
-                  <Resizable
-                    onResize={(e: any, direction: any, ref: any) => {
-                      if (ref?.style?.width) {
-                        this.resizeSideBar(ref.style.width);
-                      }
-                    }}
-                    className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
-                    minWidth={'71'}
-                    maxWidth={maxWidth}
-                    enable={{
-                      right: true
-                    }}
-                    handleClasses={{
-                      right: classes.vResizeHandle
-                    }}
-                    bounds={'parent'}
-                    size={{
-                      width: sideWidth,
-                      height: ''
-                    }}
-                  >
-                    <SidebarV9/>
-                  </Resizable>
-                )}
-                {graphExplorerMode === Mode.TryIt &&
-                headerMessagingV9(query)}
+              {graphExplorerMode === Mode.Complete && (
+              <Resizable
+              onResize={(e: any, direction: any, ref: any) => {
+                if (ref?.style?.width) {
+                this.resizeSideBar(ref.style.width);
+                }
+              }}
+              className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${sidebarWidth} resizable-sidebar`}
+              minWidth={'71'}
+              maxWidth={maxWidth}
+              enable={{
+                right: true
+              }}
+              handleClasses={{
+                right: classes.vResizeHandle
+              }}
+              bounds={'parent'}
+              size={{
+                width: sideWidth,
+                height: ''
+              }}
+              >
+              <SidebarV9/>
+              </Resizable>
+              )}
+              {graphExplorerMode === Mode.TryIt &&
+              headerMessagingV9(query)}
 
-                {displayContent && (
-                  <Resizable
-                    bounds={'window'}
-                    className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
-                    enable={{
-                      right: false
-                    }}
-                    size={{
-                      width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
-                      height: ''
-                    }}
-                    style={!sidebarProperties.showSidebar && !mobileScreen ? {
-                      marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                    } : {
-                      display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                    }}
-                  >
-                    <div className='ms-Grid-row'>
-                      <Notification
-                        header={translateMessage('Banner notification 1 header')}
-                        content={translateMessage('Banner notification 1 content')}
-                        link={translateMessage('Banner notification 1 link')}
-                        linkText={translateMessage('Banner notification 1 link text')}/>
-                    </div>
-                    <ValidationProvider>
-                      <div style={{ marginBottom: 2 }} >
-                        <QueryRunner onSelectVerb={this.handleSelectVerb} />
-                      </div>
-                      <div style={{
-                        display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
-                      }}>
-                        <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                          <StatusMessagesV9 />
-                        </div>
-                        <QueryResponse />
-                      </div>
-                    </ValidationProvider>
-                  </Resizable>
-                )}
+              {displayContent && (
+              <Resizable
+              bounds={'window'}
+              className={`ms-Grid-col ms-sm12 ms-md4 ms-lg4 ${layout}`}
+              enable={{
+                right: false
+              }}
+              size={{
+                width: graphExplorerMode === Mode.TryIt ? '100%' : contentWidth,
+                height: ''
+              }}
+              style={!sidebarProperties.showSidebar && !mobileScreen ? {
+                marginLeft: '8px', display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+              } : {
+                display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                <ValidationProvider>
+                  <div style={{ marginBottom: 2 }} >
+                  <QueryRunner onSelectVerb={this.handleSelectVerb} />
+                  </div>
+                  <div style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
+                  }}>
+                  <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
+                    <StatusMessagesV9 />
+                  </div>
+                  <QueryResponse />
+                  </div>
+                </ValidationProvider>
+                </Resizable>
+              )}
               </div>
               <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                <TermsOfUseMessageV9 />
+              <TermsOfUseMessageV9 />
               </div>
             </div> */}
             {/* <CollectionPermissionsProvider>
