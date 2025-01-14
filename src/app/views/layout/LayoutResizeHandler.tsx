@@ -8,7 +8,7 @@ interface HandleProps {
 
 const useHoverStyles = makeResetStyles({
   ':hover': {
-    backgroundColor: tokens.colorBrandForegroundOnLightHover
+    backgroundColor: tokens.colorBrandBackgroundHover
   }
 })
 export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>(
