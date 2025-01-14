@@ -11,8 +11,7 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     padding: '0 0 0 24px',
     height: '48px',
-    background: tokens.colorNeutralBackground4,
-    marginBottom: '8px' // TODO: remove when sidebar and query areas are updated
+    background: tokens.colorNeutralBackground4
   },
   headerIcons: {
     display: 'flex',

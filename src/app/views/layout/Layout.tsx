@@ -38,7 +38,7 @@ const useSidebarStyles = makeResetStyles({
   borderRightWidth: '2px',
   position: 'relative',
   flexShrink: '0',
-  backgroundColor: 'lightcoral',
+  backgroundColor: tokens.colorNeutralBackground6,
   overflow: 'hidden'
 });
 
@@ -49,29 +49,25 @@ const useResponseAreaStyles = makeResetStyles({
 
 const useLayoutStyles = makeStyles({
   header: {
-    flexShrink: '0',
-    height: '60px',
-    background: 'orange'
+    flexShrink: '0'
   },
   body: {
     display: 'flex',
     flex: '1',
     gap: '0.5rem',
     overflow: 'hidden',
-    backgroundColor: 'lightblue'
+    backgroundColor: tokens.colorNeutralBackground1
   },
   main: {
     display: 'flex',
     flexDirection: 'column',
     padding: '0.5rem',
     flex: '1',
-    backgroundColor: 'lightpink',
     height: 'calc(100vh - 110px)',
     overflowY: 'auto'
   },
   footer: {
     flexShrink: '0',
-    height: '50px',
     backgroundColor: 'lightgreen'
   }
 })

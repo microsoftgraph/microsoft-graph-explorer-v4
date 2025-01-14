@@ -56,7 +56,8 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     marginTop: '6px',
-    height: 'calc(100vh - 310px)' // NOTE: use this height for API explorer and History tree views
+    // NOTE: use this height for API explorer and History tree views
+    height: 'calc(100vh - 270px)'
   },
   searchBox: {
     width: '100%',
