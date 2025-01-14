@@ -147,57 +147,12 @@ const Layout = (props: LayoutProps) =>{
     setSampleBody(value!);
   };
 
-  // return (
-  //   <div className={pageStyles}>
-  //     <div className={layoutStyles.header}><MainHeaderV9/></div>
-  //     {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
-  //     <div className={layoutStyles.body} ref={wrapperRef}>
-  //       <div className={sidebarStyles} ref={sidebarElementRef}>
-  //         {/* <SidebarV9/> */}
-  //         <LayoutResizeHandler
-  //           position='end'
-  //           ref={sidebarHandleRef}
-  //           onDoubleClick={resetSidebarArea}
-  //         />
-  //       </div>
-  //       <div className={layoutStyles.content}>
-  //         {/* <Notification
-  //           header={translateMessage('Banner notification 1 header')}
-  //           content={translateMessage('Banner notification 1 content')}
-  //           link={translateMessage('Banner notification 1 link')}
-  //           linkText={translateMessage('Banner notification 1 link text')}/> */}
-  //         {/* <ValidationProvider>
-  //           <QueryRunner onSelectVerb={props.handleSelectVerb} />
-  //           <RequestV9
-  //             handleOnEditorChange={handleOnEditorChange}
-  //             sampleQuery={sampleQuery}
-  //           />
-  //           <StatusMessagesV9 /> */}
-  //         {/* TODO: Implement resizing for the response area */}
-  //         {/* <div className={responseAreaStyles}
-  //             ref={responseAreaElementRef}>
-  //             <QueryResponse />
-  //             <LayoutResizeHandler
-  //               position='top'
-  //               ref={responseAreaHandleRef}
-  //               onDoubleClick={resetResponseArea}
-  //             />
-  //           </div>
-  //         </ValidationProvider> */}
-  //         <CollectionPermissionsProvider>
-  //           <PopupsWrapper />
-  //         </CollectionPermissionsProvider>
-  //       </div>
-  //     </div>
-  //     <div id="footer" className={layoutStyles.footer}><TermsOfUseMessageV9 /></div>
-  //   </div>)
-
   return (
     <div id="container" className={pageStyles}>
       <div id="header" className={layoutStyles.header}><MainHeaderV9/></div>
       {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
       <div id="body" className={layoutStyles.body} ref={wrapperRef}>
-        <div className={sidebarStyles}>
+        <div id="sidebar" className={sidebarStyles} ref={sidebarElementRef}>
           <SidebarV9/>
           <LayoutResizeHandler
             position='end'
@@ -205,7 +160,38 @@ const Layout = (props: LayoutProps) =>{
             onDoubleClick={resetSidebarArea}
           />
         </div>
-        <div className={layoutStyles.main}>someMain</div>
+        <div id="main" className={layoutStyles.main}>
+          <div id="notification">
+            <Notification
+              header={translateMessage('Banner notification 1 header')}
+              content={translateMessage('Banner notification 1 content')}
+              link={translateMessage('Banner notification 1 link')}
+              linkText={translateMessage('Banner notification 1 link text')} />
+          </div>
+          <div>
+            <ValidationProvider>
+              <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              <RequestV9
+                handleOnEditorChange={handleOnEditorChange}
+                sampleQuery={sampleQuery}
+              />
+              <StatusMessagesV9 />
+              {/* TODO: Implement resizing for the response area */}
+              <div className={responseAreaStyles}
+                ref={responseAreaElementRef}>
+                <QueryResponse />
+                <LayoutResizeHandler
+                  position='top'
+                  ref={responseAreaHandleRef}
+                  onDoubleClick={resetResponseArea}
+                />
+              </div>
+            </ValidationProvider>
+            <CollectionPermissionsProvider>
+              <PopupsWrapper />
+            </CollectionPermissionsProvider>
+          </div>
+        </div>
       </div>
       <div id="footer" className={layoutStyles.footer}><TermsOfUseMessageV9 /></div>
     </div>
