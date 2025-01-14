@@ -1,4 +1,4 @@
-import { makeResetStyles, makeStyles, mergeClasses, useMergedRefs } from '@fluentui/react-components'
+import { makeResetStyles, makeStyles, tokens, useMergedRefs } from '@fluentui/react-components'
 import { translateMessage } from '../../utils/translate-messages'
 import Notification from '../common/banners/Notification'
 import { MainHeaderV9 } from '../main-header/MainHeaderV9'
@@ -31,7 +31,9 @@ const usePageStyles = makeResetStyles({
 const useSidebarStyles = makeResetStyles({
   flex: `0 0 clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%)`,
   padding: '0.5rem',
-  borderRight: '1px solid #e5e5e5',
+  borderRightStyle: 'solid',
+  borderRightColor: tokens.colorNeutralStroke1,
+  borderRightWidth: '2px',
   position: 'relative'
 });
 

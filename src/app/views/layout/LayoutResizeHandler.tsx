@@ -29,20 +29,20 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
     const positioningProps =
       position === 'start' || position === 'end'
         ? {
-          [positioningAttr]: '-4px',
+          [positioningAttr]: '-12px',
           top: '50%',
           transform: 'translateY(-50%)',
           width: '6px',
           height: '100px',
-          cursor: 'ew-resize'
+          cursor: 'col-resize'
         }
         : {
-          ...(position === 'top' ? { top: '-7px' } : { bottom: '-7px' }),
+          ...(position === 'top' ? { top: '14px' } : { bottom: '14px' }),
           left: '50%',
           transform: 'translateX(-50%)',
           width: '100px',
           height: '6px',
-          cursor: 'ns-resize'
+          cursor: 'row-resize'
         };
 
     return (
