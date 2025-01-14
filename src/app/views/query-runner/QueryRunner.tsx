@@ -12,10 +12,12 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
-import './query-runner.scss';
-import Request from './request/RequestV9';
 
-const QueryRunner = (props: any) => {
+interface IQueryRunnerProps {
+  onSelectVerb: (verb: string) => void;
+}
+
+const QueryRunner = (props: IQueryRunnerProps) => {
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
@@ -40,10 +42,6 @@ const QueryRunner = (props: any) => {
     }
   };
 
-  const handleOnEditorChange = (value?: string) => {
-    setSampleBody(value!);
-  };
-
   const handleOnRunQuery = (query?: IQuery) => {
     let sample = { ...sampleQuery };
     if (sampleBody && sample.selectedVerb !== 'GET') {
@@ -51,7 +49,7 @@ const QueryRunner = (props: any) => {
       const contentType = headers.find((k: { name: string; }) => k.name.toLowerCase() === 'content-type');
       if (!contentType || (contentType.value === ContentType.Json)) {
         try {
-          sample.sampleBody = JSON.parse(sampleBody);
+          sample.sampleBody = JSON.parse(sampleBody) as string;
         } catch (error) {
           dispatch(setQueryResponseStatus({
             ok: false,
@@ -112,27 +110,11 @@ const QueryRunner = (props: any) => {
   };
 
   return (
-    <>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-          <QueryInput
-            handleOnRunQuery={handleOnRunQuery}
-            handleOnMethodChange={handleOnMethodChange}
-            handleOnVersionChange={handleOnVersionChange}
-          />
-        </div>
-      </div>
-      <div className='ms-Grid-row' style={{ marginTop: 10 }}>
-        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-          {
-            <Request
-              handleOnEditorChange={handleOnEditorChange}
-              sampleQuery={sampleQuery}
-            />
-          }
-        </div>
-      </div>
-    </>
+    <QueryInput
+      handleOnRunQuery={handleOnRunQuery}
+      handleOnMethodChange={handleOnMethodChange}
+      handleOnVersionChange={handleOnVersionChange}
+    />
   );
 }
 

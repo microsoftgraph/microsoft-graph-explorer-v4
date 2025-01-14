@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Request = (props: IRequestProps) => {
+const RequestV9 = (props: IRequestProps) => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
   const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
@@ -149,4 +149,4 @@ const Request = (props: IRequestProps) => {
   );
 };
 
-export default Request;
+export default RequestV9;

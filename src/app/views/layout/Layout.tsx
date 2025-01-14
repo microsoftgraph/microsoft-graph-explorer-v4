@@ -9,6 +9,10 @@ import { QueryResponse } from '../query-response'
 import { QueryRunner } from '../query-runner'
 import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider'
 import PopupsWrapper from '../common/popups/PopupsWrapper'
+import { useState, useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import { setSampleQuery } from '../../services/slices/sample-query.slice'
+import RequestV9 from '../query-runner/request/RequestV9'
 
 const layoutStyles = makeStyles({
   root: {
@@ -22,7 +26,8 @@ const layoutStyles = makeStyles({
   },
   body: {
     display: 'flex',
-    flex: '1 1 auto'
+    flex: '1 1 auto',
+    gap: '0.5rem'
   },
   sidebar: {
     flex: '0 0 auto',
@@ -39,6 +44,23 @@ interface LayoutProps {
 }
 
 const Layout = (props: LayoutProps) =>{
+  const dispatch = useAppDispatch();
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+
+  const [sampleBody, setSampleBody] = useState('');
+
+  useEffect(() => {
+    if (sampleQuery.selectedVerb !== 'GET') {
+      const query = { ...sampleQuery };
+      query.sampleBody = sampleBody;
+      dispatch(setSampleQuery(query));
+    }
+  }, [sampleBody])
+
+  const handleOnEditorChange = (value?: string) => {
+    setSampleBody(value!);
+  };
+
   const styles = layoutStyles();
   return <div className={styles.root}>
     <div className={styles.header}><MainHeaderV9/></div>
@@ -53,6 +75,10 @@ const Layout = (props: LayoutProps) =>{
           linkText={translateMessage('Banner notification 1 link text')}/>
         <ValidationProvider>
           <QueryRunner onSelectVerb={props.handleSelectVerb} />
+          <RequestV9
+            handleOnEditorChange={handleOnEditorChange}
+            sampleQuery={sampleQuery}
+          />
           <StatusMessagesV9 />
           <QueryResponse />
         </ValidationProvider>
