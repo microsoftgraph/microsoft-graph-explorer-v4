@@ -22,7 +22,9 @@ interface IShowSidebar {
 const useStyles = makeStyles({
   container: {
     display:'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto'
   },
   sidebarToggle: {
     marginLeft: 'auto'

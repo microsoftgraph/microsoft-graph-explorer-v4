@@ -46,7 +46,7 @@ export function Monaco(props: IMonaco) {
         {props.extraInfoElement}
         <ThemeContext.Consumer>
           {(theme) => (<Editor
-            width='800 !important'
+            width='99.8%'
             height={itemHeight}
             // @ts-ignore
             value={body ? body : ''}
