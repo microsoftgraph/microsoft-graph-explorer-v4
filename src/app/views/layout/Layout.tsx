@@ -25,17 +25,19 @@ const usePageStyles = makeResetStyles({
   [RESPONSE_AREA_SIZE_CSS_VAR]: '40%',
   display: 'flex',
   flexDirection: 'column',
-  height: '100%',
   width: '100%'
 })
 
 const useSidebarStyles = makeResetStyles({
   flex: `0 0 clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%)`,
-  height: '100%'
+  padding: '0.5rem',
+  borderRight: '1px solid #e5e5e5',
+  position: 'relative'
 });
 
 const useResponseAreaStyles = makeResetStyles({
-  flex: `1 1 clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%)`
+  flex: `1 1 clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%)`,
+  position: 'relative'
 });
 
 const useLayoutStyles = makeStyles({
@@ -48,13 +50,10 @@ const useLayoutStyles = makeStyles({
     gap: '0.5rem'
   },
   content: {
-    flex: '1 1 auto'
+    flex: '1 1 auto',
+    padding: '0.5rem'
   }
 })
-
-const useMainBoxStyles = makeResetStyles({
-  position: 'relative'
-});
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void
@@ -105,7 +104,6 @@ const Layout = (props: LayoutProps) =>{
 
   const pageStyles = usePageStyles();
   const layoutStyles = useLayoutStyles();
-  const mainBoxStyles = useMainBoxStyles();
   const sidebarStyles = useSidebarStyles();
   const responseAreaStyles = useResponseAreaStyles();
 
@@ -132,7 +130,7 @@ const Layout = (props: LayoutProps) =>{
     <div className={layoutStyles.header}><MainHeaderV9/></div>
     {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
     <div className={layoutStyles.body} ref={wrapperRef}>
-      <div className={mergeClasses(mainBoxStyles, sidebarStyles)} ref={sidebarElementRef}>
+      <div className={sidebarStyles} ref={sidebarElementRef}>
         <SidebarV9/>
         <LayoutResizeHandler
           position='end'
@@ -154,9 +152,8 @@ const Layout = (props: LayoutProps) =>{
           />
           <StatusMessagesV9 />
           {/* TODO: Implement resizing for the response area */}
-          <div className={
-            mergeClasses(mainBoxStyles,responseAreaStyles)}
-          ref={responseAreaElementRef}>
+          <div className={responseAreaStyles}
+            ref={responseAreaElementRef}>
             <QueryResponse />
             <LayoutResizeHandler
               position='top'

@@ -22,15 +22,15 @@ interface IShowSidebar {
 const useStyles = makeStyles({
   container: {
     display:'flex',
-    flexDirection: 'column',
-    height: '100%',
-    overflow: 'auto'
+    flexDirection: 'column'
   },
   sidebarToggle: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    flex: '0 0 auto'
   },
   tabList: {
-    margin: '8px 0'
+    margin: '8px 0',
+    flex: '0 0 auto'
   }
 })
 const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{

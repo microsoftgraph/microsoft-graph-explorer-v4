@@ -53,7 +53,10 @@ type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'sub
 
 const useStyles = makeStyles({
   container: {
-    marginTop: '6px'
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '6px',
+    height: '100vh'
   },
   searchBox: {
     width: '100%',
@@ -76,6 +79,10 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'not-allowed'
     }
+  },
+  tree:{
+    overflowY: 'auto',
+    flex: '1 1 auto'
   }
 });
 
@@ -416,6 +423,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     }));
   }
 
+  const styles = useStyles();
+
   return (
     <>
       {sampleQueries.length=== 0 && <NoResultsFoundV9 message='No sample queries'/>}
@@ -423,6 +432,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         openItems={openItems}
         onOpenChange={handleOpenChange}
         aria-label={translateMessage('Sample Queries')}
+        className={styles.tree}
+        id='tree-items'
       >
         {groups.map((group, pos) => (
           <React.Fragment key={group.key}>
