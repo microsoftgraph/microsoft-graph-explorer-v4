@@ -82,12 +82,11 @@ const useLayoutStyles = makeStyles({
     gap: '0.5rem'
   },
   requestContainer: {
-    backgroundColor: 'gold',
     display: 'flex',
     flexDirection: 'column',
     gap: '0.5rem',
-    border: '2px solid black',
-    borderRadius: '4px'
+    border: `solid ${tokens.colorNeutralStroke1} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium
   },
   statusMessages: {
     margin: '0.5rem'
