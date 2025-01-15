@@ -1,5 +1,5 @@
-import { Button, Input, makeStyles, shorthands } from '@fluentui/react-components';
-import { useRef, useState } from 'react';
+import { Button, Input, makeStyles} from '@fluentui/react-components';
+import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { setSampleQuery } from '../../../../services/slices/sample-query.slice';

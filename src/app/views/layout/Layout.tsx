@@ -186,10 +186,13 @@ const Layout = (props: LayoutProps) => {
               linkText={translateMessage('Banner notification 1 link text')}
             />
           </div>
-          <div className={layoutStyles.queryContainer}>
+          <div id='query-container' className={layoutStyles.queryContainer}>
             <ValidationProvider>
               <QueryRunner onSelectVerb={props.handleSelectVerb} />
-              <div className={layoutStyles.requestContainer}>
+              <div
+                id='request-container'
+                className={layoutStyles.requestContainer}
+              >
                 <RequestV9
                   handleOnEditorChange={handleOnEditorChange}
                   sampleQuery={sampleQuery}

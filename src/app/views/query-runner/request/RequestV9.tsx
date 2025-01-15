@@ -111,7 +111,7 @@ const RequestV9 = (props: IRequestProps) => {
   };
 
   return (
-    <div className='query-request'>
+    <div id='request-area-tabs'>
       <TabList
         selectedValue={selectedTab}
         onTabSelect={(_, data) => handleTabSelect(data.value)}
