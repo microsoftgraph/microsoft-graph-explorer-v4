@@ -103,7 +103,6 @@ const useStyles = makeStyles({
   },
   responseArea: {
     gridArea: 'responseArea',
-    backgroundColor: 'violet',
     padding: tokens.spacingHorizontalXS,
     border: `solid ${tokens.colorNeutralStroke1} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium
