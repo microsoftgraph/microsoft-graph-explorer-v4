@@ -3,9 +3,9 @@ import { Mode } from './enums';
 import { Header, IQuery } from './query-runner';
 
 export interface IHeadersListControl {
-  handleOnHeaderDelete: Function;
+  handleOnHeaderDelete: (item: Header) => void;
   headers?: Header[];
-  handleOnHeaderEdit: Function;
+  handleOnHeaderEdit: (item: Header) => void;
 }
 
 export interface IRequestHeadersProps {

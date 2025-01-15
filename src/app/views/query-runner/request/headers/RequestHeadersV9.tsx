@@ -1,11 +1,9 @@
-import { Button, Input, makeStyles, shorthands } from '@fluentui/react-components';
-import { useRef, useState } from 'react';
-
+import { Button, Input, makeStyles, tokens } from '@fluentui/react-components';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import HeadersList from './HeadersList';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 interface IHeader {
   name: string;
@@ -14,15 +12,15 @@ interface IHeader {
 
 const useStyles = makeStyles({
   container: {
-    textAlign: 'center',
-    padding: '10px',
-    overflowY: 'auto',
-    overflowX: 'hidden'
-  },
-  row: {
+    padding: tokens.spacingHorizontalXS,
+    backgroundColor: 'teal',
     display: 'flex',
-    gap: '16px',
-    marginBottom: '16px',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalS
+  },
+  headerInputs: {
+    display: 'flex',
+    gap: tokens.spacingHorizontalM,
     alignItems: 'center'
   },
   input: {
@@ -31,19 +29,13 @@ const useStyles = makeStyles({
   button: {
     flexShrink: 0,
     minWidth: '80px'
-  },
-  listContainer: {
-    flex: 1,
-    overflow: 'auto'
   }
 });
 
 const RequestHeaders = () => {
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const height = useAppSelector((state) => state.dimensions.request.height);
   const [header, setHeader] = useState<IHeader>({ name: '', value: '' });
   const [isUpdatingHeader, setIsUpdatingHeader] = useState(false);
-  const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
 
   const dispatch = useAppDispatch();
   const styles = useStyles();
@@ -55,65 +47,60 @@ const RequestHeaders = () => {
   const handleAddHeader = () => {
     if (header.name.trim() && header.value.trim()) {
       const updatedHeaders = [header, ...(sampleQuery.sampleHeaders || [])];
-      dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
+      dispatch(
+        setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders })
+      );
       setHeader({ name: '', value: '' });
       setIsUpdatingHeader(false);
     }
   };
 
   const handleDeleteHeader = (headerToDelete: IHeader) => {
-    const updatedHeaders = sampleQuery.sampleHeaders.filter((h) => h.name !== headerToDelete.name);
+    const updatedHeaders = sampleQuery.sampleHeaders.filter(
+      (h) => h.name !== headerToDelete.name
+    );
     dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
   };
 
   const handleEditHeader = (headerToEdit: IHeader) => {
     setHeader(headerToEdit);
     setIsUpdatingHeader(true);
-    const updatedHeaders = sampleQuery.sampleHeaders.filter((h) => h.name !== headerToEdit.name);
+    const updatedHeaders = sampleQuery.sampleHeaders.filter(
+      (h) => h.name !== headerToEdit.name
+    );
     dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
   };
 
   return (
-    <div
-      className={styles.container}
-      onMouseEnter={() => setIsHoverOverHeadersList(true)}
-      onMouseLeave={() => setIsHoverOverHeadersList(false)}
-      style={
-        isHoverOverHeadersList
-          ? { height: convertVhToPx(height, 60) }
-          : { height: convertVhToPx(height, 60), overflow: 'hidden' }
-      }
-    >
-      <div className={styles.row}>
+    <div className={styles.container}>
+      <div className={styles.headerInputs}>
         <Input
           className={styles.input}
           placeholder={translateMessage('Key')}
-          name="name"
+          name='name'
           value={header.name}
           onChange={handleInputChange}
         />
         <Input
           className={styles.input}
           placeholder={translateMessage('Value')}
-          name="value"
+          name='value'
           value={header.value}
           onChange={handleInputChange}
         />
         <Button
           className={styles.button}
-          appearance="primary"
+          appearance='primary'
           onClick={handleAddHeader}
         >
           {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}
         </Button>
       </div>
-      <div className={styles.listContainer}>
-        <HeadersList
-          headers={sampleQuery.sampleHeaders || []}
-          handleOnHeaderDelete={handleDeleteHeader}
-          handleOnHeaderEdit={handleEditHeader}
-        />
-      </div>
+      <HeadersList
+        headers={sampleQuery.sampleHeaders || []}
+        handleOnHeaderDelete={handleDeleteHeader}
+        handleOnHeaderEdit={handleEditHeader}
+      />
     </div>
   );
 };
