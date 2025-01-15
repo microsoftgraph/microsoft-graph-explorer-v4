@@ -18,11 +18,13 @@ import PopupsWrapper from '../common/popups/PopupsWrapper';
 import { MainHeaderV9 } from '../main-header/MainHeaderV9';
 import { QueryResponse } from '../query-response';
 import { QueryRunner } from '../query-runner';
+import { styles } from '../query-runner/query-input/auto-complete/suffix/suffix.styles';
 import RequestV9 from '../query-runner/request/RequestV9';
 import { SidebarV9 } from '../sidebar/SidebarV9';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
+const RESPONSE_AREA_SIZE_VAR = 66;
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 interface LayoutProps {
@@ -41,7 +43,7 @@ const usePageStyles = makeResetStyles({
 
 const useMainWrapperStyles = makeResetStyles({
   [SIDEBAR_SIZE_CSS_VAR]: '460px',
-  [RESPONSE_AREA_SIZE_CSS_VAR]: '70%',
+  [RESPONSE_AREA_SIZE_CSS_VAR]: `${RESPONSE_AREA_SIZE_VAR}%`,
   display: 'grid',
   width: '100%',
   height: '100%',
@@ -146,17 +148,23 @@ const Layout = (props: LayoutProps) => {
     variableName: RESPONSE_AREA_SIZE_CSS_VAR,
     growDirection: 'up',
     onDragEnd: (_, { value, type }) => {
-      console.log('responseSize');
       props.onDragEnd(value, String(type), 'responseSize');
     }
   });
 
   const resetSidebarArea = () => {
     setSidebarColumnSize(460);
+    props.onDragEnd(460, '', 'sidebar');
   };
 
   const resetResponseArea = () => {
-    setResponseAreaRowSize(460);
+    const layout = document.getElementById('layout');
+    if (layout) {
+      const parentHeight = layout.parentElement?.offsetHeight ?? 790;
+      const resize = Math.floor((RESPONSE_AREA_SIZE_VAR / 100) * parentHeight);
+      setResponseAreaRowSize(resize);
+      props.onDragEnd(resize, '', 'responseSize');
+    }
   };
 
   const dispatch = useAppDispatch();
@@ -185,6 +193,7 @@ const Layout = (props: LayoutProps) => {
           className={mergeClasses(boxStyles, styles.areaSidebar)}
           ref={sidebarElementRef}
         >
+          {/* TODO: use the onDrag event to resize this sidebar */}
           <SidebarV9 />
           <LayoutResizeHandler
             position='end'
@@ -220,6 +229,7 @@ const Layout = (props: LayoutProps) => {
             <div
               className={mergeClasses(boxStyles, styles.responseArea)}
               ref={responseAreaElementRef}
+              id='layout'
             >
               <QueryResponse />
               <LayoutResizeHandler

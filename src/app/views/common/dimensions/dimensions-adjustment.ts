@@ -3,6 +3,11 @@ export function convertVhToPx(height: string, adjustment: number) {
         * document.documentElement.clientHeight;
   return Math.floor(newHeight - adjustment) + 'px';
 }
+export function convertPercentToPx(percent: string, adjustment: number) {
+  const newHeight = parseFloat(percent.replace('%', '')) / 100
+        * document.documentElement.clientHeight;
+  return Math.floor(newHeight - adjustment) + 'px';
+}
 
 export function convertPxToVh(px: number){
   const innerHeight = window.innerHeight;
