@@ -80,6 +80,14 @@ const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '0.5rem'
+  },
+  requestContainer: {
+    backgroundColor: 'gold',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem',
+    border: '2px solid black',
+    borderRadius: '4px'
   }
 });
 
@@ -181,11 +189,13 @@ const Layout = (props: LayoutProps) => {
           <div className={layoutStyles.queryContainer}>
             <ValidationProvider>
               <QueryRunner onSelectVerb={props.handleSelectVerb} />
-              <RequestV9
-                handleOnEditorChange={handleOnEditorChange}
-                sampleQuery={sampleQuery}
-              />
-              <StatusMessagesV9 />
+              <div className={layoutStyles.requestContainer}>
+                <RequestV9
+                  handleOnEditorChange={handleOnEditorChange}
+                  sampleQuery={sampleQuery}
+                />
+                <StatusMessagesV9 />
+              </div>
               {/* TODO: Implement resizing for the response area */}
               <div className={responseAreaStyles} ref={responseAreaElementRef}>
                 <QueryResponseV9 />

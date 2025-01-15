@@ -1,23 +1,29 @@
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 
+import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
+import { IQuery } from '../../../../types/query-runner';
 import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
-import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
+import {
+  convertPxToVh,
+  convertVhToPx
+} from '../../common/dimensions/dimensions-adjustment';
+import {
+  Auth,
+  Permissions,
+  RequestHeaders
+} from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
-import { IQuery } from '../../../../types/query-runner';
-import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 
-
-  interface IRequestProps {
-    handleOnEditorChange: () => void
-    sampleQuery: IQuery
-  }
+interface IRequestProps {
+  handleOnEditorChange: () => void;
+  sampleQuery: IQuery;
+}
 
 const useStyles = makeStyles({
   resizable: {
@@ -52,7 +58,7 @@ const RequestV9 = (props: IRequestProps) => {
     borderRadius: '4px',
     border: '1px solid #ddd',
     padding: '8px'
-  }
+  };
 
   useEffect(() => {
     if (sidebarProperties && sidebarProperties.mobileScreen) {
@@ -80,7 +86,10 @@ const RequestV9 = (props: IRequestProps) => {
       },
       response: {
         ...dimensions.response,
-        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
+        height: `${
+          maxDeviceVerticalHeight -
+          parseFloat(requestHeightInVh.replace('vh', ''))
+        }vh`
       }
     };
 
@@ -91,61 +100,56 @@ const RequestV9 = (props: IRequestProps) => {
     const resizable = document.getElementsByClassName('request-resizable');
     if (resizable && resizable.length > 0) {
       const resizableElement = resizable[0] as HTMLElement;
-      if (resizableElement && resizableElement.style && resizableElement.style.height) {
+      if (
+        resizableElement &&
+        resizableElement.style &&
+        resizableElement.style.height
+      ) {
         resizableElement.style.height = '';
       }
     }
   };
 
   return (
-    <Resizable
-      className={styles.resizable}
-      onResize={(e: any, direction: any, ref: any) => {
-        if (ref && ref.style && ref.style.height) {
-          setRequestAndResponseHeights(ref.style.height);
-        }
-      }}
-      maxHeight={maxHeight}
-      minHeight={minHeight}
-      bounds={'window'}
-      size={{
-        height: 'inherit',
-        width: '100%'
-      }}
-      enable={{
-        bottom: true
-      }}
-    >
-      <div className="query-request">
-        <TabList
-          selectedValue={selectedTab}
-          onTabSelect={(_, data) => handleTabSelect(data.value)}
-          className={styles.tabList}
+    <div className='query-request'>
+      <TabList
+        selectedValue={selectedTab}
+        onTabSelect={(_, data) => handleTabSelect(data.value)}
+      >
+        <Tab value='request-body' aria-label={translateMessage('request body')}>
+          {translateMessage('Request Body')}
+        </Tab>
+        <Tab
+          value='request-headers'
+          aria-label={translateMessage('request header')}
         >
-          <Tab value="request-body" className={styles.tab} aria-label={translateMessage('request body')}>
-            {translateMessage('Request Body')}
+          {translateMessage('Request Headers')}
+        </Tab>
+        <Tab
+          value='modify-permissions'
+          aria-label={translateMessage('modify permissions')}
+        >
+          {translateMessage('Modify Permissions')}
+        </Tab>
+        {mode === Mode.Complete && (
+          <Tab
+            value='access-token'
+            aria-label={translateMessage('Access Token')}
+          >
+            {translateMessage('Access Token')}
           </Tab>
-          <Tab value="request-headers" className={styles.tab} aria-label={translateMessage('request header')}>
-            {translateMessage('Request Headers')}
-          </Tab>
-          <Tab value="modify-permissions" className={styles.tab} aria-label={translateMessage('modify permissions')}>
-            {translateMessage('Modify Permissions')}
-          </Tab>
-          {mode === Mode.Complete && (
-            <Tab value="access-token" className={styles.tab} aria-label={translateMessage('Access Token')}>
-              {translateMessage('Access Token')}
-            </Tab>
-          )}
-        </TabList>
+        )}
+      </TabList>
 
-        <div style={containerStyle}>
-          {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
-          {selectedTab === 'request-headers' && <RequestHeaders />}
-          {selectedTab === 'modify-permissions' && <Permissions />}
-          {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
-        </div>
+      <div>
+        {selectedTab === 'request-body' && (
+          <RequestBody handleOnEditorChange={handleOnEditorChange} />
+        )}
+        {selectedTab === 'request-headers' && <RequestHeaders />}
+        {selectedTab === 'modify-permissions' && <Permissions />}
+        {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
       </div>
-    </Resizable>
+    </div>
   );
 };
 

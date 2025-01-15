@@ -1,4 +1,4 @@
-import { useFluent , makeResetStyles, tokens} from '@fluentui/react-components';
+import { makeResetStyles, tokens, useFluent } from '@fluentui/react-components';
 import * as React from 'react';
 
 interface HandleProps {
@@ -10,31 +10,33 @@ const useHoverStyles = makeResetStyles({
   ':hover': {
     backgroundColor: tokens.colorBrandBackgroundHover
   }
-})
-export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>(
-  (props, ref) => {
-    const { position, ...rest } = props;
-    const { dir } = useFluent();
-    const hoverStyles = useHoverStyles()
+});
+export const LayoutResizeHandler = React.forwardRef<
+  HTMLDivElement,
+  HandleProps
+>((props, ref) => {
+  const { position, ...rest } = props;
+  const { dir } = useFluent();
+  const hoverStyles = useHoverStyles();
 
-    const handleClick = (event: React.MouseEvent) => {
-      if (event.detail === 2) {
-        props.onDoubleClick?.();
-      }
-    };
+  const handleClick = (event: React.MouseEvent) => {
+    if (event.detail === 2) {
+      props.onDoubleClick?.();
+    }
+  };
 
-    const positioningAttr =
-      dir === 'ltr'
-        ? position === 'start'
-          ? 'left'
-          : 'right'
-        : position === 'start'
-          ? 'right'
-          : 'left';
+  const positioningAttr =
+    dir === 'ltr'
+      ? position === 'start'
+        ? 'left'
+        : 'right'
+      : position === 'start'
+      ? 'right'
+      : 'left';
 
-    const positioningProps =
-      position === 'start' || position === 'end'
-        ? {
+  const positioningProps =
+    position === 'start' || position === 'end'
+      ? {
           [positioningAttr]: '-7px',
           top: '50%',
           transform: 'translateY(-50%)',
@@ -42,8 +44,8 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
           height: '100%',
           cursor: 'col-resize'
         }
-        : {
-          ...(position === 'top' ? { top: '15px' } : { bottom: '15px' }),
+      : {
+          ...(position === 'top' ? { top: '-7px' } : { bottom: '-7px' }),
           left: '50%',
           transform: 'translateX(-50%)',
           width: '100%',
@@ -51,20 +53,19 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
           cursor: 'row-resize'
         };
 
-    return (
-      <div
-        {...rest}
-        ref={ref}
-        onClick={handleClick}
-        tabIndex={0}
-        className={hoverStyles}
-        style={{
-          position: 'absolute',
-          borderRadius: '2px',
-          ...positioningProps
-        }}
-      />
-    );
-  }
-);
+  return (
+    <div
+      {...rest}
+      ref={ref}
+      onClick={handleClick}
+      tabIndex={0}
+      className={hoverStyles}
+      style={{
+        position: 'absolute',
+        borderRadius: '2px',
+        ...positioningProps
+      }}
+    />
+  );
+});
 LayoutResizeHandler.displayName = 'LayoutResizeHandler';
