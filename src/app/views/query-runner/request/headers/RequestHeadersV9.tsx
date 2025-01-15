@@ -13,7 +13,6 @@ interface IHeader {
 const useStyles = makeStyles({
   container: {
     padding: tokens.spacingHorizontalXS,
-    backgroundColor: 'teal',
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingVerticalS
