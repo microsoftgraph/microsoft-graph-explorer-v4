@@ -1,21 +1,25 @@
-import { makeResetStyles, makeStyles, tokens, useMergedRefs } from '@fluentui/react-components'
-import { translateMessage } from '../../utils/translate-messages'
-import Notification from '../common/banners/Notification'
-import { MainHeaderV9 } from '../main-header/MainHeaderV9'
-import { SidebarV9 } from '../sidebar/SidebarV9'
-import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider'
-import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections'
-import { QueryResponse } from '../query-response'
-import { QueryRunner } from '../query-runner'
-import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider'
-import PopupsWrapper from '../common/popups/PopupsWrapper'
-import { useState, useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store'
-import { setSampleQuery } from '../../services/slices/sample-query.slice'
-import RequestV9 from '../query-runner/request/RequestV9'
-import { useResizeHandle } from '@fluentui-contrib/react-resize-handle'
-import { LayoutResizeHandler } from './LayoutResizeHandler'
-
+import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
+import {
+  makeResetStyles,
+  makeStyles,
+  tokens,
+  useMergedRefs
+} from '@fluentui/react-components';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider';
+import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider';
+import { setSampleQuery } from '../../services/slices/sample-query.slice';
+import { translateMessage } from '../../utils/translate-messages';
+import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
+import Notification from '../common/banners/Notification';
+import PopupsWrapper from '../common/popups/PopupsWrapper';
+import { MainHeaderV9 } from '../main-header/MainHeaderV9';
+import QueryResponseV9 from '../query-response/QueryResponseV9';
+import { QueryRunner } from '../query-runner';
+import RequestV9 from '../query-runner/request/RequestV9';
+import { SidebarV9 } from '../sidebar/SidebarV9';
+import { LayoutResizeHandler } from './LayoutResizeHandler';
 
 const RESPONSE_AREA_SIZE_CSS_VAR = '--response-area-size';
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
@@ -28,7 +32,7 @@ const usePageStyles = makeResetStyles({
   display: 'flex',
   flexDirection: 'column',
   flex: '1'
-})
+});
 
 const useSidebarStyles = makeResetStyles({
   flex: `0 0 clamp(60px, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 30%)`,
@@ -43,7 +47,10 @@ const useSidebarStyles = makeResetStyles({
 
 const useResponseAreaStyles = makeResetStyles({
   flex: `1 1 clamp(5%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 60%)`,
-  position: 'relative'
+  position: 'relative',
+  border: '2px solid black',
+  borderRadius: '4px',
+  height: '500px'
 });
 
 const useLayoutStyles = makeStyles({
@@ -68,18 +75,23 @@ const useLayoutStyles = makeStyles({
   footer: {
     flexShrink: '0',
     backgroundColor: 'lightgreen'
+  },
+  queryContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem'
   }
-})
+});
 
 interface LayoutProps {
-  handleSelectVerb: (verb: string) => void
+  handleSelectVerb: (verb: string) => void;
   maxWidth: number;
   onDragStart: (value: number, eventType: string) => void;
   onDragEnd: (value: number, eventType: string) => void;
   onChange: (value: number, eventType: string) => void;
 }
 
-const Layout = (props: LayoutProps) =>{
+const Layout = (props: LayoutProps) => {
   const {
     handleRef: sidebarHandleRef,
     wrapperRef: sidebarWrapperRef,
@@ -136,34 +148,37 @@ const Layout = (props: LayoutProps) =>{
       query.sampleBody = sampleBody;
       dispatch(setSampleQuery(query));
     }
-  }, [sampleBody])
+  }, [sampleBody]);
 
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
   };
 
   return (
-    <div id="container" className={pageStyles}>
-      <div id="header" className={layoutStyles.header}><MainHeaderV9/></div>
+    <div id='container' className={pageStyles}>
+      <div id='header' className={layoutStyles.header}>
+        <MainHeaderV9 />
+      </div>
       {/* TODO: Handle the Modes - Modes.Complete and Modes.TryIt */}
-      <div id="body" className={layoutStyles.body} ref={wrapperRef}>
-        <div id="sidebar" className={sidebarStyles} ref={sidebarElementRef}>
-          <SidebarV9/>
+      <div id='body' className={layoutStyles.body} ref={wrapperRef}>
+        <div id='sidebar' className={sidebarStyles} ref={sidebarElementRef}>
+          <SidebarV9 />
           <LayoutResizeHandler
             position='end'
             ref={sidebarHandleRef}
             onDoubleClick={resetSidebarArea}
           />
         </div>
-        <div id="main" className={layoutStyles.main}>
-          <div id="notification">
+        <div id='main' className={layoutStyles.main}>
+          <div id='notification'>
             <Notification
               header={translateMessage('Banner notification 1 header')}
               content={translateMessage('Banner notification 1 content')}
               link={translateMessage('Banner notification 1 link')}
-              linkText={translateMessage('Banner notification 1 link text')} />
+              linkText={translateMessage('Banner notification 1 link text')}
+            />
           </div>
-          <div>
+          <div className={layoutStyles.queryContainer}>
             <ValidationProvider>
               <QueryRunner onSelectVerb={props.handleSelectVerb} />
               <RequestV9
@@ -172,9 +187,8 @@ const Layout = (props: LayoutProps) =>{
               />
               <StatusMessagesV9 />
               {/* TODO: Implement resizing for the response area */}
-              <div className={responseAreaStyles}
-                ref={responseAreaElementRef}>
-                <QueryResponse />
+              <div className={responseAreaStyles} ref={responseAreaElementRef}>
+                <QueryResponseV9 />
                 <LayoutResizeHandler
                   position='top'
                   ref={responseAreaHandleRef}
@@ -188,9 +202,11 @@ const Layout = (props: LayoutProps) =>{
           </div>
         </div>
       </div>
-      <div id="footer" className={layoutStyles.footer}><TermsOfUseMessageV9 /></div>
+      <div id='footer' className={layoutStyles.footer}>
+        <TermsOfUseMessageV9 />
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export {Layout}
+export { Layout };
