@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
+  Text,
   useId
 } from '@fluentui/react-components';
 import { DeleteRegular, EditRegular } from '@fluentui/react-icons';
@@ -38,7 +39,9 @@ const HeadersList = ({
       <TableHeader>
         <TableRow>
           {columns.map((column) => (
-            <TableHeaderCell key={column.key}>{column.name}</TableHeaderCell>
+            <TableHeaderCell key={column.key}>
+              <Text weight='bold'>{column.name}</Text>
+            </TableHeaderCell>
           ))}
         </TableRow>
       </TableHeader>
