@@ -43,7 +43,7 @@ const usePageStyles = makeResetStyles({
 });
 
 const useMainWrapperStyles = makeResetStyles({
-  [SIDEBAR_SIZE_CSS_VAR]: '20%',
+  [SIDEBAR_SIZE_CSS_VAR]: '460px',
   [RESPONSE_AREA_SIZE_CSS_VAR]: '70%',
   display: 'grid',
   width: '100%',
@@ -55,7 +55,7 @@ const useMainWrapperStyles = makeResetStyles({
   "footer footer"
   `,
   gridTemplateRows: '48px 1fr 48px',
-  gridTemplateColumns: `clamp(5%, calc(20% + var(${SIDEBAR_SIZE_CSS_VAR})), 80%) 1fr`
+  gridTemplateColumns: `clamp(60px, var(${SIDEBAR_SIZE_CSS_VAR}), 40%) 1fr`
 });
 const bannerRow = `${bannerIsVisible ? 'auto' : ''}`;
 const useMainAreaWrapperStyles = makeResetStyles({
@@ -156,7 +156,7 @@ const Layout = (props: LayoutProps) => {
   });
 
   const resetSidebarArea = () => {
-    setSidebarColumnSize(40);
+    setSidebarColumnSize(460);
   };
 
   const resetResponseArea = () => {
