@@ -1,11 +1,11 @@
-import { Button, Input, makeStyles} from '@fluentui/react-components';
+import { Button, Input, makeStyles } from '@fluentui/react-components';
 import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
-import HeadersList from './HeadersList';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import HeadersList from './HeadersList';
 
 interface IHeader {
   name: string;
@@ -15,7 +15,7 @@ interface IHeader {
 const useStyles = makeStyles({
   container: {
     textAlign: 'center',
-    padding: '10px',
+    padding: '0.5rem',
     overflowY: 'auto',
     overflowX: 'hidden'
   },
@@ -55,21 +55,27 @@ const RequestHeaders = () => {
   const handleAddHeader = () => {
     if (header.name.trim() && header.value.trim()) {
       const updatedHeaders = [header, ...(sampleQuery.sampleHeaders || [])];
-      dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
+      dispatch(
+        setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders })
+      );
       setHeader({ name: '', value: '' });
       setIsUpdatingHeader(false);
     }
   };
 
   const handleDeleteHeader = (headerToDelete: IHeader) => {
-    const updatedHeaders = sampleQuery.sampleHeaders.filter((h) => h.name !== headerToDelete.name);
+    const updatedHeaders = sampleQuery.sampleHeaders.filter(
+      (h) => h.name !== headerToDelete.name
+    );
     dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
   };
 
   const handleEditHeader = (headerToEdit: IHeader) => {
     setHeader(headerToEdit);
     setIsUpdatingHeader(true);
-    const updatedHeaders = sampleQuery.sampleHeaders.filter((h) => h.name !== headerToEdit.name);
+    const updatedHeaders = sampleQuery.sampleHeaders.filter(
+      (h) => h.name !== headerToEdit.name
+    );
     dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
   };
 
@@ -88,20 +94,20 @@ const RequestHeaders = () => {
         <Input
           className={styles.input}
           placeholder={translateMessage('Key')}
-          name="name"
+          name='name'
           value={header.name}
           onChange={handleInputChange}
         />
         <Input
           className={styles.input}
           placeholder={translateMessage('Value')}
-          name="value"
+          name='value'
           value={header.value}
           onChange={handleInputChange}
         />
         <Button
           className={styles.button}
-          appearance="primary"
+          appearance='primary'
           onClick={handleAddHeader}
         >
           {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}

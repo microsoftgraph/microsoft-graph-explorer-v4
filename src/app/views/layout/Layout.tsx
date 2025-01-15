@@ -82,6 +82,7 @@ const useLayoutStyles = makeStyles({
     gap: '0.5rem'
   },
   requestContainer: {
+    backgroundColor: 'gold',
     display: 'flex',
     flexDirection: 'column',
     gap: '0.5rem',
