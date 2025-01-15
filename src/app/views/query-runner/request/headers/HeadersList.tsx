@@ -7,8 +7,7 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
-  Text,
-  useId
+  Text
 } from '@fluentui/react-components';
 import { DeleteRegular, EditRegular } from '@fluentui/react-icons';
 import { IHeadersListControl } from '../../../../../types/request';
