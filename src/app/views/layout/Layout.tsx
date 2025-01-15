@@ -82,12 +82,14 @@ const useLayoutStyles = makeStyles({
     gap: '0.5rem'
   },
   requestContainer: {
-    backgroundColor: 'gold',
     display: 'flex',
     flexDirection: 'column',
     gap: '0.5rem',
     border: '2px solid black',
     borderRadius: '4px'
+  },
+  statusMessages: {
+    margin: '0.5rem'
   }
 });
 
@@ -197,7 +199,9 @@ const Layout = (props: LayoutProps) => {
                   handleOnEditorChange={handleOnEditorChange}
                   sampleQuery={sampleQuery}
                 />
-                <StatusMessagesV9 />
+                <div className={layoutStyles.statusMessages}>
+                  <StatusMessagesV9 />
+                </div>
               </div>
               {/* TODO: Implement resizing for the response area */}
               <div className={responseAreaStyles} ref={responseAreaElementRef}>

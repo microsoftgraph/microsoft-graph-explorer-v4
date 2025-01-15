@@ -9,7 +9,7 @@ interface IRequestBodyProps {
 
 const useStyles = makeStyles({
   container: {
-    padding: '0.5rem'
+    padding: '0 0.5rem'
   }
 });
 
