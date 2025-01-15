@@ -1,4 +1,4 @@
-import { useFluent , makeResetStyles, tokens} from '@fluentui/react-components';
+import { makeResetStyles, tokens, useFluent } from '@fluentui/react-components';
 import * as React from 'react';
 
 interface HandleProps {
@@ -43,7 +43,7 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
           cursor: 'col-resize'
         }
         : {
-          ...(position === 'top' ? { top: '15px' } : { bottom: '15px' }),
+          ...(position === 'top' ? { top: '-6.5px' } : { bottom: '-6.5px' }),
           left: '50%',
           transform: 'translateX(-50%)',
           width: '100%',

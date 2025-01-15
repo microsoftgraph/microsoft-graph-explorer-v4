@@ -4,7 +4,6 @@ import polygons from './bgPolygons.svg';
 export const useNotificationStyles = makeStyles({
   container: {
     padding: '8px',
-    marginBottom: '8px',
     backgroundImage: `url(${polygons})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
@@ -20,6 +19,9 @@ export const useNotificationStyles = makeStyles({
     '&.highContrast': {
       backgroundColor: '#0C3B5E',
       color: '#ffffff'
+    },
+    '&:empty': {
+      display: 'none'
     }
   },
   body: {

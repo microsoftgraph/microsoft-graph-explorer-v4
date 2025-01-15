@@ -8,7 +8,10 @@ import { Provider } from 'react-redux';
 import App from './app/views/App';
 
 import { CURRENT_THEME } from './app/services/graph-constants';
-import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
+import {
+  getAuthTokenSuccess,
+  getConsentedScopesSuccess
+} from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/slices/collections.slice';
 import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
@@ -33,7 +36,6 @@ import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { Collection } from './types/resources';
-
 
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
@@ -99,12 +101,14 @@ setCurrentSystemTheme();
 appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
-  authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
-    if (authResponse && authResponse.accessToken) {
-      appStore.dispatch(getAuthTokenSuccess());
-      appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
-    }
-  })
+  authenticationWrapper
+    .getToken()
+    .then((authResponse: AuthenticationResult) => {
+      if (authResponse && authResponse.accessToken) {
+        appStore.dispatch(getAuthTokenSuccess());
+        appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
+      }
+    })
     .catch(() => {
       // ignore the error as it means that a User login is required
     });
@@ -121,10 +125,12 @@ if (theme) {
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 } else {
   appStore.dispatch(setGraphExplorerMode(Mode.Complete));
-  appStore.dispatch(toggleSidebar({
-    mobileScreen: false,
-    showSidebar: true
-  }))
+  appStore.dispatch(
+    toggleSidebar({
+      mobileScreen: false,
+      showSidebar: true
+    })
+  );
 }
 
 const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
@@ -152,12 +158,14 @@ historyCache.readHistoryData().then((data: IHistoryItem[]) => {
 
 collectionsCache.read().then((data: Collection[]) => {
   if (!data || data.length === 0) {
-    appStore.dispatch(createCollection({
-      id: new Date().getTime().toString(),
-      name: 'My Collection',
-      paths: [],
-      isDefault: true
-    }));
+    appStore.dispatch(
+      createCollection({
+        id: new Date().getTime().toString(),
+        name: 'My Collection',
+        paths: [],
+        isDefault: true
+      })
+    );
   } else {
     data.forEach((collection: Collection) => {
       appStore.dispatch(createCollection(collection));
@@ -170,15 +178,15 @@ function loadResources() {
 }
 loadResources();
 
-appStore.dispatch(setSampleQuery(
-  {
+appStore.dispatch(
+  setSampleQuery({
     sampleUrl: 'https://graph.microsoft.com/v1.0/me',
     selectedVerb: 'GET',
     sampleBody: undefined,
     sampleHeaders: [],
     selectedVersion: 'v1.0'
-  }
-));
+  })
+);
 
 /**
  * Set's up Monaco Editor's Workers.
@@ -186,24 +194,24 @@ appStore.dispatch(setSampleQuery(
 enum Workers {
   Json = 'json',
   Editor = 'editor',
-  Typescript='ts',
-  Css='css',
-  Html='html'
+  Typescript = 'ts',
+  Css = 'css',
+  Html = 'html'
 }
 
 window.MonacoEnvironment = {
   getWorkerUrl(moduleId: any, label: string) {
     switch (label) {
-    case 'json':
-      return getWorkerFor(Workers.Json);
-    case 'css':
-      return getWorkerFor(Workers.Css);
-    case 'html':
-      return getWorkerFor(Workers.Html);
-    case 'typescript':
-      return getWorkerFor(Workers.Typescript);
-    default:
-      return getWorkerFor(Workers.Editor);
+      case 'json':
+        return getWorkerFor(Workers.Json);
+      case 'css':
+        return getWorkerFor(Workers.Css);
+      case 'html':
+        return getWorkerFor(Workers.Html);
+      case 'typescript':
+        return getWorkerFor(Workers.Typescript);
+      default:
+        return getWorkerFor(Workers.Editor);
     }
   }
 };
@@ -228,7 +236,7 @@ window.onerror = (message, url, lineNumber, columnNumber, error) => {
     lineNumber,
     columnNumber
   });
-}
+};
 
 const Root = () => {
   return (
