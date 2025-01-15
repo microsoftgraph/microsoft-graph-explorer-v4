@@ -46,8 +46,8 @@ const HeadersList = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {headerItems.map((item) => (
-          <TableRow key={useId(item.name)}>
+        {headerItems.map((item, index) => (
+          <TableRow key={index}>
             <TableCell>{item.name}</TableCell>
             <TableCell>
               {item.value}
