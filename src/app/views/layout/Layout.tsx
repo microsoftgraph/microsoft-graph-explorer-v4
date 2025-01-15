@@ -54,7 +54,7 @@ const useMainWrapperStyles = makeResetStyles({
   "sidebar mainArea"
   "footer footer"
   `,
-  gridTemplateRows: '48px 1fr 48px',
+  gridTemplateRows: '48px 1fr auto',
   gridTemplateColumns: `clamp(60px, var(${SIDEBAR_SIZE_CSS_VAR}), 40%) 1fr`
 });
 const bannerRow = `${bannerIsVisible ? 'auto' : ''}`;
