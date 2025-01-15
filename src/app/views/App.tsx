@@ -1,5 +1,11 @@
 import { getTheme, ITheme, styled } from '@fluentui/react';
-import { FluentProvider, teamsHighContrastTheme, Theme, webDarkTheme, webLightTheme } from '@fluentui/react-components';
+import {
+  FluentProvider,
+  teamsHighContrastTheme,
+  Theme,
+  webDarkTheme,
+  webLightTheme
+} from '@fluentui/react-components';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { Resizable } from 're-resizable';
 import { Component } from 'react';
@@ -12,7 +18,11 @@ import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
-import { IInitMessage, IQuery, IThemeChangedMessage } from '../../types/query-runner';
+import {
+  IInitMessage,
+  IQuery,
+  IThemeChangedMessage
+} from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
 import CollectionPermissionsProvider from '../services/context/collection-permissions/CollectionPermissionsProvider';
@@ -27,9 +37,9 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
 import { translateMessage } from '../utils/translate-messages';
 import { StatusMessagesV9, TermsOfUseMessageV9 } from './app-sections';
+import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import Notification from './common/banners/Notification';
@@ -42,8 +52,8 @@ import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
 // import { Sidebar } from './sidebar/Sidebar';
-import { SidebarV9 } from './sidebar/SidebarV9';
 import { Layout } from './layout/Layout';
+import { SidebarV9 } from './sidebar/SidebarV9';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -72,7 +82,10 @@ interface IAppState {
 }
 
 const getSystemTheme = (): string => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  if (
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) {
     return 'dark';
   }
   return 'light';
@@ -98,7 +111,7 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({
       sidebarTabSelection: selectedTab
     });
-  }
+  };
 
   public componentDidMount = async () => {
     removeSpinners();
@@ -224,14 +237,14 @@ class App extends Component<IAppProps, IAppState> {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
 
     switch (msgEvent.type) {
-    case 'init':
-      this.handleInitMsg(msgEvent);
-      break;
-    case 'theme-changed':
-      this.handleThemeChangeMsg(msgEvent);
-      break;
-    default:
-      return;
+      case 'init':
+        this.handleInitMsg(msgEvent);
+        break;
+      case 'theme-changed':
+        this.handleThemeChangeMsg(msgEvent);
+        break;
+      default:
+        return;
     }
   };
 
@@ -286,11 +299,9 @@ class App extends Component<IAppProps, IAppState> {
   public toggleSidebar = (): void => {
     const shouldShowSidebar = this.setSidebarProperties();
     this.changeDimensions(shouldShowSidebar ? '28%' : '4%');
-    telemetry.trackEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
-      });
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
+    });
   };
 
   public displayToggleButton = (mediaQueryList: any) => {
@@ -310,7 +321,6 @@ class App extends Component<IAppProps, IAppState> {
 
     // @ts-ignore
     this.props.actions!.toggleSidebar(properties);
-
   };
 
   private setSidebarProperties() {
@@ -327,7 +337,10 @@ class App extends Component<IAppProps, IAppState> {
     const width = this.changeDimensions(sidebarWidth);
     const { sidebarProperties } = this.props;
     const minimised = !sidebarProperties.showSidebar;
-    if ((width <= breakPoint && !minimised) || (width > breakPoint && minimised)) {
+    if (
+      (width <= breakPoint && !minimised) ||
+      (width > breakPoint && minimised)
+    ) {
       this.setSidebarProperties();
     }
   }
@@ -356,7 +369,11 @@ class App extends Component<IAppProps, IAppState> {
 
   private shouldDisplayContent(parameters: any) {
     const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
-    return !(graphExplorerMode === Mode.Complete && mobileScreen && showSidebar);
+    return !(
+      graphExplorerMode === Mode.Complete &&
+      mobileScreen &&
+      showSidebar
+    );
   }
 
   private removeFlexBasisProperty() {
@@ -392,8 +409,14 @@ class App extends Component<IAppProps, IAppState> {
 
   public render() {
     const classes = classNames(this.props);
-    const { authenticated, graphExplorerMode, minimised, sampleQuery,
-      sidebarProperties, dimensions }: any = this.props;
+    const {
+      authenticated,
+      graphExplorerMode,
+      minimised,
+      sampleQuery,
+      sidebarProperties,
+      dimensions
+    }: any = this.props;
     const { sidebar, content } = dimensions;
 
     let sidebarWidth = classes.sidebar;
@@ -407,7 +430,8 @@ class App extends Component<IAppProps, IAppState> {
 
     const displayContent = this.shouldDisplayContent({
       graphExplorerMode,
-      mobileScreen, showSidebar
+      mobileScreen,
+      showSidebar
     });
 
     if (mobileScreen) {
@@ -424,10 +448,10 @@ class App extends Component<IAppProps, IAppState> {
     this.removeSidebarHeightProperty();
 
     const fluentV9Themes: Record<string, Theme> = {
-      'light': webLightTheme,
-      'dark': webDarkTheme,
+      light: webLightTheme,
+      dark: webDarkTheme,
       'high-contrast': teamsHighContrastTheme
-    }
+    };
     return (
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -439,15 +463,15 @@ class App extends Component<IAppProps, IAppState> {
                 console.log('Selected verb:', verb);
                 this.handleSelectVerb(verb);
               }}
-              maxWidth={100}
-              onDragStart={(value: number, eventType: string) => {
-                console.log('Drag started', value, eventType);
-              }}
-              onDragEnd={(value: number, eventType: string) => {
-                console.log('Drag ended', value, eventType);
-              }}
-              onChange={(value: number, eventType: string) => {
-                console.log('Layout changed', value, eventType);
+              onDragEnd={(
+                value: number,
+                eventType: string,
+                initiator: string
+              ) => {
+                const event = new CustomEvent('onResizeDragEnd', {
+                  detail: { value, eventType, initiator }
+                });
+                window.dispatchEvent(event);
               }}
             />
             {/* <div className={`ms-Grid ${classes.app}`} style={{ paddingLeft: mobileScreen && '15px' }}>
@@ -530,8 +554,14 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-const mapStateToProps = ({ sidebarProperties, theme, dimensions,
-  profile, sampleQuery, auth: { authToken }, graphExplorerMode
+const mapStateToProps = ({
+  sidebarProperties,
+  theme,
+  dimensions,
+  profile,
+  sampleQuery,
+  auth: { authToken },
+  graphExplorerMode
 }: ApplicationState) => {
   const mobileScreen = !!sidebarProperties.mobileScreen;
   const showSidebar = !!sidebarProperties.showSidebar;

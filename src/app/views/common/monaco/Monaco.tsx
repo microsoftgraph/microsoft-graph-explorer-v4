@@ -1,12 +1,8 @@
-import { FocusZone } from '@fluentui/react';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import Editor, { OnChange, loader } from '@monaco-editor/react';
-import { useEffect } from 'react';
-
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { useEffect, useRef, useState } from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
-import './monaco.scss';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
-
 interface IMonaco {
   body: object | string | undefined;
   onChange?: OnChange;
@@ -19,12 +15,11 @@ interface IMonaco {
 
 export function Monaco(props: IMonaco) {
   let { body } = props;
-  const { onChange, language, readOnly, height } = props;
+  const { onChange, language, readOnly } = props;
 
   if (body && typeof body !== 'string') {
     body = formatJsonStringForAllBrowsers(body);
   }
-  const itemHeight = height ? height : '300px';
 
   loader.config({ monaco });
 
@@ -40,15 +35,40 @@ export function Monaco(props: IMonaco) {
     }
   }, [monaco]);
 
+  const editorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+    editorRef.current = editor;
+  };
+
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [editorHeight, setEditorHeight] = useState(300);
+
+  useEffect(() => {
+    const handleResize = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { initiator, value } = customEvent.detail as {
+        initiator: string;
+        value: number;
+      };
+      if (initiator === 'responseSize') {
+        if (editorRef.current) {
+          const newHeight = window.innerHeight - value;
+          setEditorHeight(newHeight);
+        }
+      }
+    };
+    window.addEventListener('onResizeDragEnd', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <FocusZone disabled= {props.extraInfoElement ? false : true}>
-      <div className='monaco-editor'>
-        {props.extraInfoElement}
-        <ThemeContext.Consumer>
-          {(theme) => (<Editor
+    <>
+      {props.extraInfoElement}
+      <ThemeContext.Consumer>
+        {/* TODO: handle this theme differently? */}
+        {(theme) => (
+          <Editor
             width='99.8%'
-            height={itemHeight}
-            // @ts-ignore
+            height={editorHeight}
             value={body ? body : ''}
             language={language ? language : 'json'}
             options={{
@@ -67,9 +87,10 @@ export function Monaco(props: IMonaco) {
             }}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
-          />)}
-        </ThemeContext.Consumer>
-      </div>
-    </FocusZone>
+            onMount={editorDidMount}
+          />
+        )}
+      </ThemeContext.Consumer>
+    </>
   );
 }

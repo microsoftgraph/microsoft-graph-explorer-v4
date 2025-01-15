@@ -27,10 +27,7 @@ const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
-  maxWidth: number;
-  onDragStart: (value: number, eventType: string) => void;
-  onDragEnd: (value: number, eventType: string) => void;
-  onChange: (value: number, eventType: string) => void;
+  onDragEnd: (value: number, eventType: string, initiator: string) => void;
 }
 
 const storageBanner = localStorage.getItem(BANNER_IS_VISIBLE);
@@ -67,7 +64,7 @@ const useMainAreaWrapperStyles = makeResetStyles({
   "requestArea"
   "responseArea"
   `,
-  gridTemplateRows: `${bannerRow} 36px minmax(20%, 80%) clamp(16%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 80%)`,
+  gridTemplateRows: `${bannerRow} 36px minmax(30%, 80%) clamp(16%, var(${RESPONSE_AREA_SIZE_CSS_VAR}), 80%)`,
   gridTemplateColumns: '1fr',
   position: 'relative',
   gap: tokens.spacingHorizontalS
@@ -134,14 +131,9 @@ const Layout = (props: LayoutProps) => {
     variableName: SIDEBAR_SIZE_CSS_VAR,
     growDirection: 'end',
     // relative: true,
-    onChange: (_, { value, type }) => {
-      props.onChange(value, String(type));
-    },
-    onDragStart: (_, { value, type }) => {
-      props.onDragStart(value, String(type));
-    },
     onDragEnd: (_, { value, type }) => {
-      props.onDragEnd(value, String(type));
+      console.log('sidebar');
+      props.onDragEnd(value, String(type), 'sidebar');
     }
   });
 
@@ -152,7 +144,11 @@ const Layout = (props: LayoutProps) => {
     setValue: setResponseAreaRowSize
   } = useResizeHandle({
     variableName: RESPONSE_AREA_SIZE_CSS_VAR,
-    growDirection: 'up'
+    growDirection: 'up',
+    onDragEnd: (_, { value, type }) => {
+      console.log('responseSize');
+      props.onDragEnd(value, String(type), 'responseSize');
+    }
   });
 
   const resetSidebarArea = () => {
