@@ -3,9 +3,8 @@ import {
   DefaultButton,
   Dialog,
   DialogFooter, DialogType, ICommandBarItemProps,
-  Label, MessageBarType, PrimaryButton
+  Label, PrimaryButton
 } from '@fluentui/react';
-
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -19,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { ResourcePath } from '../../../../../types/resources';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
+import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 export interface APICollection {
   version: string;
@@ -63,7 +63,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     downloadToLocal(content, filename);
     trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
   }
-
 
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
@@ -207,7 +206,19 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   ];
 
   return (
-    <>
+    <CommonCollectionsPanel
+      messageBarText='Manage API Collections'
+      primaryButtonText='Download postman collection'
+      primaryButtonAction={generateCollection}
+      primaryButtonDisabled={items.length === 0}
+      closePopup={props.dismissPopup}
+      isDialogHidden={isDialogHidden}
+      dialogTitle='Upload collection'
+      dialogSubText='You have an existing collection. Would you like to merge or replace it?'
+      mergeAction={mergeWithExistingCollection}
+      replaceAction={overwriteCollection}
+      toggleDialog={toggleIsDialogHidden}
+    >
       <CommandBar
         items={options}
         ariaLabel='Selection actions'
@@ -223,24 +234,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         style={{ display: 'none' }}
         onChange={handleFileSelect}
       />
-
-      {!isDialogHidden && (
-        <Dialog
-          hidden={isDialogHidden}
-          onDismiss={() => setIsDialogHidden(true)}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: translateMessage('Upload collection'),
-            closeButtonAriaLabel: 'Close',
-            subText: translateMessage('You have an existing collection. Would you like to merge or replace it?')
-          }}
-        >
-          <DialogFooter>
-            <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Merge with existing')} />
-            <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
-          </DialogFooter>
-        </Dialog>
-      )}
 
       {items && items.length > 0 ?
         (<div style={{ height: '80vh' }}>
@@ -259,22 +252,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
-        }}>
-        <PrimaryButton onClick={generateCollection} disabled={items.length === 0}>
-          {translateMessage('Download postman collection')}
-        </PrimaryButton>
-
-        <DefaultButton
-          onClick={
-            () => props.closePopup()
-          }>
-          {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-    </>
+    </CommonCollectionsPanel>
   )
 }
 

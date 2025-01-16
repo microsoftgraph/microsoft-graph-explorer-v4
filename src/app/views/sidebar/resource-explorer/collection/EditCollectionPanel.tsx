@@ -1,23 +1,21 @@
-import { DefaultButton, DialogFooter, Label, MessageBar, PrimaryButton } from '@fluentui/react';
+import { DefaultButton, Label, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/slices/collections.slice';
 import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
+import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 interface EditCollectionPanelProps {
-    closePopup: () => void;
-  }
+  closePopup: () => void;
+}
 
-const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) => {
+const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup }) => {
   const dispatch = useAppDispatch();
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
-  const { collections } = useAppSelector(
-    (state) => state.collections
-  );
-  const items = collections && collections.length >
-        0 ? collections.find(k => k.isDefault)!.paths : [];
+  const { collections } = useAppSelector((state) => state.collections);
+  const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
 
   const columns = [
     { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
@@ -30,11 +28,13 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
   };
 
   return (
-    <>
-      <MessageBar isMultiline={true}>
-        {translateMessage('edit collections')}
-        <span style={{ fontWeight: 'bold' }}>{translateMessage('Delete all selected')}</span>
-      </MessageBar>
+    <CommonCollectionsPanel
+      messageBarText='edit collections'
+      primaryButtonText='Delete all selected'
+      primaryButtonAction={removeSelectedItems}
+      primaryButtonDisabled={selectedItems.length === 0}
+      closePopup={closePopup}
+    >
       {items && items.length > 0 ? (
         <div style={{ height: '80vh' }}>
           <Paths
@@ -45,7 +45,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
           />
         </div>
       ) : (
-        <div style={{height: '80vh'}}>
+        <div style={{ height: '80vh' }}>
           <Label
             style={{
               display: 'flex',
@@ -58,19 +58,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
           </Label>
         </div>
       )}
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
-        }}>
-        <PrimaryButton onClick={removeSelectedItems} disabled={selectedItems.length === 0}>
-          {translateMessage('Delete all selected')}
-        </PrimaryButton>
-
-        <DefaultButton onClick={closePopup}>
-          {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-    </>
+    </CommonCollectionsPanel>
   );
 };
 

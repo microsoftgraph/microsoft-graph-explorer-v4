@@ -1,10 +1,4 @@
-import { DefaultButton,
-  DialogFooter,
-  Dropdown,
-  IDropdownOption,
-  Label,
-  MessageBar,
-  PrimaryButton } from '@fluentui/react';
+import { DefaultButton, Dropdown, IDropdownOption, Label, PrimaryButton } from '@fluentui/react';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useEffect, useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -13,9 +7,10 @@ import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import { formatScopeLabel, scopeOptions } from './collection.util';
+import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 interface EditScopePanelProps {
-    closePopup: () => void;
+  closePopup: () => void;
 }
 
 const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
@@ -41,7 +36,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   ];
 
   const handleScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
-    if (!option) {return;}
+    if (!option) { return; }
     const newScope = option.key as PERMS_SCOPE;
     const updatedSelectedItems = selectedItems.map(item => ({ ...item, scope: newScope }));
     setSelectedItems(updatedSelectedItems);
@@ -72,12 +67,13 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column',
-      overflow: 'hidden' }}>
-      <MessageBar isMultiline={true}>
-        {translateMessage('edit query scopes')}
-        <span style={{ fontWeight: 'bold' }}>{translateMessage('Save all')}</span>
-      </MessageBar>
+    <CommonCollectionsPanel
+      messageBarText='edit query scopes'
+      primaryButtonText='Save all'
+      primaryButtonAction={saveAllScopes}
+      primaryButtonDisabled={pendingChanges.length === 0}
+      closePopup={closePopup}
+    >
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 0px' }}>
         <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
         <Dropdown
@@ -91,7 +87,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           styles={{ dropdown: { width: 200 } }}
         />
       </div>
-      <div style={{ flex: 1, marginBottom: '1px',  maxHeight: '80vh' }}>
+      <div style={{ flex: 1, marginBottom: '1px', maxHeight: '80vh' }}>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}
@@ -99,23 +95,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
         />
       </div>
-
-      <DialogFooter
-        styles={{
-          actionsRight: {
-            display: 'flex',
-            justifyContent: 'flex-start',
-            padding: '5px'
-          }
-        }}>
-        <PrimaryButton onClick={saveAllScopes} disabled={pendingChanges.length === 0}>
-          {translateMessage('Save all')}
-        </PrimaryButton>
-        <DefaultButton onClick={closePopup}>
-          {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-    </div>
+    </CommonCollectionsPanel>
   );
 };
 
