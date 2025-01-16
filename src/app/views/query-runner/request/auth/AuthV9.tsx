@@ -35,6 +35,7 @@ const useStyles = makeStyles({
   accessToken: {
     wordWrap: 'break-word',
     width: 'calc(100vw - var(--sidebar-size) - 4rem)',
+    padding: tokens.spacingHorizontalXS,
     height: '100%',
     border: 'none',
     resize: 'none'
@@ -59,7 +60,7 @@ export function Auth() {
   );
   const authToken = useAppSelector((state) => state.auth.authToken);
   const { user } = profile;
-  const requestHeight = convertVhToPx(height, 60);
+  const requestHeight = convertVhToPx(height, 5);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -105,6 +106,7 @@ export function Auth() {
             </Text>
             <CopyButton isIconButton={true} handleOnClick={handleCopy} />
             <Tooltip
+              withArrow
               content={translateMessage(showMessage())}
               relationship='label'
             >
