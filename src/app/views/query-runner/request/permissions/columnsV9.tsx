@@ -45,6 +45,7 @@ const createRenderColumnHeader = (styles: ReturnType<typeof permissionStyles>) =
     return (
       <div className={styles.headerContainer}>
         <Tooltip
+          withArrow
           content={tooltipMessage}
           relationship='label'>
           <Button
