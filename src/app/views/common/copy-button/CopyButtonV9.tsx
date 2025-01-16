@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
 import { Button, Tooltip, makeStyles } from '@fluentui/react-components';
-import { translateMessage } from '../../../utils/translate-messages';
 import { CheckmarkRegular, CopyRegular } from '@fluentui/react-icons';
+import { useRef, useState } from 'react';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ICopyButtonProps {
   style?: React.CSSProperties;
-  handleOnClick: Function;
+  handleOnClick: (props: ICopyButtonProps) => void;
   className?: string;
   isIconButton: boolean;
 }
@@ -23,7 +23,9 @@ export default function CopyButton(props: ICopyButtonProps) {
   const copyRef = useRef<HTMLButtonElement>(null);
   const styles = useStyles();
 
-  const copyLabel: string = !copied ? translateMessage('Copy') : translateMessage('Copied');
+  const copyLabel: string = !copied
+    ? translateMessage('Copy')
+    : translateMessage('Copied');
 
   const handleCopyClick = async () => {
     props.handleOnClick(props);
@@ -40,9 +42,9 @@ export default function CopyButton(props: ICopyButtonProps) {
   return (
     <>
       {props.isIconButton ? (
-        <Tooltip content={copyLabel} relationship='label'>
+        <Tooltip withArrow content={copyLabel} relationship='label'>
           <Button
-            appearance="subtle"
+            appearance='subtle'
             icon={copied ? <CheckmarkRegular /> : <CopyRegular />}
             aria-label={copyLabel}
             onClick={handleCopyClick}
@@ -52,11 +54,7 @@ export default function CopyButton(props: ICopyButtonProps) {
           />
         </Tooltip>
       ) : (
-        <Button
-          appearance="primary"
-          onClick={handleCopyClick}
-          ref={copyRef}
-        >
+        <Button appearance='primary' onClick={handleCopyClick} ref={copyRef}>
           {copyLabel}
         </Button>
       )}
