@@ -1,6 +1,6 @@
 import {INavLink} from '@fluentui/react';
 
-import {makeStyles, Tooltip, Button, Badge } from '@fluentui/react-components'
+import { Tooltip, Button, Badge } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
 import { useEffect } from 'react';
 
@@ -10,6 +10,7 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
+import { useStyles, useIconButtonStyles } from './resourceLinkStyles';
 
 interface IResourceLinkProps {
   link: INavLink;
@@ -19,49 +20,6 @@ interface IResourceLinkProps {
 }
 
 type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
-
-const useStyles = makeStyles({
-  link: {
-    display: 'flex',
-    lineHeight: 'normal',
-    width: '100%',
-    overflow: 'hidden',
-    justifyContent: 'space-between',
-    marginRight: '8px',
-    position: 'relative',
-    ':hover .actions': {
-      visibility: 'visible'
-    }
-  },
-  resourceLinkNameContainer: {
-    textAlign: 'left',
-    flex: '1',
-    overflow: 'hidden',
-    display: 'flex',
-    marginTop: '4px',
-    paddingLeft: '4px'
-  },
-  resourceLinkText: {
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    marginTop: '6px'
-  },
-  badge: {
-    maxWidth: '50px'
-  },
-  actions: {
-    visibility: 'hidden',
-    display: 'flex',
-    alignItems: 'center'
-  }
-});
-
-const useIconButtonStyles = makeStyles({
-  root: {
-    marginRight: '1px'
-  }
-});
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { version } = props;
