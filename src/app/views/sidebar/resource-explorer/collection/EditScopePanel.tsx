@@ -1,4 +1,11 @@
-import { DefaultButton, Dropdown, IDropdownOption, Label, PrimaryButton } from '@fluentui/react';
+import * as React from 'react';
+import {
+  Dropdown,
+  Label,
+  makeStyles,
+  Option,
+  useId
+} from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useEffect, useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -9,6 +16,21 @@ import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
+const useStyles = makeStyles({
+  container: {
+    height: '80vh'
+  },
+  dropdownContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: '10px 0px'
+  },
+  dropdown: {
+    width: '200px'
+  }
+});
+
 interface EditScopePanelProps {
   closePopup: () => void;
 }
@@ -16,16 +38,16 @@ interface EditScopePanelProps {
 const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   const dispatch = useAppDispatch();
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
-  const [selectedScope, setSelectedScope] = useState<PERMS_SCOPE | null>(null);
   const [dropdownKey, setDropdownKey] = useState(0);
   const [pendingChanges, setPendingChanges] = useState<IResourceLink[]>([]);
   const { collections, saved } = useAppSelector((state) => state.collections);
   const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
+  const styles = useStyles();
+  const dropdownId = useId('dropdown-scope');
 
   useEffect(() => {
     if (saved) {
       setSelectedItems([]);
-      setSelectedScope(null);
       setPendingChanges([]);
     }
   }, [saved]);
@@ -35,9 +57,11 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
     { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
-  const handleScopeChange = (_event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleScopeChange = (_event: any, option?: any) => {
     if (!option) { return; }
-    const newScope = option.key as PERMS_SCOPE;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const newScope = option.optionValue as PERMS_SCOPE;
     const updatedSelectedItems = selectedItems.map(item => ({ ...item, scope: newScope }));
     setSelectedItems(updatedSelectedItems);
     const newPendingChanges = [...pendingChanges];
@@ -50,7 +74,6 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
       }
     });
     setPendingChanges(newPendingChanges);
-    setSelectedScope(null);
     setDropdownKey(prevKey => prevKey + 1);
   };
 
@@ -74,20 +97,24 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
       primaryButtonDisabled={pendingChanges.length === 0}
       closePopup={closePopup}
     >
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '10px 0px' }}>
-        <Label style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
+      <div className={styles.dropdownContainer}>
+        <Label id={dropdownId} style={{ marginRight: '16px' }}>{translateMessage('Change scope to: ')}</Label>
         <Dropdown
           key={dropdownKey}
+          aria-labelledby={dropdownId}
           placeholder={translateMessage('[Select one scope]')}
-          options={scopeOptions.map(option =>
-            ({ key: option.key, text: formatScopeLabel(option.key) }))}
-          onChange={handleScopeChange}
-          selectedKey={selectedScope}
+          onOptionSelect={handleScopeChange}
           disabled={selectedItems.length === 0}
-          styles={{ dropdown: { width: 200 } }}
-        />
+          className={styles.dropdown}
+        >
+          {scopeOptions.map(option => (
+            <Option key={option.key} value={option.key}>
+              {formatScopeLabel(option.text)}
+            </Option>
+          ))}
+        </Dropdown>
       </div>
-      <div style={{ flex: 1, marginBottom: '1px', maxHeight: '80vh' }}>
+      <div className={styles.container}>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}

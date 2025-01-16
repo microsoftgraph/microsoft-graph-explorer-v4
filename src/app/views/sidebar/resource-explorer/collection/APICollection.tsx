@@ -1,10 +1,10 @@
 import {
-  CommandBar,
-  DefaultButton,
-  Dialog,
-  DialogFooter, DialogType, ICommandBarItemProps,
-  Label, PrimaryButton
-} from '@fluentui/react';
+  Label,
+  Toolbar,
+  ToolbarButton,
+  ToolbarDivider
+} from '@fluentui/react-components';
+import { Delete20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -168,34 +168,34 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     });
   };
 
-  const options: ICommandBarItemProps[] = [
+  const options = [
     {
       key: 'remove',
       text: translateMessage('Edit collection'),
-      iconProps: { iconName: 'Delete' },
+      icon: <Delete20Regular />,
       disabled: items.length === 0,
       onClick: openEditCollectionPanel
     },
     {
       key: 'set-scope',
       text: translateMessage('Edit scope'),
-      iconProps: { iconName: 'Permissions' },
+      icon: <Key20Regular />,
       disabled: items.length === 0,
       onClick: openEditScopePanel
     },
     {
       key: 'upload',
       text: translateMessage('Upload a new list'),
-      iconProps: { iconName: 'Upload' },
+      icon: <ArrowUpload20Regular />,
       onClick: () => document.getElementById('file-input')?.click()
     }
   ];
 
-  const farItems: ICommandBarItemProps[] = [
+  const farItems = [
     {
       key: 'preview-permissions',
       text: translateMessage('Preview permissions'),
-      iconProps: { iconName: 'ListMirrored' },
+      icon: <List20Regular />,
       disabled: items.length === 0,
       onClick: () => viewPermissions({
         settings: {
@@ -219,13 +219,29 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       replaceAction={overwriteCollection}
       toggleDialog={toggleIsDialogHidden}
     >
-      <CommandBar
-        items={options}
-        ariaLabel='Selection actions'
-        primaryGroupAriaLabel='Selection actions'
-        farItemsGroupAriaLabel='More selection actions'
-        farItems={farItems}
-      />
+      <Toolbar aria-label='Selection actions'>
+        {options.map(option => (
+          <ToolbarButton
+            key={option.key}
+            icon={option.icon}
+            disabled={option.disabled}
+            onClick={option.onClick}
+          >
+            {option.text}
+          </ToolbarButton>
+        ))}
+        <ToolbarDivider />
+        {farItems.map(item => (
+          <ToolbarButton
+            key={item.key}
+            icon={item.icon}
+            disabled={item.disabled}
+            onClick={item.onClick}
+          >
+            {item.text}
+          </ToolbarButton>
+        ))}
+      </Toolbar>
 
       <input
         key={fileInputKey}
@@ -244,11 +260,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         </div>
         ) :
         (
-          <Label
-            style={{ display: 'flex', width: '100%',
-              height: '80vh',
-              justifyContent: 'center',
-              alignItems: 'center' }}>
+          <Label>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}

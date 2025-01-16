@@ -54,9 +54,9 @@ const CommonCollectionsPanel: FC<CommonCollectionsPanelProps> = ({
           onDismiss={toggleDialog}
           dialogContentProps={{
             type: DialogType.normal,
-            title: translateMessage(dialogTitle || ''),
+            title: translateMessage(dialogTitle ?? ''),
             closeButtonAriaLabel: 'Close',
-            subText: translateMessage(dialogSubText || '')
+            subText: translateMessage(dialogSubText ?? '')
           }}
         >
           <DialogFooter>

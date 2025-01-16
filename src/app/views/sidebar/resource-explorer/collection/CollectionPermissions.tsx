@@ -1,21 +1,40 @@
 import {
-  DetailsList,
-  IGroup,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
   Label,
   Link,
-  SelectionMode
-} from '@fluentui/react';
+  makeStyles,
+  Spinner
+} from '@fluentui/react-components';
 import { FC, useEffect } from 'react';
 import { useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
 import { CollectionPermission } from '../../../../../types/resources';
 import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
-import { generateGroupsFromList } from '../../../../utils/generate-groups';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackDownload } from '../../../common/download';
 import { geLocale } from '../../../../../appLocale';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
+
+const useStyles = makeStyles({
+  centeredLabel: {
+    display: 'flex',
+    width: '100%',
+    minHeight: '200px',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  tableContainer: {
+    height: '80vh',
+    overflowY: 'auto',
+    overflowX: 'hidden'
+  }
+});
 
 const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
   const { getPermissions, permissions, isFetching } = useCollectionPermissions();
@@ -52,15 +71,11 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     }
   }, [paths]);
 
+  const styles = useStyles();
+
   if (!isFetching && !permissions) {
     return (
-      <Label style={{
-        display: 'flex',
-        width: '100%',
-        minHeight: '200px',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
+      <Label className={styles.centeredLabel}>
         {translateMessage('permissions not found')}
       </Label>
     );
@@ -68,19 +83,15 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   if (isFetching) {
     return (
-      <Label>
-        {translateMessage('Fetching permissions')}...
-      </Label>
+      <Spinner label={translateMessage('Fetching permissions')} />
     );
   }
 
   const permissionsArray: CollectionPermission[] = [];
-  let groups: IGroup[] | undefined = [];
   if (permissions) {
     Object.keys(permissions).forEach(key => {
       permissionsArray.push(...permissions[key]);
     });
-    groups = generateGroupsFromList(permissionsArray, 'scopeType');
   }
 
   return (
@@ -96,17 +107,26 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         rel="noopener noreferrer"
         onClick={handleTelemetryClick}
         href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
-        underline
       >
         {translateMessage('Microsoft Graph permissions reference')}
       </Link>
-      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
-        <DetailsList
-          items={permissionsArray}
-          columns={columns}
-          groups={groups}
-          selectionMode={SelectionMode.none}
-        />
+      <div className={styles.tableContainer}>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHeaderCell key={column.key}>{column.name}</TableHeaderCell>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {permissionsArray.map((permission, index) => (
+              <TableRow key={index}>
+                <TableCell>{permission.value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </CommonCollectionsPanel>
   );

@@ -1,4 +1,4 @@
-import { DefaultButton, Label, PrimaryButton } from '@fluentui/react';
+import { Label, makeStyles } from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -6,6 +6,18 @@ import { removeResourcePaths } from '../../../../services/slices/collections.sli
 import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
+
+const useStyles = makeStyles({
+  container: {
+    height: '80vh'
+  },
+  centeredLabel: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
 
 interface EditCollectionPanelProps {
   closePopup: () => void;
@@ -27,6 +39,8 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
     setSelectedItems([]);
   };
 
+  const styles = useStyles();
+
   return (
     <CommonCollectionsPanel
       messageBarText='edit collections'
@@ -36,7 +50,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
       closePopup={closePopup}
     >
       {items && items.length > 0 ? (
-        <div style={{ height: '80vh' }}>
+        <div className={styles.container}>
           <Paths
             resources={items}
             columns={columns}
@@ -45,15 +59,8 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
           />
         </div>
       ) : (
-        <div style={{ height: '80vh' }}>
-          <Label
-            style={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
+        <div className={styles.container}>
+          <Label className={styles.centeredLabel}>
             {translateMessage('No items available')}
           </Label>
         </div>
