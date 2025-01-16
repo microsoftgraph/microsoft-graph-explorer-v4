@@ -1,8 +1,8 @@
 import Editor, { OnChange, loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
-import { convertPercentToPx } from '../dimensions/dimensions-adjustment';
+import { ResizeContext } from '../../../services/context/resize-context/ResizeContext';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
 interface IMonaco {
   body: object | string | undefined;
@@ -17,6 +17,7 @@ interface IMonaco {
 export function Monaco(props: IMonaco) {
   let { body } = props;
   const { onChange, language, readOnly } = props;
+  const { parentHeight, dragValue, initiator } = useContext(ResizeContext);
 
   if (body && typeof body !== 'string') {
     body = formatJsonStringForAllBrowsers(body);
@@ -42,28 +43,14 @@ export function Monaco(props: IMonaco) {
 
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [editorHeight, setEditorHeight] = useState(300);
-
   useEffect(() => {
-    const handleResize = (e: Event) => {
-      const layout = document.getElementById('layout');
-      if (layout) {
-        const parentHeight = layout.parentElement?.offsetHeight ?? 0;
-        const customEvent = e as CustomEvent;
-        const { initiator, value } = customEvent.detail as {
-          initiator: string;
-          value: number;
-        };
-        if (initiator === 'responseSize') {
-          if (editorRef.current && value > 0) {
-            const newHeight = parentHeight - value - 124;
-            setEditorHeight(newHeight);
-          }
-        }
+    if (initiator === 'responseSize') {
+      if (editorRef.current && dragValue > 0) {
+        const newHeight = parentHeight - dragValue - 124;
+        setEditorHeight(Math.max(300, newHeight));
       }
-    };
-    window.addEventListener('onResizeDragEnd', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    }
+  }, [parentHeight, dragValue, initiator]);
 
   return (
     <>
