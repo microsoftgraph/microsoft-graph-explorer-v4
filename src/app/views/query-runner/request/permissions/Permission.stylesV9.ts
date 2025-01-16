@@ -33,7 +33,7 @@ const permissionStyles = makeStyles({
   },
   icon: {
     position: 'relative',
-    top: '4px',
+    top: '2px',
     cursor: 'pointer'
   },
   iconButton: {
@@ -48,6 +48,10 @@ const permissionStyles = makeStyles({
   },
   headerText: {
     marginLeft: '8px'
+  },
+  value: {
+    display: 'flex',
+    gap: '2px'
   }
 });
 

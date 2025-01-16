@@ -1,8 +1,9 @@
 import {
   Button,
-  Tooltip,
-  Label
+  Label,
+  Tooltip
 } from '@fluentui/react-components';
+import { InfoRegular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission, IPermissionGrant } from '../../../../../types/permissions';
 import { revokeScopes } from '../../../../services/actions/revoke-scopes.action';
@@ -11,7 +12,6 @@ import { consentToScopes } from '../../../../services/slices/auth.slice';
 import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
-import { InfoRegular } from '@fluentui/react-icons';
 import permissionStyles from './Permission.stylesV9';
 
 interface PermissionItemProps {
@@ -89,7 +89,10 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
         );
       }
       return (
-        <Tooltip content={translateMessage('You require the following permissions to revoke')} relationship='label'>
+        <Tooltip
+          withArrow
+          content={translateMessage('You require the following permissions to revoke')}
+          relationship='label'>
           <Button appearance='primary' disabled className={styles.button}>
             {translateMessage('Revoke')}
           </Button>
@@ -108,10 +111,10 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     switch (column.key) {
     case 'value':
       return (
-        <div>
+        <div className={styles.value}>
           {content}
           {props.index === 0 && (
-            <Tooltip content={translateMessage('Least privileged permission')} relationship='label'>
+            <Tooltip withArrow content={translateMessage('Least privileged permission')} relationship='label'>
               <span className={styles.icon}><InfoRegular /></span>
             </Tooltip>
           )}
@@ -130,7 +133,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
 
     case 'consentDescription':
       return (
-        <Tooltip content={item.consentDescription} relationship='label'>
+        <Tooltip withArrow content={item.consentDescription} relationship='label'>
           <span>{item.consentDescription}</span>
         </Tooltip>
       );
@@ -140,7 +143,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
 
     default:
       return (
-        <Tooltip content={content} relationship='label'>
+        <Tooltip withArrow content={content} relationship='label'>
           <span>{content}</span>
         </Tooltip>
       );
