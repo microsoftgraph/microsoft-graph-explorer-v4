@@ -1,10 +1,16 @@
 import {
-  Table, TableHeader, TableRow, TableCell, TableBody,
-  Link, Text
+  Link,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+  Text
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
+import { ResizeContext } from '../../../../services/context/resize-context/ResizeContext';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
 import { usePopups } from '../../../../services/hooks';
 import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
@@ -13,13 +19,13 @@ import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { getColumns } from './columnsV9';
+import permissionStyles from './Permission.stylesV9';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
-import permissionStyles  from './Permission.stylesV9';
-
 
 export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
+  const resizeValues = useContext(ResizeContext);
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const scopes = useAppSelector((state) => state.scopes);
   const authToken = useAppSelector((state) => state.auth.authToken);
@@ -29,8 +35,12 @@ export const Permissions = (): JSX.Element => {
 
   const tokenPresent = !!authToken.token;
   const { pending: loading, error } = scopes;
-  const [permissions, setPermissions] = useState<{ item: IPermission; index: number }[]>([]);
-  const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
+  const [permissions, setPermissions] = useState<
+    { item: IPermission; index: number }[]
+  >([]);
+  const [permissionsError, setPermissionsError] = useState<ScopesError | null>(
+    error
+  );
 
   const styles = permissionStyles();
   const tabHeight = convertVhToPx(dimensions.request.height, 110);
@@ -76,18 +86,30 @@ export const Permissions = (): JSX.Element => {
   useEffect(() => {
     let updatedPermissions = scopes.data.specificPermissions || [];
     updatedPermissions = sortPermissionsWithPrivilege(updatedPermissions);
-    updatedPermissions = setConsentedStatus(tokenPresent, updatedPermissions, consentedScopes);
+    updatedPermissions = setConsentedStatus(
+      tokenPresent,
+      updatedPermissions,
+      consentedScopes
+    );
     setPermissions(updatedPermissions.map((item, index) => ({ item, index })));
   }, [scopes.data.specificPermissions, tokenPresent, consentedScopes]);
 
   const columns = getColumns({ source: 'tab', tokenPresent });
 
   if (loading.isSpecificPermissions) {
-    return <div className={styles.label}><Text>{translateMessage('Fetching permissions')}... </Text></div>;
+    return (
+      <div className={styles.label}>
+        <Text>{translateMessage('Fetching permissions')}... </Text>
+      </div>
+    );
   }
 
   if (!validation.isValid) {
-    return <div className={styles.label}><Text>{translateMessage('Invalid URL')}!</Text></div>;
+    return (
+      <div className={styles.label}>
+        <Text>{translateMessage('Invalid URL')}!</Text>
+      </div>
+    );
   }
 
   const displayNoPermissionsFoundMessage = (): JSX.Element => (
@@ -104,12 +126,16 @@ export const Permissions = (): JSX.Element => {
 
   const displayNotSignedInMessage = (): JSX.Element => (
     <div className={styles.root}>
-      <Text>{translateMessage('sign in to view a list of all permissions')}</Text>
+      <Text>
+        {translateMessage('sign in to view a list of all permissions')}
+      </Text>
     </div>
   );
 
   const displayErrorFetchingPermissionsMessage = (): JSX.Element => (
-    <div className={styles.errorLabel}><Text>{translateMessage('Fetching permissions failing')}</Text></div>
+    <div className={styles.errorLabel}>
+      <Text>{translateMessage('Fetching permissions failing')}</Text>
+    </div>
   );
 
   if (!tokenPresent && permissions.length === 0) {
@@ -117,24 +143,38 @@ export const Permissions = (): JSX.Element => {
   }
 
   if (permissions.length === 0) {
-    return permissionsError?.status && (permissionsError?.status === 404 || permissionsError?.status === 400)
+    return permissionsError?.status &&
+      (permissionsError?.status === 404 || permissionsError?.status === 400)
       ? displayNoPermissionsFoundMessage()
       : displayErrorFetchingPermissionsMessage();
   }
+
+  const calcTableHeight =
+    resizeValues.parentHeight - resizeValues.dragValue - 124;
+  const tableHeight = Math.max(
+    0,
+    Math.max(calcTableHeight, parseInt(tabHeight, 10))
+  );
 
   return (
     <div>
       <div className={styles.permissionText}>
         <Text>
-          {translateMessage(tokenPresent ? 'permissions required to run the query':'sign in to consent to permissions')}
+          {translateMessage(
+            tokenPresent
+              ? 'permissions required to run the query'
+              : 'sign in to consent to permissions'
+          )}
         </Text>
       </div>
-      <div className={styles.tableWrapper} style={{ height: tabHeight }}>
-        <Table aria-label={translateMessage('Permissions Table')}>
+      <div className={styles.tableWrapper} style={{ height: tableHeight }}>
+        <Table size='small' aria-label={translateMessage('Permissions Table')}>
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.columnId}>{column.renderHeaderCell()}</TableCell>
+                <TableCell key={column.columnId}>
+                  {column.renderHeaderCell()}
+                </TableCell>
               ))}
             </TableRow>
           </TableHeader>
@@ -142,7 +182,9 @@ export const Permissions = (): JSX.Element => {
             {permissions.map(({ item, index }) => (
               <TableRow key={item.value}>
                 {columns.map((column) => (
-                  <TableCell key={column.columnId}>{column.renderCell({ item, index })}</TableCell>
+                  <TableCell key={column.columnId}>
+                    {column.renderCell({ item, index })}
+                  </TableCell>
                 ))}
               </TableRow>
             ))}

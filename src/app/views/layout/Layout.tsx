@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider';
+import { ResizeProvider } from '../../services/context/resize-context/ResizeProvider';
 import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider';
 import { BANNER_IS_VISIBLE } from '../../services/graph-constants';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
@@ -189,60 +190,63 @@ const Layout = (props: LayoutProps) => {
         <div className={mergeClasses(boxStyles, styles.areaHeader)}>
           <MainHeaderV9 />
         </div>
-        <div
-          className={mergeClasses(boxStyles, styles.areaSidebar)}
-          ref={sidebarElementRef}
-        >
-          {/* TODO: use the onDrag event to resize this sidebar */}
-          <SidebarV9 />
-          <LayoutResizeHandler
-            position='end'
-            ref={sidebarHandleRef}
-            onDoubleClick={resetSidebarArea}
-          />
-        </div>
-        <div className={mainAreaStyles} ref={responseAreaWrapperRef}>
-          {bannerIsVisible && (
-            <div
-              id='notification'
-              className={mergeClasses(boxStyles, styles.notificationArea)}
-            >
-              <Notification
-                header={translateMessage('Banner notification 1 header')}
-                content={translateMessage('Banner notification 1 content')}
-                link={translateMessage('Banner notification 1 link')}
-                linkText={translateMessage('Banner notification 1 link text')}
-              />
-            </div>
-          )}
-          <ValidationProvider>
-            <div className={mergeClasses(boxStyles, styles.queryArea)}>
-              <QueryRunner onSelectVerb={props.handleSelectVerb} />
-            </div>
-            <div className={mergeClasses(boxStyles, styles.requestArea)}>
-              <RequestV9
-                handleOnEditorChange={handleOnEditorChange}
-                sampleQuery={sampleQuery}
-              />
-              <StatusMessagesV9 />
-            </div>
-            <div
-              className={mergeClasses(boxStyles, styles.responseArea)}
-              ref={responseAreaElementRef}
-              id='layout'
-            >
-              <QueryResponse />
-              <LayoutResizeHandler
-                position='top'
-                ref={responseAreaHandleRef}
-                onDoubleClick={resetResponseArea}
-              />
-            </div>
-          </ValidationProvider>
-          <CollectionPermissionsProvider>
-            <PopupsWrapper />
-          </CollectionPermissionsProvider>
-        </div>
+        <ResizeProvider>
+          <div
+            className={mergeClasses(boxStyles, styles.areaSidebar)}
+            ref={sidebarElementRef}
+          >
+            {/* TODO: use the onDrag event to resize this sidebar */}
+            <SidebarV9 />
+            <LayoutResizeHandler
+              position='end'
+              ref={sidebarHandleRef}
+              onDoubleClick={resetSidebarArea}
+            />
+          </div>
+          <div className={mainAreaStyles} ref={responseAreaWrapperRef}>
+            {bannerIsVisible && (
+              <div
+                id='notification'
+                className={mergeClasses(boxStyles, styles.notificationArea)}
+              >
+                <Notification
+                  header={translateMessage('Banner notification 1 header')}
+                  content={translateMessage('Banner notification 1 content')}
+                  link={translateMessage('Banner notification 1 link')}
+                  linkText={translateMessage('Banner notification 1 link text')}
+                />
+              </div>
+            )}
+            <ValidationProvider>
+              <div className={mergeClasses(boxStyles, styles.queryArea)}>
+                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              </div>
+              <div className={mergeClasses(boxStyles, styles.requestArea)}>
+                <RequestV9
+                  handleOnEditorChange={handleOnEditorChange}
+                  sampleQuery={sampleQuery}
+                />
+                <StatusMessagesV9 />
+              </div>
+              <div
+                className={mergeClasses(boxStyles, styles.responseArea)}
+                ref={responseAreaElementRef}
+                id='layout'
+              >
+                <QueryResponse />
+                <LayoutResizeHandler
+                  position='top'
+                  ref={responseAreaHandleRef}
+                  onDoubleClick={resetResponseArea}
+                />
+              </div>
+            </ValidationProvider>
+            <CollectionPermissionsProvider>
+              <PopupsWrapper />
+            </CollectionPermissionsProvider>
+          </div>
+        </ResizeProvider>
+
         <div className={mergeClasses(boxStyles, styles.areaFooter)}>
           <TermsOfUseMessageV9 />
         </div>
