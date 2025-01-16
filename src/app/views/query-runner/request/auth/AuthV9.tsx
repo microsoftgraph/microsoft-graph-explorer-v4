@@ -1,41 +1,40 @@
-import { useEffect, useState } from 'react';
+import { AuthenticationResult } from '@azure/msal-browser';
 import {
   Button,
-  Text,
-  Tooltip,
   makeStyles,
-  MessageBar
+  MessageBar,
+  Text,
+  tokens,
+  Tooltip
 } from '@fluentui/react-components';
-import { AuthenticationResult } from '@azure/msal-browser';
+import { useEffect, useState } from 'react';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { useAppSelector } from '../../../../../store';
 
+import { BracesRegular } from '@fluentui/react-icons';
 import { componentNames, telemetry } from '../../../../../telemetry';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButton } from '../../../common/lazy-loader/component-registry';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
-import { BracesRegular } from '@fluentui/react-icons';
+import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   auth: {
-    padding: '5px',
+    padding: tokens.spacingVerticalSNudge,
     overflowY: 'auto'
   },
   accessTokenContainer: {
-    width: '160px',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'start',
     alignItems: 'center',
-    paddingBottom: '10px'
+    gap: tokens.spacingVerticalS,
+    paddingBottom: tokens.spacingVerticalMNudge
   },
   accessToken: {
     wordWrap: 'break-word',
-    fontFamily: 'monospace',
-    fontSize: '12px',
-    width: '100%',
+    width: 'calc(100vw - var(--sidebar-size) - 4rem)',
     height: '100%',
     border: 'none',
     resize: 'none'
@@ -55,7 +54,9 @@ const useStyles = makeStyles({
 
 export function Auth() {
   const profile = useAppSelector((state) => state.profile);
-  const height: string = useAppSelector((state) => state.dimensions.request.height);
+  const height: string = useAppSelector(
+    (state) => state.dimensions.request.height
+  );
   const authToken = useAppSelector((state) => state.auth.authToken);
   const { user } = profile;
   const requestHeight = convertVhToPx(height, 60);
@@ -65,7 +66,10 @@ export function Auth() {
   const styles = useStyles();
 
   const handleCopy = async () => {
-    trackedGenericCopy(accessToken || '', componentNames.ACCESS_TOKEN_COPY_BUTTON);
+    trackedGenericCopy(
+      accessToken || '',
+      componentNames.ACCESS_TOKEN_COPY_BUTTON
+    );
   };
 
   useEffect(() => {
@@ -96,25 +100,35 @@ export function Auth() {
       {!loading ? (
         <div>
           <div className={styles.accessTokenContainer}>
-            <Text className={styles.accessTokenLabel}>{translateMessage('Access Token')}</Text>
-            <CopyButton
-              isIconButton={true}
-              handleOnClick={handleCopy}
-            />
-            <Tooltip content={translateMessage(showMessage())} relationship='label'>
+            <Text className={styles.accessTokenLabel}>
+              {translateMessage('Access Token')}
+            </Text>
+            <CopyButton isIconButton={true} handleOnClick={handleCopy} />
+            <Tooltip
+              content={translateMessage(showMessage())}
+              relationship='label'
+            >
               <Button
                 as='a'
                 href={`https://jwt.ms#access_token=${accessToken}`}
                 target='_blank'
                 appearance='subtle'
                 disabled={tokenDetailsDisabled}
-                icon={<BracesRegular/>}
+                icon={<BracesRegular />}
               />
             </Tooltip>
           </div>
-          <Text className={styles.accessToken} id="access-tokens-tab" tabIndex={0}>
-            {accessToken}
-          </Text>
+          <div className={styles.accessToken}>
+            <Text
+              wrap
+              size={300}
+              font='monospace'
+              id='access-tokens-tab'
+              tabIndex={0}
+            >
+              {accessToken}
+            </Text>
+          </div>
         </div>
       ) : (
         <MessageBar intent='info'>
@@ -132,4 +146,7 @@ export function Auth() {
   }
 }
 
-export default telemetry.trackReactComponent(Auth, componentNames.ACCESS_TOKEN_TAB);
+export default telemetry.trackReactComponent(
+  Auth,
+  componentNames.ACCESS_TOKEN_TAB
+);
