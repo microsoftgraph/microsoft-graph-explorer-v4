@@ -4,7 +4,7 @@ import {
   makeStyles,
   MessageBar
 } from '@fluentui/react-components';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 interface CommonCollectionsPanelProps {
@@ -28,7 +28,7 @@ const useStyles = makeStyles({
   }
 });
 
-const CommonCollectionsPanel: FC<CommonCollectionsPanelProps> = ({
+const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
   messageBarText,
   primaryButtonText,
   primaryButtonAction,

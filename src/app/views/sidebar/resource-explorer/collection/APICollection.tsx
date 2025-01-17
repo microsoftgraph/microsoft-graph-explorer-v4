@@ -2,7 +2,7 @@ import {
   Label,
   Toolbar,
   ToolbarButton,
-  ToolbarDivider,
+  ToolbarGroup,
   Dialog,
   DialogActions,
   DialogBody,
@@ -220,28 +220,32 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       primaryButtonDisabled={items.length === 0}
       closePopup={props.dismissPopup}
     >
-      <Toolbar aria-label='Selection actions'>
-        {options.map(option => (
-          <ToolbarButton
-            key={option.key}
-            icon={option.icon}
-            disabled={option.disabled}
-            onClick={option.onClick}
-          >
-            {option.text}
-          </ToolbarButton>
-        ))}
-        <ToolbarDivider />
-        {farItems.map(item => (
-          <ToolbarButton
-            key={item.key}
-            icon={item.icon}
-            disabled={item.disabled}
-            onClick={item.onClick}
-          >
-            {item.text}
-          </ToolbarButton>
-        ))}
+      <Toolbar aria-label='Selection actions' style={{ justifyContent: 'space-between' }}>
+        <ToolbarGroup>
+          {options.map(option => (
+            <ToolbarButton
+              key={option.key}
+              appearance='primary'
+              icon={option.icon}
+              disabled={option.disabled}
+              onClick={option.onClick}
+            >
+              {option.text}
+            </ToolbarButton>
+          ))}
+        </ToolbarGroup>
+        <ToolbarGroup>
+          {farItems.map(item => (
+            <ToolbarButton
+              key={item.key}
+              icon={item.icon}
+              disabled={item.disabled}
+              onClick={item.onClick}
+            >
+              {item.text}
+            </ToolbarButton>
+          ))}
+        </ToolbarGroup>
       </Toolbar>
 
       <input
