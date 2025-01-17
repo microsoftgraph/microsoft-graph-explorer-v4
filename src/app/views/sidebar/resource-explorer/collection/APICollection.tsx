@@ -2,7 +2,14 @@ import {
   Label,
   Toolbar,
   ToolbarButton,
-  ToolbarDivider
+  ToolbarDivider,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  Button
 } from '@fluentui/react-components';
 import { Delete20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -212,12 +219,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       primaryButtonAction={generateCollection}
       primaryButtonDisabled={items.length === 0}
       closePopup={props.dismissPopup}
-      isDialogHidden={isDialogHidden}
-      dialogTitle='Upload collection'
-      dialogSubText='You have an existing collection. Would you like to merge or replace it?'
-      mergeAction={mergeWithExistingCollection}
-      replaceAction={overwriteCollection}
-      toggleDialog={toggleIsDialogHidden}
     >
       <Toolbar aria-label='Selection actions'>
         {options.map(option => (
@@ -260,10 +261,35 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         </div>
         ) :
         (
-          <Label>
+          <Label style={{
+            height: '80vh',
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
+
+      <Dialog open={!isDialogHidden} onOpenChange={toggleIsDialogHidden}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{translateMessage('Upload collection')}</DialogTitle>
+            <DialogContent>
+              {translateMessage('You have an existing collection. Would you like to merge or replace it?')}
+            </DialogContent>
+            <DialogActions>
+              <Button appearance="primary" onClick={mergeWithExistingCollection}>
+                {translateMessage('Merge with existing')}
+              </Button>
+              <Button onClick={overwriteCollection}>
+                {translateMessage('Replace existing')}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </CommonCollectionsPanel>
   )
 }

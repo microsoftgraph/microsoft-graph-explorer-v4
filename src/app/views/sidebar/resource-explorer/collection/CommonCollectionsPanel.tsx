@@ -1,4 +1,9 @@
-import { DefaultButton, Dialog, DialogFooter, DialogType, Label, MessageBar, PrimaryButton } from '@fluentui/react';
+import {
+  Button,
+  DialogActions,
+  makeStyles,
+  MessageBar
+} from '@fluentui/react-components';
 import { FC, ReactNode } from 'react';
 import { translateMessage } from '../../../../utils/translate-messages';
 
@@ -9,13 +14,19 @@ interface CommonCollectionsPanelProps {
   primaryButtonDisabled: boolean;
   closePopup: () => void;
   children: ReactNode;
-  isDialogHidden?: boolean;
-  dialogTitle?: string;
-  dialogSubText?: string;
-  mergeAction?: () => void;
-  replaceAction?: () => void;
-  toggleDialog?: () => void;
 }
+
+const useStyles = makeStyles({
+  dialogFooter: {
+    display: 'flex',
+    justifyContent: 'start',
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    zIndex: 1,
+    padding: '10px'
+  }
+});
 
 const CommonCollectionsPanel: FC<CommonCollectionsPanelProps> = ({
   messageBarText,
@@ -23,48 +34,24 @@ const CommonCollectionsPanel: FC<CommonCollectionsPanelProps> = ({
   primaryButtonAction,
   primaryButtonDisabled,
   closePopup,
-  children,
-  isDialogHidden,
-  dialogTitle,
-  dialogSubText,
-  mergeAction,
-  replaceAction,
-  toggleDialog
+  children
 }) => {
+  const styles = useStyles();
+
   return (
     <>
-      <MessageBar isMultiline={true}>
+      <MessageBar>
         {translateMessage(messageBarText)}
       </MessageBar>
       {children}
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1 }
-        }}>
-        <PrimaryButton onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
+      <DialogActions className={styles.dialogFooter}>
+        <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}
-        </PrimaryButton>
-        <DefaultButton onClick={closePopup}>
+        </Button>
+        <Button onClick={closePopup}>
           {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-      {!isDialogHidden && (
-        <Dialog
-          hidden={isDialogHidden}
-          onDismiss={toggleDialog}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: translateMessage(dialogTitle ?? ''),
-            closeButtonAriaLabel: 'Close',
-            subText: translateMessage(dialogSubText ?? '')
-          }}
-        >
-          <DialogFooter>
-            <PrimaryButton onClick={mergeAction} text={translateMessage('Merge with existing')} />
-            <DefaultButton onClick={replaceAction} text={translateMessage('Replace existing')} />
-          </DialogFooter>
-        </Dialog>
-      )}
+        </Button>
+      </DialogActions>
     </>
   );
 };

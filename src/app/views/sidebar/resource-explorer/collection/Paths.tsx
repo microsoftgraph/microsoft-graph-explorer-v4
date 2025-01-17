@@ -1,10 +1,10 @@
-import { Checkbox, Label, Tooltip, makeStyles } from '@fluentui/react-components';
+import * as React from 'react';
+import { Checkbox, Label, Tooltip } from '@fluentui/react-components';
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '@fluentui/react-components';
-import { Component } from 'react';
-
 import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
+import pathStyles from './Paths.styles';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -13,104 +13,100 @@ interface IPathProps {
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
 
-export default class Paths extends Component<IPathProps> {
-  readonly _selection: Set<ResourcePath> = new Set();
+const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelectionChange }) => {
+  const styles = pathStyles();
+  const [selection, setSelection] = React.useState<Set<ResourcePath>>(new Set());
+  const [allSelected, setAllSelected] = React.useState(false);
 
-  constructor(props: IPathProps) {
-    super(props);
-
-    if (props.isSelectable) {
-      this._selection = new Set();
-    }
-  }
-
-  handleSelectionChange = (item: ResourcePath) => {
-    const { onSelectionChange } = this.props;
-    if (this._selection.has(item)) {
-      this._selection.delete(item);
+  const handleSelectionChange = (item: ResourcePath) => {
+    const newSelection = new Set(selection);
+    if (newSelection.has(item)) {
+      newSelection.delete(item);
     } else {
-      this._selection.add(item);
+      newSelection.add(item);
     }
-    onSelectionChange && onSelectionChange(Array.from(this._selection));
+    setSelection(newSelection);
+    onSelectionChange && onSelectionChange(Array.from(newSelection));
+    setAllSelected(newSelection.size === resources.length);
   };
 
-  readonly renderCustomCheckbox = (props: any): JSX.Element => {
-    return (
-      <div style={{ pointerEvents: 'none' }}>
-        <Checkbox checked={props ? props.checked : false} />
-      </div>
-    );
+  const handleSelectAllChange = () => {
+    if (allSelected) {
+      setSelection(new Set());
+      onSelectionChange && onSelectionChange([]);
+    } else {
+      const newSelection = new Set(resources);
+      setSelection(newSelection);
+      onSelectionChange && onSelectionChange(Array.from(newSelection));
+    }
+    setAllSelected(!allSelected);
   };
 
-  readonly renderItemColumn = (
+  const renderItemColumn = (
     item: ResourcePath,
-    index: number | undefined,
-    column: {
-      key: string,
-      name: string,
-      fieldName: string,
-      minWidth: number,
-      maxWidth: number,
-      isResizable: boolean
-    } | undefined
+    column: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }
   ) => {
-
-    if (column) {
-      if (column.key === 'scope') {
-        return <Label weight='semibold'>
+    if (column.key === 'scope') {
+      return (
+        <Label className={styles.scopeLabel}>
           {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
         </Label>
-      }
+      );
+    }
+    if (column.key === 'url') {
       return (
         <Tooltip content={item.url} relationship="description" withArrow>
-          <div>
-            <Label weight='semibold'>
+          <span>
+            <span className={styles.urlMethod}>
               {item.method}
-            </Label>
-            <Label>
-              {`/${item.version}${item.url}`}
-            </Label>
-          </div>
+            </span>
+            {`/${item.version}${item.url}`}
+          </span>
         </Tooltip>
       );
     }
-  }
+  };
 
-  public render(): JSX.Element {
-    const { resources, columns, isSelectable } = this.props;
-
-    return (
-      <div>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {isSelectable && <TableHeaderCell>Select</TableHeaderCell>}
+  return (
+    <div className={styles.tableContainer}>
+      <Table className={styles.table}>
+        <TableHeader>
+          <TableRow>
+            {isSelectable && (
+              <TableHeaderCell>
+                <Checkbox
+                  checked={allSelected}
+                  onChange={handleSelectAllChange}
+                />
+              </TableHeaderCell>
+            )}
+            {columns.map((column) => (
+              <TableHeaderCell className={styles.tableHeader} key={column.key}>{column.name}</TableHeaderCell>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {resources.map((resource) => (
+            <TableRow key={resource.key} className={styles.row}>
+              {isSelectable && (
+                <TableCell>
+                  <Checkbox
+                    checked={selection.has(resource)}
+                    onChange={() => handleSelectionChange(resource)}
+                  />
+                </TableCell>
+              )}
               {columns.map((column) => (
-                <TableHeaderCell key={column.key}>{column.name}</TableHeaderCell>
+                <TableCell key={column.key}>
+                  {renderItemColumn(resource, column)}
+                </TableCell>
               ))}
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {resources.map((resource, index) => (
-              <TableRow key={resource.key}>
-                {isSelectable && (
-                  <TableCell>
-                    <Checkbox
-                      checked={this._selection.has(resource)}
-                      onChange={() => this.handleSelectionChange(resource)}
-                    />
-                  </TableCell>
-                )}
-                {columns.map((column) => (
-                  <TableCell key={column.key}>
-                    {this.renderItemColumn(resource, index, column)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    );
-  }
-}
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+};
+
+export default Paths;
