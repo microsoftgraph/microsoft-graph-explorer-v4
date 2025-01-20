@@ -1,25 +1,22 @@
 import {
-  Tree,
-  TreeItem,
+  FlatTree,
+  FlatTreeItem,
   TreeItemLayout,
-  Label,
-  Input,
+  Badge,
   makeStyles,
-  Spinner,
-  Button,
-  Divider
+  Text,
+  Divider,
+  Input
 } from '@fluentui/react-components';
-import { Filter24Regular } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { SortOrder } from '../../../../../types/enums';
 import { IPermission } from '../../../../../types/permissions';
-import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
+import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { dynamicSort } from '../../../../utils/dynamic-sort';
 import { translateMessage } from '../../../../utils/translate-messages';
-import PermissionItem from './PermissionItem';
-import { getColumns } from './columnsV9';
+import PermissionItem from './PermissionItemV9';
 
 const useStyles = makeStyles({
   container: {
@@ -31,41 +28,37 @@ const useStyles = makeStyles({
     borderRadius: '8px'
   },
   header: {
-    display: 'flex',
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr 1fr 2fr',
+    gap: '1rem',
+    padding: '8px',
+    fontWeight: 'bold',
+    backgroundColor: '#f3f3f3',
+    borderBottom: '1px solid #e1e1e1'
+  },
+  treeItem: {
+    display: 'grid',
+    gridTemplateColumns: '2fr 1fr 1fr 2fr',
+    gap: '1rem',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    padding: '8px',
+    borderBottom: '1px solid #e1e1e1'
   },
   searchBar: {
     width: '300px'
-  },
-  treeWrapper: {
-    padding: '8px',
-    border: '1px solid #e1e1e1',
-    borderRadius: '8px',
-    overflowY: 'auto',
-    maxHeight: '500px'
-  },
-  treeItemLayout: {
-    display: 'grid',
-    gridTemplateColumns: '2fr 1fr 1fr 1fr',
-    gap: '1rem',
-    alignItems: 'center'
   }
 });
 
-type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
-
-const FullPermissions = (): JSX.Element => {
+const FullPermissionsV9 = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
-  const { scopes, auth: { consentedScopes, authToken } } = useAppSelector((state) => state);
+  const { scopes, auth } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
-  const tokenPresent = !!authToken.token;
-  const loading = scopes.pending.isFullPermissions;
+  const tokenPresent = !!auth.authToken.token;
 
   const [permissions, setPermissions] = useState<IPermission[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [filter, setFilter] = useState<Filter>('all-permissions');
+  const [searchValue, setSearchValue] = useState('');
+  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     dispatch(fetchScopes('full'));
@@ -75,80 +68,110 @@ const FullPermissions = (): JSX.Element => {
   }, [dispatch, tokenPresent]);
 
   useEffect(() => {
-    if (!searchValue) {
-      setPermissions(fullPermissions);
-    }
-  }, [fullPermissions, searchValue]);
+    setPermissions(fullPermissions);
+  }, [fullPermissions]);
 
-  const filteredPermissions = permissions.filter((permission) => {
-    if (filter === 'consented-permissions') {return permission.consented;}
-    if (filter === 'unconsented-permissions') {return !permission.consented;}
-    return true;
-  });
-
-  const sortedPermissions = [...filteredPermissions].sort(
-    dynamicSort<IPermission>('value', SortOrder.ASC)
+  const filteredPermissions = permissions.filter((permission) =>
+    permission.value.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  const groupedPermissions = sortedPermissions.reduce((acc, permission) => {
+  const groupedPermissions = filteredPermissions.reduce((acc, permission) => {
     const group = permission.value.split('.')[0];
     if (!acc[group]) {acc[group] = [];}
     acc[group].push(permission);
     return acc;
   }, {} as Record<string, IPermission[]>);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
-    setSearchValue(value);
-    const results = fullPermissions.filter((permission) =>
-      permission.value.toLowerCase().includes(value)
-    );
-    setPermissions(results);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
+
+  const handleOpenChange = (group: string) => {
+    const updatedOpenItems = new Set(openItems);
+    if (updatedOpenItems.has(group)) {
+      updatedOpenItems.delete(group);
+    } else {
+      updatedOpenItems.add(group);
+    }
+    setOpenItems(updatedOpenItems);
   };
 
   return (
     <div className={styles.container}>
-      {loading ? (
-        <Spinner label={translateMessage('Fetching permissions')} />
-      ) : (
-        <>
-          <div className={styles.header}>
-            <Label>{translateMessage('Permissions')}</Label>
-            <Input
-              className={styles.searchBar}
-              placeholder={translateMessage('Search permissions')}
-              onChange={handleSearchChange}
-              value={searchValue}
-            />
-          </div>
-          <Divider />
-          <div className={styles.treeWrapper}>
-            <Tree>
-              {Object.entries(groupedPermissions).map(([group, permissions]) => (
-                <TreeItem key={group} value={group} itemType={'branch'}>
-                  <TreeItemLayout>{group} ({permissions.length})</TreeItemLayout>
-                  {permissions.map((permission, index) => (
-                    <TreeItem key={permission.value} value={permission.value} itemType={'leaf'}>
-                      <PermissionItem
-                        item={permission}
-                        index={index}
-                        column={{
-                          key: 'value',
-                          name: 'value',
-                          minWidth: 100,
-                          ...getColumns({ source: 'panel', tokenPresent })[0]
-                        }}
-                      />
-                    </TreeItem>
-                  ))}
-                </TreeItem>
+      <div>
+        <Input
+          className={styles.searchBar}
+          placeholder={translateMessage('Search permissions')}
+          onChange={handleSearchChange}
+          value={searchValue}
+        />
+      </div>
+      <Divider />
+      <div className={styles.header}>
+        <span>{translateMessage('Permission')}</span>
+        <span>{translateMessage('Admin Consent')}</span>
+        <span>{translateMessage('Status')}</span>
+        <span>{translateMessage('Description')}</span>
+      </div>
+      <FlatTree aria-label={translateMessage('Permissions')}>
+        {Object.entries(groupedPermissions).map(([group, items]) => (
+          <FlatTreeItem
+            key={group}
+            value={group}
+            itemType="branch"
+            aria-label={`${group} group`} aria-level={0} aria-posinset={0} aria-setsize={0}          >
+            <TreeItemLayout
+              onClick={() => handleOpenChange(group)}
+              aside={
+                <Badge appearance="tint" color="informative">
+                  {items.length}
+                </Badge>
+              }
+            >
+              {group}
+            </TreeItemLayout>
+            {openItems.has(group) &&
+              items.map((item, index) => (
+                <FlatTreeItem
+                  key={item.value}
+                  parentValue={group}
+                  value={item.value}
+                  itemType="leaf"
+                  aria-label={`${item.value} permission`} aria-level={0}
+                  aria-posinset={0} aria-setsize={0}>
+                  <TreeItemLayout >
+                    <PermissionItem
+                      key={item.value}
+                      item={item}
+                      index={index}
+                      column={{ key: 'value', fieldName: 'value' }}
+                    />
+                    <PermissionItem
+                      key={`${item.value}-admin`}
+                      item={item}
+                      index={index}
+                      column={{ key: 'isAdmin', fieldName: 'isAdmin' }}
+                    />
+                    <PermissionItem
+                      key={`${item.value}-status`}
+                      item={item}
+                      index={index}
+                      column={{ key: 'consented', fieldName: 'consented' }}
+                    />
+                    <PermissionItem
+                      key={`${item.value}-consentType`}
+                      item={item}
+                      index={index}
+                      column={{ key: 'consentType', fieldName: 'consentType' }}
+                    />
+                  </TreeItemLayout>
+                </FlatTreeItem>
               ))}
-            </Tree>
-          </div>
-        </>
-      )}
+          </FlatTreeItem>
+        ))}
+      </FlatTree>
     </div>
   );
 };
 
-export default FullPermissions;
+export default FullPermissionsV9;
