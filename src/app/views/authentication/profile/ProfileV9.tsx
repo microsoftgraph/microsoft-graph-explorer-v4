@@ -4,6 +4,7 @@ import {
   CardFooter,
   CardHeader,
   Divider,
+  Link,
   makeStyles,
   Persona,
   PersonaProps,
@@ -22,6 +23,7 @@ import { signOut } from '../../../services/slices/auth.slice';
 import { getProfileInfo } from '../../../services/slices/profile.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { useHeaderStyles } from '../../main-header/utils';
+import { usePopups } from '../../../services/hooks/usePopups';
 
 const useProfileStyles = makeStyles({
   card: {
@@ -81,12 +83,23 @@ const PersonaLayout = ({profile}: {profile: IProfileState}) => {
 const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) => {
   const dispatch = useAppDispatch();
   const styles = useProfileStyles();
-  const {signInWithOther, profile} = props
-  const user = profile.user
-  const tenant = user && user.tenant ? user.tenant : 'Sample'
+  const {signInWithOther, profile} = props;
+  const user = profile.user;
+  const tenant = user && user.tenant ? user.tenant : 'Sample';
+  const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const handleSignOut = () => {
     dispatch(signOut());
+  };
+
+
+  const changePanelState = () => {
+    showPermissions({
+      settings: {
+        title: translateMessage('Permissions'),
+        width: 'lg'
+      }
+    })
   };
 
   return (
@@ -110,6 +123,10 @@ const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) =
       />
       <Divider/>
       <PersonaLayout profile={profile}/>
+      <Link key={'view-all-permissions'}
+        onClick={() => changePanelState()}>
+        {translateMessage('view all permissions')}
+      </Link>
       <CardFooter>
         <Button
           className={styles.footerButton}
