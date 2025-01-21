@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
   FlatTree,
   FlatTreeItem,
@@ -8,41 +9,21 @@ import {
   DataGridBody,
   DataGridRow,
   DataGridCell,
-  Badge,
-  makeStyles,
-  Divider,
   Input,
-  createTableColumn,
-  TableColumnDefinition
+  Badge,
+  makeStyles
 } from '@fluentui/react-components';
-import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
-import { IPermission } from '../../../../../types/permissions';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { getColumns } from './columnsV9';
+import { IPermission } from '../../../../../types/permissions';
 
 const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-    padding: '1rem',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '8px',
-    width: '100%',
-    overflowX: 'auto' // Allow horizontal scrolling
-  },
-  searchBar: {
-    width: '300px'
-  },
-  groupHeader: {
-    fontWeight: 'bold',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '8px 0'
-  }
+  container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
+  searchBar: { width: '300px' },
+  groupHeader: { fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }
 });
 
 const FullPermissionsV9 = () => {
@@ -58,9 +39,7 @@ const FullPermissionsV9 = () => {
 
   useEffect(() => {
     dispatch(fetchScopes('full'));
-    if (tokenPresent) {
-      dispatch(fetchAllPrincipalGrants());
-    }
+    if (tokenPresent) {dispatch(fetchAllPrincipalGrants());}
   }, [dispatch, tokenPresent]);
 
   useEffect(() => {
@@ -78,83 +57,42 @@ const FullPermissionsV9 = () => {
     return acc;
   }, {} as Record<string, IPermission[]>);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value);
 
   const handleOpenChange = (group: string) => {
     const updatedOpenItems = new Set(openItems);
-    if (updatedOpenItems.has(group)) {
-      updatedOpenItems.delete(group);
-    } else {
-      updatedOpenItems.add(group);
-    }
+    if (updatedOpenItems.has(group)) {updatedOpenItems.delete(group);}
+    else {updatedOpenItems.add(group);}
     setOpenItems(updatedOpenItems);
   };
 
-  const columns: TableColumnDefinition<IPermission>[] = [
-    createTableColumn<IPermission>({
-      columnId: 'value',
-      renderHeaderCell: () => translateMessage('Permission'),
-      renderCell: (item) => item.value
-    }),
-    createTableColumn<IPermission>({
-      columnId: 'isAdmin',
-      renderHeaderCell: () => translateMessage('Admin Consent'),
-      renderCell: (item) =>
-        item.isAdmin ? translateMessage('Yes') : translateMessage('No')
-    }),
-    createTableColumn<IPermission>({
-      columnId: 'consented',
-      renderHeaderCell: () => translateMessage('Status'),
-      renderCell: (item) =>
-        item.consented
-          ? translateMessage('Consented')
-          : translateMessage('Not Consented')
-    }),
-    createTableColumn<IPermission>({
-      columnId: 'consentType',
-      renderHeaderCell: () => translateMessage('Consent Type'),
-      renderCell: (item) => item.consentType
-    })
-  ];
+  const columns = getColumns({ source: 'panel', tokenPresent });
 
   return (
     <div className={styles.container}>
-      <div>
-        <Input
-          className={styles.searchBar}
-          placeholder={translateMessage('Search permissions')}
-          onChange={handleSearchChange}
-          value={searchValue}
-        />
-      </div>
-      <Divider />
+      <Input
+        className={styles.searchBar}
+        placeholder={translateMessage('Search permissions')}
+        onChange={handleSearchChange}
+        value={searchValue}
+      />
       <FlatTree aria-label={translateMessage('Permissions')}>
         {Object.entries(groupedPermissions).map(([group, items]) => (
-          <FlatTreeItem
-            key={group}
-            value={group}
-            itemType="branch"
-            aria-label={`${group} group`} aria-level={0} aria-posinset={0} aria-setsize={0}          >
+          <FlatTreeItem key={group} value={group} itemType="branch" aria-level={0} aria-posinset={0} aria-setsize={0}>
             <TreeItemLayout
               onClick={() => handleOpenChange(group)}
-              aside={
-                <Badge appearance="tint" color="informative">
-                  {items.length}
-                </Badge>
-              }
+              aside={<Badge appearance="tint">{items.length}</Badge>}
               className={styles.groupHeader}
             >
               {group}
             </TreeItemLayout>
             {openItems.has(group) && (
               <DataGrid
-                as="div"
-                aria-label={`${group} permissions`}
                 columns={columns}
-                items={items}
-                getRowId={(item) => item.value}
+                items={items.map((item, index) => {
+                  return { item, index };
+                })}
+                getRowId={(row: { item: IPermission; index: number }) => row.item.value}
               >
                 <DataGridHeader>
                   <DataGridRow>
@@ -166,17 +104,15 @@ const FullPermissionsV9 = () => {
                   </DataGridRow>
                 </DataGridHeader>
                 <DataGridBody>
-                  {() =>
-                    items.map((item) => (
-                      <DataGridRow key={item.value}>
-                        {(column) => (
-                          <DataGridCell key={column.columnId}>
-                            {column.renderCell(item)}
-                          </DataGridCell>
-                        )}
-                      </DataGridRow>
-                    ))
-                  }
+                  {({ item }: { item: { item: IPermission; index: number } }) => (
+                    <DataGridRow key={item.item.value}>
+                      {(column) => (
+                        <DataGridCell key={column.columnId}>
+                          {column.renderCell({ item: item.item, index: item.index })}
+                        </DataGridCell>
+                      )}
+                    </DataGridRow>
+                  )}
                 </DataGridBody>
               </DataGrid>
             )}
