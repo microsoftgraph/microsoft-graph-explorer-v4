@@ -19,6 +19,20 @@ import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getColumns } from './columnsV9';
 import { IPermission } from '../../../../../types/permissions';
+interface PermissionListItem extends IPermission {
+  groupName?: string;
+}
+
+const setConsentedStatus = (
+  tokenPresent: boolean,
+  permissions: IPermission[],
+  consentedScopes: string[]
+): IPermission[] => {
+  return permissions.map((permission) => ({
+    ...permission,
+    consented: tokenPresent && consentedScopes.includes(permission.value)
+  }));
+};
 
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
@@ -33,36 +47,50 @@ const FullPermissionsV9 = () => {
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!auth.authToken.token;
 
-  const [permissions, setPermissions] = useState<IPermission[]>([]);
+  const [permissions, setPermissions] = useState<PermissionListItem[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     dispatch(fetchScopes('full'));
-    if (tokenPresent) {dispatch(fetchAllPrincipalGrants());}
+    if (tokenPresent) {
+      dispatch(fetchAllPrincipalGrants());
+    }
   }, [dispatch, tokenPresent]);
 
   useEffect(() => {
-    setPermissions(fullPermissions);
-  }, [fullPermissions]);
+    const sortedPermissions = [...fullPermissions].sort((a, b) => a.value.localeCompare(b.value));
+    const updatedPermissions = setConsentedStatus(tokenPresent, sortedPermissions, auth.consentedScopes);
+    const permissionsList: PermissionListItem[] = updatedPermissions.map((perm) => ({
+      ...perm,
+      groupName: perm.value.split('.')[0]
+    }));
+
+    setPermissions(permissionsList);
+  }, [fullPermissions, tokenPresent, auth.consentedScopes]);
 
   const filteredPermissions = permissions.filter((permission) =>
     permission.value.toLowerCase().includes(searchValue.toLowerCase())
   );
 
   const groupedPermissions = filteredPermissions.reduce((acc, permission) => {
-    const group = permission.value.split('.')[0];
-    if (!acc[group]) {acc[group] = [];}
+    const group = permission.groupName ?? 'Unknown';
+    if (!acc[group]) {
+      acc[group] = [];
+    }
     acc[group].push(permission);
     return acc;
-  }, {} as Record<string, IPermission[]>);
+  }, {} as Record<string, PermissionListItem[]>);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value);
 
   const handleOpenChange = (group: string) => {
     const updatedOpenItems = new Set(openItems);
-    if (updatedOpenItems.has(group)) {updatedOpenItems.delete(group);}
-    else {updatedOpenItems.add(group);}
+    if (updatedOpenItems.has(group)) {
+      updatedOpenItems.delete(group);
+    } else {
+      updatedOpenItems.add(group);
+    }
     setOpenItems(updatedOpenItems);
   };
 
@@ -89,10 +117,8 @@ const FullPermissionsV9 = () => {
             {openItems.has(group) && (
               <DataGrid
                 columns={columns}
-                items={items.map((item, index) => {
-                  return { item, index };
-                })}
-                getRowId={(row: { item: IPermission; index: number }) => row.item.value}
+                items={items.map((item, index) => ({ item, index }))}
+                getRowId={(row: { item: PermissionListItem; index: number }) => row.item.value}
               >
                 <DataGridHeader>
                   <DataGridRow>
@@ -104,7 +130,7 @@ const FullPermissionsV9 = () => {
                   </DataGridRow>
                 </DataGridHeader>
                 <DataGridBody>
-                  {({ item }: { item: { item: IPermission; index: number } }) => (
+                  {({ item }: { item: { item: PermissionListItem; index: number } }) => (
                     <DataGridRow key={item.item.value}>
                       {(column) => (
                         <DataGridCell key={column.columnId}>
