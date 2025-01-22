@@ -11,7 +11,8 @@ import {
   DataGridCell,
   Input,
   Badge,
-  makeStyles
+  makeStyles,
+  CounterBadge
 } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
@@ -37,7 +38,7 @@ const setConsentedStatus = (
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
   searchBar: { width: '300px' },
-  groupHeader: { fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }
+  groupHeader: { display: 'flex', justifyContent: 'space-between' }
 });
 
 const FullPermissionsV9 = () => {
@@ -105,12 +106,23 @@ const FullPermissionsV9 = () => {
         value={searchValue}
       />
       <FlatTree aria-label={translateMessage('Permissions')}>
-        {Object.entries(groupedPermissions).map(([group, items]) => (
-          <FlatTreeItem key={group} value={group} itemType="branch" aria-level={0} aria-posinset={0} aria-setsize={0}>
+        {Object.entries(groupedPermissions).map(([group, items], index) => (
+          <FlatTreeItem key={group} value={group} itemType="branch"
+            aria-level={1}
+            aria-posinset={index + 1}
+            aria-setsize={Object.keys(groupedPermissions).length}>
             <TreeItemLayout
               onClick={() => handleOpenChange(group)}
-              aside={<Badge appearance="tint">{items.length}</Badge>}
-              className={styles.groupHeader}
+              aside={
+                <CounterBadge
+                  appearance='filled'
+                  color='informative'
+                  shape='rounded'
+                  size='medium'
+                  count={items.length}
+                  aria-label={`${items.length} ${translateMessage('Permissions')}`}
+                />
+              }
             >
               {group}
             </TreeItemLayout>
