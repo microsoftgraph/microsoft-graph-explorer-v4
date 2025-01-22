@@ -1,4 +1,14 @@
-import { getTheme, IconButton, IOverlayProps, Panel, PanelType, Spinner } from '@fluentui/react';
+// import { getTheme, IconButton, IOverlayProps, Spinner } from '@fluentui/react';
+import {
+  Drawer,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  DrawerProps,
+  Spinner,
+  Button
+} from '@fluentui/react-components';
+import { ArrowStepBack20Regular, TrayItemRemove20Regular  } from '@fluentui/react-icons';
 import { Suspense } from 'react';
 
 import { useAppSelector } from '../../../../store';
@@ -7,7 +17,7 @@ import { WrapperProps } from './popups.types';
 
 export function PanelWrapper(props: WrapperProps) {
   const appTheme  = useAppSelector((state) => state.theme);
-  const theme = getTheme();
+  // const theme = getTheme();
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { title, renderFooter } = popupsProps.settings;
 
@@ -15,32 +25,32 @@ export function PanelWrapper(props: WrapperProps) {
     return (appTheme === 'dark' || appTheme === 'high-contrast');
   }
 
-  const panelOverlayProps: IOverlayProps = {
-    styles: {
-      root: {
-        backgroundColor: isCurrentThemeDark() ? theme.palette.blackTranslucent40 :
-          theme.palette.whiteTranslucent40
-      }
-    }
-  }
+  // const drawerOverlayProps: DrawerProps['overlayProps'] = {
+  //   styles: {
+  //     root: {
+  //       backgroundColor: isCurrentThemeDark() ? theme.palette.blackTranslucent40 :
+  //         theme.palette.whiteTranslucent40
+  //     }
+  //   }
+  // }
 
   const headerText = title ? title : '';
 
-  const getPanelType = () => {
-    switch (popupsProps.settings.width) {
-    case 'sm':
-      return PanelType.smallFluid;
-    case 'md':
-      return PanelType.medium;
-    case 'lg':
-      return PanelType.largeFixed;
-    case 'xl':
-      return PanelType.large;
-    }
-    return PanelType.medium;
-  }
+  // const getDrawerSize = () => {
+  //   switch (popupsProps.settings.width) {
+  //   case 'sm':
+  //     return 'small';
+  //   case 'md':
+  //     return 'medium';
+  //   case 'lg':
+  //     return 'large';
+  //   case 'xl':
+  //     return 'extraLarge';
+  //   }
+  //   return 'medium';
+  // }
 
-  const panelType = getPanelType();
+  // const drawerSize = getDrawerSize();
 
   const onRenderFooterContent = (): JSX.Element | null => {
     return renderFooter ? renderFooter() : null;
@@ -50,13 +60,12 @@ export function PanelWrapper(props: WrapperProps) {
 
   const onRenderHeader = (): JSX.Element => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <IconButton
-        iconProps={{ iconName: 'Back' }}
-        ariaLabel={translateMessage('Back')}
+      <Button
+        icon={< ArrowStepBack20Regular />}
+        aria-label={translateMessage('Back')}
         onClick={() => dismissPopup()}
-        styles={{ root: { marginRight: 8 } }}
       />
-      <span style={{ fontSize: theme.fonts.xLarge.fontSize, fontWeight: theme.fonts.xLarge.fontWeight }}>
+      <span>
         {title}
       </span>
     </div>
@@ -64,46 +73,35 @@ export function PanelWrapper(props: WrapperProps) {
 
   return (
     <div>
-      <Panel
-        isOpen={isOpen}
-        hasCloseButton={false}
-        type={panelType}
-        headerText={headerText.toString()}
-        isFooterAtBottom={true}
-        isBlocking={true}
-        isLightDismiss={false}
-        closeButtonAriaLabel='Close'
-        overlayProps={panelOverlayProps}
-        onRenderFooterContent={onRenderFooterContent}
-        onRenderHeader={showBackButton ? onRenderHeader: undefined}
+      <Drawer
+        open={isOpen}
+        type='overlay'
+        size='full'
       >
-        <IconButton
-          styles={{
-            root: {
-              float: 'right',
-              zIndex: 1,
-              marginTop: -30
-            }
-          }}
-          iconProps={{ iconName: 'Cancel' }}
-          ariaLabel={translateMessage('Close')}
-          onClick={() => dismissPopup()}
-        />
-        <div>
-          {
-            <Suspense fallback={<Spinner />}>
-              <Component
-                {...popupsProps}
-                data={popupsProps.data || {}}
-
-                dismissPopup={() => dismissPopup()}
-                closePopup={(e: any) => closePopup(e)}
-              />
-            </Suspense>
-          }
-        </div>
-
-      </Panel>
+        <DrawerHeader>
+          {showBackButton && onRenderHeader()}
+          <Button
+            icon={< TrayItemRemove20Regular />}
+            aria-label={translateMessage('Close')}
+            onClick={() => dismissPopup()}
+          />
+        </DrawerHeader>
+        <DrawerBody>
+          <Suspense fallback={<Spinner />}>
+            <Component
+              {...popupsProps}
+              data={popupsProps.data || {}}
+              dismissPopup={() => dismissPopup()}
+              closePopup={(e: any) => closePopup(e)}
+            />
+          </Suspense>
+        </DrawerBody>
+        {renderFooter && (
+          <DrawerFooter>
+            {onRenderFooterContent()}
+          </DrawerFooter>
+        )}
+      </Drawer>
     </div>
   );
 }

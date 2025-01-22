@@ -229,6 +229,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
               icon={option.icon}
               disabled={option.disabled}
               onClick={option.onClick}
+              style={{ marginInlineEnd: '30px' }}
             >
               {option.text}
             </ToolbarButton>
