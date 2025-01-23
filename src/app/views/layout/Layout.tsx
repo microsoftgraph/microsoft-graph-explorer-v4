@@ -11,7 +11,11 @@ import { QueryRunner } from '../query-runner';
 import { SidebarV9 } from '../sidebar/SidebarV9';
 import Notification from '../common/banners/Notification';
 import { makeStyles, tokens } from '@fluentui/react-components';
-
+import Request from '../query-runner/request/RequestV9';
+import { IDropdownOption } from '@fluentui/react';
+import { useState, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { setSampleQuery } from '../../services/slices/sample-query.slice';
 interface LayoutProps {
     handleSelectVerb: (verb: string) => void;
 }
@@ -30,6 +34,7 @@ const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    height: '100vh',
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground6,
     borderRightStyle: 'solid',
@@ -37,12 +42,38 @@ const useLayoutStyles = makeStyles({
     borderRightWidth: tokens.strokeWidthThin
   },
   mainContent: {
-    flex: 1
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingHorizontalS
+  },
+  responseArea: {
+    flex:'1'
+  },
+  requestArea: {
+    flex: '1'
   }
 })
 
 export const Layout = (props: LayoutProps)=>{
   const layoutStyles = useLayoutStyles()
+  const dispatch = useAppDispatch();
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+
+  const [sampleBody, setSampleBody] = useState('');
+
+  useEffect(() => {
+    if (sampleQuery.selectedVerb !== 'GET') {
+      const query = { ...sampleQuery };
+      query.sampleBody = sampleBody;
+      dispatch(setSampleQuery(query));
+    }
+  }, [sampleBody])
+
+  const handleOnEditorChange = (value?: string) => {
+    setSampleBody(value!);
+  };
+
   return <>
     <PopupsProvider>
       <div className={layoutStyles.container}>
@@ -50,7 +81,7 @@ export const Layout = (props: LayoutProps)=>{
         {/* TODO: handle the graphExplorerMode */}
         <div  id="content" className={layoutStyles.content}>
           {/* TODO: find better minimum and maximu values.  */}
-          <Resizable defaultSize={{ width: '25%', height: '100%' }} minWidth={'15%'} maxWidth={'60%'}>
+          <Resizable defaultSize={{ width: '25%', height: '100vh' }} minWidth={'15%'} maxWidth={'60%'}>
             <div id="sidebar" className={layoutStyles.sidebar}>
               <SidebarV9 />
             </div>
@@ -70,18 +101,20 @@ export const Layout = (props: LayoutProps)=>{
             />
             {/* TODO: handle try-it mode. Make the sidebar hidden and the main content spans all width */}
             <ValidationProvider>
-              <div style={{ marginBottom: 2, flex: 1, background: 'red' }} id="query-runner0request">
-                <QueryRunner onSelectVerb={props.handleSelectVerb} />
-              </div>
-              <div
-                id="status-message-response"
-                style={{
-                  flex: 1
-                }}
-              >
+              <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              <div id="request-area" className={layoutStyles.requestArea}>
+                <Request
+                  handleOnEditorChange={handleOnEditorChange}
+                  sampleQuery={sampleQuery}
+                />
                 <StatusMessagesV9 />
-                <QueryResponseV9 />
               </div>
+              <Resizable
+                defaultSize={{height: 400}} maxHeight="80%" minHeight="10%" className={layoutStyles.responseArea}>
+                <div id="response-area">
+                  <QueryResponseV9 />
+                </div>
+              </Resizable>
             </ValidationProvider>
           </div>
         </div>

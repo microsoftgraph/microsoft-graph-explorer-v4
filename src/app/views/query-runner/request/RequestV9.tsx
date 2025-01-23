@@ -11,7 +11,7 @@ import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/comp
 import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
-import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
+import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-components';
 
 
   interface IRequestProps {
@@ -20,17 +20,10 @@ import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
   }
 
 const useStyles = makeStyles({
-  resizable: {
-    width: '100%'
-  },
-  tabList: {
-    paddingBottom: '4px',
-    marginBottom: '8px'
-  },
-  tab: {
-    fontWeight: 'bold',
-    padding: '8px 16px',
-    borderBottom: '2px solid transparent'
+  container: {
+    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalMNudge
   }
 });
 
@@ -98,54 +91,32 @@ const Request = (props: IRequestProps) => {
   };
 
   return (
-    <Resizable
-      className={styles.resizable}
-      onResize={(e: any, direction: any, ref: any) => {
-        if (ref && ref.style && ref.style.height) {
-          setRequestAndResponseHeights(ref.style.height);
-        }
-      }}
-      maxHeight={maxHeight}
-      minHeight={minHeight}
-      bounds={'window'}
-      size={{
-        height: 'inherit',
-        width: '100%'
-      }}
-      enable={{
-        bottom: true
-      }}
-    >
-      <div className="query-request">
-        <TabList
-          selectedValue={selectedTab}
-          onTabSelect={(_, data) => handleTabSelect(data.value)}
-          className={styles.tabList}
-        >
-          <Tab value="request-body" className={styles.tab} aria-label={translateMessage('request body')}>
-            {translateMessage('Request Body')}
+    <div className={styles.container}>
+      <TabList
+        selectedValue={selectedTab}
+        onTabSelect={(_, data) => handleTabSelect(data.value)}
+      >
+        <Tab value="request-body" aria-label={translateMessage('request body')}>
+          {translateMessage('Request Body')}
+        </Tab>
+        <Tab value="request-headers" aria-label={translateMessage('request header')}>
+          {translateMessage('Request Headers')}
+        </Tab>
+        <Tab value="modify-permissions" aria-label={translateMessage('modify permissions')}>
+          {translateMessage('Modify Permissions')}
+        </Tab>
+        {mode === Mode.Complete && (
+          <Tab value="access-token" aria-label={translateMessage('Access Token')}>
+            {translateMessage('Access Token')}
           </Tab>
-          <Tab value="request-headers" className={styles.tab} aria-label={translateMessage('request header')}>
-            {translateMessage('Request Headers')}
-          </Tab>
-          <Tab value="modify-permissions" className={styles.tab} aria-label={translateMessage('modify permissions')}>
-            {translateMessage('Modify Permissions')}
-          </Tab>
-          {mode === Mode.Complete && (
-            <Tab value="access-token" className={styles.tab} aria-label={translateMessage('Access Token')}>
-              {translateMessage('Access Token')}
-            </Tab>
-          )}
-        </TabList>
+        )}
+      </TabList>
 
-        <div style={containerStyle}>
-          {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
-          {selectedTab === 'request-headers' && <RequestHeaders />}
-          {selectedTab === 'modify-permissions' && <Permissions />}
-          {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
-        </div>
-      </div>
-    </Resizable>
+      {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
+      {selectedTab === 'request-headers' && <RequestHeaders />}
+      {selectedTab === 'modify-permissions' && <Permissions />}
+      {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
+    </div>
   );
 };
 
