@@ -9,6 +9,8 @@ import {
 } from '@fluentui/react-components';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item-v9';
+import { ExpandUpLeftRegular } from '@fluentui/react-icons';
+import { ClosePaneIcon } from '@fluentui/react-icons-mdl2';
 
 const useStyles = makeStyles({
   container: {
@@ -17,6 +19,7 @@ const useStyles = makeStyles({
     overflow: 'hidden'
   },
   dialog: {
+    display: 'flex',
     maxWidth: '70%',
     minHeight: '60%'
   },
@@ -33,7 +36,7 @@ const PivotItemsDialog = () => {
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
       <div className={styles.dialogBtn}>
         <DialogTrigger disableButtonEnhancement>
-          <Button>Expand</Button>
+          <Button appearance='transparent' icon={<ExpandUpLeftRegular/>}>Expand</Button>
         </DialogTrigger>
       </div>
       <DialogSurface className={styles.dialog}>
@@ -42,7 +45,7 @@ const PivotItemsDialog = () => {
             <GetPivotItems />
           </DialogContent>
           <div className={styles.dialogBtn}>
-            <Button onClick={() => setOpen(false)}>
+            <Button appearance='transparent' onClick={() => setOpen(false)}>
             Close
             </Button>
           </div>
