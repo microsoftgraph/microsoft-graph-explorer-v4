@@ -1,4 +1,3 @@
-import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -23,7 +22,8 @@ const useStyles = makeStyles({
   container: {
     border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge
+    padding: tokens.spacingHorizontalMNudge,
+    height: '-webkit-fill-available'
   }
 });
 

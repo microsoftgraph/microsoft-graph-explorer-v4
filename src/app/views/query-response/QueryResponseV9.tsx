@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge,
-    height: '100%'
+    height: '-webkit-fill-available'
   },
   dialog: {
     display: 'flex',
@@ -39,7 +39,7 @@ const PivotItemsDialog = () => {
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
       <div className={styles.dialogBtn}>
         <DialogTrigger disableButtonEnhancement>
-          <Button appearance='transparent' icon={<ExpandUpLeftRegular/>}>Expand</Button>
+          <Button appearance='transparent' icon={<ExpandUpLeftRegular/>} aria-label='Expand' />
         </DialogTrigger>
       </div>
       <DialogSurface className={styles.dialog}>
