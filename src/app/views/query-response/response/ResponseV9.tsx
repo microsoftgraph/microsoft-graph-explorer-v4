@@ -13,6 +13,7 @@ import { ResponseMessagesV9 } from './ResponseMessagesV9';
 
 const useStyles = makeStyles({
   container: {
+    flex:'1'
   }
 })
 

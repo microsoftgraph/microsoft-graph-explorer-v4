@@ -240,14 +240,14 @@ class App extends Component<IAppProps, IAppState> {
     const msgEvent: IThemeChangedMessage | IInitMessage = event.data;
 
     switch (msgEvent.type) {
-      case 'init':
-        this.handleInitMsg(msgEvent);
-        break;
-      case 'theme-changed':
-        this.handleThemeChangeMsg(msgEvent);
-        break;
-      default:
-        return;
+    case 'init':
+      this.handleInitMsg(msgEvent);
+      break;
+    case 'theme-changed':
+      this.handleThemeChangeMsg(msgEvent);
+      break;
+    default:
+      return;
     }
   };
 
@@ -536,18 +536,18 @@ class App extends Component<IAppProps, IAppState> {
                     style={
                       !sidebarProperties.showSidebar && !mobileScreen
                         ? {
-                            marginLeft: '8px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'stretch',
-                            flex: 1
-                          }
+                          marginLeft: '8px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'stretch',
+                          flex: 1
+                        }
                         : {
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'stretch',
-                            flex: 1
-                          }
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'stretch',
+                          flex: 1
+                        }
                     }
                   >
                     <div className='ms-Grid-row'>
@@ -565,14 +565,12 @@ class App extends Component<IAppProps, IAppState> {
                       />
                     </div>
                     <ValidationProvider>
-                      <div style={{ marginBottom: 2 }}>
+                      <div style={{ marginBottom: 2, flex: 1, background: 'red' }} id="query-runner0request">
                         <QueryRunner onSelectVerb={this.handleSelectVerb} />
                       </div>
                       <div
+                        id="status-message-response"
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'stretch',
                           flex: 1
                         }}
                       >
