@@ -16,9 +16,6 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     overflow: 'hidden',
-    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
-    borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge,
     height: '-webkit-fill-available'
   },
   dialog: {

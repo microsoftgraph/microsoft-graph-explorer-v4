@@ -20,9 +20,6 @@ import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-comp
 
 const useStyles = makeStyles({
   container: {
-    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
-    borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge,
     height: '-webkit-fill-available'
   }
 });

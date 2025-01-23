@@ -13,9 +13,11 @@ import Notification from '../common/banners/Notification';
 import { makeStyles, tokens } from '@fluentui/react-components';
 import Request from '../query-runner/request/RequestV9';
 import { IDropdownOption } from '@fluentui/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
+import { MonacoV9 } from '../common';
+import e from 'express';
 interface LayoutProps {
     handleSelectVerb: (verb: string) => void;
 }
@@ -47,11 +49,29 @@ const useLayoutStyles = makeStyles({
     flexDirection: 'column',
     gap: tokens.spacingHorizontalS
   },
+  requestResponseArea: {
+    flex: '1',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingHorizontalS,
+    backgroundColor: 'green',
+    borderRadius: tokens.borderRadiusMedium
+  },
   responseArea: {
-    flex:'1'
+    flex:'1',
+    backgroundColor: 'blue',
+    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalMNudge
   },
   requestArea: {
-    flex: '1'
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '1',
+    backgroundColor: 'red',
+    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalMNudge
   }
 })
 
@@ -102,19 +122,18 @@ export const Layout = (props: LayoutProps)=>{
             {/* TODO: handle try-it mode. Make the sidebar hidden and the main content spans all width */}
             <ValidationProvider>
               <QueryRunner onSelectVerb={props.handleSelectVerb} />
-              <div id="request-area" className={layoutStyles.requestArea}>
-                <Request
-                  handleOnEditorChange={handleOnEditorChange}
-                  sampleQuery={sampleQuery}
-                />
-                <StatusMessagesV9 />
-              </div>
-              <Resizable
-                defaultSize={{height: 400}} maxHeight="80%" minHeight="10%" className={layoutStyles.responseArea}>
-                <div id="response-area">
+              <div id="request-response-area"className={layoutStyles.requestResponseArea}>
+                <div id="request-area" className={layoutStyles.requestArea}>
+                  <Request
+                    handleOnEditorChange={handleOnEditorChange}
+                    sampleQuery={sampleQuery}
+                  />
+                  <StatusMessagesV9 />
+                </div>
+                <div id="response-area" className={layoutStyles.responseArea}>
                   <QueryResponseV9 />
                 </div>
-              </Resizable>
+              </div>
             </ValidationProvider>
           </div>
         </div>
