@@ -23,12 +23,18 @@ const useLayoutStyles = makeStyles({
     padding: tokens.spacingHorizontalS
   },
   content: {
-    display: 'flex'
+    display: 'flex',
+    gap: tokens.spacingVerticalS
   },
   sidebar: {
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    padding: `0 ${tokens.spacingHorizontalS}`,
+    backgroundColor: tokens.colorNeutralBackground6,
+    borderRightStyle: 'solid',
+    borderRightColor: tokens.colorStrokeFocus2,
+    borderRightWidth: tokens.strokeWidthThin
   },
   mainContent: {
     flex: 1
@@ -62,7 +68,7 @@ export const Layout = (props: LayoutProps)=>{
                 'Banner notification 1 link text'
               )}
             />
-            TODO: handle try-it mode. Make the sidebar hidden and the main content spans all width
+            {/* TODO: handle try-it mode. Make the sidebar hidden and the main content spans all width */}
             <ValidationProvider>
               <div style={{ marginBottom: 2, flex: 1, background: 'red' }} id="query-runner0request">
                 <QueryRunner onSelectVerb={props.handleSelectVerb} />
