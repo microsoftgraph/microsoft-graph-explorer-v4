@@ -5,18 +5,20 @@ import {
   DialogContent,
   DialogSurface,
   DialogTrigger,
-  makeStyles
+  makeStyles,
+  tokens
 } from '@fluentui/react-components';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item-v9';
 import { ExpandUpLeftRegular } from '@fluentui/react-icons';
-import { ClosePaneIcon } from '@fluentui/react-icons-mdl2';
 
 const useStyles = makeStyles({
   container: {
     display: 'flex',
-    width: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalMNudge
   },
   dialog: {
     display: 'flex',
