@@ -40,7 +40,7 @@ const MonacoV9 = (props: MonacoProps)=>{
     {props.extraInfoElement}
     <Editor
       language={language?language:'json'}
-      width='800 !important'
+      width='98.9%'
       height={editorHeight}
       value={body}
       options={editorOptions}

@@ -12,16 +12,16 @@ import { GetPivotItems } from './pivot-items/pivot-item-v9';
 
 const useStyles = makeStyles({
   container: {
-    // display: 'flex', // TODO: draws expand button to the right. Fix
-    width: '100%', // Ensure the container has a defined width
+    display: 'flex',
+    width: '100%',
     overflow: 'hidden'
   },
   dialog: {
     maxWidth: '70%',
     minHeight: '60%'
   },
-  dialogClose: {
-    // soid
+  dialogBtn: {
+    display: 'block'
   }
 });
 
@@ -31,17 +31,21 @@ const PivotItemsDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
-      <DialogTrigger disableButtonEnhancement>
-        <Button>Expand</Button>
-      </DialogTrigger>
+      <div className={styles.dialogBtn}>
+        <DialogTrigger disableButtonEnhancement>
+          <Button>Expand</Button>
+        </DialogTrigger>
+      </div>
       <DialogSurface className={styles.dialog}>
         <DialogBody>
           <DialogContent>
             <GetPivotItems />
           </DialogContent>
-          <Button className={styles.dialogClose} onClick={() => setOpen(false)}>
+          <div className={styles.dialogBtn}>
+            <Button onClick={() => setOpen(false)}>
             Close
-          </Button>
+            </Button>
+          </div>
         </DialogBody>
       </DialogSurface>
     </Dialog>

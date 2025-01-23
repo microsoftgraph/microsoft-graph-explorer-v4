@@ -172,14 +172,8 @@ import { ResponseV9 } from '../response';
 // };
 
 const useStyles = makeStyles({
-  root: {
-    alignItems: 'flex-start',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    padding: '50px 20px',
-    rowGap: '20px'
-  }
+  container: {
+    flex: '1'  }
 });
 
 export const GetPivotItems = () => {
@@ -196,7 +190,7 @@ export const GetPivotItems = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
         <Tab value={translateMessage('Response Preview')}>
           {translateMessage('Response Preview')}
