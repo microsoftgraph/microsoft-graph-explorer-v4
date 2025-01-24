@@ -58,6 +58,8 @@ const useLayoutStyles = makeStyles({
     borderRadius: tokens.borderRadiusMedium
   },
   responseArea: {
+    display: 'flex',
+    flexDirection: 'column',
     flex:'1',
     backgroundColor: 'blue',
     border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
