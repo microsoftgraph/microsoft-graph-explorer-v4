@@ -16,7 +16,7 @@ import {
   default as LazyCopyButtonV9
 } from '../../copy-button/CopyButtonV9';
 
-export const Permissions = (props?: IPermissionProps) => {
+export const Permissions = (props?: any) => {
   return <LazySpecificPermissions {...props} />;
 };
 
