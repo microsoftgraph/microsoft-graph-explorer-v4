@@ -4,53 +4,34 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  DrawerProps,
   Spinner,
   Button
 } from '@fluentui/react-components';
-import { ArrowStepBack20Regular, TrayItemRemove20Regular  } from '@fluentui/react-icons';
+import { ArrowLeft20Filled, TrayItemRemove20Regular  } from '@fluentui/react-icons';
 import { Suspense } from 'react';
-
-import { useAppSelector } from '../../../../store';
 import { translateMessage } from '../../../utils/translate-messages';
 import { WrapperProps } from './popups.types';
 
-export function PanelWrapper(props: WrapperProps) {
-  const appTheme  = useAppSelector((state) => state.theme);
-  // const theme = getTheme();
+export function DrawerWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { title, renderFooter } = popupsProps.settings;
+  const headerText = title || '';
 
-  const isCurrentThemeDark = (): boolean => {
-    return (appTheme === 'dark' || appTheme === 'high-contrast');
+  const getDrawerSize = () => {
+    switch (popupsProps.settings.width) {
+    case 'sm':
+      return 'small';
+    case 'md':
+      return 'medium';
+    case 'lg':
+      return 'large';
+    case 'xl':
+      return 'full';
+    }
+    return 'medium';
   }
 
-  // const drawerOverlayProps: DrawerProps['overlayProps'] = {
-  //   styles: {
-  //     root: {
-  //       backgroundColor: isCurrentThemeDark() ? theme.palette.blackTranslucent40 :
-  //         theme.palette.whiteTranslucent40
-  //     }
-  //   }
-  // }
-
-  const headerText = title ? title : '';
-
-  // const getDrawerSize = () => {
-  //   switch (popupsProps.settings.width) {
-  //   case 'sm':
-  //     return 'small';
-  //   case 'md':
-  //     return 'medium';
-  //   case 'lg':
-  //     return 'large';
-  //   case 'xl':
-  //     return 'extraLarge';
-  //   }
-  //   return 'medium';
-  // }
-
-  // const drawerSize = getDrawerSize();
+  const drawerSize = getDrawerSize();
 
   const onRenderFooterContent = (): JSX.Element | null => {
     return renderFooter ? renderFooter() : null;
@@ -61,12 +42,12 @@ export function PanelWrapper(props: WrapperProps) {
   const onRenderHeader = (): JSX.Element => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Button
-        icon={< ArrowStepBack20Regular />}
+        icon={< ArrowLeft20Filled />}
         aria-label={translateMessage('Back')}
         onClick={() => dismissPopup()}
       />
       <span>
-        {title}
+        {headerText}
       </span>
     </div>
   );
@@ -76,7 +57,8 @@ export function PanelWrapper(props: WrapperProps) {
       <Drawer
         open={isOpen}
         type='overlay'
-        size='full'
+        size={drawerSize}
+        position='end'
       >
         <DrawerHeader>
           {showBackButton && onRenderHeader()}

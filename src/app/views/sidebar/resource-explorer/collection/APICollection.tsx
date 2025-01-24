@@ -161,7 +161,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showPopup({
       settings: {
         title: translateMessage('Edit Collection'),
-        width: 'xl'
+        width: 'lg'
       }
     });
   };
@@ -170,7 +170,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showEditScopePanel({
       settings: {
         title: translateMessage('Edit Scope'),
-        width: 'xl'
+        width: 'lg'
       }
     });
   };
@@ -207,7 +207,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       onClick: () => viewPermissions({
         settings: {
           title: translateMessage('Preview Permissions'),
-          width: 'xl'
+          width: 'lg'
         }
       })}
   ];
@@ -225,7 +225,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
           {options.map(option => (
             <ToolbarButton
               key={option.key}
-              appearance='primary'
               icon={option.icon}
               disabled={option.disabled}
               onClick={option.onClick}
