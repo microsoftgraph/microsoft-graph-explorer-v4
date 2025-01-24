@@ -5,23 +5,26 @@ import {
   DialogContent,
   DialogSurface,
   DialogTrigger,
-  makeStyles
+  makeStyles,
+  tokens
 } from '@fluentui/react-components';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item-v9';
+import { ExpandUpLeftRegular } from '@fluentui/react-icons';
 
 const useStyles = makeStyles({
   container: {
-    // display: 'flex', // TODO: draws expand button to the right. Fix
-    width: '100%', // Ensure the container has a defined width
-    overflow: 'hidden'
+    display: 'flex',
+    overflow: 'hidden',
+    height: '-webkit-fill-available'
   },
   dialog: {
+    display: 'flex',
     maxWidth: '70%',
     minHeight: '60%'
   },
-  dialogClose: {
-    // soid
+  dialogBtn: {
+    display: 'block'
   }
 });
 
@@ -31,17 +34,21 @@ const PivotItemsDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
-      <DialogTrigger disableButtonEnhancement>
-        <Button>Expand</Button>
-      </DialogTrigger>
+      <div className={styles.dialogBtn}>
+        <DialogTrigger disableButtonEnhancement>
+          <Button appearance='transparent' icon={<ExpandUpLeftRegular/>} aria-label='Expand' />
+        </DialogTrigger>
+      </div>
       <DialogSurface className={styles.dialog}>
         <DialogBody>
           <DialogContent>
             <GetPivotItems />
           </DialogContent>
-          <Button className={styles.dialogClose} onClick={() => setOpen(false)}>
+          <div className={styles.dialogBtn}>
+            <Button appearance='transparent' onClick={() => setOpen(false)}>
             Close
-          </Button>
+            </Button>
+          </div>
         </DialogBody>
       </DialogSurface>
     </Dialog>

@@ -8,7 +8,7 @@ import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names
 import { SnippetError } from '../../../../types/snippets';
 import { getSnippet } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { Monaco, MonacoV9 } from '../../common';
+import { MonacoV9 } from '../../common';
 import { copyAndTrackText, trackedGenericCopy } from '../../common/copy';
 import {
   convertVhToPx, getResponseEditorHeight, getResponseHeight
@@ -189,7 +189,7 @@ function Snippet(props: ISnippetProps) {
       {!loadingState && snippet &&
         <>
           <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
-          <Monaco
+          <MonacoV9
             body={snippet}
             language={language}
             readOnly={true}

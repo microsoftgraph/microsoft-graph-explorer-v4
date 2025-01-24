@@ -1,6 +1,7 @@
 import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
+import { makeStyles } from '@fluentui/react-components';
 
 interface MonacoProps {
   body: object | string | undefined;
@@ -12,9 +13,16 @@ interface MonacoProps {
   extraInfoElement?: JSX.Element;
 }
 
+const useEditorStyles = makeStyles({
+  container: {
+    height: '95%'
+  }
+})
+
 
 const MonacoV9 = (props: MonacoProps)=>{
-  const { onChange, language, readOnly, height} = props;
+  const styles = useEditorStyles();
+  const { onChange, language, readOnly} = props;
   const editorOptions: editor.IStandaloneEditorConstructionOptions={
     lineNumbers: 'off' as 'off',
     automaticLayout: true,
@@ -30,18 +38,17 @@ const MonacoV9 = (props: MonacoProps)=>{
     wordSeparators: '"'
   }
   let body = props.body;
-  const editorHeight = height ? height : '300px';
   if (body && typeof body !== 'string') {
     body = formatJsonStringForAllBrowsers(body);
   }
 
 
-  return <div className='monaco-editor'>
+  return <div id='monaco-editor' className={styles.container}>
     {props.extraInfoElement}
     <Editor
       language={language?language:'json'}
-      width='800 !important'
-      height={editorHeight}
+      width='98.9%'
+      height="95%"
       value={body}
       options={editorOptions}
       onChange={onChange}>

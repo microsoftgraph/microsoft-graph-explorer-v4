@@ -1,7 +1,6 @@
-import { FocusZone } from '@fluentui/react';
 import { useAppSelector } from '../../../../../store';
 
-import { Monaco } from '../../../common';
+import { MonacoV9 } from '../../../common';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 
 interface IRequestBodyProps {
@@ -13,13 +12,11 @@ const RequestBody = ({ handleOnEditorChange }: IRequestBodyProps) => {
   const sampleBody = useAppSelector((state)=> state.sampleQuery.sampleBody);
 
   return (
-    <FocusZone>
-      <Monaco
-        body={sampleBody}
-        height={convertVhToPx(height, 60)}
-        onChange={(value) => handleOnEditorChange(value)} />
-    </FocusZone>
-
+    <MonacoV9
+      height={'100%'}
+      body={sampleBody}
+      // height={convertVhToPx(height, 60)}
+      onChange={(value) => handleOnEditorChange(value)} />
   );
 };
 
