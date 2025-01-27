@@ -1,6 +1,7 @@
 import { makeStyles } from '@fluentui/react-components';
 import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
+import { ThemeContext } from '../../../../themes/theme-context';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
 
 interface MonacoProps {
@@ -42,17 +43,22 @@ const MonacoV9 = (props: MonacoProps) => {
   }
 
   return (
-    <div id='monaco-editor' className={styles.container}>
-      {props.extraInfoElement}
-      <Editor
-        language={language ? language : 'json'}
-        width='98.9%'
-        height={height ? height : '95%'}
-        value={body}
-        options={editorOptions}
-        onChange={onChange}
-      ></Editor>
-    </div>
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <div id='monaco-editor' className={styles.container}>
+          {props.extraInfoElement}
+          <Editor
+            language={language ? language : 'json'}
+            width='98.9%'
+            height={height ? height : '95%'}
+            value={body}
+            options={editorOptions}
+            onChange={onChange}
+            theme={theme === 'light' ? 'vs' : 'vs-dark'}
+          ></Editor>
+        </div>
+      )}
+    </ThemeContext.Consumer>
   );
 };
 

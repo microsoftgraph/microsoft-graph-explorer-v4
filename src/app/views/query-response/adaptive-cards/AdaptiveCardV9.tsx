@@ -1,7 +1,16 @@
 import { getTheme, ITheme } from '@fluentui/react';
 import {
-  Label, Link, makeStyles, MessageBar, MessageBarBody, MessageBarTitle,
-  SelectTabData, SelectTabEvent, Tab, TabList, TabValue
+  Label,
+  Link,
+  makeStyles,
+  MessageBar,
+  MessageBarBody,
+  MessageBarTitle,
+  SelectTabData,
+  SelectTabEvent,
+  Tab,
+  TabList,
+  TabValue
 } from '@fluentui/react-components';
 import * as AdaptiveCardsAPI from 'adaptivecards';
 import { useEffect, useState } from 'react';
@@ -23,17 +32,16 @@ export interface AdaptiveCardResponse {
 }
 
 interface AdaptiveCardProps {
-  body: string,
-  hostConfig: object
+  body: string;
+  hostConfig: object;
 }
 
 interface RenderCardJSONProps {
-  handleCopy: ()=> void
-  template: string
-  renderedCard: HTMLElement
-  sampleQuery: IQuery
+  handleCopy: () => void;
+  template: string;
+  renderedCard: HTMLElement;
+  sampleQuery: IQuery;
 }
-
 
 const adaptiveCardStyles = makeStyles({
   container: {
@@ -41,16 +49,19 @@ const adaptiveCardStyles = makeStyles({
     flexDirection: 'column',
     gap: '4px'
   }
-})
+});
 
 const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
-  let adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null = new AdaptiveCardsAPI.AdaptiveCard();
-  const [cardContent, setCardContent] = useState<AdaptiveCardResponse | undefined>(undefined);
+  let adaptiveCard: AdaptiveCardsAPI.AdaptiveCard | null =
+    new AdaptiveCardsAPI.AdaptiveCard();
+  const [cardContent, setCardContent] = useState<
+    AdaptiveCardResponse | undefined
+  >(undefined);
 
   const { body, hostConfig } = props;
-  const sampleQuery = useAppSelector(state => state.sampleQuery)
-  const theme = useAppSelector(state => state.theme)
-  const queryStatus = useAppSelector(state => state.queryRunnerStatus)
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const theme = useAppSelector((state) => state.theme);
+  const queryStatus = useAppSelector((state) => state.queryRunnerStatus);
 
   const currentTheme: ITheme = getTheme();
 
@@ -59,12 +70,12 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
       const content = getAdaptiveCard(body, sampleQuery);
       setCardContent({
         data: content
-      })
+      });
     } catch (err: unknown) {
       const error = err as Error;
       setCardContent({
         error: error.message
-      })
+      });
     }
 
     if (!adaptiveCard) {
@@ -72,15 +83,13 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
     }
 
     if (hostConfig) {
-      adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(
-        hostConfig
-      );
+      adaptiveCard.hostConfig = new AdaptiveCardsAPI.HostConfig(hostConfig);
     }
 
     return () => {
       adaptiveCard = null;
-    }
-  }, [body])
+    };
+  }, [body]);
 
   if (!body) {
     return <div />;
@@ -89,11 +98,18 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
   if (body) {
     if (!cardContent?.data || (queryStatus && !queryStatus.ok)) {
       return (
-        <Label weight="semibold">
-          {translateMessage('The Adaptive Card for this response is not available')}&nbsp;
+        <Label weight='semibold'>
+          {translateMessage(
+            'The Adaptive Card for this response is not available'
+          )}
+          &nbsp;
           <Link
-            href={'https://adaptivecards.io/designer/'} tabIndex={0} target='_blank'
-            rel='noopener noreferrer' inline></Link>
+            href={'https://adaptivecards.io/designer/'}
+            tabIndex={0}
+            target='_blank'
+            rel='noopener noreferrer'
+            inline
+          ></Link>
           {translateMessage('Adaptive Cards designer')}
         </Label>
       );
@@ -101,22 +117,29 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
 
     try {
       // markdown support
-      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown =
-        (text: string, result: AdaptiveCardsAPI.IMarkdownProcessingResult) => {
-          const md = new MarkdownIt();
-          result.outputHtml = md.render(text);
-          result.didProcess = true;
-        };
+      AdaptiveCardsAPI.AdaptiveCard.onProcessMarkdown = (
+        text: string,
+        result: AdaptiveCardsAPI.IMarkdownProcessingResult
+      ) => {
+        const md = new MarkdownIt();
+        result.outputHtml = md.render(text);
+        result.didProcess = true;
+      };
       adaptiveCard.parse(cardContent!.data.card);
       const renderedCard = adaptiveCard.render();
 
       if (renderedCard) {
         // TODO: find out what tokens to use here
-        renderedCard.style.backgroundColor = currentTheme.palette.neutralLighter;
+        renderedCard.style.backgroundColor =
+          currentTheme.palette.neutralLighter;
 
         const applyTheme = (child: HTMLElement) => {
-          if (!child) { return; }
-          if (child && child.tagName === 'BUTTON') { return; }
+          if (!child) {
+            return;
+          }
+          if (child && child.tagName === 'BUTTON') {
+            return;
+          }
 
           child.style.color = currentTheme.palette.black;
           if (child.children.length > 0) {
@@ -125,7 +148,7 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
               applyTheme(child.children[i] as HTMLElement);
             }
           }
-        }
+        };
 
         if (theme !== 'light') {
           applyTheme(renderedCard);
@@ -133,16 +156,20 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
       }
 
       const handleCopy = async () => {
-        trackedGenericCopy(JSON.stringify(cardContent!.data?.template, null, 4),
-          componentNames.JSON_SCHEMA_COPY_BUTTON, sampleQuery);
-      }
+        trackedGenericCopy(
+          JSON.stringify(cardContent!.data?.template, null, 4),
+          componentNames.JSON_SCHEMA_COPY_BUTTON,
+          sampleQuery
+        );
+      };
 
       return (
         <RenderCardAndJson
           handleCopy={handleCopy}
           renderedCard={renderedCard as HTMLElement}
           template={cardContent!.data?.template as string}
-          sampleQuery={sampleQuery}/>
+          sampleQuery={sampleQuery}
+        />
       );
     } catch (err: unknown) {
       const error = err as Error;
@@ -153,41 +180,53 @@ const AdaptiveCardV9 = (props: AdaptiveCardProps) => {
             {error.message}
           </MessageBarBody>
         </MessageBar>
-      )
+      );
     }
   }
-}
+};
 
-const RenderCardAndJson = (props: RenderCardJSONProps)=>{
-  const styles= adaptiveCardStyles()
-  const {handleCopy, template, renderedCard, sampleQuery} = props
-  const  [tabSelected, setTabSelected] = useState<TabValue>('card')
+const RenderCardAndJson = (props: RenderCardJSONProps) => {
+  const styles = adaptiveCardStyles();
+  const { handleCopy, template, renderedCard, sampleQuery } = props;
+  const [tabSelected, setTabSelected] = useState<TabValue>('card');
   const handleTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     const value = data.value as string;
     setTabSelected(value);
     telemetry.trackTabClickEvent(value, sampleQuery);
   };
-  return (<div className={styles.container}>
-    <TabList selectedValue={tabSelected} onTabSelect={handleTabSelect}>
-      <Tab value='card'>{translateMessage('card')}</Tab>
-      <Tab value='JSON-schema'>{translateMessage('JSON Schema')}</Tab>
-    </TabList>
-    <div>
-      {tabSelected === 'card' &&
-        <RenderCard sampleQuery={sampleQuery} handleCopy={handleCopy}
-          template={template} renderedCard={renderedCard}/>}
-      {tabSelected === 'JSON-schema' &&
-        <RenderJSONSchema sampleQuery={sampleQuery} renderedCard={renderedCard}
-          template={template} handleCopy={handleCopy}/>}
+  return (
+    <div className={styles.container}>
+      <TabList selectedValue={tabSelected} onTabSelect={handleTabSelect}>
+        <Tab value='card'>{translateMessage('card')}</Tab>
+        <Tab value='JSON-schema'>{translateMessage('JSON Schema')}</Tab>
+      </TabList>
+      <div>
+        {tabSelected === 'card' && (
+          <RenderCard
+            sampleQuery={sampleQuery}
+            handleCopy={handleCopy}
+            template={template}
+            renderedCard={renderedCard}
+          />
+        )}
+        {tabSelected === 'JSON-schema' && (
+          <RenderJSONSchema
+            sampleQuery={sampleQuery}
+            renderedCard={renderedCard}
+            template={template}
+            handleCopy={handleCopy}
+          />
+        )}
+      </div>
     </div>
-  </div>
-  )
-}
+  );
+};
 
 const RenderCard = (props: RenderCardJSONProps) => {
-  const {renderedCard} = props
-  return(
-    <div id={'card-tab'}
+  const { renderedCard } = props;
+  return (
+    <div
+      id={'card-tab'}
       ref={(n) => {
         if (n && !n.firstChild) {
           n.appendChild(renderedCard);
@@ -198,42 +237,59 @@ const RenderCard = (props: RenderCardJSONProps) => {
         }
       }}
     />
-  )
-}
+  );
+};
 
-const RenderJSONSchema = (props: RenderCardJSONProps)=>{
-  const {handleCopy, template} = props
+const RenderJSONSchema = (props: RenderCardJSONProps) => {
+  const { handleCopy, template } = props;
 
   return (
     <div>
       <MessageBar intent='info'>
         <MessageBarBody>
-          <MessageBarTitle>{translateMessage('Adaptive Cards Templating SDK')}</MessageBarTitle>
+          <MessageBarTitle>
+            {translateMessage('Adaptive Cards Templating SDK')}
+          </MessageBarTitle>
           {translateMessage('Get started with adaptive cards on')}
-          <Link href={'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'}
+          <Link
+            href={
+              'https://learn.microsoft.com/en-us/adaptive-cards/templating/sdk'
+            }
             target='_blank'
             rel='noopener noreferrer'
             tabIndex={0}
-            inline>{translateMessage('Adaptive Cards Templating SDK')}</Link>&nbsp;
+            inline
+          >
+            {translateMessage('Adaptive Cards Templating SDK')}
+          </Link>
+          &nbsp;
           {translateMessage('and experiment on')}&nbsp;
-          <Link href={'https://adaptivecards.io/designer/'}
+          <Link
+            href={'https://adaptivecards.io/designer/'}
             target='_blank'
             rel='noopener noreferrer'
             tabIndex={0}
-            inline>{translateMessage('Adaptive Cards designer')}</Link>
+            inline
+          >
+            {translateMessage('Adaptive Cards designer')}
+          </Link>
         </MessageBarBody>
       </MessageBar>
       <div>
-        <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true}/>
+        <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true} />
         <MonacoV9
           body={template}
           language='json'
           readOnly={true}
+          height='300px'
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-const trackedComponent = telemetry.trackReactComponent(AdaptiveCardV9, componentNames.ADAPTIVE_CARDS_TAB);
+const trackedComponent = telemetry.trackReactComponent(
+  AdaptiveCardV9,
+  componentNames.ADAPTIVE_CARDS_TAB
+);
 export default trackedComponent;
