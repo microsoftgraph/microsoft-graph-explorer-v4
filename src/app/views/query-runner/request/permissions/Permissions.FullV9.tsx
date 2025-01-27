@@ -28,23 +28,13 @@ import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getColumns } from './columnsV9';
 import { IPermission } from '../../../../../types/permissions';
+import { setConsentedStatus } from './util';
 
 type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
 
 interface PermissionListItem extends IPermission {
   groupName?: string;
 }
-
-const setConsentedStatus = (
-  tokenPresent: boolean,
-  permissions: IPermission[],
-  consentedScopes: string[]
-): IPermission[] => {
-  return permissions.map((permission) => ({
-    ...permission,
-    consented: tokenPresent && consentedScopes.includes(permission.value)
-  }));
-};
 
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
@@ -91,9 +81,9 @@ const FullPermissionsV9 = () => {
   const filteredPermissions = (() => {
     switch (filter) {
     case 'consented-permissions':
-      return searchedPermissions.filter((p) => p.consented);
+      return searchedPermissions.filter((perm) => perm.consented);
     case 'unconsented-permissions':
-      return searchedPermissions.filter((p) => !p.consented);
+      return searchedPermissions.filter((perm) => !perm.consented);
     default:
       return searchedPermissions;
     }
