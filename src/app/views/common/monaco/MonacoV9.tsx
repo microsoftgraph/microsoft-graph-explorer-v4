@@ -1,7 +1,7 @@
+import { makeStyles } from '@fluentui/react-components';
 import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
-import { makeStyles } from '@fluentui/react-components';
 
 interface MonacoProps {
   body: object | string | undefined;
@@ -15,15 +15,14 @@ interface MonacoProps {
 
 const useEditorStyles = makeStyles({
   container: {
-    height: '95%'
+    height: '250px'
   }
-})
+});
 
-
-const MonacoV9 = (props: MonacoProps)=>{
+const MonacoV9 = (props: MonacoProps) => {
   const styles = useEditorStyles();
-  const { onChange, language, readOnly} = props;
-  const editorOptions: editor.IStandaloneEditorConstructionOptions={
+  const { onChange, language, readOnly } = props;
+  const editorOptions: editor.IStandaloneEditorConstructionOptions = {
     lineNumbers: 'off' as 'off',
     automaticLayout: true,
     minimap: { enabled: false },
@@ -36,24 +35,25 @@ const MonacoV9 = (props: MonacoProps)=>{
     scrollBeyondLastLine: true,
     overviewRulerBorder: false,
     wordSeparators: '"'
-  }
+  };
   let body = props.body;
   if (body && typeof body !== 'string') {
     body = formatJsonStringForAllBrowsers(body);
   }
 
-
-  return <div id='monaco-editor' className={styles.container}>
-    {props.extraInfoElement}
-    <Editor
-      language={language?language:'json'}
-      width='98.9%'
-      height="95%"
-      value={body}
-      options={editorOptions}
-      onChange={onChange}>
-    </Editor></div>
-}
+  return (
+    <div id='monaco-editor' className={styles.container}>
+      {props.extraInfoElement}
+      <Editor
+        language={language ? language : 'json'}
+        width='98.9%'
+        height='95%'
+        value={body}
+        options={editorOptions}
+        onChange={onChange}
+      ></Editor>
+    </div>
+  );
+};
 
 export { MonacoV9 };
-
