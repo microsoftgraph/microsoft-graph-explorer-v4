@@ -5,7 +5,7 @@ import {
 import ErrorBoundary from '../error-boundary/ErrorBoundary';
 import { DialogWrapper } from './DialogWrapper';
 import { ModalWrapper } from './ModalWrapper';
-import { PanelWrapper } from './PanelWrapper';
+import { DrawerWrapper } from './PanelWrapper';
 
 const PopupWrapper = () => {
 
@@ -30,7 +30,7 @@ const PopupWrapper = () => {
       {popups && popups.map((popup: Popup) => {
         const { component, type, popupsProps, isOpen } = popup;
         if (type === 'panel') {
-          return component && <PanelWrapper
+          return component && <DrawerWrapper
             isOpen={!!isOpen}
             key={popup.id}
             dismissPopup={() => dismiss(popup)}
