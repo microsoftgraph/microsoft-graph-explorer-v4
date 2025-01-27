@@ -12,7 +12,13 @@ import {
   Input,
   Badge,
   makeStyles,
-  CounterBadge
+  CounterBadge,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger
 } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
@@ -20,6 +26,9 @@ import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getColumns } from './columnsV9';
 import { IPermission } from '../../../../../types/permissions';
+import { Filter24Regular } from '@fluentui/react-icons';
+
+type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
 interface PermissionListItem extends IPermission {
   groupName?: string;
 }
@@ -37,6 +46,7 @@ const setConsentedStatus = (
 
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
+  controlsRow: { display: 'flex', gap: '0.5rem', alignItems: 'center' },
   searchBar: { width: '300px' },
   groupHeader: { display: 'flex', justifyContent: 'space-between' }
 });
@@ -51,6 +61,7 @@ const FullPermissionsV9 = () => {
   const [permissions, setPermissions] = useState<PermissionListItem[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+  const [filter, setFilter] = useState<Filter>('all-permissions');
 
   useEffect(() => {
     dispatch(fetchScopes('full'));
@@ -70,9 +81,20 @@ const FullPermissionsV9 = () => {
     setPermissions(permissionsList);
   }, [fullPermissions, tokenPresent, auth.consentedScopes]);
 
-  const filteredPermissions = permissions.filter((permission) =>
+  const searchedPermissions = permissions.filter((permission) =>
     permission.value.toLowerCase().includes(searchValue.toLowerCase())
   );
+
+  const filteredPermissions = (() => {
+    switch (filter) {
+    case 'consented-permissions':
+      return searchedPermissions.filter((p) => p.consented);
+    case 'unconsented-permissions':
+      return searchedPermissions.filter((p) => !p.consented);
+    default:
+      return searchedPermissions;
+    }
+  })();
 
   const groupedPermissions = filteredPermissions.reduce((acc, permission) => {
     const group = permission.groupName ?? 'Unknown';
@@ -95,19 +117,49 @@ const FullPermissionsV9 = () => {
     setOpenItems(updatedOpenItems);
   };
 
+  const chooseFilter = (chosenFilter: Filter) => {
+    setFilter(chosenFilter);
+  };
+
   const columns = getColumns({ source: 'panel', tokenPresent });
 
   return (
     <div className={styles.container}>
-      <Input
-        className={styles.searchBar}
-        placeholder={translateMessage('Search permissions')}
-        onChange={handleSearchChange}
-        value={searchValue}
-      />
+      <div className={styles.controlsRow}>
+        <Menu>
+          <MenuTrigger>
+            <MenuButton
+              icon={<Filter24Regular />}
+              appearance='primary' // or 'subtle', etc.
+            >
+              {translateMessage('Filter')}
+            </MenuButton>
+          </MenuTrigger>
+          <MenuPopover>
+            <MenuList>
+              <MenuItem onClick={() => chooseFilter('all-permissions')}>
+                {translateMessage('All permissions')}
+              </MenuItem>
+              <MenuItem onClick={() => chooseFilter('consented-permissions')}>
+                {translateMessage('Consented permissions')}
+              </MenuItem>
+              <MenuItem onClick={() => chooseFilter('unconsented-permissions')}>
+                {translateMessage('Unconsented permissions')}
+              </MenuItem>
+            </MenuList>
+          </MenuPopover>
+        </Menu>
+
+        <Input
+          className={styles.searchBar}
+          placeholder={translateMessage('Search permissions')}
+          onChange={handleSearchChange}
+          value={searchValue}
+        />
+      </div>
       <FlatTree aria-label={translateMessage('Permissions')}>
         {Object.entries(groupedPermissions).map(([group, items], index) => (
-          <FlatTreeItem key={group} value={group} itemType="branch"
+          <FlatTreeItem key={group} value={group} itemType='branch'
             aria-level={1}
             aria-posinset={index + 1}
             aria-setsize={Object.keys(groupedPermissions).length}>
