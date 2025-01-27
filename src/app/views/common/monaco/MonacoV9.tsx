@@ -15,13 +15,13 @@ interface MonacoProps {
 
 const useEditorStyles = makeStyles({
   container: {
-    height: '250px'
+    height: '95%'
   }
 });
 
 const MonacoV9 = (props: MonacoProps) => {
   const styles = useEditorStyles();
-  const { onChange, language, readOnly } = props;
+  const { onChange, language, readOnly, height } = props;
   const editorOptions: editor.IStandaloneEditorConstructionOptions = {
     lineNumbers: 'off' as 'off',
     automaticLayout: true,
@@ -47,7 +47,7 @@ const MonacoV9 = (props: MonacoProps) => {
       <Editor
         language={language ? language : 'json'}
         width='98.9%'
-        height='95%'
+        height={height ? height : '95%'}
         value={body}
         options={editorOptions}
         onChange={onChange}

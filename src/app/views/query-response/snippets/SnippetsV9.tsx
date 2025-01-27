@@ -1,5 +1,13 @@
 import {
-  Label, Link, makeStyles, SelectTabData, SelectTabEvent, Spinner, Tab, TabList, TabValue,
+  Label,
+  Link,
+  makeStyles,
+  SelectTabData,
+  SelectTabEvent,
+  Spinner,
+  Tab,
+  TabList,
+  TabValue,
   Text
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
@@ -11,46 +19,45 @@ import { getSnippet } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { MonacoV9 } from '../../common';
 import { copyAndTrackText } from '../../common/copy';
-import { getResponseEditorHeight } from '../../common/dimensions/dimensions-adjustment';
 import { CopyButtonV9 } from '../../common/lazy-loader/component-registry';
 
 interface LanguageSnippet {
-  [language:string]: {
-    sdkDocLink: string,
-    sdkDownloadLink: string,
-  }
+  [language: string]: {
+    sdkDocLink: string;
+    sdkDownloadLink: string;
+  };
 }
 
-const supportedLanguages: LanguageSnippet= {
-  'CSharp': {
+const supportedLanguages: LanguageSnippet = {
+  CSharp: {
     sdkDownloadLink: 'https://aka.ms/csharpsdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'PowerShell': {
+  PowerShell: {
     sdkDownloadLink: 'https://aka.ms/pshellsdk',
     sdkDocLink: 'https://aka.ms/pshellsdkdocs'
   },
-  'Go': {
+  Go: {
     sdkDownloadLink: 'https://aka.ms/graphgosdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'Java': {
+  Java: {
     sdkDownloadLink: 'https://aka.ms/graphjavasdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'JavaScript': {
+  JavaScript: {
     sdkDownloadLink: 'https://aka.ms/graphjssdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'PHP': {
+  PHP: {
     sdkDownloadLink: 'https://aka.ms/graphphpsdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'Python': {
+  Python: {
     sdkDownloadLink: 'https://aka.ms/msgraphpythonsdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   },
-  'CLI': {
+  CLI: {
     sdkDownloadLink: 'https://aka.ms/msgraphclisdk',
     sdkDocLink: 'https://aka.ms/sdk-doc'
   }
@@ -65,104 +72,139 @@ const useSnippetStyles = makeStyles({
     marginLeft: '28px',
     lineHeight: '1.5'
   }
-})
+});
 
 const setCommentSymbol = (language: string): string => {
-  const lang = language.trim().toLowerCase()
-  return (lang=== 'powershell' || lang === 'python') ? '# ' : '// ';
-}
+  const lang = language.trim().toLowerCase();
+  return lang === 'powershell' || lang === 'python' ? '# ' : '// ';
+};
 
 const getLanguageComponentName = (
-  language: string, isDocumentationLink: boolean,
-  snippetComponentNames: {[language: string]: {sdk: string, doc: string}}) : string => {
+  language: string,
+  isDocumentationLink: boolean,
+  snippetComponentNames: { [language: string]: { sdk: string; doc: string } }
+): string => {
   const snippetComponentEntries = Object.entries(snippetComponentNames);
   const snippetLanguageEntry = snippetComponentEntries.find(
     ([key]) => language.toLocaleLowerCase() === key.toLocaleLowerCase()
   );
-  const componentName = isDocumentationLink ? snippetLanguageEntry?.[1].doc : snippetLanguageEntry?.[1].sdk;
-  return componentName || '' ;
-}
-
+  const componentName = isDocumentationLink
+    ? snippetLanguageEntry?.[1].doc
+    : snippetLanguageEntry?.[1].sdk;
+  return componentName || '';
+};
 
 const trackLinkClickedEvent = (
-  link: string, language: string, e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-  const isDocumentationLink : boolean = link.includes('doc')
-  const componentName = getLanguageComponentName(language, isDocumentationLink, componentNames.CODE_SNIPPET_LANGUAGES);
+  link: string,
+  language: string,
+  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+) => {
+  const isDocumentationLink: boolean = link.includes('doc');
+  const componentName = getLanguageComponentName(
+    language,
+    isDocumentationLink,
+    componentNames.CODE_SNIPPET_LANGUAGES
+  );
   telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
-}
+};
 
-const addExtraSnippetInformation = (language: string) : JSX.Element => {
-  const styles = useSnippetStyles()
+const addExtraSnippetInformation = (language: string): JSX.Element => {
+  const styles = useSnippetStyles();
   const { sdkDownloadLink, sdkDocLink } = supportedLanguages[language];
-  const libParagraph = setCommentSymbol(language) + translateMessage('Leverage libraries') +
-    translateMessage('Client library') + ' '
-  const sdkParagraph = setCommentSymbol(language) + translateMessage('SDKs documentation') + ' '
+  const libParagraph =
+    setCommentSymbol(language) +
+    translateMessage('Leverage libraries') +
+    translateMessage('Client library') +
+    ' ';
+  const sdkParagraph =
+    setCommentSymbol(language) + translateMessage('SDKs documentation') + ' ';
   return (
-    <div id="extra-info" className={styles.extraInformation}>
+    <div id='extra-info' className={styles.extraInformation}>
       <Text font='monospace' weight='medium'>
         {libParagraph}
         <Link
           onClick={(e) => trackLinkClickedEvent(language, sdkDownloadLink, e)}
-          href={sdkDownloadLink} inline rel='norefferer noopener' target='_blank'>
-          {sdkDownloadLink}</Link>
+          href={sdkDownloadLink}
+          inline
+          rel='norefferer noopener'
+          target='_blank'
+        >
+          {sdkDownloadLink}
+        </Link>
       </Text>
-      <br/>
+      <br />
       <Text font='monospace' weight='medium'>
         {sdkParagraph}
         <Link
           onClick={(e) => trackLinkClickedEvent(language, sdkDocLink, e)}
-          href={sdkDocLink} inline rel='norefferer noopener' target='_blank'>{sdkDocLink}</Link>
+          href={sdkDocLink}
+          inline
+          rel='norefferer noopener'
+          target='_blank'
+        >
+          {sdkDocLink}
+        </Link>
       </Text>
     </div>
-  )
-}
+  );
+};
 
-const GetSnippets = ()=> {
+const GetSnippets = () => {
   const validation = useContext(ValidationContext);
-  return <div>
-    {validation.isValid && <RenderSnippets />}
-    {!validation.isValid && <Label weight="semibold">{translateMessage('Invalid URL')}!</Label>}
-  </div>
-}
+  return (
+    <div>
+      {validation.isValid && <RenderSnippets />}
+      {!validation.isValid && (
+        <Label weight='semibold'>{translateMessage('Invalid URL')}!</Label>
+      )}
+    </div>
+  );
+};
 
-const RenderSnippets = ()=>{
-  const styles = useSnippetStyles()
+const RenderSnippets = () => {
+  const styles = useSnippetStyles();
   const [selectedLanguage, setSelectedLanguage] = useState<TabValue>('CSharp');
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     setSelectedLanguage(data.value);
   };
-  return <div id="snippets-tablist" className={styles.container}>
-    <TabList selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
-      {Object.keys(supportedLanguages).map((language: string) => (
-        <Tab key={language} value={language}>
-          {language === 'CSharp' ? 'C#' : language}
-        </Tab>
-      ))}
-    </TabList>
-    <div id="snippet-content"><SnippetContent language={selectedLanguage as string}/></div>
-  </div>
-
-}
+  return (
+    <div id='snippets-tablist' className={styles.container}>
+      <TabList selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
+        {Object.keys(supportedLanguages).map((language: string) => (
+          <Tab key={language} value={language}>
+            {language === 'CSharp' ? 'C#' : language}
+          </Tab>
+        ))}
+      </TabList>
+      <div id='snippet-content'>
+        <SnippetContent language={selectedLanguage as string} />
+      </div>
+    </div>
+  );
+};
 
 interface SnippetContentProps {
-  language: string
+  language: string;
 }
 
-const SnippetContent: React.FC<SnippetContentProps> = (props: SnippetContentProps) => {
+const SnippetContent: React.FC<SnippetContentProps> = (
+  props: SnippetContentProps
+) => {
   const dispatch = useAppDispatch();
   const language = props.language.toLowerCase();
-  const snippets = useAppSelector(state => state.snippets);
+  const snippets = useAppSelector((state) => state.snippets);
   const { data, pending: loadingState, error } = snippets;
-  const hasSnippetError = (error?.status && error.status === 404) ||
+  const hasSnippetError =
+    (error?.status && error.status === 404) ||
     (error?.status && error.status === 400);
 
-  const snippet = (!loadingState && data) ? data[language] : '';
-
-  const monacoHeight = getResponseEditorHeight(235);
+  const snippet = !loadingState && data ? data[language] : '';
 
   const handleCopy = async () => {
-    copyAndTrackText(snippet, CODE_SNIPPETS_COPY_BUTTON, { Language: language });
+    copyAndTrackText(snippet, CODE_SNIPPETS_COPY_BUTTON, {
+      Language: language
+    });
   };
 
   useEffect(() => {
@@ -174,22 +216,30 @@ const SnippetContent: React.FC<SnippetContentProps> = (props: SnippetContentProp
 
   return (
     <div>
-      {showSpinner && <Spinner labelPosition="below" label={translateMessage('Fetching code snippet')} />}
-      {notAvailable && <Label weight="semibold">{translateMessage('Snippet not available')}!</Label>}
+      {showSpinner && (
+        <Spinner
+          labelPosition='below'
+          label={translateMessage('Fetching code snippet')}
+        />
+      )}
+      {notAvailable && (
+        <Label weight='semibold'>
+          {translateMessage('Snippet not available')}!
+        </Label>
+      )}
       <>
         <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
         <MonacoV9
           body={snippet}
           language={language}
           readOnly={true}
-          height={monacoHeight}
+          height='300px'
           extraInfoElement={addExtraSnippetInformation(props.language)}
         />
       </>
     </div>
   );
 };
-
 
 const Snippets = telemetry.trackReactComponent(
   GetSnippets,
