@@ -10,25 +10,27 @@ import {
   DataGridRow,
   DataGridCell,
   Input,
-  Badge,
-  makeStyles,
-  CounterBadge,
   Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  MenuTrigger,
   MenuPopover,
-  MenuTrigger
+  MenuList,
+  MenuItem,
+  MenuButton,
+  CounterBadge,
+  makeStyles
 } from '@fluentui/react-components';
+import {
+  Filter24Regular
+} from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { getColumns } from './columnsV9';
 import { IPermission } from '../../../../../types/permissions';
-import { Filter24Regular } from '@fluentui/react-icons';
 
 type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
+
 interface PermissionListItem extends IPermission {
   groupName?: string;
 }
@@ -47,8 +49,7 @@ const setConsentedStatus = (
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
   controlsRow: { display: 'flex', gap: '0.5rem', alignItems: 'center' },
-  searchBar: { width: '300px' },
-  groupHeader: { display: 'flex', justifyContent: 'space-between' }
+  searchBar: { width: '300px' }
 });
 
 const FullPermissionsV9 = () => {
@@ -59,9 +60,11 @@ const FullPermissionsV9 = () => {
   const tokenPresent = !!auth.authToken.token;
 
   const [permissions, setPermissions] = useState<PermissionListItem[]>([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
+
   const [filter, setFilter] = useState<Filter>('all-permissions');
+  const [searchValue, setSearchValue] = useState('');
+
+  const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     dispatch(fetchScopes('full'));
@@ -96,29 +99,35 @@ const FullPermissionsV9 = () => {
     }
   })();
 
-  const groupedPermissions = filteredPermissions.reduce((acc, permission) => {
-    const group = permission.groupName ?? 'Unknown';
+  const groupedPermissions = filteredPermissions.reduce((acc, perm) => {
+    const group = perm.groupName ?? 'Unknown';
     if (!acc[group]) {
       acc[group] = [];
     }
-    acc[group].push(permission);
+    acc[group].push(perm);
     return acc;
   }, {} as Record<string, PermissionListItem[]>);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value);
-
-  const handleOpenChange = (group: string) => {
-    const updatedOpenItems = new Set(openItems);
-    if (updatedOpenItems.has(group)) {
-      updatedOpenItems.delete(group);
-    } else {
-      updatedOpenItems.add(group);
-    }
-    setOpenItems(updatedOpenItems);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
   };
 
   const chooseFilter = (chosenFilter: Filter) => {
     setFilter(chosenFilter);
+  };
+
+  const handleOpenChange = (
+    _event: React.MouseEvent | React.KeyboardEvent,
+    data: { value: string | number; open: boolean }
+  ) => {
+    const group = data.value as string;
+    const updated = new Set(openItems);
+    if (data.open) {
+      updated.add(group);
+    } else {
+      updated.delete(group);
+    }
+    setOpenItems(updated);
   };
 
   const columns = getColumns({ source: 'panel', tokenPresent });
@@ -130,7 +139,7 @@ const FullPermissionsV9 = () => {
           <MenuTrigger>
             <MenuButton
               icon={<Filter24Regular />}
-              appearance='primary' // or 'subtle', etc.
+              appearance='primary'
             >
               {translateMessage('Filter')}
             </MenuButton>
@@ -157,57 +166,70 @@ const FullPermissionsV9 = () => {
           value={searchValue}
         />
       </div>
-      <FlatTree aria-label={translateMessage('Permissions')}>
-        {Object.entries(groupedPermissions).map(([group, items], index) => (
-          <FlatTreeItem key={group} value={group} itemType='branch'
-            aria-level={1}
-            aria-posinset={index + 1}
-            aria-setsize={Object.keys(groupedPermissions).length}>
-            <TreeItemLayout
-              onClick={() => handleOpenChange(group)}
-              aside={
-                <CounterBadge
-                  appearance='filled'
-                  color='informative'
-                  shape='rounded'
-                  size='medium'
-                  count={items.length}
-                  aria-label={`${items.length} ${translateMessage('Permissions')}`}
-                />
-              }
+
+      <FlatTree
+        aria-label={translateMessage('Permissions')}
+        openItems={Array.from(openItems)}
+        onOpenChange={handleOpenChange}
+      >
+        {Object.entries(groupedPermissions).map(([group, items], groupIndex) => {
+          const isOpen = openItems.has(group);
+
+          return (
+            <FlatTreeItem
+              key={group}
+              value={group}
+              itemType='branch'
+              aria-level={1}
+              aria-posinset={groupIndex + 1}
+              aria-setsize={Object.keys(groupedPermissions).length}
             >
-              {group}
-            </TreeItemLayout>
-            {openItems.has(group) && (
-              <DataGrid
-                columns={columns}
-                items={items.map((item, index) => ({ item, index }))}
-                getRowId={(row: { item: PermissionListItem; index: number }) => row.item.value}
+              <TreeItemLayout
+                aside={
+                  <CounterBadge
+                    appearance='filled'
+                    color='informative'
+                    shape='rounded'
+                    size='medium'
+                    count={items.length}
+                    aria-label={`${items.length} ${translateMessage('Permissions')}`}
+                  />
+                }
               >
-                <DataGridHeader>
-                  <DataGridRow>
-                    {(column) => (
-                      <DataGridHeaderCell key={column.columnId}>
-                        {column.renderHeaderCell()}
-                      </DataGridHeaderCell>
-                    )}
-                  </DataGridRow>
-                </DataGridHeader>
-                <DataGridBody>
-                  {({ item }: { item: { item: PermissionListItem; index: number } }) => (
-                    <DataGridRow key={item.item.value}>
+                {group}
+              </TreeItemLayout>
+
+              {isOpen && (
+                <DataGrid
+                  columns={columns}
+                  items={items.map((item, index) => ({ item, index }))}
+                  getRowId={(row: { item: PermissionListItem; index: number }) => row.item.value}
+                >
+                  <DataGridHeader>
+                    <DataGridRow>
                       {(column) => (
-                        <DataGridCell key={column.columnId}>
-                          {column.renderCell({ item: item.item, index: item.index })}
-                        </DataGridCell>
+                        <DataGridHeaderCell key={column.columnId}>
+                          {column.renderHeaderCell()}
+                        </DataGridHeaderCell>
                       )}
                     </DataGridRow>
-                  )}
-                </DataGridBody>
-              </DataGrid>
-            )}
-          </FlatTreeItem>
-        ))}
+                  </DataGridHeader>
+                  <DataGridBody>
+                    {({ item: rowData }: { item: { item: PermissionListItem; index: number } }) => (
+                      <DataGridRow key={rowData.item.value}>
+                        {(column) => (
+                          <DataGridCell key={column.columnId}>
+                            {column.renderCell({ item: rowData.item, index: rowData.index })}
+                          </DataGridCell>
+                        )}
+                      </DataGridRow>
+                    )}
+                  </DataGridBody>
+                </DataGrid>
+              )}
+            </FlatTreeItem>
+          );
+        })}
       </FlatTree>
     </div>
   );
