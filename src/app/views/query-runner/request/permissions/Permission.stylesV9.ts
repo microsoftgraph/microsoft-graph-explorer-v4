@@ -48,6 +48,20 @@ const permissionStyles = makeStyles({
   },
   headerText: {
     marginLeft: '8px'
+  },
+  permissionContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    padding: '1rem'
+  },
+  controlsRow: {
+    display: 'flex',
+    gap: '0.5rem',
+    alignItems: 'center'
+  },
+  searchBar: {
+    width: '100%'
   }
 });
 

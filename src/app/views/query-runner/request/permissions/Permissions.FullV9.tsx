@@ -17,7 +17,6 @@ import {
   MenuItem,
   MenuButton,
   CounterBadge,
-  makeStyles,
   Text
 } from '@fluentui/react-components';
 import {
@@ -30,6 +29,7 @@ import { translateMessage } from '../../../../utils/translate-messages';
 import { getColumns } from './columnsV9';
 import { IPermission } from '../../../../../types/permissions';
 import { setConsentedStatus } from './util';
+import permissionStyles from './Permission.stylesV9';
 
 type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
 
@@ -37,14 +37,8 @@ interface PermissionListItem extends IPermission {
   groupName?: string;
 }
 
-const useStyles = makeStyles({
-  container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
-  controlsRow: { display: 'flex', gap: '0.5rem', alignItems: 'center' },
-  searchBar: { width: '100%' }
-});
-
 const FullPermissionsV9 = () => {
-  const styles = useStyles();
+  const styles = permissionStyles();
   const dispatch = useAppDispatch();
   const scopes = useAppSelector((state) => state.scopes);
   const auth = useAppSelector((state) => state.auth);
@@ -132,7 +126,7 @@ const FullPermissionsV9 = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.permissionContainer}>
       {loading ?
         <Text>
           {translateMessage('Fetching permissions')}...
