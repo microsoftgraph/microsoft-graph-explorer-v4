@@ -40,7 +40,7 @@ interface PermissionListItem extends IPermission {
 const useStyles = makeStyles({
   container: { display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1rem' },
   controlsRow: { display: 'flex', gap: '0.5rem', alignItems: 'center' },
-  searchBar: { width: '300px' }
+  searchBar: { width: '100%' }
 });
 
 const FullPermissionsV9 = () => {
@@ -146,6 +146,7 @@ const FullPermissionsV9 = () => {
                 <MenuButton
                   icon={<Filter24Regular />}
                   appearance='primary'
+                  disabled={loading || fullPermissions.length === 0}
                 >
                   {translateMessage('Filter')}
                 </MenuButton>
