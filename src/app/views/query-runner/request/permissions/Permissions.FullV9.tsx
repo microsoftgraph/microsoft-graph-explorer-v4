@@ -17,7 +17,8 @@ import {
   MenuItem,
   MenuButton,
   CounterBadge,
-  makeStyles
+  makeStyles,
+  Text
 } from '@fluentui/react-components';
 import {
   Filter24Regular
@@ -48,6 +49,7 @@ const FullPermissionsV9 = () => {
   const { scopes, auth } = useAppSelector((state) => state);
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!auth.authToken.token;
+  const loading = scopes.pending.isFullPermissions;
 
   const [permissions, setPermissions] = useState<PermissionListItem[]>([]);
 
@@ -122,105 +124,139 @@ const FullPermissionsV9 = () => {
 
   const columns = getColumns({ source: 'panel', tokenPresent });
 
+  const columnSizingOptions = {
+    value: { minWidth: 250, defaultWidth: 300 },
+    isAdmin: { minWidth: 150, defaultWidth: 170 },
+    consentType: { minWidth: 100, defaultWidth: 150 }
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.controlsRow}>
-        <Menu>
-          <MenuTrigger>
-            <MenuButton
-              icon={<Filter24Regular />}
-              appearance='primary'
-            >
-              {translateMessage('Filter')}
-            </MenuButton>
-          </MenuTrigger>
-          <MenuPopover>
-            <MenuList>
-              <MenuItem onClick={() => chooseFilter('all-permissions')}>
-                {translateMessage('All permissions')}
-              </MenuItem>
-              <MenuItem onClick={() => chooseFilter('consented-permissions')}>
-                {translateMessage('Consented permissions')}
-              </MenuItem>
-              <MenuItem onClick={() => chooseFilter('unconsented-permissions')}>
-                {translateMessage('Unconsented permissions')}
-              </MenuItem>
-            </MenuList>
-          </MenuPopover>
-        </Menu>
-
-        <Input
-          className={styles.searchBar}
-          placeholder={translateMessage('Search permissions')}
-          onChange={handleSearchChange}
-          value={searchValue}
-        />
-      </div>
-
-      <FlatTree
-        aria-label={translateMessage('Permissions')}
-        openItems={Array.from(openItems)}
-        onOpenChange={handleOpenChange}
-      >
-        {Object.entries(groupedPermissions).map(([group, items], groupIndex) => {
-          const isOpen = openItems.has(group);
-
-          return (
-            <FlatTreeItem
-              key={group}
-              value={group}
-              itemType='branch'
-              aria-level={1}
-              aria-posinset={groupIndex + 1}
-              aria-setsize={Object.keys(groupedPermissions).length}
-            >
-              <TreeItemLayout
-                aside={
-                  <CounterBadge
-                    appearance='filled'
-                    color='informative'
-                    shape='rounded'
-                    size='medium'
-                    count={items.length}
-                    aria-label={`${items.length} ${translateMessage('Permissions')}`}
-                  />
-                }
-              >
-                {group}
-              </TreeItemLayout>
-
-              {isOpen && (
-                <DataGrid
-                  columns={columns}
-                  items={items.map((item, index) => ({ item, index }))}
-                  getRowId={(row: { item: PermissionListItem; index: number }) => row.item.value}
+      {loading ?
+        <Text>
+          {translateMessage('Fetching permissions')}...
+        </Text> :
+        <>
+          <Text>
+            {translateMessage('Select different permissions')}
+          </Text>
+          <div className={styles.controlsRow}>
+            <Menu>
+              <MenuTrigger>
+                <MenuButton
+                  icon={<Filter24Regular />}
+                  appearance='primary'
                 >
-                  <DataGridHeader>
-                    <DataGridRow>
-                      {(column) => (
-                        <DataGridHeaderCell key={column.columnId}>
-                          {column.renderHeaderCell()}
-                        </DataGridHeaderCell>
-                      )}
-                    </DataGridRow>
-                  </DataGridHeader>
-                  <DataGridBody>
-                    {({ item: rowData }: { item: { item: PermissionListItem; index: number } }) => (
-                      <DataGridRow key={rowData.item.value}>
-                        {(column) => (
-                          <DataGridCell key={column.columnId}>
-                            {column.renderCell({ item: rowData.item, index: rowData.index })}
-                          </DataGridCell>
+                  {translateMessage('Filter')}
+                </MenuButton>
+              </MenuTrigger>
+              <MenuPopover>
+                <MenuList>
+                  <MenuItem onClick={() => chooseFilter('all-permissions')}>
+                    {translateMessage('All permissions')}
+                  </MenuItem>
+                  <MenuItem onClick={() => chooseFilter('consented-permissions')}>
+                    {translateMessage('Consented permissions')}
+                  </MenuItem>
+                  <MenuItem onClick={() => chooseFilter('unconsented-permissions')}>
+                    {translateMessage('Unconsented permissions')}
+                  </MenuItem>
+                </MenuList>
+              </MenuPopover>
+            </Menu>
+
+            <Input
+              className={styles.searchBar}
+              placeholder={translateMessage('Search permissions')}
+              onChange={handleSearchChange}
+              value={searchValue}
+            />
+          </div>
+
+          <FlatTree
+            aria-label={translateMessage('Permissions')}
+            openItems={Array.from(openItems)}
+            onOpenChange={handleOpenChange}
+          >
+            {Object.entries(groupedPermissions).map(([group, items], groupIndex) => {
+              const isOpen = openItems.has(group);
+
+              return (
+                <FlatTreeItem
+                  key={group}
+                  value={group}
+                  itemType='branch'
+                  aria-level={1}
+                  aria-posinset={groupIndex + 1}
+                  aria-setsize={Object.keys(groupedPermissions).length}
+                >
+                  <TreeItemLayout
+                    aside={
+                      <CounterBadge
+                        appearance='filled'
+                        color='informative'
+                        shape='circular'
+                        size='medium'
+                        count={items.length}
+                        aria-label={`${items.length} ${translateMessage('Permissions')}`}
+                      />
+                    }
+                  >
+                    {group}
+                  </TreeItemLayout>
+
+                  {isOpen && (
+                    <DataGrid
+                      columns={columns}
+                      items={items.map((item, index) => ({ item, index }))}
+                      getRowId={(row: { item: PermissionListItem; index: number }) => row.item.value}
+                      resizableColumns={true}
+                      columnSizingOptions={columnSizingOptions}
+                    >
+                      <DataGridHeader>
+                        <DataGridRow>
+                          {(column) => (
+                            <DataGridHeaderCell key={column.columnId}>
+                              {column.renderHeaderCell()}
+                            </DataGridHeaderCell>
+                          )}
+                        </DataGridRow>
+                      </DataGridHeader>
+                      <DataGridBody>
+                        {({ item: rowData }: { item: { item: PermissionListItem; index: number } }) => (
+                          <DataGridRow key={rowData.item.value}>
+                            {(column) => (
+                              <DataGridCell key={column.columnId}>
+                                {column.renderCell({ item: rowData.item, index: rowData.index })}
+                              </DataGridCell>
+                            )}
+                          </DataGridRow>
                         )}
-                      </DataGridRow>
-                    )}
-                  </DataGridBody>
-                </DataGrid>
-              )}
-            </FlatTreeItem>
-          );
-        })}
-      </FlatTree>
+                      </DataGridBody>
+                    </DataGrid>
+                  )}
+                </FlatTreeItem>
+              );
+            })}
+          </FlatTree>
+        </>}
+
+      {!loading && permissions && permissions.length === 0 && scopes?.error &&
+                scopes?.error?.status && scopes?.error?.status === 404 ?
+        <Text style={{
+          display: 'flex',
+          width: '100%',
+          minHeight: '200px',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          {translateMessage('permissions not found')}
+        </Text> :
+        !loading && permissions && permissions.length === 0 && scopes.error &&
+                <Text>
+                  {translateMessage('Fetching permissions failing')}
+                </Text>
+      }
     </div>
   );
 };
