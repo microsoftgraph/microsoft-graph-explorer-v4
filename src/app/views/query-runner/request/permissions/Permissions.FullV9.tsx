@@ -46,7 +46,8 @@ const useStyles = makeStyles({
 const FullPermissionsV9 = () => {
   const styles = useStyles();
   const dispatch = useAppDispatch();
-  const { scopes, auth } = useAppSelector((state) => state);
+  const scopes = useAppSelector((state) => state.scopes);
+  const auth = useAppSelector((state) => state.auth);
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!auth.authToken.token;
   const loading = scopes.pending.isFullPermissions;
