@@ -17,7 +17,9 @@ import {
   MenuItem,
   MenuButton,
   CounterBadge,
-  Text
+  Text,
+  TableColumnId,
+  DataGridCellFocusMode
 } from '@fluentui/react-components';
 import {
   Filter24Regular
@@ -125,6 +127,9 @@ const FullPermissionsV9 = () => {
     consentType: { minWidth: 100, defaultWidth: 150 }
   };
 
+  const getCellFocusMode = (columnId: TableColumnId): DataGridCellFocusMode =>
+    columnId === 'consented' ? 'none' : 'cell';
+
   return (
     <div className={styles.permissionContainer}>
       {loading ?
@@ -222,7 +227,7 @@ const FullPermissionsV9 = () => {
                         {({ item: rowData }: { item: { item: PermissionListItem; index: number } }) => (
                           <DataGridRow key={rowData.item.value}>
                             {(column) => (
-                              <DataGridCell key={column.columnId}>
+                              <DataGridCell key={column.columnId} focusMode={getCellFocusMode(column.columnId)}>
                                 {column.renderCell({ item: rowData.item, index: rowData.index })}
                               </DataGridCell>
                             )}
