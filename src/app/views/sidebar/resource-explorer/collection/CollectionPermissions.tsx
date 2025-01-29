@@ -96,7 +96,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   return (
     <CommonCollectionsPanel
-      messageBarText='list of permissions'
+      messageBarText={translateMessage('List of permissions')}
       primaryButtonText='Download permissions'
       primaryButtonAction={downloadPermissions}
       primaryButtonDisabled={!permissions}

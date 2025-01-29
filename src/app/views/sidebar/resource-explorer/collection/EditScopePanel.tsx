@@ -91,7 +91,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
 
   return (
     <CommonCollectionsPanel
-      messageBarText='edit query scopes'
+      messageBarText={translateMessage('Edit query scopes')}
       primaryButtonText='Save all'
       primaryButtonAction={saveAllScopes}
       primaryButtonDisabled={pendingChanges.length === 0}

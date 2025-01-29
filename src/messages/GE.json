@@ -524,5 +524,10 @@
   "Delete All Selected": "Delete All Selected",
   "edit query scopes":"To edit query scopes, select the queries to update, choose a new scope from the dropdown menu, and click ",
   "Save all": "Save all",
-  "expand resources to view details":"You can expand each resource and add specific operations into your API collection."
+  "expand resources to view details":"You can expand each resource and add specific operations into your API collection.",
+  "Manage API Collections": "Manage API Collections",
+  "List of permissions": "List of permissions",
+  "Edit collections": "Edit collections",
+  "Edit query scopes": "Edit query scopes"
+
 }

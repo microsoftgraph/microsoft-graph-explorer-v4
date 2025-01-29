@@ -214,7 +214,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
 
   return (
     <CommonCollectionsPanel
-      messageBarText='Manage API Collections'
+      messageBarText={translateMessage('Manage API Collections')}
       primaryButtonText='Download postman collection'
       primaryButtonAction={generateCollection}
       primaryButtonDisabled={items.length === 0}

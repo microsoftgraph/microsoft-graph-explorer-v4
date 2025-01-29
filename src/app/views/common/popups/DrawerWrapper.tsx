@@ -54,14 +54,6 @@ export function DrawerWrapper(props: WrapperProps) {
       size={getDrawerSize()}
     >
       <DrawerHeader>
-        {showBackButton && (
-          <Button
-            icon={<ArrowLeft24Regular />}
-            appearance='subtle'
-            onClick={() => dismissPopup()}
-            aria-label={translateMessage('Back')}
-          />
-        )}
         <DrawerHeaderTitle action={
           <Button
             icon={<Dismiss24Regular />}
@@ -71,6 +63,14 @@ export function DrawerWrapper(props: WrapperProps) {
           />
 
         }>
+          {showBackButton && (
+            <Button
+              icon={<ArrowLeft24Regular />}
+              appearance='subtle'
+              onClick={() => dismissPopup()}
+              aria-label={translateMessage('Back')}
+            />
+          )}
           {title || ''}
         </DrawerHeaderTitle>
       </DrawerHeader>

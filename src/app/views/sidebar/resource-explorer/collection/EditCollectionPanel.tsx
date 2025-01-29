@@ -44,7 +44,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
 
   return (
     <CommonCollectionsPanel
-      messageBarText='edit collections'
+      messageBarText={translateMessage('Edit collections')}
       primaryButtonText='Delete all selected'
       primaryButtonAction={removeSelectedItems}
       primaryButtonDisabled={selectedItems.length === 0}
