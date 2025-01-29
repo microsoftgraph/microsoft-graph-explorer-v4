@@ -103,6 +103,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     );
   };
 
+
   if (column) {
     const content = item[column.fieldName as keyof IPermission] as string;
     switch (column.key) {
