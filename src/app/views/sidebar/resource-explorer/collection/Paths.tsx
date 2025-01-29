@@ -68,44 +68,42 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   };
 
   return (
-    <div className={styles.tableContainer}>
-      <Table className={styles.table}>
-        <TableHeader>
-          <TableRow>
+    <Table className={styles.table}>
+      <TableHeader>
+        <TableRow>
+          {isSelectable && (
+            <TableHeaderCell>
+              <Checkbox
+                checked={allSelected}
+                onChange={handleSelectAllChange}
+              />
+            </TableHeaderCell>
+          )}
+          {columns.map((column) => (
+            <TableHeaderCell className={styles.tableHeader} key={column.key}>{column.name}</TableHeaderCell>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {resources.map((resource) => (
+          <TableRow key={resource.key} className={styles.row}>
             {isSelectable && (
-              <TableHeaderCell>
+              <TableCell>
                 <Checkbox
-                  checked={allSelected}
-                  onChange={handleSelectAllChange}
+                  checked={selection.has(resource)}
+                  onChange={() => handleSelectionChange(resource)}
                 />
-              </TableHeaderCell>
+              </TableCell>
             )}
             {columns.map((column) => (
-              <TableHeaderCell className={styles.tableHeader} key={column.key}>{column.name}</TableHeaderCell>
+              <TableCell key={column.key}>
+                {renderItemColumn(resource, column)}
+              </TableCell>
             ))}
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {resources.map((resource) => (
-            <TableRow key={resource.key} className={styles.row}>
-              {isSelectable && (
-                <TableCell>
-                  <Checkbox
-                    checked={selection.has(resource)}
-                    onChange={() => handleSelectionChange(resource)}
-                  />
-                </TableCell>
-              )}
-              {columns.map((column) => (
-                <TableCell key={column.key}>
-                  {renderItemColumn(resource, column)}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 

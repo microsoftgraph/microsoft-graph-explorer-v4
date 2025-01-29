@@ -17,18 +17,13 @@ const pathStyles = makeStyles({
     fontSize: '12px',
     display: 'inline-block',
     textAlign: 'center',
-    width: '100%',
-    boxSizing: 'border-box'
+    width: '100%'
   },
   urlMethod: {
     fontWeight: 'bold',
     display: 'inline-block',
     minWidth: '55px',
     textTransform: 'uppercase'
-  },
-  tableContainer: {
-    overflowX: 'auto',
-    width: '100%'
   },
   tableHeader: {
     fontWeight: 'bold'
