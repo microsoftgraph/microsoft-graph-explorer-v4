@@ -1,37 +1,26 @@
+import * as React from 'react';
+import { Suspense } from 'react';
 import {
   Drawer,
-  DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Spinner,
+  DrawerHeader,
+  DrawerHeaderTitle,
   Button,
-  makeStyles,
-  DrawerHeaderTitle
+  Spinner
 } from '@fluentui/react-components';
-import { ArrowLeft20Filled } from '@fluentui/react-icons';
-import { Suspense } from 'react';
+import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons';
+
 import { translateMessage } from '../../../utils/translate-messages';
 import { WrapperProps } from './popups.types';
 
-const useDrawerStyles = makeStyles({
-  header: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  backButton: {
-    marginInlineEnd: '20px'
-  }
-});
 
 export function DrawerWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
-  const { title, renderFooter } = popupsProps.settings;
-  const headerText = title || '';
-
-  const drawerClasses = useDrawerStyles();
+  const { title, renderFooter, width } = popupsProps.settings;
 
   const getDrawerSize = () => {
-    switch (popupsProps.settings.width) {
+    switch (width) {
     case 'sm':
       return 'small';
     case 'md':
@@ -40,60 +29,68 @@ export function DrawerWrapper(props: WrapperProps) {
       return 'large';
     case 'xl':
       return 'full';
+    default:
+      return 'medium';
     }
-    return 'medium';
-  }
+  };
 
-  const drawerSize = getDrawerSize();
+  const showBackButton =
+    title === 'Edit Scope' ||
+    title === 'Edit Collection' ||
+    title === 'Preview Permissions';
 
-  const onRenderFooterContent = (): JSX.Element | null => {
-    return renderFooter ? renderFooter() : null;
-  }
-
-  const showBackButton = title === 'Edit Scope' || title === 'Edit Collection' || title === 'Preview Permissions';
-
-  const onRenderHeader = (): JSX.Element => (
-
-    <div className={drawerClasses.header}>
-      <Button
-        className={drawerClasses.backButton}
-        icon={<ArrowLeft20Filled />}
-        aria-label={translateMessage('Back')}
-        onClick={() => dismissPopup()}
-      />
-      <DrawerHeaderTitle>
-        {headerText}
-      </DrawerHeaderTitle>
-    </div>
-  );
+  const onOpenChange = (_ev: unknown, data: { open: boolean }) => {
+    if (!data.open) {
+      dismissPopup();
+    }
+  };
 
   return (
-    <div>
-      <Drawer
-        open={isOpen}
-        type='overlay'
-        size={drawerSize}
-        position='end'
-      >
-        <DrawerHeader>
-          {showBackButton && onRenderHeader()}
-        </DrawerHeader>
-        <DrawerBody>
-          <Suspense fallback={<Spinner />}>
-            <Component
-              {...popupsProps}
-              data={popupsProps.data || {}}
-              dismissPopup={() => dismissPopup()}
-              closePopup={(e: any) => closePopup(e)}
-            />
-          </Suspense>
-        </DrawerBody>
-        {renderFooter && (
-          <DrawerFooter>
-            {onRenderFooterContent()}
-          </DrawerFooter>
+    <Drawer
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      position='end'
+      type='overlay'
+      size={getDrawerSize()}
+    >
+      <DrawerHeader>
+        {showBackButton && (
+          <Button
+            icon={<ArrowLeft24Regular />}
+            appearance='subtle'
+            onClick={() => dismissPopup()}
+            aria-label={translateMessage('Back')}
+          />
         )}
-      </Drawer>
-    </div>
+        <DrawerHeaderTitle action={
+          <Button
+            icon={<Dismiss24Regular />}
+            appearance='subtle'
+            onClick={() => dismissPopup()}
+            aria-label={translateMessage('Close')}
+          />
+
+        }>
+          {title || ''}
+        </DrawerHeaderTitle>
+      </DrawerHeader>
+
+      <DrawerBody>
+        <Suspense fallback={<Spinner />}>
+          <Component
+            {...popupsProps}
+            data={popupsProps.data || {}}
+            dismissPopup={() => dismissPopup()}
+            closePopup={(e: any) => closePopup(e)}
+          />
+        </Suspense>
+      </DrawerBody>
+
+      {renderFooter && (
+        <DrawerFooter>
+          {renderFooter()}
+        </DrawerFooter>
+      )}
+    </Drawer>
   );
 }
