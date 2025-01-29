@@ -7,17 +7,25 @@ import {
   DrawerHeader,
   DrawerHeaderTitle,
   Button,
-  Spinner
+  Spinner,
+  makeStyles
 } from '@fluentui/react-components';
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons';
 
 import { translateMessage } from '../../../utils/translate-messages';
 import { WrapperProps } from './popups.types';
 
+const useButtonStyles = makeStyles({
+  root: {
+    marginInlineEnd: '20px'
+  }
+});
+
 
 export function DrawerWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { title, renderFooter, width } = popupsProps.settings;
+  const buttonStyles = useButtonStyles();
 
   const getDrawerSize = () => {
     switch (width) {
@@ -69,6 +77,7 @@ export function DrawerWrapper(props: WrapperProps) {
               appearance='subtle'
               onClick={() => dismissPopup()}
               aria-label={translateMessage('Back')}
+              className={buttonStyles.root}
             />
           )}
           {title || ''}

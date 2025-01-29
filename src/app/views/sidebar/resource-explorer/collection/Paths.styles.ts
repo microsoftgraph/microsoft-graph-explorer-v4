@@ -7,11 +7,11 @@ const pathStyles = makeStyles({
     borderCollapse: 'collapse'
   },
   row: {
-    borderBottom: '1px solid #e1e1e1'
+    borderBottom: '1px solid var(--colorNeutralStroke1)'
   },
   scopeLabel: {
-    backgroundColor: '#616161',
-    color: 'white',
+    backgroundColor: 'var(--colorNeutralForeground3)',
+    color: 'var(--colorNeutralBackground1)',
     padding: '4px 12px',
     borderRadius: '16px',
     fontSize: '12px',
