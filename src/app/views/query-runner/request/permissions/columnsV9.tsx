@@ -72,8 +72,9 @@ const getColumns = ({ source, tokenPresent }: ColumnProps):
     createTableColumn({
       columnId: 'value',
       renderHeaderCell: () => translateMessage('Permission'),
-      renderCell: ({item, index}) => (
-        <PermissionItem column={{ key: 'value', fieldName: 'value' }} index={index} item={item} />)
+      renderCell: ({ item, index }) => {
+        return <PermissionItem column={{ key: 'value', fieldName: 'value' }} index={index} item={item} />;
+      }
     })
   ];
 
