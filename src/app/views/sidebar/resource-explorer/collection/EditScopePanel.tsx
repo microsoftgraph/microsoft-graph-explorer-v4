@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   Dropdown,
   Label,
@@ -7,7 +6,7 @@ import {
   useId
 } from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
 import { resetSaveState, updateResourcePaths } from '../../../../services/slices/collections.slice';
 import Paths from './Paths';
