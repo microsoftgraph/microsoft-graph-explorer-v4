@@ -13,7 +13,7 @@ import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-r
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
-import { getStyleFor } from '../../../utils/http-methods.utils';
+import { getMethodColor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
@@ -37,7 +37,11 @@ const useStyles = makeStyles({
   },
   smallDropdown: {
     width: '150px'
+  },
+  methodText: {
+    color: 'var(--method-color)'
   }
+
 });
 
 const QueryInput = (props: IQueryInputProps) => {
@@ -112,11 +116,15 @@ const QueryInput = (props: IQueryInputProps) => {
             handleOnMethodChange({ key: data.optionValue, text: data.optionValue });
           }}
         >
-          {httpMethods.map(method => (
-            <Option key={method.key} value={method.key.toString()}>
-              {method.text}
-            </Option>
-          ))}
+          {httpMethods.map(method => {
+            const textColor = getMethodColor(method.key.toString());
+
+            return (
+              <Option text={method.text} key={method.key} value={method.key.toString()}>
+                <Text style={{ '--method-color': textColor } as React.CSSProperties}>{method.text}</Text>
+              </Option>
+            );
+          })}
         </Dropdown>
       </Field>
 
