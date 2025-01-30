@@ -10,8 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { IDimensions } from '../../../types/dimensions';
 import { setDimensions } from '../../services/slices/dimensions.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import { History } from './history';
-import { HistoryV9 } from './history/HistoryV9';
+import History from './history/History';
 import ResourceExplorer from './resource-explorer';
 import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
 
@@ -63,7 +62,7 @@ const SidebarV9 = ()=>{
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueriesV9 />,
     'resources': <ResourceExplorer />,
-    'history': <HistoryV9 />
+    'history': <History />
   }
   // TODO: Resizing is not showing/ hiding sidebar. Should be checked when
   // updated to v9
