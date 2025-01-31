@@ -1,12 +1,21 @@
 import {
-  INavLink, INavLinkGroup,
-  Nav} from '@fluentui/react';
-
-import { Button, SearchBox, Spinner, Switch, Label, makeStyles } from '@fluentui/react-components'
+  Button,
+  SearchBox,
+  Spinner,
+  Switch,
+  Label,
+  FlatTree,
+  FlatTreeItem,
+  TreeItemLayout,
+  CounterBadge,
+  TreeItemValue,
+  TreeOpenChangeData,
+  TreeOpenChangeEvent
+} from '@fluentui/react-components';
 import { StackShim, StackItemShim } from '@fluentui/react-migration-v8-v9';
 import { Collections20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -17,26 +26,26 @@ import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames'
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLinkV9';
 import { usePopups } from '../../../services/hooks/usePopups';
-import { useResourceExplorerStyles, useSearchBoxStyles, useSpinnerStyles, useNavStyles } from './resourceExplorerStyles';
-
+import {
+  useResourceExplorerStyles,
+  useSearchBoxStyles,
+  useSpinnerStyles
+} from './resourceExplorerStyles';
 
 const ResourceExplorer = (props: any) => {
   const { data, pending } = useAppSelector((state) => state.resources);
   const { collections } = useAppSelector((state) => state.collections);
 
-  const navStyles = useNavStyles();
   const resourceExplorerStyles = useResourceExplorerStyles();
   const searchBoxStyles = useSearchBoxStyles();
   const spinnerStyles = useSpinnerStyles();
 
   const dispatch: AppDispatch = useAppDispatch();
-  const classes = classNames(props);
-  const selectedLinks = collections  && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
+  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -44,14 +53,15 @@ const ResourceExplorer = (props: any) => {
 
   const [version, setVersion] = useState<string>(versions[0].key);
   const resourcesToUse = data?.[version]?.children
-      && Object.keys(data[version]).length > 0
+    && Object.keys(data[version]).length > 0
     ? data[version].children
     : [];
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
-  const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
+  const [items, setItems] = useState<IResourceLink[]>(navigationGroup);
   const { show: previewCollection } = usePopups('preview-collection', 'panel');
+  const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(new Set());
 
   useEffect(() => {
     setItems(navigationGroup);
@@ -79,13 +89,6 @@ const ResourceExplorer = (props: any) => {
     return debounce((event: React.ChangeEvent<HTMLInputElement>) => changeSearchValue(event), 300);
   }, []);
 
-
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
-      ev!.preventDefault();
-      item!.isExpanded = !item!.isExpanded;
-      setQuery(item!);
-  }
-
   const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
@@ -96,7 +99,7 @@ const ResourceExplorer = (props: any) => {
     }
   }
 
-  const setQuery = (resourceLink: INavLink) => {
+  const setQuery = (resourceLink: IResourceLink) => {
     const link = resourceLink as IResourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
     const resourceUrl = getUrlFromLink(link.paths);
@@ -126,6 +129,45 @@ const ResourceExplorer = (props: any) => {
       }
     })
   }
+
+  const AsideContent = ({ messageCount }: { messageCount?: number }) => (
+    <>
+      {messageCount && messageCount > 0 && (
+        <CounterBadge count={messageCount} color="informative" size="small" />
+      )}
+    </>
+  );
+
+  const handleOpenChange = (event: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
+    setOpenItems(data.openItems);
+  };
+
+  const renderTreeItems = (items: IResourceLink[], level = 1, parentValue?: string) => {
+    return items.map((item, index) => (
+      <React.Fragment key={item.key}>
+        <FlatTreeItem
+          value={item.key ?? ''}
+          itemType={item.links.length > 0 ? 'branch' : 'leaf'}
+          aria-level={level}
+          aria-setsize={items.length}
+          aria-posinset={index + 1}
+          parentValue={parentValue}
+        >
+          <TreeItemLayout
+            aside={<AsideContent messageCount={item.links.length} />}
+          >
+            <ResourceLink
+              link={item}
+              version={item.version!}
+              resourceOptionSelected={(activity: string, context: IResourceLink) =>
+                resourceOptionSelected(activity, context)}
+            />
+          </TreeItemLayout>
+        </FlatTreeItem>
+        {openItems.has(item.key) && renderTreeItems(item.links, level + 1, item.key)}
+      </React.Fragment>
+    ));
+  };
 
   if (pending) {
     return (
@@ -175,23 +217,10 @@ const ResourceExplorer = (props: any) => {
         </StackShim>
       </StackShim>
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
-        // Nav v9 currently in preview, migrate after v9 version is released
-          (<Nav
-            groups={items}
-            styles={navStyles}
-            onRenderLink={link => {
-              return <ResourceLink
-                link={link!}
-                version={version}
-                resourceOptionSelected={(activity: string, context: IResourceLink) =>
-                  resourceOptionSelected(activity, context)}
-                classes={classes}
-              />
-            }}
-            onLinkClick={clickLink}
-            className={classes.queryList} />
-          )
+        items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
+          <FlatTree aria-label="Resource Explorer" openItems={openItems} onOpenChange={handleOpenChange}>
+            {renderTreeItems(items)}
+          </FlatTree>
       }
     </section>
   );

@@ -1,5 +1,3 @@
-import { INavLinkGroup } from '@fluentui/react';
-
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
 } from '../../../../types/resources';
@@ -15,7 +13,7 @@ export function createResourcesList(
   source: IResource[],
   version: string,
   searchText?: string
-): INavLinkGroup[] {
+): IResourceLink[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
     const hasChildren = links && links.length > 0;
@@ -134,11 +132,7 @@ export function createResourcesList(
     ''
   );
 
-  return [
-    {
-      links: navLink.links
-    }
-  ];
+  return navLink.links;
 }
 
 export function generateKey(method: string | undefined, paths: string[], version: string) {
@@ -172,7 +166,7 @@ export function getCurrentTree({
   level,
   resourceItems,
   version
-}: ITreeFilter): INavLinkGroup {
+}: ITreeFilter): IResourceLink {
   let currentTree = createResourcesList(resourceItems, version)[0];
   const filters = paths.slice(1, level + 1);
   filters.forEach((key: string) => {
@@ -184,7 +178,7 @@ export function getCurrentTree({
   return currentTree;
 }
 
-function findLinkByName(list: any, filter: string): INavLinkGroup {
+function findLinkByName(list: any, filter: string): IResourceLink {
   return list.links.find((k: any) => removeCounter(k.name) === filter);
 }
 

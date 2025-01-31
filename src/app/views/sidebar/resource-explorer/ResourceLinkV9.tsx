@@ -1,5 +1,3 @@
-import {INavLink} from '@fluentui/react';
-
 import { Tooltip, Button, Badge } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
 import { useEffect } from 'react';
@@ -10,12 +8,11 @@ import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
-import { useStyles, useIconButtonStyles } from './resourceLinkStyles';
+import { useStyles } from './resourceLinkStyles';
 
 interface IResourceLinkProps {
-  link: INavLink;
+  link: IResourceLink;
   resourceOptionSelected: Function;
-  classes: any;
   version: string;
 }
 
@@ -41,7 +38,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   }
 
   const linkStyles = useStyles();
-  const iconButtonStyles = useIconButtonStyles();
 
   const openDocumentationLink = () => {
     window.open(resourceLink.docLink, '_blank');
@@ -77,7 +73,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
   return (
     <span className={linkStyles.link} tabIndex={0}>
       <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} colors={colors} />
-      <ResourceLinkCountBadge resourceLink={resourceLink} />
       <ResourceLinkActions
         resourceLink={resourceLink}
         iconButtonStyles={linkStyles}
@@ -118,14 +113,6 @@ const ResourceLinkNameContainer = ({
   )
 );
 
-const ResourceLinkCountBadge = ({ resourceLink }: { resourceLink: IResourceLink }) => (
-  resourceLink.count && resourceLink.count > 0 ? (
-    <Badge appearance='tint' color='informative' aria-label={resourceLink.count + translateMessage('Resources')}>
-      {resourceLink.count}
-    </Badge>
-  ) : null
-);
-
 const ResourceLinkActions = ({
   resourceLink,
   iconButtonStyles,
@@ -149,14 +136,15 @@ const ResourceLinkActions = ({
         }
         relationship='label'
       >
-        <Button
-          aria-label={translateMessage('Read documentation')}
-          id='documentButton'
-          aria-disabled={!resourceLink.docLink}
-          className={iconButtonStyles.root}
-          icon={<DocumentText20Regular />}
-          onClick={() => openDocumentationLink()}
-        />
+        {resourceLink.docLink ? (
+          <Button
+            aria-label={translateMessage('Read documentation')}
+            id='documentButton'
+            aria-disabled={!resourceLink.docLink}
+            className={iconButtonStyles.root}
+            icon={<DocumentText20Regular />}
+            onClick={() => openDocumentationLink()}
+          /> ) : (null)}
       </Tooltip>
     )}
     {resourceLink.isInCollection ? (
