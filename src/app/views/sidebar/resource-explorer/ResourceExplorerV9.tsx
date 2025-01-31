@@ -132,9 +132,9 @@ const ResourceExplorer = (props: any) => {
 
   const AsideContent = ({ messageCount }: { messageCount?: number }) => (
     <>
-      {messageCount && messageCount > 0 && (
+      {messageCount && messageCount > 0 ? (
         <CounterBadge count={messageCount} color="informative" size="small" />
-      )}
+      ) : null}
     </>
   );
 

@@ -144,7 +144,15 @@ const ResourceLinkActions = ({
             className={iconButtonStyles.root}
             icon={<DocumentText20Regular />}
             onClick={() => openDocumentationLink()}
-          /> ) : (null)}
+          /> ) :
+          <Button
+            disabled
+            aria-label={translateMessage('Read documentation')}
+            id='documentButton'
+            aria-disabled
+            className={iconButtonStyles.root}
+            icon={<DocumentText20Regular />}
+          />}
       </Tooltip>
     )}
     {resourceLink.isInCollection ? (
