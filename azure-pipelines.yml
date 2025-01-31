@@ -187,23 +187,23 @@ extends:
             npm install
           displayName: "npm install"
 
-        - script: |
-            npm run build
-          env:
-            REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
-            REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
-            REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
-            REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
-            REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
-            REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
-            REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
-            REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
-            REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
-          displayName: "Build static assets for staging"
+        # - script: |
+        #     npm run build
+        #   env:
+        #     REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
+        #     REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+        #     REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
+        #     REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
+        #     REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
+        #     REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
+        #     REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
+        #     REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
+        #     REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
+        #   displayName: "Build static assets for staging"
 
         - task: PowerShell@2
           displayName: "Set version-number"
-          # condition: and(succeeded(), eq(variables['isMaster'], 'true'))
+          condition: and(succeeded(), eq(variables['isMaster'], 'true'))
           inputs:
             targetType: "inline"
             script: |
