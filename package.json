@@ -109,7 +109,7 @@
                 "acorn": "8.12.1",
                 "babel-jest": "29.7.0",
                 "chromedriver": "131.0.1",
-                "eslint": "8.57.1",
+                "eslint": "9.19.0",
                 "html-webpack-plugin": "5.6.3",
                 "jest": "29.7.0",
                 "jest-canvas-mock": "2.5.2",
