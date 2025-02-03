@@ -1,13 +1,15 @@
 import { makeStyles } from '@fluentui/react-components';
+import { tokens } from '@fluentui/react-theme';
 
 export const useStyles = makeStyles({
   link: {
     display: 'flex',
-    lineHeight: 'normal',
+    lineHeight: tokens.lineHeightBase300,
     width: '100%',
     overflow: 'hidden',
     justifyContent: 'space-between',
-    marginRight: '8px',
+    alignItems: 'center',
+    marginRight: tokens.spacingHorizontalS,
     position: 'relative',
     ':hover .actions': {
       visibility: 'visible'
@@ -18,14 +20,14 @@ export const useStyles = makeStyles({
     flex: '1',
     overflow: 'hidden',
     display: 'flex',
-    marginTop: '4px',
-    paddingLeft: '4px'
+    marginTop: tokens.spacingVerticalXXS,
+    paddingLeft: tokens.spacingHorizontalXXS
   },
   resourceLinkText: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
-    marginTop: '6px'
+    marginTop: tokens.spacingVerticalXS
   },
   badge: {
     maxWidth: '50px'
@@ -39,6 +41,6 @@ export const useStyles = makeStyles({
 
 export const useIconButtonStyles = makeStyles({
   root: {
-    marginRight: '1px'
+    marginRight: tokens.spacingHorizontalXXS
   }
 });

@@ -71,17 +71,18 @@ const ResourceLink = (props: IResourceLinkProps) => {
   }
 
   return (
-    <span className={linkStyles.link} tabIndex={0}>
+    <div className={linkStyles.link}>
       <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} colors={colors} />
-      <ResourceLinkActions
-        resourceLink={resourceLink}
-        iconButtonStyles={linkStyles}
-        openDocumentationLink={openDocumentationLink}
-        handleAddToCollectionClick={handleAddToCollectionClick}
-        handleRemoveFromCollectionClick={handleRemoveFromCollectionClick}
-      />
-        &nbsp;
-    </span>
+      {resourceLink.method && (
+        <ResourceLinkActions
+          resourceLink={resourceLink}
+          iconButtonStyles={linkStyles}
+          openDocumentationLink={openDocumentationLink}
+          handleAddToCollectionClick={handleAddToCollectionClick}
+          handleRemoveFromCollectionClick={handleRemoveFromCollectionClick}
+        />
+      )}
+    </div>
   );
 }
 
@@ -143,6 +144,7 @@ const ResourceLinkActions = ({
             aria-disabled={!resourceLink.docLink}
             className={iconButtonStyles.root}
             icon={<DocumentText20Regular />}
+            appearance='transparent'
             onClick={() => openDocumentationLink()}
           /> ) :
           <Button
@@ -150,6 +152,7 @@ const ResourceLinkActions = ({
             aria-label={translateMessage('Read documentation')}
             id='documentButton'
             aria-disabled
+            appearance='transparent'
             className={iconButtonStyles.root}
             icon={<DocumentText20Regular />}
           />}
@@ -163,6 +166,7 @@ const ResourceLinkActions = ({
         <Button
           aria-label={translateMessage('Remove from collection')}
           id='removeCollectionButton'
+          appearance='transparent'
           className={iconButtonStyles.root}
           icon={<SubtractSquare20Regular />}
           onClick={handleRemoveFromCollectionClick}
@@ -177,6 +181,7 @@ const ResourceLinkActions = ({
         <Button
           aria-label={translateMessage('Add to collection')}
           id='targetButton'
+          appearance='transparent'
           aria-describedby='tooltip'
           className={iconButtonStyles.root}
           icon={<AddSquare20Regular />}

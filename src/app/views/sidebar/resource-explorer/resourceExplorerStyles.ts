@@ -1,50 +1,33 @@
 import { makeStyles } from '@fluentui/react-components';
+import { tokens } from '@fluentui/react-theme';
 
 export const useResourceExplorerStyles = makeStyles({
   apiCollectionButton: {
     width: '100%',
     padding: '8px 12px',
-    border: '1px solid',
-    borderRadius: '4px',
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadiusMedium,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'var(--color-neutral-white)',
+    backgroundColor: tokens.colorNeutralBackground1,
     textAlign: 'left',
     height: '40px',
     marginTop: '10px',
     '& .label': {
       marginLeft: '8px',
-      fontWeight: 'bold',
-      color: 'var(--color-neutral-primary)',
-      fontSize: '14px'
+      fontWeight: tokens.fontWeightSemibold,
+      color: tokens.colorNeutralForeground1,
+      fontSize: tokens.fontSizeBase200
     }
   },
   apiCollectionCount: {
-    fontSize: '14px',
-    color: 'var(--color-black)'
-  }
-});
-
-export const useNavStyles = makeStyles({
-  chevronIcon: {
-    transform: 'rotate(0deg)',
-    position: 'relative',
-    '&.collapsed': {
-      transform: 'rotate(-90deg)'
-    }
+    fontSize: tokens.fontSizeBase200,
+    color: tokens.colorNeutralForeground1
   },
-  chevronButton: {
-    '&::after': {
-      border: 'none !important',
-      borderLeft: '0px !important'
-    }
-  },
-  link: {
-    '&::after': {
-      border: 'none !important',
-      borderLeft: '0px !important'
-    }
+  tree: {
+    overflow: 'auto',
+    maxWidth: '100%'
   }
 });
 

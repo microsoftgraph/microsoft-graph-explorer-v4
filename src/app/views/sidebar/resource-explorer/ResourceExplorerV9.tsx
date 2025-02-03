@@ -89,6 +89,12 @@ const ResourceExplorer = (props: any) => {
     return debounce((event: React.ChangeEvent<HTMLInputElement>) => changeSearchValue(event), 300);
   }, []);
 
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
+    ev!.preventDefault();
+    item!.isExpanded = !item!.isExpanded;
+    setQuery(item!);
+  }
+
   const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
       addToCollection(context);
@@ -100,7 +106,7 @@ const ResourceExplorer = (props: any) => {
   }
 
   const setQuery = (resourceLink: IResourceLink) => {
-    const link = resourceLink as IResourceLink;
+    const link = resourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
     const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
@@ -152,9 +158,10 @@ const ResourceExplorer = (props: any) => {
           aria-setsize={items.length}
           aria-posinset={index + 1}
           parentValue={parentValue}
+          onClick={(ev) => clickLink(ev, item)}
         >
           <TreeItemLayout
-            aside={<AsideContent messageCount={item.links.length} />}
+            aside={item.links.length > 0 ? <AsideContent messageCount={item.links.length} /> : null}
           >
             <ResourceLink
               link={item}
@@ -218,7 +225,12 @@ const ResourceExplorer = (props: any) => {
       </StackShim>
       {
         items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
-          <FlatTree aria-label="Resource Explorer" openItems={openItems} onOpenChange={handleOpenChange}>
+          <FlatTree
+            className={resourceExplorerStyles.tree}
+            aria-label="Resource Explorer"
+            openItems={openItems}
+            onOpenChange={handleOpenChange}
+          >
             {renderTreeItems(items)}
           </FlatTree>
       }
