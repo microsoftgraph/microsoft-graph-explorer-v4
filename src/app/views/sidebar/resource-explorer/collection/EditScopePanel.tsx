@@ -91,7 +91,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           styles={{ dropdown: { width: 200 } }}
         />
       </div>
-      <div style={{ flex: 1, marginBottom: '1px',  maxHeight: '80vh' }}>
+      <div style={{ flex: 1, marginBottom: '1px'}}>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}
@@ -105,7 +105,6 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           actionsRight: {
             display: 'flex',
             justifyContent: 'flex-start',
-            padding: '5px',
             position: 'fixed',
             width: '100%',
             bottom: 0,

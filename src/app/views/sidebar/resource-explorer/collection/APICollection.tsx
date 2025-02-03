@@ -244,7 +244,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       )}
 
       {items && items.length > 0 ?
-        (<div className='container'>
+        (<div>
           <Paths
             resources={items}
             columns={columns}
