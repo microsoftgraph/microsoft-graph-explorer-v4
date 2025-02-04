@@ -1,105 +1,124 @@
-import { Checkbox, Label, TooltipHost, getId, mergeStyles } from '@fluentui/react';
-import {
-  DetailsList, DetailsListLayoutMode,
-  IColumn, Selection
-} from '@fluentui/react/lib/DetailsList';
-import { Component } from 'react';
-
+import * as React from 'react';
+import { Checkbox, Label, Tooltip, Badge } from '@fluentui/react-components';
+import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '@fluentui/react-components';
 import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
+import pathStyles from './Paths.styles';
 
 interface IPathProps {
   resources: ResourcePath[];
-  columns: IColumn[];
+  columns: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }[];
   isSelectable?: boolean;
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
 
-const scopeLabelClass = mergeStyles({
-  backgroundColor: '#616161',
-  color: 'white',
-  padding: '4px 12px',
-  borderRadius: '16px',
-  fontSize: '12px',
-  display: 'inline-block',
-  textAlign: 'center'
-});
+type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
 
-export default class Paths extends Component<IPathProps> {
-  readonly _selection: Selection | null = null;
+const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelectionChange }) => {
+  const styles = pathStyles();
+  const [selection, setSelection] = React.useState<Set<ResourcePath>>(new Set());
+  const [allSelected, setAllSelected] = React.useState(false);
 
-  constructor(props: IPathProps) {
-    super(props);
-
-    if(props.isSelectable) {
-      this._selection = new Selection({
-        onSelectionChanged: () => {
-          const selected = this._selection!.getSelection() as ResourcePath[];
-          props.onSelectionChange && props.onSelectionChange(selected);
-        }
-      });
-    }
+  const colors: Record<string, Colors> = {
+    'GET': 'brand',
+    'POST': 'success',
+    'PATCH': 'severe',
+    'DELETE': 'danger',
+    'PUT': 'warning'
   }
 
-  readonly renderCustomCheckbox = (props: any): JSX.Element => {
-    return (
-      <div style={{ pointerEvents: 'none' }}>
-        <Checkbox checked={props ? props.checked : false} />
-      </div>
-    );
+  const handleSelectionChange = (item: ResourcePath) => {
+    const newSelection = new Set(selection);
+    if (newSelection.has(item)) {
+      newSelection.delete(item);
+    } else {
+      newSelection.add(item);
+    }
+    setSelection(newSelection);
+    onSelectionChange && onSelectionChange(Array.from(newSelection));
+    setAllSelected(newSelection.size === resources.length);
   };
 
-  readonly renderItemColumn = (item: ResourcePath, index: number | undefined, column: IColumn | undefined) => {
+  const handleSelectAllChange = () => {
+    if (allSelected) {
+      setSelection(new Set());
+      onSelectionChange && onSelectionChange([]);
+    } else {
+      const newSelection = new Set(resources);
+      setSelection(newSelection);
+      onSelectionChange && onSelectionChange(Array.from(newSelection));
+    }
+    setAllSelected(!allSelected);
+  };
 
-    if (column) {
-      if (column.key === 'scope') {
-        return <Label className={scopeLabelClass}>
+  const renderItemColumn = (
+    item: ResourcePath,
+    column: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }
+  ) => {
+    if (column.key === 'scope') {
+      return (
+        <Label className={styles.scopeLabel}>
           {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
         </Label>
-      }
-      return (
-        <TooltipHost
-          tooltipProps={{
-            content: item.url
-          }}
-          id={getId()}
-          calloutProps={{ gapSpace: 0 }}
-          styles={{ root: { display: 'inline-block' } }}
-        >
-          <span
-            style={{
-              fontWeight: 'bold',
-              display: 'inline-block',
-              minWidth: '55px',
-              textTransform: 'uppercase'
-            }}
-          >
-            {item.method}
-          </span>
-          {`/${item.version}${item.url}`}
-        </TooltipHost>
       );
     }
-  }
+    if (column.key === 'url') {
+      return (
+        <Tooltip content={item.url} relationship="description" withArrow>
+          <span>
+            {item.method ? <Badge
+              className={styles.badge}
+              size='medium'
+              color={colors[item?.method]}
+              aria-label={'http method ' + item.method + ' for'}>
+              {item.method}
+            </Badge> : <span className={styles.urlMethod}> {item.method} </span>}
+            {`/${item.version}${item.url}`}
+          </span>
+        </Tooltip>
+      );
+    }
+  };
 
-  public render(): JSX.Element {
-    const { resources, columns, isSelectable } = this.props;
-    return (
-      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
-        <DetailsList
-          items={resources}
-          columns={columns}
-          setKey='set'
-          onRenderItemColumn={this.renderItemColumn}
-          layoutMode={DetailsListLayoutMode.justified}
-          selection={isSelectable ? this._selection! : undefined}
-          selectionMode={isSelectable ? 2 : 0}
-          onShouldVirtualize={() => false}
-          checkboxVisibility={isSelectable ? 1 : 0}
-          onRenderCheckbox={this.renderCustomCheckbox}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <Table className={styles.table}>
+      <TableHeader>
+        <TableRow>
+          {isSelectable && (
+            <TableHeaderCell>
+              <Checkbox
+                checked={allSelected}
+                onChange={handleSelectAllChange}
+              />
+            </TableHeaderCell>
+          )}
+          {columns.map((column) => (
+            <TableHeaderCell className={styles.tableHeader} key={column.key}>{column.name}</TableHeaderCell>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {resources.map((resource) => (
+          <TableRow key={resource.key} className={styles.row}>
+            {isSelectable && (
+              <TableCell>
+                <Checkbox
+                  checked={selection.has(resource)}
+                  onChange={() => handleSelectionChange(resource)}
+                />
+              </TableCell>
+            )}
+            {columns.map((column) => (
+              <TableCell key={column.key}>
+                {renderItemColumn(resource, column)}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default Paths;
