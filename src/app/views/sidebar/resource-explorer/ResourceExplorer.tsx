@@ -209,17 +209,21 @@ const ResourceExplorer = () => {
           </StackItemShim>
         </StackShim>
       </Button>
-      <StackShim horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
-        <Label style={{ position: 'relative' }}>
+      <StackShim
+        horizontal
+        tokens={{ childrenGap: 10, padding: 10 }}
+        horizontalAlign='space-between'
+        className={resourceExplorerStyles.stackStyles}
+      >
+        <Label weight='semibold'>
           {translateMessage('Resources available')}
         </Label>
-        <StackShim horizontal tokens={{ childrenGap: 10 }}>
+        <StackShim horizontal tokens={{ childrenGap: 10 }} className={resourceExplorerStyles.stackStyles}>
           <Switch
             onChange={changeVersion}
             labelPosition='after'
-            style={{ position: 'relative', top: '2px' }}
           />
-          <Label style={{ position: 'relative', top: '2px' }} >
+          <Label weight='semibold'>
             {translateMessage('Switch to beta')}
           </Label>
         </StackShim>
