@@ -19,6 +19,10 @@ const pathStyles = makeStyles({
     textAlign: 'center',
     width: '100%'
   },
+  badge: {
+    maxWidth: '50%',
+    marginInlineEnd: '10px'
+  },
   urlMethod: {
     fontWeight: 'bold',
     display: 'inline-block',
