@@ -118,7 +118,7 @@ const UnstyledResourceExplorer = (props: any) => {
     previewCollection({
       settings: {
         title: translateMessage('My API collection'),
-        width: 'xl'
+        width: 'lg'
       }
     })
   }
