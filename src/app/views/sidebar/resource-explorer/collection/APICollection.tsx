@@ -1,11 +1,17 @@
 import {
-  CommandBar,
-  DefaultButton,
+  Label,
+  Toolbar,
+  ToolbarButton,
+  ToolbarGroup,
   Dialog,
-  DialogFooter, DialogType, ICommandBarItemProps,
-  Label, MessageBarType, PrimaryButton
-} from '@fluentui/react';
-
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  Button
+} from '@fluentui/react-components';
+import { Delete20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -19,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { ResourcePath } from '../../../../../types/resources';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
+import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 export interface APICollection {
   version: string;
@@ -63,7 +70,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     downloadToLocal(content, filename);
     trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
   }
-
 
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
@@ -155,7 +161,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showPopup({
       settings: {
         title: translateMessage('Edit Collection'),
-        width: 'xl'
+        width: 'lg'
       }
     });
   };
@@ -164,57 +170,82 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showEditScopePanel({
       settings: {
         title: translateMessage('Edit Scope'),
-        width: 'xl'
+        width: 'lg'
       }
     });
   };
 
-  const options: ICommandBarItemProps[] = [
+  const options = [
     {
       key: 'remove',
       text: translateMessage('Edit collection'),
-      iconProps: { iconName: 'Delete' },
+      icon: <Delete20Regular />,
       disabled: items.length === 0,
       onClick: openEditCollectionPanel
     },
     {
       key: 'set-scope',
       text: translateMessage('Edit scope'),
-      iconProps: { iconName: 'Permissions' },
+      icon: <Key20Regular />,
       disabled: items.length === 0,
       onClick: openEditScopePanel
     },
     {
       key: 'upload',
       text: translateMessage('Upload a new list'),
-      iconProps: { iconName: 'Upload' },
+      icon: <ArrowUpload20Regular />,
       onClick: () => document.getElementById('file-input')?.click()
     }
   ];
 
-  const farItems: ICommandBarItemProps[] = [
+  const farItems = [
     {
       key: 'preview-permissions',
       text: translateMessage('Preview permissions'),
-      iconProps: { iconName: 'ListMirrored' },
+      icon: <List20Regular />,
       disabled: items.length === 0,
       onClick: () => viewPermissions({
         settings: {
           title: translateMessage('Preview Permissions'),
-          width: 'xl'
+          width: 'lg'
         }
       })}
   ];
 
   return (
-    <>
-      <CommandBar
-        items={options}
-        ariaLabel='Selection actions'
-        primaryGroupAriaLabel='Selection actions'
-        farItemsGroupAriaLabel='More selection actions'
-        farItems={farItems}
-      />
+    <CommonCollectionsPanel
+      primaryButtonText='Download postman collection'
+      primaryButtonAction={generateCollection}
+      primaryButtonDisabled={items.length === 0}
+      closePopup={props.dismissPopup}
+    >
+      <Toolbar aria-label='Selection actions' style={{ justifyContent: 'space-between' }}>
+        <ToolbarGroup>
+          {options.map(option => (
+            <ToolbarButton
+              key={option.key}
+              icon={option.icon}
+              disabled={option.disabled}
+              onClick={option.onClick}
+              style={{ marginInlineEnd: '30px' }}
+            >
+              {option.text}
+            </ToolbarButton>
+          ))}
+        </ToolbarGroup>
+        <ToolbarGroup>
+          {farItems.map(item => (
+            <ToolbarButton
+              key={item.key}
+              icon={item.icon}
+              disabled={item.disabled}
+              onClick={item.onClick}
+            >
+              {item.text}
+            </ToolbarButton>
+          ))}
+        </ToolbarGroup>
+      </Toolbar>
 
       <input
         key={fileInputKey}
@@ -224,26 +255,8 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         onChange={handleFileSelect}
       />
 
-      {!isDialogHidden && (
-        <Dialog
-          hidden={isDialogHidden}
-          onDismiss={() => setIsDialogHidden(true)}
-          dialogContentProps={{
-            type: DialogType.normal,
-            title: translateMessage('Upload collection'),
-            closeButtonAriaLabel: 'Close',
-            subText: translateMessage('You have an existing collection. Would you like to merge or replace it?')
-          }}
-        >
-          <DialogFooter>
-            <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Merge with existing')} />
-            <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
-          </DialogFooter>
-        </Dialog>
-      )}
-
       {items && items.length > 0 ?
-        (<div style={{ height: '80vh' }}>
+        (<div>
           <Paths
             resources={items}
             columns={columns}
@@ -251,30 +264,36 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         </div>
         ) :
         (
-          <Label
-            style={{ display: 'flex', width: '100%',
-              height: '80vh',
-              justifyContent: 'center',
-              alignItems: 'center' }}>
+          <Label style={{
+            height: '80vh',
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
-        }}>
-        <PrimaryButton onClick={generateCollection} disabled={items.length === 0}>
-          {translateMessage('Download postman collection')}
-        </PrimaryButton>
 
-        <DefaultButton
-          onClick={
-            () => props.closePopup()
-          }>
-          {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-    </>
+      <Dialog open={!isDialogHidden} onOpenChange={toggleIsDialogHidden}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>{translateMessage('Upload collection')}</DialogTitle>
+            <DialogContent>
+              {translateMessage('You have an existing collection. Would you like to merge or replace it?')}
+            </DialogContent>
+            <DialogActions>
+              <Button appearance="primary" onClick={mergeWithExistingCollection}>
+                {translateMessage('Merge with existing')}
+              </Button>
+              <Button onClick={overwriteCollection}>
+                {translateMessage('Replace existing')}
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+    </CommonCollectionsPanel>
   )
 }
 
