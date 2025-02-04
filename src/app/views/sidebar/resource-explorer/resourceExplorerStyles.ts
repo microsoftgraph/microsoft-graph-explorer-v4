@@ -28,6 +28,15 @@ export const useResourceExplorerStyles = makeStyles({
   tree: {
     overflow: 'auto',
     maxWidth: '100%'
+  },
+  treeItemLayout: {
+    width: '100%',
+    ':hover': {
+      backgroundColor: tokens.colorNeutralBackground3Hover
+    },
+    '> div.fui-TreeItemLayout__main': {
+      width: '100%'
+    }
   }
 });
 

@@ -28,7 +28,7 @@ import { searchResources } from '../../../utils/resources/resources-filter';
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
-import ResourceLink from './ResourceLinkV9';
+import ResourceLink from './ResourceLink';
 import { usePopups } from '../../../services/hooks/usePopups';
 import {
   useResourceExplorerStyles,
@@ -36,7 +36,7 @@ import {
   useSpinnerStyles
 } from './resourceExplorerStyles';
 
-const ResourceExplorer = (props: any) => {
+const ResourceExplorer = () => {
   const { data, pending } = useAppSelector((state) => state.resources);
   const { collections } = useAppSelector((state) => state.collections);
 
@@ -161,6 +161,7 @@ const ResourceExplorer = (props: any) => {
           onClick={(ev) => clickLink(ev, item)}
         >
           <TreeItemLayout
+            className={resourceExplorerStyles.treeItemLayout}
             aside={item.links.length > 0 ? <AsideContent messageCount={item.links.length} /> : null}
           >
             <ResourceLink

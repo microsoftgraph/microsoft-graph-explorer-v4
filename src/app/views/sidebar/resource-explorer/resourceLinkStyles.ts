@@ -5,7 +5,6 @@ export const useStyles = makeStyles({
   link: {
     display: 'flex',
     lineHeight: tokens.lineHeightBase300,
-    width: '100%',
     overflow: 'hidden',
     justifyContent: 'space-between',
     alignItems: 'center',
