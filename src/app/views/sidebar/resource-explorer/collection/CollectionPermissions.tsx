@@ -8,7 +8,9 @@ import {
   Label,
   Link,
   makeStyles,
-  Spinner
+  Spinner,
+  MessageBar,
+  MessageBarBody
 } from '@fluentui/react-components';
 import { FC, useEffect } from 'react';
 import { useAppSelector } from '../../../../../store';
@@ -96,20 +98,24 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
 
   return (
     <CommonCollectionsPanel
-      messageBarText={translateMessage('List of permissions')}
       primaryButtonText='Download permissions'
       primaryButtonAction={downloadPermissions}
       primaryButtonDisabled={!permissions}
       closePopup={props.dismissPopup}
     >
-      <Link
-        target='_blank'
-        rel="noopener noreferrer"
-        onClick={handleTelemetryClick}
-        href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
-      >
-        {translateMessage('Microsoft Graph permissions reference')}
-      </Link>
+      <MessageBar intent='info'>
+        <MessageBarBody>
+          {translateMessage('list of permissions')}
+          <Link
+            target='_blank'
+            rel="noopener noreferrer"
+            onClick={handleTelemetryClick}
+            href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
+          >
+            {translateMessage('Microsoft Graph permissions reference')}
+          </Link>
+        </MessageBarBody>
+      </MessageBar>
       <div className={styles.tableContainer}>
         <Table>
           <TableHeader>

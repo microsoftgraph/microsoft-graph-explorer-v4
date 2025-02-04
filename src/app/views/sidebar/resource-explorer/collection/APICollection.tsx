@@ -214,7 +214,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
 
   return (
     <CommonCollectionsPanel
-      messageBarText={translateMessage('Manage API Collections')}
       primaryButtonText='Download postman collection'
       primaryButtonAction={generateCollection}
       primaryButtonDisabled={items.length === 0}
@@ -257,7 +256,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       />
 
       {items && items.length > 0 ?
-        (<div style={{ height: '80vh' }}>
+        (<div>
           <Paths
             resources={items}
             columns={columns}

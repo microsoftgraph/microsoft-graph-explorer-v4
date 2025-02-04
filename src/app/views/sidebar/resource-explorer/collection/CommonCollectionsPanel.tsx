@@ -2,13 +2,15 @@ import {
   Button,
   DialogActions,
   makeStyles,
-  MessageBar
+  MessageBar,
+  MessageBarBody
 } from '@fluentui/react-components';
 import { ReactNode } from 'react';
 import { translateMessage } from '../../../../utils/translate-messages';
 
 interface CommonCollectionsPanelProps {
-  messageBarText: string;
+  messageBarText?: string;
+  messageBarSpanText?: string;
   primaryButtonText: string;
   primaryButtonAction: () => void;
   primaryButtonDisabled: boolean;
@@ -20,16 +22,17 @@ const useStyles = makeStyles({
   dialogFooter: {
     display: 'flex',
     justifyContent: 'start',
-    position: 'fixed',
+    position: 'sticky',
     bottom: 0,
     width: '100%',
-    zIndex: 1,
-    padding: '10px'
+    marginBlockStart: '10px',
+    zIndex: 1
   }
 });
 
 const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
   messageBarText,
+  messageBarSpanText,
   primaryButtonText,
   primaryButtonAction,
   primaryButtonDisabled,
@@ -40,9 +43,16 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
 
   return (
     <>
-      <MessageBar>
-        {translateMessage(messageBarText)}
-      </MessageBar>
+      {messageBarText ? <MessageBar intent='info'>
+        <MessageBarBody>
+          {translateMessage(messageBarText)}
+          {messageBarSpanText ? (
+            <span style={{ fontWeight: 'bold' }}>
+              {translateMessage(messageBarSpanText)}
+            </span>
+          ) : null}
+        </MessageBarBody>
+      </MessageBar> : null}
       {children}
       <DialogActions className={styles.dialogFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
