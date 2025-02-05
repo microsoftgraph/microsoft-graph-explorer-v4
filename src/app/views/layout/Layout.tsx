@@ -129,9 +129,9 @@ export const Layout = (props: LayoutProps) => {
                       handleOnEditorChange={handleOnEditorChange}
                       sampleQuery={sampleQuery}
                     />
-                    <StatusMessagesV9 />
                   </div>
                   <div id='response-area' className={layoutStyles.responseArea}>
+                    <StatusMessagesV9 />
                     <QueryResponseV9 />
                   </div>
                 </div>

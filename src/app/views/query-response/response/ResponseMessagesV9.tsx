@@ -1,6 +1,13 @@
-import { Link, MessageBar, MessageBarType } from '@fluentui/react';
 import { useState } from 'react';
 
+import {
+  Button,
+  Link,
+  MessageBar,
+  MessageBarActions,
+  MessageBarBody
+} from '@fluentui/react-components';
+import { DismissRegular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { Mode } from '../../../../types/enums';
 import { CustomBody } from '../../../../types/query-response';
@@ -20,7 +27,7 @@ function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
   const odataLinks = ['nextLink', 'deltaLink'];
   let data = null;
   if (responseBody) {
-    odataLinks.forEach(link => {
+    odataLinks.forEach((link) => {
       if (responseBody[`@odata.${link}`]) {
         data = {
           link: responseBody[`@odata.${link}`],
@@ -35,11 +42,13 @@ function getOdataLinkFromResponseBody(responseBody: any): ODataLink | null {
 export const ResponseMessagesV9 = () => {
   const dispatch = useAppDispatch();
   const messageBars = [];
-  const body = useAppSelector((state)=> state.graphResponse.response.body);
-  const headers = useAppSelector((state)=> state.graphResponse.response.headers);
-  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
-  const authToken= useAppSelector((state)=> state.auth.authToken);
-  const graphExplorerMode = useAppSelector((state)=> state.graphExplorerMode);
+  const body = useAppSelector((state) => state.graphResponse.response.body);
+  const headers = useAppSelector(
+    (state) => state.graphResponse.response.headers
+  );
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const authToken = useAppSelector((state) => state.auth.authToken);
+  const graphExplorerMode = useAppSelector((state) => state.graphExplorerMode);
   const [displayMessage, setDisplayMessage] = useState(true);
 
   const tokenPresent = !!authToken.token;
@@ -51,14 +60,15 @@ export const ResponseMessagesV9 = () => {
     query.sampleUrl = odataLink!.link;
     dispatch(setSampleQuery(query));
     dispatch(runQuery(query));
-  }
+  };
 
   // Display link to step to next result
   if (odataLink) {
     messageBars.push(
-      <MessageBar messageBarType={MessageBarType.info} key={'odataLink'}>
-        {translateMessage('This response contains an @odata property.')}: @odata.{odataLink.name}
-        <Link onClick={() => setQuery()} underline>
+      <MessageBar intent='warning' key={'odataLink'}>
+        {translateMessage('This response contains an @odata property.')}:
+        @odata.{odataLink.name}
+        <Link onClick={() => setQuery()} inline>
           &nbsp;{translateMessage('Click here to follow the link')}
         </Link>
       </MessageBar>
@@ -66,46 +76,62 @@ export const ResponseMessagesV9 = () => {
   }
 
   // Display link to download file response
-  const contentDownloadUrl = (body as CustomBody)?.contentDownloadUrl
+  const contentDownloadUrl = (body as CustomBody)?.contentDownloadUrl;
   if (contentDownloadUrl) {
     messageBars.push(
       <div key={'contentDownloadUrl'}>
-        <MessageBar messageBarType={MessageBarType.warning}>
+        <MessageBar intent='warning'>
           {translateMessage('This response contains unviewable content')}
-          <Link href={contentDownloadUrl} download underline>
+          <Link href={contentDownloadUrl} download inline>
             {translateMessage('Click to download file')}
-          </Link>&nbsp;
+          </Link>
+          &nbsp;
         </MessageBar>
       </div>
     );
   }
 
   // Show CORS compliance message
-  const throwsCorsError = (body as CustomBody)?.throwsCorsError
+  const throwsCorsError = (body as CustomBody)?.throwsCorsError;
   if (throwsCorsError) {
     messageBars.push(
       <div key={'throwsCorsError'}>
-        <MessageBar messageBarType={MessageBarType.warning}>
-          {translateMessage('Response content not available due to CORS policy')}
-          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} underline>
+        <MessageBar intent='warning'>
+          {translateMessage(
+            'Response content not available due to CORS policy'
+          )}
+          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} inline>
             {translateMessage('here')}
-          </Link>.
+          </Link>
+          .
         </MessageBar>
       </div>
     );
   }
 
-  if (body && !tokenPresent && displayMessage && graphExplorerMode === Mode.Complete) {
+  if (
+    body &&
+    !tokenPresent &&
+    displayMessage &&
+    graphExplorerMode === Mode.Complete
+  ) {
     messageBars.push(
       <div key={'displayMessage'}>
-        <MessageBar
-          messageBarType={MessageBarType.warning}
-          isMultiline={true}
-          onDismiss={() => setDisplayMessage(false)}
-          dismissButtonAriaLabel={translateMessage('Close')}
-        >
-          {translateMessage('Using demo tenant')}{' '}
-          {translateMessage('To access your own data:')}
+        <MessageBar intent='warning'>
+          <MessageBarBody>
+            {translateMessage('Using demo tenant')}{' '}
+            {translateMessage('To access your own data:')}
+          </MessageBarBody>
+          <MessageBarActions
+            containerAction={
+              <Button
+                onClick={() => setDisplayMessage(false)}
+                aria-label={translateMessage('Close')}
+                appearance='transparent'
+                icon={<DismissRegular />}
+              />
+            }
+          ></MessageBarActions>
         </MessageBar>
       </div>
     );
@@ -114,16 +140,24 @@ export const ResponseMessagesV9 = () => {
   if (contentType === 'application/json' && typeof body === 'string') {
     messageBars.push(
       <div key={'application/json'}>
-        <MessageBar
-          messageBarType={MessageBarType.info}
-          onDismiss={() => setDisplayMessage(false)}
-          dismissButtonAriaLabel={translateMessage('Close')}
-        >
-          {translateMessage('Malformed JSON body')}
+        <MessageBar intent='warning'>
+          <MessageBarBody>
+            {translateMessage('Malformed JSON body')}
+          </MessageBarBody>
+          <MessageBarActions
+            containerAction={
+              <Button
+                onClick={() => setDisplayMessage(false)}
+                aria-label={translateMessage('Close')}
+                appearance='transparent'
+                icon={<DismissRegular />}
+              />
+            }
+          ></MessageBarActions>
         </MessageBar>
       </div>
     );
   }
 
   return messageBars;
-}
+};
