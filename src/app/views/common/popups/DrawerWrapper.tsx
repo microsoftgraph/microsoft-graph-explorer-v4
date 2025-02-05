@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Suspense } from 'react';
 import {
   Drawer,
@@ -7,17 +6,28 @@ import {
   DrawerHeader,
   DrawerHeaderTitle,
   Button,
-  Spinner
+  Spinner,
+  makeStyles
 } from '@fluentui/react-components';
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons';
 
 import { translateMessage } from '../../../utils/translate-messages';
 import { WrapperProps } from './popups.types';
 
+const useDrawerStyles = makeStyles({
+  root: {
+    width: '1100px'
+  },
+  button: {
+    marginInlineEnd: '20px'
+  }
+});
+
 
 export function DrawerWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { title, renderFooter, width } = popupsProps.settings;
+  const drawerStyles = useDrawerStyles();
 
   const getDrawerSize = () => {
     switch (width) {
@@ -52,16 +62,9 @@ export function DrawerWrapper(props: WrapperProps) {
       position='end'
       type='overlay'
       size={getDrawerSize()}
+      className={drawerStyles.root}
     >
       <DrawerHeader>
-        {showBackButton && (
-          <Button
-            icon={<ArrowLeft24Regular />}
-            appearance='subtle'
-            onClick={() => dismissPopup()}
-            aria-label={translateMessage('Back')}
-          />
-        )}
         <DrawerHeaderTitle action={
           <Button
             icon={<Dismiss24Regular />}
@@ -71,6 +74,15 @@ export function DrawerWrapper(props: WrapperProps) {
           />
 
         }>
+          {showBackButton && (
+            <Button
+              icon={<ArrowLeft24Regular />}
+              appearance='subtle'
+              onClick={() => dismissPopup()}
+              aria-label={translateMessage('Back')}
+              className={drawerStyles.button}
+            />
+          )}
           {title || ''}
         </DrawerHeaderTitle>
       </DrawerHeader>
