@@ -78,7 +78,10 @@ export const Layout = (props: LayoutProps) => {
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  // NOTE: use this to show only the icons of the request and response area tabs
   const mode = useAppSelector((state) => state.graphExplorerMode);
+  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+  const showSidebar = mode === Mode.Complete && !mobileScreen
 
   const {
     handleRef: sidebarHandleRef,
@@ -104,8 +107,8 @@ export const Layout = (props: LayoutProps) => {
     setSampleBody(value!);
   };
 
-  const handleToggleSelect = (showSidebar: boolean)=> {
-    setSidebarColumnSize(showSidebar ? 100 : 0);
+  const handleToggleSelect = (toggled: boolean)=> {
+    setSidebarColumnSize(toggled ? 100 : 0);
   }
 
   const resetSidebarArea = () => {
@@ -118,7 +121,7 @@ export const Layout = (props: LayoutProps) => {
         <div className={layoutStyles.container}>
           <MainHeaderV9 />
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {mode === Mode.Complete &&
+            {showSidebar &&
             <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
               <SidebarV9 handleToggleSelect={handleToggleSelect} />
               <LayoutResizeHandler
@@ -134,7 +137,6 @@ export const Layout = (props: LayoutProps) => {
                 link={translateMessage('Banner notification 1 link')}
                 linkText={translateMessage('Banner notification 1 link text')}
               />
-              {/* TODO: handle try-it mode. Make the sidebar hidden and the main content spans all width */}
               <ValidationProvider>
                 <QueryRunner onSelectVerb={props.handleSelectVerb} />
                 <div
@@ -155,8 +157,6 @@ export const Layout = (props: LayoutProps) => {
               </ValidationProvider>
             </div>
           </div>
-
-          {/* TODO: handle mobile screen view */}
           <TermsOfUseMessageV9 />
         </div>
         <CollectionPermissionsProvider>

@@ -352,56 +352,58 @@ class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  private removeFlexBasisProperty() {
-    /*
-    flex-basis style property is added automatically when the window resizes
-    and is set to 100% leading to a distortion of the page when these exact steps are followed.
-    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
-    Removing the property altogether helps maintain the layout of the page.
-    */
+  // private removeFlexBasisProperty() {
+  //   /*
+  //   flex-basis style property is added automatically when the window resizes
+  //   and is set to 100% leading to a distortion of the page when these exact steps are followed.
+  //   https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
+  //   Removing the property altogether helps maintain the layout of the page.
+  //   */
 
-    const collection = document.getElementsByClassName('layout');
-    if (collection?.length === 0) {
-      return;
-    }
-    const element: any = collection[0];
-    element.style.removeProperty('flex-basis');
-  }
+  //   const collection = document.getElementsByClassName('layout');
+  //   if (collection?.length === 0) {
+  //     return;
+  //   }
+  //   const element: any = collection[0];
+  //   element.style.removeProperty('flex-basis');
+  // }
 
-  private removeSidebarHeightProperty() {
-    /*
-    height style property is added automatically on the sidebar when the window resizes
-    and is set to 100% leading to a distortion of the page when these exact steps are followed.
-    https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
-    Removing the property altogether helps maintain the layout of the page.
-    */
-    const collection = document.getElementsByClassName('resizable-sidebar');
-    if (collection?.length === 0) {
-      return;
-    }
-    const element: any = collection[0];
-    element.style.removeProperty('height');
-  }
+  // private removeSidebarHeightProperty() {
+  //   /*
+  //   height style property is added automatically on the sidebar when the window resizes
+  //   and is set to 100% leading to a distortion of the page when these exact steps are followed.
+  //   https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
+  //   Removing the property altogether helps maintain the layout of the page.
+  //   */
+  //   const collection = document.getElementsByClassName('resizable-sidebar');
+  //   if (collection?.length === 0) {
+  //     return;
+  //   }
+  //   const element: any = collection[0];
+  //   element.style.removeProperty('height');
+  // }
 
   public render() {
-    const classes = classNames(this.props);
+    // const classes = classNames(this.props);
     const {
-      authenticated,
-      graphExplorerMode,
-      sampleQuery,
+    // authenticated,
+    // graphExplorerMode,
+    // sampleQuery,
       sidebarProperties
     } = this.props;
-    // const { selectedVerb, mobileScreen, hideDialog, sidebarTabSelection} = this.state;
+    const { mobileScreen} = sidebarProperties;
+    console.log('mobileScreen ', mobileScreen)
+    console.log('sidebaprops ', sidebarProperties)
     // const minimised = !sidebarProperties.mobileScreen && !sidebarProperties.showSidebar;
     // const { sidebar, content } = dimensions;
 
-    const sidebarWidth = classes.sidebar;
-    const layout = '';
+    // const sidebarWidth = classes.sidebar;
+    // const layout = '';
     // let sideWidth = sidebar.width;
-    const maxWidth = '50%';
+    // const maxWidth = '50%';
     // let contentWidth = content.width;
 
-    const query = createShareLink(sampleQuery, authenticated);
+    // const query = createShareLink(sampleQuery, authenticated);
     // const { mobileScreen, showSidebar } = sidebarProperties;
 
     // const displayContent = this.shouldDisplayContent({
@@ -429,8 +431,6 @@ class App extends Component<IAppProps, IAppState> {
       'high-contrast': teamsHighContrastTheme
     };
     return (
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
           <Layout handleSelectVerb={this.handleSelectVerb} />

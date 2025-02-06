@@ -29,6 +29,9 @@ const useUpdatedEditorStyles = makeStyles({
 })
 
 const MonacoV9 = (props: MonacoProps) => {
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+  const showSidebar = mode === Mode.Complete && !mobileScreen
   const styles = useEditorStyles();
   const { onChange, language, readOnly, height } = props;
   const editorOptions: editor.IStandaloneEditorConstructionOptions = {
@@ -50,9 +53,8 @@ const MonacoV9 = (props: MonacoProps) => {
     body = formatJsonStringForAllBrowsers(body);
   }
 
-  const mode = useAppSelector((state) => state.graphExplorerMode);
   const updatedEditorStyles = useUpdatedEditorStyles()
-  const editorStyles = mode === Mode.TryIt ? updatedEditorStyles.container : styles.container;
+  const editorStyles = !showSidebar ? updatedEditorStyles.container : styles.container;
 
   return (
     <ThemeContext.Consumer>
