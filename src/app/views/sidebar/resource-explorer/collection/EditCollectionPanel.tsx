@@ -36,7 +36,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
         <span style={{ fontWeight: 'bold' }}>{translateMessage('Delete all selected')}</span>
       </MessageBar>
       {items && items.length > 0 ? (
-        <div style={{ height: '80vh' }}>
+        <div>
           <Paths
             resources={items}
             columns={columns}
@@ -45,7 +45,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
           />
         </div>
       ) : (
-        <div style={{height: '80vh'}}>
+        <div>
           <Label
             style={{
               display: 'flex',
@@ -60,7 +60,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
       )}
       <DialogFooter
         styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
+          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1 }
         }}>
         <PrimaryButton onClick={removeSelectedItems} disabled={selectedItems.length === 0}>
           {translateMessage('Delete all selected')}
