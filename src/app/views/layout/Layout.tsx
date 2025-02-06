@@ -16,8 +16,10 @@ import Request from '../query-runner/request/RequestV9';
 import { SidebarV9 } from '../sidebar/SidebarV9';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
+import { Mode } from '../../../types/enums';
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
+  graphExplorerMode: Mode;
 }
 
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
@@ -73,6 +75,7 @@ const useLayoutStyles = makeStyles({
 });
 
 export const Layout = (props: LayoutProps) => {
+  const {graphExplorerMode} = props;
   const layoutStyles = useLayoutStyles();
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
@@ -117,6 +120,7 @@ export const Layout = (props: LayoutProps) => {
           <MainHeaderV9 />
           {/* TODO: handle the graphExplorerMode */}
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+            {graphExplorerMode === Mode.Complete &&
             <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
               <SidebarV9 handleToggleSelect={handleToggleSelect} />
               <LayoutResizeHandler
@@ -124,7 +128,7 @@ export const Layout = (props: LayoutProps) => {
                 ref={sidebarHandleRef}
                 onDoubleClick={resetSidebarArea}
               />
-            </div>
+            </div>}
             <div id='main-content' className={layoutStyles.mainContent}>
               <Notification
                 header={translateMessage('Banner notification 1 header')}

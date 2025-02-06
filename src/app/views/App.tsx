@@ -7,7 +7,6 @@ import {
   webLightTheme
 } from '@fluentui/react-components';
 import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
-import { Resizable } from 're-resizable';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -25,9 +24,6 @@ import {
 } from '../../types/query-runner';
 import { ISharedQueryParams } from '../../types/share-query';
 import { ISidebarProps } from '../../types/sidebar';
-import CollectionPermissionsProvider from '../services/context/collection-permissions/CollectionPermissionsProvider';
-import { PopupsProvider } from '../services/context/popups-context';
-import { ValidationProvider } from '../services/context/validation-context/ValidationProvider';
 import { GRAPH_URL } from '../services/graph-constants';
 import { signIn, storeScopes } from '../services/slices/auth.slice';
 import { setDimensions } from '../services/slices/dimensions.slice';
@@ -37,24 +33,11 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { translateMessage } from '../utils/translate-messages';
-import { StatusMessagesV9, TermsOfUseMessageV9 } from './app-sections';
-import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
-import Notification from './common/banners/Notification';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
-import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
-// import { MainHeader } from './main-header/MainHeader';
-import { MainHeaderV9 } from './main-header/MainHeaderV9';
-// import { QueryResponse } from './query-response';
-import { QueryResponseV9 } from './query-response';
-import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
-// import { Sidebar } from './sidebar/Sidebar';
-// import { QueryResponse } from './query-response';
-import { SidebarV9 } from './sidebar/SidebarV9';
 import { Layout } from './layout/Layout';
 export interface IAppProps {
   theme?: ITheme;
@@ -76,6 +59,13 @@ export interface IAppProps {
   };
 }
 
+interface ParsedMessageCode{
+  verb: string;
+  headers: { name: string; value: string }[];
+  url: string;
+  body: string
+}
+
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
@@ -95,11 +85,6 @@ const getSystemTheme = (): string => {
 
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
-  private currentTheme: ITheme = getTheme();
-  private statusAreaMobileStyle = appStyles(this.currentTheme)
-    .statusAreaMobileScreen;
-  private statusAreaFullScreenStyle = appStyles(this.currentTheme)
-    .statusAreaFullScreen;
 
   constructor(props: IAppProps) {
     super(props);
@@ -110,12 +95,6 @@ class App extends Component<IAppProps, IAppState> {
       sidebarTabSelection: 'sample-queries'
     };
   }
-
-  private setSidebarTabSelection = (selectedTab: string) => {
-    this.setState({
-      sidebarTabSelection: selectedTab
-    });
-  };
 
   public componentDidMount = async () => {
     removeSpinners();
@@ -189,9 +168,8 @@ class App extends Component<IAppProps, IAppState> {
     return { request, method, version, graphUrl, requestBody, headers };
   }
 
-  private generateQueryObjectFrom(queryParams: any) {
-    const { request, method, version, graphUrl, requestBody, headers } =
-      queryParams;
+  private generateQueryObjectFrom(queryParams: ISharedQueryParams) {
+    const { request, method, version, graphUrl, requestBody, headers } = queryParams;
 
     if (!request) {
       return null;
@@ -202,7 +180,7 @@ class App extends Component<IAppProps, IAppState> {
       selectedVerb: method,
       selectedVersion: version,
       sampleBody: requestBody ? this.hashDecode(requestBody) : null,
-      sampleHeaders: headers ? JSON.parse(this.hashDecode(headers)) : []
+      sampleHeaders: headers ? (JSON.parse(this.hashDecode(headers)) as { name: string; value: string }[]) : []
     };
   }
 
@@ -231,7 +209,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    loadGETheme(msg.theme);
+    loadGETheme(msg.theme); // TODO: remove when done moving to fluent ui
 
     // @ts-ignore
     this.props.actions!.changeTheme(msg.theme);
@@ -252,9 +230,10 @@ class App extends Component<IAppProps, IAppState> {
     }
   };
 
+
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
-    const { verb, headers, url, body }: any = parse(msg.code);
+    const { verb, headers, url, body }: ParsedMessageCode = parse(msg.code);
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -416,11 +395,12 @@ class App extends Component<IAppProps, IAppState> {
     const {
       authenticated,
       graphExplorerMode,
-      minimised,
       sampleQuery,
       sidebarProperties,
       dimensions
-    }: any = this.props;
+    } = this.props;
+    const { selectedVerb, mobileScreen, hideDialog, sidebarTabSelection } = this.state;
+    const minimised = !sidebarProperties.mobileScreen && !sidebarProperties.showSidebar;
     const { sidebar, content } = dimensions;
 
     let sidebarWidth = classes.sidebar;
@@ -461,7 +441,7 @@ class App extends Component<IAppProps, IAppState> {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
-          <Layout handleSelectVerb={this.handleSelectVerb}/>
+          <Layout handleSelectVerb={this.handleSelectVerb} graphExplorerMode={Mode.TryIt}/>
         </ThemeContext.Provider>
       </FluentProvider>
     );
