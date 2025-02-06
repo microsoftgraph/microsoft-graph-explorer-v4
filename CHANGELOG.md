@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-06)
+
+
+### Bug Fixes
+
+* make the dialog actions responsive in collections ([#3493](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3493)) ([b285bbd](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b285bbdd4f16f91947319b4597bd7ff075ef624f))
+
 ## [10.5.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.0...v10.5.1) (2025-01-16)
 
 
