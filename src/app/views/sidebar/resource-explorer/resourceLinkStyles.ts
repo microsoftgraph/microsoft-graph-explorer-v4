@@ -19,14 +19,12 @@ export const useStyles = makeStyles({
     flex: '1',
     overflow: 'hidden',
     display: 'flex',
-    marginTop: tokens.spacingVerticalXXS,
     paddingLeft: tokens.spacingHorizontalXXS
   },
   resourceLinkText: {
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    marginTop: tokens.spacingVerticalXS
+    whiteSpace: 'nowrap'
   },
   badge: {
     maxWidth: '50px'

@@ -25,6 +25,9 @@ export const useResourceExplorerStyles = makeStyles({
     fontSize: tokens.fontSizeBase200,
     color: tokens.colorNeutralForeground1
   },
+  stackStyles: {
+    alignItems: 'center'
+  },
   tree: {
     overflow: 'auto',
     maxWidth: '100%'
