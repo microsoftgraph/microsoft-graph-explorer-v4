@@ -30,8 +30,6 @@ const useStyles = makeStyles({
 });
 
 export const GetPivotItems = () => {
-  const mode = useAppSelector((state) => state.graphExplorerMode);
-  const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const body = useAppSelector((state) => state.graphResponse.response.body);
   const styles = useStyles();
   const selected = translateMessage('Response Preview');

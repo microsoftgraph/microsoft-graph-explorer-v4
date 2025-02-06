@@ -19,7 +19,6 @@ import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { Mode } from '../../../types/enums';
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
-  graphExplorerMode: Mode;
 }
 
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
@@ -75,11 +74,11 @@ const useLayoutStyles = makeStyles({
 });
 
 export const Layout = (props: LayoutProps) => {
-  const {graphExplorerMode} = props;
   const layoutStyles = useLayoutStyles();
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const mode = useAppSelector((state) => state.graphExplorerMode);
 
   const {
     handleRef: sidebarHandleRef,
@@ -118,9 +117,8 @@ export const Layout = (props: LayoutProps) => {
       <PopupsProvider>
         <div className={layoutStyles.container}>
           <MainHeaderV9 />
-          {/* TODO: handle the graphExplorerMode */}
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {graphExplorerMode === Mode.Complete &&
+            {mode === Mode.Complete &&
             <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
               <SidebarV9 handleToggleSelect={handleToggleSelect} />
               <LayoutResizeHandler

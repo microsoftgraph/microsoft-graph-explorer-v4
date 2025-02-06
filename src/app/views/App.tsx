@@ -433,7 +433,7 @@ class App extends Component<IAppProps, IAppState> {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
-          <Layout handleSelectVerb={this.handleSelectVerb} graphExplorerMode={Mode.TryIt}/>
+          <Layout handleSelectVerb={this.handleSelectVerb} />
         </ThemeContext.Provider>
       </FluentProvider>
     );

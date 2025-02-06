@@ -12,23 +12,23 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
   const { contentType, body } = props;
 
   switch (contentType) {
-    case 'application/xml':
-      return (
-        <MonacoV9 body={formatXml(body)} language='text/html' readOnly={true} />
-      );
+  case 'application/xml':
+    return (
+      <MonacoV9 body={formatXml(body)} language='text/html' readOnly={true} />
+    );
 
-    case 'text/html':
-      return <MonacoV9 body={body} language='text/html' readOnly={true} />;
+  case 'text/html':
+    return <MonacoV9 body={body} language='text/html' readOnly={true} />;
 
-    default:
-      if (isImageResponse(contentType)) {
-        return (
-          <Image styles={{ padding: '10px' }} body={body} alt='profile image' />
-        );
-      }
+  default:
+    if (isImageResponse(contentType)) {
       return (
-        <MonacoV9 body={body} readOnly={true} language={ContentType.Json} />
+        <Image styles={{ padding: '10px' }} body={body} alt='profile image' />
       );
+    }
+    return (
+      <MonacoV9 body={body} readOnly={true} language={ContentType.Json} />
+    );
   }
 };
 

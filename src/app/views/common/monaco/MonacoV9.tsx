@@ -3,6 +3,8 @@ import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
+import { useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 
 interface MonacoProps {
   body: object | string | undefined;
@@ -19,6 +21,12 @@ const useEditorStyles = makeStyles({
     height: '95%'
   }
 });
+
+const useUpdatedEditorStyles = makeStyles({
+  container: {
+    height: '350px'
+  }
+})
 
 const MonacoV9 = (props: MonacoProps) => {
   const styles = useEditorStyles();
@@ -42,10 +50,14 @@ const MonacoV9 = (props: MonacoProps) => {
     body = formatJsonStringForAllBrowsers(body);
   }
 
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const updatedEditorStyles = useUpdatedEditorStyles()
+  const editorStyles = mode === Mode.TryIt ? updatedEditorStyles.container : styles.container;
+
   return (
     <ThemeContext.Consumer>
       {(theme) => (
-        <div id='monaco-editor' className={styles.container}>
+        <div id='monaco-editor' className={editorStyles}>
           {props.extraInfoElement}
           <Editor
             language={language ? language : 'json'}
