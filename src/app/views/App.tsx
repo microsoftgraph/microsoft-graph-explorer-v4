@@ -59,13 +59,6 @@ export interface IAppProps {
   };
 }
 
-interface ParsedMessageCode{
-  verb: string;
-  headers: { name: string; value: string }[];
-  url: string;
-  body: string
-}
-
 interface IAppState {
   selectedVerb: string;
   mobileScreen: boolean;
@@ -233,7 +226,7 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
-    const { verb, headers, url, body }: ParsedMessageCode = parse(msg.code);
+    const { verb, headers, url, body }: any = parse(msg.code);
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -396,40 +389,39 @@ class App extends Component<IAppProps, IAppState> {
       authenticated,
       graphExplorerMode,
       sampleQuery,
-      sidebarProperties,
-      dimensions
+      sidebarProperties
     } = this.props;
-    const { selectedVerb, mobileScreen, hideDialog, sidebarTabSelection } = this.state;
-    const minimised = !sidebarProperties.mobileScreen && !sidebarProperties.showSidebar;
-    const { sidebar, content } = dimensions;
+    // const { selectedVerb, mobileScreen, hideDialog, sidebarTabSelection} = this.state;
+    // const minimised = !sidebarProperties.mobileScreen && !sidebarProperties.showSidebar;
+    // const { sidebar, content } = dimensions;
 
-    let sidebarWidth = classes.sidebar;
-    let layout = '';
-    let sideWidth = sidebar.width;
-    let maxWidth = '50%';
-    let contentWidth = content.width;
+    const sidebarWidth = classes.sidebar;
+    const layout = '';
+    // let sideWidth = sidebar.width;
+    const maxWidth = '50%';
+    // let contentWidth = content.width;
 
     const query = createShareLink(sampleQuery, authenticated);
-    const { mobileScreen, showSidebar } = sidebarProperties;
+    // const { mobileScreen, showSidebar } = sidebarProperties;
 
-    const displayContent = this.shouldDisplayContent({
-      graphExplorerMode,
-      mobileScreen,
-      showSidebar
-    });
+    // const displayContent = this.shouldDisplayContent({
+    //   graphExplorerMode,
+    //   mobileScreen,
+    //   showSidebar
+    // });
 
-    if (mobileScreen) {
-      layout = sidebarWidth = 'ms-Grid-col ms-sm12';
-      sideWidth = '100%';
-      maxWidth = '100%';
-      contentWidth = '100%';
-      layout += ' layout';
-    } else if (minimised) {
-      sidebarWidth = classes.sidebarMini;
-    }
+    // if (mobileScreen) {
+    //   layout = sidebarWidth = 'ms-Grid-col ms-sm12';
+    //   sideWidth = '100%';
+    //   maxWidth = '100%';
+    //   contentWidth = '100%';
+    //   layout += ' layout';
+    // } else if (minimised) {
+    //   sidebarWidth = classes.sidebarMini;
+    // }
 
-    this.removeFlexBasisProperty();
-    this.removeSidebarHeightProperty();
+    // this.removeFlexBasisProperty();
+    // this.removeSidebarHeightProperty();
 
     const fluentV9Themes: Record<string, Theme> = {
       light: webLightTheme,
