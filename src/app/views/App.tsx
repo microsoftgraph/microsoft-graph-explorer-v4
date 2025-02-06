@@ -1,4 +1,4 @@
-import { getTheme, ITheme, styled } from '@fluentui/react';
+import { ITheme } from '@fluentui/react';
 import {
   FluentProvider,
   teamsHighContrastTheme,
@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { ApplicationState } from '../../store';
-import { componentNames, eventTypes, telemetry } from '../../telemetry';
 import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
@@ -33,12 +32,9 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { appStyles } from './App.styles';
-import { classNames } from './classnames';
-import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
-import { createShareLink } from './common/share';
-import { parse } from './query-runner/util/iframe-message-parser';
+import { parse, ParsedMessageResult } from './query-runner/util/iframe-message-parser';
 import { Layout } from './layout/Layout';
+import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -92,8 +88,6 @@ class App extends Component<IAppProps, IAppState> {
   public componentDidMount = async () => {
     removeSpinners();
     KeyboardCopyEvent();
-    this.displayToggleButton(this.mediaQueryList);
-    this.mediaQueryList.addListener(this.displayToggleButton);
 
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('sid');
@@ -101,9 +95,7 @@ class App extends Component<IAppProps, IAppState> {
     if (sessionId) {
       const authResp = await authenticationWrapper.logIn(sessionId);
       if (authResp) {
-        // @ts-ignore
         this.props.actions!.signIn(authResp.accessToken);
-        // @ts-ignore
         this.props.actions!.storeScopes(authResp.scopes);
       }
     }
@@ -132,7 +124,7 @@ class App extends Component<IAppProps, IAppState> {
     const savedTheme = localStorage.getItem('appTheme') ?? getSystemTheme();
     // @ts-ignore
     this.props.actions.changeTheme(savedTheme);
-    loadGETheme(savedTheme); // Remove when cleaning up
+    loadGETheme(savedTheme); // TODO: Remove when cleaning up
   };
 
   public handleSharedQueries() {
@@ -198,7 +190,6 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
-    this.mediaQueryList.removeListener(this.displayToggleButton);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -226,7 +217,7 @@ class App extends Component<IAppProps, IAppState> {
 
   private handleInitMsg = (msg: IInitMessage) => {
     const { actions, profile } = this.props;
-    const { verb, headers, url, body }: any = parse(msg.code);
+    const { verb, headers, url, body }: ParsedMessageResult = parse(msg.code);
     if (actions) {
       actions.setSampleQuery({
         sampleUrl: url,
@@ -244,7 +235,7 @@ class App extends Component<IAppProps, IAppState> {
     setTimeout(() => {
       if (actions) {
         const { queryVersion } = parseSampleUrl(url);
-        const requestHeaders = headers.map((header: any) => {
+        const requestHeaders = headers.map((header: { name: string, value: string }) => {
           return {
             name: Object.keys(header)[0],
             value: Object.values(header)[0]
@@ -272,159 +263,7 @@ class App extends Component<IAppProps, IAppState> {
     });
   };
 
-  public toggleSidebar = (): void => {
-    const shouldShowSidebar = this.setSidebarProperties();
-    this.changeDimensions(shouldShowSidebar ? '28%' : '4%');
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SIDEBAR_HAMBURGER_BUTTON
-    });
-  };
-
-  public displayToggleButton = (mediaQueryList: any) => {
-    const mobileScreen = mediaQueryList.matches;
-    let showSidebar = true;
-    if (mobileScreen) {
-      showSidebar = false;
-    }
-
-    const properties = {
-      mobileScreen,
-      showSidebar
-    };
-    if (showSidebar) {
-      this.changeDimensions('28%');
-    }
-
-    // @ts-ignore
-    this.props.actions!.toggleSidebar(properties);
-  };
-
-  private setSidebarProperties() {
-    const { sidebarProperties } = this.props;
-    const properties = { ...sidebarProperties };
-    const shouldShowSidebar = !properties.showSidebar;
-    properties.showSidebar = shouldShowSidebar;
-    this.props.actions!.toggleSidebar(properties);
-    return shouldShowSidebar;
-  }
-
-  private resizeSideBar(sidebarWidth: string) {
-    const breakPoint = 15;
-    const width = this.changeDimensions(sidebarWidth);
-    const { sidebarProperties } = this.props;
-    const minimised = !sidebarProperties.showSidebar;
-    if (
-      (width <= breakPoint && !minimised) ||
-      (width > breakPoint && minimised)
-    ) {
-      this.setSidebarProperties();
-    }
-  }
-
-  private changeDimensions(sidebarWidth: string): number {
-    const maxWidth = 98;
-    const width = parseFloat(sidebarWidth.replace('%', ''));
-
-    const { dimensions, actions }: any = this.props;
-    const dimensionsToUpdate = {
-      ...dimensions,
-      content: {
-        ...dimensions.content,
-        width: `${maxWidth - width}%`
-      },
-      sidebar: {
-        ...dimensions.sidebar,
-        width: `${width}%`
-      }
-    };
-    if (actions) {
-      actions.setDimensions(dimensionsToUpdate);
-    }
-    return width;
-  }
-
-  private shouldDisplayContent(parameters: any) {
-    const { graphExplorerMode, mobileScreen, showSidebar } = parameters;
-    return !(
-      graphExplorerMode === Mode.Complete &&
-      mobileScreen &&
-      showSidebar
-    );
-  }
-
-  // private removeFlexBasisProperty() {
-  //   /*
-  //   flex-basis style property is added automatically when the window resizes
-  //   and is set to 100% leading to a distortion of the page when these exact steps are followed.
-  //   https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1433#issuecomment-1036135231
-  //   Removing the property altogether helps maintain the layout of the page.
-  //   */
-
-  //   const collection = document.getElementsByClassName('layout');
-  //   if (collection?.length === 0) {
-  //     return;
-  //   }
-  //   const element: any = collection[0];
-  //   element.style.removeProperty('flex-basis');
-  // }
-
-  // private removeSidebarHeightProperty() {
-  //   /*
-  //   height style property is added automatically on the sidebar when the window resizes
-  //   and is set to 100% leading to a distortion of the page when these exact steps are followed.
-  //   https://github.com/microsoftgraph/microsoft-graph-explorer-v4/pull/1602#:~:text=Zoom
-  //   Removing the property altogether helps maintain the layout of the page.
-  //   */
-  //   const collection = document.getElementsByClassName('resizable-sidebar');
-  //   if (collection?.length === 0) {
-  //     return;
-  //   }
-  //   const element: any = collection[0];
-  //   element.style.removeProperty('height');
-  // }
-
   public render() {
-    // const classes = classNames(this.props);
-    const {
-    // authenticated,
-    // graphExplorerMode,
-    // sampleQuery,
-      sidebarProperties
-    } = this.props;
-    const { mobileScreen} = sidebarProperties;
-    console.log('mobileScreen ', mobileScreen)
-    console.log('sidebaprops ', sidebarProperties)
-    // const minimised = !sidebarProperties.mobileScreen && !sidebarProperties.showSidebar;
-    // const { sidebar, content } = dimensions;
-
-    // const sidebarWidth = classes.sidebar;
-    // const layout = '';
-    // let sideWidth = sidebar.width;
-    // const maxWidth = '50%';
-    // let contentWidth = content.width;
-
-    // const query = createShareLink(sampleQuery, authenticated);
-    // const { mobileScreen, showSidebar } = sidebarProperties;
-
-    // const displayContent = this.shouldDisplayContent({
-    //   graphExplorerMode,
-    //   mobileScreen,
-    //   showSidebar
-    // });
-
-    // if (mobileScreen) {
-    //   layout = sidebarWidth = 'ms-Grid-col ms-sm12';
-    //   sideWidth = '100%';
-    //   maxWidth = '100%';
-    //   contentWidth = '100%';
-    //   layout += ' layout';
-    // } else if (minimised) {
-    //   sidebarWidth = classes.sidebarMini;
-    // }
-
-    // this.removeFlexBasisProperty();
-    // this.removeSidebarHeightProperty();
-
     const fluentV9Themes: Record<string, Theme> = {
       light: webLightTheme,
       dark: webDarkTheme,
@@ -482,7 +321,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-const StyledApp = styled(App, appStyles as any);
-
-//@ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(StyledApp);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
