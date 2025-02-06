@@ -33,18 +33,10 @@ const useLayoutStyles = makeStyles({
     gap: tokens.spacingVerticalS
   },
   sidebar: {
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    height: '100vh',
-    padding: `0 ${tokens.spacingHorizontalS}`,
-    backgroundColor: tokens.colorNeutralBackground6,
-    borderRightStyle: 'solid',
-    borderRightColor: tokens.colorStrokeFocus2,
-    borderRightWidth: tokens.strokeWidthThin
+    flex: 1
   },
   mainContent: {
-    flex: 1,
+    flex: 3,
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingHorizontalS
@@ -93,6 +85,10 @@ export const Layout = (props: LayoutProps) => {
     setSampleBody(value!);
   };
 
+  const handleToggleSelect = (showSidebar: boolean)=> {
+    console.log('toggle select', showSidebar);
+  }
+
   return (
     <>
       <PopupsProvider>
@@ -101,15 +97,15 @@ export const Layout = (props: LayoutProps) => {
           {/* TODO: handle the graphExplorerMode */}
           <div id='content' className={layoutStyles.content}>
             {/* TODO: find better minimum and maximu values.  */}
-            <Resizable
+            {/* <Resizable
               defaultSize={{ width: '25%', height: '100vh' }}
               minWidth={'15%'}
               maxWidth={'60%'}
-            >
-              <div id='sidebar' className={layoutStyles.sidebar}>
-                <SidebarV9 />
-              </div>
-            </Resizable>
+            > */}
+            <div id='sidebar' className={layoutStyles.sidebar}>
+              <SidebarV9 handleToggleSelect={handleToggleSelect} />
+            </div>
+            {/* </Resizable> */}
             <div id='main-content' className={layoutStyles.mainContent}>
               <Notification
                 header={translateMessage('Banner notification 1 header')}
