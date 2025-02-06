@@ -1,8 +1,5 @@
-import { IDropdownOption } from '@fluentui/react';
-import { makeStyles, tokens } from '@fluentui/react-components';
-import e from 'express';
-import { Resizable } from 're-resizable';
-import { useEffect, useRef, useState } from 'react';
+import { makeResetStyles, makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider';
 import { PopupsProvider } from '../../services/context/popups-context';
@@ -10,7 +7,6 @@ import { ValidationProvider } from '../../services/context/validation-context/Va
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
-import { MonacoV9 } from '../common';
 import Notification from '../common/banners/Notification';
 import PopupsWrapper from '../common/popups/PopupsWrapper';
 import { MainHeaderV9 } from '../main-header/MainHeaderV9';
@@ -18,9 +14,17 @@ import { QueryResponseV9 } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
 import { SidebarV9 } from '../sidebar/SidebarV9';
+import { LayoutResizeHandler } from './LayoutResizeHandler';
+import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
 }
+
+const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
+
+const useLayoutResizeStyles = makeResetStyles({
+  [SIDEBAR_SIZE_CSS_VAR]: '56px'
+})
 
 const useLayoutStyles = makeStyles({
   container: {
@@ -33,10 +37,13 @@ const useLayoutStyles = makeStyles({
     gap: tokens.spacingVerticalS
   },
   sidebar: {
-    flex: 1
+    flex: '1 1 auto',
+    width: '100%',
+    flexBasis: `clamp(60px, var(${SIDEBAR_SIZE_CSS_VAR}), 100%)`,
+    position: 'relative'
   },
   mainContent: {
-    flex: 3,
+    flex: '3 1 auto',
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingHorizontalS
@@ -68,8 +75,24 @@ const useLayoutStyles = makeStyles({
 
 export const Layout = (props: LayoutProps) => {
   const layoutStyles = useLayoutStyles();
+  const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
+
+  const {
+    handleRef: sidebarHandleRef,
+    wrapperRef: sidebarWrapperRef,
+    elementRef: sidebarElementRef,
+    setValue: setSidebarColumnSize
+  } = useResizeHandle({
+    variableName: SIDEBAR_SIZE_CSS_VAR,
+    growDirection: 'end',
+    // relative: true,
+    onDragEnd: (_, { value, type }) => {
+      console.log('sidebar', value, type);
+      // props.onDragEnd(value, String(type), 'sidebar');
+    }
+  });
 
   const [sampleBody, setSampleBody] = useState('');
 
@@ -95,15 +118,20 @@ export const Layout = (props: LayoutProps) => {
         <div className={layoutStyles.container}>
           <MainHeaderV9 />
           {/* TODO: handle the graphExplorerMode */}
-          <div id='content' className={layoutStyles.content}>
+          <div id='content' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
             {/* TODO: find better minimum and maximu values.  */}
             {/* <Resizable
               defaultSize={{ width: '25%', height: '100vh' }}
               minWidth={'15%'}
               maxWidth={'60%'}
             > */}
-            <div id='sidebar' className={layoutStyles.sidebar}>
+            <div id='sidebar' className={layoutStyles.sidebar} ref={sidebarElementRef}>
               <SidebarV9 handleToggleSelect={handleToggleSelect} />
+              <LayoutResizeHandler
+                position='end'
+                ref={sidebarHandleRef}
+                // onDoubleClick={resetSidebarArea}
+              />
             </div>
             {/* </Resizable> */}
             <div id='main-content' className={layoutStyles.mainContent}>
