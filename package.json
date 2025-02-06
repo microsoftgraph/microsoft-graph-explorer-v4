@@ -73,7 +73,7 @@
                 "start": "node scripts/start.js",
                 "build": "node scripts/build.js && node versioned-build.js",
                 "test": "node scripts/test.js --no-watch --testPathIgnorePatterns=src/tests/ui src/tests/accessibility /scripts/ --max-old-space-size=8192",
-                "lint": "eslint . \"**/*.{js,ts,tsx}\"",
+                "lint": "eslint . \"**/*.{js,ts,tsx}\" --quiet",
                 "prebuild:prod": "standard-version",
                 "build:prod": "npm run build",
                 "bump": "standard-version --skip.tag --skip.changelog",

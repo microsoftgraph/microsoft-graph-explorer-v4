@@ -223,13 +223,9 @@ export const parseResponse = (response: ResponseBody): Promise<ResponseBody> => 
       return response.text();
 
     default:
-      console.log('what default response', contentType, response.headers.get('Content-Type'), response.headers.entries())
-      console.log(response)
       return Promise.resolve(response);
     }
   }
-  console.log('what response')
-  console.log(response)
   return Promise.resolve(response);
 }
 

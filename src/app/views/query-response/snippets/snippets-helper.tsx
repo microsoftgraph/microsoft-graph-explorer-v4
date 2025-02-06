@@ -130,7 +130,7 @@
 //     return (
 //       <div style={snippetCommentStyles}>
 
-//         {setCommentSymbol()} {translateMessage('Leverage libraries')} {unformattedLanguage} {translateMessage('Client library')}
+//         {setCommentSymbol()} {translateMessage('Leverage libraries
 
 //         <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
 //           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>

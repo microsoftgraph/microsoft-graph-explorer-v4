@@ -127,15 +127,17 @@ function Snippet(props: ISnippetProps) {
     return componentName || '' ;
   }
 
+  const msg = `
+  ${setCommentSymbol()} ${translateMessage('Leverage libraries')} ${unformattedLanguage}
+  ${translateMessage('Client library')}`
+
   const addExtraSnippetInformation = () : JSX.Element => {
     const currentTheme: ITheme = getTheme();
     const snippetLinkStyles = getSnippetStyles(currentTheme);
     const snippetCommentStyles = getSnippetStyles(currentTheme).snippetComments;
     return (
       <div style={snippetCommentStyles}>
-
-        {setCommentSymbol()} {translateMessage('Leverage libraries')} {unformattedLanguage} {translateMessage('Client library')}
-
+        {msg}
         <Link href={sdkDownloadLink} underline styles={snippetLinkStyles}
           onClick={(e) => trackLinkClickedEvent(sdkDownloadLink, e)} target={'_blank'} rel='noreferrer noopener'>
           {sdkDownloadLink}
