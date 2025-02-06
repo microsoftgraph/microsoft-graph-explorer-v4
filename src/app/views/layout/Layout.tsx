@@ -37,9 +37,8 @@ const useLayoutStyles = makeStyles({
     gap: tokens.spacingVerticalS
   },
   sidebar: {
-    flex: '1 1 auto',
-    width: '100%',
-    flexBasis: `clamp(60px, var(${SIDEBAR_SIZE_CSS_VAR}), 100%)`,
+    flex: '0 0 auto',
+    flexBasis: `clamp(15px, var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
     position: 'relative'
   },
   mainContent: {
@@ -86,12 +85,7 @@ export const Layout = (props: LayoutProps) => {
     setValue: setSidebarColumnSize
   } = useResizeHandle({
     variableName: SIDEBAR_SIZE_CSS_VAR,
-    growDirection: 'end',
-    // relative: true,
-    onDragEnd: (_, { value, type }) => {
-      console.log('sidebar', value, type);
-      // props.onDragEnd(value, String(type), 'sidebar');
-    }
+    growDirection: 'end'
   });
 
   const [sampleBody, setSampleBody] = useState('');
@@ -109,7 +103,11 @@ export const Layout = (props: LayoutProps) => {
   };
 
   const handleToggleSelect = (showSidebar: boolean)=> {
-    console.log('toggle select', showSidebar);
+    setSidebarColumnSize(showSidebar ? 100 : 0);
+  }
+
+  const resetSidebarArea = () => {
+    setSidebarColumnSize(56)
   }
 
   return (
@@ -118,22 +116,15 @@ export const Layout = (props: LayoutProps) => {
         <div className={layoutStyles.container}>
           <MainHeaderV9 />
           {/* TODO: handle the graphExplorerMode */}
-          <div id='content' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {/* TODO: find better minimum and maximu values.  */}
-            {/* <Resizable
-              defaultSize={{ width: '25%', height: '100vh' }}
-              minWidth={'15%'}
-              maxWidth={'60%'}
-            > */}
-            <div id='sidebar' className={layoutStyles.sidebar} ref={sidebarElementRef}>
+          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
               <SidebarV9 handleToggleSelect={handleToggleSelect} />
               <LayoutResizeHandler
                 position='end'
                 ref={sidebarHandleRef}
-                // onDoubleClick={resetSidebarArea}
+                onDoubleClick={resetSidebarArea}
               />
             </div>
-            {/* </Resizable> */}
             <div id='main-content' className={layoutStyles.mainContent}>
               <Notification
                 header={translateMessage('Banner notification 1 header')}

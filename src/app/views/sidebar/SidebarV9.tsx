@@ -6,9 +6,6 @@ import {
 } from '@fluentui/react-icons';
 
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { IDimensions } from '../../../types/dimensions';
-import { setDimensions } from '../../services/slices/dimensions.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { HistoryV9 } from './history/HistoryV9';
 import ResourceExplorer from './resource-explorer';
@@ -49,23 +46,15 @@ interface SidebarProps {
 }
 const SidebarV9 = (props: SidebarProps)=>{
   const sidebarStyles = useStyles();
-  const sidebarProps = useAppSelector(state=> state.sidebarProperties)
-  const dimensions = useAppSelector(state=> state.dimensions)
-  const dispatch = useAppDispatch()
-  const {showSidebar} = sidebarProps;
   const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value as string);
     setShowSidebarValue(true);
-    const dims = getDimensions(true, dimensions)
-    dispatch(setDimensions(dims))
   };
 
-  const [showSidebarValue, setShowSidebarValue] = useState(showSidebar);
+  const [showSidebarValue, setShowSidebarValue] = useState(true);
   const handleShow = ()=>{
-    const tempDimensions = getDimensions(!showSidebarValue, dimensions)
-    dispatch(setDimensions(tempDimensions))
     setShowSidebarValue(!showSidebarValue);
     props.handleToggleSelect(!showSidebarValue)
   }
@@ -76,21 +65,17 @@ const SidebarV9 = (props: SidebarProps)=>{
     'resources': <ResourceExplorer />,
     'history': <HistoryV9 />
   }
-  // TODO: Resizing is not showing/ hiding sidebar. Should be checked when
-  // updated to v9
 
   return (
     <div className={sidebarStyles.container}>
-      <div id="sidebar">
-        <SidebarToggle className={sidebarStyles.sidebarToggle} show={showSidebarValue} handleShow={handleShow}/>
-        <TabList
-          className={sidebarStyles.tabList}
-          selectedValue={selectedValue} onTabSelect={onTabSelect} size="large" vertical>
-          {renderTablistItems(showSidebarValue)}
-        </TabList>
-        <div>
-          {showSidebarValue && tabItems[selectedValue]}
-        </div>
+      <SidebarToggle className={sidebarStyles.sidebarToggle} show={showSidebarValue} handleShow={handleShow}/>
+      <TabList
+        className={sidebarStyles.tabList}
+        selectedValue={selectedValue} onTabSelect={onTabSelect} size="large" vertical>
+        {renderTablistItems(showSidebarValue)}
+      </TabList>
+      <div>
+        {showSidebarValue && tabItems[selectedValue]}
       </div>
     </div>
   )
@@ -114,22 +99,6 @@ const renderTablistItems = (showSidebar: boolean) =>{
       <Tab id="history" value="history" icon={<History20Regular />}></Tab>
     </>
   )
-}
-
-const getDimensions = (show: boolean, dimensions: IDimensions)=>{
-  let tempDimensions = {...dimensions}
-  if (!show){
-    tempDimensions = {
-      ...dimensions,
-      sidebar: {width: '2.85%', height: ''}
-    }
-  } else {
-    tempDimensions = {
-      ...dimensions,
-      sidebar: {width: '28%', height: ''}
-    }
-  }
-  return tempDimensions
 }
 
 export { SidebarV9 };
