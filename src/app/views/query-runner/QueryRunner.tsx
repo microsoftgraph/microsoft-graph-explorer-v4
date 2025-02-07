@@ -113,8 +113,8 @@ const QueryRunner = (props: any) => {
 
   return (
     <>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
+      <div>
+        <div>
           <QueryInput
             handleOnRunQuery={handleOnRunQuery}
             handleOnMethodChange={handleOnMethodChange}

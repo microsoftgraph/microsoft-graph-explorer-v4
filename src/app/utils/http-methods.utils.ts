@@ -1,6 +1,6 @@
 import { getTheme } from '@fluentui/react';
 
-export type SemanticTextColors =
+type BadgeColors =
   | 'brand'
   | 'danger'
   | 'important'
@@ -10,22 +10,13 @@ export type SemanticTextColors =
   | 'success'
   | 'warning';
 
-export function getMethodColor(method?: string): SemanticTextColors {
-  switch ((method || '').toUpperCase()) {
-  case 'GET':
-    return 'brand';
-  case 'POST':
-    return 'success';
-  case 'PUT':
-    return 'warning';
-  case 'PATCH':
-    return 'severe';
-  case 'DELETE':
-    return 'danger';
-  default:
-    return 'brand';
-  }
-}
+export const methodColors: Record<string, BadgeColors> = {
+  GET: 'brand',
+  POST: 'success',
+  PATCH: 'severe',
+  DELETE: 'danger',
+  PUT: 'warning'
+};
 
 export function getStyleFor(method: string) {
   const currentTheme = getTheme();

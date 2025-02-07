@@ -1,13 +1,12 @@
+import React, { useContext } from 'react';
 import {
   Dropdown,
   Field,
   Option,
-  Text,
+  Badge,
   makeStyles,
   tokens
 } from '@fluentui/react-components';
-import React, { useContext } from 'react';
-
 import { ErrorCircle12Filled } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import {
@@ -18,12 +17,12 @@ import {
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
-import { getMethodColor } from '../../../utils/http-methods.utils';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { AutoComplete } from './auto-complete';
+import { methodColors } from '../../../utils/http-methods.utils';
 
 const useStyles = makeStyles({
   container: {
@@ -37,15 +36,11 @@ const useStyles = makeStyles({
     color: 'red',
     marginTop: '4px'
   },
-  verbDropdown: {},
   smallDropdown: {
     '&.fui-Dropdown': {
       minWidth: '0',
       flex: '1'
     }
-  },
-  methodText: {
-    color: 'var(--method-color)'
   },
   autocomplete: {
     flexGrow: '1'
@@ -53,8 +48,7 @@ const useStyles = makeStyles({
 });
 
 const QueryInput = (props: IQueryInputProps) => {
-  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } =
-    props;
+  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } = props;
 
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -63,9 +57,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const authToken = useAppSelector((state) => state.auth.authToken);
   const authenticated = !!authToken.token;
-  const isLoadingData = useAppSelector(
-    (state) => state.graphResponse.isLoadingData
-  );
+  const isLoadingData = useAppSelector((state) => state.graphResponse.isLoadingData);
   const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
   const { mobileScreen } = sidebarProperties;
 
@@ -119,7 +111,6 @@ const QueryInput = (props: IQueryInputProps) => {
         <Dropdown
           placeholder='Select method'
           value={sampleQuery.selectedVerb}
-          // Combine your smallDropdown style
           className={classes.smallDropdown}
           onOptionSelect={(event, data) => {
             handleOnMethodChange({
@@ -129,19 +120,18 @@ const QueryInput = (props: IQueryInputProps) => {
           }}
         >
           {httpMethods.map((method) => {
-            const textColor = getMethodColor(method.key.toString());
+            const uppercaseKey = method.key.toString().toUpperCase();
+            const badgeColor = methodColors[uppercaseKey] || 'brand';
 
             return (
               <Option
-                text={method.text}
                 key={method.key}
                 value={method.key.toString()}
+                text={method.text}
               >
-                <Text
-                  style={{ '--method-color': textColor } as React.CSSProperties}
-                >
+                <Badge appearance='ghost' color={badgeColor}>
                   {method.text}
-                </Text>
+                </Badge>
               </Option>
             );
           })}
