@@ -1,4 +1,3 @@
-import React, { useContext } from 'react';
 import {
   Dropdown,
   Field,
@@ -7,9 +6,15 @@ import {
   makeStyles,
   tokens
 } from '@fluentui/react-components';
+import React, { useContext } from 'react';
 
+import { ErrorCircle12Filled } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
-import { IQuery, IQueryInputProps, httpMethods } from '../../../../types/query-runner';
+import {
+  IQuery,
+  IQueryInputProps,
+  httpMethods
+} from '../../../../types/query-runner';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
 import { GRAPH_API_VERSIONS } from '../../../services/graph-constants';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
@@ -19,7 +24,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { AutoComplete } from './auto-complete';
-import { ErrorCircle12Filled } from '@fluentui/react-icons';
 
 const useStyles = makeStyles({
   container: {
@@ -33,23 +37,24 @@ const useStyles = makeStyles({
     color: 'red',
     marginTop: '4px'
   },
-  verbDropdown: {
-  },
+  verbDropdown: {},
   smallDropdown: {
-    width: '150px'
+    '&.fui-Dropdown': {
+      minWidth: '0',
+      flex: '1'
+    }
   },
   methodText: {
     color: 'var(--method-color)'
+  },
+  autocomplete: {
+    flexGrow: '1'
   }
-
 });
 
 const QueryInput = (props: IQueryInputProps) => {
-  const {
-    handleOnRunQuery,
-    handleOnMethodChange,
-    handleOnVersionChange
-  } = props;
+  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } =
+    props;
 
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -58,7 +63,9 @@ const QueryInput = (props: IQueryInputProps) => {
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const authToken = useAppSelector((state) => state.auth.authToken);
   const authenticated = !!authToken.token;
-  const isLoadingData = useAppSelector((state) => state.graphResponse.isLoadingData);
+  const isLoadingData = useAppSelector(
+    (state) => state.graphResponse.isLoadingData
+  );
   const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
   const { mobileScreen } = sidebarProperties;
 
@@ -104,24 +111,37 @@ const QueryInput = (props: IQueryInputProps) => {
     >
       <Field
         validationMessageIcon={showError ? <ErrorCircle12Filled /> : null}
-        validationMessage={showError ? translateMessage('Sign in to use this method') : undefined}
+        validationMessage={
+          showError ? translateMessage('Sign in to use this method') : undefined
+        }
         validationState={showError ? 'error' : 'none'}
       >
         <Dropdown
-          placeholder="Select method"
+          placeholder='Select method'
           value={sampleQuery.selectedVerb}
           // Combine your smallDropdown style
           className={classes.smallDropdown}
           onOptionSelect={(event, data) => {
-            handleOnMethodChange({ key: data.optionValue, text: data.optionValue });
+            handleOnMethodChange({
+              key: data.optionValue,
+              text: data.optionValue
+            });
           }}
         >
-          {httpMethods.map(method => {
+          {httpMethods.map((method) => {
             const textColor = getMethodColor(method.key.toString());
 
             return (
-              <Option text={method.text} key={method.key} value={method.key.toString()}>
-                <Text style={{ '--method-color': textColor } as React.CSSProperties}>{method.text}</Text>
+              <Option
+                text={method.text}
+                key={method.key}
+                value={method.key.toString()}
+              >
+                <Text
+                  style={{ '--method-color': textColor } as React.CSSProperties}
+                >
+                  {method.text}
+                </Text>
               </Option>
             );
           })}
@@ -131,14 +151,17 @@ const QueryInput = (props: IQueryInputProps) => {
       <div>
         <Dropdown
           aria-label={translateMessage('Microsoft Graph API Version option')}
-          placeholder="Select a version"
+          placeholder='Select a version'
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
           onOptionSelect={(event, data) => {
-            handleOnVersionChange({ key: data.optionValue, text: data.optionValue });
+            handleOnVersionChange({
+              key: data.optionValue,
+              text: data.optionValue
+            });
           }}
           className={classes.smallDropdown}
         >
-          {GRAPH_API_VERSIONS.map(version => (
+          {GRAPH_API_VERSIONS.map((version) => (
             <Option key={version} value={version}>
               {version}
             </Option>
@@ -146,16 +169,13 @@ const QueryInput = (props: IQueryInputProps) => {
         </Dropdown>
       </div>
 
-      <div style={{ flexGrow: 1 }}>
-        <AutoComplete
-          contentChanged={contentChanged}
-          runQuery={runQuery}
-        />
+      <div className={classes.autocomplete}>
+        <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
       </div>
 
       <div>
         <SubmitButton
-          className="run-query-button"
+          className='run-query-button'
           text={translateMessage('Run Query')}
           disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
           handleOnClick={() => runQuery()}
