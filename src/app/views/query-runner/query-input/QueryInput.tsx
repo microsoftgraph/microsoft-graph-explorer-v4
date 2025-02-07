@@ -109,6 +109,7 @@ const QueryInput = (props: IQueryInputProps) => {
         validationState={showError ? 'error' : 'none'}
       >
         <Dropdown
+          aria-label={translateMessage('HTTP request method option')}
           placeholder='Select method'
           value={sampleQuery.selectedVerb}
           className={classes.smallDropdown}
