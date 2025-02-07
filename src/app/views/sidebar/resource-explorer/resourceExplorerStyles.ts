@@ -26,7 +26,13 @@ export const useResourceExplorerStyles = makeStyles({
     color: tokens.colorNeutralForeground1
   },
   stackStyles: {
-    alignItems: 'center'
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  versioning: {
+    display: 'flex',
+    alignItems: 'center',
   },
   tree: {
     overflow: 'auto',

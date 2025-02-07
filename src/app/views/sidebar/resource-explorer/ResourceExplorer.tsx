@@ -12,7 +12,6 @@ import {
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { StackShim, StackItemShim } from '@fluentui/react-migration-v8-v9';
 import { Collections20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -200,25 +199,13 @@ const ResourceExplorer = () => {
         aria-label={translateMessage('My API Collection')}
         className={resourceExplorerStyles.apiCollectionButton}
       >
-        {translateMessage('My API Collection')}
-        <StackShim horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
-          <StackItemShim align='auto'>
-            <div className={resourceExplorerStyles.apiCollectionCount}>
-              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
-            </div>
-          </StackItemShim>
-        </StackShim>
+        {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
       </Button>
-      <StackShim
-        horizontal
-        tokens={{ childrenGap: 10, padding: 10 }}
-        horizontalAlign='space-between'
-        className={resourceExplorerStyles.stackStyles}
-      >
+      <div className={resourceExplorerStyles.stackStyles}>
         <Label weight='semibold'>
           {translateMessage('Resources available')}
         </Label>
-        <StackShim horizontal tokens={{ childrenGap: 10 }} className={resourceExplorerStyles.stackStyles}>
+        <div className={resourceExplorerStyles.versioning}>
           <Switch
             onChange={changeVersion}
             labelPosition='after'
@@ -226,8 +213,8 @@ const ResourceExplorer = () => {
           <Label weight='semibold'>
             {translateMessage('Switch to beta')}
           </Label>
-        </StackShim>
-      </StackShim>
+        </div>
+      </div>
       {
         items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
           <FlatTree
