@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 export const popups = new Map<string, any>([
   ['share-query', lazy(() => import('../../../query-runner/query-input/share-query/ShareQuery'))],
-  ['theme-chooser', lazy(() => import('../../../main-header/settings/ThemeChooserV9'))],
+  ['theme-chooser', lazy(() => import('../../../main-header/settings/ThemeChooser'))],
   ['preview-collection', lazy(() => import('../../../sidebar/resource-explorer/collection/APICollection'))],
   ['full-permissions', lazy(() => import('../../../query-runner/request/permissions/Permissions.FullV9'))],
   ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))],
