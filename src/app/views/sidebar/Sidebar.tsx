@@ -10,9 +10,9 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { IDimensions } from '../../../types/dimensions';
 import { setDimensions } from '../../services/slices/dimensions.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import History from './history/History';
+import { History } from './history/History';
 import ResourceExplorer from './resource-explorer';
-import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
+import { SampleQueries } from './sample-queries/SampleQueries';
 
 interface IShowSidebar {
   show: boolean
@@ -36,7 +36,7 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
 
   return <Button appearance="subtle" icon={PanelIcon()} onClick={handleShow} {...props}></Button>
 }
-const SidebarV9 = ()=>{
+const Sidebar = ()=>{
   const sidebarStyles = useStyles();
   const sidebarProps = useAppSelector(state=> state.sidebarProperties)
   const dimensions = useAppSelector(state=> state.dimensions)
@@ -60,7 +60,7 @@ const SidebarV9 = ()=>{
 
   // TODO: change these to V9 components
   const tabItems: Record<string, JSX.Element> = {
-    'sample-queries': <SampleQueriesV9 />,
+    'sample-queries': <SampleQueries />,
     'resources': <ResourceExplorer />,
     'history': <History />
   }
@@ -118,5 +118,5 @@ const getDimensions = (show: boolean, dimensions: IDimensions)=>{
   return tempDimensions
 }
 
-export { SidebarV9 };
+export { Sidebar };
 

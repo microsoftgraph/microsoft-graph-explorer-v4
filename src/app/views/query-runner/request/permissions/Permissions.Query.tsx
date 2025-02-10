@@ -12,9 +12,9 @@ import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
-import { getColumns } from './columnsV9';
+import { getColumns } from './columns';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
-import permissionStyles  from './Permission.stylesV9';
+import permissionStyles  from './Permission.styles';
 
 
 export const Permissions = (): JSX.Element => {

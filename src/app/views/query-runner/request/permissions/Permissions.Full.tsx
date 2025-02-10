@@ -28,10 +28,10 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { getColumns } from './columnsV9';
+import { getColumns } from './columns';
 import { IPermission } from '../../../../../types/permissions';
 import { setConsentedStatus } from './util';
-import permissionStyles from './Permission.stylesV9';
+import permissionStyles from './Permission.styles';
 
 type Filter = 'all-permissions' | 'consented-permissions' | 'unconsented-permissions';
 

@@ -9,8 +9,8 @@ import { ADMIN_CONSENT_DOC_LINK, CONSENT_TYPE_DOC_LINK } from '../../../../servi
 import { translateMessage } from '../../../../utils/translate-messages';
 import { IPermission } from '../../../../../types/permissions';
 import { InfoRegular } from '@fluentui/react-icons';
-import PermissionItem from './PermissionItemV9';
-import permissionStyles from './Permission.stylesV9';
+import PermissionItem from './PermissionItem';
+import permissionStyles from './Permission.styles';
 
 type source = 'panel' | 'tab';
 

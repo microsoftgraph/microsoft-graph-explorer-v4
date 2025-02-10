@@ -488,3 +488,5 @@ export const History = ()=>{
     <HistoryItems history={historyItems} searchValue={searchValue} groups={groups}></HistoryItems>
   </div>
 }
+
+export default History;

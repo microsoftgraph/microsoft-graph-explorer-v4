@@ -12,7 +12,7 @@ import { getAllPrincipalGrant, getSinglePrincipalGrant } from '../../../../servi
 import { translateMessage } from '../../../../utils/translate-messages';
 import { PermissionConsentType } from './ConsentType';
 import { InfoRegular } from '@fluentui/react-icons';
-import permissionStyles from './Permission.stylesV9';
+import permissionStyles from './Permission.styles';
 
 interface PermissionItemProps {
   item: IPermission;

@@ -44,7 +44,7 @@ import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList } from '../../../utils/generate-groups';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
-import { NoResultsFoundV9 } from '../sidebar-utils/SearchResultsV9';
+import { NoResultsFound } from '../sidebar-utils/SearchResults';
 import {
   isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
 } from './sample-query-utils';
@@ -79,7 +79,7 @@ const useStyles = makeStyles({
   }
 });
 
-export const SampleQueriesV9 = () => {
+export const SampleQueries = () => {
   const sampleQueriesStyles = useStyles();
   const samples = useAppSelector((s) => s.samples);
   const { error, pending, queries } = samples;
@@ -418,7 +418,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
 
   return (
     <>
-      {sampleQueries.length=== 0 && <NoResultsFoundV9 message='No sample queries'/>}
+      {sampleQueries.length=== 0 && <NoResultsFound message='No sample queries'/>}
       <FlatTree
         openItems={openItems}
         onOpenChange={handleOpenChange}

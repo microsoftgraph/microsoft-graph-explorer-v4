@@ -1,11 +1,18 @@
-import { MessageBar, MessageBarType } from '@fluentui/react';
-
+import { MessageBar, MessageBarBody, MessageBarActions, MessageBarIntent, Button } from '@fluentui/react-components';
+import { DismissRegular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { IQuery } from '../../../types/query-runner';
 import { clearQueryStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import MessageDisplay from '../common/message-display/MessageDisplay';
+
+const intentMap: { [key: string]: MessageBarIntent } = {
+  'info': 'info',
+  'error': 'error',
+  'warning': 'warning',
+  'success': 'success'
+};
 
 const StatusMessages = () => {
   const dispatch = useAppDispatch();
@@ -21,31 +28,37 @@ const StatusMessages = () => {
   }
 
   if (queryRunnerStatus) {
-    const { messageBarType, statusText, status, duration, hint } = queryRunnerStatus; // remove when cleaning up
+    const { messageBarType, statusText, status, duration, hint } = queryRunnerStatus;  return <MessageBar
+      intent={intentMap[messageBarType]}
+      politeness='assertive'
+    >
+      <MessageBarBody>
+        <MessageDisplay message={`**${statusText} - **${status.toString()}`} onSetQuery={setQuery} />
 
-    const messageBarTypeKey = messageBarType as keyof typeof MessageBarType;
+        {duration && <>
+          {` - ${duration} ${translateMessage('milliseconds')}`}
+        </>}
 
-    return <MessageBar messageBarType={MessageBarType[messageBarTypeKey]}
-      isMultiline={true}
-      onDismiss={() => dispatch(clearQueryStatus())}
-      dismissButtonAriaLabel='Close'
-      aria-live={'assertive'}>
-      <MessageDisplay message={`**${statusText} - **${status.toString()}`} onSetQuery={setQuery} />
+        {status === 403 && <>
+          {translateMessage('consent to scopes')}
+          <span style={{ fontWeight: 600 }}>
+            {translateMessage('modify permissions')}
+          </span>
+          {translateMessage('tab')}
+        </>}
 
-      {duration && <>
-        {` - ${duration} ${translateMessage('milliseconds')}`}
-      </>}
-
-      {status === 403 && <>.
-        {translateMessage('consent to scopes')}
-        <span style={{ fontWeight: 600 }}>
-          {translateMessage('modify permissions')}
-        </span>
-        {translateMessage('tab')}
-      </>}
-
-      {hint && <div>{hint}</div>}
-
+        {hint && <div>{hint}</div>}
+      </MessageBarBody>
+      <MessageBarActions
+        containerAction={
+          <Button
+            onClick={() => dispatch(clearQueryStatus())}
+            aria-label="dismiss"
+            appearance="transparent"
+            icon={<DismissRegular />}
+          />
+        }
+      />
     </MessageBar>;
   }
   return <div />;
