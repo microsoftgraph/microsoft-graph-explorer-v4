@@ -167,23 +167,20 @@ export function getCurrentTree({
   resourceItems,
   version
 }: ITreeFilter): IResourceLink {
-  let currentTree = createResourcesList(resourceItems, version)[0];
+  const currentTree = createResourcesList(resourceItems, version)[0];
   const filters = paths.slice(1, level + 1);
+  const currentPaths = ['/'];
   filters.forEach((key: string) => {
-    const linkedKey = findLinkByName(currentTree, key);
-    if (linkedKey) {
-      currentTree = linkedKey;
+    if (key) {
+      currentPaths.push(key);
+    } else {
+      throw new Error(`Path segment "${key}" not found in the current tree.`);
     }
   });
+
+  currentTree.paths = currentPaths;
   return currentTree;
-}
 
-function findLinkByName(list: any, filter: string): IResourceLink {
-  return list.links.find((k: any) => removeCounter(k.name) === filter);
-}
-
-export function removeCounter(title: string): string {
-  return title.split(' (')[0].trim();
 }
 
 export function getAvailableMethods(
