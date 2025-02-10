@@ -20,14 +20,15 @@ export function DialogWrapper(props: WrapperProps) {
       <DialogSurface>
         <DialogBody>
           <DialogTitle>{title?.toString()}</DialogTitle>
-          <DialogContent>{subtitle?.toString()}</DialogContent>
           <Suspense fallback={<Spinner />}>
-            <Component
-              {...popupsProps}
-              data={popupsProps.data || {}}
-              dismissPopup={() => dismissPopup()}
-              closePopup={(e: any) => closePopup(e)}
-            />
+            <DialogContent>{subtitle?.toString()}
+              <Component
+                {...popupsProps}
+                data={popupsProps.data || {}}
+                dismissPopup={() => dismissPopup()}
+                closePopup={(e: any) => closePopup(e)}
+              />
+            </DialogContent>
             {popupsProps.settings.renderFooter && (
               <DialogActions>{popupsProps.settings.renderFooter()}</DialogActions>
             )}
