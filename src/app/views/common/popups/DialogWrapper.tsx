@@ -16,10 +16,10 @@ export function DialogWrapper(props: WrapperProps) {
   const { settings: { title, subtitle } } = popupsProps;
 
   return (
-    <Dialog open={isOpen} onOpenChange={(_, data) => !data.open && dismissPopup()}>
+    <Dialog modalType='non-modal' open={isOpen} onOpenChange={(_, data) => !data.open && dismissPopup()}>
       <DialogSurface>
         <DialogBody>
-          <DialogTitle>{title?.toString()}</DialogTitle>
+          {title && <DialogTitle>{title.toString()}</DialogTitle>}
           <Suspense fallback={<Spinner />}>
             <DialogContent>{subtitle?.toString()}
               <Component

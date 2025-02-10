@@ -1,54 +1,35 @@
 import {
-  DirectionalHint, getId,
-  getTheme, IconButton, IContextualMenuProps, TooltipHost
-} from '@fluentui/react';
-import { useEffect, useState } from 'react';
+  Button, Menu, MenuItem, MenuItemLink, MenuList, MenuPopover, MenuTrigger, Tooltip
+} from '@fluentui/react-components'
+import { Color20Regular, Settings20Regular, WindowDevTools20Regular } from '@fluentui/react-icons'
 
-import { geLocale } from '../../../../appLocale';
-import { useAppSelector } from '../../../../store';
-import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
-import { ISettingsProps } from '../../../../types/settings';
-import { usePopups } from '../../../services/hooks';
-import '../../../utils/string-operations';
-import { translateMessage } from '../../../utils/translate-messages';
-import { mainHeaderStyles } from '../MainHeader.styles';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry'
+import { usePopups } from '../../../services/hooks'
+import { translateMessage } from '../../../utils/translate-messages'
+import { useHeaderStyles } from '../utils'
 
-export const Settings: React.FunctionComponent<ISettingsProps> = () => {
-  const auth = useAppSelector((state)=> state.auth)
-  const authToken = auth.authToken;
-  const authenticated = authToken.token;
-  const [items, setItems] = useState([]);
-  const currentTheme = getTheme();
-  const { show: showThemeChooser } = usePopups('theme-chooser', 'dialog');
+const officeLink = 'https://developer.microsoft.com/office/dev-program'
 
-  useEffect(() => {
-    const menuItems: any = [
-      {
-        key: 'change-theme',
-        text: translateMessage('Change theme'),
-        iconProps: {
-          iconName: 'Color'
-        },
-        onClick: () => toggleThemeChooserDialogState()
-      },
-      {
-        key: 'office-dev-program',
-        text: translateMessage('Office Dev Program'),
-        href: `https://developer.microsoft.com/${geLocale}/office/dev-program`,
-        target: '_blank',
-        iconProps: {
-          iconName: 'CommandPrompt'
-        },
-        onClick: () => trackOfficeDevProgramLinkClickEvent()
-      }
-    ];
-    setItems(menuItems);
-  }, [authenticated]);
+const trackSettingsButtonClickEvent = () => {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    ComponentName: componentNames.SETTINGS_BUTTON
+  });
+}
 
+const trackOfficeDevProgramLinkClickEvent = () => {
+  telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
+    ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
+  });
+};
+
+const Settings = ()=>{
+  const styles = useHeaderStyles();
+  const {show: showThemeChooser} = usePopups('theme-chooser', 'dialog')
   const toggleThemeChooserDialogState = () => {
     showThemeChooser({
       settings: {
-        title: translateMessage('Change theme')
+        title: translateMessage('Change theme'),
+        width: 'xl'
       }
     });
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
@@ -56,60 +37,31 @@ export const Settings: React.FunctionComponent<ISettingsProps> = () => {
     });
   };
 
-  const trackOfficeDevProgramLinkClickEvent = () => {
-    telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, {
-      ComponentName: componentNames.OFFICE_DEV_PROGRAM_LINK
-    });
-  };
-
-  const trackSettingsButtonClickEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.SETTINGS_BUTTON
-    });
-  }
-
-  const calloutStyles: React.CSSProperties = {
-    overflowY: 'hidden'
-  }
-
-  const { iconButton: settingsButtonStyles, settingsContainerStyles,
-    tooltipStyles } = mainHeaderStyles(currentTheme);
-
-  const menuProperties: IContextualMenuProps = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items,
-    directionalHint: DirectionalHint.bottomLeftEdge,
-    directionalHintFixed: true,
-    calloutProps: {
-      style: calloutStyles
-    },
-    styles: { container: { border: '1px solid' + currentTheme.palette.neutralTertiary } }
-  };
-
   return (
-    <div style={settingsContainerStyles}>
-      <TooltipHost
-        content={
-          <div style={{ padding: '3px' }}>
-            {translateMessage('Settings')}
-          </div>
-        }
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
-        styles={tooltipStyles}
-      >
-        <IconButton
-          ariaLabel={translateMessage('Settings')}
-          role='button'
-          styles={settingsButtonStyles}
-          menuIconProps={{ iconName: 'Settings' }}
-          menuProps={menuProperties}
-          onMenuClick={trackSettingsButtonClickEvent}
-        />
-      </TooltipHost>
-    </div>
-  );
+    <Menu>
+      <Tooltip content={translateMessage('Settings')} relationship="description">
+        <MenuTrigger disableButtonEnhancement>
+          <Button
+            onClick={trackSettingsButtonClickEvent}
+            className={styles.iconButton} appearance="subtle" icon={<Settings20Regular />} />
+        </MenuTrigger>
+      </Tooltip>
+
+      <MenuPopover>
+        <MenuList>
+          <MenuItem
+            icon={<Color20Regular />}
+            onClick={toggleThemeChooserDialogState}>{translateMessage('Change theme')}</MenuItem>
+          <MenuItemLink
+            as='a'
+            href={officeLink} target="_blank"
+            onClick={trackOfficeDevProgramLinkClickEvent}
+            icon={<WindowDevTools20Regular />}>{translateMessage('Office Dev Program')}</MenuItemLink>
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  )
 }
 
+export { Settings }
 
