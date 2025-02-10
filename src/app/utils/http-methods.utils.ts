@@ -1,4 +1,4 @@
-import { getTheme } from '@fluentui/react';
+import { tokens } from '@fluentui/react-components';
 
 type BadgeColors =
   | 'brand'
@@ -19,26 +19,14 @@ export const methodColors: Record<string, BadgeColors> = {
 };
 
 export function getStyleFor(method: string) {
-  const currentTheme = getTheme();
   method = method?.toUpperCase();
+  const styles: Record<string, string> = {
+    GET: tokens.colorBrandBackground,
+    POST: tokens.colorStatusSuccessForeground1,
+    PUT: tokens.colorStatusWarningForeground2,
+    PATCH: tokens.colorStatusWarningForeground3,
+    DELETE: tokens.colorStatusDangerForeground1
+  };
 
-  switch (method) {
-  case 'GET':
-    return currentTheme.palette.blue;
-
-  case 'POST':
-    return currentTheme.palette.green;
-
-  case 'PUT':
-    return currentTheme.palette.magentaDark;
-
-  case 'PATCH':
-    return currentTheme.palette.orange;
-
-  case 'DELETE':
-    return currentTheme.palette.redDark;
-
-  default:
-    return currentTheme.palette.orangeLight;
-  }
+  return styles[method] || tokens.colorNeutralForeground1;
 }

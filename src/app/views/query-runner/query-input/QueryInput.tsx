@@ -22,7 +22,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 import SubmitButton from '../../../views/common/submit-button/SubmitButton';
 import { shouldRunQuery } from '../../sidebar/sample-queries/sample-query-utils';
 import { AutoComplete } from './auto-complete';
-import { methodColors } from '../../../utils/http-methods.utils';
+import { methodColors, getStyleFor } from '../../../utils/http-methods.utils';
 
 const useStyles = makeStyles({
   container: {
@@ -94,6 +94,10 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnRunQuery(query);
   };
 
+  // Compute the selected badge color for the method dropdown
+  const selectedMethod = sampleQuery.selectedVerb;
+  const selectedBadgeColor = getStyleFor(selectedMethod);
+
   return (
     <div
       className={classes.container}
@@ -113,6 +117,7 @@ const QueryInput = (props: IQueryInputProps) => {
           placeholder='Select method'
           value={sampleQuery.selectedVerb}
           className={classes.smallDropdown}
+          button={{ style: { color: selectedBadgeColor } }}
           onOptionSelect={(event, data) => {
             handleOnMethodChange({
               key: data.optionValue,
