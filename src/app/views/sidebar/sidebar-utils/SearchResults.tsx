@@ -5,6 +5,6 @@ import { translateMessage } from '../../../utils/translate-messages';
 interface LabelMessage {
   message: string
 }
-export const NoResultsFoundV9 = (props: LabelProps & LabelMessage ) => (
+export const NoResultsFound = (props: LabelProps & LabelMessage ) => (
   <Label {...props}>{translateMessage(props.message)}</Label>
 );

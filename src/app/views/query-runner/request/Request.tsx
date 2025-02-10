@@ -1,8 +1,3 @@
-import {
-  FontSizes,
-  Pivot,
-  PivotItem
-} from '@fluentui/react';
 import { Resizable } from 're-resizable';
 import { CSSProperties, useEffect, useState } from 'react';
 
@@ -16,131 +11,60 @@ import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/comp
 import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
+import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 
-interface IRequestProps {
-  handleOnEditorChange: ()=> void
-  sampleQuery: IQuery
-}
+
+  interface IRequestProps {
+    handleOnEditorChange: () => void
+    sampleQuery: IQuery
+  }
+
+const useStyles = makeStyles({
+  resizable: {
+    width: '100%'
+  },
+  tabList: {
+    paddingBottom: '4px',
+    marginBottom: '8px'
+  },
+  tab: {
+    fontWeight: 'bold',
+    padding: '8px 16px',
+    borderBottom: '2px solid transparent'
+  }
+});
 
 const Request = (props: IRequestProps) => {
+  const styles = useStyles();
   const dispatch = useAppDispatch();
-  const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const mode = useAppSelector((state)=> state.graphExplorerMode);
-  const dimensions= useAppSelector((state)=> state.dimensions);
-  const sidebarProperties = useAppSelector((state)=> state.sidebarProperties);
-  const pivot = selectedPivot.replace('.$', '');
+  const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const dimensions = useAppSelector((state) => state.dimensions);
+  const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
   const minHeight = 60;
   const maxHeight = 800;
 
-  const {
-    handleOnEditorChange,
-    sampleQuery
-  }: IRequestProps = props;
+  const { handleOnEditorChange, sampleQuery }: IRequestProps = props;
+  const newHeight = convertVhToPx(dimensions.request.height, 55);
+  const containerStyle: CSSProperties = {
+    height: newHeight,
+    overflow: 'hidden',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    padding: '8px'
+  }
 
   useEffect(() => {
-    if(sidebarProperties && sidebarProperties.mobileScreen){
+    if (sidebarProperties && sidebarProperties.mobileScreen) {
       window.addEventListener('resize', resizeHandler);
-    }
-    else{
+    } else {
       window.removeEventListener('resize', resizeHandler);
     }
-  }, [sidebarProperties.mobileScreen])
+  }, [sidebarProperties.mobileScreen]);
 
-  const getPivotItems = (height: string) => {
-
-    const heightAdjustment = 55;
-    const containerStyle: CSSProperties = {
-      height: convertVhToPx(height, heightAdjustment),
-      overflowY: 'hidden',
-      overflowX: 'hidden',
-      borderBottom: '1px solid #ddd'
-    };
-
-    const pivotItems = [
-      <PivotItem
-        key='request-body'
-        itemIcon='Send'
-        itemKey='request-body' // To be used to construct component name for telemetry data
-        ariaLabel={translateMessage('request body')}
-        headerText={translateMessage('request body')}
-        title={translateMessage('request body')}
-        headerButtonProps={{
-          'aria-controls': 'request-body-tab'
-        }}
-      >
-        <div style={containerStyle} id={'request-body-tab'} tabIndex={0}>
-          <RequestBody handleOnEditorChange={handleOnEditorChange} />
-        </div>
-      </PivotItem>,
-      <PivotItem
-        key='request-headers'
-        itemIcon='FileComment'
-        itemKey='request-headers'
-        ariaLabel={translateMessage('request header')}
-        headerText={translateMessage('request header')}
-        title={translateMessage('request header')}
-        headerButtonProps={{
-          'aria-controls': 'request-header-tab'
-        }}
-      >
-        <div style={containerStyle} id={'request-header-tab'} tabIndex={0}>
-          <RequestHeaders />
-        </div>
-      </PivotItem>,
-      <PivotItem
-        key='modify-permissions'
-        itemIcon='AzureKeyVault'
-        itemKey='modify-permissions'
-        ariaLabel={translateMessage('modify permissions')}
-        headerText={translateMessage('modify permissions')}
-        title={translateMessage('modify permissions')}
-        headerButtonProps={{
-          'aria-controls': 'permission-tab'
-        }}
-      >
-        <div style={containerStyle} id={'permission-tab'} tabIndex={0}>
-          <Permissions />
-        </div>
-      </PivotItem>
-    ];
-    if (mode === Mode.Complete) {
-      pivotItems.push(
-        <PivotItem
-          key='access-token'
-          itemIcon='AuthenticatorApp'
-          itemKey='access-token'
-          ariaLabel={translateMessage('Access Token')}
-          headerText={translateMessage('Access Token')}
-          title={translateMessage('Access Token')}
-          headerButtonProps={{
-            'aria-controls': 'access-token-tab'
-          }}>
-          <div style={containerStyle} id={'access-token-tab'} tabIndex={0}>
-            <Auth />
-          </div>
-        </PivotItem>
-      );
-    }
-
-    return pivotItems;
-  }
-
-  const requestPivotItems = getPivotItems(dimensions.request.height);
-
-  const handlePivotItemClick = (pivotItem?: PivotItem) => {
-    if (!pivotItem) {
-      return;
-    }
-    onPivotItemClick(pivotItem);
-    setSelectedPivot(pivotItem.props.itemKey!);
-  }
-
-  const onPivotItemClick = (item?: PivotItem) => {
-    if (!item) { return; }
-    const tabKey = item.props.itemKey;
-    if (tabKey) {
-      telemetry.trackTabClickEvent(tabKey, sampleQuery);
-    }
+  const handleTabSelect = (tab: TabValue) => {
+    setSelectedTab(tab);
+    telemetry.trackTabClickEvent(tab as string, sampleQuery);
   };
 
   const setRequestAndResponseHeights = (requestHeight: string) => {
@@ -163,57 +87,66 @@ const Request = (props: IRequestProps) => {
     dispatch(setDimensions(dimensionsToUpdate));
   };
 
-
-  // Resizable element does not update it's size when the browser window is resized.
-  // This is a workaround to reset the height
   const resizeHandler = () => {
     const resizable = document.getElementsByClassName('request-resizable');
     if (resizable && resizable.length > 0) {
       const resizableElement = resizable[0] as HTMLElement;
-      if(resizableElement && resizableElement.style && resizableElement.style.height){
+      if (resizableElement && resizableElement.style && resizableElement.style.height) {
         resizableElement.style.height = '';
       }
     }
-  }
+  };
 
   return (
-    <>
-      <Resizable
-        style={{
-          border: 'solid 1px #ddd'
-        }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
-        maxHeight={maxHeight}
-        minHeight={minHeight}
-        bounds={'window'}
-        size={{
-          height: 'inherit',
-          width: '100%'
-        }}
-        enable={{
-          bottom: true
-        }}
-        className='request-resizable'
-      >
-        <div className='query-request'>
-          <Pivot
-            overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More request area items')}
-            onLinkClick={handlePivotItemClick}
-            className='pivot-request'
-            selectedKey={pivot}
-            styles={{ text: { fontSize: FontSizes.size14 }}}
-          >
-            {requestPivotItems}
-          </Pivot>
+    <Resizable
+      className={styles.resizable}
+      onResize={(e: any, direction: any, ref: any) => {
+        if (ref && ref.style && ref.style.height) {
+          setRequestAndResponseHeights(ref.style.height);
+        }
+      }}
+      maxHeight={maxHeight}
+      minHeight={minHeight}
+      bounds={'window'}
+      size={{
+        height: 'inherit',
+        width: '100%'
+      }}
+      enable={{
+        bottom: true
+      }}
+    >
+      <div className="query-request">
+        <TabList
+          selectedValue={selectedTab}
+          onTabSelect={(_, data) => handleTabSelect(data.value)}
+          className={styles.tabList}
+        >
+          <Tab value="request-body" className={styles.tab} aria-label={translateMessage('request body')}>
+            {translateMessage('Request Body')}
+          </Tab>
+          <Tab value="request-headers" className={styles.tab} aria-label={translateMessage('request header')}>
+            {translateMessage('Request Headers')}
+          </Tab>
+          <Tab value="modify-permissions" className={styles.tab} aria-label={translateMessage('modify permissions')}>
+            {translateMessage('Modify Permissions')}
+          </Tab>
+          {mode === Mode.Complete && (
+            <Tab value="access-token" className={styles.tab} aria-label={translateMessage('Access Token')}>
+              {translateMessage('Access Token')}
+            </Tab>
+          )}
+        </TabList>
+
+        <div style={containerStyle}>
+          {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
+          {selectedTab === 'request-headers' && <RequestHeaders />}
+          {selectedTab === 'modify-permissions' && <Permissions />}
+          {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
         </div>
-      </Resizable>
-    </>
+      </div>
+    </Resizable>
   );
-}
+};
 
 export default Request;

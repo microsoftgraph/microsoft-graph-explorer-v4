@@ -1,7 +1,7 @@
-import StatusMessagesV9 from './StatusMessagesV9';
-import TermsOfUseMessageV9 from './TermsOfUseMessageV9';
+import StatusMessages from './StatusMessages';
+import TermsOfUseMessage from './TermsOfUseMessage';
 
 export {
-  StatusMessagesV9,
-  TermsOfUseMessageV9
+  StatusMessages,
+  TermsOfUseMessage
 };

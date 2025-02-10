@@ -27,22 +27,20 @@ import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 import { changeTheme } from '../services/slices/theme.slice';
 import { parseSampleUrl } from '../utils/sample-url-generation';
 import { substituteTokens } from '../utils/token-helpers';
-import { headerMessagingV9 } from './app-sections/HeaderMessagingV9';
+import { headerMessaging } from './app-sections/HeaderMessaging';
 import { translateMessage } from '../utils/translate-messages';
-import { StatusMessagesV9, TermsOfUseMessageV9 } from './app-sections';
+import { StatusMessages, TermsOfUseMessage } from './app-sections';
 import { appStyles } from './App.styles';
 import { classNames } from './classnames';
 import Notification from './common/banners/Notification';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
 import PopupsWrapper from './common/popups/PopupsWrapper';
 import { createShareLink } from './common/share';
-// import { MainHeader } from './main-header/MainHeader';
-import { MainHeaderV9 } from './main-header/MainHeaderV9';
+import { MainHeader } from './main-header/MainHeader';
 import { QueryResponse } from './query-response';
 import { QueryRunner } from './query-runner';
 import { parse } from './query-runner/util/iframe-message-parser';
-// import { Sidebar } from './sidebar/Sidebar';
-import { SidebarV9 } from './sidebar/SidebarV9';
+import { Sidebar } from './sidebar/Sidebar';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -445,7 +443,7 @@ class App extends Component<IAppProps, IAppState> {
                 }
               /> */}
 
-              <MainHeaderV9 />
+              <MainHeader />
               <div className={`ms-Grid-row ${classes.appRow}`} style={{
                 flexWrap: mobileScreen && 'wrap',
                 marginRight: showSidebar || (graphExplorerMode === Mode.TryIt) && '-20px',
@@ -477,11 +475,11 @@ class App extends Component<IAppProps, IAppState> {
                       setSidebarTabSelection={this.setSidebarTabSelection} showSidebar={showSidebar}
                       toggleSidebar={this.toggleSidebar}
                       mobileScreen={mobileScreen} /> */}
-                    <SidebarV9/>
+                    <Sidebar/>
                   </Resizable>
                 )}
                 {graphExplorerMode === Mode.TryIt &&
-                headerMessagingV9(query)}
+                headerMessaging(query)}
 
                 {displayContent && (
                   <Resizable
@@ -515,7 +513,7 @@ class App extends Component<IAppProps, IAppState> {
                         display: 'flex', flexDirection: 'column', alignItems: 'stretch', flex: 1
                       }}>
                         <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                          <StatusMessagesV9 />
+                          <StatusMessages />
                         </div>
                         <QueryResponse />
                       </div>
@@ -524,7 +522,7 @@ class App extends Component<IAppProps, IAppState> {
                 )}
               </div>
               <div style={mobileScreen ? this.statusAreaMobileStyle : this.statusAreaFullScreenStyle}>
-                <TermsOfUseMessageV9 />
+                <TermsOfUseMessage />
               </div>
             </div>
             <CollectionPermissionsProvider>

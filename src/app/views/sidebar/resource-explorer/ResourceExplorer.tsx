@@ -25,7 +25,7 @@ import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { translateMessage } from '../../../utils/translate-messages';
-import { NoResultsFound } from '../sidebar-utils/SearchResult';
+import { NoResultsFound } from '../sidebar-utils/SearchResults';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { usePopups } from '../../../services/hooks/usePopups';
@@ -216,7 +216,7 @@ const ResourceExplorer = () => {
         </div>
       </div>
       {
-        items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
+        items.length === 0 ? <NoResultsFound message='No resources found' /> :
           <FlatTree
             className={resourceExplorerStyles.tree}
             aria-label="Resource Explorer"

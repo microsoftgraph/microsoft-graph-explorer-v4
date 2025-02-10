@@ -432,7 +432,7 @@ const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
 }
 
 
-const History = ()=>{
+export const History = ()=>{
   const styles = useStyles()
   const history = useAppSelector(state=> state.history)
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history)
@@ -489,4 +489,4 @@ const History = ()=>{
   </div>
 }
 
-export default History
+export default History;
