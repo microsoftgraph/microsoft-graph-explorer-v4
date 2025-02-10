@@ -32,7 +32,7 @@ export const useResourceExplorerStyles = makeStyles({
   },
   versioning: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   tree: {
     overflow: 'auto',
