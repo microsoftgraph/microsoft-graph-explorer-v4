@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { IDimensions } from '../../../types/dimensions';
 import { setDimensions } from '../../services/slices/dimensions.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import { History } from './history';
+import History from './history/History';
 import ResourceExplorer from './resource-explorer';
 import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
 

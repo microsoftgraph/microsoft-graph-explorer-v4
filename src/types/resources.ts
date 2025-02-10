@@ -1,5 +1,3 @@
-import { INavLink } from '@fluentui/react';
-
 export type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 export type Version = 'v1.0' | 'beta';
 export interface IResource {
@@ -24,10 +22,23 @@ export interface IResources {
   error: Error | null;
 }
 
-export interface IResourceLink extends INavLink, Omit<ResourcePath, 'key'> {
+export interface IResourceLink extends Omit<ResourcePath, 'key'> {
   labels: IResourceLabel[];
   links: IResourceLink[];
+  key: string;
+  name: string;
+  url: string;
+  isExpanded: boolean;
+  parent: string;
+  level: number;
+  paths: string[];
+  method?: string;
+  type: ResourceLinkType;
+  docLink?: string;
+  count?: number | null;
+  isInCollection?: boolean;
 }
+
 export interface ResourcePath {
   paths: string[];
   name: string;

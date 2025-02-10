@@ -5,7 +5,7 @@ import {
 import ErrorBoundary from '../error-boundary/ErrorBoundary';
 import { DialogWrapper } from './DialogWrapper';
 import { ModalWrapper } from './ModalWrapper';
-import { DrawerWrapper } from './PanelWrapper';
+import { DrawerWrapper } from './DrawerWrapper';
 
 const PopupWrapper = () => {
 

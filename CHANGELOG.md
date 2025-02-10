@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.0...v10.5.1) (2025-01-16)
+
+
+### Bug Fixes
+
+* Rollback adaptive-expressions version ([#3523](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3523)) ([89ecd8e](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/89ecd8ebfc048ecbeab9a113f1931e9935a8dec2))
+
 ## [10.5.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.4.1...v10.5.0) (2024-12-02)
 
 

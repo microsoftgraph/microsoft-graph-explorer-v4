@@ -1,5 +1,7 @@
-import { PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
+
+import { Play24Regular } from '@fluentui/react-icons';
 import { ISubmitButtonControl } from '../../../../types/submit-button';
+import { Button, Spinner } from '@fluentui/react-components';
 
 const SubmitButtonControl = ({
   handleOnClick,
@@ -7,24 +9,22 @@ const SubmitButtonControl = ({
   className,
   text,
   ariaLabel,
-  role,
-  disabled,
-  allowDisabledFocus
+  disabled
 }: ISubmitButtonControl) => {
 
   return (
     <div className={className}>
-      <PrimaryButton disabled={submitting || disabled}
+      <Button disabled={submitting || disabled}
+        appearance='primary'
         onClick={() => handleOnClick()}
-        ariaLabel={ariaLabel}
-        role={role}
-        allowDisabledFocus={allowDisabledFocus}
+        aria-label={ariaLabel}
+        icon={<Play24Regular/>}
       >
         {text}
         {submitting && <>&nbsp;
-          <Spinner size={SpinnerSize.small} />
+          <Spinner size='small' />
         </>}
-      </PrimaryButton>
+      </Button>
     </div>
   );
 };
