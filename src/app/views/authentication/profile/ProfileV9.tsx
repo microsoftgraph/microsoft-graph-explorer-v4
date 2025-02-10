@@ -145,8 +145,10 @@ export const PersonaSignedIn = (props: Partial<PersonaProps>) => {
 const SignedInButton = forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
+  & {  user?: { displayName?: string; profileImageUrl?: string };}
 >((props, ref) => {
   const styles = useHeaderStyles();
+  const {user, ... rest} = props;
 
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
@@ -155,9 +157,13 @@ const SignedInButton = forwardRef<
         role='button'
         appearance='subtle'
         className={styles.iconButton}
-        icon={<PersonaSignedIn />}
+        icon={<PersonaSignedIn
+          name={user?.displayName}
+          avatar={{
+            image: user?.profileImageUrl ? { src: user.profileImageUrl } : undefined
+          }}/>}
         ref={ref}
-        {...props}
+        {...rest}
       />
     </Tooltip>
   );
