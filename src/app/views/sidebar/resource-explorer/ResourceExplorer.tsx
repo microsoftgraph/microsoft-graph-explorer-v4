@@ -74,8 +74,8 @@ const ResourceExplorer = () => {
     dispatch(removeResourcePaths(getResourcePaths(item, version)));
   }
 
-  const changeVersion = (_event: React.ChangeEvent<HTMLInputElement>, data: { checked: boolean }): void => {
-    const selectedVersion = data.checked ? versions[1].key : versions[0].key;
+  const changeVersion = (_event: React.ChangeEvent<HTMLInputElement>, data_: { checked: boolean }): void => {
+    const selectedVersion = data_.checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
   }
 
@@ -143,18 +143,18 @@ const ResourceExplorer = () => {
     </>
   );
 
-  const handleOpenChange = (event: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
-    setOpenItems(data.openItems);
+  const handleOpenChange = (_event: TreeOpenChangeEvent, data_: TreeOpenChangeData) => {
+    setOpenItems(data_.openItems);
   };
 
-  const renderTreeItems = (items: IResourceLink[], level = 1, parentValue?: string) => {
-    return items.map((item, index) => (
+  const renderTreeItems = (items_: IResourceLink[], level = 1, parentValue?: string) => {
+    return items_.map((item, index) => (
       <React.Fragment key={item.key}>
         <FlatTreeItem
           value={item.key ?? ''}
           itemType={item.links.length > 0 ? 'branch' : 'leaf'}
           aria-level={level}
-          aria-setsize={items.length}
+          aria-setsize={items_.length}
           aria-posinset={index + 1}
           parentValue={parentValue}
           onClick={(ev) => clickLink(ev, item)}
