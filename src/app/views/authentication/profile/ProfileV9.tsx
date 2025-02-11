@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Body1,
   Button,
   CardFooter,
@@ -138,18 +139,23 @@ const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) =
   );
 };
 
-export const PersonaSignedIn = (props: Partial<PersonaProps>) => {
-  return <Persona presence={{ status: 'available' }} {...props} />;
+export const AvatarSignedIn = ({ name, imageUrl }: { name?: string; imageUrl?: string }) => {
+  return (
+    <Avatar
+      name={name || ''}
+      image={imageUrl ? { src: imageUrl } : undefined}
+      size={32}
+      badge={{ status: 'available' }}
+    />
+  );
 };
-
 const SignedInButton = forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
-  & {  user?: { displayName?: string; profileImageUrl?: string };}
 >((props, ref) => {
   const styles = useHeaderStyles();
-  const {user, ... rest} = props;
-
+  const profile = useAppSelector((state) => state.profile);
+  const user = profile.user;
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
       <Button
@@ -157,18 +163,13 @@ const SignedInButton = forwardRef<
         role='button'
         appearance='subtle'
         className={styles.iconButton}
-        icon={<PersonaSignedIn
-          name={user?.displayName}
-          avatar={{
-            image: user?.profileImageUrl ? { src: user.profileImageUrl } : undefined
-          }}/>}
+        icon={<AvatarSignedIn name={user?.displayName} imageUrl={user?.profileImageUrl} />}
         ref={ref}
-        {...rest}
+        {...props}
       />
     </Tooltip>
   );
 });
-
 SignedInButton.displayName = 'SignedInButton';
 
 const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }) => {
