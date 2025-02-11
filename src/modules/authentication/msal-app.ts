@@ -37,9 +37,7 @@ export const configuration: Configuration = {
 const msalApplication = new PublicClientApplication(configuration);
 msalApplication.initialize();
 msalApplication.addEventCallback((message: EventMessage) => {
-  if (message.eventType === EventType.LOGIN_FAILURE) {
-    console.error('MSAL Login failed:', message.error);
-  }
+  console.log('MSAL Log:', message);
 
 });
 export { msalApplication };
