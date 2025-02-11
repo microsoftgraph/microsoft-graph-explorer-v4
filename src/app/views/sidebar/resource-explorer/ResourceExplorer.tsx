@@ -1,10 +1,20 @@
 import {
-  DefaultButton,
-  INavLink, INavLinkGroup, Label,
-  Nav, SearchBox, Spinner, SpinnerSize, Stack, styled, Toggle,
-  useTheme} from '@fluentui/react';
-import debouce from 'lodash.debounce';
-import { useEffect, useMemo, useState } from 'react';
+  Button,
+  SearchBox,
+  Spinner,
+  Switch,
+  Label,
+  FlatTree,
+  FlatTreeItem,
+  TreeItemLayout,
+  CounterBadge,
+  TreeItemValue,
+  TreeOpenChangeData,
+  TreeOpenChangeEvent
+} from '@fluentui/react-components';
+import { Collections20Regular } from '@fluentui/react-icons';
+import debounce from 'lodash.debounce';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -14,25 +24,27 @@ import { addResourcePaths, removeResourcePaths } from '../../../services/slices/
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchResources } from '../../../utils/resources/resources-filter';
-import { searchBoxStyles } from '../../../utils/searchbox.styles';
 import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
 import { NoResultsFound } from '../sidebar-utils/SearchResult';
-import { sidebarStyles } from '../Sidebar.styles';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
-import { navStyles, resourceExplorerStyles } from './resources.styles';
 import { usePopups } from '../../../services/hooks/usePopups';
+import {
+  useResourceExplorerStyles,
+  useSearchBoxStyles,
+  useSpinnerStyles
+} from './resourceExplorerStyles';
 
-const UnstyledResourceExplorer = (props: any) => {
+const ResourceExplorer = () => {
   const { data, pending } = useAppSelector((state) => state.resources);
   const { collections } = useAppSelector((state) => state.collections);
 
+  const resourceExplorerStyles = useResourceExplorerStyles();
+  const searchBoxStyles = useSearchBoxStyles();
+  const spinnerStyles = useSpinnerStyles();
+
   const dispatch: AppDispatch = useAppDispatch();
-  const classes = classNames(props);
-  const theme = useTheme();
-  const styles = resourceExplorerStyles(theme);
-  const selectedLinks = collections  && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
+  const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const versions: { key: string, text: string }[] = [
     { key: 'v1.0', text: 'v1.0' },
     { key: 'beta', text: 'beta' }
@@ -46,8 +58,9 @@ const UnstyledResourceExplorer = (props: any) => {
   const [searchText, setSearchText] = useState<string>('');
   const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
-  const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
+  const [items, setItems] = useState<IResourceLink[]>(navigationGroup);
   const { show: previewCollection } = usePopups('preview-collection', 'panel');
+  const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(new Set());
 
   useEffect(() => {
     setItems(navigationGroup);
@@ -61,22 +74,21 @@ const UnstyledResourceExplorer = (props: any) => {
     dispatch(removeResourcePaths(getResourcePaths(item, version)));
   }
 
-  const changeVersion = (_event: React.MouseEvent<HTMLElement>, checked?: boolean | undefined): void => {
-    const selectedVersion = checked ? versions[1].key : versions[0].key;
+  const changeVersion = (_event: React.ChangeEvent<HTMLInputElement>, data: { checked: boolean }): void => {
+    const selectedVersion = data.checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
   }
 
-  const changeSearchValue = (event: any, value?: string) => {
-    const trimmedSearchText = value ? value.trim() : '';
+  const changeSearchValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const trimmedSearchText = event.target.value.trim();
     setSearchText(trimmedSearchText);
   }
 
   const debouncedSearch = useMemo(() => {
-    return debouce(changeSearchValue, 300);
+    return debounce((event: React.ChangeEvent<HTMLInputElement>) => changeSearchValue(event), 300);
   }, []);
 
-
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink) => {
+  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
     ev!.preventDefault();
     item!.isExpanded = !item!.isExpanded;
     setQuery(item!);
@@ -92,8 +104,8 @@ const UnstyledResourceExplorer = (props: any) => {
     }
   }
 
-  const setQuery = (resourceLink: INavLink) => {
-    const link = resourceLink as IResourceLink;
+  const setQuery = (resourceLink: IResourceLink) => {
+    const link = resourceLink;
     if (resourceLink.type === ResourceLinkType.NODE) { return; }
     const resourceUrl = getUrlFromLink(link.paths);
     if (!resourceUrl) { return; }
@@ -118,19 +130,59 @@ const UnstyledResourceExplorer = (props: any) => {
     previewCollection({
       settings: {
         title: translateMessage('My API collection'),
-        width: 'lg'
+        width: 'xl'
       }
     })
   }
 
+  const AsideContent = ({ messageCount }: { messageCount?: number }) => (
+    <>
+      {messageCount && messageCount > 0 ? (
+        <CounterBadge count={messageCount} color="informative" size="small" />
+      ) : null}
+    </>
+  );
+
+  const handleOpenChange = (event: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
+    setOpenItems(data.openItems);
+  };
+
+  const renderTreeItems = (items: IResourceLink[], level = 1, parentValue?: string) => {
+    return items.map((item, index) => (
+      <React.Fragment key={item.key}>
+        <FlatTreeItem
+          value={item.key ?? ''}
+          itemType={item.links.length > 0 ? 'branch' : 'leaf'}
+          aria-level={level}
+          aria-setsize={items.length}
+          aria-posinset={index + 1}
+          parentValue={parentValue}
+          onClick={(ev) => clickLink(ev, item)}
+        >
+          <TreeItemLayout
+            className={resourceExplorerStyles.treeItemLayout}
+            aside={item.links.length > 0 ? <AsideContent messageCount={item.links.length} /> : null}
+          >
+            <ResourceLink
+              link={item}
+              version={item.version!}
+              resourceOptionSelected={(activity: string, context: IResourceLink) =>
+                resourceOptionSelected(activity, context)}
+            />
+          </TreeItemLayout>
+        </FlatTreeItem>
+        {openItems.has(item.key) && renderTreeItems(item.links, level + 1, item.key)}
+      </React.Fragment>
+    ));
+  };
+
   if (pending) {
     return (
       <Spinner
-        className={classes.spinner}
-        size={SpinnerSize.large}
+        className={spinnerStyles.root}
+        size='large'
         label={`${translateMessage('loading resources')} ...`}
-        ariaLive='assertive'
-        labelPosition='top'
+        labelPosition="before"
       />
     );
   }
@@ -139,60 +191,43 @@ const UnstyledResourceExplorer = (props: any) => {
     <section style={{ marginTop: '8px' }}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
-        onChange={debouncedSearch}
-        styles={searchBoxStyles}
+        onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}
+        className={searchBoxStyles.root}
       />
-      <DefaultButton onClick={openPreviewCollection}
-        iconProps={{iconName: 'AddBookmark'}}
-        ariaLabel={translateMessage('My API Collection')}
-        styles={styles.apiCollectionButton}
-        text={translateMessage('My API Collection')}
+      <Button onClick={openPreviewCollection}
+        icon={<Collections20Regular />}
+        aria-label={translateMessage('My API Collection')}
+        className={resourceExplorerStyles.apiCollectionButton}
       >
-        <Stack horizontal reversed verticalAlign="center" tokens={{ childrenGap: 8 }}>
-          <Stack.Item align='auto'>
-            <div style={styles.apiCollectionCount}>
-              {selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
-            </div>
-          </Stack.Item>
-        </Stack>
-      </DefaultButton>
-      <Stack horizontal tokens={{ childrenGap: 10, padding: 10 }} horizontalAlign='space-between'>
-        <Label styles={{ root: { position: 'relative'} }}>
+        {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
+      </Button>
+      <div className={resourceExplorerStyles.stackStyles}>
+        <Label weight='semibold'>
           {translateMessage('Resources available')}
         </Label>
-        <Stack horizontal tokens={{ childrenGap: 10}}>
-          <Toggle
+        <div className={resourceExplorerStyles.versioning}>
+          <Switch
             onChange={changeVersion}
-            inlineLabel
-            styles={{ root: { position: 'relative', top: '2px' } }}
+            labelPosition='after'
           />
-          <Label styles={{ root: { position: 'relative', top: '2px' } }} >
+          <Label weight='semibold'>
             {translateMessage('Switch to beta')}
           </Label>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
       {
-        items[0].links.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
-          (<Nav
-            groups={items}
-            styles={navStyles}
-            onRenderLink={link => {
-              return <ResourceLink
-                link={link!}
-                version={version}
-                resourceOptionSelected={(activity: string, context: IResourceLink) =>
-                  resourceOptionSelected(activity, context)}
-                classes={classes}
-              />
-            }}
-            onLinkClick={clickLink}
-            className={classes.queryList} />
-          )
+        items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
+          <FlatTree
+            className={resourceExplorerStyles.tree}
+            aria-label="Resource Explorer"
+            openItems={openItems}
+            onOpenChange={handleOpenChange}
+          >
+            {renderTreeItems(items)}
+          </FlatTree>
       }
     </section>
   );
 }
 
-// @ts-ignore
-const ResourceExplorer = styled(UnstyledResourceExplorer, sidebarStyles);
 export default ResourceExplorer;

@@ -2,7 +2,7 @@ import { makeStyles, Text, tokens } from '@fluentui/react-components';
 import AuthenticationV9 from '../authentication/AuthenticationV9';
 import { FeedbackButtonV9 } from './FeedbackButtonV9';
 import { HelpV9 } from './HelpV9';
-import { SettingsV9 } from './settings/SettingsV9';
+import { Settings } from './settings/Settings';
 import { Tenant } from './Tenant';
 const useStyles = makeStyles({
   root: {
@@ -43,7 +43,7 @@ const HeaderIcons = () => {
   return (
     <div className={styles.headerIcons}>
       <Tenant/>
-      <SettingsV9 />
+      <Settings />
       <HelpV9 />
       <FeedbackButtonV9 />
       <AuthenticationV9 />

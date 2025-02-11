@@ -7,7 +7,7 @@ import {
 
 import { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
-import { HistoryV9 } from './history/HistoryV9';
+import History from './history/History';
 import ResourceExplorer from './resource-explorer';
 import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
 
@@ -63,7 +63,7 @@ const SidebarV9 = (props: SidebarProps)=>{
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueriesV9 />,
     'resources': <ResourceExplorer />,
-    'history': <HistoryV9 />
+    'history': <History />
   }
 
   return (
