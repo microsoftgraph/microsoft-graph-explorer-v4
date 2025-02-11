@@ -21,7 +21,7 @@ const ResponseHeaders = () => {
     return (
       <>
         <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true} />
-        <MonacoV9 body={headers} />
+        <MonacoV9 body={headers} height='25rem' />
       </>
     );
   }
