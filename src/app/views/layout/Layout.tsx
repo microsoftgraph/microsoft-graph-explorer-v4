@@ -24,7 +24,7 @@ interface LayoutProps {
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 const useLayoutResizeStyles = makeResetStyles({
-  [SIDEBAR_SIZE_CSS_VAR]: '25%'
+  [SIDEBAR_SIZE_CSS_VAR]: '17%'
 })
 
 const useLayoutStyles = makeStyles({
@@ -39,7 +39,7 @@ const useLayoutStyles = makeStyles({
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(min(25%, var(${SIDEBAR_SIZE_CSS_VAR})), var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
+    flexBasis: `clamp(min(17%, var(${SIDEBAR_SIZE_CSS_VAR})), var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
     position: 'relative'
   },
   mainContent: {
@@ -112,7 +112,7 @@ export const Layout = (props: LayoutProps) => {
   }
 
   const resetSidebarArea = () => {
-    setSidebarColumnSize(56)
+    setSidebarColumnSize(456)
   }
 
   return (
