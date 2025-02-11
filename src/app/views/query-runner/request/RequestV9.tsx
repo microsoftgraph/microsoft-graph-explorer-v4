@@ -26,23 +26,11 @@ const useStyles = makeStyles({
 
 const Request = (props: IRequestProps) => {
   const styles = useStyles();
-  const dispatch = useAppDispatch();
   const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
   const mode = useAppSelector((state) => state.graphExplorerMode);
-  const dimensions = useAppSelector((state) => state.dimensions);
   const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
-  const minHeight = 60;
-  const maxHeight = 800;
 
   const { handleOnEditorChange, sampleQuery }: IRequestProps = props;
-  const newHeight = convertVhToPx(dimensions.request.height, 55);
-  const containerStyle: CSSProperties = {
-    height: newHeight,
-    overflow: 'hidden',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    padding: '8px'
-  }
 
   useEffect(() => {
     if (sidebarProperties && sidebarProperties.mobileScreen) {
@@ -55,26 +43,6 @@ const Request = (props: IRequestProps) => {
   const handleTabSelect = (tab: TabValue) => {
     setSelectedTab(tab);
     telemetry.trackTabClickEvent(tab as string, sampleQuery);
-  };
-
-  const setRequestAndResponseHeights = (requestHeight: string) => {
-    const heightInPx = requestHeight.replace('px', '').trim();
-    const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
-    const maxDeviceVerticalHeight = 90;
-
-    const dimensionsToUpdate = {
-      ...dimensions,
-      request: {
-        ...dimensions.request,
-        height: requestHeightInVh
-      },
-      response: {
-        ...dimensions.response,
-        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
-      }
-    };
-
-    dispatch(setDimensions(dimensionsToUpdate));
   };
 
   const resizeHandler = () => {
