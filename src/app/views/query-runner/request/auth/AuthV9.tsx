@@ -15,7 +15,6 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
@@ -33,7 +32,7 @@ const useStyles = makeStyles({
   },
   accessToken: {
     display: 'inline-block',
-    maxWidth: '600px'
+    wordBreak: 'break-all'
   },
   emptyStateLabel: {
     display: 'flex',
@@ -46,12 +45,8 @@ const useStyles = makeStyles({
 
 export function Auth() {
   const profile = useAppSelector((state) => state.profile);
-  const height: string = useAppSelector(
-    (state) => state.dimensions.request.height
-  );
   const authToken = useAppSelector((state) => state.auth.authToken);
   const { user } = profile;
-  const requestHeight = convertVhToPx(height, 60);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
