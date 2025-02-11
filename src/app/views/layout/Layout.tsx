@@ -24,7 +24,7 @@ interface LayoutProps {
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 const useLayoutResizeStyles = makeResetStyles({
-  [SIDEBAR_SIZE_CSS_VAR]: '56px'
+  [SIDEBAR_SIZE_CSS_VAR]: '25%'
 })
 
 const useLayoutStyles = makeStyles({
@@ -39,7 +39,7 @@ const useLayoutStyles = makeStyles({
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(15px, var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
+    flexBasis: `clamp(min(25%, var(${SIDEBAR_SIZE_CSS_VAR})), var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
     position: 'relative'
   },
   mainContent: {
@@ -108,7 +108,7 @@ export const Layout = (props: LayoutProps) => {
   };
 
   const handleToggleSelect = (toggled: boolean)=> {
-    setSidebarColumnSize(toggled ? 100 : 0);
+    setSidebarColumnSize(toggled ? 456 : 5);
   }
 
   const resetSidebarArea = () => {
