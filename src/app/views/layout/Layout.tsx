@@ -31,7 +31,8 @@ const useLayoutStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    padding: tokens.spacingHorizontalS
+    padding: tokens.spacingHorizontalS,
+    height: '100vh'
   },
   content: {
     display: 'flex',
@@ -40,13 +41,16 @@ const useLayoutStyles = makeStyles({
   sidebar: {
     flex: '0 0 auto',
     flexBasis: `clamp(min(17%, var(${SIDEBAR_SIZE_CSS_VAR})), var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
-    position: 'relative'
+    position: 'relative',
+    height: 'calc(100vh - 98px)'
   },
   mainContent: {
     flex: '3 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: tokens.spacingHorizontalS
+    gap: tokens.spacingHorizontalS,
+    overflowY: 'auto',
+    height: 'calc(100vh - 98px)'
   },
   requestResponseArea: {
     flex: '1',
