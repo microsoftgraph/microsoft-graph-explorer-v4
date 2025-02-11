@@ -46,6 +46,7 @@ interface SidebarProps {
 }
 const SidebarV9 = (props: SidebarProps)=>{
   const sidebarStyles = useStyles();
+  const [showSidebarValue, setShowSidebarValue] = useState(true);
   const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
@@ -53,7 +54,6 @@ const SidebarV9 = (props: SidebarProps)=>{
     setShowSidebarValue(true);
   };
 
-  const [showSidebarValue, setShowSidebarValue] = useState(true);
   const handleShow = ()=>{
     setShowSidebarValue(!showSidebarValue);
     props.handleToggleSelect(!showSidebarValue)
