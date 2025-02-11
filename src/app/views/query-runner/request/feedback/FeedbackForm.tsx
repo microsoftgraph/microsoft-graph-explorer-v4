@@ -4,7 +4,6 @@ import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
 import { useEffect, useState } from 'react';
 
-import { geLocale } from '../../../../../appLocale';
 import { authenticationWrapper } from '../../../../../modules/authentication';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
@@ -81,7 +80,6 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       environment: (NODE_ENV === 'development') ? 1 : 0, // 0 - Prod, 1 - Int
       ageGroup: user?.ageGroup,
       authenticationType: getAuthType(user?.profileType!),
-      locale: geLocale,
       onError: (error: string): string => { throw error; },
       build: getVersion().toString(),
       primaryColour: currentTheme.palette.themePrimary,
