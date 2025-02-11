@@ -20,7 +20,6 @@ import { PopupsComponent } from '../../../../services/context/popups-context';
 import { useCollectionPermissions } from '../../../../services/hooks/useCollectionPermissions';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { downloadToLocal, trackDownload } from '../../../common/download';
-import { geLocale } from '../../../../../appLocale';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 const useStyles = makeStyles({
@@ -110,7 +109,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
             target='_blank'
             rel="noopener noreferrer"
             onClick={handleTelemetryClick}
-            href={`https://learn.microsoft.com/${geLocale}/graph/permissions-reference?view=graph-rest-1.0`}
+            href={'https://learn.microsoft.com/graph/permissions-reference?view=graph-rest-1.0'}
           >
             {translateMessage('Microsoft Graph permissions reference')}
           </Link>

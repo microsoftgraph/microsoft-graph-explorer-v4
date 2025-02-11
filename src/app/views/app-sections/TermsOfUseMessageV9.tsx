@@ -1,6 +1,5 @@
 import { Link, makeStyles, Button, MessageBar, MessageBarActions, MessageBarBody } from '@fluentui/react-components';
 import { DismissRegular } from '@fluentui/react-icons';
-import { geLocale } from '../../../appLocale';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, telemetry } from '../../../telemetry';
 import { clearTermsOfUse } from '../../services/slices/terms-of-use.slice';
@@ -27,8 +26,7 @@ const TermsOfUseMessageV9 = () => {
           onClick={(e) =>
             telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
               componentNames.MICROSOFT_APIS_TERMS_OF_USE_LINK)}
-          href={'https://learn.microsoft.com/' + geLocale +
-            '/legal/microsoft-apis/terms-of-use?context=graph/context'}
+          href={'https://learn.microsoft.com/legal/microsoft-apis/terms-of-use?context=graph/context'}
           target='_blank'
           rel='noopener noreferrer'
           inline>
@@ -39,7 +37,7 @@ const TermsOfUseMessageV9 = () => {
           onClick={(e) =>
             telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,
               componentNames.MICROSOFT_PRIVACY_STATEMENT_LINK)}
-          href={'https://privacy.microsoft.com/' + geLocale + '/privacystatement'}
+          href={'https://privacy.microsoft.com/privacystatement'}
           target='_blank'
           rel='noopener noreferrer'
           inline>
