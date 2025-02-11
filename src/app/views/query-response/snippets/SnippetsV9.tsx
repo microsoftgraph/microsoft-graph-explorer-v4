@@ -8,7 +8,7 @@ import {
   Tab,
   TabList,
   TabValue,
-  Text
+  Text, tokens
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -71,6 +71,19 @@ const useSnippetStyles = makeStyles({
     color: 'rgb(0, 128, 0)',
     marginLeft: '28px',
     lineHeight: '1.5'
+  },
+  codeContainer: {
+    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalMNudge,
+    margin: tokens.spacingHorizontalMNudge
+  },
+  codeContainerLayout: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  copyButton: {
+    marginLeft: 'auto'
   }
 });
 
@@ -213,9 +226,10 @@ const SnippetContent: React.FC<SnippetContentProps> = (
 
   const showSpinner = loadingState && !hasSnippetError;
   const notAvailable = !loadingState && hasSnippetError;
+  const styles = useSnippetStyles();
 
   return (
-    <div>
+    <div className={styles.codeContainer}>
       {showSpinner && (
         <Spinner
           labelPosition='below'
@@ -227,8 +241,8 @@ const SnippetContent: React.FC<SnippetContentProps> = (
           {translateMessage('Snippet not available')}!
         </Label>
       )}
-      <>
-        <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
+      <div className={styles.codeContainerLayout}>
+        <div className={styles.copyButton}><CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} /></div>
         <MonacoV9
           body={snippet}
           language={language}
@@ -236,7 +250,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
           height='300px'
           extraInfoElement={addExtraSnippetInformation(props.language)}
         />
-      </>
+      </div>
     </div>
   );
 };
