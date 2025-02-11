@@ -138,7 +138,7 @@ const ResourceExplorer = () => {
   const AsideContent = ({ messageCount }: { messageCount?: number }) => (
     <>
       {messageCount && messageCount > 0 ? (
-        <CounterBadge count={messageCount} color="informative" size="small" />
+        <CounterBadge count={messageCount} color="informative" />
       ) : null}
     </>
   );
@@ -188,7 +188,7 @@ const ResourceExplorer = () => {
   }
 
   return (
-    <section style={{ marginTop: '8px' }}>
+    <section className={resourceExplorerStyles.container}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}

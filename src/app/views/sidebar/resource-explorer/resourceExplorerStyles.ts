@@ -2,6 +2,9 @@ import { makeStyles } from '@fluentui/react-components';
 import { tokens } from '@fluentui/react-theme';
 
 export const useResourceExplorerStyles = makeStyles({
+  container: {
+    marginTop: '8px'
+  },
   apiCollectionButton: {
     width: '100%',
     padding: '8px 12px',
@@ -35,8 +38,8 @@ export const useResourceExplorerStyles = makeStyles({
     alignItems: 'center'
   },
   tree: {
-    overflow: 'auto',
-    maxWidth: '100%'
+    height: 'calc(100vh - 280px)',
+    overflowY: 'auto'
   },
   treeItemLayout: {
     width: '100%',

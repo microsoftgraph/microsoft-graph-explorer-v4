@@ -59,7 +59,6 @@ const SidebarV9 = (props: SidebarProps)=>{
     props.handleToggleSelect(!showSidebarValue)
   }
 
-  // TODO: change these to V9 components
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueriesV9 />,
     'resources': <ResourceExplorer />,
