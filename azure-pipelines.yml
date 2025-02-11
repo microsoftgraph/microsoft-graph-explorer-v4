@@ -229,63 +229,63 @@ extends:
         #     REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
         #   displayName: "Build static assets for prod"
 
-      #   - task: PowerShell@2
-      #     displayName: "Create _manifest directory"
-      #     inputs:
-      #       targetType: "inline"
-      #       script: |
-      #         $manifestPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/_manifest"
-      #         mkdir -p $manifestPath
-      #         Write-Host "Created directory '$manifestPath'."
+        - task: PowerShell@2
+          displayName: "Create _manifest directory"
+          inputs:
+            targetType: "inline"
+            script: |
+              $manifestPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/_manifest"
+              mkdir -p $manifestPath
+              Write-Host "Created directory '$manifestPath'."
 
-      #   - task: ManifestGeneratorTask@0
-      #     inputs:
-      #       ManifestDirPath: "$(System.DefaultWorkingDirectory)/_manifest"
-      #       BuildComponentPath: "$(System.DefaultWorkingDirectory)/build"
-      #       PackageName: "graph-explorer-v2"
-      #       PackageVersion: "$(Build.UpdateBuildNumber)"
+        - task: ManifestGeneratorTask@0
+          inputs:
+            ManifestDirPath: "$(System.DefaultWorkingDirectory)/_manifest"
+            BuildComponentPath: "$(System.DefaultWorkingDirectory)/build"
+            PackageName: "graph-explorer-v2"
+            PackageVersion: "$(Build.UpdateBuildNumber)"
 
-      #   - task: CopyFiles@1
-      #     displayName: "Copy manifest files to artifact staging dir: manifest"
-      #     inputs:
-      #       SourceFolder: "$(System.DefaultWorkingDirectory)/_manifest"
-      #       TargetFolder: "$(Build.ArtifactStagingDirectory)/manifest"
+        - task: CopyFiles@1
+          displayName: "Copy manifest files to artifact staging dir: manifest"
+          inputs:
+            SourceFolder: "$(System.DefaultWorkingDirectory)/_manifest"
+            TargetFolder: "$(Build.ArtifactStagingDirectory)/manifest"
 
-      #   - task: CopyFiles@1
-      #     displayName: "Copy files to: $(Build.ArtifactStagingDirectory)/build"
-      #     inputs:
-      #       SourceFolder: "$(System.DefaultWorkingDirectory)/build"
-      #       TargetFolder: "$(Build.ArtifactStagingDirectory)/build"
+        - task: CopyFiles@1
+          displayName: "Copy files to: $(Build.ArtifactStagingDirectory)/build"
+          inputs:
+            SourceFolder: "$(System.DefaultWorkingDirectory)/build"
+            TargetFolder: "$(Build.ArtifactStagingDirectory)/build"
 
-      #   - task: DeleteFiles@1
-      #     inputs:
-      #       contents: node_modules
-      #     displayName: "Delete node_modules"
+        - task: DeleteFiles@1
+          inputs:
+            contents: node_modules
+          displayName: "Delete node_modules"
 
-      #   - task: ArchiveFiles@2
-      #     inputs:
-      #       rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
-      #       includeRootFolder: false
-      #       archiveType: 'zip'
-      #       archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
-      #       replaceExistingArchive: true
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
+            replaceExistingArchive: true
 
-      #   templateContext:
-      #     outputs:
-      #     - output: pipelineArtifact
-      #       displayName: 'Publish Artifact: manifest'
-      #       targetPath: "$(Build.ArtifactStagingDirectory)/manifest"
-      #       artifactName: manifest
-      #     - output: pipelineArtifact
-      #       displayName: 'Publish Artifact: drop'
-      #       targetPath: "$(build.ArtifactStagingDirectory)/build"
-      #       artifactName: drop
+        templateContext:
+          outputs:
+          - output: pipelineArtifact
+            displayName: 'Publish Artifact: manifest'
+            targetPath: "$(Build.ArtifactStagingDirectory)/manifest"
+            artifactName: manifest
+          - output: pipelineArtifact
+            displayName: 'Publish Artifact: drop'
+            targetPath: "$(build.ArtifactStagingDirectory)/build"
+            artifactName: drop
 
-      # - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
-      #   parameters:
-      #     directory: 'microsoft-graph-explorer-v4'
-      #     repoName: ReleasePipelines
-      #     dependsOn: ['Three']
+      - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
+        parameters:
+          directory: 'microsoft-graph-explorer-v4'
+          repoName: ReleasePipelines
+          dependsOn: ['Three']
 
     - stage: DeployStaging
       # condition: and(contains(variables['build.sourceBranch'], 'refs/heads/dev'), succeeded())
