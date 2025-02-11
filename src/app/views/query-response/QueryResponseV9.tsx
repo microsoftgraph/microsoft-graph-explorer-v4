@@ -20,7 +20,8 @@ const useStyles = makeStyles({
   },
   dialog: {
     display: 'flex',
-    maxWidth: '70%',
+    justifyContent: 'center',
+    maxWidth: '40%',
     minHeight: '60%'
   },
   dialogBtn: {
