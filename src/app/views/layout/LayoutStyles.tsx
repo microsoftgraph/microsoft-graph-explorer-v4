@@ -1,5 +1,4 @@
-import { makeStyles } from '@fluentui/react';
-import { makeResetStyles, tokens } from '@fluentui/react-components';
+import { makeResetStyles, tokens, makeStyles } from '@fluentui/react-components';
 
 const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
