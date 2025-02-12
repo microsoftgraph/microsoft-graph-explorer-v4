@@ -293,7 +293,7 @@ const HistoryStatusCodes = ({ status, method }: { status: number, method?: strin
   return (
     <div style={{ display: 'flex', gap: '4px' }}>
       {method && (
-        <Badge color={methodColors[method] || 'informative'} appearance="ghost">
+        <Badge color={methodColors[method] || 'informative'}>
           {method}
         </Badge>
       )}
