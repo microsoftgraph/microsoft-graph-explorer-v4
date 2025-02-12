@@ -75,7 +75,7 @@ const useStyles = makeStyles({
     }
   },
   itemLayout: {
-    paddingLeft: tokens.spacingHorizontalXL
+    paddingLeft: tokens.spacingHorizontalXXL
   }
 });
 
