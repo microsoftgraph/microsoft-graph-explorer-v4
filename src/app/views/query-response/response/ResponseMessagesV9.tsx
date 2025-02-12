@@ -5,7 +5,7 @@ import {
   Link,
   MessageBar,
   MessageBarActions,
-  MessageBarBody
+  MessageBarBody, Text
 } from '@fluentui/react-components';
 import { DismissRegular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -66,11 +66,11 @@ export const ResponseMessagesV9 = () => {
   if (odataLink) {
     messageBars.push(
       <MessageBar intent='warning' key={'odataLink'}>
-        {translateMessage('This response contains an @odata property.')}:
-        @odata.{odataLink.name}
-        <Link onClick={() => setQuery()} inline>
-          &nbsp;{translateMessage('Click here to follow the link')}
-        </Link>
+        <MessageBarBody>
+          {translateMessage('This response contains an @odata property.')}&nbsp;
+          <Text font="monospace">@odata.{odataLink.name}</Text>&nbsp;
+          <Link onClick={setQuery} inline>{translateMessage('Click here to follow the link')}</Link>
+        </MessageBarBody>
       </MessageBar>
     );
   }
@@ -81,11 +81,12 @@ export const ResponseMessagesV9 = () => {
     messageBars.push(
       <div key={'contentDownloadUrl'}>
         <MessageBar intent='warning'>
-          {translateMessage('This response contains unviewable content')}
-          <Link href={contentDownloadUrl} download inline>
-            {translateMessage('Click to download file')}
-          </Link>
-          &nbsp;
+          <MessageBarBody>
+            {translateMessage('This response contains unviewable content')}
+            <Link href={contentDownloadUrl} download inline>
+              {translateMessage('Click to download file')}
+            </Link>
+          </MessageBarBody>
         </MessageBar>
       </div>
     );
@@ -97,13 +98,14 @@ export const ResponseMessagesV9 = () => {
     messageBars.push(
       <div key={'throwsCorsError'}>
         <MessageBar intent='warning'>
-          {translateMessage(
-            'Response content not available due to CORS policy'
-          )}
-          <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} inline>
-            {translateMessage('here')}
-          </Link>
-          .
+          <MessageBarBody>
+            {translateMessage(
+              'Response content not available due to CORS policy'
+            )}
+            <Link target='_blank' href={MOZILLA_CORS_DOCUMENTATION_LINK} inline>
+              {translateMessage('here')}
+            </Link>
+          </MessageBarBody>
         </MessageBar>
       </div>
     );
