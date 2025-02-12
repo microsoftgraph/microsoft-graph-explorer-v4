@@ -29,9 +29,6 @@ const useStyles = makeStyles({
   },
   sidebarToggle: {
     marginLeft: 'auto'
-  },
-  tabList: {
-    margin: '8px 0'
   }
 })
 const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
@@ -69,7 +66,6 @@ const SidebarV9 = (props: SidebarProps)=>{
     <div className={sidebarStyles.container}>
       <SidebarToggle className={sidebarStyles.sidebarToggle} show={showSidebarValue} handleShow={handleShow}/>
       <TabList
-        className={sidebarStyles.tabList}
         selectedValue={selectedValue} onTabSelect={onTabSelect} size="large" vertical>
         {renderTablistItems(showSidebarValue)}
       </TabList>

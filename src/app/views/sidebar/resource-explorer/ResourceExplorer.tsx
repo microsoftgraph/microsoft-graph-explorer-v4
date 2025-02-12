@@ -188,7 +188,7 @@ const ResourceExplorer = () => {
   }
 
   return (
-    <section className={resourceExplorerStyles.container}>
+    <div className={resourceExplorerStyles.container}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}
@@ -226,7 +226,7 @@ const ResourceExplorer = () => {
             {renderTreeItems(items)}
           </FlatTree>
       }
-    </section>
+    </div>
   );
 }
 
