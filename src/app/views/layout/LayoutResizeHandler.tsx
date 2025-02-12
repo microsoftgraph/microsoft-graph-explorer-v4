@@ -35,7 +35,7 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
     const positioningProps =
       position === 'start' || position === 'end'
         ? {
-          [positioningAttr]: '-7px',
+          [positioningAttr]: '-5px',
           top: '50%',
           transform: 'translateY(-50%)',
           width: '3px',

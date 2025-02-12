@@ -73,7 +73,7 @@ const useSnippetStyles = makeStyles({
     lineHeight: '1.5'
   },
   codeContainer: {
-    border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    border: `solid ${tokens.colorNeutralForeground3} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge,
     margin: tokens.spacingHorizontalMNudge
