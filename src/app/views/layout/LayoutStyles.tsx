@@ -1,6 +1,6 @@
 import { makeResetStyles, tokens, makeStyles } from '@fluentui/react-components';
 
-const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
+export const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 export const useLayoutResizeStyles = makeResetStyles({
   [SIDEBAR_SIZE_CSS_VAR]: '29%'

@@ -17,14 +17,11 @@ import { SidebarV9 } from '../sidebar/SidebarV9';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { Mode } from '../../../types/enums';
-import { useLayoutResizeStyles, useLayoutStyles } from './LayoutStyles';
+import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
 }
-
-const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
-
 
 export const Layout = (props: LayoutProps) => {
   const layoutStyles = useLayoutStyles();
