@@ -38,30 +38,33 @@ const PivotItemsDialog = () => {
   const styles = useStyles();
 
   return (
-    <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
-      <DialogTrigger disableButtonEnhancement>
-        <Button
-          appearance='transparent'
-          icon={<ExpandUpLeftRegular />}
-          aria-label='Expand'
-          className={styles.dialogBtn}
-        />
-      </DialogTrigger>
-      <DialogSurface className={styles.dialog}>
-        <DialogBody>
-          <DialogContent>
-            <GetPivotItems />
-          </DialogContent>
-        </DialogBody>
-        <Button
-          appearance='transparent'
-          icon={<DismissRegular />}
-          aria-label='Collapse'
-          className={styles.dismissBtn}
-          onClick={() => setOpen(false)}
-        />
-      </DialogSurface>
-    </Dialog>
+    <div>
+      <Button
+        appearance='transparent'
+        icon={<ExpandUpLeftRegular />}
+        aria-label='Expand'
+        className={styles.dialogBtn}
+        onClick={() => setOpen(true)}
+      />
+      <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
+        <DialogSurface className={styles.dialog}>
+          <DialogBody>
+            <DialogContent>
+              <GetPivotItems />
+            </DialogContent>
+          </DialogBody>
+          <DialogTrigger disableButtonEnhancement>
+            <Button
+              appearance='transparent'
+              icon={<DismissRegular />}
+              aria-label='Collapse'
+              className={styles.dismissBtn}
+              onClick={() => setOpen(false)}
+            />
+          </DialogTrigger>
+        </DialogSurface>
+      </Dialog>
+    </div>
   );
 };
 
