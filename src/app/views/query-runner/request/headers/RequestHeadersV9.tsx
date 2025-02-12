@@ -16,14 +16,18 @@ const useStyles = makeStyles({
   container: {
     textAlign: 'center',
     padding: '10px',
-    overflowY: 'auto',
-    overflowX: 'hidden'
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    flex: 1
   },
   row: {
     display: 'flex',
     gap: '16px',
     marginBottom: '16px',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexShrink: 0
   },
   input: {
     flex: 1
@@ -34,7 +38,9 @@ const useStyles = makeStyles({
   },
   listContainer: {
     flex: 1,
-    overflow: 'auto'
+    overflow: 'auto',
+    minHeight: 0,
+    width: '100%'
   }
 });
 
@@ -69,7 +75,7 @@ const RequestHeaders = () => {
   const handleEditHeader = (headerToEdit: IHeader) => {
     setHeader(headerToEdit);
     setIsUpdatingHeader(true);
-    const updatedHeaders = sampleQuery.sampleHeaders.filter((h) => h.name !== headerToEdit.name);
+    const updatedHeaders = sampleQuery.sampleHeaders.filter((h: { name: string; }) => h.name !== headerToEdit.name);
     dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
   };
 
@@ -78,11 +84,11 @@ const RequestHeaders = () => {
       className={styles.container}
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
-      style={
-        isHoverOverHeadersList
-          ? { height: convertVhToPx(height, 60) }
-          : { height: convertVhToPx(height, 60), overflow: 'hidden' }
-      }
+      // style={
+      //   isHoverOverHeadersList
+      //     ? { height: convertVhToPx(height, 60) }
+      //     : { height: convertVhToPx(height, 60), overflow: 'hidden' }
+      // }
     >
       <div className={styles.row}>
         <Input

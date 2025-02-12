@@ -6,7 +6,8 @@ import {
   SelectTabEvent,
   Tab,
   TabList,
-  TabValue
+  TabValue,
+  tokens
 } from '@fluentui/react-components';
 import { useState } from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
@@ -26,6 +27,13 @@ import { ResponseV9 } from '../response';
 const useStyles = makeStyles({
   container: {
     flex: '1'
+  },
+  tabContent: {
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: `0 0 ${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium}`,
+    padding: tokens.spacingHorizontalS,
+    marginTop: tokens.spacingHorizontalS,
+    backgroundColor: tokens.colorNeutralBackground1
   }
 });
 
@@ -59,29 +67,32 @@ export const GetPivotItems = () => {
           {translateMessage('Adaptive Cards')}
         </Tab>
       </TabList>
-      {selectedValue === translateMessage('Response Preview') && <ResponseV9 />}
-      {selectedValue === translateMessage('Response Headers') && (
-        <ResponseHeadersV9 />
-      )}
-      {selectedValue === translateMessage('Snippets') && <SnippetsV9 />}
-      {selectedValue === translateMessage('Graph Toolkit') && (
-        <GraphToolkitV9 />
-      )}
-      {selectedValue === translateMessage('Adaptive Cards') && (
-        <ThemeContext.Consumer>
-          {(theme) => (
+      <div className={styles.tabContent}>
+        {selectedValue === translateMessage('Response Preview') && <ResponseV9 />}
+        {selectedValue === translateMessage('Response Headers') && (
+          <ResponseHeadersV9 />
+        )}
+        {selectedValue === translateMessage('Snippets') && <SnippetsV9 />}
+        {selectedValue === translateMessage('Graph Toolkit') && (
+          <GraphToolkitV9 />
+        )}
+        {selectedValue === translateMessage('Adaptive Cards') && (
+          <ThemeContext.Consumer>
+            {(theme) => (
             // @ts-ignore
-            <div id={'adaptive-cards-tab'} tabIndex={0}>
-              <AdaptiveCardsV9
-                body={body as string}
-                hostConfig={
-                  theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig
-                }
-              />
-            </div>
-          )}
-        </ThemeContext.Consumer>
-      )}
+              <div id={'adaptive-cards-tab'} tabIndex={0}>
+                <AdaptiveCardsV9
+                  body={body as string}
+                  hostConfig={
+                    theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig
+                  }
+                />
+              </div>
+            )}
+          </ThemeContext.Consumer>
+        )}
+      </div>
+
     </div>
   );
 };

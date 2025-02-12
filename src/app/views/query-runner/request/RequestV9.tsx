@@ -12,7 +12,6 @@ import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
 import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-components';
 
-
   interface IRequestProps {
     handleOnEditorChange: () => void
     sampleQuery: IQuery
@@ -20,7 +19,20 @@ import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-comp
 
 const useStyles = makeStyles({
   container: {
-    height: '-webkit-fill-available'
+    height: '-webkit-fill-available',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  tabContent: {
+    flex: '1',
+    display: 'flex',
+    flexDirection: 'column',
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius:tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalS,
+    marginTop: tokens.spacingHorizontalS,
+    backgroundColor: tokens.colorNeutralBackground1,
+    minHeight: '0'
   }
 });
 
@@ -76,11 +88,18 @@ const Request = (props: IRequestProps) => {
           </Tab>
         )}
       </TabList>
-
-      {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
-      {selectedTab === 'request-headers' && <RequestHeaders />}
-      {selectedTab === 'modify-permissions' && <Permissions />}
-      {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
+      <div className={styles.tabContent}>
+        {selectedTab === 'request-body' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestBody handleOnEditorChange={handleOnEditorChange} />
+          </div>)}
+        {selectedTab === 'request-headers' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestHeaders />
+          </div>)}
+        {selectedTab === 'modify-permissions' && <Permissions />}
+        {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
+      </div>
     </div>
   );
 };
