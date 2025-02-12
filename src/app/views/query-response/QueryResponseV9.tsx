@@ -5,8 +5,7 @@ import {
   DialogContent,
   DialogSurface,
   DialogTrigger,
-  makeStyles,
-  tokens
+  makeStyles
 } from '@fluentui/react-components';
 import { ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';

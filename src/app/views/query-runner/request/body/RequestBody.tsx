@@ -13,7 +13,7 @@ const RequestBody = ({ handleOnEditorChange }: IRequestBodyProps) => {
     <MonacoV9
       body={sampleBody}
       onChange={(value) => handleOnEditorChange(value)}
-      height='25rem'
+      height='18rem'
     />
   );
 };

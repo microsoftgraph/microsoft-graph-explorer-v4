@@ -42,7 +42,7 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     flex: '1',
-    maxHeight: '50%',
+    maxHeight: '70%',
     border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge
@@ -51,7 +51,7 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     flex: '1',
-    maxHeight: '50%',
+    maxHeight: '30%',
     border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge

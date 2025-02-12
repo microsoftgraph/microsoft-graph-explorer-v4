@@ -19,7 +19,8 @@ const permissionStyles = makeStyles({
   },
   tableWrapper: {
     flex: 1,
-    overflowY: 'auto'
+    overflowY: 'auto',
+    height: '17rem'
   },
   adminLabel: {
     fontSize: tokens.fontSizeBase300,
