@@ -139,7 +139,7 @@ const addExtraSnippetInformation = (language: string): JSX.Element => {
           onClick={(e) => trackLinkClickedEvent(language, sdkDownloadLink, e)}
           href={sdkDownloadLink}
           inline
-          rel='norefferer noopener'
+          rel='noreferrer noopener'
           target='_blank'
         >
           {sdkDownloadLink}
@@ -152,7 +152,7 @@ const addExtraSnippetInformation = (language: string): JSX.Element => {
           onClick={(e) => trackLinkClickedEvent(language, sdkDocLink, e)}
           href={sdkDocLink}
           inline
-          rel='norefferer noopener'
+          rel='noreferrer noopener'
           target='_blank'
         >
           {sdkDocLink}

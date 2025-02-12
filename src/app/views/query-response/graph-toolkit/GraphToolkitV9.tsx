@@ -79,7 +79,7 @@ const GraphToolkitV9 = () => {
       <Link
         tabIndex={0}
         href='https://aka.ms/mgt'
-        rel='noopener norefferer'
+        rel='noopener noreferrer'
         target='_blank'
         inline
       >
