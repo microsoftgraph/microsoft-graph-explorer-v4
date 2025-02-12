@@ -89,6 +89,7 @@ const useStyles = makeStyles({
   },
   titleAside: {
     display: 'flex',
+    alignItems: 'center',
     gap: '2px'
   }
 })
@@ -117,7 +118,7 @@ interface AsideGroupIconsProps {
   historyItems: IHistoryItem[]
 }
 
-const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
+const GroupIcons = (props: AsideGroupIconsProps)=>{
   const dispatch = useAppDispatch()
   const {groupName, historyItems} = props
   const [open, setOpen] = useState(false);
@@ -136,6 +137,7 @@ const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
   }
 
   return <div className={styles.titleAside}>
+    <Text weight='semibold'>{groupName}{' '}</Text>
     <Tooltip withArrow relationship="label" content={`${translateMessage('Export')} ${groupName} queries`}>
       <Button onClick={
         (e) => handleDownloadHistoryGroup(e,groupName, historyItems )}
@@ -206,7 +208,6 @@ const HistoryItems = (props: HistoryProps)=>{
       body: query.result,
       headers: query.responseHeaders
     }))
-    // TODO: change the message bar type to v9 types
     dispatch(setQueryResponseStatus({
       duration,
       messageBarType: status < 300 ? 'success' : 'error',
@@ -236,11 +237,11 @@ const HistoryItems = (props: HistoryProps)=>{
               aria-setsize={2}
               aria-posinset={pos+1}
               aria-label={ariaLabel}>
-              <TreeItemLayout aside={<AsideGroupIcons groupName={name} historyItems={history} />}>
-                <Text weight='semibold'>{name}{' '}
-                  <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
-                    {count}
-                  </Badge></Text>
+              <TreeItemLayout aside={
+                <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
+                  {count}
+                </Badge>}>
+                <GroupIcons groupName={name} historyItems={history} />
               </TreeItemLayout>
             </FlatTreeItem>
             {openItems.has(name) &&
@@ -257,7 +258,7 @@ const HistoryItems = (props: HistoryProps)=>{
                 >
                   <TreeItemLayout
                     onClick={()=>handleViewQuery(h)}
-                    iconBefore={<HistoryStatusCodes status={h.status}/>}
+                    iconBefore={<HistoryStatusCodes status={h.status} method={h.method}/>}
                     aside={<HistoryItemActionMenu item={h}/>}>
                     <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
                       <Text>{h.url.replace(GRAPH_URL, '')}</Text>
@@ -272,16 +273,34 @@ const HistoryItems = (props: HistoryProps)=>{
   )
 }
 
-const HistoryStatusCodes = ({status}:{status: number})=>{
-  const getBadgeColor = (): BadgeColors =>{
-    if(status >= 100 && status < 199) {return 'informative'}
-    if(status >= 200 && status < 299) {return 'success'}
-    if(status >= 300 && status < 399) {return 'important'}
-    if(status >= 400 && status < 599) {return 'danger'}
-    return 'success'
-  }
-  return <Badge color={getBadgeColor()} appearance="ghost">{status}</Badge>
-}
+const HistoryStatusCodes = ({ status, method }: { status: number, method?: string }) => {
+  const getBadgeColor = (): BadgeColors => {
+    if (status >= 100 && status < 199) { return 'informative' }
+    if (status >= 200 && status < 299) { return 'success' }
+    if (status >= 300 && status < 399) { return 'important' }
+    if (status >= 400 && status < 599) { return 'danger' }
+    return 'success';
+  };
+
+  const methodColors: Record<string, BadgeColors> = {
+    GET: 'brand',
+    POST: 'success',
+    PATCH: 'severe',
+    DELETE: 'danger',
+    PUT: 'warning'
+  };
+
+  return (
+    <div style={{ display: 'flex', gap: '4px' }}>
+      {method && (
+        <Badge color={methodColors[method] || 'informative'}>
+          {method}
+        </Badge>
+      )}
+      <Badge color={getBadgeColor()} appearance="ghost">{status}</Badge>
+    </div>
+  );
+};
 
 const trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
   const sanitizedUrl = sanitizeQueryUrl(query.url);
@@ -302,59 +321,6 @@ interface HistoryItemActionMenuProps {
 const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
   const dispatch = useAppDispatch()
   const {item} = props
-
-  const handleViewQuery = (query: IHistoryItem)=>{
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
-    const sampleQuery: IQuery = {
-      sampleUrl,
-      selectedVerb: query.method,
-      sampleBody: query.body,
-      sampleHeaders: query.headers,
-      selectedVersion: queryVersion
-    };
-    const { duration, status, statusText } = query;
-    dispatch(setSampleQuery(sampleQuery));
-    dispatch(setQueryResponse({
-      body: query.result,
-      headers: query.responseHeaders
-    }))
-    // TODO: change the message bar type to v9 types
-    dispatch(setQueryResponseStatus({
-      duration,
-      messageBarType: status < 300 ? 'success' : 'error',
-      ok: status < 300,
-      status,
-      statusText
-    }));
-    trackHistoryItemEvent(
-      eventTypes.LISTITEM_CLICK_EVENT,
-      componentNames.HISTORY_LIST_ITEM,
-      query
-    );
-  }
-
-  const handleRunQuery = (query: IHistoryItem) =>{
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
-    const sampleQuery: IQuery = {
-      sampleUrl,
-      selectedVerb: query.method,
-      sampleBody: query.body,
-      sampleHeaders: query.headers,
-      selectedVersion: queryVersion
-    };
-
-    if (sampleQuery.selectedVerb === 'GET') {
-      sampleQuery.sampleBody = JSON.parse('{}') as string;
-    }
-    dispatch(setSampleQuery(sampleQuery));
-    dispatch(runQuery(sampleQuery));
-
-    trackHistoryItemEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      componentNames.RUN_HISTORY_ITEM_BUTTON,
-      query
-    );
-  }
 
   const handleExportQuery = (query: IHistoryItem)=>{
     const harPayload = createHarEntry(query);
@@ -386,9 +352,6 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
       <MenuList>
         <MenuGroup>
           <MenuGroupHeader>{translateMessage('actions')}</MenuGroupHeader>
-          <MenuItem icon={<EyeRegular/>} onClick={()=>handleViewQuery(item)}>{translateMessage('view')}</MenuItem>
-          <MenuItem icon={<ArrowRepeatAllRegular/>}
-            onClick={()=>handleRunQuery(item)}>{translateMessage('Run Query')}</MenuItem>
           <MenuItem icon={<ArrowDownloadRegular/>}
             onClick={()=>handleExportQuery(item)}>{translateMessage('Export')}</MenuItem>
           <MenuItem icon={<DeleteRegular/>}

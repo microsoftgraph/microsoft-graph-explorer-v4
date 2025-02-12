@@ -8,7 +8,6 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
-  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -60,16 +59,13 @@ const useStyles = makeStyles({
     maxWidth: '100%'
   },
   iconBefore: {
-    width: '74px',
-    maxWidth: '74px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     gap: '2px'
   },
   badge: {
-    width: '58px',
-    maxWidth: '58px'
+    maxWidth: '50px'
   },
   disabled: {
     backgroundColor: tokens.colorSubtleBackgroundHover,
@@ -80,6 +76,9 @@ const useStyles = makeStyles({
   sampleQueries: {
     height: 'calc(100vh - 374px)',
     overflowY: 'auto'
+  },
+  itemLayout: {
+    paddingLeft: tokens.spacingHorizontalXXL
   }
 });
 
@@ -250,6 +249,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             id={query.id}
           >
             <TreeItemLayout
+              className={leafStyles.itemLayout}
               onClick={()=>handleOnClick(query)}
               iconBefore={<MethodIcon isSignedIn={isSignedIn} method={query.method} />}
               aside={<ResourceLink item={query}/>}
@@ -311,8 +311,7 @@ const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolea
     <div className={sampleQueriesStyles.iconBefore}>
       <Badge
         className={sampleQueriesStyles.badge}
-        appearance="filled"
-        size='small'
+        size='medium'
         color={colors[method]}
         aria-label={'http method ' + method + ' for'}>
         {method}
