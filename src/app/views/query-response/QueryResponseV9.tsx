@@ -5,9 +5,10 @@ import {
   DialogContent,
   DialogSurface,
   DialogTrigger,
-  makeStyles
+  makeStyles,
+  tokens
 } from '@fluentui/react-components';
-import { ExpandUpLeftRegular } from '@fluentui/react-icons';
+import { DismissRegular, ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item-v9';
 
@@ -20,11 +21,15 @@ const useStyles = makeStyles({
   dialog: {
     display: 'flex',
     justifyContent: 'center',
-    maxWidth: '40%',
+    maxWidth: '60%',
     minHeight: '60%'
   },
   dialogBtn: {
-    display: 'block'
+    height: 'min-content'
+  },
+  dismissBtn: {
+    height: 'min-content',
+    marginTop: tokens.spacingVerticalL
   }
 });
 
@@ -34,26 +39,27 @@ const PivotItemsDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
-      <div className={styles.dialogBtn}>
-        <DialogTrigger disableButtonEnhancement>
-          <Button
-            appearance='transparent'
-            icon={<ExpandUpLeftRegular />}
-            aria-label='Expand'
-          />
-        </DialogTrigger>
-      </div>
+      <DialogTrigger disableButtonEnhancement>
+        <Button
+          appearance='transparent'
+          icon={<ExpandUpLeftRegular />}
+          aria-label='Expand'
+          className={styles.dialogBtn}
+        />
+      </DialogTrigger>
       <DialogSurface className={styles.dialog}>
         <DialogBody>
           <DialogContent>
             <GetPivotItems />
           </DialogContent>
-          <div className={styles.dialogBtn}>
-            <Button appearance='transparent' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </DialogBody>
+        <Button
+          appearance='transparent'
+          icon={<DismissRegular />}
+          aria-label='Collapse'
+          className={styles.dismissBtn}
+          onClick={() => setOpen(false)}
+        />
       </DialogSurface>
     </Dialog>
   );
