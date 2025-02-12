@@ -34,7 +34,7 @@ export const PermissionConsentType = (props: IConsentType) => {
 
   if (allPrincipalPermissions.includes(item.value)) {
     return (
-      <Label className={consentStyles.consentTypeLabel}>
+      <Label className={consentStyles.consentTypeLabel} weight='semibold'>
         {translateMessage('AllPrincipal')}
       </Label>
     );
@@ -42,7 +42,7 @@ export const PermissionConsentType = (props: IConsentType) => {
 
   if (singlePrincipalPermissions.includes(item.value)) {
     return (
-      <Label className={consentStyles.consentTypeLabel}>
+      <Label className={consentStyles.consentTypeLabel} weight='semibold'>
         {translateMessage('Principal')}
       </Label>
     );
@@ -61,7 +61,6 @@ export const PermissionConsentType = (props: IConsentType) => {
             onClick={handleOnClick}
             icon={<ArrowSyncRegular />}
             aria-label={translateMessage('Reload consent-type')}
-            style={{ marginLeft: '50px' }}
           >
             {translateMessage('Reload')}
           </Button>
