@@ -44,7 +44,6 @@ const QueryRunner = (props: IQueryRunnerProps) => {
   };
 
   const handleOnRunQuery = (query?: IQuery) => {
-    console.log('query stuff', query)
     let sample = { ...sampleQuery };
     if (sampleBody && sample.selectedVerb !== 'GET') {
       const headers = sample.sampleHeaders;
@@ -75,7 +74,6 @@ const QueryRunner = (props: IQueryRunnerProps) => {
       }
     }
 
-    console.log('sample before dispatch', sample)
     dispatch(runQuery(sample));
     const sanitizedUrl = sanitizeQueryUrl(sample.sampleUrl);
     const deviceCharacteristics = telemetry.getDeviceCharacteristicsData();
@@ -113,18 +111,11 @@ const QueryRunner = (props: IQueryRunnerProps) => {
   };
 
   return (
-    <>
-      <div>
-        <div>
-          <QueryInput
-            handleOnRunQuery={handleOnRunQuery}
-            handleOnMethodChange={handleOnMethodChange}
-            handleOnVersionChange={handleOnVersionChange}
-          />
-        </div>
-      </div>
-
-    </>
+    <QueryInput
+      handleOnRunQuery={handleOnRunQuery}
+      handleOnMethodChange={handleOnMethodChange}
+      handleOnVersionChange={handleOnVersionChange}
+    />
   );
 }
 
