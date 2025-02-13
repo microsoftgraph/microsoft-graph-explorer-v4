@@ -22,6 +22,13 @@ import {
 } from '../adaptive-cards/AdaptiveHostConfig';
 import { default as GraphToolkitV9 } from '../graph-toolkit/GraphToolkitV9';
 import { ResponseV9 } from '../response';
+import {
+  ArrowResetRegular,
+  DocumentChevronDoubleRegular,
+  ClipboardCodeRegular,
+  WindowWrenchRegular,
+  CardUiRegular
+} from '@fluentui/react-icons';
 
 const useStyles = makeStyles({
   container: {
@@ -43,19 +50,19 @@ export const GetPivotItems = () => {
   return (
     <div className={styles.container}>
       <TabList selectedValue={selectedValue} onTabSelect={onTabSelect}>
-        <Tab value={translateMessage('Response Preview')}>
+        <Tab value={translateMessage('Response Preview')} icon={<ArrowResetRegular />}>
           {translateMessage('Response Preview')}
         </Tab>
-        <Tab value={translateMessage('Response Headers')}>
+        <Tab value={translateMessage('Response Headers')} icon={<DocumentChevronDoubleRegular />}>
           {translateMessage('Response Headers')}
         </Tab>
-        <Tab value={translateMessage('Snippets')}>
+        <Tab value={translateMessage('Snippets')} icon={<ClipboardCodeRegular />}>
           {translateMessage('Snippets')}
         </Tab>
-        <Tab value={translateMessage('Graph toolkit')}>
+        <Tab value={translateMessage('Graph toolkit')} icon={<WindowWrenchRegular />}>
           {translateMessage('Graph toolkit')}
         </Tab>
-        <Tab value={translateMessage('Adaptive Cards')}>
+        <Tab value={translateMessage('Adaptive Cards')} icon={<CardUiRegular />}>
           {translateMessage('Adaptive Cards')}
         </Tab>
       </TabList>

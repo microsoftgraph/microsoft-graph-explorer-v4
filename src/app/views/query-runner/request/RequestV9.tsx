@@ -11,6 +11,7 @@ import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
 import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-components';
+import { DocumentTableRegular, ShieldKeyholeRegular, KeyRegular, SendRegular } from '@fluentui/react-icons';
 
 
   interface IRequestProps {
@@ -61,17 +62,18 @@ const Request = (props: IRequestProps) => {
         selectedValue={selectedTab}
         onTabSelect={(_, data) => handleTabSelect(data.value)}
       >
-        <Tab value="request-body" aria-label={translateMessage('request body')}>
+        <Tab value="request-body" aria-label={translateMessage('request body')} icon={<SendRegular/>}>
           {translateMessage('Request Body')}
         </Tab>
-        <Tab value="request-headers" aria-label={translateMessage('request header')}>
+        <Tab value="request-headers" aria-label={translateMessage('request header')} icon={<DocumentTableRegular/>}>
           {translateMessage('Request Headers')}
         </Tab>
-        <Tab value="modify-permissions" aria-label={translateMessage('modify permissions')}>
+        <Tab value="modify-permissions" aria-label={translateMessage('modify permissions')}
+          icon={<ShieldKeyholeRegular />}>
           {translateMessage('Modify Permissions')}
         </Tab>
         {mode === Mode.Complete && (
-          <Tab value="access-token" aria-label={translateMessage('Access Token')}>
+          <Tab value="access-token" aria-label={translateMessage('Access Token')} icon={<KeyRegular />}>
             {translateMessage('Access Token')}
           </Tab>
         )}
