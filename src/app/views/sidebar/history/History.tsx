@@ -9,7 +9,6 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -81,7 +80,8 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    gap: '4px',
+    height: 'calc(100vh - 374px)'
   },
   searchBox: {
     width: '100%',
@@ -440,7 +440,7 @@ const History = ()=>{
       className={styles.searchBox}
     >
     </SearchBox>
-    <Divider />
+    <hr/>
     <MessageBar>
       <MessageBarBody>
         {translateMessage('Your history includes queries made in the last 30 days')}

@@ -1,0 +1,35 @@
+import { ContentType } from '../../../../types/enums';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
+import { Image, MonacoV9 } from '../../common';
+import { formatXml } from '../../common/monaco/util/format-xml';
+
+interface ResponseDisplayProps {
+  contentType: string;
+  body: string;
+}
+
+const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
+  const { contentType, body } = props;
+
+  switch (contentType) {
+  case 'application/xml':
+    return (
+      <MonacoV9 height="34rem" body={formatXml(body)} language='text/html' readOnly={true} />
+    );
+
+  case 'text/html':
+    return <MonacoV9 height="34rem" body={body} language='text/html' readOnly={true} />;
+
+  default:
+    if (isImageResponse(contentType)) {
+      return (
+        <Image styles={{ padding: '10px' }} body={body} alt='profile image' />
+      );
+    }
+    return (
+      <MonacoV9 height="34rem" body={body} readOnly={true} language={ContentType.Json} />
+    );
+  }
+};
+
+export default ResponseDisplayV9;

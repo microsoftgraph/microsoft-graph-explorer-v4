@@ -1,14 +1,11 @@
 import {
-  Button, ButtonProps, makeStyles, SelectTabData, SelectTabEvent, Tab, TabList
+  Button, ButtonProps, makeStyles, SelectTabData, SelectTabEvent, Tab, TabList, tokens
 } from '@fluentui/react-components';
 import {
   GroupList20Regular, History20Regular, PanelLeftContract20Regular, PanelLeftExpand20Regular, Rocket20Regular
 } from '@fluentui/react-icons';
 
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { IDimensions } from '../../../types/dimensions';
-import { setDimensions } from '../../services/slices/dimensions.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import ResourceExplorer from './resource-explorer';
@@ -20,14 +17,18 @@ interface IShowSidebar {
 }
 const useStyles = makeStyles({
   container: {
-    display:'flex',
-    flexDirection: 'column'
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    height: '100%',
+    padding: `0 ${tokens.spacingHorizontalS}`,
+    backgroundColor: tokens.colorNeutralBackground6,
+    borderRightStyle: 'solid',
+    borderRightColor: tokens.colorNeutralForeground3,
+    borderRightWidth: tokens.strokeWidthThin
   },
   sidebarToggle: {
     marginLeft: 'auto'
-  },
-  tabList: {
-    margin: '8px 0'
   }
 })
 const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
@@ -36,42 +37,35 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
 
   return <Button appearance="subtle" icon={PanelIcon()} onClick={handleShow} {...props}></Button>
 }
-const SidebarV9 = ()=>{
+
+interface SidebarProps {
+  handleToggleSelect: (showSidebarValue: boolean) => void;
+}
+const SidebarV9 = (props: SidebarProps)=>{
   const sidebarStyles = useStyles();
-  const sidebarProps = useAppSelector(state=> state.sidebarProperties)
-  const dimensions = useAppSelector(state=> state.dimensions)
-  const dispatch = useAppDispatch()
-  const {showSidebar} = sidebarProps;
+  const [showSidebarValue, setShowSidebarValue] = useState(true);
   const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value as string);
     setShowSidebarValue(true);
-    const dims = getDimensions(true, dimensions)
-    dispatch(setDimensions(dims))
   };
 
-  const [showSidebarValue, setShowSidebarValue] = useState(showSidebar);
   const handleShow = ()=>{
-    const tempDimensions = getDimensions(!showSidebarValue, dimensions)
-    dispatch(setDimensions(tempDimensions))
     setShowSidebarValue(!showSidebarValue);
+    props.handleToggleSelect(!showSidebarValue)
   }
 
-  // TODO: change these to V9 components
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueriesV9 />,
     'resources': <ResourceExplorer />,
     'history': <History />
   }
-  // TODO: Resizing is not showing/ hiding sidebar. Should be checked when
-  // updated to v9
 
   return (
     <div className={sidebarStyles.container}>
       <SidebarToggle className={sidebarStyles.sidebarToggle} show={showSidebarValue} handleShow={handleShow}/>
       <TabList
-        className={sidebarStyles.tabList}
         selectedValue={selectedValue} onTabSelect={onTabSelect} size="large" vertical>
         {renderTablistItems(showSidebarValue)}
       </TabList>
@@ -100,22 +94,6 @@ const renderTablistItems = (showSidebar: boolean) =>{
       <Tab id="history" value="history" icon={<History20Regular />}></Tab>
     </>
   )
-}
-
-const getDimensions = (show: boolean, dimensions: IDimensions)=>{
-  let tempDimensions = {...dimensions}
-  if (!show){
-    tempDimensions = {
-      ...dimensions,
-      sidebar: {width: '2.85%', height: ''}
-    }
-  } else {
-    tempDimensions = {
-      ...dimensions,
-      sidebar: {width: '28%', height: ''}
-    }
-  }
-  return tempDimensions
 }
 
 export { SidebarV9 };

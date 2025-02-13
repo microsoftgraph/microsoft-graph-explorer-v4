@@ -8,7 +8,6 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
-  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -73,6 +72,10 @@ const useStyles = makeStyles({
     '&:hover': {
       cursor: 'not-allowed'
     }
+  },
+  sampleQueries: {
+    height: 'calc(100vh - 374px)',
+    overflowY: 'auto'
   },
   itemLayout: {
     paddingLeft: tokens.spacingHorizontalXXL
@@ -362,6 +365,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const profile = useAppSelector(state=>state.profile)
   const authToken= useAppSelector((state) => state.auth.authToken);
   const authenticated = authToken.token
+  const styles = useStyles();
 
   useEffect(() => {
     if (!searchValue && queries.length === 0) {
@@ -423,7 +427,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         openItems={openItems}
         onOpenChange={handleOpenChange}
         aria-label={translateMessage('Sample Queries')}
-      >
+        className={styles.sampleQueries}>
         {groups.map((group, pos) => (
           <React.Fragment key={group.key}>
             <FlatTreeItem

@@ -26,11 +26,15 @@ import { methodColors, getStyleFor } from '../../../utils/http-methods.utils';
 
 const useStyles = makeStyles({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    rowGap: tokens.spacingHorizontalM,
-    columnGap: tokens.spacingHorizontalM
+    columnGap: tokens.spacingHorizontalMNudge,
+    display: 'inline-grid',
+    gridTemplateColumns: 'auto auto 1fr auto'
+  },
+  containerMobile: {
+    display: 'inline-grid',
+    rowGap: tokens.spacingHorizontalMNudge,
+    gridTemplateRows: 'auto auto auto auto'
+
   },
   errorText: {
     color: 'red',
@@ -39,7 +43,7 @@ const useStyles = makeStyles({
   smallDropdown: {
     '&.fui-Dropdown': {
       minWidth: '0',
-      flex: '1'
+      height: 'min-content'
     }
   },
   autocomplete: {
@@ -99,12 +103,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const selectedBadgeColor = getStyleFor(selectedMethod);
 
   return (
-    <div
-      className={classes.container}
-      style={{
-        flexDirection: mobileScreen ? 'column' : 'row'
-      }}
-    >
+    <div className={mobileScreen ? classes.containerMobile : classes.container}>
       <Field
         validationMessageIcon={showError ? <ErrorCircle12Filled /> : null}
         validationMessage={
@@ -144,40 +143,34 @@ const QueryInput = (props: IQueryInputProps) => {
         </Dropdown>
       </Field>
 
-      <div>
-        <Dropdown
-          aria-label={translateMessage('Microsoft Graph API Version option')}
-          placeholder='Select a version'
-          value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
-          onOptionSelect={(event, data) => {
-            handleOnVersionChange({
-              key: data.optionValue,
-              text: data.optionValue
-            });
-          }}
-          className={classes.smallDropdown}
-        >
-          {GRAPH_API_VERSIONS.map((version) => (
-            <Option key={version} value={version}>
-              {version}
-            </Option>
-          ))}
-        </Dropdown>
-      </div>
+      <Dropdown
+        aria-label={translateMessage('Microsoft Graph API Version option')}
+        placeholder='Select a version'
+        value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
+        onOptionSelect={(event, data) => {
+          handleOnVersionChange({
+            key: data.optionValue,
+            text: data.optionValue
+          });
+        }}
+        className={classes.smallDropdown}
+      >
+        {GRAPH_API_VERSIONS.map((version) => (
+          <Option key={version} value={version}>
+            {version}
+          </Option>
+        ))}
+      </Dropdown>
 
-      <div className={classes.autocomplete}>
-        <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
-      </div>
+      <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
 
-      <div>
-        <SubmitButton
-          className='run-query-button'
-          text={translateMessage('Run Query')}
-          disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
-          handleOnClick={() => runQuery()}
-          submitting={isLoadingData}
-        />
-      </div>
+      <SubmitButton
+        className='run-query-button'
+        text={translateMessage('Run Query')}
+        disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
+        handleOnClick={() => runQuery()}
+        submitting={isLoadingData}
+      />
     </div>
   );
 };
