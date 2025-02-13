@@ -52,8 +52,8 @@ export const GetPivotItems = () => {
         <Tab value={translateMessage('Snippets')}>
           {translateMessage('Snippets')}
         </Tab>
-        <Tab value={translateMessage('Graph Toolkit')}>
-          {translateMessage('Graph Toolkit')}
+        <Tab value={translateMessage('Graph toolkit')}>
+          {translateMessage('Graph toolkit')}
         </Tab>
         <Tab value={translateMessage('Adaptive Cards')}>
           {translateMessage('Adaptive Cards')}
@@ -64,7 +64,7 @@ export const GetPivotItems = () => {
         <ResponseHeadersV9 />
       )}
       {selectedValue === translateMessage('Snippets') && <SnippetsV9 />}
-      {selectedValue === translateMessage('Graph Toolkit') && (
+      {selectedValue === translateMessage('Graph toolkit') && (
         <GraphToolkitV9 />
       )}
       {selectedValue === translateMessage('Adaptive Cards') && (
