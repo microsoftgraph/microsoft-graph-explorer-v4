@@ -54,7 +54,8 @@ export const useResourceExplorerStyles = makeStyles({
 
 export const useSearchBoxStyles = makeStyles({
   root: {
-    width: '100%'
+    width: '100%',
+    maxWidth: '100%'
   },
   field: {
     paddingLeft: '10px',
