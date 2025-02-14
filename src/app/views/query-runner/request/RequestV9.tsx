@@ -1,16 +1,14 @@
-import { CSSProperties, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../../store';
+import { useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
-import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
-import { makeStyles, Tab, TabList, TabValue, tokens } from '@fluentui/react-components';
+import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
 import { DocumentTableRegular, ShieldKeyholeRegular, KeyRegular, SendRegular } from '@fluentui/react-icons';
 
 
