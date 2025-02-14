@@ -91,7 +91,7 @@ const Request = (props: IRequestProps) => {
       <div className={styles.tabContent}>
         {selectedTab === 'request-body' && (
           <div style={{ flex: 1, display: 'flex' }}>
-            <RequestBody handleOnEditorChange={handleOnEditorChange} />
+            <RequestBody handleOnEditorChange={handleOnEditorChange} isVisible={selectedTab === 'request-body'} />
           </div>)}
         {selectedTab === 'request-headers' && (
           <div style={{ flex: 1, display: 'flex' }}>
