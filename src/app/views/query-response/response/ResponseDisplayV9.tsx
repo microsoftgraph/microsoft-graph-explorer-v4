@@ -27,7 +27,9 @@ const ResponseDisplayV9 = (props: ResponseDisplayProps) => {
       );
     }
     return (
-      <MonacoV9 body={body} readOnly={true} language={ContentType.Json} />
+      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+        <MonacoV9 body={body} readOnly language="json" />
+      </div>
     );
   }
 };

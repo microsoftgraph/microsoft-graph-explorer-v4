@@ -24,35 +24,37 @@ export const useLayoutStyles = makeStyles({
     height: 'calc(100vh - 98px)'
   },
   mainContent: {
-    flex: '3 1 auto',
+    flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingHorizontalS,
     overflowY: 'auto',
-    height: 'calc(100vh - 98px)'
+    minHeight: '300px',
+    height: 'calc(100vh - 120px)'
   },
   requestResponseArea: {
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
     gap: tokens.spacingHorizontalS,
-    borderRadius: tokens.borderRadiusMedium
+    height: '100%',
+    overflow: 'hidden'
   },
   responseArea: {
+    flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    flex: '1',
-    maxHeight: '45%',
-    // border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    maxHeight: '50%',
+    overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge
   },
   requestArea: {
+    flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    flex: '1',
-    maxHeight: '50%',
-    // border: `solid ${tokens.colorStrokeFocus2} ${tokens.strokeWidthThin}`,
+    maxHeight: '37%',
+    overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge
   }

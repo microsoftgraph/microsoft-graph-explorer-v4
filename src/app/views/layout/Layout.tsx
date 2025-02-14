@@ -99,8 +99,8 @@ export const Layout = (props: LayoutProps) => {
                       sampleQuery={sampleQuery}
                     />
                   </div>
+                  <StatusMessagesV9 />
                   <div id='response-area' className={layoutStyles.responseArea}>
-                    <StatusMessagesV9 />
                     <QueryResponseV9 />
                   </div>
                 </div>

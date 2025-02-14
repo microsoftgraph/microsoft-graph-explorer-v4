@@ -26,14 +26,24 @@ import { ResponseV9 } from '../response';
 
 const useStyles = makeStyles({
   container: {
-    flex: '1'
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    flex: 1,
+    height: '100%',
+    overflow: 'hidden'
   },
   tabContent: {
+    flex: 1, // Allow it to expand properly
+    display: 'flex',
+    flexDirection: 'column',
     border: `1px solid ${tokens.colorNeutralStroke1}`,
-    borderRadius: `0 0 ${tokens.borderRadiusMedium} ${tokens.borderRadiusMedium}`,
-    padding: tokens.spacingHorizontalS,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalM,
     marginTop: tokens.spacingHorizontalS,
-    backgroundColor: tokens.colorNeutralBackground1
+    backgroundColor: tokens.colorNeutralBackground1,
+    height: '100%', // Remove minHeight and ensure it fills parent
+    overflow: 'hidden'
   }
 });
 
