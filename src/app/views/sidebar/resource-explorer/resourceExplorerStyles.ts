@@ -37,6 +37,11 @@ export const useResourceExplorerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
+  asideIcons: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem'
+  },
   tree: {
     height: 'calc(100vh - 374px)',
     overflowY: 'auto'

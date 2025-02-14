@@ -8,11 +8,12 @@ import {
   FlatTreeItem,
   TreeItemLayout,
   CounterBadge,
+  Tooltip,
   TreeItemValue,
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { Collections20Regular } from '@fluentui/react-icons';
+import { Collections20Regular, AddSquare20Regular, SubtractSquare20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -20,6 +21,7 @@ import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { existsInCollection, setExisting } from './resourcelink.utils';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -89,10 +91,20 @@ const ResourceExplorer = () => {
   }, []);
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
-    ev!.preventDefault();
-    item!.isExpanded = !item!.isExpanded;
-    setQuery(item!);
-  }
+    ev?.preventDefault();
+    if (!item) {return;}
+    // Toggle expanded state for items with child links
+    if (item.links.length > 0) {
+      const updatedOpenItems = new Set(openItems);
+      if (updatedOpenItems.has(item.key)) {
+        updatedOpenItems.delete(item.key);
+      } else {
+        updatedOpenItems.add(item.key);
+      }
+      setOpenItems(updatedOpenItems);
+    }
+    setQuery(item);
+  };
 
   const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
@@ -135,13 +147,67 @@ const ResourceExplorer = () => {
     })
   }
 
-  const AsideContent = ({ messageCount }: { messageCount?: number }) => (
-    <>
-      {messageCount && messageCount > 0 ? (
-        <CounterBadge count={messageCount} color="informative" />
-      ) : null}
-    </>
-  );
+  const AsideContent = ({
+    item,
+    messageCount
+  }: {
+    item: IResourceLink;
+    messageCount?: number;
+  }) => {
+    const paths = collections?.find(k => k.isDefault)?.paths || [];
+
+    const isInCollection = useMemo(() => {
+      return existsInCollection(item, paths, version);
+    }, [item, paths, version]);
+
+    const handleAddToCollection = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      addToCollection(item);
+    };
+
+    const handleRemoveFromCollection = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      removeFromCollection(item);
+    };
+
+    return (
+      <div className={resourceExplorerStyles.asideIcons}>
+        <div className='action-button'>
+          {isInCollection ? (
+            <Tooltip
+              withArrow
+              content={translateMessage('Remove from collection')}
+              relationship='label'
+            >
+              <Button
+                aria-label={translateMessage('Remove from collection')}
+                appearance='transparent'
+                icon={<SubtractSquare20Regular />}
+                onClick={handleRemoveFromCollection}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip
+              withArrow
+              content={translateMessage('Add to collection')}
+              relationship='label'
+            >
+              <Button
+                aria-label={translateMessage('Add to collection')}
+                appearance='transparent'
+                aria-describedby='tooltip'
+                icon={<AddSquare20Regular />}
+                onClick={handleAddToCollection}
+              />
+            </Tooltip>
+          )}
+        </div>
+        {messageCount && messageCount > 0 && (
+          <CounterBadge count={messageCount} color="informative" />
+        )}
+      </div>
+    );
+  };
 
   const handleOpenChange = (_event: TreeOpenChangeEvent, data_: TreeOpenChangeData) => {
     setOpenItems(data_.openItems);
@@ -161,7 +227,14 @@ const ResourceExplorer = () => {
         >
           <TreeItemLayout
             className={resourceExplorerStyles.treeItemLayout}
-            aside={item.links.length > 0 ? <AsideContent messageCount={item.links.length} /> : null}
+            aside={
+              item.links.length > 0 ? (
+                <AsideContent
+                  item={item}
+                  messageCount={item.links?.length}
+                />
+              ) : null
+            }
           >
             <ResourceLink
               link={item}

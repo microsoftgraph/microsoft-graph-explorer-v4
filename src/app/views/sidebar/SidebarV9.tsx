@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     height: '100%',
     padding: `0 ${tokens.spacingHorizontalS}`,
-    backgroundColor: tokens.colorNeutralBackground6,
+    backgroundColor: tokens.colorNeutralBackground2,
     borderRightStyle: 'solid',
     borderRightColor: tokens.colorNeutralForeground3,
     borderRightWidth: tokens.strokeWidthThin
