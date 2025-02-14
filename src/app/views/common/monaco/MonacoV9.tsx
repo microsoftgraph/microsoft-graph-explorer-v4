@@ -15,12 +15,12 @@ interface MonacoProps {
   readOnly?: boolean;
   height?: string;
   extraInfoElement?: JSX.Element;
-  isVisible?: boolean; // NEW PROP: Tracks visibility
+  isVisible?: boolean;
 }
 
 const useStyles = makeStyles({
   container: {
-    flex: 1, // NEW: Allows container to stretch inside parent
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
@@ -72,14 +72,14 @@ const MonacoV9 = ({ body, onChange, language, readOnly, height, extraInfoElement
           <Editor
             language={language || 'json'}
             width=' 100%'
-            height=' 100%'  // Ensures full height
+            height=' 100%'
             value={formattedBody}
             options={editorOptions}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
             onMount={(editorInstance) => {
               editorRef.current = editorInstance;
-              editorInstance.layout(); // Ensure layout is applied when mounted
+              editorInstance.layout();
             }}
           />
         </div>
