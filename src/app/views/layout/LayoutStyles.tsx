@@ -44,7 +44,7 @@ export const useLayoutStyles = makeStyles({
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    maxHeight: '50%',
+    maxHeight: '53%',
     overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge
