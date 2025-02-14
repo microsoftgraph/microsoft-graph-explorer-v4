@@ -26,15 +26,17 @@ import { methodColors, getStyleFor } from '../../../utils/http-methods.utils';
 
 const useStyles = makeStyles({
   container: {
-    columnGap: tokens.spacingHorizontalMNudge,
-    display: 'inline-grid',
-    gridTemplateColumns: 'auto auto 1fr auto'
+    display: 'grid',
+    gridTemplateColumns: 'auto auto 1fr auto', // Matches the layout in the image
+    alignItems: 'center',
+    columnGap: tokens.spacingHorizontalS,
+    width: '100%'
   },
   containerMobile: {
-    display: 'inline-grid',
+    display: 'grid',
+    gridTemplateRows: 'auto auto auto auto',
     rowGap: tokens.spacingHorizontalMNudge,
-    gridTemplateRows: 'auto auto auto auto'
-
+    width: '100%'
   },
   errorText: {
     color: 'red',
@@ -42,7 +44,7 @@ const useStyles = makeStyles({
   },
   smallDropdown: {
     '&.fui-Dropdown': {
-      minWidth: '0',
+      minWidth: '90px',
       height: 'min-content'
     }
   },
