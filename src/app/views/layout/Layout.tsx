@@ -81,14 +81,19 @@ export const Layout = (props: LayoutProps) => {
               />
             </div>}
             <div id='main-content' className={layoutStyles.mainContent}>
-              <Notification
-                header={translateMessage('Banner notification 1 header')}
-                content={translateMessage('Banner notification 1 content')}
-                link={translateMessage('Banner notification 1 link')}
-                linkText={translateMessage('Banner notification 1 link text')}
-              />
+              <div style={{margin: '0 10px'}}>
+                <Notification
+                  header={translateMessage('Banner notification 1 header')}
+                  content={translateMessage('Banner notification 1 content')}
+                  link={translateMessage('Banner notification 1 link')}
+                  linkText={translateMessage('Banner notification 1 link text')}
+                />
+              </div>
+
               <ValidationProvider>
-                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                <div style={{margin: '0 10px'}}>
+                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                </div>
                 <div
                   id='request-response-area'
                   className={layoutStyles.requestResponseArea}
@@ -99,7 +104,9 @@ export const Layout = (props: LayoutProps) => {
                       sampleQuery={sampleQuery}
                     />
                   </div>
-                  <StatusMessagesV9 />
+                  <div style={{margin: '0 10px'}}>
+                    <StatusMessagesV9 />
+                  </div>
                   <div id='response-area' className={layoutStyles.responseArea}>
                     <QueryResponseV9 />
                   </div>
