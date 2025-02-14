@@ -33,6 +33,12 @@ export const useStyles = makeStyles({
     visibility: 'hidden',
     display: 'flex',
     alignItems: 'center'
+  },
+  linkIcon: {
+    display: 'flex',
+    '&:hover': {
+      color: tokens.colorBrandForegroundLinkHover
+    }
   }
 });
 

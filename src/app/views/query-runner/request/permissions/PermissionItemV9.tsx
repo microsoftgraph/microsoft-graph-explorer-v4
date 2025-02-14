@@ -122,7 +122,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
     case 'isAdmin':
       return (
         <div className={styles.adminLabel}>
-          <Label>{translateMessage(item.isAdmin ? 'Yes' : 'No')}</Label>
+          <Label weight='semibold'>{translateMessage(item.isAdmin ? 'Yes' : 'No')}</Label>
         </div>
       );
 

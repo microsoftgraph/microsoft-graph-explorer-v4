@@ -113,18 +113,11 @@ const QueryRunner = (props: IQueryRunnerProps) => {
   };
 
   return (
-    <>
-      <div>
-        <div>
-          <QueryInput
-            handleOnRunQuery={handleOnRunQuery}
-            handleOnMethodChange={handleOnMethodChange}
-            handleOnVersionChange={handleOnVersionChange}
-          />
-        </div>
-      </div>
-
-    </>
+    <QueryInput
+      handleOnRunQuery={handleOnRunQuery}
+      handleOnMethodChange={handleOnMethodChange}
+      handleOnVersionChange={handleOnVersionChange}
+    />
   );
 }
 

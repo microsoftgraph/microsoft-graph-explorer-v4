@@ -123,14 +123,14 @@ export const Permissions = (): JSX.Element => {
   }
 
   return (
-    <div>
+    <>
       <div className={styles.permissionText}>
         <Text>
           {translateMessage(tokenPresent ? 'permissions required to run the query':'sign in to consent to permissions')}
         </Text>
       </div>
-      <div className={styles.tableWrapper} style={{ height: tabHeight }}>
-        <Table aria-label={translateMessage('Permissions Table')}>
+      <div className={styles.tableWrapper}>
+        <Table aria-label={translateMessage('Permissions Table')}  size="extra-small">
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
@@ -149,6 +149,6 @@ export const Permissions = (): JSX.Element => {
           </TableBody>
         </Table>
       </div>
-    </div>
+    </>
   );
 };

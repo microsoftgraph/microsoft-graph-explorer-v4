@@ -1,4 +1,4 @@
-import { Tooltip, Button, Badge } from '@fluentui/react-components'
+import { Tooltip, Button, Badge, Link } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
 import { useEffect } from 'react';
 
@@ -138,24 +138,20 @@ const ResourceLinkActions = ({
         relationship='label'
       >
         {resourceLink.docLink ? (
-          <Button
+          <Link
             aria-label={translateMessage('Read documentation')}
-            id='documentButton'
-            aria-disabled={!resourceLink.docLink}
-            className={iconButtonStyles.root}
-            icon={<DocumentText20Regular />}
-            appearance='transparent'
-            onClick={() => openDocumentationLink()}
-          /> ) :
-          <Button
+            appearance='subtle'
+            className={iconButtonStyles.linkIcon}
+            target='_blank' href={resourceLink.docLink}
+            onClick={() => openDocumentationLink()}>
+            <DocumentText20Regular /></Link>) :
+          <Link
             disabled
             aria-label={translateMessage('Read documentation')}
-            id='documentButton'
+            appearance='subtle'
             aria-disabled
-            appearance='transparent'
-            className={iconButtonStyles.root}
-            icon={<DocumentText20Regular />}
-          />}
+            className={iconButtonStyles.linkIcon}>
+            <DocumentText20Regular /></Link>}
       </Tooltip>
     )}
     {resourceLink.isInCollection ? (

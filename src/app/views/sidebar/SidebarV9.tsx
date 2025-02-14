@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground6,
     borderRightStyle: 'solid',
-    borderRightColor: tokens.colorStrokeFocus2,
+    borderRightColor: tokens.colorNeutralForeground3,
     borderRightWidth: tokens.strokeWidthThin
   },
   sidebarToggle: {
