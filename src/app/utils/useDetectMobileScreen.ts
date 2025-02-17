@@ -3,7 +3,7 @@ import { useAppDispatch } from '../../store';
 import { toggleSidebar } from '../services/slices/sidebar-properties.slice';
 
 
-const MOBILE_BREAKPOINT = 480;
+const MOBILE_BREAKPOINT = 768;
 
 export const useDetectMobileScreen = () => {
   const dispatch = useAppDispatch();

@@ -35,6 +35,7 @@ import { substituteTokens } from '../utils/token-helpers';
 import { parse, ParsedMessageResult } from './query-runner/util/iframe-message-parser';
 import { Layout } from './layout/Layout';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
+import { useDetectMobileScreen } from '../utils/useDetectMobileScreen';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
@@ -86,6 +87,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = async () => {
+    this.detectMobileScreen();
     removeSpinners();
     KeyboardCopyEvent();
 
@@ -261,6 +263,14 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({
       selectedVerb: verb
     });
+  };
+
+  private detectMobileScreen = () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile !== this.state.mobileScreen) {
+      this.setState({ mobileScreen: isMobile });
+      this.props.actions.toggleSidebar({ mobileScreen: isMobile, showSidebar: !isMobile });
+    }
   };
 
   public render() {
