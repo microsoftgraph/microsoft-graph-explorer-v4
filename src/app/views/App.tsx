@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { removeSpinners } from '../..';
 import { authenticationWrapper } from '../../modules/authentication';
 import { ApplicationState } from '../../store';
-import { loadGETheme } from '../../themes';
 import { ThemeContext } from '../../themes/theme-context';
 import { Mode } from '../../types/enums';
 import {
@@ -62,16 +61,6 @@ interface IAppState {
   sidebarTabSelection: string;
 }
 
-const getSystemTheme = (): string => {
-  if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    return 'dark';
-  }
-  return 'light';
-};
-
 class App extends Component<IAppProps, IAppState> {
   private mediaQueryList = window.matchMedia('(max-width: 992px)');
 
@@ -119,12 +108,6 @@ class App extends Component<IAppProps, IAppState> {
     // Listens for messages from host document
     window.addEventListener('message', this.receiveMessage, false);
     this.handleSharedQueries();
-
-    // Load the theme from local storage or use the system theme as the default
-    const savedTheme = localStorage.getItem('appTheme') ?? getSystemTheme();
-    // @ts-ignore
-    this.props.actions.changeTheme(savedTheme);
-    loadGETheme(savedTheme); // TODO: Remove when cleaning up
   };
 
   public handleSharedQueries() {
@@ -193,8 +176,6 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
-    loadGETheme(msg.theme); // TODO: remove when done moving to fluent ui
-
     // @ts-ignore
     this.props.actions!.changeTheme(msg.theme);
   };
