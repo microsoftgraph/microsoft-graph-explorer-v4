@@ -18,12 +18,14 @@ import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { Mode } from '../../../types/enums';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
+import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
 }
 
 export const Layout = (props: LayoutProps) => {
+  useDetectMobileScreen();
   const layoutStyles = useLayoutStyles();
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ export const Layout = (props: LayoutProps) => {
   // NOTE: use this to show only the icons of the request and response area tabs
   const mode = useAppSelector((state) => state.graphExplorerMode);
   const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
-  const showSidebar = mode === Mode.Complete && !mobileScreen
+  const showSidebar = mode === Mode.Complete && !mobileScreen;
 
   const {
     handleRef: sidebarHandleRef,
