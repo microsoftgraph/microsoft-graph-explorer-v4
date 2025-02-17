@@ -275,13 +275,12 @@ const RenderJSONSchema = (props: RenderCardJSONProps) => {
           </Link>
         </MessageBarBody>
       </MessageBar>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column',height: '500px' }}>
         <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true} />
         <MonacoV9
           body={template}
           language='json'
           readOnly={true}
-          height='300px'
         />
       </div>
     </div>
