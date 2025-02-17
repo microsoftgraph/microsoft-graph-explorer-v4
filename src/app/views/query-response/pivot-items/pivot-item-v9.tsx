@@ -41,15 +41,15 @@ const useStyles = makeStyles({
     overflow: 'hidden'
   },
   tabContent: {
-    flex: 1, // Allow it to expand properly
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    minHeight: 0,
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalM,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
-    height: '100%', // Remove minHeight and ensure it fills parent
     overflow: 'hidden'
   }
 });

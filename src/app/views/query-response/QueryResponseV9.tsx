@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: '-webkit-fill-available',
+    height: '100%',
     width: '100%',
     position: 'relative'
   },
