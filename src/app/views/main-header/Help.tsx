@@ -1,132 +1,79 @@
 import {
-  ContextualMenuItemType,
-  DirectionalHint,
-  getId,
-  getTheme,
-  IconButton,
-  IContextualMenuProps,
-  registerIcons,
-  TooltipHost
-} from '@fluentui/react';
-import { useEffect, useState } from 'react';
-import { GitHubLogoIcon } from '@fluentui/react-icons-mdl2';
+  Button, Menu, MenuDivider, MenuItemLink, MenuList, MenuPopover, MenuTrigger, Tooltip
+} from '@fluentui/react-components'
+import {
+  Branch20Regular,
+  ChatHelp20Regular, DocumentMultiple20Regular, DocumentOnePage20Regular, DocumentQuestionMark20Regular
+} from '@fluentui/react-icons'
+import { componentNames, eventTypes, telemetry } from '../../../telemetry'
+import {
+  GE_DOCUMENTATION_LINK, GITHUB_LINK, GRAPH_DOCUMENTATION_LINK, REPORT_AN_ISSUE_LINK
+} from '../../../telemetry/component-names'
+import { translateMessage } from '../../utils/translate-messages'
+import { useHeaderStyles } from './utils'
 
-import { componentNames, eventTypes, telemetry } from '../../../telemetry';
-import { translateMessage } from '../../utils/translate-messages';
-import { mainHeaderStyles } from './MainHeader.styles';
-import { useAppSelector } from '../../../store';
-
-export const Help = () => {
-  const auth = useAppSelector((state)=> state.auth)
-  const authToken = auth.authToken;
-  const authenticated = authToken.token;
-  const [items, setItems] = useState([]);
-  const currentTheme = getTheme();
-
-  registerIcons({
-    icons: {
-      GitHubLogo: <GitHubLogoIcon />
-    }
+const trackHelpButtonClickEvent = () => {
+  telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+    ComponentName: componentNames.HELP_BUTTON
   });
+}
 
-  useEffect(() => {
-    const menuItems: any = [
-      {
-        key: 'report-issue',
-        text: translateMessage('Report an Issue'),
-        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose',
-        target: '_blank',
-        iconProps: {
-          iconName: 'ReportWarning'
-        },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.REPORT_AN_ISSUE_LINK)
-      },
-      { key: 'divider_1', itemType: ContextualMenuItemType.Divider },
-      {
-        key: 'ge-documentation',
-        text: translateMessage('Get started with Graph Explorer'),
-        href: 'https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0',
-        target: '_blank',
-        iconProps: {
-          iconName: 'TextDocument'
-        },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GE_DOCUMENTATION_LINK)
-      },
-      {
-        key: 'graph-documentation',
-        text: translateMessage('Graph Documentation'),
-        href: ' https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
-        target: '_blank',
-        iconProps: {
-          iconName: 'Documentation'
-        },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(
-          e.currentTarget.href,
-          componentNames.GRAPH_DOCUMENTATION_LINK)
-      },
-      {
-        key: 'github',
-        text: 'GitHub',
-        href: 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4#readme',
-        target: '_blank',
-        iconProps: {
-          iconName: 'GitHubLogo',
-          styles: {
-            root: {
-              position: 'relative',
-              top: '-2px'
-            }
-          }
-        },
-        onClick: (e: any) => telemetry.trackLinkClickEvent(e.currentTarget.href, componentNames.GITHUB_LINK)
-      }
-    ];
-    setItems(menuItems);
-  }, [authenticated]);
+const reportAnIssueLink = 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/new/choose';
+const geDocsLink = 'https://learn.microsoft.com/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0'
+const graphDocsLink = 'https://learn.microsoft.com/graph/api/overview?view=graph-rest-1.0'
+const ghLink = 'https://github.com/microsoftgraph/microsoft-graph-explorer-v4#readme'
 
-  const trackHelpButtonClickEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
-      ComponentName: componentNames.HELP_BUTTON
-    });
-  }
+const trackLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, componentName: string) => {
+  telemetry.trackLinkClickEvent(e.currentTarget.href, componentName)
+}
 
-  const calloutStyles: React.CSSProperties = {
-    overflowY: 'hidden'
-  }
-  const { iconButton: helpButtonStyles, tooltipStyles, helpContainerStyles } = mainHeaderStyles(currentTheme);
-
-  const menuProperties: IContextualMenuProps = {
-    shouldFocusOnMount: true,
-    alignTargetEdge: true,
-    items,
-    directionalHint: DirectionalHint.bottomLeftEdge,
-    calloutProps: {
-      style: calloutStyles
-    },
-    styles: { container: { border: '1px solid' + currentTheme.palette.neutralTertiary } }
-  };
+const HelpV9 = ()=>{
+  const styles = useHeaderStyles();
 
   return (
-    <div style={helpContainerStyles}>
-      <TooltipHost
-        content={
-          <div style={{ padding: '3px' }}>
-            {translateMessage('Help')}
-          </div>}
-        id={getId()}
-        calloutProps={{ gapSpace: 0 }}
-        styles={tooltipStyles}
-      >
-        <IconButton
-          ariaLabel={translateMessage('Help')}
-          role='button'
-          styles={helpButtonStyles}
-          menuIconProps={{ iconName: 'Help' }}
-          menuProps={menuProperties}
-          onMenuClick={trackHelpButtonClickEvent}
-        />
-      </TooltipHost>
-    </div>
-  );
+    <Menu>
+      <Tooltip content={translateMessage('Help')} relationship="description">
+        <MenuTrigger disableButtonEnhancement>
+          <Button
+            onClick={trackHelpButtonClickEvent}
+            className={styles.iconButton} appearance="subtle" icon={<ChatHelp20Regular />} />
+        </MenuTrigger>
+      </Tooltip>
+
+      <MenuPopover>
+        <MenuList>
+          <MenuItemLink
+            as='a'
+            href={reportAnIssueLink} target="_blank"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>)=> trackLinkClick(e, REPORT_AN_ISSUE_LINK)}
+            icon={<DocumentQuestionMark20Regular />}>{translateMessage('Report an Issue')}</MenuItemLink>
+        </MenuList>
+        <MenuDivider />
+        <MenuList>
+          <MenuItemLink
+            as='a'
+            href={geDocsLink} target="_blank"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>)=> trackLinkClick(e, GE_DOCUMENTATION_LINK)}
+            icon={<DocumentOnePage20Regular />}>{translateMessage('Get started with Graph Explorer')}</MenuItemLink>
+        </MenuList>
+        <MenuList>
+          <MenuItemLink
+            as='a'
+            href={graphDocsLink} target="_blank"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>)=> trackLinkClick(e, GRAPH_DOCUMENTATION_LINK)}
+            icon={<DocumentMultiple20Regular />}>{translateMessage('Graph Documentation')}</MenuItemLink>
+        </MenuList>
+        <MenuList>
+          <MenuItemLink
+            as='a'
+            href={ghLink} target="_blank"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>)=> trackLinkClick(e, GITHUB_LINK)}
+            icon={<Branch20Regular />}>GitHub</MenuItemLink>
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  )
 }
+
+export { HelpV9 }
 
