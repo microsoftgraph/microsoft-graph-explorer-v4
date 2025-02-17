@@ -171,7 +171,7 @@ const ResourceExplorer = () => {
     };
 
     return (
-      <div className={resourceExplorerStyles.asideIcons}>
+      <>
         <div className='action-button'>
           {isInCollection ? (
             <Tooltip
@@ -205,7 +205,7 @@ const ResourceExplorer = () => {
         {messageCount && messageCount > 0 && (
           <CounterBadge count={messageCount} color="informative" />
         )}
-      </div>
+      </>
     );
   };
 
@@ -229,10 +229,12 @@ const ResourceExplorer = () => {
             className={resourceExplorerStyles.treeItemLayout}
             aside={
               item.links.length > 0 ? (
-                <AsideContent
-                  item={item}
-                  messageCount={item.links?.length}
-                />
+                <div data-aside-content className={resourceExplorerStyles.asideIcons}>
+                  <AsideContent
+                    item={item}
+                    messageCount={item.links?.length}
+                  />
+                </div>
               ) : null
             }
           >

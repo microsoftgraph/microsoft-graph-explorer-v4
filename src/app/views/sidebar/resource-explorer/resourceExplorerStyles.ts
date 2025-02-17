@@ -40,7 +40,9 @@ export const useResourceExplorerStyles = makeStyles({
   asideIcons: {
     display: 'flex',
     alignItems: 'center',
-    gap: '0.5rem'
+    '& .action-button': {
+      display: 'none'
+    }
   },
   tree: {
     height: 'calc(100vh - 374px)',
@@ -49,7 +51,10 @@ export const useResourceExplorerStyles = makeStyles({
   treeItemLayout: {
     width: '100%',
     ':hover': {
-      backgroundColor: tokens.colorNeutralBackground3Hover
+      backgroundColor: tokens.colorNeutralBackground3Hover,
+      '& [data-aside-content] .action-button': {
+        display: 'flex'
+      }
     },
     '> div.fui-TreeItemLayout__main': {
       width: '100%'
