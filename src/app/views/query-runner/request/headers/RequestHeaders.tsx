@@ -16,11 +16,10 @@ const useStyles = makeStyles({
   container: {
     textAlign: 'center',
     padding: '10px',
-    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    flex: 1
+    flex: 1,
+    maxHeight:'100%'
   },
   row: {
     display: 'flex',
@@ -38,7 +37,8 @@ const useStyles = makeStyles({
   },
   listContainer: {
     flex: 1,
-    overflow: 'auto',
+    overflowY: 'auto',
+    maxHeight: '15vh',
     minHeight: 0,
     width: '100%'
   }

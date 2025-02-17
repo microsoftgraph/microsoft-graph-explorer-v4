@@ -2,10 +2,10 @@ import { makeStyles } from '@fluentui/react-components';
 
 export const useHeaderStyles = makeStyles({
   container: {
-    overflow: 'auto hidden',
     padding: '10px',
     textAlign: 'start',
-    height: '100%'
+    maxHeight: '15vh',
+    minHeight: 0
   },
   itemContent: {
     marginTop: '2.5%'
