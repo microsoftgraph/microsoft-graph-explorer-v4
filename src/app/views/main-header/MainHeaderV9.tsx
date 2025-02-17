@@ -58,7 +58,7 @@ const MainHeaderV9 = ()=>{
         {mobileScreen && (
           <PanelLeftExpand20Regular className={styles.menuIcon} onClick={handleSidebarToggle} />
         )}
-        <Text size={mobileScreen ?400 : 600} as="h1" className={styles.headerText}>Graph Explorer</Text>
+        <Text size={mobileScreen ? 500 : 600} as="h1" className={styles.headerText}>Graph Explorer</Text>
       </div>
       <HeaderIcons />
     </div>
