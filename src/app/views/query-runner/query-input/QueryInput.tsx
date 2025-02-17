@@ -27,8 +27,8 @@ import { methodColors, getStyleFor } from '../../../utils/http-methods.utils';
 const useStyles = makeStyles({
   container: {
     display: 'grid',
-    gridTemplateColumns: 'auto auto 1fr auto', // Matches the layout in the image
-    alignItems: 'center',
+    gridTemplateColumns: 'auto auto 1fr auto',
+    alignItems: 'start',
     columnGap: tokens.spacingHorizontalS,
     width: '100%'
   },
