@@ -198,7 +198,7 @@ const HistoryItems = (props: HistoryProps)=>{
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
   openHistoryItems.add('Today')
 
-  const styles = useStyles()
+  const itemStyles = useStyles()
 
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
@@ -318,11 +318,11 @@ const HistoryItems = (props: HistoryProps)=>{
                   aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
                 >
                   <TreeItemLayout
-                    className={styles.historyTreeItemLayout}
+                    className={itemStyles.historyTreeItemLayout}
                     onClick={()=>handleViewQuery(h)}
                     iconBefore={<HistoryStatusCodes status={h.status} method={h.method}/>}
                     aside={
-                      <div data-history-aside className={styles.historyAsideIcons}>
+                      <div data-history-aside className={itemStyles.historyAsideIcons}>
                         <HistoryItemActionMenu item={h}/>
                         {isInCollection(h) ? (
                           <Tooltip
