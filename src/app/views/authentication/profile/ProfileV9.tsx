@@ -147,18 +147,23 @@ const SignedInButton = forwardRef<
   React.ComponentProps<typeof Button>
 >((props, ref) => {
   const styles = useHeaderStyles();
+  const profile = useAppSelector((state) => state.profile);
+  const user = profile.user;
 
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
       <Button
         aria-label={translateMessage('sign out')}
-        role='button'
         appearance='subtle'
         className={styles.iconButton}
-        icon={<PersonaSignedIn />}
         ref={ref}
-        {...props}
-      />
+        {...props}>
+        <Persona
+          name={user?.displayName}
+          className={styles.iconButton}
+          presence={{ status: 'available' }}
+        />
+      </Button>
     </Tooltip>
   );
 });
