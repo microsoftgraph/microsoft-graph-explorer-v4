@@ -8,7 +8,7 @@ import {
   makeStyles,
   tokens
 } from '@fluentui/react-components';
-import { ExpandUpLeftRegular } from '@fluentui/react-icons';
+import { DismissRegular, ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item-v9';
 
@@ -24,8 +24,8 @@ const useStyles = makeStyles({
   dialog: {
     display: 'flex',
     justifyContent: 'center',
-    maxWidth: '40%',
-    minHeight: '60%'
+    maxWidth: '70%',
+    minHeight: '70%'
   },
   dialogBtn: {
     position: 'absolute',
@@ -33,8 +33,9 @@ const useStyles = makeStyles({
     right: '5px',
     zIndex: 10
   },
-  closeBtn: {
-    ddisplay: 'block'
+  dismissBtn: {
+    height: 'min-content',
+    marginTop: tokens.spacingVerticalL
   }
 });
 
@@ -43,28 +44,33 @@ const PivotItemsDialog = () => {
   const styles = useStyles();
 
   return (
-    <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
-      <DialogTrigger disableButtonEnhancement>
-        <Button
-          className={styles.dialogBtn}
-          appearance='transparent'
-          icon={<ExpandUpLeftRegular />}
-          aria-label='Expand'
-        />
-      </DialogTrigger>
-      <DialogSurface className={styles.dialog}>
-        <DialogBody>
-          <DialogContent>
-            <GetPivotItems />
-          </DialogContent>
-          <div className={styles.closeBtn}>
-            <Button appearance='transparent' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
+    <div>
+      <Button
+        appearance='transparent'
+        icon={<ExpandUpLeftRegular />}
+        aria-label='Expand'
+        className={styles.dialogBtn}
+        onClick={() => setOpen(true)}
+      />
+      <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
+        <DialogSurface className={styles.dialog}>
+          <DialogBody>
+            <DialogContent>
+              <GetPivotItems />
+            </DialogContent>
+          </DialogBody>
+          <DialogTrigger disableButtonEnhancement>
+            <Button
+              appearance='transparent'
+              icon={<DismissRegular />}
+              aria-label='Collapse'
+              className={styles.dismissBtn}
+              onClick={() => setOpen(false)}
+            />
+          </DialogTrigger>
+        </DialogSurface>
+      </Dialog>
+    </div>
   );
 };
 
