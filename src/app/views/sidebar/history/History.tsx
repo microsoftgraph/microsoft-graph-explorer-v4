@@ -34,11 +34,11 @@ import {
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 import {
+  AddSquare20Regular,
   ArrowDownloadRegular,
-  ArrowRepeatAllRegular,
   DeleteRegular,
-  EyeRegular,
-  MoreHorizontalRegular
+  MoreHorizontalRegular,
+  SubtractSquare20Regular
 } from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { historyCache } from '../../../../modules/cache/history-utils';
@@ -59,6 +59,8 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
+import { ResourceLinkType } from '../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 
 type BadgeColors =  'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning';
 const formatDate = (date: Date) => {
@@ -91,6 +93,16 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     gap: '2px'
+  },
+  historyAsideIcons: {
+    display: 'none'
+  },
+  historyTreeItemLayout: {
+    ':hover': {
+      '& [data-history-aside]': {
+        display: 'flex'
+      }
+    }
   }
 })
 
@@ -186,9 +198,12 @@ const HistoryItems = (props: HistoryProps)=>{
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
   openHistoryItems.add('Today')
 
+  const styles = useStyles()
+
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
   );
+  const {collections} = useAppSelector((state) => state.collections);
   const handleOpenChange = (_: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
     setOpenItems(data.openItems);
   };
@@ -221,6 +236,52 @@ const HistoryItems = (props: HistoryProps)=>{
       query
     );
   }
+
+  const processUrlAndVersion = (url: string) => {
+    let version = 'v1.0';
+    if (url.includes('graph.microsoft.com/beta')) {
+      version = 'beta';
+      url = url.replace('https://graph.microsoft.com/beta', '');
+    } else {
+      url = url.replace('https://graph.microsoft.com/v1.0', '');
+    }
+    return { relativeUrl: url, version };
+  };
+
+  const isInCollection = (item: IHistoryItem) => {
+    const defaultCollection = collections.find((collection) => collection.isDefault);
+    if (!defaultCollection) { return false; }
+    return defaultCollection.paths.some((path) => {
+      const { relativeUrl } = processUrlAndVersion(item.url);
+      return path.url === relativeUrl && path.method === item.method;
+    });
+  };
+
+  const formatHistoryItem = (item: IHistoryItem) => {
+    const { relativeUrl, version } = processUrlAndVersion(item.url);
+    const pathSegments = relativeUrl.split('/').filter(Boolean);
+    const name = pathSegments[pathSegments.length - 1] || relativeUrl;
+
+    return {
+      paths: pathSegments,
+      name,
+      type: ResourceLinkType.PATH,
+      version,
+      method: item.method,
+      url: relativeUrl,
+      key: `${item.index}-${item.url}`
+    };
+  };
+
+  const handleAddToCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(addResourcePaths([resourcePath]));
+  };
+
+  const handleRemoveFromCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(removeResourcePaths([resourcePath]));
+  };
 
 
   return(
@@ -257,9 +318,41 @@ const HistoryItems = (props: HistoryProps)=>{
                   aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
                 >
                   <TreeItemLayout
+                    className={styles.historyTreeItemLayout}
                     onClick={()=>handleViewQuery(h)}
                     iconBefore={<HistoryStatusCodes status={h.status} method={h.method}/>}
-                    aside={<HistoryItemActionMenu item={h}/>}>
+                    aside={
+                      <div data-history-aside className={styles.historyAsideIcons}>
+                        <HistoryItemActionMenu item={h}/>
+                        {isInCollection(h) ? (
+                          <Tooltip
+                            withArrow
+                            content={translateMessage('Remove from collection')}
+                            relationship='label'
+                          >
+                            <Button
+                              aria-label={translateMessage('Remove from collection')}
+                              appearance='transparent'
+                              icon={<SubtractSquare20Regular />}
+                              onClick={ () => handleRemoveFromCollection(h)}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            withArrow
+                            content={translateMessage('Add to collection')}
+                            relationship='label'
+                          >
+                            <Button
+                              aria-label={translateMessage('Add to collection')}
+                              appearance='transparent'
+                              icon={<AddSquare20Regular />}
+                              onClick={() => handleAddToCollection(h)}
+                            />
+                          </Tooltip>
+                        )}
+                      </div>
+                    }>
                     <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
                       <Text>{h.url.replace(GRAPH_URL, '')}</Text>
                     </Tooltip>
