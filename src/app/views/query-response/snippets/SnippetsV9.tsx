@@ -69,14 +69,7 @@ const useSnippetStyles = makeStyles({
   },
   extraInformation: {
     color: 'rgb(0, 128, 0)',
-    marginLeft: '28px',
-    lineHeight: '1.5'
-  },
-  codeContainer: {
-    border: `solid ${tokens.colorNeutralStroke1} ${tokens.strokeWidthThin}`,
-    borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge,
-    margin: tokens.spacingHorizontalMNudge
+    marginLeft: '28px'
   },
   codeContainerLayout: {
     display: 'flex',
@@ -230,7 +223,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
   const styles = useSnippetStyles();
 
   return (
-    <div className={styles.codeContainer}>
+    <div>
       {showSpinner && (
         <Spinner
           labelPosition='below'
