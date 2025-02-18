@@ -14,7 +14,8 @@ export const useLayoutStyles = makeStyles({
     height: '100vh'
   },
   content: {
-    display: 'flex'
+    display: 'flex',
+    overflowY: 'hidden'
   },
   sidebar: {
     flex: '0 0 auto',
@@ -26,7 +27,6 @@ export const useLayoutStyles = makeStyles({
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'auto',
     minHeight: '300px',
     height: 'calc(100vh - 120px)'
   },
