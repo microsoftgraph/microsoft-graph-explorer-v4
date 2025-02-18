@@ -28,7 +28,6 @@ import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
-import { loadGETheme } from './themes';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
@@ -38,7 +37,7 @@ import { Collection } from './types/resources';
 const appRoot: HTMLElement = document.getElementById('root')!;
 initializeIcons();
 
-let currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
+let currentTheme = readFromLocalStorage(CURRENT_THEME);
 export function removeSpinners() {
   // removes the loading spinner from GE html after the app is loaded
   const spinner = document.getElementById('spinner');
@@ -56,16 +55,17 @@ export function removeSpinners() {
   appRoot.classList.remove('hidden');
 }
 
-function setCurrentSystemTheme(): void {
+function setCurrentTheme(): void {
   const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
 
   if (themeFromLocalStorage) {
     currentTheme = themeFromLocalStorage;
   } else {
     currentTheme = getOSTheme();
+    localStorage.setItem('CURRENT_THEME', currentTheme);
   }
 
-  applyCurrentSystemTheme(currentTheme);
+  applyCurrentTheme(currentTheme);
 }
 function getOSTheme(): string {
   let currentSystemTheme: string;
@@ -88,14 +88,13 @@ function getOSTheme(): string {
   return currentSystemTheme;
 }
 
-function applyCurrentSystemTheme(themeToApply: string): void {
-  loadGETheme(themeToApply);
+function applyCurrentTheme(themeToApply: string): void {
   appStore.dispatch(changeTheme(themeToApply));
 }
 
 const appStore: any = store;
 
-setCurrentSystemTheme();
+setCurrentTheme();
 appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
@@ -116,7 +115,6 @@ setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 1
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
-  loadGETheme(theme);
   appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 } else {
