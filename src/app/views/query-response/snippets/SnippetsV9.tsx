@@ -65,7 +65,7 @@ const supportedLanguages: LanguageSnippet = {
 
 const useSnippetStyles = makeStyles({
   container: {
-    margin: '0 40px'
+    margin: '0 auto'
   },
   extraInformation: {
     color: 'rgb(0, 128, 0)',
@@ -73,14 +73,15 @@ const useSnippetStyles = makeStyles({
     lineHeight: '1.5'
   },
   codeContainer: {
-    border: `solid ${tokens.colorNeutralForeground3} ${tokens.strokeWidthThin}`,
+    border: `solid ${tokens.colorNeutralStroke1} ${tokens.strokeWidthThin}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalMNudge,
     margin: tokens.spacingHorizontalMNudge
   },
   codeContainerLayout: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    height: '450px'
   },
   copyButton: {
     marginLeft: 'auto'
@@ -247,7 +248,6 @@ const SnippetContent: React.FC<SnippetContentProps> = (
           body={snippet}
           language={language}
           readOnly={true}
-          height='300px'
           extraInfoElement={addExtraSnippetInformation(props.language)}
         />
       </div>

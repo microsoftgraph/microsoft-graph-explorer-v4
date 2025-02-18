@@ -15,17 +15,23 @@ import { GetPivotItems } from './pivot-items/pivot-item-v9';
 const useStyles = makeStyles({
   container: {
     display: 'flex',
+    flexDirection: 'column',
     overflow: 'hidden',
-    height: '-webkit-fill-available'
+    height: '100%',
+    width: '100%',
+    position: 'relative'
   },
   dialog: {
     display: 'flex',
     justifyContent: 'center',
-    maxWidth: '60%',
-    minHeight: '60%'
+    maxWidth: '70%',
+    minHeight: '70%'
   },
   dialogBtn: {
-    height: 'min-content'
+    position: 'absolute',
+    top: '5px',
+    right: '5px',
+    zIndex: 10
   },
   dismissBtn: {
     height: 'min-content',

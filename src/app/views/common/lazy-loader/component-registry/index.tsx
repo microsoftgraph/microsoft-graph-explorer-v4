@@ -35,10 +35,6 @@ export const SnippetsV9 = (props?: any) => {
   return <LazySnippetsV9 {...props} />;
 };
 
-export const CopyButton = (props?: any) => {
-  return <LazyCopyButton {...props} />;
-};
-
 export const CopyButtonV9 = (props?: any) => {
   return <LazyCopyButtonV9 {...props} />;
 };

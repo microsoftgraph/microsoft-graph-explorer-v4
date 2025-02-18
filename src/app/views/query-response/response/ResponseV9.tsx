@@ -7,8 +7,11 @@ import { ResponseMessagesV9 } from './ResponseMessagesV9';
 
 const useStyles = makeStyles({
   container: {
-    flex: '1',
-    height: '-webkit-fill-available'
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    height: '100%',
+    overflow: 'hidden'
   },
   messageBars: {
     display: 'flex',

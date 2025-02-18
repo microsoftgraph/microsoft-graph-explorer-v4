@@ -4,6 +4,7 @@ import {
   makeStyles,
   MessageBar,
   Text,
+  tokens,
   Tooltip
 } from '@fluentui/react-components';
 import { useEffect, useState } from 'react';
@@ -15,24 +16,31 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButton } from '../../../common/lazy-loader/component-registry';
+import { CopyButtonV9 } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   auth: {
     padding: '5px',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%'
   },
   accessTokenContainer: {
-    width: '160px',
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: '10px'
+    paddingBottom: '10px',
+    gap: tokens.spacingHorizontalS
   },
   accessToken: {
-    display: 'inline-block',
-    wordBreak: 'break-all'
+    display: 'block',
+    wordBreak: 'break-word',
+    overflowWrap: 'break-word',
+    maxWidth: '100%',
+    whiteSpace: 'pre-wrap',
+    textOverflow: 'ellipsis'
   },
   emptyStateLabel: {
     display: 'flex',
@@ -40,6 +48,12 @@ const useStyles = makeStyles({
     minHeight: '100%',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  tokenWrapper: {
+    maxWidth: '100%',
+    overflow: 'auto',
+    wordBreak: 'break-word',
+    display: 'flex'
   }
 });
 
@@ -88,7 +102,7 @@ export function Auth() {
         <div>
           <div className={styles.accessTokenContainer}>
             <Text weight='bold'>{translateMessage('Access Token')}</Text>
-            <CopyButton isIconButton={true} handleOnClick={handleCopy} />
+            <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
             <Tooltip
               content={translateMessage(showMessage())}
               relationship='label'
@@ -103,8 +117,8 @@ export function Auth() {
               />
             </Tooltip>
           </div>
-          <div id='access-token' className={styles.accessToken}>
-            <Text font='monospace' tabIndex={0}>
+          <div id='access-token' className={styles.tokenWrapper}>
+            <Text font='monospace' className={styles.accessToken} size={100} tabIndex={0}>
               {accessToken}
             </Text>
           </div>

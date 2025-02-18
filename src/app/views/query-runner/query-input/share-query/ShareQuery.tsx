@@ -14,7 +14,7 @@ import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { copy } from '../../../common/copy';
 import { createShareLink } from '../../../common/share';
-import { CopyButton } from '../../../common/lazy-loader/component-registry';
+import { CopyButtonV9 } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   textArea: {
@@ -58,7 +58,7 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
       </DialogContent>
 
       <DialogActions>
-        <CopyButton handleOnClick={handleCopy} isIconButton={false} />
+        <CopyButtonV9 handleOnClick={handleCopy} isIconButton={false} />
         <Button appearance="secondary" onClick={() => props.dismissPopup()}>
           {translateMessage('Close')}
         </Button>

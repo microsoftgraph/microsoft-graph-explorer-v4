@@ -1,4 +1,4 @@
-import { Button } from '@fluentui/react-components';
+import { Button, Tooltip } from '@fluentui/react-components';
 import { CheckmarkRegular, CopyRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
@@ -32,11 +32,13 @@ export default function CopyButton(props: ICopyButtonProps) {
   return (
     <>
       {props.isIconButton ? (
-        <Button
-          appearance='transparent'
-          onClick={handleCopyClick}
-          icon={<CopyIcon />}
-        />
+        <Tooltip content={copyLabel} relationship='label'>
+          <Button
+            appearance='transparent'
+            onClick={handleCopyClick}
+            icon={<CopyIcon />}
+          />
+        </Tooltip>
       ) : (
         <Button appearance='transparent' onClick={handleCopyClick}>
           {copyLabel}

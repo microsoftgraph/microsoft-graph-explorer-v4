@@ -9,7 +9,7 @@ import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { classNames } from '../../../classnames';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButton } from '../../../common/lazy-loader/component-registry';
+import { CopyButtonV9 } from '../../../common/lazy-loader/component-registry';
 import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { authStyles } from './Auth.styles';
 
@@ -53,7 +53,7 @@ export function Auth(props: any) {
       <div>
         <div className={classes.accessTokenContainer}>
           <Label className={classes.accessTokenLabel}>{translateMessage('Access Token')}</Label>
-          <CopyButton isIconButton={true} handleOnClick={handleCopy} />
+          <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
           <IconButton iconProps={tokenDetailsIcon}
             title={translateMessage(showMessage())}
             ariaLabel={translateMessage(showMessage())}

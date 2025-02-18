@@ -26,15 +26,17 @@ import { methodColors, getStyleFor } from '../../../utils/http-methods.utils';
 
 const useStyles = makeStyles({
   container: {
-    columnGap: tokens.spacingHorizontalMNudge,
-    display: 'inline-grid',
-    gridTemplateColumns: 'auto auto 1fr auto'
+    display: 'grid',
+    gridTemplateColumns: 'auto auto 1fr auto',
+    alignItems: 'start',
+    columnGap: tokens.spacingHorizontalS,
+    width: '100%'
   },
   containerMobile: {
-    display: 'inline-grid',
+    display: 'grid',
+    gridTemplateRows: 'auto auto auto auto',
     rowGap: tokens.spacingHorizontalMNudge,
-    gridTemplateRows: 'auto auto auto auto'
-
+    width: '100%'
   },
   errorText: {
     color: 'red',
@@ -42,7 +44,7 @@ const useStyles = makeStyles({
   },
   smallDropdown: {
     '&.fui-Dropdown': {
-      minWidth: '0',
+      minWidth: '90px',
       height: 'min-content'
     }
   },
@@ -75,7 +77,7 @@ const QueryInput = (props: IQueryInputProps) => {
     const updatedQuery = getChangedQueryContent(value);
     dispatch(setSampleQuery(updatedQuery));
   };
-
+  console.log('mobile screen:', mobileScreen);
   const getChangedQueryContent = (newUrl: string): IQuery => {
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);

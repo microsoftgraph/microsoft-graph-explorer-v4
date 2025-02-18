@@ -48,6 +48,11 @@ const adaptiveCardStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     gap: '4px'
+  },
+  editorContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '500px'
   }
 });
 
@@ -242,6 +247,7 @@ const RenderCard = (props: RenderCardJSONProps) => {
 
 const RenderJSONSchema = (props: RenderCardJSONProps) => {
   const { handleCopy, template } = props;
+  const styles = adaptiveCardStyles();
 
   return (
     <div>
@@ -275,13 +281,12 @@ const RenderJSONSchema = (props: RenderCardJSONProps) => {
           </Link>
         </MessageBarBody>
       </MessageBar>
-      <div>
+      <div className={styles.editorContainer}>
         <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true} />
         <MonacoV9
           body={template}
           language='json'
           readOnly={true}
-          height='300px'
         />
       </div>
     </div>
