@@ -8,7 +8,7 @@ import {
   Tab,
   TabList,
   TabValue,
-  Text, tokens
+  Text
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -65,7 +65,11 @@ const supportedLanguages: LanguageSnippet = {
 
 const useSnippetStyles = makeStyles({
   container: {
-    margin: '0 auto'
+    margin: '0 auto',
+    maxHeight: '100vh',
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column'
   },
   extraInformation: {
     color: 'rgb(0, 128, 0)',
@@ -74,10 +78,18 @@ const useSnippetStyles = makeStyles({
   codeContainerLayout: {
     display: 'flex',
     flexDirection: 'column',
-    height: '450px'
+    flex: '1 1 auto',
+    height: '30vh',
+    overflowY: 'auto'
   },
   copyButton: {
     marginLeft: 'auto'
+  },
+  snippetContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflowY: 'auto',
+    maxHeight: 'calc(100vh-120px)'
   }
 });
 
@@ -223,7 +235,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
   const styles = useSnippetStyles();
 
   return (
-    <div>
+    <div className={styles.snippetContent}>
       {showSpinner && (
         <Spinner
           labelPosition='below'

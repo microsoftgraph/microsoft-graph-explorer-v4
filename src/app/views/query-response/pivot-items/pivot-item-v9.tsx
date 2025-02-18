@@ -57,7 +57,7 @@ const useStyles = makeStyles({
     minHeight: 0,
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalM,
+    padding: tokens.spacingHorizontalS,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
     overflow: 'hidden'
