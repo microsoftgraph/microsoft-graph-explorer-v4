@@ -10,7 +10,7 @@ import { translateMessage } from '../../utils/translate-messages';
 import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
 import Notification from '../common/banners/Notification';
 import PopupsWrapper from '../common/popups/PopupsWrapper';
-import { MainHeaderV9 } from '../main-header/MainHeader';
+import { MainHeader } from '../main-header/MainHeader';
 import { QueryResponseV9 } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
@@ -77,7 +77,7 @@ export const Layout = (props: LayoutProps) => {
     <>
       <PopupsProvider>
         <div className={layoutStyles.container}>
-          <MainHeaderV9 />
+          <MainHeader />
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
             {showSidebar && (
               <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>

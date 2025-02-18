@@ -14,7 +14,7 @@ const trackFeedbackButtonEvent = () => {
     ComponentName: FEEDBACK_BUTTON
   });
 }
-const FeedbackButtonV9 = ()=>{
+const FeedbackButton = ()=>{
   const [enableSurvey, setEnableSurvey] = useState(false);
   const user = useAppSelector(state=> state.profile.user)
   const activateSurvey = () => {
@@ -40,5 +40,5 @@ const FeedbackButtonV9 = ()=>{
   ) : null)
 }
 
-export { FeedbackButtonV9 }
+export { FeedbackButton }
 
