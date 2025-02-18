@@ -87,6 +87,7 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = async () => {
+    window.addEventListener('resize', this.detectMobileScreen);
     this.detectMobileScreen();
     removeSpinners();
     KeyboardCopyEvent();
@@ -192,6 +193,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
+    window.removeEventListener('resize', this.detectMobileScreen);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
