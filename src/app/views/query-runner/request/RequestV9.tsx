@@ -130,7 +130,7 @@ const Request = (props: IRequestProps) => {
       <div className={styles.tabContainer}>
         {mobileScreen ? (
           <Overflow minimumVisible={2}>
-            <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)}>
+            <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
               {tabs.map((tab) => (
                 <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedTab ? 2 : 1}>
                   <Tab value={tab.id} icon={tab.icon}>
@@ -142,7 +142,7 @@ const Request = (props: IRequestProps) => {
             </TabList>
           </Overflow>
         ) : (
-          <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)}>
+          <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
             {tabs.map((tab) => (
               <Tab key={tab.id} value={tab.id} icon={tab.icon}>
                 {tab.name}
