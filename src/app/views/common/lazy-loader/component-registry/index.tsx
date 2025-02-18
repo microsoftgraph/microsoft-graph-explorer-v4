@@ -1,11 +1,11 @@
 import LazyResponseHeadersV9 from '../../../query-response/headers/ResponseHeadersV9';
 import LazySnippetsV9 from '../../../query-response/snippets/SnippetsV9';
-import { default as LazyCopyButtonV9 } from '../../copy-button/CopyButtonV9';
+import { default as LazyCopyButtonV9 } from '../../copy-button/CopyButton';
 import LazySpecificPermissions from  '../../../query-runner/request/permissions';
-import LazyStatusMessages from  '../../../app-sections/StatusMessagesV9';
+import LazyStatusMessages from  '../../../app-sections/StatusMessages';
 import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
-import LazyCopyButton from  '../../copy-button/CopyButtonV9';
+import LazyCopyButton from  '../../copy-button/CopyButton';
 import LazyAuth from  '../../../query-runner/request/auth/AuthV9';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
 import LazyHistory from  '../../../sidebar/history/History';
