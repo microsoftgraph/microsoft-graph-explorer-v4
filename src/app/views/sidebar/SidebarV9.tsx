@@ -51,10 +51,11 @@ const SidebarV9 = (props: SidebarProps)=>{
     setShowSidebarValue(true);
   };
 
-  const handleShow = ()=>{
-    setShowSidebarValue(!showSidebarValue);
-    props.handleToggleSelect(!showSidebarValue)
-  }
+  const handleShow = () => {
+    const newState = !showSidebarValue;
+    setShowSidebarValue(newState);
+    props.handleToggleSelect(newState);
+  };
 
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueriesV9 />,

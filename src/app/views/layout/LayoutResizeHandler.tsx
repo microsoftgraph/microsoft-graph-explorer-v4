@@ -1,5 +1,6 @@
 import { makeResetStyles, tokens, useFluent } from '@fluentui/react-components';
 import * as React from 'react';
+import { useAppSelector } from '../../../store';
 
 interface HandleProps {
   position: 'start' | 'end' | 'top' | 'bottom';
@@ -15,13 +16,18 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
   (props, ref) => {
     const { position, ...rest } = props;
     const { dir } = useFluent();
-    const hoverStyles = useHoverStyles()
+    const hoverStyles = useHoverStyles();
+    const mobileScreen  = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
     const handleClick = (event: React.MouseEvent) => {
       if (event.detail === 2) {
         props.onDoubleClick?.();
       }
     };
+
+    if (mobileScreen) {
+      return null;
+    }
 
     const positioningAttr =
       dir === 'ltr'
@@ -38,7 +44,7 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
           [positioningAttr]: '-5px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '3px',
+          width: '6px',
           height: '100%',
           cursor: 'col-resize'
         }

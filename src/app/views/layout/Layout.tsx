@@ -33,6 +33,7 @@ export const Layout = (props: LayoutProps) => {
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const mode = useAppSelector((state) => state.graphExplorerMode);
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
+  const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
 
   const {
     handleRef: sidebarHandleRef,
@@ -55,18 +56,38 @@ export const Layout = (props: LayoutProps) => {
   }, [sampleBody]);
 
   useEffect(() => {
-    if (mobileScreen) {
-      dispatch(toggleSidebar({ showSidebar: false, mobileScreen: true }));
+    if (!mobileScreen) {
+      updateSidebarSize(456); // Use function to enforce min/max limits
+    } else {
       setSidebarColumnSize(0);
     }
-  }, [mobileScreen, dispatch]);
+  }, [mobileScreen]);
+
 
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
   };
 
   const handleToggleSelect = (toggled: boolean) => {
-    setSidebarColumnSize(toggled ? 456 : 5);
+    if (mobileScreen) {
+      dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
+    } else {
+      if (toggled) {
+        setSidebarColumnSize(initialSidebarWidth > 48 ? initialSidebarWidth : 456);
+      } else {
+        setSidebarColumnSize(48);
+      }
+    }
+  };
+
+
+  const updateSidebarSize = (newSize: number) => {
+    const minSize = 48;
+    const maxSize = 456;
+
+    const finalSize = Math.max(minSize, Math.min(maxSize, newSize));
+    setSidebarColumnSize(finalSize);
+    setInitialSidebarWidth(finalSize);
   };
 
   const resetSidebarArea = () => {
@@ -82,7 +103,9 @@ export const Layout = (props: LayoutProps) => {
             {showSidebar && (
               <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
                 <SidebarV9 handleToggleSelect={handleToggleSelect} />
-                <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
+                {!mobileScreen && (
+                  <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
+                )}
               </div>
             )}
             <div id='main-content' className={layoutStyles.mainContent}>
