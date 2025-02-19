@@ -15,7 +15,7 @@ export const useLayoutStyles = makeStyles({
   },
   content: {
     display: 'flex',
-    gap: tokens.spacingVerticalS
+    overflowY: 'hidden'
   },
   sidebar: {
     flex: '0 0 auto',
@@ -27,8 +27,6 @@ export const useLayoutStyles = makeStyles({
     flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: tokens.spacingHorizontalS,
-    overflowY: 'auto',
     minHeight: '300px',
     height: 'calc(100vh - 120px)'
   },
@@ -36,7 +34,6 @@ export const useLayoutStyles = makeStyles({
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    gap: tokens.spacingHorizontalS,
     height: '100%',
     overflow: 'hidden'
   },
@@ -47,7 +44,7 @@ export const useLayoutStyles = makeStyles({
     maxHeight: '55%',
     overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge
+    padding: tokens.spacingHorizontalS
   },
   requestArea: {
     flex: '1',
@@ -56,6 +53,6 @@ export const useLayoutStyles = makeStyles({
     maxHeight: '37%',
     overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge
+    padding: tokens.spacingHorizontalS
   }
 });
