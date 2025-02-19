@@ -11,7 +11,7 @@ const useTermsStyles = makeStyles({
   }
 });
 
-const TermsOfUseMessageV9 = () => {
+const TermsOfUseMessage = () => {
 
   const  termsOfUse = useAppSelector((state) => state.termsOfUse);
   const termsStyles = useTermsStyles();
@@ -58,4 +58,4 @@ const TermsOfUseMessageV9 = () => {
   return <div />;
 }
 
-export default TermsOfUseMessageV9;
+export default TermsOfUseMessage;

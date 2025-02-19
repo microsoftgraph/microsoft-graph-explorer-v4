@@ -11,7 +11,7 @@ import {
   DialogTitle,
   Button
 } from '@fluentui/react-components';
-import { Delete20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
+import { Edit20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -179,7 +179,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     {
       key: 'remove',
       text: translateMessage('Edit collection'),
-      icon: <Delete20Regular />,
+      icon: <Edit20Regular />,
       disabled: items.length === 0,
       onClick: openEditCollectionPanel
     },

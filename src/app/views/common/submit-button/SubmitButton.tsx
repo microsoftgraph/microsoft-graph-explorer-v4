@@ -16,13 +16,16 @@ const useStyles = makeStyles({
   },
   spinnerVisible: {
     visibility: 'visible'
+  },
+  button: {
+    width: '100%',
+    padding: '3px'
   }
 });
 
 const SubmitButtonControl = ({
   handleOnClick,
   submitting,
-  className,
   text,
   ariaLabel,
   disabled
@@ -30,7 +33,7 @@ const SubmitButtonControl = ({
   const classes = useStyles();
 
   return (
-    <div className={className}>
+    <div className={classes.button}>
       <Button
         disabled={submitting || disabled}
         appearance='primary'
