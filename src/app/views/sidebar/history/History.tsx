@@ -209,7 +209,6 @@ const HistoryItems = (props: HistoryProps)=>{
   };
 
   const handleViewQuery = (query: IHistoryItem)=>{
-    console.log('query', query)
     const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
       sampleUrl,

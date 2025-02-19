@@ -1,4 +1,4 @@
-export interface ISubmitButtonControl {
+export interface ISubmitButton {
   handleOnClick: Function;
   submitting: boolean;
   text: string;

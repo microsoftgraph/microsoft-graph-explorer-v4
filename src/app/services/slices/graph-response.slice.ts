@@ -116,21 +116,17 @@ function generateHistoryItem(
   result: Result,
   duration: number
 ): IHistoryItem {
-  let updatedResult = result;
+  let response = { ...result };
+  const responseHeaders = { ...respHeaders };
+  const contentType = respHeaders['content-type'];
 
-  if (isImageResponse(respHeaders['content-type'])) {
-    updatedResult = {
-      ...result,
-      body: 'Run the query to view the image'
-    };
-    respHeaders['content-type'] = ContentType.Json;
+  if (isImageResponse(contentType)) {
+    response = { ...response, body: 'Run the query to view the image' };
+    responseHeaders['content-type'] = ContentType.Json;
   }
 
   if (isFileResponse(respHeaders)) {
-    updatedResult = {
-      ...result,
-      body: 'Run the query to generate file download URL'
-    };
+    response = { ...response, body: 'Run the query to generate file download URL' };
   }
 
   const historyItem: IHistoryItem = {
@@ -144,7 +140,7 @@ function generateHistoryItem(
     status: status.status as number,
     statusText: status.statusText,
     duration,
-    result: updatedResult
+    result: response.body as Object
   };
 
   historyCache.writeHistoryData(historyItem);

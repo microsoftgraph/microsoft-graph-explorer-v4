@@ -72,51 +72,49 @@ export const Layout = (props: LayoutProps) => {
   };
 
   return (
-    <>
-      <PopupsProvider>
-        <div className={layoutStyles.container}>
-          <MainHeader />
-          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {showSidebar && (
-              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
-                <Sidebar handleToggleSelect={handleToggleSelect} />
-                <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
-              </div>
-            )}
-            <div id='main-content' className={layoutStyles.mainContent}>
-              <div style={{ margin: '0 10px' }}>
-                <Notification
-                  header={translateMessage('Banner notification 1 header')}
-                  content={translateMessage('Banner notification 1 content')}
-                  link={translateMessage('Banner notification 1 link')}
-                  linkText={translateMessage('Banner notification 1 link text')}
-                />
-              </div>
-
-              <ValidationProvider>
-                <div style={{ margin: '0 10px' }}>
-                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
-                </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div id='request-area' className={layoutStyles.requestArea}>
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessages />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponse />
-                  </div>
-                </div>
-              </ValidationProvider>
+    <PopupsProvider>
+      <div className={layoutStyles.container}>
+        <MainHeader />
+        <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+          {showSidebar && (
+            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
+              <Sidebar handleToggleSelect={handleToggleSelect} />
+              <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
             </div>
+          )}
+          <div id='main-content' className={layoutStyles.mainContent}>
+            <div style={{ margin: '0 10px' }}>
+              <Notification
+                header={translateMessage('Banner notification 1 header')}
+                content={translateMessage('Banner notification 1 content')}
+                link={translateMessage('Banner notification 1 link')}
+                linkText={translateMessage('Banner notification 1 link text')}
+              />
+            </div>
+
+            <ValidationProvider>
+              <div style={{ margin: '0 10px' }}>
+                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              </div>
+              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                <div id='request-area' className={layoutStyles.requestArea}>
+                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                </div>
+                <div style={{ margin: '0 10px' }}>
+                  <StatusMessages />
+                </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
+                </div>
+              </div>
+            </ValidationProvider>
           </div>
-          <TermsOfUseMessage />
         </div>
-        <CollectionPermissionsProvider>
-          <PopupsWrapper />
-        </CollectionPermissionsProvider>
-      </PopupsProvider>
-    </>
+        <TermsOfUseMessage />
+      </div>
+      <CollectionPermissionsProvider>
+        <PopupsWrapper />
+      </CollectionPermissionsProvider>
+    </PopupsProvider>
   );
 };

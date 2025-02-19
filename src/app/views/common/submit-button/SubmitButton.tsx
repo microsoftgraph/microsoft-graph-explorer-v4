@@ -1,7 +1,7 @@
 import { PlayRegular } from '@fluentui/react-icons';
-import { ISubmitButtonControl } from '../../../../types/submit-button';
+import { ISubmitButton } from '../../../../types/submit-button';
 import { Button, Spinner } from '@fluentui/react-components';
-import { makeStyles, tokens } from '@fluentui/react-components';
+import { makeStyles, tokens, mergeClasses } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   buttonContent: {
@@ -23,13 +23,13 @@ const useStyles = makeStyles({
   }
 });
 
-const SubmitButtonControl = ({
+const SubmitButton = ({
   handleOnClick,
   submitting,
   text,
   ariaLabel,
   disabled
-}: ISubmitButtonControl) => {
+}: ISubmitButton) => {
   const classes = useStyles();
 
   return (
@@ -45,7 +45,7 @@ const SubmitButtonControl = ({
           {text}
           <Spinner
             size="small"
-            className={`${classes.spinner} ${submitting ? classes.spinnerVisible : ''}`}
+            className={mergeClasses(classes.spinner, submitting && classes.spinnerVisible)}
           />
         </span>
       </Button>
@@ -53,4 +53,4 @@ const SubmitButtonControl = ({
   );
 };
 
-export default SubmitButtonControl;
+export default SubmitButton;
