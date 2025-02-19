@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 
 const Response = () => {
   const styles = useStyles();
-  const body = useAppSelector<ResponseBody>(
+  const body = useAppSelector(
     (state) => state.graphResponse.response.body
   );
   const headers = useAppSelector(
@@ -41,7 +41,7 @@ const Response = () => {
         <ResponseMessages />
       </div>
       {!contentDownloadUrl && !throwsCorsError && headers && (
-        <ResponseDisplay contentType={contentType} body={body as string} />
+        <ResponseDisplay contentType={contentType} body={body} />
       )}
     </div>
   );

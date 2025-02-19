@@ -5,7 +5,7 @@ import { formatXml } from '../../common/monaco/util/format-xml';
 
 interface ResponseDisplayProps {
   contentType: string;
-  body: string;
+  body: any;
 }
 
 const ResponseDisplay = (props: ResponseDisplayProps) => {
@@ -21,14 +21,14 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
     return <MonacoV9 body={body} language='text/html' readOnly={true} />;
 
   default:
-    if (isImageResponse(contentType)) {
+    if (isImageResponse(contentType) && typeof body !== 'string') {
       return (
         <Image styles={{ padding: '10px', height: '300px', width: '300px' }} body={body} alt='profile image' />
       );
     }
     return (
       <div style={{ flex: 1, height: '100%', display: 'flex' }}>
-        <MonacoV9 body={body} readOnly language="json" />
+        <MonacoV9 body={body} readOnly language="application/json" />
       </div>
     );
   }
