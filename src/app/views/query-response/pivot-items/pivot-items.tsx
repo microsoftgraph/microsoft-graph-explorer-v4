@@ -8,13 +8,12 @@ import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
+import { ResponseHeadersV9, SnippetsV9 } from '../../common/lazy-loader/component-registry';
+import AdaptiveCardsV9 from '../adaptive-cards/AdaptiveCardV9';
 import { darkThemeHostConfig, lightThemeHostConfig } from '../adaptive-cards/AdaptiveHostConfig';
+import GraphToolkitV9 from '../graph-toolkit/GraphToolkitV9';
 import { queryResponseStyles } from '../queryResponse.styles';
-import { Response } from '../response';
-import {
-  AdaptiveCards, GraphToolkit, ResponseHeaders,
-  Snippets
-} from '../../common/lazy-loader/component-registry';
+import { ResponseV9 } from '../response';
 
 export const GetPivotItems = () => {
   const mode = useAppSelector((state)=> state.graphExplorerMode);
@@ -73,7 +72,8 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-tab'
       }}
     >
-      <div id={'response-tab'} tabIndex={0}><Response /></div>
+      {/* <div id={'response-tab'} tabIndex={0}><Response /></div> */}
+      <div id={'response-tab'} tabIndex={0}><ResponseV9 /></div>
     </PivotItem>,
     <PivotItem
       key='response-headers'
@@ -86,7 +86,7 @@ export const GetPivotItems = () => {
         'aria-controls': 'response-headers-tab'
       }}
     >
-      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeaders /></div>
+      <div id={'response-headers-tab'} tabIndex={0}><ResponseHeadersV9 /></div>
     </PivotItem>
   ];
   if (mode === Mode.Complete) {
@@ -102,7 +102,8 @@ export const GetPivotItems = () => {
           'aria-controls': 'code-snippets-tab'
         }}
       >
-        <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div>
+        {/* <div id={'code-snippets-tab'} tabIndex={0}><Snippets /></div> */}
+        <div id={'code-snippets-tab'} tabIndex={0}><SnippetsV9 /></div>
       </PivotItem>,
       <PivotItem
         key='graph-toolkit'
@@ -116,7 +117,8 @@ export const GetPivotItems = () => {
           'aria-controls': 'toolkit-tab'
         }}
       >
-        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div>
+        {/* <div id={'toolkit-tab'} tabIndex={0}><GraphToolkit /></div> */}
+        <div id={'toolkit-tab'} tabIndex={0}><GraphToolkitV9 /></div>
       </PivotItem>,
       <PivotItem
         key='adaptive-cards'
@@ -134,9 +136,8 @@ export const GetPivotItems = () => {
           {(theme) => (
             // @ts-ignore
             <div id={'adaptive-cards-tab'} tabIndex={0}>
-              <AdaptiveCards
-                body={body}
-                hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+              <AdaptiveCardsV9
+                body={body as string} hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
               />
             </div>
           )}

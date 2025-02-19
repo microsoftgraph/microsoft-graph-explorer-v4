@@ -25,6 +25,6 @@ export const existsInCollection = (link: IResourceLink, paths: ResourcePath[], v
   return list.length === noneNodeLinks.length;
 };
 
-export function setExisting(item: any, value: boolean) {
+export function setExisting(item: IResourceLink, value: boolean) {
   item.isInCollection = value;
 }

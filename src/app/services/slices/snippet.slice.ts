@@ -2,14 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ApplicationState } from '../../../store';
 import { IRequestOptions } from '../../../types/request';
-import { ISnippet } from '../../../types/snippets';
+import { ISnippet, Snippet, SnippetError } from '../../../types/snippets';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { constructHeaderString } from '../../utils/snippet.utils';
 
 const initialState: ISnippet = {
   pending: false,
-  data: {},
-  error: null,
+  data: {} as Snippet,
+  error: {} as SnippetError,
   snippetTab: 'csharp'
 };
 
@@ -84,17 +84,17 @@ const snippetSlice = createSlice({
     builder
       .addCase(getSnippet.pending, (state) => {
         state.pending = true;
-        state.error = null;
+        state.error = {} as SnippetError;
         state.data = {};
       })
       .addCase(getSnippet.fulfilled, (state, action) => {
         state.pending = false;
-        state.data = action.payload;
-        state.error = null;
+        state.data = action.payload as Snippet;
+        state.error = {} as SnippetError;
       })
       .addCase(getSnippet.rejected, (state, action) => {
         state.pending = false;
-        state.error = action.payload as object;
+        state.error = action.payload as SnippetError;
         state.data = {};
       });
   }

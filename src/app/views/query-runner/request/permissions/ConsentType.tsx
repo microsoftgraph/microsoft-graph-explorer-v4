@@ -1,4 +1,5 @@
-import { DirectionalHint, IconButton, IIconProps, Label, Spinner, TooltipHost } from '@fluentui/react';
+import { Spinner, Label, Tooltip, Button, makeStyles } from '@fluentui/react-components';
+import { ArrowSyncRegular } from '@fluentui/react-icons';
 
 import { IPermission } from '../../../../../types/permissions';
 import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-grants.slice';
@@ -6,62 +7,64 @@ import { translateMessage } from '../../../../utils/translate-messages';
 
 interface IConsentType {
   item: IPermission;
-  allPrincipalPermissions: string[],
-  singlePrincipalPermissions: string[],
+  allPrincipalPermissions: string[];
+  singlePrincipalPermissions: string[];
   itemNotInGrants?: Function,
-  tenantGrantFetchPending: boolean | undefined,
-  dispatch: Function
+  tenantGrantFetchPending: boolean | undefined;
+  dispatch: Function;
 }
 
-export const PermissionConsentType = (props: IConsentType) => {
-  const { item, allPrincipalPermissions, singlePrincipalPermissions,
-    tenantGrantFetchPending, dispatch
-  } = props;
-  const consentTypeLabelStyles = {
-    textAlign: 'center' as 'center',
+const useStyles = makeStyles({
+  consentTypeLabel: {
+    textAlign: 'center',
     paddingLeft: '10px'
   }
+});
 
-  if(allPrincipalPermissions.includes(item.value)){
+export const PermissionConsentType = (props: IConsentType) => {
+  const {
+    item,
+    allPrincipalPermissions,
+    singlePrincipalPermissions,
+    tenantGrantFetchPending,
+    dispatch
+  } = props;
+
+  const consentStyles = useStyles();
+
+  if (allPrincipalPermissions.includes(item.value)) {
     return (
-      <Label style={consentTypeLabelStyles}>
+      <Label className={consentStyles.consentTypeLabel} weight='semibold'>
         {translateMessage('AllPrincipal')}
       </Label>
-    )
+    );
   }
 
-  if(singlePrincipalPermissions.includes(item.value)){
+  if (singlePrincipalPermissions.includes(item.value)) {
     return (
-      <Label style={consentTypeLabelStyles}>
+      <Label className={consentStyles.consentTypeLabel} weight='semibold'>
         {translateMessage('Principal')}
       </Label>
-    )
+    );
   }
 
   const handleOnClick = () => {
     dispatch(fetchAllPrincipalGrants());
-  }
-
-  const iconProps: IIconProps = {
-    iconName: 'Refresh'
-  }
+  };
 
   return (
     tenantGrantFetchPending ?
       (<Spinner></Spinner>) :
       (
-        <TooltipHost
-          content={translateMessage('Reload consent-type')}
-          directionalHint={DirectionalHint.leftCenter}
-        >
-          <IconButton onClick={handleOnClick}
-            iconProps={iconProps}
-            styles={{root: {left: '50px'}}}
-            ariaLabel={translateMessage('Reload consent-type')}
+        <Tooltip content={translateMessage('Reload consent-type')} relationship='label'>
+          <Button
+            onClick={handleOnClick}
+            icon={<ArrowSyncRegular />}
+            aria-label={translateMessage('Reload consent-type')}
           >
-            {translateMessage('Reload ')}
-          </IconButton>
-        </TooltipHost>
+            {translateMessage('Reload')}
+          </Button>
+        </Tooltip>
       )
-  )
-}
+  );
+};

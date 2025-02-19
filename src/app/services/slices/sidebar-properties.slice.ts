@@ -15,7 +15,10 @@ const sidebarPropertiesSlice = createSlice({
   name: 'sidebarProperties',
   initialState,
   reducers: {
-    toggleSidebar: (_, action: PayloadAction<ISidebarProps>) => action.payload
+    toggleSidebar: (state, action: PayloadAction<ISidebarProps>) => {
+      state.showSidebar = action.payload.showSidebar;
+      state.mobileScreen = action.payload.mobileScreen;
+    }
   },
   extraReducers: (builder) => {
     builder
