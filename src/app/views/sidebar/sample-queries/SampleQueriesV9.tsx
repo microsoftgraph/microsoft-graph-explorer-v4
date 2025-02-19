@@ -28,8 +28,6 @@ import {
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
 import { DismissRegular, DocumentText20Regular, LockClosed16Regular } from '@fluentui/react-icons';
-import { IGroup } from '@fluentui/react/lib/DetailsList';
-// TODO: update these checks for @fluentui/react@9.0.0+
 
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -40,7 +38,7 @@ import { GRAPH_URL } from '../../../services/graph-constants';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { fetchSamples } from '../../../services/slices/samples.slice';
-import { generateGroupsFromList } from '../../../utils/generate-groups';
+import { generateGroupsFromList, IGroup } from '../../../utils/generate-groups';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
 import { NoResultsFoundV9 } from '../sidebar-utils/SearchResultsV9';
