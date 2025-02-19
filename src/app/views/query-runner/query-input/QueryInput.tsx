@@ -167,7 +167,6 @@ const QueryInput = (props: IQueryInputProps) => {
       <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
 
       <SubmitButton
-        className='run-query-button'
         text={translateMessage('Run Query')}
         disabled={showError || !sampleQuery.sampleUrl || !validation.isValid}
         handleOnClick={() => runQuery()}

@@ -31,7 +31,7 @@ import {
   lightThemeHostConfig
 } from '../adaptive-cards/AdaptiveHostConfig';
 import { default as GraphToolkitV9 } from '../graph-toolkit/GraphToolkitV9';
-import { ResponseV9 } from '../response';
+import { Response } from '../response';
 import {
   ArrowResetRegular,
   DocumentChevronDoubleRegular,
@@ -146,7 +146,7 @@ export const GetPivotItems = () => {
         </TabList>
       )}
       <div className={styles.tabContent}>
-        {selectedValue === translateMessage('Response Preview') && <ResponseV9 />}
+        {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeadersV9 />}
         {selectedValue === translateMessage('Snippets') && <SnippetsV9 />}
         {selectedValue === translateMessage('Graph toolkit') && <GraphToolkitV9 />}

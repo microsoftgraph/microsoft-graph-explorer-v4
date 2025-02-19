@@ -24,7 +24,6 @@ import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
-import { queryInputStyles } from '../QueryInput.styles';
 import {
   cleanUpSelectedSuggestion,
   getFilteredSuggestions,
