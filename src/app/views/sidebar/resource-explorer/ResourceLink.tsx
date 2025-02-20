@@ -9,14 +9,13 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 import { useStyles } from './resourceLinkStyles';
+import { METHOD_COLORS } from '../sidebar-utils/SidebarUtils';
 
 interface IResourceLinkProps {
   link: IResourceLink;
   resourceOptionSelected: Function;
   version: string;
 }
-
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { version } = props;
@@ -29,13 +28,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
     setExisting(resourceLink, existsInCollection(link, paths, version));
   }, [paths])
 
-  const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
 
   const linkStyles = useStyles();
 
@@ -72,7 +64,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   return (
     <div className={linkStyles.link}>
-      <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} colors={colors} />
+      <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} />
       {resourceLink.method && (
         <ResourceLinkActions
           resourceLink={resourceLink}
@@ -88,19 +80,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const ResourceLinkNameContainer = ({
   resourceLink,
-  linkStyles,
-  colors
+  linkStyles
 }: {
   resourceLink: IResourceLink,
-  linkStyles: any,
-  colors: Record<string, Colors>
+  linkStyles: any
 }) => (
   resourceLink.method ? (
     <span className={linkStyles.resourceLinkNameContainer}>
       <Badge
         className={linkStyles.badge}
         size='medium'
-        color={colors[resourceLink.method]}
+        color={METHOD_COLORS[resourceLink.method]}
         aria-label={'http method ' + resourceLink.method + ' for'}>
         {resourceLink.method}
       </Badge>

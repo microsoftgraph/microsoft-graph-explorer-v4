@@ -39,13 +39,11 @@ import { fetchSamples } from '../../../services/slices/samples.slice';
 import { generateGroupsFromList, IGroup } from '../../../utils/generate-groups';
 import { substituteTokens } from '../../../utils/token-helpers';
 import { translateMessage } from '../../../utils/translate-messages';
-import { NoResultsFoundV9 } from '../sidebar-utils/SearchResultsV9';
+import { METHOD_COLORS, NoResultsFound } from '../sidebar-utils/SidebarUtils';
 import {
   isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
 } from './sample-query-utils';
 import { useStyles } from './SampleQueries.styles';
-
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
 
 export const SampleQueries = () => {
   const sampleQueriesStyles = useStyles();
@@ -264,20 +262,13 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
  */
 const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolean }) => {
   const sampleQueriesStyles = useStyles();
-  const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
 
   return (
     <div className={sampleQueriesStyles.iconBefore}>
       <Badge
         className={sampleQueriesStyles.badge}
         size='medium'
-        color={colors[method]}
+        color={METHOD_COLORS[method]}
         aria-label={'http method ' + method + ' for'}>
         {method}
       </Badge>
@@ -387,7 +378,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
 
   return (
     <>
-      {sampleQueries.length=== 0 && <NoResultsFoundV9 message='No sample queries'/>}
+      {sampleQueries.length=== 0 && <NoResultsFound message='No sample queries'/>}
       <FlatTree
         openItems={openItems}
         onOpenChange={handleOpenChange}

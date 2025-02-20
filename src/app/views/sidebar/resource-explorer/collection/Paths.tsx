@@ -5,6 +5,7 @@ import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import pathStyles from './Paths.styles';
+import { METHOD_COLORS } from '../../sidebar-utils/SidebarUtils';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -13,20 +14,10 @@ interface IPathProps {
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
 
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
-
 const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelectionChange }) => {
   const styles = pathStyles();
   const [selection, setSelection] = React.useState<Set<ResourcePath>>(new Set());
   const [allSelected, setAllSelected] = React.useState(false);
-
-  const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
 
   const handleSelectionChange = (item: ResourcePath) => {
     const newSelection = new Set(selection);
@@ -70,7 +61,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
             {item.method ? <Badge
               className={styles.badge}
               size='medium'
-              color={colors[item?.method]}
+              color={METHOD_COLORS[item?.method]}
               aria-label={'http method ' + item.method + ' for'}>
               {item.method}
             </Badge> : <span className={styles.urlMethod}> {item.method} </span>}
