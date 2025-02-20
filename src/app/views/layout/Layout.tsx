@@ -5,7 +5,7 @@ import CollectionPermissionsProvider from '../../services/context/collection-per
 import { PopupsProvider } from '../../services/context/popups-context';
 import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
-import { toggleSidebar } from '../../services/slices/sidebar-properties.slice'; // Import sidebar action
+import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
 import Notification from '../common/banners/Notification';
@@ -17,7 +17,6 @@ import Request from '../query-runner/request/RequestV9';
 import { SidebarV9 } from '../sidebar/SidebarV9';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
-import { Mode } from '../../../types/enums';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
 import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
 
@@ -31,7 +30,6 @@ export const Layout = (props: LayoutProps) => {
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const mode = useAppSelector((state) => state.graphExplorerMode);
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
