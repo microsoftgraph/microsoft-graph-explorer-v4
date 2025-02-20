@@ -37,7 +37,7 @@ const useStyles = makeStyles({
     display: 'none',
     cursor: 'pointer',
 
-    '@media (max-width: 480px)': {
+    '@media (max-width: 768px)': {
       display: 'block'
     }
   }
@@ -49,7 +49,7 @@ const MainHeader = ()=>{
   const  mobileScreen  = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
   const handleSidebarToggle = () => {
-    dispatch(toggleSidebar({ showSidebar: true, mobileScreen: true }));
+    dispatch(toggleSidebar({ mobileScreen: true }));
   };
 
   return (

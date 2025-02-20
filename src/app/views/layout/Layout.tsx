@@ -5,7 +5,7 @@ import CollectionPermissionsProvider from '../../services/context/collection-per
 import { PopupsProvider } from '../../services/context/popups-context';
 import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
-import { toggleSidebar } from '../../services/slices/sidebar-properties.slice'; // Import sidebar action
+import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { StatusMessages, TermsOfUseMessage } from '../app-sections';
 import Notification from '../common/banners/Notification';
@@ -31,11 +31,13 @@ export const Layout = (props: LayoutProps) => {
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
+  const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
+  const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
 
   const {
     handleRef: sidebarHandleRef,
     wrapperRef: sidebarWrapperRef,
-    elementRef: sidebarElementRef,
+    elementRef: storeSidebarElement,
     setValue: setSidebarColumnSize
   } = useResizeHandle({
     variableName: SIDEBAR_SIZE_CSS_VAR,
@@ -53,68 +55,120 @@ export const Layout = (props: LayoutProps) => {
   }, [sampleBody]);
 
   useEffect(() => {
-    if (mobileScreen) {
-      dispatch(toggleSidebar({ showSidebar: false, mobileScreen: true }));
+    if (!mobileScreen) {
+      setSidebarColumnSize(456);
+      setInitialSidebarWidth(456);
+    } else {
       setSidebarColumnSize(0);
     }
-  }, [mobileScreen, dispatch]);
+  }, [mobileScreen]);
+
 
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
   };
 
   const handleToggleSelect = (toggled: boolean) => {
-    setSidebarColumnSize(toggled ? 456 : 5);
+    if (mobileScreen) {
+      dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
+      setSidebarColumnSize(toggled ? window.innerWidth : 0);
+    } else {
+      if (toggled) {
+        setSidebarColumnSize(initialSidebarWidth > 456 ? initialSidebarWidth : 456);
+      } else {
+        setSidebarColumnSize(48);
+      }
+    }
   };
 
-  const resetSidebarArea = () => {
-    setSidebarColumnSize(456);
+  const handleResizeStart = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (!sidebarElement) {return;}
+
+    const startX = event.clientX;
+    const startWidth = parseInt(getComputedStyle(sidebarElement).width, 10);
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const newWidth = startWidth + (moveEvent.clientX - startX);
+      updateSidebarSize(newWidth);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+
+  const updateSidebarSize = (newSize: number) => {
+    const minSize = 48;
+    const maxSize = window.innerWidth * 0.5;
+
+    const finalSize = Math.max(minSize, Math.min(maxSize, newSize));
+
+    setSidebarColumnSize(finalSize);
+
+    if (finalSize > 48) {
+      setInitialSidebarWidth(finalSize);
+    }
   };
 
   return (
-    <PopupsProvider>
-      <div className={layoutStyles.container}>
-        <MainHeader />
-        <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-          {showSidebar && (
-            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
-              <Sidebar handleToggleSelect={handleToggleSelect} />
-              <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
-            </div>
-          )}
-          <div id='main-content' className={layoutStyles.mainContent}>
-            <div style={{ margin: '0 10px' }}>
-              <Notification
-                header={translateMessage('Banner notification 1 header')}
-                content={translateMessage('Banner notification 1 content')}
-                link={translateMessage('Banner notification 1 link')}
-                linkText={translateMessage('Banner notification 1 link text')}
-              />
-            </div>
-
-            <ValidationProvider>
+    <>
+      <PopupsProvider>
+        <div className={layoutStyles.container}>
+          <MainHeader />
+          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+            {showSidebar && (
+              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
+                <Sidebar handleToggleSelect={handleToggleSelect} />
+                {!mobileScreen && (
+                  <LayoutResizeHandler
+                    position="end"
+                    ref={sidebarHandleRef}
+                    onDoubleClick={() => updateSidebarSize(456)}
+                    onMouseDown={handleResizeStart}
+                  />
+                )}
+              </div>
+            )}
+            <div id='main-content' className={layoutStyles.mainContent}>
               <div style={{ margin: '0 10px' }}>
-                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                <Notification
+                  header={translateMessage('Banner notification 1 header')}
+                  content={translateMessage('Banner notification 1 content')}
+                  link={translateMessage('Banner notification 1 link')}
+                  linkText={translateMessage('Banner notification 1 link text')}
+                />
               </div>
-              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                <div id='request-area' className={layoutStyles.requestArea}>
-                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                </div>
+              <ValidationProvider>
                 <div style={{ margin: '0 10px' }}>
-                  <StatusMessages />
+                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
                 </div>
-                <div id='response-area' className={layoutStyles.responseArea}>
-                  <QueryResponse />
+                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                  <div id='request-area' className={layoutStyles.requestArea}>
+                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                  </div>
+                  <div style={{ margin: '0 10px' }}>
+                    <StatusMessages />
+                  </div>
+                  <div id='response-area' className={layoutStyles.responseArea}>
+                    <QueryResponse />
+                  </div>
                 </div>
-              </div>
-            </ValidationProvider>
+              </ValidationProvider>
+            </div>
           </div>
+          <TermsOfUseMessage />
         </div>
-        <TermsOfUseMessage />
-      </div>
-      <CollectionPermissionsProvider>
-        <PopupsWrapper />
-      </CollectionPermissionsProvider>
-    </PopupsProvider>
+        <CollectionPermissionsProvider>
+          <PopupsWrapper />
+        </CollectionPermissionsProvider>
+      </PopupsProvider>
+    </>
   );
 };

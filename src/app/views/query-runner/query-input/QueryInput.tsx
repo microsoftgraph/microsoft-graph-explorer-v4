@@ -77,7 +77,7 @@ const QueryInput = (props: IQueryInputProps) => {
     const updatedQuery = getChangedQueryContent(value);
     dispatch(setSampleQuery(updatedQuery));
   };
-  console.log('mobile screen:', mobileScreen);
+
   const getChangedQueryContent = (newUrl: string): IQuery => {
     const query = { ...sampleQuery };
     const { queryVersion: newQueryVersion } = parseSampleUrl(newUrl);

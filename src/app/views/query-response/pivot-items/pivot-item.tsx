@@ -124,7 +124,7 @@ export const GetPivotItems = () => {
   return (
     <div className={styles.container}>
       {mobileScreen ? (
-        <Overflow minimumVisible={1}>
+        <Overflow minimumVisible={2}>
           <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small'>
             {tabs.map((tab) => (
               <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedValue ? 2 : 1}>

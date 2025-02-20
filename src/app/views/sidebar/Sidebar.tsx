@@ -23,9 +23,8 @@ const useStyles = makeStyles({
     height: '100%',
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground2,
-    borderRightStyle: 'solid',
-    borderRightColor: tokens.colorNeutralForeground3,
-    borderRightWidth: tokens.strokeWidthThin
+    borderRightWidth: tokens.strokeWidthThin,
+    borderRight: `1px solid ${tokens.colorNeutralForeground3}`
   },
   sidebarToggle: {
     marginLeft: 'auto'
@@ -35,7 +34,7 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   const {show, handleShow} = props;
   const PanelIcon = ()=> show ? <PanelLeftContract20Regular/>: <PanelLeftExpand20Regular/>
 
-  return <Button appearance="subtle" icon={PanelIcon()} onClick={handleShow} {...props}></Button>
+  return <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}></Button>
 }
 
 interface SidebarProps {
@@ -48,13 +47,16 @@ const Sidebar = (props: SidebarProps)=>{
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value as string);
-    setShowSidebarValue(true);
+    if (!showSidebarValue) {
+      handleShow();
+    }
   };
 
-  const handleShow = ()=>{
-    setShowSidebarValue(!showSidebarValue);
-    props.handleToggleSelect(!showSidebarValue)
-  }
+  const handleShow = () => {
+    const newState = !showSidebarValue;
+    setShowSidebarValue(newState);
+    props.handleToggleSelect(newState);
+  };
 
   const tabItems: Record<string, JSX.Element> = {
     'sample-queries': <SampleQueries />,
@@ -66,7 +68,7 @@ const Sidebar = (props: SidebarProps)=>{
     <div className={sidebarStyles.container}>
       <SidebarToggle className={sidebarStyles.sidebarToggle} show={showSidebarValue} handleShow={handleShow}/>
       <TabList
-        selectedValue={selectedValue} onTabSelect={onTabSelect} size="large" vertical>
+        selectedValue={selectedValue} onTabSelect={onTabSelect} size='large' vertical>
         {renderTablistItems(showSidebarValue)}
       </TabList>
       <div>
@@ -80,21 +82,20 @@ const renderTablistItems = (showSidebar: boolean) =>{
   if (showSidebar) {
     return (
       <>
-        <Tab id="sample-queries" value="sample-queries" icon={<Rocket20Regular />}>
+        <Tab id='sample-queries' value='sample-queries' icon={<Rocket20Regular />}>
           {translateMessage('Sample Queries')}</Tab>
-        <Tab id="resources" value="resources" icon={<GroupList20Regular />}>{translateMessage('Resources')}</Tab>
-        <Tab id="history" value="history" icon={<History20Regular />}>{translateMessage('History')}</Tab>
+        <Tab id='resources' value='resources' icon={<GroupList20Regular />}>{translateMessage('Resources')}</Tab>
+        <Tab id='history' value='history' icon={<History20Regular />}>{translateMessage('History')}</Tab>
       </>
     )
   }
   return (
     <>
-      <Tab id="sample-queries" value="sample-queries" icon={<Rocket20Regular />}></Tab>
-      <Tab id="resources" value="resources" icon={<GroupList20Regular />}></Tab>
-      <Tab id="history" value="history" icon={<History20Regular />}></Tab>
+      <Tab id='sample-queries' value='sample-queries' icon={<Rocket20Regular />}></Tab>
+      <Tab id='resources' value='resources' icon={<GroupList20Regular />}></Tab>
+      <Tab id='history' value='history' icon={<History20Regular />}></Tab>
     </>
   )
 }
 
 export { Sidebar };
-

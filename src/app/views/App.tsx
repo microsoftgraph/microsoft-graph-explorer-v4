@@ -34,7 +34,6 @@ import { substituteTokens } from '../utils/token-helpers';
 import { parse, ParsedMessageResult } from './query-runner/util/iframe-message-parser';
 import { Layout } from './layout/Layout';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
-import { useDetectMobileScreen } from '../utils/useDetectMobileScreen';
 export interface IAppProps {
   theme?: ITheme;
   styles?: object;
