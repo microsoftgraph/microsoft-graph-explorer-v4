@@ -69,7 +69,7 @@ export const runQuery = createAsyncThunk(
 
       const historyItem = generateHistoryItem(
         status,
-        {},
+        result.headers,
         query,
         createdAt,
         result,
@@ -116,19 +116,17 @@ function generateHistoryItem(
   result: Result,
   duration: number
 ): IHistoryItem {
-  let response: Result = { body: {}, headers: {} };
-  const contentType_ = respHeaders['content-type'];
+  let response = { ...result };
+  const responseHeaders = { ...respHeaders };
+  const contentType = respHeaders['content-type'];
 
-  if (isImageResponse(contentType_)) {
-    response = { ...result, body: 'Run the query to view the image' };
-    Object.assign(respHeaders, { 'content-type': ContentType.Json });
+  if (isImageResponse(contentType)) {
+    response = { ...response, body: 'Run the query to view the image' };
+    responseHeaders['content-type'] = ContentType.Json;
   }
 
   if (isFileResponse(respHeaders)) {
-    response = {
-      ...result,
-      body: 'Run the query to generate file download URL'
-    };
+    response = { ...response, body: 'Run the query to generate file download URL' };
   }
 
   const historyItem: IHistoryItem = {
@@ -142,7 +140,7 @@ function generateHistoryItem(
     status: status.status as number,
     statusText: status.statusText,
     duration,
-    result: response.body as object
+    result: response.body as Object
   };
 
   historyCache.writeHistoryData(historyItem);

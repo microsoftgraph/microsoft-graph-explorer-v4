@@ -7,17 +7,16 @@ import { ValidationProvider } from '../../services/context/validation-context/Va
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { toggleSidebar } from '../../services/slices/sidebar-properties.slice'; // Import sidebar action
 import { translateMessage } from '../../utils/translate-messages';
-import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
+import { StatusMessages, TermsOfUseMessage } from '../app-sections';
 import Notification from '../common/banners/Notification';
 import PopupsWrapper from '../common/popups/PopupsWrapper';
 import { MainHeader } from '../main-header/MainHeader';
-import { QueryResponseV9 } from '../query-response';
+import { QueryResponse } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
-import { SidebarV9 } from '../sidebar/SidebarV9';
+import { Sidebar } from '../sidebar/Sidebar';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
-import { Mode } from '../../../types/enums';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
 import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
 
@@ -31,7 +30,6 @@ export const Layout = (props: LayoutProps) => {
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const mode = useAppSelector((state) => state.graphExplorerMode);
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
 
   const {
@@ -74,51 +72,49 @@ export const Layout = (props: LayoutProps) => {
   };
 
   return (
-    <>
-      <PopupsProvider>
-        <div className={layoutStyles.container}>
-          <MainHeader />
-          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {showSidebar && (
-              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
-                <SidebarV9 handleToggleSelect={handleToggleSelect} />
-                <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
-              </div>
-            )}
-            <div id='main-content' className={layoutStyles.mainContent}>
-              <div style={{ margin: '0 10px' }}>
-                <Notification
-                  header={translateMessage('Banner notification 1 header')}
-                  content={translateMessage('Banner notification 1 content')}
-                  link={translateMessage('Banner notification 1 link')}
-                  linkText={translateMessage('Banner notification 1 link text')}
-                />
-              </div>
-
-              <ValidationProvider>
-                <div style={{ margin: '0 10px' }}>
-                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
-                </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div id='request-area' className={layoutStyles.requestArea}>
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessagesV9 />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponseV9 />
-                  </div>
-                </div>
-              </ValidationProvider>
+    <PopupsProvider>
+      <div className={layoutStyles.container}>
+        <MainHeader />
+        <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+          {showSidebar && (
+            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
+              <Sidebar handleToggleSelect={handleToggleSelect} />
+              <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
             </div>
+          )}
+          <div id='main-content' className={layoutStyles.mainContent}>
+            <div style={{ margin: '0 10px' }}>
+              <Notification
+                header={translateMessage('Banner notification 1 header')}
+                content={translateMessage('Banner notification 1 content')}
+                link={translateMessage('Banner notification 1 link')}
+                linkText={translateMessage('Banner notification 1 link text')}
+              />
+            </div>
+
+            <ValidationProvider>
+              <div style={{ margin: '0 10px' }}>
+                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              </div>
+              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                <div id='request-area' className={layoutStyles.requestArea}>
+                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                </div>
+                <div style={{ margin: '0 10px' }}>
+                  <StatusMessages />
+                </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
+                </div>
+              </div>
+            </ValidationProvider>
           </div>
-          <TermsOfUseMessageV9 />
         </div>
-        <CollectionPermissionsProvider>
-          <PopupsWrapper />
-        </CollectionPermissionsProvider>
-      </PopupsProvider>
-    </>
+        <TermsOfUseMessage />
+      </div>
+      <CollectionPermissionsProvider>
+        <PopupsWrapper />
+      </CollectionPermissionsProvider>
+    </PopupsProvider>
   );
 };
