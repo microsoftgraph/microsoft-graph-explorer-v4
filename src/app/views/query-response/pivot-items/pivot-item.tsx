@@ -25,7 +25,7 @@ import {
   ResponseHeadersV9,
   SnippetsV9
 } from '../../common/lazy-loader/component-registry';
-import AdaptiveCardsV9 from '../adaptive-cards/AdaptiveCardV9';
+import AdaptiveCards from '../adaptive-cards/AdaptiveCard';
 import {
   darkThemeHostConfig,
   lightThemeHostConfig
@@ -154,7 +154,7 @@ export const GetPivotItems = () => {
           <ThemeContext.Consumer>
             {(theme) => (
               <div id={'adaptive-cards-tab'} tabIndex={0}>
-                <AdaptiveCardsV9
+                <AdaptiveCards
                   body={body as string}
                   hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
                 />
