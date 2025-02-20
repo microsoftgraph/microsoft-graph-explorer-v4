@@ -34,11 +34,12 @@ export const Layout = (props: LayoutProps) => {
   const mode = useAppSelector((state) => state.graphExplorerMode);
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
+  const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
 
   const {
     handleRef: sidebarHandleRef,
     wrapperRef: sidebarWrapperRef,
-    elementRef: sidebarElementRef,
+    elementRef: storeSidebarElement,
     setValue: setSidebarColumnSize
   } = useResizeHandle({
     variableName: SIDEBAR_SIZE_CSS_VAR,
@@ -57,7 +58,8 @@ export const Layout = (props: LayoutProps) => {
 
   useEffect(() => {
     if (!mobileScreen) {
-      updateSidebarSize(456); // Use function to enforce min/max limits
+      setSidebarColumnSize(456);
+      setInitialSidebarWidth(456);
     } else {
       setSidebarColumnSize(0);
     }
@@ -73,21 +75,48 @@ export const Layout = (props: LayoutProps) => {
       dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
     } else {
       if (toggled) {
-        setSidebarColumnSize(initialSidebarWidth > 48 ? initialSidebarWidth : 456);
+        setSidebarColumnSize(initialSidebarWidth > 456 ? initialSidebarWidth : 456);
       } else {
         setSidebarColumnSize(48);
       }
     }
   };
 
+  const handleResizeStart = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (!sidebarElement) {return;}
+
+    const startX = event.clientX;
+    const startWidth = parseInt(getComputedStyle(sidebarElement).width, 10);
+    const maxSize = window.innerWidth * 0.5; // ✅ Maximum expansion: 50% of screen
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const newWidth = startWidth + (moveEvent.clientX - startX);
+      updateSidebarSize(newWidth);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
 
   const updateSidebarSize = (newSize: number) => {
     const minSize = 48;
-    const maxSize = 456;
+    const maxSize = window.innerWidth * 0.5;
 
     const finalSize = Math.max(minSize, Math.min(maxSize, newSize));
+
     setSidebarColumnSize(finalSize);
-    setInitialSidebarWidth(finalSize);
+
+    if (finalSize > 48) {
+      setInitialSidebarWidth(finalSize);
+    }
   };
 
   const resetSidebarArea = () => {
@@ -101,10 +130,15 @@ export const Layout = (props: LayoutProps) => {
           <MainHeader />
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
             {showSidebar && (
-              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
+              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
                 <SidebarV9 handleToggleSelect={handleToggleSelect} />
                 {!mobileScreen && (
-                  <LayoutResizeHandler position='end' ref={sidebarHandleRef} onDoubleClick={resetSidebarArea} />
+                  <LayoutResizeHandler
+                    position="end"
+                    ref={sidebarHandleRef}
+                    onDoubleClick={() => updateSidebarSize(456)}
+                    onMouseDown={handleResizeStart}
+                  />
                 )}
               </div>
             )}

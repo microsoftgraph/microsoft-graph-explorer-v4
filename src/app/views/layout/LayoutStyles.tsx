@@ -22,8 +22,8 @@ export const useLayoutStyles = makeStyles({
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(48px, var(${SIDEBAR_SIZE_CSS_VAR}), 456px)`,
-    maxWidth: '456px',
+    flexBasis: `clamp(48px, var(${SIDEBAR_SIZE_CSS_VAR}), 50vw)`,
+    maxWidth: '50vw',
     minWidth: '48px',
     position: 'relative',
     height: 'calc(100vh - 98px)',

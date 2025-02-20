@@ -5,6 +5,7 @@ import { useAppSelector } from '../../../store';
 interface HandleProps {
   position: 'start' | 'end' | 'top' | 'bottom';
   onDoubleClick?: () => void;
+  onMouseDown?: (event: React.MouseEvent) => void;
 }
 
 const useHoverStyles = makeResetStyles({
@@ -14,7 +15,7 @@ const useHoverStyles = makeResetStyles({
 })
 export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>(
   (props, ref) => {
-    const { position, ...rest } = props;
+    const { position,onMouseDown, ...rest } = props;
     const { dir } = useFluent();
     const hoverStyles = useHoverStyles();
     const mobileScreen  = useAppSelector((state) => state.sidebarProperties.mobileScreen);
@@ -62,6 +63,7 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
         {...rest}
         ref={ref}
         onClick={handleClick}
+        onMouseDown={onMouseDown}
         tabIndex={0}
         className={hoverStyles}
         style={{
