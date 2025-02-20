@@ -38,9 +38,6 @@ const pathStyles = makeStyles({
   },
   tableHeader: {
     fontWeight: 'bold'
-  },
-  scopeColumn: {
-    textAlign: 'right'
   }
 });
 

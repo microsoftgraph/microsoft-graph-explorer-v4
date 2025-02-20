@@ -1,6 +1,6 @@
 import {
   Table, TableHeader, TableRow, TableCell, TableBody,
-  Link, Text
+  Link, Text, Label
 } from '@fluentui/react-components';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -125,16 +125,21 @@ export const Permissions = (): JSX.Element => {
   return (
     <>
       <div className={styles.permissionText}>
-        <Text>
+        <Label size="small" weight='semibold'>
           {translateMessage(tokenPresent ? 'permissions required to run the query':'sign in to consent to permissions')}
-        </Text>
+        </Label>
       </div>
       <div className={styles.tableWrapper}>
-        <Table aria-label={translateMessage('Permissions Table')}  size="extra-small">
-          <TableHeader>
+        <Table className={styles.table} aria-label={translateMessage('Permissions Table')}  size="extra-small">
+          <TableHeader className={styles.tableHeader}>
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.columnId}>{column.renderHeaderCell()}</TableCell>
+                <TableCell
+                  key={column.columnId}
+                  style={{ textAlign: column.columnId === 'consented' ? 'center' : 'left' }}
+                >
+                  {column.renderHeaderCell()}
+                </TableCell>
               ))}
             </TableRow>
           </TableHeader>

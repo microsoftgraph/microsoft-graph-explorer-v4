@@ -217,7 +217,14 @@ const FullPermissions = () => {
                       <DataGridHeader>
                         <DataGridRow>
                           {(column) => (
-                            <DataGridHeaderCell key={column.columnId}>
+                            <DataGridHeaderCell
+                              key={column.columnId}
+                              style={{
+                                justifyContent: column.columnId === 'consented' || column.columnId === 'consentType'
+                                  ? 'center'
+                                  : 'left',
+                                maxWidth: '100%'}}
+                            >
                               {column.renderHeaderCell()}
                             </DataGridHeaderCell>
                           )}
@@ -227,7 +234,14 @@ const FullPermissions = () => {
                         {({ item: rowData }: { item: { item: PermissionListItem; index: number } }) => (
                           <DataGridRow key={rowData.item.value}>
                             {(column) => (
-                              <DataGridCell key={column.columnId} focusMode={getCellFocusMode(column.columnId)}>
+                              <DataGridCell
+                                key={column.columnId}
+                                style={{
+                                  justifyContent: column.columnId === 'isAdmin' ? 'center' : 'left',
+                                  whiteSpace: 'nowrap'
+                                }}
+                                focusMode={getCellFocusMode(column.columnId)}
+                              >
                                 {column.renderCell({ item: rowData.item, index: rowData.index })}
                               </DataGridCell>
                             )}

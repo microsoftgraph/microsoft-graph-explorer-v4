@@ -51,7 +51,6 @@ const createRenderColumnHeader = (styles: ReturnType<typeof permissionStyles>) =
             icon={<InfoRegular />}
             appearance="subtle"
             size="small"
-            className={styles.iconButton}
             aria-label={translateMessage(headerText)}
             onClick={() => openExternalWebsite(headerText)}
           />

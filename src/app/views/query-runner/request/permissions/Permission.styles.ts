@@ -2,20 +2,27 @@ import { makeStyles, tokens } from '@fluentui/react-components';
 
 const permissionStyles = makeStyles({
   root: {
-    padding: '17px'
+    padding: tokens.spacingVerticalM
   },
   label: {
-    marginLeft: '12px'
+    marginLeft: tokens.spacingHorizontalS
+  },
+  table: {
+    tableLayout: 'fixed',
+    display: 'table-cell'
+  },
+  tableHeader: {
+    fontWeight: tokens.fontWeightSemibold
   },
   errorLabel: {
-    marginTop: '10px',
-    paddingLeft: '10px',
-    paddingRight: '20px',
+    marginTop: tokens.spacingVerticalS,
+    paddingLeft: tokens.spacingHorizontalS,
+    paddingRight: tokens.spacingHorizontalL,
     minHeight: '200px'
   },
   permissionText: {
-    marginBottom: '5px',
-    paddingLeft: '10px'
+    marginBottom: tokens.spacingVerticalXS,
+    paddingLeft: tokens.spacingHorizontalS
   },
   tableWrapper: {
     flex: 1,
@@ -24,23 +31,14 @@ const permissionStyles = makeStyles({
   },
   adminLabel: {
     fontSize: tokens.fontSizeBase300,
-    padding: tokens.spacingVerticalXS
-  },
-  button: {
-    margin: tokens.spacingVerticalXXS
+    padding: tokens.spacingVerticalXS,
+    textAlign: 'center'
   },
   tooltip: {
     display: 'block'
   },
   icon: {
-    position: 'relative',
-    top: '4px',
-    cursor: 'pointer'
-  },
-  iconButton: {
-    position: 'relative',
-    left: '4px',
-    top: '2px'
+    display: 'inline'
   },
   headerContainer: {
     display: 'flex',
@@ -48,17 +46,17 @@ const permissionStyles = makeStyles({
     textAlign: 'left'
   },
   headerText: {
-    marginLeft: '8px'
+    marginLeft: tokens.spacingHorizontalXS
   },
   permissionContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem',
-    padding: '1rem'
+    gap: tokens.spacingVerticalM,
+    padding: tokens.spacingVerticalM
   },
   controlsRow: {
     display: 'flex',
-    gap: '0.5rem',
+    gap: tokens.spacingHorizontalXS,
     alignItems: 'center'
   },
   searchBar: {

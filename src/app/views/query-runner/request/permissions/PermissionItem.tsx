@@ -82,7 +82,6 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
           <Button
             appearance='primary'
             onClick={() => handleRevoke(item)}
-            className={styles.button}
           >
             {translateMessage('Revoke')}
           </Button>
@@ -90,14 +89,14 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
       }
       return (
         <Tooltip content={translateMessage('You require the following permissions to revoke')} relationship='label'>
-          <Button appearance='primary' disabled className={styles.button}>
+          <Button appearance='primary' disabled>
             {translateMessage('Revoke')}
           </Button>
         </Tooltip>
       );
     }
     return (
-      <Button appearance='primary' onClick={() => handleConsent(item)} className={styles.button}>
+      <Button appearance='primary' onClick={() => handleConsent(item)}>
         {translateMessage('Consent')}
       </Button>
     );
@@ -113,7 +112,7 @@ const PermissionItem = (props: PermissionItemProps): JSX.Element | null => {
           {content}
           {props.index === 0 && (
             <Tooltip content={translateMessage('Least privileged permission')} relationship='label'>
-              <span className={styles.icon}><InfoRegular /></span>
+              <Button className={styles.icon} icon={<InfoRegular />} appearance='subtle' size='small' />
             </Tooltip>
           )}
         </div>
