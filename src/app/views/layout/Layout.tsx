@@ -7,11 +7,11 @@ import { ValidationProvider } from '../../services/context/validation-context/Va
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
 import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
+import { StatusMessages, TermsOfUseMessage } from '../app-sections';
 import Notification from '../common/banners/Notification';
 import PopupsWrapper from '../common/popups/PopupsWrapper';
 import { MainHeader } from '../main-header/MainHeader';
-import { QueryResponseV9 } from '../query-response';
+import { QueryResponse } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
 import { Sidebar } from '../sidebar/Sidebar';
@@ -118,7 +118,6 @@ export const Layout = (props: LayoutProps) => {
   };
 
   return (
-    <>
       <PopupsProvider>
         <div className={layoutStyles.container}>
           <MainHeader />
@@ -138,38 +137,27 @@ export const Layout = (props: LayoutProps) => {
             )}
             <div id='main-content' className={layoutStyles.mainContent}>
               <div style={{ margin: '0 10px' }}>
-                <Notification
-                  header={translateMessage('Banner notification 1 header')}
-                  content={translateMessage('Banner notification 1 content')}
-                  link={translateMessage('Banner notification 1 link')}
-                  linkText={translateMessage('Banner notification 1 link text')}
-                />
+                <QueryRunner onSelectVerb={props.handleSelectVerb} />
               </div>
-
-              <ValidationProvider>
+              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                <div id='request-area' className={layoutStyles.requestArea}>
+                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                </div>
                 <div style={{ margin: '0 10px' }}>
-                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                  <StatusMessages />
                 </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div id='request-area' className={layoutStyles.requestArea}>
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessagesV9 />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponseV9 />
-                  </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
                 </div>
-              </ValidationProvider>
-            </div>
+              </div>
+            </ValidationProvider>
           </div>
-          <TermsOfUseMessageV9 />
         </div>
-        <CollectionPermissionsProvider>
-          <PopupsWrapper />
-        </CollectionPermissionsProvider>
-      </PopupsProvider>
-    </>
+        <TermsOfUseMessage />
+      </div>
+      <CollectionPermissionsProvider>
+        <PopupsWrapper />
+      </CollectionPermissionsProvider>
+    </PopupsProvider>
   );
 };

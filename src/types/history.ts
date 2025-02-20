@@ -1,4 +1,3 @@
-import { ITheme } from '@fluentui/react';
 import { Header } from './query-runner';
 
 export interface IHistoryItem extends IHistory {
@@ -17,7 +16,7 @@ interface IHistory {
   duration: number;
   body?: string;
   category?: string;
-  responseHeaders: Record<string, string>;
+  responseHeaders: { [key: string]: string };
 }
 
 export interface IHistoryProps {
@@ -29,7 +28,6 @@ export interface IHistoryProps {
     setQueryResponseStatus: Function;
     bulkRemoveHistoryItems: Function;
   };
-  theme?: ITheme;
   styles?: object;
   history: History[];
 }

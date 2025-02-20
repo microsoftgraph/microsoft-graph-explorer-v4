@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import ResourceExplorer from './resource-explorer';
-import { SampleQueriesV9 } from './sample-queries/SampleQueriesV9';
+import { SampleQueries } from './sample-queries/SampleQueries';
 
 interface IShowSidebar {
   show: boolean
@@ -37,6 +37,11 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   return <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}></Button>
 }
 
+const Sidebar = (props: SidebarProps)=>{
+  const sidebarStyles = useStyles();
+  const [showSidebarValue, setShowSidebarValue] = useState(true);
+  const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
+
 interface SidebarProps {
   handleToggleSelect: (showSidebarValue: boolean) => void;
 }
@@ -59,7 +64,7 @@ const Sidebar = (props: SidebarProps)=>{
   };
 
   const tabItems: Record<string, JSX.Element> = {
-    'sample-queries': <SampleQueriesV9 />,
+    'sample-queries': <SampleQueries />,
     'resources': <ResourceExplorer />,
     'history': <History />
   }
