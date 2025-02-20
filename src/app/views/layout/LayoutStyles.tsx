@@ -28,7 +28,17 @@ export const useLayoutStyles = makeStyles({
     position: 'relative',
     height: 'calc(100vh - 98px)',
     overflow: 'hidden',
-    transition: 'flex-basis 0.2s ease-in-out'
+    transition: 'flex-basis 0.2s ease-in-out',
+
+    '@media (max-width: 768px)': {
+      flexBasis: '100vw',
+      maxWidth: '100vw',
+      minWidth: '100vw',
+      position: 'absolute',
+      left: 0,
+      zIndex: 1000,
+      backgroundColor: 'white'
+    }
   },
   mainContent: {
     flex: '1 1 auto',

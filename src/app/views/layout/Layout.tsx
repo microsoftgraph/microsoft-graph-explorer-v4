@@ -71,6 +71,7 @@ export const Layout = (props: LayoutProps) => {
   const handleToggleSelect = (toggled: boolean) => {
     if (mobileScreen) {
       dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
+      setSidebarColumnSize(toggled ? window.innerWidth : 0);
     } else {
       if (toggled) {
         setSidebarColumnSize(initialSidebarWidth > 456 ? initialSidebarWidth : 456);
