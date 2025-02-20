@@ -1,3 +1,3 @@
-import { Auth } from './AuthV9';
+import { Auth } from './Auth';
 
 export default Auth;
