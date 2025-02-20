@@ -215,7 +215,17 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
               className={leafStyles.itemLayout}
               onClick={()=>handleOnClick(query)}
               iconBefore={<MethodIcon isSignedIn={isSignedIn} method={query.method} />}
-              aside={<ResourceLink item={query}/>}
+              aside={<>
+                {query.method !== 'GET' && !isSignedIn && <Tooltip
+                  withArrow
+                  content={translateMessage('Sign In to try this sample')}
+                  relationship='label'
+                  positioning='above-start'
+                >
+                  <LockClosed16Regular/>
+                </Tooltip>}
+                <ResourceLink item={query}/>
+              </>}
             >
               <Tooltip
                 withArrow
@@ -243,11 +253,18 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
 const ResourceLink = ({item}: {item: ISampleQuery}) =>{
   const href = item.docLink ?? '';
   return (
-    <Link
-      aria-label={item.humanName + translateMessage('Read documentation')}
-      target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
-      <DocumentText20Regular />
-    </Link>
+    <Tooltip
+      withArrow
+      content={translateMessage('Read documentation')
+      }
+      relationship='label'
+    >
+      <Link
+        aria-label={item.humanName + translateMessage('Read documentation')}
+        target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+        <DocumentText20Regular />
+      </Link>
+    </Tooltip>
   )
 }
 
@@ -272,14 +289,6 @@ const MethodIcon = ({ method, isSignedIn }: { method: string, isSignedIn: boolea
         aria-label={'http method ' + method + ' for'}>
         {method}
       </Badge>
-      {method !== 'GET' && !isSignedIn && <Tooltip
-        withArrow
-        content={translateMessage('Sign In to try this sample')}
-        relationship='label'
-        positioning='above-start'
-      >
-        <LockClosed16Regular/>
-      </Tooltip>}
     </div>
   )
 }
