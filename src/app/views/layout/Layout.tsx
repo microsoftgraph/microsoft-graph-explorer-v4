@@ -14,7 +14,7 @@ import { MainHeader } from '../main-header/MainHeader';
 import { QueryResponseV9 } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
-import { SidebarV9 } from '../sidebar/SidebarV9';
+import { Sidebar } from '../sidebar/Sidebar';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
@@ -117,10 +117,6 @@ export const Layout = (props: LayoutProps) => {
     }
   };
 
-  const resetSidebarArea = () => {
-    setSidebarColumnSize(456);
-  };
-
   return (
     <>
       <PopupsProvider>
@@ -129,7 +125,7 @@ export const Layout = (props: LayoutProps) => {
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
             {showSidebar && (
               <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
-                <SidebarV9 handleToggleSelect={handleToggleSelect} />
+                <Sidebar handleToggleSelect={handleToggleSelect} />
                 {!mobileScreen && (
                   <LayoutResizeHandler
                     position="end"
