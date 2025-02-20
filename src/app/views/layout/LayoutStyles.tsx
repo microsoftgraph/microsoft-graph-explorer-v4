@@ -35,7 +35,7 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     minWidth: '300px',
-    height: 'calc(100vh - 120px)',
+    height: 'calc(100vh - 98px)',
     overflow: 'hidden'
   },
   requestResponseArea: {

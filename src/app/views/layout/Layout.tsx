@@ -89,7 +89,6 @@ export const Layout = (props: LayoutProps) => {
 
     const startX = event.clientX;
     const startWidth = parseInt(getComputedStyle(sidebarElement).width, 10);
-    const maxSize = window.innerWidth * 0.5; // ✅ Maximum expansion: 50% of screen
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       const newWidth = startWidth + (moveEvent.clientX - startX);
