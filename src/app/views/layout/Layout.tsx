@@ -118,6 +118,7 @@ export const Layout = (props: LayoutProps) => {
   };
 
   return (
+    <>
       <PopupsProvider>
         <div className={layoutStyles.container}>
           <MainHeader />
@@ -137,27 +138,37 @@ export const Layout = (props: LayoutProps) => {
             )}
             <div id='main-content' className={layoutStyles.mainContent}>
               <div style={{ margin: '0 10px' }}>
-                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                <Notification
+                  header={translateMessage('Banner notification 1 header')}
+                  content={translateMessage('Banner notification 1 content')}
+                  link={translateMessage('Banner notification 1 link')}
+                  linkText={translateMessage('Banner notification 1 link text')}
+                />
               </div>
-              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                <div id='request-area' className={layoutStyles.requestArea}>
-                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                </div>
+              <ValidationProvider>
                 <div style={{ margin: '0 10px' }}>
-                  <StatusMessages />
+                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
                 </div>
-                <div id='response-area' className={layoutStyles.responseArea}>
-                  <QueryResponse />
+                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                  <div id='request-area' className={layoutStyles.requestArea}>
+                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                  </div>
+                  <div style={{ margin: '0 10px' }}>
+                    <StatusMessages />
+                  </div>
+                  <div id='response-area' className={layoutStyles.responseArea}>
+                    <QueryResponse />
+                  </div>
                 </div>
-              </div>
-            </ValidationProvider>
+              </ValidationProvider>
+            </div>
           </div>
+          <TermsOfUseMessage />
         </div>
-        <TermsOfUseMessage />
-      </div>
-      <CollectionPermissionsProvider>
-        <PopupsWrapper />
-      </CollectionPermissionsProvider>
-    </PopupsProvider>
+        <CollectionPermissionsProvider>
+          <PopupsWrapper />
+        </CollectionPermissionsProvider>
+      </PopupsProvider>
+    </>
   );
 };

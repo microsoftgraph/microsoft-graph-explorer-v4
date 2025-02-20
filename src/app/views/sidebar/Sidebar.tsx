@@ -37,11 +37,6 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   return <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}></Button>
 }
 
-const Sidebar = (props: SidebarProps)=>{
-  const sidebarStyles = useStyles();
-  const [showSidebarValue, setShowSidebarValue] = useState(true);
-  const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
-
 interface SidebarProps {
   handleToggleSelect: (showSidebarValue: boolean) => void;
 }
@@ -104,4 +99,3 @@ const renderTablistItems = (showSidebar: boolean) =>{
 }
 
 export { Sidebar };
-
