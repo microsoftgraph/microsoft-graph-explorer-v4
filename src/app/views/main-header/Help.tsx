@@ -35,6 +35,7 @@ const Help = ()=>{
       <Tooltip content={translateMessage('Help')} relationship="description">
         <MenuTrigger disableButtonEnhancement>
           <Button
+            aria-label={translateMessage('Help')}
             onClick={trackHelpButtonClickEvent}
             className={styles.iconButton} appearance="subtle" icon={<ChatHelp20Regular />} />
         </MenuTrigger>
