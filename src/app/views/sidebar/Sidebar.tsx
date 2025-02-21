@@ -36,8 +36,8 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   const PanelIcon = ()=> show ? <PanelLeftContract20Regular/>: <PanelLeftExpand20Regular/>
 
   return (
-    <Tooltip content={show? translateMessage('Minimize sidebar'): translateMessage('Mazimize sidebar')}
-      relationship="description">
+    <Tooltip content={show? translateMessage('Minimize sidebar'): translateMessage('Maximize sidebar')}
+      relationship='label'>
       <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}>
       </Button>
     </Tooltip>
