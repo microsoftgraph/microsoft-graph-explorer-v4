@@ -28,8 +28,9 @@ const useStyles = makeStyles({
     marginBlockStart: '10px',
     zIndex: 1
   },
-  children: {
-    height: '100%'
+  messageBar: {
+    marginInlineStart: '15px',
+    width: '100%'
   }
 });
 
@@ -46,7 +47,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
 
   return (
     <>
-      {messageBarText ? <MessageBar intent='info'>
+      {messageBarText ? <MessageBar className={styles.messageBar} intent='info'>
         <MessageBarBody>
           {translateMessage(messageBarText)}
           {messageBarSpanText ? (
@@ -56,7 +57,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
           ) : null}
         </MessageBarBody>
       </MessageBar> : null}
-      <div className={styles.children}>{children}</div>
+      {children}
       <DialogActions className={styles.dialogFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}
