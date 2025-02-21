@@ -32,7 +32,7 @@ const TermsOfUseMessage = () => {
           inline>
           {translateMessage('Terms of use')}
         </Link>.
-        {translateMessage('View the')}
+        {translateMessage('View the ')}
         <Link
           onClick={(e) =>
             telemetry.trackLinkClickEvent((e.currentTarget as HTMLAnchorElement).href,

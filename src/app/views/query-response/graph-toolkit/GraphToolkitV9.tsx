@@ -4,18 +4,12 @@ import {
   makeStyles,
   MessageBar,
   MessageBarBody,
-  MessageBarTitle,
   tokens
 } from '@fluentui/react-components';
 import { useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { lookupToolkitUrl } from '../../../utils/graph-toolkit-lookup';
 import { translateMessage } from '../../../utils/translate-messages';
-import {
-  convertVhToPx,
-  getResponseEditorHeight,
-  getResponseHeight
-} from '../../common/dimensions/dimensions-adjustment';
 
 const useMGTStyles = makeStyles({
   container: {
@@ -27,24 +21,16 @@ const useMGTStyles = makeStyles({
 const GraphToolkitV9 = () => {
   const styles = useMGTStyles();
   const {
-    sampleQuery,
-    dimensions: { response },
-    responseAreaExpanded
+    sampleQuery
   } = useAppSelector((state) => state);
   const { toolkitUrl, exampleUrl } = lookupToolkitUrl(sampleQuery);
 
-  const defaultHeight = convertVhToPx(
-    getResponseHeight(response.height, responseAreaExpanded),
-    220
-  );
-  const monacoHeight = getResponseEditorHeight(115);
 
   if (toolkitUrl && exampleUrl) {
     return (
       <div className={styles.container}>
         <MessageBar intent='info'>
           <MessageBarBody>
-            <MessageBarTitle>Microsoft Graph Toolkit</MessageBarTitle>
             {translateMessage('Open this example in')}{' '}
             <Link
               tabIndex={0}
