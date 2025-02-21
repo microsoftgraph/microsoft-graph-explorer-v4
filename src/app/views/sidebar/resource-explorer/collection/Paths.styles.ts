@@ -2,7 +2,7 @@ import { makeStyles } from '@fluentui/react-components';
 
 const pathStyles = makeStyles({
   table: {
-    tableLayout: 'fixed',
+    tableLayout: 'auto',
     width: '100%',
     overflow: 'auto',
     borderCollapse: 'collapse'
