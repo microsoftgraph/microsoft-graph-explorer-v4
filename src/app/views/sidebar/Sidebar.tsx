@@ -1,5 +1,6 @@
 import {
-  Button, ButtonProps, makeStyles, SelectTabData, SelectTabEvent, Tab, TabList, tokens
+  Button, ButtonProps, makeStyles, SelectTabData, SelectTabEvent, Tab, TabList, tokens,
+  Tooltip
 } from '@fluentui/react-components';
 import {
   GroupList20Regular, History20Regular, PanelLeftContract20Regular, PanelLeftExpand20Regular, Rocket20Regular
@@ -34,7 +35,13 @@ const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   const {show, handleShow} = props;
   const PanelIcon = ()=> show ? <PanelLeftContract20Regular/>: <PanelLeftExpand20Regular/>
 
-  return <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}></Button>
+  return (
+    <Tooltip content={show? translateMessage('Minimize sidebar'): translateMessage('Mazimize sidebar')}
+      relationship="description">
+      <Button appearance='subtle' icon={PanelIcon()} onClick={handleShow} {...props}>
+      </Button>
+    </Tooltip>
+  )
 }
 
 interface SidebarProps {
