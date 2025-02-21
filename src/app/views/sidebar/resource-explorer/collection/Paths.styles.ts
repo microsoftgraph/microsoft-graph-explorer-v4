@@ -2,12 +2,13 @@ import { makeStyles } from '@fluentui/react-components';
 
 const pathStyles = makeStyles({
   table: {
-    tableLayout: 'auto',
+    tableLayout: 'fixed',
     width: '100%',
+    overflow: 'auto',
     borderCollapse: 'collapse'
   },
   row: {
-    borderBottom: '1px solid var(--colorNeutralStroke1)'
+    borderBottom: 'none'
   },
   scopeLabel: {
     backgroundColor: 'var(--colorNeutralForeground3)',
@@ -17,17 +18,23 @@ const pathStyles = makeStyles({
     fontSize: '12px',
     display: 'inline-block',
     textAlign: 'center',
-    width: '100%'
+    maxWidth: '100%',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   badge: {
-    maxWidth: '50%',
-    marginInlineEnd: '10px'
+    maxWidth: '50%'
   },
-  urlMethod: {
-    fontWeight: 'bold',
+  badgeContainer: {
     display: 'inline-block',
-    minWidth: '55px',
-    textTransform: 'uppercase'
+    minWidth: '55px'
+  },
+  urlAndMethod: {
+    display: 'inline-flex',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   tableHeader: {
     fontWeight: 'bold'

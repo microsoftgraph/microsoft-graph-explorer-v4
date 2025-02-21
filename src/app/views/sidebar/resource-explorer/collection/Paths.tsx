@@ -58,7 +58,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   ) => {
     if (column.key === 'scope') {
       return (
-        <Label className={styles.scopeLabel}>
+        <Label className={styles.scopeLabel} style={{ textAlign: 'right' }}>
           {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
         </Label>
       );
@@ -66,14 +66,14 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
     if (column.key === 'url') {
       return (
         <Tooltip content={item.url} relationship="description" withArrow>
-          <span>
-            {item.method ? <Badge
+          <span className={styles.urlAndMethod}>
+            {item.method && <span className={styles.badgeContainer}><Badge
               className={styles.badge}
               size='medium'
               color={colors[item?.method]}
               aria-label={'http method ' + item.method + ' for'}>
               {item.method}
-            </Badge> : <span className={styles.urlMethod}> {item.method} </span>}
+            </Badge></span>}
             {`/${item.version}${item.url}`}
           </span>
         </Tooltip>
@@ -110,7 +110,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               </TableCell>
             )}
             {columns.map((column) => (
-              <TableCell key={column.key}>
+              <TableCell key={column.key} style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}>
                 {renderItemColumn(resource, column)}
               </TableCell>
             ))}

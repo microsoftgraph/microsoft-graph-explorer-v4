@@ -9,7 +9,8 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
-  Button
+  Button,
+  makeStyles
 } from '@fluentui/react-components';
 import { Edit20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -31,6 +32,16 @@ export interface APICollection {
   version: string;
 }
 
+const useStyles = makeStyles({
+  labelStyle: {
+    height: '80vh',
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
+
 const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const dispatch = useAppDispatch();
   const { show: viewPermissions } = usePopups('collection-permissions', 'panel');
@@ -42,6 +53,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [items, setItems] = useState<ResourcePath[]>([]);
   const [loading, setLoading] = useState(true);
+  const labelStyles = useStyles();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -60,8 +72,8 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   }
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: '', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   const generateCollection = () => {
@@ -264,13 +276,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         </div>
         ) :
         (
-          <Label style={{
-            height: '80vh',
-            display: 'flex',
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
+          <Label className={labelStyles.labelStyle}>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}

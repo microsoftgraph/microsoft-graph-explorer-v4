@@ -27,6 +27,9 @@ const useStyles = makeStyles({
     width: '100%',
     marginBlockStart: '10px',
     zIndex: 1
+  },
+  children: {
+    height: '100%'
   }
 });
 
@@ -53,7 +56,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
           ) : null}
         </MessageBarBody>
       </MessageBar> : null}
-      {children}
+      <div className={styles.children}>{children}</div>
       <DialogActions className={styles.dialogFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}
