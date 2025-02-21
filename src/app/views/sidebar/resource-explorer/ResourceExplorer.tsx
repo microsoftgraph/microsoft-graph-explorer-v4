@@ -286,6 +286,7 @@ const ResourceExplorer = () => {
         </Label>
         <div className={resourceExplorerStyles.versioning}>
           <Switch
+            aria-label={translateMessage('Switch to beta')}
             onChange={changeVersion}
             labelPosition='after'
           />
