@@ -50,6 +50,9 @@ const useStyles = makeStyles({
     height: '100%',
     overflow: 'hidden'
   },
+  tabList:{
+    padding: '5px 5px'
+  },
   tabContent: {
     flex: 1,
     display: 'flex',
@@ -137,7 +140,7 @@ export const GetPivotItems = () => {
           </TabList>
         </Overflow>
       ) : (
-        <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small'>
+        <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small' className={styles.tabList}>
           {tabs.map((tab) => (
             <Tab key={tab.id} value={tab.id} icon={tab.icon}>
               {tab.name}
