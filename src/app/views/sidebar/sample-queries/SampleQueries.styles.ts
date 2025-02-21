@@ -11,7 +11,8 @@ export const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: '2px'
+    minWidth: '50px',
+    paddingRight: '0'
   },
   badge: {
     maxWidth: '50px'

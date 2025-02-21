@@ -2,6 +2,7 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
+  CounterBadge,
   Dialog,
   DialogActions,
   DialogBody,
@@ -61,8 +62,8 @@ import { translateMessage } from '../../../utils/translate-messages';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
 import { ResourceLinkType } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
+import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
 
-type BadgeColors =  'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning';
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -71,7 +72,6 @@ const formatDate = (date: Date) => {
   const dayStr = (day < 10 ? '0' : '') + day;
   return `${year}-${monthStr}-${dayStr}`;
 };
-
 
 const today = formatDate(new Date());
 const yesterdaysDate = new Date();
@@ -103,6 +103,13 @@ const useStyles = makeStyles({
         display: 'flex'
       }
     }
+  },
+  badgeContainer: {
+    minWidth: '50px',
+    display: 'inline-block'
+  },
+  badge: {
+    maxWidth: '50px'
   }
 })
 
@@ -299,9 +306,10 @@ const HistoryItems = (props: HistoryProps)=>{
               aria-posinset={pos+1}
               aria-label={ariaLabel}>
               <TreeItemLayout aside={
-                <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
-                  {count}
-                </Badge>}>
+                <CounterBadge
+                  color='informative'
+                  aria-label={count + translateMessage('History')}
+                  count={count}/>}>
                 <GroupIcons groupName={name} historyItems={history} />
               </TreeItemLayout>
             </FlatTreeItem>
@@ -375,22 +383,18 @@ const HistoryStatusCodes = ({ status, method }: { status: number, method?: strin
     return 'success';
   };
 
-  const methodColors: Record<string, BadgeColors> = {
-    GET: 'brand',
-    POST: 'success',
-    PATCH: 'severe',
-    DELETE: 'danger',
-    PUT: 'warning'
-  };
+  const historyItemStyles = useStyles()
 
   return (
-    <div style={{ display: 'flex', gap: '4px' }}>
+    <div className={historyItemStyles.badgeContainer}>
       {method && (
-        <Badge color={methodColors[method] || 'informative'}>
-          {method}
-        </Badge>
+        <div className={historyItemStyles.badgeContainer}>
+          <Badge className={historyItemStyles.badge} color={METHOD_COLORS[method] || 'informative'}>
+            {method}
+          </Badge>
+        </div>
       )}
-      <Badge color={getBadgeColor()} appearance="ghost">{status}</Badge>
+      <Badge className={historyItemStyles.badge} color={getBadgeColor()} appearance="ghost">{status}</Badge>
     </div>
   );
 };
