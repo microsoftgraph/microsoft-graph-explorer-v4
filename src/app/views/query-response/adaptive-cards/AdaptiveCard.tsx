@@ -118,12 +118,10 @@ const AdaptiveCard = (props: AdaptiveCardProps) => {
   }
 
   if (body) {
-    if (!cardContent?.data || (queryStatus && !queryStatus.ok)) {
+    if (!cardContent || !cardContent.data || (queryStatus && !queryStatus.ok)) {
       return (
         <Label weight='semibold'>
-          {translateMessage(
-            'The Adaptive Card for this response is not available'
-          )}
+          {translateMessage('The Adaptive Card for this response is not available')}
           &nbsp;
           <Link
             href={'https://adaptivecards.io/designer/'}
