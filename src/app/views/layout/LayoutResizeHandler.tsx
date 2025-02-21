@@ -64,13 +64,14 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
         ref={ref}
         onClick={handleClick}
         onMouseDown={onMouseDown}
-        tabIndex={0}
+        tabIndex={-1}
         className={hoverStyles}
         style={{
           position: 'absolute',
           borderRadius: '2px',
           ...positioningProps
         }}
+        aria-hidden={true}
       />
     );
   }
