@@ -4,7 +4,7 @@ import { IAdaptiveCardContent } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 
-export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptiveCardContent {
+export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptiveCardContent | undefined {
   if (!payload) {
     // no payload so return empty result
     throw new Error('No adaptive card payload available');
@@ -18,7 +18,7 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptive
   const templateFileName = lookupTemplate(sampleQuery);
   if (!templateFileName) {
     // we don't support this card yet
-    throw new Error('Adaptive card is not supported yet');
+    return undefined;
   }
 
   try {
