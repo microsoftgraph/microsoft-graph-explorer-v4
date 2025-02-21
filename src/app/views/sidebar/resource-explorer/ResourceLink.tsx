@@ -1,4 +1,4 @@
-import { Tooltip, Button, Badge } from '@fluentui/react-components'
+import { Tooltip, Button, Badge, Link } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
 import { useEffect } from 'react';
 
@@ -9,14 +9,13 @@ import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { existsInCollection, setExisting } from './resourcelink.utils';
 import { useStyles } from './resourceLinkStyles';
+import { METHOD_COLORS } from '../sidebar-utils/SidebarUtils';
 
 interface IResourceLinkProps {
   link: IResourceLink;
   resourceOptionSelected: Function;
   version: string;
 }
-
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
 
 const ResourceLink = (props: IResourceLinkProps) => {
   const { version } = props;
@@ -29,13 +28,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
     setExisting(resourceLink, existsInCollection(link, paths, version));
   }, [paths])
 
-  const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
 
   const linkStyles = useStyles();
 
@@ -72,7 +64,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
   return (
     <div className={linkStyles.link}>
-      <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} colors={colors} />
+      <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} />
       {resourceLink.method && (
         <ResourceLinkActions
           resourceLink={resourceLink}
@@ -88,19 +80,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
 
 const ResourceLinkNameContainer = ({
   resourceLink,
-  linkStyles,
-  colors
+  linkStyles
 }: {
   resourceLink: IResourceLink,
-  linkStyles: any,
-  colors: Record<string, Colors>
+  linkStyles: any
 }) => (
   resourceLink.method ? (
     <span className={linkStyles.resourceLinkNameContainer}>
       <Badge
         className={linkStyles.badge}
         size='medium'
-        color={colors[resourceLink.method]}
+        color={METHOD_COLORS[resourceLink.method]}
         aria-label={'http method ' + resourceLink.method + ' for'}>
         {resourceLink.method}
       </Badge>
@@ -138,24 +128,20 @@ const ResourceLinkActions = ({
         relationship='label'
       >
         {resourceLink.docLink ? (
-          <Button
+          <Link
             aria-label={translateMessage('Read documentation')}
-            id='documentButton'
-            aria-disabled={!resourceLink.docLink}
-            className={iconButtonStyles.root}
-            icon={<DocumentText20Regular />}
-            appearance='transparent'
-            onClick={() => openDocumentationLink()}
-          /> ) :
-          <Button
+            appearance='subtle'
+            className={iconButtonStyles.linkIcon}
+            target='_blank' href={resourceLink.docLink}
+            onClick={() => openDocumentationLink()}>
+            <DocumentText20Regular /></Link>) :
+          <Link
             disabled
             aria-label={translateMessage('Read documentation')}
-            id='documentButton'
+            appearance='subtle'
             aria-disabled
-            appearance='transparent'
-            className={iconButtonStyles.root}
-            icon={<DocumentText20Regular />}
-          />}
+            className={iconButtonStyles.linkIcon}>
+            <DocumentText20Regular /></Link>}
       </Tooltip>
     )}
     {resourceLink.isInCollection ? (

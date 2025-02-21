@@ -1,39 +1,31 @@
-import { useState, useRef } from 'react';
-import { Button, Tooltip, makeStyles } from '@fluentui/react-components';
-import { translateMessage } from '../../../utils/translate-messages';
+import { Button, Tooltip } from '@fluentui/react-components';
 import { CheckmarkRegular, CopyRegular } from '@fluentui/react-icons';
+import { useState } from 'react';
+import { translateMessage } from '../../../utils/translate-messages';
 
 interface ICopyButtonProps {
-  style?: React.CSSProperties;
-  handleOnClick: Function;
-  className?: string;
+  handleOnClick: () => void;
   isIconButton: boolean;
 }
 
-const useStyles = makeStyles({
-  button: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});
-
 export default function CopyButton(props: ICopyButtonProps) {
   const [copied, setCopied] = useState(false);
-  const copyRef = useRef<HTMLButtonElement>(null);
-  const styles = useStyles();
 
-  const copyLabel: string = !copied ? translateMessage('Copy') : translateMessage('Copied');
+  const CopyIcon = !copied ? CopyRegular : CheckmarkRegular;
+  const copyLabel: string = !copied
+    ? translateMessage('Copy')
+    : translateMessage('Copied');
 
   const handleCopyClick = async () => {
-    props.handleOnClick(props);
+    props.handleOnClick();
     setCopied(true);
     handleTimeout();
-    copyRef.current?.focus(); // Set focus back to the button
   };
 
   const handleTimeout = () => {
-    const timer = setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
+    const timer = setTimeout(() => {
+      setCopied(false);
+    }, 3000); // 3 seconds
     return () => clearTimeout(timer);
   };
 
@@ -42,21 +34,13 @@ export default function CopyButton(props: ICopyButtonProps) {
       {props.isIconButton ? (
         <Tooltip content={copyLabel} relationship='label'>
           <Button
-            appearance="subtle"
-            icon={copied ? <CheckmarkRegular /> : <CopyRegular />}
-            aria-label={copyLabel}
+            appearance='transparent'
             onClick={handleCopyClick}
-            style={props.style}
-            className={`${props.className} ${styles.button}`}
-            ref={copyRef}
+            icon={<CopyIcon />}
           />
         </Tooltip>
       ) : (
-        <Button
-          appearance="primary"
-          onClick={handleCopyClick}
-          ref={copyRef}
-        >
+        <Button appearance='transparent' onClick={handleCopyClick}>
           {copyLabel}
         </Button>
       )}

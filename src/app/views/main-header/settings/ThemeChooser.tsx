@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RadioGroup, Radio, DialogActions, Button} from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { PopupsComponent } from '../../../services/context/popups-context';
 import { changeTheme } from '../../../services/slices/theme.slice';
-import { loadGETheme } from '../../../../themes';
 import { translateMessage } from '../../../utils/translate-messages';
 import { useIconOptionStyles, useRadioGroupStyles } from './ThemeChooser.styles';
 import { BrightnessHigh24Regular, WeatherMoon24Regular, DarkTheme24Regular} from '@fluentui/react-icons';
@@ -27,34 +26,18 @@ const availableThemes = [
   }
 ];
 
-const getSystemTheme = (): string => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
-};
-
 const ThemeChooser: React.FC<PopupsComponent<null>> = (props) => {
   const dispatch = useAppDispatch();
   const appTheme = useAppSelector(state=> state.theme);
   const iconOptionStyles = useIconOptionStyles();
   const radioGroupStyles = useRadioGroupStyles();
 
-  useEffect(() => {
-    // Load the theme from local storage or use the system theme as the default
-    const savedTheme = localStorage.getItem('appTheme') ?? getSystemTheme();
-    dispatch(changeTheme(savedTheme));
-    loadGETheme(savedTheme); // Remove when cleaning up
-  }, [dispatch]);
-
-
   const handleChangeTheme = (selectedTheme: { key: string; displayName: string; icon: JSX.Element }) => {
     const newTheme: string = selectedTheme.key;
     // Save the selected theme to local storage
-    localStorage.setItem('appTheme', newTheme);
+    localStorage.setItem('CURRENT_THEME', newTheme);
     // Applies the theme to the Fluent UI components
     dispatch(changeTheme(newTheme));
-    loadGETheme(newTheme); //Remove when cleaning up
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
       ComponentName: componentNames.SELECT_THEME_BUTTON,
       SelectedTheme: newTheme.replace('-', ' ').toSentenceCase()

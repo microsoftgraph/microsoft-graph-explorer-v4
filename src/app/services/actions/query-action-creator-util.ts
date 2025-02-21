@@ -10,11 +10,12 @@ import {
 
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ApplicationState } from '../../../store';
-import { ContentType } from '../../../types/enums';
+import { ResponseBody } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { IRequestOptions } from '../../../types/request';
 import { IStatus } from '../../../types/status';
 import { ClientError } from '../../utils/error-utils/ClientError';
+import { getHeaders } from '../../utils/http-methods.utils';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { translateMessage } from '../../utils/translate-messages';
 import { authProvider, GraphClient } from '../graph-client';
@@ -36,7 +37,7 @@ export async function anonymousRequest(
 export function createAnonymousRequest(query: IQuery, proxyUrl: string, queryRunnerStatus: IStatus) {
   const escapedUrl = encodeURIComponent(query.sampleUrl);
   const graphUrl = `${proxyUrl}?url=${escapedUrl}`;
-  const sampleHeaders: any = {};
+  const sampleHeaders: Record<string, string> = {};
 
   if (query.sampleHeaders && query.sampleHeaders.length > 0) {
     query.sampleHeaders.forEach((header) => {
@@ -106,30 +107,30 @@ function createAuthenticatedRequest(
 
 export function makeGraphRequest(scopes: string[]) {
   return async (query: IQuery) => {
-    let response;
+    let response: ResponseBody;
 
     const graphRequest: GraphRequest = createAuthenticatedRequest(scopes, query);
 
     switch (query.selectedVerb) {
     case 'GET':
-      response = await graphRequest.get();
+      response = await graphRequest.get() as ResponseBody;
       break;
     case 'POST':
-      response = await graphRequest.post(query.sampleBody);
+      response = await graphRequest.post(query.sampleBody) as ResponseBody;
       break;
     case 'PUT':
-      response = await graphRequest.put(query.sampleBody);
+      response = await graphRequest.put(query.sampleBody) as ResponseBody;
       break;
     case 'PATCH':
-      response = await graphRequest.patch(query.sampleBody);
+      response = await graphRequest.patch(query.sampleBody) as ResponseBody;
       break;
     case 'DELETE':
-      response = await graphRequest.delete();
+      response = await graphRequest.delete() as ResponseBody;
       break;
     default:
       return;
     }
-    return Promise.resolve(response);
+    return Promise.resolve(response) as ResponseBody;
   };
 }
 
@@ -146,32 +147,26 @@ export function isBetaURLResponse(json: any) {
   return !!json?.account?.[0]?.source?.type?.[0];
 }
 
-export function getContentType(headers: any) {
-  let contentType = null;
-
-  if (headers) {
-    let contentTypes = headers['content-type'];
-    if (headers instanceof Headers) {
-      contentTypes = headers.get('content-type');
-    }
-    if (contentTypes) {
-      /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
-       * Take the first option after splitting since it is the only value useful in the description of the content
-       */
-      const splitContentTypes = contentTypes.split(';');
-      if (splitContentTypes.length > 0) {
-        contentType = splitContentTypes[0].toLowerCase();
-      }
-    }
+export function getContentType(headers: Record<string, string>): string {
+  const contentTypeHeader = Object.keys(headers).find(header => header.toLowerCase() === 'content-type');
+  let contentType = contentTypeHeader ? headers[contentTypeHeader] : '';
+  /* Example: application/json;odata.metadata=minimal;odata.streaming=true;IEEE754Compatible=false;charset=utf-8
+   * Take the first option after splitting since it is the only value useful in the description of the content
+  */
+  if (contentType) {
+    const splitContentTypes = contentType.split(';');
+    contentType = (splitContentTypes.length > 0) ? splitContentTypes[0].toLowerCase() : contentType;
   }
-  return contentType;
+  return contentType.toLowerCase();
 }
 
-export function isFileResponse(headers: any) {
-  const contentDisposition = headers['content-disposition'];
+export function isFileResponse(headers: Record<string, string>) {
+  const contentDisposition: string |  null = (headers instanceof Headers) ?
+    headers.get('content-disposition') : headers['content-disposition'];
+
   if (contentDisposition) {
     const directives = contentDisposition.split(';');
-    if (directives.contains('attachment')) {
+    if (directives.includes('attachment')) {
       return true;
     }
   }
@@ -191,19 +186,17 @@ export function isFileResponse(headers: any) {
   return false;
 }
 
-export async function generateResponseDownloadUrl(
-  response: Response,
-  respHeaders: any
-) {
+export async function generateResponseDownloadUrl(response: Response) {
+  const headers = getHeaders(response)
   try {
-    const fileContents = await parseResponse(response, respHeaders);
-    const contentType = getContentType(respHeaders);
+    const fileContents = await parseResponse(response);
+    const contentType = getContentType(headers);
     if (fileContents) {
       const buffer = await response.arrayBuffer();
       const blob = new Blob([buffer], { type: contentType });
       return URL.createObjectURL(blob);
     }
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -211,28 +204,22 @@ export async function generateResponseDownloadUrl(
 async function tryParseJson(textValue: string) {
   try {
     return JSON.parse(textValue);
-  } catch (error) {
+  } catch {
     return textValue;
   }
 }
 
-export function parseResponse(
-  response: Response,
-  respHeaders: { [key: string]: string } = {}
-): Promise<any> {
-  if (response && response.headers) {
-    response.headers.forEach((val: string, key: string) => {
-      respHeaders[key] = val;
-    });
-
-    const contentType = getContentType(response.headers);
+export const parseResponse = (response: ResponseBody): Promise<ResponseBody> => {
+  if (response instanceof Response && response.headers) {
+    const headers = getHeaders(response)
+    const contentType = getContentType(headers);
     switch (contentType) {
-    case ContentType.Json:
+    case 'application/json':
       return response.text().then(tryParseJson);
-    case ContentType.XML:
-    case ContentType.HTML:
-    case ContentType.TextCsv:
-    case ContentType.TextPlain:
+    case 'application/xml':
+    case 'text/html':
+    case 'text/csv':
+    case 'text/plain':
       return response.text();
 
     default:

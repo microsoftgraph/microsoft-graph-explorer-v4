@@ -5,6 +5,7 @@ import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import pathStyles from './Paths.styles';
+import { METHOD_COLORS } from '../../sidebar-utils/SidebarUtils';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -13,20 +14,10 @@ interface IPathProps {
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
 
-type Colors = 'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning'
-
 const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelectionChange }) => {
   const styles = pathStyles();
   const [selection, setSelection] = React.useState<Set<ResourcePath>>(new Set());
   const [allSelected, setAllSelected] = React.useState(false);
-
-  const colors: Record<string, Colors> = {
-    'GET': 'brand',
-    'POST': 'success',
-    'PATCH': 'severe',
-    'DELETE': 'danger',
-    'PUT': 'warning'
-  }
 
   const handleSelectionChange = (item: ResourcePath) => {
     const newSelection = new Set(selection);
@@ -58,7 +49,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   ) => {
     if (column.key === 'scope') {
       return (
-        <Label className={styles.scopeLabel}>
+        <Label className={styles.scopeLabel} style={{ textAlign: 'right' }}>
           {formatScopeLabel(item.scope as PERMS_SCOPE ?? scopeOptions[0].key)}
         </Label>
       );
@@ -66,14 +57,14 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
     if (column.key === 'url') {
       return (
         <Tooltip content={item.url} relationship="description" withArrow>
-          <span>
-            {item.method ? <Badge
+          <span className={styles.urlAndMethod}>
+            {item.method && <span className={styles.badgeContainer}><Badge
               className={styles.badge}
               size='medium'
-              color={colors[item?.method]}
+              color={METHOD_COLORS[item?.method]}
               aria-label={'http method ' + item.method + ' for'}>
               {item.method}
-            </Badge> : <span className={styles.urlMethod}> {item.method} </span>}
+            </Badge></span>}
             {`/${item.version}${item.url}`}
           </span>
         </Tooltip>
@@ -110,7 +101,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               </TableCell>
             )}
             {columns.map((column) => (
-              <TableCell key={column.key}>
+              <TableCell key={column.key} style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}>
                 {renderItemColumn(resource, column)}
               </TableCell>
             ))}

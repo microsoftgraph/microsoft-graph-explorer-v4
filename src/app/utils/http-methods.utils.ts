@@ -1,3 +1,4 @@
+import { ResponseBody } from '../../types/query-response';
 import { tokens } from '@fluentui/react-components';
 
 type BadgeColors =
@@ -30,3 +31,14 @@ export function getStyleFor(method: string) {
 
   return styles[method] || tokens.colorNeutralForeground1;
 }
+
+export function getHeaders(response: ResponseBody) {
+  const headers: Record<string, string> = {};
+  if(response instanceof Response){
+    for (const entry of response.headers.entries()) {
+      headers[entry[0]] = entry[1];
+    }
+  }
+  return headers;
+}
+

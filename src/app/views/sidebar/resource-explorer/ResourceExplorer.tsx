@@ -8,11 +8,12 @@ import {
   FlatTreeItem,
   TreeItemLayout,
   CounterBadge,
+  Tooltip,
   TreeItemValue,
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { Collections20Regular } from '@fluentui/react-icons';
+import { Collections20Regular, AddSquare20Regular, SubtractSquare20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -20,12 +21,13 @@ import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
+import { existsInCollection, setExisting } from './resourcelink.utils';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
 import { searchResources } from '../../../utils/resources/resources-filter';
 import { translateMessage } from '../../../utils/translate-messages';
-import { NoResultsFound } from '../sidebar-utils/SearchResult';
+import { NoResultsFound } from '../sidebar-utils/SidebarUtils';
 import { createResourcesList, getResourcePaths, getUrlFromLink } from './resource-explorer.utils';
 import ResourceLink from './ResourceLink';
 import { usePopups } from '../../../services/hooks/usePopups';
@@ -74,8 +76,8 @@ const ResourceExplorer = () => {
     dispatch(removeResourcePaths(getResourcePaths(item, version)));
   }
 
-  const changeVersion = (_event: React.ChangeEvent<HTMLInputElement>, data: { checked: boolean }): void => {
-    const selectedVersion = data.checked ? versions[1].key : versions[0].key;
+  const changeVersion = (_event: React.ChangeEvent<HTMLInputElement>, data_: { checked: boolean }): void => {
+    const selectedVersion = data_.checked ? versions[1].key : versions[0].key;
     setVersion(selectedVersion);
   }
 
@@ -89,10 +91,20 @@ const ResourceExplorer = () => {
   }, []);
 
   const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
-    ev!.preventDefault();
-    item!.isExpanded = !item!.isExpanded;
-    setQuery(item!);
-  }
+    ev?.preventDefault();
+    if (!item) {return;}
+    // Toggle expanded state for items with child links
+    if (item.links.length > 0) {
+      const updatedOpenItems = new Set(openItems);
+      if (updatedOpenItems.has(item.key)) {
+        updatedOpenItems.delete(item.key);
+      } else {
+        updatedOpenItems.add(item.key);
+      }
+      setOpenItems(updatedOpenItems);
+    }
+    setQuery(item);
+  };
 
   const resourceOptionSelected = (activity: string, context: IResourceLink) => {
     if (activity === ResourceOptions.ADD_TO_COLLECTION) {
@@ -135,33 +147,100 @@ const ResourceExplorer = () => {
     })
   }
 
-  const AsideContent = ({ messageCount }: { messageCount?: number }) => (
-    <>
-      {messageCount && messageCount > 0 ? (
-        <CounterBadge count={messageCount} color="informative" size="small" />
-      ) : null}
-    </>
-  );
+  const AsideContent = ({
+    item,
+    messageCount
+  }: {
+    item: IResourceLink;
+    messageCount?: number;
+  }) => {
+    const paths = collections?.find(k => k.isDefault)?.paths || [];
 
-  const handleOpenChange = (event: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
-    setOpenItems(data.openItems);
+    const isInCollection = useMemo(() => {
+      return existsInCollection(item, paths, version);
+    }, [item, paths, version]);
+
+    const handleAddToCollection = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      addToCollection(item);
+    };
+
+    const handleRemoveFromCollection = (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      removeFromCollection(item);
+    };
+
+    return (
+      <>
+        <div className='action-button'>
+          {isInCollection ? (
+            <Tooltip
+              withArrow
+              content={translateMessage('Remove from collection')}
+              relationship='label'
+            >
+              <Button
+                aria-label={translateMessage('Remove from collection')}
+                appearance='transparent'
+                icon={<SubtractSquare20Regular />}
+                onClick={handleRemoveFromCollection}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip
+              withArrow
+              content={translateMessage('Add to collection')}
+              relationship='label'
+            >
+              <Button
+                aria-label={translateMessage('Add to collection')}
+                appearance='transparent'
+                aria-describedby='tooltip'
+                icon={<AddSquare20Regular />}
+                onClick={handleAddToCollection}
+              />
+            </Tooltip>
+          )}
+        </div>
+        {messageCount && messageCount > 0 && (
+          <CounterBadge
+            count={messageCount}
+            color="informative"
+            aria-label={messageCount + translateMessage('Resources')}
+          />
+        )}
+      </>
+    );
   };
 
-  const renderTreeItems = (items: IResourceLink[], level = 1, parentValue?: string) => {
-    return items.map((item, index) => (
+  const handleOpenChange = (_event: TreeOpenChangeEvent, data_: TreeOpenChangeData) => {
+    setOpenItems(data_.openItems);
+  };
+
+  const renderTreeItems = (items_: IResourceLink[], level = 1, parentValue?: string) => {
+    return items_.map((item, index) => (
       <React.Fragment key={item.key}>
         <FlatTreeItem
           value={item.key ?? ''}
           itemType={item.links.length > 0 ? 'branch' : 'leaf'}
           aria-level={level}
-          aria-setsize={items.length}
+          aria-setsize={items_.length}
           aria-posinset={index + 1}
           parentValue={parentValue}
           onClick={(ev) => clickLink(ev, item)}
         >
           <TreeItemLayout
             className={resourceExplorerStyles.treeItemLayout}
-            aside={item.links.length > 0 ? <AsideContent messageCount={item.links.length} /> : null}
+            aside={
+              item.links.length > 0 ? (
+                <div data-aside-content className={resourceExplorerStyles.asideIcons}>
+                  <AsideContent
+                    item={item}
+                    messageCount={item.links?.length}
+                  />
+                </div>
+              ) : null
+            }
           >
             <ResourceLink
               link={item}
@@ -188,7 +267,7 @@ const ResourceExplorer = () => {
   }
 
   return (
-    <section style={{ marginTop: '8px' }}>
+    <div className={resourceExplorerStyles.container}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}
@@ -216,7 +295,7 @@ const ResourceExplorer = () => {
         </div>
       </div>
       {
-        items.length === 0 ? NoResultsFound('No resources found', { paddingBottom: '20px' }) :
+        items.length === 0 ? <NoResultsFound message='No resources found' /> :
           <FlatTree
             className={resourceExplorerStyles.tree}
             aria-label="Resource Explorer"
@@ -226,7 +305,7 @@ const ResourceExplorer = () => {
             {renderTreeItems(items)}
           </FlatTree>
       }
-    </section>
+    </div>
   );
 }
 

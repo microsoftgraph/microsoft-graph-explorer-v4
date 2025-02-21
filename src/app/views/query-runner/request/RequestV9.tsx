@@ -1,151 +1,171 @@
-import { Resizable } from 're-resizable';
-import { CSSProperties, useEffect, useState } from 'react';
-
-import { useAppDispatch, useAppSelector } from '../../../../store';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
-import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
-import { makeStyles, Tab, TabList, TabValue } from '@fluentui/react-components';
+import {
+  makeStyles,
+  Tab,
+  TabList,
+  TabValue,
+  tokens,
+  Button,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Overflow,
+  OverflowItem,
+  useOverflowMenu,
+  useIsOverflowItemVisible
+} from '@fluentui/react-components';
+import {
+  SendRegular,
+  DocumentTableRegular,
+  ShieldKeyholeRegular,
+  KeyRegular,
+  MoreHorizontalRegular } from '@fluentui/react-icons';
 
-
-  interface IRequestProps {
-    handleOnEditorChange: () => void
-    sampleQuery: IQuery
-  }
+interface IRequestProps {
+  handleOnEditorChange: () => void;
+  sampleQuery: IQuery;
+}
 
 const useStyles = makeStyles({
-  resizable: {
-    width: '100%'
+  container: {
+    height: '-webkit-fill-available',
+    display: 'flex',
+    flexDirection: 'column'
   },
-  tabList: {
-    paddingBottom: '4px',
-    marginBottom: '8px'
+  tabContainer: {
+    display: 'flex',
+    flexShrink: 0,
+    overflowX: 'hidden'
   },
-  tab: {
-    fontWeight: 'bold',
-    padding: '8px 16px',
-    borderBottom: '2px solid transparent'
+  tabContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalS,
+    marginTop: tokens.spacingHorizontalS,
+    backgroundColor: tokens.colorNeutralBackground1,
+    minHeight: '0',
+    overflow: 'auto'
+  },
+  menuButton: {
+    alignSelf: 'center'
   }
 });
 
-const Request = (props: IRequestProps) => {
-  const styles = useStyles();
-  const dispatch = useAppDispatch();
-  const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
-  const mode = useAppSelector((state) => state.graphExplorerMode);
-  const dimensions = useAppSelector((state) => state.dimensions);
-  const sidebarProperties = useAppSelector((state) => state.sidebarProperties);
-  const minHeight = 60;
-  const maxHeight = 800;
+const OverflowMenuItem = ({ tab, onClick }: { tab: { id: string; name: string; icon: JSX.Element };
+  onClick: () => void }) => {
+  const isVisible = useIsOverflowItemVisible(tab.id);
 
-  const { handleOnEditorChange, sampleQuery }: IRequestProps = props;
-  const newHeight = convertVhToPx(dimensions.request.height, 55);
-  const containerStyle: CSSProperties = {
-    height: newHeight,
-    overflow: 'hidden',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    padding: '8px'
+  if (isVisible) {
+    return null;
   }
 
-  useEffect(() => {
-    if (sidebarProperties && sidebarProperties.mobileScreen) {
-      window.addEventListener('resize', resizeHandler);
-    } else {
-      window.removeEventListener('resize', resizeHandler);
-    }
-  }, [sidebarProperties.mobileScreen]);
+  return (
+    <MenuItem key={tab.id} icon={tab.icon} onClick={onClick}>
+      {tab.name}
+    </MenuItem>
+  );
+};
+
+const OverflowMenu = ({ onTabSelect, tabs }:
+  { onTabSelect: (tabId: string) => void; tabs: { id: string; name: string; icon: JSX.Element }[] }) => {
+  const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>();
+
+  if (!isOverflowing) {
+    return null;
+  }
+
+  return (
+    <Menu hasIcons>
+      <MenuTrigger disableButtonEnhancement>
+        <Button appearance='transparent' ref={ref}
+          icon={<MoreHorizontalRegular />} aria-label={`${overflowCount} more tabs`} role='tab' />
+      </MenuTrigger>
+      <MenuPopover>
+        <MenuList>
+          {tabs.map((tab) => (
+            <OverflowMenuItem key={tab.id} tab={tab} onClick={() => onTabSelect(tab.id)} />
+          ))}
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  );
+};
+
+const Request = (props: IRequestProps) => {
+  const styles = useStyles();
+  const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const  mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+
+  const tabs = [
+    { id: 'request-body', name: translateMessage('Request Body'), icon: <SendRegular /> },
+    { id: 'request-headers', name: translateMessage('Request Headers'), icon: <DocumentTableRegular /> },
+    { id: 'modify-permissions', name: translateMessage('Modify Permissions'), icon: <ShieldKeyholeRegular /> }
+  ];
+
+  if (mode === Mode.Complete) {
+    tabs.push({ id: 'access-token', name: translateMessage('Access Token'), icon: <KeyRegular /> });
+  }
 
   const handleTabSelect = (tab: TabValue) => {
     setSelectedTab(tab);
-    telemetry.trackTabClickEvent(tab as string, sampleQuery);
-  };
-
-  const setRequestAndResponseHeights = (requestHeight: string) => {
-    const heightInPx = requestHeight.replace('px', '').trim();
-    const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
-    const maxDeviceVerticalHeight = 90;
-
-    const dimensionsToUpdate = {
-      ...dimensions,
-      request: {
-        ...dimensions.request,
-        height: requestHeightInVh
-      },
-      response: {
-        ...dimensions.response,
-        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
-      }
-    };
-
-    dispatch(setDimensions(dimensionsToUpdate));
-  };
-
-  const resizeHandler = () => {
-    const resizable = document.getElementsByClassName('request-resizable');
-    if (resizable && resizable.length > 0) {
-      const resizableElement = resizable[0] as HTMLElement;
-      if (resizableElement && resizableElement.style && resizableElement.style.height) {
-        resizableElement.style.height = '';
-      }
-    }
+    telemetry.trackTabClickEvent(tab as string, props.sampleQuery);
   };
 
   return (
-    <Resizable
-      className={styles.resizable}
-      onResize={(e: any, direction: any, ref: any) => {
-        if (ref && ref.style && ref.style.height) {
-          setRequestAndResponseHeights(ref.style.height);
-        }
-      }}
-      maxHeight={maxHeight}
-      minHeight={minHeight}
-      bounds={'window'}
-      size={{
-        height: 'inherit',
-        width: '100%'
-      }}
-      enable={{
-        bottom: true
-      }}
-    >
-      <div className="query-request">
-        <TabList
-          selectedValue={selectedTab}
-          onTabSelect={(_, data) => handleTabSelect(data.value)}
-          className={styles.tabList}
-        >
-          <Tab value="request-body" className={styles.tab} aria-label={translateMessage('request body')}>
-            {translateMessage('Request Body')}
-          </Tab>
-          <Tab value="request-headers" className={styles.tab} aria-label={translateMessage('request header')}>
-            {translateMessage('Request Headers')}
-          </Tab>
-          <Tab value="modify-permissions" className={styles.tab} aria-label={translateMessage('modify permissions')}>
-            {translateMessage('Modify Permissions')}
-          </Tab>
-          {mode === Mode.Complete && (
-            <Tab value="access-token" className={styles.tab} aria-label={translateMessage('Access Token')}>
-              {translateMessage('Access Token')}
-            </Tab>
-          )}
-        </TabList>
-
-        <div style={containerStyle}>
-          {selectedTab === 'request-body' && <RequestBody handleOnEditorChange={handleOnEditorChange} />}
-          {selectedTab === 'request-headers' && <RequestHeaders />}
-          {selectedTab === 'modify-permissions' && <Permissions />}
-          {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
-        </div>
+    <div className={styles.container}>
+      <div className={styles.tabContainer}>
+        {mobileScreen ? (
+          <Overflow minimumVisible={2}>
+            <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
+              {tabs.map((tab) => (
+                <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedTab ? 2 : 1}>
+                  <Tab value={tab.id} icon={tab.icon}>
+                    {tab.name}
+                  </Tab>
+                </OverflowItem>
+              ))}
+              <OverflowMenu onTabSelect={handleTabSelect} tabs={tabs} />
+            </TabList>
+          </Overflow>
+        ) : (
+          <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
+            {tabs.map((tab) => (
+              <Tab key={tab.id} value={tab.id} icon={tab.icon}>
+                {tab.name}
+              </Tab>
+            ))}
+          </TabList>
+        )}
       </div>
-    </Resizable>
+      <div className={styles.tabContent}>
+        {selectedTab === 'request-body' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestBody handleOnEditorChange={props.handleOnEditorChange} isVisible={selectedTab === 'request-body'} />
+          </div>
+        )}
+        {selectedTab === 'request-headers' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestHeaders />
+          </div>
+        )}
+        {selectedTab === 'modify-permissions' && <Permissions />}
+        {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
+      </div>
+    </div>
   );
 };
 

@@ -2,6 +2,7 @@ import {
   AriaLiveAnnouncer,
   Badge,
   Button,
+  CounterBadge,
   Dialog,
   DialogActions,
   DialogBody,
@@ -9,7 +10,6 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Divider,
   FlatTree,
   FlatTreeItem,
   InputOnChangeData,
@@ -35,11 +35,11 @@ import {
 } from '@fluentui/react-components';
 import { IGroup } from '@fluentui/react/lib/DetailsList';
 import {
+  AddSquare20Regular,
   ArrowDownloadRegular,
-  ArrowRepeatAllRegular,
   DeleteRegular,
-  EyeRegular,
-  MoreHorizontalRegular
+  MoreHorizontalRegular,
+  SubtractSquare20Regular
 } from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { historyCache } from '../../../../modules/cache/history-utils';
@@ -60,8 +60,10 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
+import { ResourceLinkType } from '../../../../types/resources';
+import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
+import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
 
-type BadgeColors =  'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning';
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -70,7 +72,6 @@ const formatDate = (date: Date) => {
   const dayStr = (day < 10 ? '0' : '') + day;
   return `${year}-${monthStr}-${dayStr}`;
 };
-
 
 const today = formatDate(new Date());
 const yesterdaysDate = new Date();
@@ -81,7 +82,8 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px'
+    gap: '4px',
+    height: 'calc(100vh - 374px)'
   },
   searchBox: {
     width: '100%',
@@ -89,7 +91,25 @@ const useStyles = makeStyles({
   },
   titleAside: {
     display: 'flex',
+    alignItems: 'center',
     gap: '2px'
+  },
+  historyAsideIcons: {
+    display: 'none'
+  },
+  historyTreeItemLayout: {
+    ':hover': {
+      '& [data-history-aside]': {
+        display: 'flex'
+      }
+    }
+  },
+  badgeContainer: {
+    minWidth: '50px',
+    display: 'inline-block'
+  },
+  badge: {
+    maxWidth: '50px'
   }
 })
 
@@ -117,7 +137,7 @@ interface AsideGroupIconsProps {
   historyItems: IHistoryItem[]
 }
 
-const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
+const GroupIcons = (props: AsideGroupIconsProps)=>{
   const dispatch = useAppDispatch()
   const {groupName, historyItems} = props
   const [open, setOpen] = useState(false);
@@ -136,6 +156,7 @@ const AsideGroupIcons = (props: AsideGroupIconsProps)=>{
   }
 
   return <div className={styles.titleAside}>
+    <Text weight='semibold'>{groupName}{' '}</Text>
     <Tooltip withArrow relationship="label" content={`${translateMessage('Export')} ${groupName} queries`}>
       <Button onClick={
         (e) => handleDownloadHistoryGroup(e,groupName, historyItems )}
@@ -184,9 +205,12 @@ const HistoryItems = (props: HistoryProps)=>{
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
   openHistoryItems.add('Today')
 
+  const itemStyles = useStyles()
+
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
   );
+  const {collections} = useAppSelector((state) => state.collections);
   const handleOpenChange = (_: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
     setOpenItems(data.openItems);
   };
@@ -206,7 +230,6 @@ const HistoryItems = (props: HistoryProps)=>{
       body: query.result,
       headers: query.responseHeaders
     }))
-    // TODO: change the message bar type to v9 types
     dispatch(setQueryResponseStatus({
       duration,
       messageBarType: status < 300 ? 'success' : 'error',
@@ -220,6 +243,52 @@ const HistoryItems = (props: HistoryProps)=>{
       query
     );
   }
+
+  const processUrlAndVersion = (url: string) => {
+    let version = 'v1.0';
+    if (url.includes('graph.microsoft.com/beta')) {
+      version = 'beta';
+      url = url.replace('https://graph.microsoft.com/beta', '');
+    } else {
+      url = url.replace('https://graph.microsoft.com/v1.0', '');
+    }
+    return { relativeUrl: url, version };
+  };
+
+  const isInCollection = (item: IHistoryItem) => {
+    const defaultCollection = collections.find((collection) => collection.isDefault);
+    if (!defaultCollection) { return false; }
+    return defaultCollection.paths.some((path) => {
+      const { relativeUrl } = processUrlAndVersion(item.url);
+      return path.url === relativeUrl && path.method === item.method;
+    });
+  };
+
+  const formatHistoryItem = (item: IHistoryItem) => {
+    const { relativeUrl, version } = processUrlAndVersion(item.url);
+    const pathSegments = relativeUrl.split('/').filter(Boolean);
+    const name = pathSegments[pathSegments.length - 1] || relativeUrl;
+
+    return {
+      paths: pathSegments,
+      name,
+      type: ResourceLinkType.PATH,
+      version,
+      method: item.method,
+      url: relativeUrl,
+      key: `${item.index}-${item.url}`
+    };
+  };
+
+  const handleAddToCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(addResourcePaths([resourcePath]));
+  };
+
+  const handleRemoveFromCollection = (item: IHistoryItem) => {
+    const resourcePath = formatHistoryItem(item);
+    dispatch(removeResourcePaths([resourcePath]));
+  };
 
 
   return(
@@ -236,11 +305,12 @@ const HistoryItems = (props: HistoryProps)=>{
               aria-setsize={2}
               aria-posinset={pos+1}
               aria-label={ariaLabel}>
-              <TreeItemLayout aside={<AsideGroupIcons groupName={name} historyItems={history} />}>
-                <Text weight='semibold'>{name}{' '}
-                  <Badge appearance='tint' color='informative' aria-label={count + translateMessage('History')}>
-                    {count}
-                  </Badge></Text>
+              <TreeItemLayout aside={
+                <CounterBadge
+                  color='informative'
+                  aria-label={count + translateMessage('History')}
+                  count={count}/>}>
+                <GroupIcons groupName={name} historyItems={history} />
               </TreeItemLayout>
             </FlatTreeItem>
             {openItems.has(name) &&
@@ -256,9 +326,41 @@ const HistoryItems = (props: HistoryProps)=>{
                   aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
                 >
                   <TreeItemLayout
+                    className={itemStyles.historyTreeItemLayout}
                     onClick={()=>handleViewQuery(h)}
-                    iconBefore={<HistoryStatusCodes status={h.status}/>}
-                    aside={<HistoryItemActionMenu item={h}/>}>
+                    iconBefore={<HistoryStatusCodes status={h.status} method={h.method}/>}
+                    aside={
+                      <div data-history-aside className={itemStyles.historyAsideIcons}>
+                        <HistoryItemActionMenu item={h}/>
+                        {isInCollection(h) ? (
+                          <Tooltip
+                            withArrow
+                            content={translateMessage('Remove from collection')}
+                            relationship='label'
+                          >
+                            <Button
+                              aria-label={translateMessage('Remove from collection')}
+                              appearance='transparent'
+                              icon={<SubtractSquare20Regular />}
+                              onClick={ () => handleRemoveFromCollection(h)}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip
+                            withArrow
+                            content={translateMessage('Add to collection')}
+                            relationship='label'
+                          >
+                            <Button
+                              aria-label={translateMessage('Add to collection')}
+                              appearance='transparent'
+                              icon={<AddSquare20Regular />}
+                              onClick={() => handleAddToCollection(h)}
+                            />
+                          </Tooltip>
+                        )}
+                      </div>
+                    }>
                     <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
                       <Text>{h.url.replace(GRAPH_URL, '')}</Text>
                     </Tooltip>
@@ -272,16 +374,30 @@ const HistoryItems = (props: HistoryProps)=>{
   )
 }
 
-const HistoryStatusCodes = ({status}:{status: number})=>{
-  const getBadgeColor = (): BadgeColors =>{
-    if(status >= 100 && status < 199) {return 'informative'}
-    if(status >= 200 && status < 299) {return 'success'}
-    if(status >= 300 && status < 399) {return 'important'}
-    if(status >= 400 && status < 599) {return 'danger'}
-    return 'success'
-  }
-  return <Badge color={getBadgeColor()} appearance="ghost">{status}</Badge>
-}
+const HistoryStatusCodes = ({ status, method }: { status: number, method?: string }) => {
+  const getBadgeColor = (): BadgeColors => {
+    if (status >= 100 && status < 199) { return 'informative' }
+    if (status >= 200 && status < 299) { return 'success' }
+    if (status >= 300 && status < 399) { return 'important' }
+    if (status >= 400 && status < 599) { return 'danger' }
+    return 'success';
+  };
+
+  const historyItemStyles = useStyles()
+
+  return (
+    <div className={historyItemStyles.badgeContainer}>
+      {method && (
+        <div className={historyItemStyles.badgeContainer}>
+          <Badge className={historyItemStyles.badge} color={METHOD_COLORS[method] || 'informative'}>
+            {method}
+          </Badge>
+        </div>
+      )}
+      <Badge className={historyItemStyles.badge} color={getBadgeColor()} appearance="ghost">{status}</Badge>
+    </div>
+  );
+};
 
 const trackHistoryItemEvent = (eventName: string, componentName: string, query: IHistoryItem) => {
   const sanitizedUrl = sanitizeQueryUrl(query.url);
@@ -302,59 +418,6 @@ interface HistoryItemActionMenuProps {
 const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
   const dispatch = useAppDispatch()
   const {item} = props
-
-  const handleViewQuery = (query: IHistoryItem)=>{
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
-    const sampleQuery: IQuery = {
-      sampleUrl,
-      selectedVerb: query.method,
-      sampleBody: query.body,
-      sampleHeaders: query.headers,
-      selectedVersion: queryVersion
-    };
-    const { duration, status, statusText } = query;
-    dispatch(setSampleQuery(sampleQuery));
-    dispatch(setQueryResponse({
-      body: query.result,
-      headers: query.responseHeaders
-    }))
-    // TODO: change the message bar type to v9 types
-    dispatch(setQueryResponseStatus({
-      duration,
-      messageBarType: status < 300 ? 'success' : 'error',
-      ok: status < 300,
-      status,
-      statusText
-    }));
-    trackHistoryItemEvent(
-      eventTypes.LISTITEM_CLICK_EVENT,
-      componentNames.HISTORY_LIST_ITEM,
-      query
-    );
-  }
-
-  const handleRunQuery = (query: IHistoryItem) =>{
-    const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
-    const sampleQuery: IQuery = {
-      sampleUrl,
-      selectedVerb: query.method,
-      sampleBody: query.body,
-      sampleHeaders: query.headers,
-      selectedVersion: queryVersion
-    };
-
-    if (sampleQuery.selectedVerb === 'GET') {
-      sampleQuery.sampleBody = JSON.parse('{}') as string;
-    }
-    dispatch(setSampleQuery(sampleQuery));
-    dispatch(runQuery(sampleQuery));
-
-    trackHistoryItemEvent(
-      eventTypes.BUTTON_CLICK_EVENT,
-      componentNames.RUN_HISTORY_ITEM_BUTTON,
-      query
-    );
-  }
 
   const handleExportQuery = (query: IHistoryItem)=>{
     const harPayload = createHarEntry(query);
@@ -386,9 +449,6 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
       <MenuList>
         <MenuGroup>
           <MenuGroupHeader>{translateMessage('actions')}</MenuGroupHeader>
-          <MenuItem icon={<EyeRegular/>} onClick={()=>handleViewQuery(item)}>{translateMessage('view')}</MenuItem>
-          <MenuItem icon={<ArrowRepeatAllRegular/>}
-            onClick={()=>handleRunQuery(item)}>{translateMessage('Run Query')}</MenuItem>
           <MenuItem icon={<ArrowDownloadRegular/>}
             onClick={()=>handleExportQuery(item)}>{translateMessage('Export')}</MenuItem>
           <MenuItem icon={<DeleteRegular/>}
@@ -477,7 +537,7 @@ const History = ()=>{
       className={styles.searchBox}
     >
     </SearchBox>
-    <Divider />
+    <hr/>
     <MessageBar>
       <MessageBarBody>
         {translateMessage('Your history includes queries made in the last 30 days')}

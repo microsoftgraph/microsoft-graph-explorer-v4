@@ -27,6 +27,10 @@ const useStyles = makeStyles({
     width: '100%',
     marginBlockStart: '10px',
     zIndex: 1
+  },
+  messageBar: {
+    marginInlineStart: '15px',
+    width: '100%'
   }
 });
 
@@ -43,7 +47,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
 
   return (
     <>
-      {messageBarText ? <MessageBar intent='info'>
+      {messageBarText ? <MessageBar className={styles.messageBar} intent='info'>
         <MessageBarBody>
           {translateMessage(messageBarText)}
           {messageBarSpanText ? (

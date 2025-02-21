@@ -77,7 +77,7 @@ export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use lin
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
 export const GRAPH_EXPLORER_TUTORIAL_LINK = 'Graph Explorer Tutorial Link';
-export const CODE_SNIPPET_LANGUAGES = {
+export const CODE_SNIPPET_LANGUAGES: {[language: string]: {sdk: string, doc: string}} = {
   CSharp: {
     sdk: 'C# SDK link', doc: 'C# snippet docs link'
   },

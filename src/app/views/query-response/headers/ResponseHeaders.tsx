@@ -1,12 +1,12 @@
 
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
-import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
-import { CopyButton } from '../../common/lazy-loader/component-registry';
+import { CopyButtonV9 } from '../../common/lazy-loader/component-registry';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { useAppSelector } from '../../../../store';
+import { MonacoV9 } from '../../common';
 
 const ResponseHeaders = () => {
   const { dimensions: { response }, graphResponse, responseAreaExpanded, sampleQuery } =
@@ -22,12 +22,12 @@ const ResponseHeaders = () => {
   if (headers) {
     return (
       <div id='response-headers-tab'>
-        <CopyButton
+        <CopyButtonV9
           handleOnClick={handleCopy}
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}
         />
-        <Monaco body={headers} height={responseAreaExpanded ? defaultHeight : monacoHeight} />
+        <MonacoV9 body={headers} height={responseAreaExpanded ? defaultHeight : monacoHeight} />
       </div>
     );
   }

@@ -1,25 +1,25 @@
-import { FocusZone } from '@fluentui/react';
 import { useAppSelector } from '../../../../../store';
 
-import { Monaco } from '../../../common';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import { MonacoV9 } from '../../../common';
 
 interface IRequestBodyProps {
-  handleOnEditorChange: (v: string | undefined)=> void;
+  handleOnEditorChange: (v: string | undefined) => void;
+  isVisible: boolean;
 }
 
-const RequestBody = ({ handleOnEditorChange }: IRequestBodyProps) => {
-  const height = useAppSelector((state)=> state.dimensions.request.height);
-  const sampleBody = useAppSelector((state)=> state.sampleQuery.sampleBody);
+const RequestBody = ({ handleOnEditorChange, isVisible }: IRequestBodyProps) => {
+  const sampleBody = useAppSelector((state) => state.sampleQuery.sampleBody);
+
 
   return (
-    <FocusZone>
-      <Monaco
+    <div style={{ flex: 1, display: 'flex' }}>
+      <MonacoV9
         body={sampleBody}
-        height={convertVhToPx(height, 60)}
-        onChange={(value) => handleOnEditorChange(value)} />
-    </FocusZone>
-
+        onChange={(value) => handleOnEditorChange(value)}
+        height='100%'
+        isVisible={isVisible}
+      />
+    </div>
   );
 };
 
