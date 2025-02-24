@@ -2,8 +2,7 @@ import { makeStyles } from '@fluentui/react-components'
 export const useHistoryStyles = makeStyles({
   container: {
     display: 'flex',
-    flexDirection: 'column',
-    gap: '4px'
+    flexDirection: 'column'
   },
   tree: {
     height: 'calc(100vh - 374px)',
@@ -34,8 +33,5 @@ export const useHistoryStyles = makeStyles({
   },
   badge: {
     maxWidth: '50px'
-  },
-  text: {
-    overflow: 'hidden'
   }
 })
