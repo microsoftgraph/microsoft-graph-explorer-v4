@@ -40,6 +40,13 @@ const StatusMessages = () => {
       <MessageBarBody>
         <MessageDisplay message={`**${statusText} - **${status}`} onSetQuery={setQuery} />
         {duration && <> - {duration} {translateMessage('milliseconds')}</>}
+        {status === 403 && <>
+          {translateMessage('consent to scopes')}
+          <span style={{ fontWeight: 600 }}>
+            {translateMessage('modify permissions')}
+          </span>
+          {translateMessage('tab')}
+        </>}
         {hint && <div>{hint}</div>}
       </MessageBarBody>
       <MessageBarActions
