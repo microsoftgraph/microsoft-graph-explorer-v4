@@ -30,9 +30,12 @@ export const useHistoryStyles = makeStyles({
   },
   badgeContainer: {
     minWidth: '50px',
-    display: 'inline-block'
+    display: 'inline-flex'
   },
   badge: {
     maxWidth: '50px'
+  },
+  text: {
+    overflow: 'hidden'
   }
 })
