@@ -533,7 +533,7 @@ const History = ()=>{
     </MessageBar>
     {historyItems.length === 0 && <Label size='medium'>{translateMessage('We did not find any history items')}</Label>}
     <AriaLiveAnnouncer><Text>{`${historyItems.length} search results available.`}</Text></AriaLiveAnnouncer>
-    <HistoryItems history={historyItems} searchValue={searchValue} groups={groups}></HistoryItems>
+    <HistoryItems history={items} searchValue={searchValue} groups={groups}></HistoryItems>
   </div>
 }
 
