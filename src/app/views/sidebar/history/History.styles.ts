@@ -3,7 +3,9 @@ export const useHistoryStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '4px'
+  },
+  tree: {
     height: 'calc(100vh - 374px)',
     overflowY: 'auto'
   },

@@ -23,7 +23,7 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
   default:
     if (isImageResponse(contentType) && typeof body !== 'string') {
       return (
-        <Image styles={{ padding: '10px', height: '300px', width: '300px' }} body={body} alt='profile image' />
+        <Image styles={{ padding: '10px', height: '240px', width: '240px' }} body={body} alt='profile image' />
       );
     }
     return (

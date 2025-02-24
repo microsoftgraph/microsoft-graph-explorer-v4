@@ -99,7 +99,8 @@ const handleDownloadHistoryGroup = (
 
 interface AsideGroupIconsProps {
   groupName: string
-  historyItems: IHistoryItem[]
+  historyItems: IHistoryItem[],
+  shouldGenerateGroups: React.MutableRefObject<boolean>
 }
 
 const GroupIcons = (props: AsideGroupIconsProps)=>{
@@ -117,6 +118,7 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
     });
     historyCache.bulkRemoveHistoryData(listOfKeys)
     dispatch(removeAllHistoryItems(listOfKeys));
+    props.shouldGenerateGroups.current = true
     setOpen(false)
   }
 
@@ -180,6 +182,7 @@ interface HistoryProps {
 const HistoryItems = (props: HistoryProps)=>{
   const dispatch = useAppDispatch()
   const {groups, history} = props
+  const shouldGenerateGroups = useRef(true);
 
   const openHistoryItems = new Set<string>()
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
@@ -272,7 +275,12 @@ const HistoryItems = (props: HistoryProps)=>{
 
 
   return(
-    <FlatTree openItems={openItems} aria-label={translateMessage('History')} onOpenChange={handleOpenChange}>
+    <FlatTree
+      className={itemStyles.tree}
+      openItems={openItems}
+      aria-label={translateMessage('History')}
+      onOpenChange={handleOpenChange}
+    >
       {groups.map((group, pos) => {
         const {name, ariaLabel, count, key, startIndex} = group
         const historyLeafs = history.slice(startIndex, startIndex + count)
@@ -290,7 +298,7 @@ const HistoryItems = (props: HistoryProps)=>{
                   color='informative'
                   aria-label={count + translateMessage('History')}
                   count={count}/>}>
-                <GroupIcons groupName={name} historyItems={history} />
+                <GroupIcons groupName={name} historyItems={history} shouldGenerateGroups={shouldGenerateGroups} />
               </TreeItemLayout>
             </FlatTreeItem>
             {openItems.has(name) &&
