@@ -14,7 +14,6 @@ import {
   FlatTreeItem,
   InputOnChangeData,
   Label,
-  makeStyles,
   Menu,
   MenuGroup,
   MenuGroupHeader,
@@ -63,6 +62,7 @@ import { createHarEntry, exportQuery, generateHar } from './har-utils';
 import { ResourceLinkType } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
+import { useHistoryStyles } from './History.styles';
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
@@ -77,41 +77,6 @@ const today = formatDate(new Date());
 const yesterdaysDate = new Date();
 const yesterday = formatDate(yesterdaysDate);
 yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
-
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4px',
-    height: 'calc(100vh - 374px)'
-  },
-  searchBox: {
-    width: '100%',
-    maxWidth: '100%'
-  },
-  titleAside: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '2px'
-  },
-  historyAsideIcons: {
-    display: 'none'
-  },
-  historyTreeItemLayout: {
-    ':hover': {
-      '& [data-history-aside]': {
-        display: 'flex'
-      }
-    }
-  },
-  badgeContainer: {
-    minWidth: '50px',
-    display: 'inline-block'
-  },
-  badge: {
-    maxWidth: '50px'
-  }
-})
 
 const handleDownloadHistoryGroup = (
   event: React.MouseEvent<HTMLButtonElement>, value: string,
@@ -141,7 +106,7 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
   const dispatch = useAppDispatch()
   const {groupName, historyItems} = props
   const [open, setOpen] = useState(false);
-  const styles = useStyles()
+  const styles = useHistoryStyles()
 
   const handleDeleteHistoryGroup = (event: React.MouseEvent<HTMLButtonElement>)=>{
     event.preventDefault()
@@ -165,7 +130,14 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
       <DialogTrigger disableButtonEnhancement>
         <Tooltip withArrow relationship="label" content={`${translateMessage('Delete')} ${groupName} queries`}>
-          <Button appearance="subtle" icon={<DeleteRegular/>}></Button>
+          <Button
+            appearance="subtle"
+            icon={<DeleteRegular/>}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(true);
+            }}
+          />
         </Tooltip>
       </DialogTrigger>
       <DialogSurface>
@@ -175,7 +147,15 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
           </DialogContent>
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">{translateMessage('Cancel')}</Button>
+              <Button
+                appearance="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(false);
+                }}
+              >
+                {translateMessage('Cancel')}
+              </Button>
             </DialogTrigger>
             <Button
               onClick={handleDeleteHistoryGroup}
@@ -205,7 +185,7 @@ const HistoryItems = (props: HistoryProps)=>{
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
   openHistoryItems.add('Today')
 
-  const itemStyles = useStyles()
+  const itemStyles = useHistoryStyles()
 
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
@@ -383,7 +363,7 @@ const HistoryStatusCodes = ({ status, method }: { status: number, method?: strin
     return 'success';
   };
 
-  const historyItemStyles = useStyles()
+  const historyItemStyles = useHistoryStyles()
 
   return (
     <div className={historyItemStyles.badgeContainer}>
@@ -493,7 +473,7 @@ const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
 
 
 const History = ()=>{
-  const styles = useStyles()
+  const styles = useHistoryStyles()
   const history = useAppSelector(state=> state.history)
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history)
   const [searchValue, setSearchValue] = useState<string>('');
