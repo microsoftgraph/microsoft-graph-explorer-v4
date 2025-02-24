@@ -6,11 +6,13 @@ import {
   DialogSurface,
   DialogTrigger,
   makeStyles,
-  tokens
+  tokens,
+  Tooltip
 } from '@fluentui/react-components';
 import { DismissRegular, ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item';
+import { translateMessage } from '../../utils/translate-messages';
 
 const useStyles = makeStyles({
   container: {
@@ -45,13 +47,15 @@ const PivotItemsDialog = () => {
 
   return (
     <div>
-      <Button
-        appearance='transparent'
-        icon={<ExpandUpLeftRegular />}
-        aria-label='Expand'
-        className={styles.dialogBtn}
-        onClick={() => setOpen(true)}
-      />
+      <Tooltip content={translateMessage('Expand')} relationship='label'>
+        <Button
+          appearance='transparent'
+          icon={<ExpandUpLeftRegular />}
+          aria-label={translateMessage('Expand')}
+          className={styles.dialogBtn}
+          onClick={() => setOpen(true)}
+        />
+      </Tooltip>
       <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
         <DialogSurface className={styles.dialog}>
           <DialogBody>
@@ -60,13 +64,15 @@ const PivotItemsDialog = () => {
             </DialogContent>
           </DialogBody>
           <DialogTrigger disableButtonEnhancement>
-            <Button
-              appearance='transparent'
-              icon={<DismissRegular />}
-              aria-label='Collapse'
-              className={styles.dismissBtn}
-              onClick={() => setOpen(false)}
-            />
+            <Tooltip relationship='label' content={translateMessage('Close')}>
+              <Button
+                appearance='transparent'
+                icon={<DismissRegular />}
+                aria-label={translateMessage('Close')}
+                className={styles.dismissBtn}
+                onClick={() => setOpen(false)}
+              />
+            </Tooltip>
           </DialogTrigger>
         </DialogSurface>
       </Dialog>

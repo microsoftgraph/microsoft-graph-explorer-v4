@@ -6,6 +6,7 @@ import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import pathStyles from './Paths.styles';
 import { METHOD_COLORS } from '../../sidebar-utils/SidebarUtils';
+import { translateMessage } from '../../../../utils/translate-messages';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -79,6 +80,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
           {isSelectable && (
             <TableHeaderCell>
               <Checkbox
+                aria-label={translateMessage('Select all')}
                 checked={allSelected}
                 onChange={handleSelectAllChange}
               />
@@ -95,6 +97,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
             {isSelectable && (
               <TableCell>
                 <Checkbox
+                  aria-label={translateMessage('Select item')}
                   checked={selection.has(resource)}
                   onChange={() => handleSelectionChange(resource)}
                 />

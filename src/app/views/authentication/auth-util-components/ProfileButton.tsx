@@ -6,6 +6,7 @@ import { ProfileV9 } from '../profile/Profile';
 export const PersonaSignIn = (props: Partial<PersonaProps>) => {
   return (
     <Persona
+      aria-hidden={true}
       presence={{ status: 'offline' }}
       {...props}
     />
@@ -13,7 +14,7 @@ export const PersonaSignIn = (props: Partial<PersonaProps>) => {
 };
 
 const SignInButton = ({signIn}: {signIn: ()=> void})=>{
-  const styles = useHeaderStyles()
+  const styles = useHeaderStyles();
   return (
     <Tooltip
       content={translateMessage('sign in')}
