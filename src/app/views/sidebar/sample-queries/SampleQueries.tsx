@@ -355,6 +355,11 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   };
 
   const sampleQueryItemSelected = (item: ISampleQuery)=>{
+    dispatch(setQueryResponseStatus({
+      messageBarType: '',
+      statusText: '',
+      status: ''
+    }));
     const queryVersion = item.requestUrl.substring(1, 5);
     const sampleQuery: IQuery = {
       sampleUrl: GRAPH_URL + item.requestUrl,
