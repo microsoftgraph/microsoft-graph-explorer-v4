@@ -1,0 +1,29 @@
+export class PublicClientApplication {
+    constructor(configuration: any) {
+      // Mock constructor
+    }
+
+    initialize() {
+      // Mock initialize method
+    }
+
+    acquireTokenSilent() {
+      // Mock acquireTokenSilent method
+      return Promise.resolve({ accessToken: 'mock-access-token' });
+    }
+
+    acquireTokenPopup() {
+      // Mock acquireTokenPopup method
+      return Promise.resolve({ accessToken: 'mock-access-token' });
+    }
+
+    loginPopup() {
+      // Mock loginPopup method
+      return Promise.resolve({ account: { username: 'mock-user' } });
+    }
+
+    logout() {
+      // Mock logout method
+      return Promise.resolve();
+    }
+  }
