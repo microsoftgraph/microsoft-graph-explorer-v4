@@ -10,7 +10,8 @@ import {
   DialogSurface,
   DialogTitle,
   Button,
-  makeStyles
+  makeStyles,
+  tokens
 } from '@fluentui/react-components';
 import { Edit20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -39,6 +40,9 @@ const useStyles = makeStyles({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  paths: {
+    marginInlineStart: tokens.spacingHorizontalL
   }
 });
 
@@ -268,7 +272,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       />
 
       {items && items.length > 0 ?
-        (<div>
+        (<div className={labelStyles.paths}>
           <Paths
             resources={items}
             columns={columns}

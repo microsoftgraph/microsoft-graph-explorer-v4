@@ -12,7 +12,8 @@ import {
   Link,
   makeStyles,
   MessageBar,
-  MessageBarBody
+  MessageBarBody,
+  tokens
 } from '@fluentui/react-components';
 import { useAppSelector } from '../../../../../store';
 import { componentNames, telemetry } from '../../../../../telemetry';
@@ -36,7 +37,8 @@ const useStyles = makeStyles({
   treeContainer: {
     height: '80vh',
     overflowY: 'auto',
-    overflowX: 'hidden'
+    overflowX: 'hidden',
+    marginBlockStart: tokens.spacingVerticalL
   }
 });
 
@@ -89,8 +91,8 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
     groupedPermissions.get(groupKey)?.push(p);
   });
 
-  const handleOpenChange = (_event: TreeOpenChangeEvent, data: TreeOpenChangeData) => {
-    setOpenItems(data.openItems);
+  const handleOpenChange = (_event: TreeOpenChangeEvent, data_: TreeOpenChangeData) => {
+    setOpenItems(data_.openItems);
   };
 
   if (!isFetching && !permissions) {
@@ -134,26 +136,29 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
         >
           {[...groupedPermissions.entries()].map(([scopeType, perms]) => (
             <React.Fragment key={scopeType}>
-              <FlatTreeItem value={scopeType} itemType="branch" aria-level={1}
-                aria-setsize={2}
+              <FlatTreeItem value={scopeType ?? ''} itemType="branch" aria-level={1}
+                aria-setsize={perms.length}
                 aria-posinset={perms.length + 1}>
                 <TreeItemLayout aside={
                   <CounterBadge count={perms.length} color="informative" />
                 }>{formatScopeLabel(scopeType as PERMS_SCOPE)}</TreeItemLayout>
               </FlatTreeItem>
-              {perms.map((permission) => {
+              {openItems.has(scopeType) &&
+              perms.map((permission) => {
                 return (
-                  <FlatTreeItem
-                    key={permission.value}
-                    value={permission.value}
-                    parentValue={scopeType}
-                    itemType="leaf"
-                    aria-level={2}
-                    aria-posinset={perms.findIndex((p) => p.value === permission.value) + 1}
-                    aria-setsize={perms.length}
-                  >
-                    <TreeItemLayout>{permission.value}</TreeItemLayout>
-                  </FlatTreeItem>
+                  <React.Fragment key={permission.value}>
+                    <FlatTreeItem
+                      key={permission.value}
+                      value={permission.value}
+                      parentValue={scopeType ?? ''}
+                      itemType="leaf"
+                      aria-level={2}
+                      aria-posinset={perms.findIndex((p) => p.value === permission.value) + 1}
+                      aria-setsize={perms.length}
+                    >
+                      <TreeItemLayout>{permission.value}</TreeItemLayout>
+                    </FlatTreeItem>
+                  </React.Fragment>
                 );
               })}
             </React.Fragment>
