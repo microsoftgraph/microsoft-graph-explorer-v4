@@ -47,6 +47,9 @@ const useStyles = makeStyles({
     flexShrink: 0,
     overflowX: 'hidden'
   },
+  tabList: {
+    padding: '5px 5px'
+  },
   tabContent: {
     flex: 1,
     display: 'flex',
@@ -142,7 +145,10 @@ const Request = (props: IRequestProps) => {
             </TabList>
           </Overflow>
         ) : (
-          <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
+          <TabList selectedValue={selectedTab}
+            onTabSelect={(_, data) => handleTabSelect(data.value)}
+            size='small' className={styles.tabList}
+          >
             {tabs.map((tab) => (
               <Tab key={tab.id} value={tab.id} icon={tab.icon}>
                 {tab.name}

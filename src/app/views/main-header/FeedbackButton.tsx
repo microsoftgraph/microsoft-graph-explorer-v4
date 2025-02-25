@@ -31,6 +31,7 @@ const FeedbackButton = ()=>{
     <>
       <Tooltip content={translateMessage('Feedback')} relationship="description">
         <Button
+          aria-label={translateMessage('Feedback')}
           onClick={activateSurvey}
           className={styles.iconButton} appearance="subtle" icon={<PersonFeedback20Regular />} />
       </Tooltip>

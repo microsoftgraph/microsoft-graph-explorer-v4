@@ -16,8 +16,8 @@ const intentMap: { [key: string]: MessageBarIntent } = {
 
 const StatusMessages = () => {
   const dispatch = useAppDispatch();
-  const queryRunnerStatus = useAppSelector((state)=> state.queryRunnerStatus);
-  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const queryRunnerStatus = useAppSelector((state) => state.queryRunnerStatus);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
   function setQuery(link: string) {
     const query: IQuery = { ...sampleQuery };
@@ -27,18 +27,19 @@ const StatusMessages = () => {
     dispatch(setSampleQuery(query));
   }
 
-  if (queryRunnerStatus) {
-    const { messageBarType, statusText, status, duration, hint } = queryRunnerStatus;  return <MessageBar
-      intent={intentMap[messageBarType]}
-      politeness='assertive'
-    >
+  if (
+    !queryRunnerStatus?.status ||
+    typeof queryRunnerStatus.status === 'string' && queryRunnerStatus.status.trim() === ''
+  ) {
+    return <div />;
+  }
+
+  const { messageBarType, statusText, status, duration, hint } = queryRunnerStatus;
+  return (
+    <MessageBar intent={intentMap[messageBarType]} politeness='assertive'>
       <MessageBarBody>
-        <MessageDisplay message={`**${statusText} - **${status.toString()}`} onSetQuery={setQuery} />
-
-        {duration && <>
-          {` - ${duration} ${translateMessage('milliseconds')}`}
-        </>}
-
+        <MessageDisplay message={`**${statusText} - **${status}`} onSetQuery={setQuery} />
+        {duration && <> - {duration} {translateMessage('milliseconds')}</>}
         {status === 403 && <>
           {translateMessage('consent to scopes')}
           <span style={{ fontWeight: 600 }}>
@@ -46,7 +47,6 @@ const StatusMessages = () => {
           </span>
           {translateMessage('tab')}
         </>}
-
         {hint && <div>{hint}</div>}
       </MessageBarBody>
       <MessageBarActions
@@ -59,9 +59,8 @@ const StatusMessages = () => {
           />
         }
       />
-    </MessageBar>;
-  }
-  return <div />;
-}
+    </MessageBar>
+  );
+};
 
 export default StatusMessages;
