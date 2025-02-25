@@ -29,7 +29,8 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalXXXL,
     paddingInline: tokens.spacingHorizontalL,
     paddingBlock: tokens.spacingVerticalL,
-    paddingLeft: 0
+    paddingLeft: 0,
+    backgroundColor: tokens.colorNeutralBackground1
   },
   messageBar: {
     marginInlineStart: tokens.spacingHorizontalM,
