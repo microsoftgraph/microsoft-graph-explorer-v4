@@ -299,7 +299,7 @@ const ResourceExplorer = () => {
         items.length === 0 ? <NoResultsFound message='No resources found' /> :
           <FlatTree
             className={resourceExplorerStyles.tree}
-            aria-label="Resource Explorer"
+            aria-label={translateMessage('Resources')}
             openItems={openItems}
             onOpenChange={handleOpenChange}
           >

@@ -8,6 +8,7 @@ import {
   Button,
   Spinner,
   makeStyles,
+  tokens,
   Tooltip
 } from '@fluentui/react-components';
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons';
@@ -21,6 +22,9 @@ const useDrawerStyles = makeStyles({
   },
   button: {
     marginInlineEnd: '20px'
+  },
+  body: {
+    padding: tokens.spacingHorizontalS
   }
 });
 
@@ -94,7 +98,7 @@ export function DrawerWrapper(props: WrapperProps) {
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
+      <DrawerBody className={drawerStyles.body}>
         <Suspense fallback={<Spinner />}>
           <Component
             {...popupsProps}
