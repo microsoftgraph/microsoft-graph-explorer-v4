@@ -24,7 +24,7 @@ const useDrawerStyles = makeStyles({
     marginInlineEnd: '20px'
   },
   body: {
-    padding: tokens.spacingHorizontalS
+    padding: 0
   }
 });
 
