@@ -16,9 +16,6 @@ import { formatScopeLabel, scopeOptions } from './collection.util';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 const useStyles = makeStyles({
-  container: {
-    height: '80vh'
-  },
   dropdownContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -114,7 +111,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           ))}
         </Dropdown>
       </div>
-      <div className={styles.container}>
+      <div>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}

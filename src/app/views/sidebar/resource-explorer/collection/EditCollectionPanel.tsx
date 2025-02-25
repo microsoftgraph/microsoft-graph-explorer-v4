@@ -8,9 +8,6 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 const useStyles = makeStyles({
-  container: {
-    height: '80vh'
-  },
   centeredLabel: {
     display: 'flex',
     width: '100%',
@@ -61,7 +58,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
           />
         </div>
       ) : (
-        <div className={styles.container}>
+        <div>
           <Label className={styles.centeredLabel}>
             {translateMessage('No items available')}
           </Label>
