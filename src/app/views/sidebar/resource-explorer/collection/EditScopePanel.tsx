@@ -69,6 +69,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
 
       dispatch(updateResourcePaths(updatedItems));
     }
+    setPendingChanges([]);
   };
 
   return (
