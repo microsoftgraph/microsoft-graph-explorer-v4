@@ -22,7 +22,7 @@
     "src",
     "src/tests",
     "typings.d.ts",
-    ".eslintrc.js",
+    "eslint.config.mjs",
     "__mocks__",
     "config",
     "jest.config.js",

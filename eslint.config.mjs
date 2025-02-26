@@ -1,53 +1,70 @@
-module.exports = {
-  env: {
-    browser: true,
-    es6: true,
-    node: true
+import globals from 'globals';
+import tsParser from '@typescript-eslint/parser';
+import pluginReact from 'eslint-plugin-react';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+
+export default [{
+  ignores: ['**/build', '**/eslintrc.js', '**/public', '**/scripts']
+},
+{
+  plugins: {
+    pluginReact,
+    '@typescript-eslint': typescriptEslint
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended'
-  ],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
-  },
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: 'tsconfig.json',
-    createDefaultProgram: true,
+
+  files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+
+  languageOptions: {
+    globals: {
+      ...globals.browser,
+      ...globals.node,
+      ...globals.es2015,
+      Atomics: 'readonly',
+      SharedArrayBuffer: 'readonly'
+    },
+
+    parser: tsParser,
     ecmaVersion: 6,
-    sourceType: 'module'
+    sourceType: 'module',
+
+    parserOptions: {
+      project: 'tsconfig.json',
+      createDefaultProgram: true
+    }
   },
-  plugins: ['react', '@typescript-eslint'],
+
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
+
   rules: {
     '@typescript-eslint/adjacent-overload-signatures': 'error',
     '@typescript-eslint/array-type': 'warn',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/consistent-type-assertions': 'error',
     '@typescript-eslint/consistent-type-definitions': 'error',
-    '@typescript-eslint/explicit-member-accessibility': [
-      'off',
-      {
-        accessibility: 'explicit'
-      }
-    ],
-    'indent': ['error', 2],
+
+    '@typescript-eslint/explicit-member-accessibility': ['off', {
+      accessibility: 'explicit'
+    }],
+
+    indent: ['error', 2],
     '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/member-delimiter-style': [
-      'off',
-      {
-        multiline: {
-          delimiter: 'none',
-          requireLast: true
-        },
-        singleline: {
-          delimiter: 'semi',
-          requireLast: false
-        }
+
+    '@typescript-eslint/member-delimiter-style': ['off', {
+      multiline: {
+        delimiter: 'none',
+        requireLast: true
+      },
+
+      singleline: {
+        delimiter: 'semi',
+        requireLast: false
       }
-    ],
+    }],
+
     '@typescript-eslint/member-ordering': 'off',
     '@typescript-eslint/no-empty-function': 'error',
     '@typescript-eslint/no-empty-interface': 'error',
@@ -59,21 +76,18 @@ module.exports = {
     '@typescript-eslint/no-misused-new': 'error',
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-parameter-properties': 'off',
-    '@typescript-eslint/no-unused-expressions': [
-      'error',
-      {
-        allowShortCircuit: true
-      }
-    ],
-    '@typescript-eslint/no-unused-vars': [
-      'warn',
-      {
-        args: 'after-used',
-        argsIgnorePattern: '^_',
-        ignoreRestSiblings: false,
-        vars: 'all'
-      }
-    ],
+
+    '@typescript-eslint/no-unused-expressions': ['error', {
+      allowShortCircuit: true
+    }],
+
+    '@typescript-eslint/no-unused-vars': ['warn', {
+      args: 'after-used',
+      argsIgnorePattern: '^_',
+      ignoreRestSiblings: false,
+      vars: 'all'
+    }],
+
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/prefer-for-of': 'error',
@@ -102,7 +116,11 @@ module.exports = {
     'import/order': 'off',
     'linebreak-style': 'off',
     'max-classes-per-file': ['error', 1],
-    'max-len': ['error', { 'code': 120 }],
+
+    'max-len': ['error', {
+      code: 120
+    }],
+
     'new-parens': 'off',
     'newline-per-chained-call': 'off',
     'no-bitwise': 'error',
@@ -120,14 +138,13 @@ module.exports = {
     'no-irregular-whitespace': 'warn',
     'no-multiple-empty-lines': 'error',
     'no-new-wrappers': 'error',
-    'quotes': ['error', 'single'],
+    quotes: ['error', 'single'],
     'no-shadow': 'off',
-    '@typescript-eslint/no-shadow': [
-      'warn',
-      {
-        hoist: 'all'
-      }
-    ],
+
+    '@typescript-eslint/no-shadow': ['warn', {
+      hoist: 'all'
+    }],
+
     'no-throw-literal': 'error',
     'no-trailing-spaces': 'warn',
     'no-undef-init': 'error',
@@ -144,22 +161,20 @@ module.exports = {
     radix: 'error',
     'react/no-unescaped-entities': 0,
     'react/prop-types': 0,
+
     'space-before-function-paren': ['error', {
-      'anonymous': 'always',
-      'named': 'never',
-      'asyncArrow': 'always'
+      anonymous: 'always',
+      named: 'never',
+      asyncArrow: 'always'
     }],
+
     'spaced-comment': 'off',
     'use-isnan': 'error',
     'valid-typeof': 'off',
     'react/react-in-jsx-scope': 'off',
-    'react/no-unstable-nested-components': [
-      'off', { 'allowAsProps': true }
-    ]
-  },
-  settings: {
-    react: {
-      version: 'detect'
-    }
+
+    'react/no-unstable-nested-components': ['off', {
+      allowAsProps: true
+    }]
   }
-};
+}];
