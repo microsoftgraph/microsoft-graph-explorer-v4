@@ -33,7 +33,7 @@ import {
 import { default as GraphToolkitV9 } from '../graph-toolkit/GraphToolkitV9';
 import { Response } from '../response';
 import {
-  ArrowResetRegular,
+  ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
   ClipboardCodeRegular,
   WindowWrenchRegular,
@@ -116,7 +116,10 @@ export const GetPivotItems = () => {
   };
 
   const tabs = [
-    { id: translateMessage('Response Preview'), name:translateMessage('Response Preview'), icon:<ArrowResetRegular />},
+    { id: translateMessage('Response Preview'),
+      name: translateMessage('Response Preview'),
+      icon: <ArrowHookDownRightRegular />
+    },
     { id: translateMessage('Response Headers'),
       name:translateMessage('Response Headers'), icon:<DocumentChevronDoubleRegular /> },
     { id: translateMessage('Snippets'), name: translateMessage('Snippets'), icon: <ClipboardCodeRegular /> },
