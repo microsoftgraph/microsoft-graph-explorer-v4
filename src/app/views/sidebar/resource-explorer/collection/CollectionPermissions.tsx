@@ -102,7 +102,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
           {translateMessage('Microsoft Graph permissions reference')}
         </Link>
       </MessageBar>
-      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
+      <div style={{ overflowY: 'auto', overflowX: 'hidden' }}>
         <DetailsList
           items={permissionsArray}
           columns={columns}
@@ -112,7 +112,7 @@ const CollectionPermissions: FC<PopupsComponent<null>> = (props) => {
       </div>
       {permissions &&
         <DialogFooter styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start' }
+          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1  }
         }}>
           <PrimaryButton onClick={downloadPermissions}>
             {translateMessage('Download permissions')}

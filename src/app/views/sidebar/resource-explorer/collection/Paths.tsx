@@ -86,7 +86,7 @@ export default class Paths extends Component<IPathProps> {
   public render(): JSX.Element {
     const { resources, columns, isSelectable } = this.props;
     return (
-      <div style={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
+      <div style={{overflowY: 'auto', overflowX: 'hidden' }}>
         <DetailsList
           items={resources}
           columns={columns}

@@ -44,7 +44,7 @@ const UnstyledResourceExplorer = (props: any) => {
     ? data[version].children
     : [];
   const [searchText, setSearchText] = useState<string>('');
-  const filteredPayload = searchText ? searchResources(resourcesToUse!, searchText) : resourcesToUse!;
+  const filteredPayload = searchText ? searchResources(resourcesToUse, searchText) : resourcesToUse;
   const navigationGroup = createResourcesList(filteredPayload, version, searchText);
   const [items, setItems] = useState<INavLinkGroup[]>(navigationGroup);
   const { show: previewCollection } = usePopups('preview-collection', 'panel');
