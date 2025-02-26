@@ -183,7 +183,7 @@ interface SampleLeaf {
  */
 const RenderSampleLeafs = (props: SampleLeaf) => {
   const { leafs, group, handleSelectedSample, isSignedIn } = props;
-  const leafStyles = useStyles()
+  const leafStyles = useStyles();
 
   return (
     <>
@@ -210,6 +210,14 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             itemType='leaf'
             className={notSignedIn ? leafStyles.disabled : ''}
             id={query.id}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleOnClick(query);
+              }
+            }}
+             aria-description='has actions'
           >
             <TreeItemLayout
               className={leafStyles.itemLayout}
@@ -252,6 +260,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
  */
 const ResourceLink = ({item}: {item: ISampleQuery}) =>{
   const href = item.docLink ?? '';
+  const styles = useStyles();
   return (
     <Tooltip
       withArrow
@@ -260,8 +269,10 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
       relationship='label'
     >
       <Link
-        aria-label={item.humanName + translateMessage('Read documentation')}
-        target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+      tabIndex={0}
+      className={styles.focusableLink}
+      aria-label={item.humanName + translateMessage('Read documentation')}
+      target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
         <DocumentText20Regular />
       </Link>
     </Tooltip>
@@ -331,6 +342,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const authToken= useAppSelector((state) => state.auth.authToken);
   const authenticated = authToken.token
   const styles = useStyles();
+  const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
 
   useEffect(() => {
     if (!searchValue && queries.length === 0) {
@@ -340,13 +352,23 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     }
   }, [queries]);
 
-  const openSampleItems = new Set<string>()
-  'Getting Started'.split('').forEach(ch=> openSampleItems.add(ch))
-  openSampleItems.add('Getting Started')
+  useEffect(() => {
+    if (groups && groups.length > 0) {
+      setOpenItems(prev => {
+        const newOpenItems = new Set(prev);
+        newOpenItems.add(`group-${groups[0].name}`);
+        return newOpenItems;
+      });
+    }
+  }, [groups]);
 
-  const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(
-    () => openSampleItems
-  );
+  // const openSampleItems = new Set<string>()
+  // 'Getting Started'.split('').forEach(ch=> openSampleItems.add(ch))
+  // openSampleItems.add('Getting Started')
+
+  // const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(
+  //   () => openSampleItems
+  // );
   const handleOpenChange = (
     _event: TreeOpenChangeEvent,
     data: TreeOpenChangeData
@@ -390,6 +412,18 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     }));
   }
 
+  const toggleGroup = (groupKey: string) => {
+    setOpenItems((prevOpenItems) => {
+      const newOpenItems = new Set(prevOpenItems);
+      if (newOpenItems.has(groupKey)) {
+        newOpenItems.delete(groupKey);
+      } else {
+        newOpenItems.add(groupKey);
+      }
+      return newOpenItems;
+    });
+  };
+
   return (
     <>
       {sampleQueries.length=== 0 && <NoResultsFound message='No sample queries'/>}
@@ -397,15 +431,21 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         openItems={openItems}
         onOpenChange={handleOpenChange}
         aria-label={translateMessage('Sample Queries')}
-        className={styles.sampleQueries}>
+        className={styles.tree}>
         {groups.map((group, pos) => (
           <React.Fragment key={group.key}>
             <FlatTreeItem
-              value={group.name}
+              value={`group-${group.name}`}
               aria-level={1}
-              aria-setsize={2}
+              aria-setsize={groups.length}
               aria-posinset={pos + 1}
               itemType='branch'
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleGroup(`group-${group.name}`);
+                }
+              }}
               aria-label={
                 group.name + translateMessage('sample queries group has ') +
                 group.count + translateMessage('Resources')}
@@ -420,7 +460,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 <Text weight='semibold'>{group.name}</Text>
               </TreeItemLayout>
             </FlatTreeItem>
-            {openItems.has(group.name) && (
+            {openItems.has(`group-${group.name}`) && (
               <RenderSampleLeafs
                 isSignedIn={authenticated}
                 leafs={sampleQueries.slice(

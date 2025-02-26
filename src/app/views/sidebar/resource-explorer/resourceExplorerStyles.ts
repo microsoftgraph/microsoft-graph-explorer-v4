@@ -46,7 +46,8 @@ export const useResourceExplorerStyles = makeStyles({
   },
   tree: {
     height: 'calc(100vh - 374px)',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    padding: '5px'
   },
   treeItemLayout: {
     width: '100%',

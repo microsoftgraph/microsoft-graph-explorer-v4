@@ -23,11 +23,18 @@ export const useStyles = makeStyles({
       cursor: 'not-allowed'
     }
   },
-  sampleQueries: {
+  tree: {
     height: 'calc(100vh - 374px)',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    padding: '5px'
   },
   itemLayout: {
     paddingLeft: tokens.spacingHorizontalXXL
-  }
+  },
+  focusableLink: {
+    '&:focus, &:focus-visible': {
+      outline: '2px solid !important',
+      outlineOffset: '2px !important',
+    },
+  },
 });
