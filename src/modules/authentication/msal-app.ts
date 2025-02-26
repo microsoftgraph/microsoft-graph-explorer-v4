@@ -1,4 +1,4 @@
-import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
+import { Configuration, EventMessage, EventType, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 
 function getClientIdFromWindow() {
   return window?.ClientId ?? '';
@@ -50,4 +50,8 @@ export const configuration: Configuration = {
 
 const msalApplication = new PublicClientApplication(configuration);
 msalApplication.initialize();
+msalApplication.addEventCallback((message: EventMessage) => {
+  console.log('MSAL Log:', message);
+
+});
 export { msalApplication };

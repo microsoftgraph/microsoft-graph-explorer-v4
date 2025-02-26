@@ -238,6 +238,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           }
         }
       }
+      console.error('Error during sign-in:', error);
       throw error;
     }
   }
