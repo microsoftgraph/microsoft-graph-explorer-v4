@@ -311,7 +311,7 @@ const HistoryItems = (props: HistoryProps)=>{
                   toggleGroup(`group-${name}`);
                 }
               }}
-              >
+            >
               <TreeItemLayout aside={
                 <CounterBadge
                   color='informative'
@@ -321,7 +321,7 @@ const HistoryItems = (props: HistoryProps)=>{
               </TreeItemLayout>
             </FlatTreeItem>
             {openItems.has(`group-${name}`) && historyLeafs.map((h: IHistoryItem) => (
-                <FlatTreeItem
+              <FlatTreeItem
                 value={h.createdAt}
                 parentValue={name}
                 itemType='leaf'
@@ -331,50 +331,50 @@ const HistoryItems = (props: HistoryProps)=>{
                 aria-level={groups.length}
                 aria-setsize={historyLeafs.length}
                 aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
-                >
-                  <TreeItemLayout
+              >
+                <TreeItemLayout
                   className={itemStyles.historyTreeItemLayout}
                   onClick={() => handleViewQuery(h)}
                   iconBefore={<HistoryStatusCodes status={h.status} method={h.method} />}
-                    aside={
-                      <div data-history-aside className={itemStyles.historyAsideIcons}>
-                        <HistoryItemActionMenu item={h}/>
-                        {isInCollection(h) ? (
-                          <Tooltip
-                            withArrow
-                            content={translateMessage('Remove from collection')}
-                            relationship='label'
-                          >
-                            <Button
-                              aria-label={translateMessage('Remove from collection')}
-                              appearance='transparent'
-                              icon={<SubtractSquare20Regular />}
-                              onClick={ () => handleRemoveFromCollection(h)}
-                            />
-                          </Tooltip>
-                        ) : (
-                          <Tooltip
-                            withArrow
-                            content={translateMessage('Add to collection')}
-                            relationship='label'
-                          >
-                            <Button
-                              aria-label={translateMessage('Add to collection')}
-                              appearance='transparent'
-                              icon={<AddSquare20Regular />}
-                              onClick={() => handleAddToCollection(h)}
-                            />
-                          </Tooltip>
-                        )}
-                      </div>
-                    }>
-                    <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
-                      <Text>{h.url.replace(GRAPH_URL, '')}</Text>
-                    </Tooltip>
-                  </TreeItemLayout>
-                </FlatTreeItem>
+                  aside={
+                    <div data-history-aside className={itemStyles.historyAsideIcons}>
+                      <HistoryItemActionMenu item={h}/>
+                      {isInCollection(h) ? (
+                        <Tooltip
+                          withArrow
+                          content={translateMessage('Remove from collection')}
+                          relationship='label'
+                        >
+                          <Button
+                            aria-label={translateMessage('Remove from collection')}
+                            appearance='transparent'
+                            icon={<SubtractSquare20Regular />}
+                            onClick={ () => handleRemoveFromCollection(h)}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip
+                          withArrow
+                          content={translateMessage('Add to collection')}
+                          relationship='label'
+                        >
+                          <Button
+                            aria-label={translateMessage('Add to collection')}
+                            appearance='transparent'
+                            icon={<AddSquare20Regular />}
+                            onClick={() => handleAddToCollection(h)}
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+                  }>
+                  <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
+                    <Text>{h.url.replace(GRAPH_URL, '')}</Text>
+                  </Tooltip>
+                </TreeItemLayout>
+              </FlatTreeItem>
 
-              ))}
+            ))}
           </React.Fragment>
         )
       })}

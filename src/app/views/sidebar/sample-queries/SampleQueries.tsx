@@ -217,7 +217,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
                 handleOnClick(query);
               }
             }}
-             aria-description='has actions'
+            aria-description='has actions'
           >
             <TreeItemLayout
               className={leafStyles.itemLayout}
@@ -269,10 +269,9 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
       relationship='label'
     >
       <Link
-      tabIndex={0}
-      className={styles.focusableLink}
-      aria-label={item.humanName + translateMessage('Read documentation')}
-      target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+        className={styles.focusableLink}
+        aria-label={item.humanName + translateMessage('Read documentation')}
+        target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
         <DocumentText20Regular />
       </Link>
     </Tooltip>
@@ -362,13 +361,6 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
     }
   }, [groups]);
 
-  // const openSampleItems = new Set<string>()
-  // 'Getting Started'.split('').forEach(ch=> openSampleItems.add(ch))
-  // openSampleItems.add('Getting Started')
-
-  // const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(
-  //   () => openSampleItems
-  // );
   const handleOpenChange = (
     _event: TreeOpenChangeEvent,
     data: TreeOpenChangeData
