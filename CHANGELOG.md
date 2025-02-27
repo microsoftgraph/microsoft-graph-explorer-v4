@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.5.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.2...v10.5.3) (2025-02-27)
+
 ## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-26)
 
 
