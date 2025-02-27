@@ -4,21 +4,21 @@ import { IAdaptiveCardContent } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { lookupTemplate } from '../../../utils/adaptive-cards-lookup';
 
-export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptiveCardContent {
+export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptiveCardContent | undefined {
   if (!payload) {
     // no payload so return empty result
-    throw new Error('No payload available');
+    throw new Error('No adaptive card payload available');
   }
 
   if (Object.keys(payload).length === 0) {
     // check if the payload is something else that we cannot use
-    throw new Error('Invalid payload for card');
+    throw new Error('Invalid adaptive card payload');
   }
 
   const templateFileName = lookupTemplate(sampleQuery);
   if (!templateFileName) {
-    // we dont support this card yet
-    throw new Error('No template available');
+    // we don't support this card yet
+    return undefined;
   }
 
   try {
@@ -35,7 +35,7 @@ export function getAdaptiveCard(payload: string, sampleQuery: IQuery): IAdaptive
   }
 }
 
-function createCardFromTemplate(templatePayload: string, payload: string): AdaptiveCardsTemplateAPI.Template {
+function createCardFromTemplate(templatePayload: object, payload: string): AdaptiveCardsTemplateAPI.Template {
   const template = new AdaptiveCardsTemplateAPI.Template(templatePayload);
   const context: AdaptiveCardsTemplateAPI.IEvaluationContext = {
     $root: payload

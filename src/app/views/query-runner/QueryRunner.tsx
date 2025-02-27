@@ -1,4 +1,4 @@
-import { IDropdownOption, MessageBarType } from '@fluentui/react';
+import { IDropdownOption } from '@fluentui/react';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../store';
@@ -13,9 +13,12 @@ import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
 import './query-runner.scss';
-import Request from './request/Request';
 
-const QueryRunner = (props: any) => {
+interface IQueryRunnerProps {
+  onSelectVerb: (verb: string) => void;
+}
+
+const QueryRunner = (props: IQueryRunnerProps) => {
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
 
@@ -40,10 +43,6 @@ const QueryRunner = (props: any) => {
     }
   };
 
-  const handleOnEditorChange = (value?: string) => {
-    setSampleBody(value!);
-  };
-
   const handleOnRunQuery = (query?: IQuery) => {
     let sample = { ...sampleQuery };
     if (sampleBody && sample.selectedVerb !== 'GET') {
@@ -57,7 +56,7 @@ const QueryRunner = (props: any) => {
             ok: false,
             statusText: translateMessage('Malformed JSON body'),
             status: `${translateMessage('Review the request body')} ${error}`,
-            messageType: MessageBarType.error
+            messageBarType: 'error'
           }));
           return;
         }
@@ -112,27 +111,11 @@ const QueryRunner = (props: any) => {
   };
 
   return (
-    <>
-      <div className='ms-Grid-row'>
-        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-          <QueryInput
-            handleOnRunQuery={handleOnRunQuery}
-            handleOnMethodChange={handleOnMethodChange}
-            handleOnVersionChange={handleOnVersionChange}
-          />
-        </div>
-      </div>
-      <div className='ms-Grid-row' style={{ marginTop: 10 }}>
-        <div className='ms-Grid-col ms-sm-12 ms-lg-12'>
-          {
-            <Request
-              handleOnEditorChange={handleOnEditorChange}
-              sampleQuery={sampleQuery}
-            />
-          }
-        </div>
-      </div>
-    </>
+    <QueryInput
+      handleOnRunQuery={handleOnRunQuery}
+      handleOnMethodChange={handleOnMethodChange}
+      handleOnVersionChange={handleOnVersionChange}
+    />
   );
 }
 

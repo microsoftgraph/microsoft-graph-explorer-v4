@@ -6,6 +6,7 @@ import { ApplicationState, store } from '../../../../src/store/index';
 import { fetchAutoCompleteOptions } from '../../../app/services/slices/autocomplete.slice';
 import { suggestions } from '../../../modules/suggestions/suggestions';
 import { Mode } from '../../../types/enums';
+import { SnippetError } from '../../../types/snippets';
 import { AUTOCOMPLETE_FETCH_ERROR, AUTOCOMPLETE_FETCH_PENDING, AUTOCOMPLETE_FETCH_SUCCESS } from '../redux-constants';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
@@ -61,13 +62,13 @@ const mockState: ApplicationState = {
     isLoadingData: false,
     response: {
       body: undefined,
-      headers: undefined
+      headers: {}
     }
   },
   snippets: {
     pending: false,
-    data: [],
-    error: null
+    data: {},
+    error: {} as SnippetError
   },
   responseAreaExpanded: false,
   dimensions: {

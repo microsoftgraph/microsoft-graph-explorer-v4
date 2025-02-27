@@ -1,36 +1,49 @@
-import { Link, MessageBar, MessageBarType } from '@fluentui/react';
+import { Link, MessageBar, MessageBarBody, makeStyles} from '@fluentui/react-components';
 
 import { getLoginType } from '../../../modules/authentication/authUtils';
 import { LoginType } from '../../../types/enums';
 import { translateMessage } from '../../utils/translate-messages';
 
-export function headerMessaging(query: string): React.ReactNode {
+const useHeaderStyles = makeStyles({
+  root: {
+    marginBottom: '8',
+    paddingLeft: '10'
+  }
+});
+
+export const headerMessaging = (query: string): React.ReactNode => {
   const loginType = getLoginType();
+  const headerStyles = useHeaderStyles();
 
   return (
-    <div style={{ marginBottom: 8, paddingLeft: 10 }}>
-      {loginType === LoginType.Popup && <>
-        <MessageBar messageBarType={MessageBarType.info} isMultiline={true}>
-          <p>
+    <div className={headerStyles.root}>
+      {loginType === LoginType.Popup &&
+        <MessageBar intent={'info'}>
+          <MessageBarBody>
             {translateMessage('To try the full features')},
-            <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
+            <Link
+              tabIndex={0}
+              inline
+              href={query}
+              target='_blank' rel='noopener noreferrer'>
               {translateMessage('full Graph Explorer')}.
             </Link>
-          </p>
-          <p>
             {translateMessage('running the query')}.
-          </p>
+          </MessageBarBody>
         </MessageBar>
-
-      </>}
-      {loginType === LoginType.Redirect && <MessageBar messageBarType={MessageBarType.warning} isMultiline={true}>
-        <p>
+      }
+      {loginType === LoginType.Redirect && <MessageBar intent={'warning'}>
+        <MessageBarBody>
           {translateMessage('To try operations other than GET')},
-
-          <Link tabIndex={0} href={query} target='_blank' rel='noopener noreferrer' underline>
+          <Link
+            tabIndex={0}
+            href={query}
+            target='_blank'
+            rel='noopener noreferrer'
+            inline>
             {translateMessage('sign in')}.
           </Link>
-        </p>
+        </MessageBarBody>
       </MessageBar>}
     </div>);
 }

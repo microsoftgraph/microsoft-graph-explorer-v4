@@ -4,7 +4,7 @@ import { getMatchingResourceForUrl } from '../../../utils/resources/resources-fi
 import content from '../../../utils/resources/resources.json';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import {
-  createResourcesList, generateKey, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink, removeCounter
+  createResourcesList, generateKey, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink
 } from './resource-explorer.utils';
 
 const resource = JSON.parse(JSON.stringify(content)) as IResource
@@ -41,12 +41,6 @@ describe('Resource payload should', () => {
   });
 
   it('return a string without counters', async () => {
-    const name = 'teamsApps (1)';
-    const withoutCounter = removeCounter(name);
-    expect(withoutCounter).not.toBe(name);
-  });
-
-  it('return a string without counters', async () => {
     const version = 'v1.0';
     const paths = ['/', 'appCatalogs', 'teamsApps'];
     const level = 3;
@@ -56,7 +50,7 @@ describe('Resource payload should', () => {
       resourceItems: resource.children!,
       version
     });
-    const link = currentTree.links[0];
+    const link = currentTree;
     const withoutCounter = getUrlFromLink(link.paths);
     expect(withoutCounter).toBe('/appCatalogs/teamsApps');
   });

@@ -34,7 +34,7 @@ export const fetchAllPrincipalGrants = createAsyncThunk(
           statusText: translateMessage('Permissions'),
           status: translateMessage('You require the following permissions to read'),
           ok: false,
-          messageType: 0
+          messageBarType: 'error'
         }));
         throw new Error('Permission required');
       }

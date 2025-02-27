@@ -11,6 +11,7 @@ import {
 import { authenticationWrapper } from '../../../modules/authentication';
 import { ApplicationState, store } from '../../../store/index';
 import { Mode } from '../../../types/enums';
+import { SnippetError } from '../../../types/snippets';
 import { getPermissionsScopeType } from '../../utils/getPermissionsScopeType';
 import { translateMessage } from '../../utils/translate-messages';
 import { ACCOUNT_TYPE } from '../graph-constants';
@@ -82,13 +83,13 @@ const mockState: ApplicationState = {
     isLoadingData: false,
     response: {
       body: undefined,
-      headers: undefined
+      headers: {}
     }
   },
   snippets: {
     pending: false,
-    data: [],
-    error: null
+    data: {},
+    error: {} as SnippetError
   },
   responseAreaExpanded: false,
   dimensions: {
@@ -301,7 +302,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]
@@ -357,7 +358,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking '),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]
@@ -416,7 +417,7 @@ describe('Permissions action creators', () => {
             statusText: translateMessage('Revoking'),
             status: translateMessage('Please wait while we revoke this permission'),
             ok: false,
-            messageType: 0
+            messageBarType: 'info'
           }
         }
       ]
