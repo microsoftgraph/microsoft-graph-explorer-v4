@@ -59,7 +59,7 @@ import { sanitizeQueryUrl } from '../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../utils/sample-url-generation';
 import { translateMessage } from '../../../utils/translate-messages';
 import { createHarEntry, exportQuery, generateHar } from './har-utils';
-import { ResourceLinkType } from '../../../../types/resources';
+import { Collection, ResourceLinkType } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
 import { useHistoryStyles } from './History.styles';
@@ -185,10 +185,10 @@ const HistoryItems = (props: HistoryProps)=>{
   const shouldGenerateGroups = useRef(true);
 
   const openHistoryItems = new Set<string>()
-  'Today'.split('').forEach(ch=> openHistoryItems.add(ch))
-  openHistoryItems.add('Today')
+  'Today'.split('').forEach(ch=> openHistoryItems.add(ch));
+  openHistoryItems.add('Today');
 
-  const itemStyles = useHistoryStyles()
+  const itemStyles = useHistoryStyles();
 
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
@@ -239,7 +239,7 @@ const HistoryItems = (props: HistoryProps)=>{
   };
 
   const isInCollection = (item: IHistoryItem) => {
-    const defaultCollection = collections.find((collection) => collection.isDefault);
+    const defaultCollection = collections.find((collection: Collection) => collection.isDefault);
     if (!defaultCollection) { return false; }
     return defaultCollection.paths.some((path) => {
       const { relativeUrl } = processUrlAndVersion(item.url);
@@ -273,6 +273,17 @@ const HistoryItems = (props: HistoryProps)=>{
     dispatch(removeResourcePaths([resourcePath]));
   };
 
+  const toggleGroup = (groupKey: string) => {
+    setOpenItems((prevOpenItems) => {
+      const newOpenItems = new Set(prevOpenItems);
+      if (newOpenItems.has(groupKey)) {
+        newOpenItems.delete(groupKey);
+      } else {
+        newOpenItems.add(groupKey);
+      }
+      return newOpenItems;
+    });
+  };
 
   return(
     <FlatTree
@@ -287,12 +298,20 @@ const HistoryItems = (props: HistoryProps)=>{
         return (
           <React.Fragment key={key}>
             <FlatTreeItem
-              value={name}
+              value={`group-${name}`}
               itemType='branch'
+              tabIndex={0}
               aria-level={1}
-              aria-setsize={2}
+              aria-setsize={groups.length}
               aria-posinset={pos+1}
-              aria-label={ariaLabel}>
+              aria-label={ariaLabel}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleGroup(`group-${name}`);
+                }
+              }}
+            >
               <TreeItemLayout aside={
                 <CounterBadge
                   color='informative'
@@ -301,60 +320,61 @@ const HistoryItems = (props: HistoryProps)=>{
                 <GroupIcons groupName={name} historyItems={history} shouldGenerateGroups={shouldGenerateGroups} />
               </TreeItemLayout>
             </FlatTreeItem>
-            {openItems.has(name) &&
-              historyLeafs.map((h: IHistoryItem) => (
-                <FlatTreeItem
-                  value={h.statusText}
-                  parentValue={name}
-                  itemType='leaf'
-                  key={h.createdAt}
-                  id={h.createdAt}
-                  aria-level={2}
-                  aria-setsize={historyLeafs.length}
-                  aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
-                >
-                  <TreeItemLayout
-                    className={itemStyles.historyTreeItemLayout}
-                    onClick={()=>handleViewQuery(h)}
-                    iconBefore={<HistoryStatusCodes status={h.status} method={h.method}/>}
-                    aside={
-                      <div data-history-aside className={itemStyles.historyAsideIcons}>
-                        <HistoryItemActionMenu item={h}/>
-                        {isInCollection(h) ? (
-                          <Tooltip
-                            withArrow
-                            content={translateMessage('Remove from collection')}
-                            relationship='label'
-                          >
-                            <Button
-                              aria-label={translateMessage('Remove from collection')}
-                              appearance='transparent'
-                              icon={<SubtractSquare20Regular />}
-                              onClick={ () => handleRemoveFromCollection(h)}
-                            />
-                          </Tooltip>
-                        ) : (
-                          <Tooltip
-                            withArrow
-                            content={translateMessage('Add to collection')}
-                            relationship='label'
-                          >
-                            <Button
-                              aria-label={translateMessage('Add to collection')}
-                              appearance='transparent'
-                              icon={<AddSquare20Regular />}
-                              onClick={() => handleAddToCollection(h)}
-                            />
-                          </Tooltip>
-                        )}
-                      </div>
-                    }>
-                    <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
-                      <Text>{h.url.replace(GRAPH_URL, '')}</Text>
-                    </Tooltip>
-                  </TreeItemLayout>
-                </FlatTreeItem>
-              ))}
+            {openItems.has(`group-${name}`) && historyLeafs.map((h: IHistoryItem) => (
+              <FlatTreeItem
+                value={h.createdAt}
+                parentValue={name}
+                itemType='leaf'
+                tabIndex={0}
+                key={h.createdAt}
+                id={h.createdAt}
+                aria-level={groups.length}
+                aria-setsize={historyLeafs.length}
+                aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
+              >
+                <TreeItemLayout
+                  className={itemStyles.historyTreeItemLayout}
+                  onClick={() => handleViewQuery(h)}
+                  iconBefore={<HistoryStatusCodes status={h.status} method={h.method} />}
+                  aside={
+                    <div data-history-aside className={itemStyles.historyAsideIcons}>
+                      <HistoryItemActionMenu item={h}/>
+                      {isInCollection(h) ? (
+                        <Tooltip
+                          withArrow
+                          content={translateMessage('Remove from collection')}
+                          relationship='label'
+                        >
+                          <Button
+                            aria-label={translateMessage('Remove from collection')}
+                            appearance='transparent'
+                            icon={<SubtractSquare20Regular />}
+                            onClick={ () => handleRemoveFromCollection(h)}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <Tooltip
+                          withArrow
+                          content={translateMessage('Add to collection')}
+                          relationship='label'
+                        >
+                          <Button
+                            aria-label={translateMessage('Add to collection')}
+                            appearance='transparent'
+                            icon={<AddSquare20Regular />}
+                            onClick={() => handleAddToCollection(h)}
+                          />
+                        </Tooltip>
+                      )}
+                    </div>
+                  }>
+                  <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
+                    <Text>{h.url.replace(GRAPH_URL, '')}</Text>
+                  </Tooltip>
+                </TreeItemLayout>
+              </FlatTreeItem>
+
+            ))}
           </React.Fragment>
         )
       })}

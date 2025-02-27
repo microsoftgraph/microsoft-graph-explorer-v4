@@ -6,7 +6,8 @@ export const useHistoryStyles = makeStyles({
   },
   tree: {
     height: 'calc(100vh - 374px)',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    padding: '5px'
   },
   searchBox: {
     width: '100%',
@@ -21,7 +22,7 @@ export const useHistoryStyles = makeStyles({
     display: 'none'
   },
   historyTreeItemLayout: {
-    ':hover': {
+    ':hover, :focus': {
       '& [data-history-aside]': {
         display: 'flex'
       }
