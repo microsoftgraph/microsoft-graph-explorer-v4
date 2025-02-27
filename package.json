@@ -1,6 +1,6 @@
 {
         "name": "graph-explorer-v2",
-        "version": "10.5.2",
+        "version": "10.5.3",
         "private": true,
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
@@ -73,7 +73,7 @@
                 "lint": "eslint . \"**/*.{js,ts,tsx}\"",
                 "prebuild:prod": "standard-version",
                 "build:prod": "npm run build",
-                "bump": "standard-version --skip.tag --skip.changelog",
+                "bump": "standard-version --release-as 10.5.3",
                 "start-server": "npm start",
                 "test-playwright": "start-server-and-test start-server http://127.0.0.1:3000 test-ui",
                 "test-ui": "npx playwright test src/tests/ui/",
