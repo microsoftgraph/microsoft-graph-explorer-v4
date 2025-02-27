@@ -27,7 +27,7 @@ const trackLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, componentName: s
   telemetry.trackLinkClickEvent(e.currentTarget.href, componentName)
 }
 
-const HelpV9 = ()=>{
+const Help = ()=>{
   const styles = useHeaderStyles();
 
   return (
@@ -35,6 +35,7 @@ const HelpV9 = ()=>{
       <Tooltip content={translateMessage('Help')} relationship="description">
         <MenuTrigger disableButtonEnhancement>
           <Button
+            aria-label={translateMessage('Help')}
             onClick={trackHelpButtonClickEvent}
             className={styles.iconButton} appearance="subtle" icon={<ChatHelp20Regular />} />
         </MenuTrigger>
@@ -75,5 +76,5 @@ const HelpV9 = ()=>{
   )
 }
 
-export { HelpV9 }
+export { Help }
 

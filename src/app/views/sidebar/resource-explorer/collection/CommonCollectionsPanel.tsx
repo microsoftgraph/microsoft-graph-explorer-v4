@@ -1,9 +1,10 @@
 import {
   Button,
-  DialogActions,
   makeStyles,
   MessageBar,
-  MessageBarBody
+  MessageBarBody,
+  DrawerFooter,
+  tokens
 } from '@fluentui/react-components';
 import { ReactNode } from 'react';
 import { translateMessage } from '../../../../utils/translate-messages';
@@ -19,14 +20,22 @@ interface CommonCollectionsPanelProps {
 }
 
 const useStyles = makeStyles({
-  dialogFooter: {
+  drawerFooter: {
     display: 'flex',
-    justifyContent: 'start',
+    justifyContent: 'flex-start',
     position: 'sticky',
     bottom: 0,
     width: '100%',
-    marginBlockStart: '10px',
-    zIndex: 1
+    gap: tokens.spacingHorizontalXXXL,
+    paddingInline: tokens.spacingHorizontalL,
+    paddingBlock: tokens.spacingVerticalL,
+    paddingLeft: 0,
+    backgroundColor: tokens.colorNeutralBackground1,
+    marginInlineStart: tokens.spacingHorizontalL
+  },
+  messageBar: {
+    marginInlineStart: tokens.spacingHorizontalM,
+    width: '100%'
   }
 });
 
@@ -43,7 +52,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
 
   return (
     <>
-      {messageBarText ? <MessageBar intent='info'>
+      {messageBarText ? <MessageBar className={styles.messageBar} intent='info'>
         <MessageBarBody>
           {translateMessage(messageBarText)}
           {messageBarSpanText ? (
@@ -54,14 +63,14 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
         </MessageBarBody>
       </MessageBar> : null}
       {children}
-      <DialogActions className={styles.dialogFooter}>
+      <DrawerFooter className={styles.drawerFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}
         </Button>
         <Button onClick={closePopup}>
           {translateMessage('Close')}
         </Button>
-      </DialogActions>
+      </DrawerFooter>
     </>
   );
 };

@@ -5,38 +5,39 @@ import CollectionPermissionsProvider from '../../services/context/collection-per
 import { PopupsProvider } from '../../services/context/popups-context';
 import { ValidationProvider } from '../../services/context/validation-context/ValidationProvider';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
+import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
-import { StatusMessagesV9, TermsOfUseMessageV9 } from '../app-sections';
+import { StatusMessages, TermsOfUseMessage } from '../app-sections';
 import Notification from '../common/banners/Notification';
 import PopupsWrapper from '../common/popups/PopupsWrapper';
-import { MainHeaderV9 } from '../main-header/MainHeader';
-import { QueryResponseV9 } from '../query-response';
+import { MainHeader } from '../main-header/MainHeader';
+import { QueryResponse } from '../query-response';
 import { QueryRunner } from '../query-runner';
 import Request from '../query-runner/request/RequestV9';
-import { SidebarV9 } from '../sidebar/SidebarV9';
+import { Sidebar } from '../sidebar/Sidebar';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
-import { Mode } from '../../../types/enums';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
+import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
 }
 
 export const Layout = (props: LayoutProps) => {
+  useDetectMobileScreen();
   const layoutStyles = useLayoutStyles();
   const resizeStyles = useLayoutResizeStyles();
   const dispatch = useAppDispatch();
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  // NOTE: use this to show only the icons of the request and response area tabs
-  const mode = useAppSelector((state) => state.graphExplorerMode);
-  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
-  const showSidebar = mode === Mode.Complete && !mobileScreen
+  const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
+  const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
+  const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
 
   const {
     handleRef: sidebarHandleRef,
     wrapperRef: sidebarWrapperRef,
-    elementRef: sidebarElementRef,
+    elementRef: storeSidebarElement,
     setValue: setSidebarColumnSize
   } = useResizeHandle({
     variableName: SIDEBAR_SIZE_CSS_VAR,
@@ -53,61 +54,116 @@ export const Layout = (props: LayoutProps) => {
     }
   }, [sampleBody]);
 
+  useEffect(() => {
+    if (!mobileScreen) {
+      setSidebarColumnSize(456);
+      setInitialSidebarWidth(456);
+    } else {
+      setSidebarColumnSize(0);
+    }
+  }, [mobileScreen]);
+
+
   const handleOnEditorChange = (value?: string) => {
     setSampleBody(value!);
   };
 
-  const handleToggleSelect = (toggled: boolean)=> {
-    setSidebarColumnSize(toggled ? 456 : 5);
-  }
+  const handleToggleSelect = (toggled: boolean) => {
+    if (mobileScreen) {
+      dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
+      setSidebarColumnSize(toggled ? window.innerWidth : 0);
+    } else {
+      if (toggled) {
+        setSidebarColumnSize(initialSidebarWidth > 456 ? initialSidebarWidth : 456);
+      } else {
+        setSidebarColumnSize(48);
+      }
+    }
+  };
 
-  const resetSidebarArea = () => {
-    setSidebarColumnSize(456)
-  }
+  const handleResizeStart = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (!sidebarElement) {return;}
+
+    const startX = event.clientX;
+    const startWidth = parseInt(getComputedStyle(sidebarElement).width, 10);
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const newWidth = startWidth + (moveEvent.clientX - startX);
+      updateSidebarSize(newWidth);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
+
+
+  const updateSidebarSize = (newSize: number) => {
+    const minSize = 48;
+    const maxSize = window.innerWidth * 0.5;
+
+    const finalSize = Math.max(minSize, Math.min(maxSize, newSize));
+
+    setSidebarColumnSize(finalSize);
+
+    if (finalSize > 48) {
+      setInitialSidebarWidth(finalSize);
+    }
+  };
 
   return (
     <>
       <PopupsProvider>
         <div className={layoutStyles.container}>
-          <MainHeaderV9 />
+          <MainHeader />
           <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {showSidebar &&
-            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={sidebarElementRef}>
-              <SidebarV9 handleToggleSelect={handleToggleSelect} />
-              <LayoutResizeHandler
-                position='end'
-                ref={sidebarHandleRef}
-                onDoubleClick={resetSidebarArea}
-              />
-            </div>}
+            {showSidebar && (
+              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
+                <Sidebar handleToggleSelect={handleToggleSelect} />
+                {!mobileScreen && (
+                  <LayoutResizeHandler
+                    position="end"
+                    ref={sidebarHandleRef}
+                    onDoubleClick={() => updateSidebarSize(456)}
+                    onMouseDown={handleResizeStart}
+                  />
+                )}
+              </div>
+            )}
             <div id='main-content' className={layoutStyles.mainContent}>
-              <Notification
-                header={translateMessage('Banner notification 1 header')}
-                content={translateMessage('Banner notification 1 content')}
-                link={translateMessage('Banner notification 1 link')}
-                linkText={translateMessage('Banner notification 1 link text')}
-              />
+              <div style={{ margin: '0 10px' }}>
+                <Notification
+                  header={translateMessage('Banner notification 1 header')}
+                  content={translateMessage('Banner notification 1 content')}
+                  link={translateMessage('Banner notification 1 link')}
+                  linkText={translateMessage('Banner notification 1 link text')}
+                />
+              </div>
               <ValidationProvider>
-                <QueryRunner onSelectVerb={props.handleSelectVerb} />
-                <div
-                  id='request-response-area'
-                  className={layoutStyles.requestResponseArea}
-                >
+                <div style={{ margin: '0 10px' }}>
+                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
+                </div>
+                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
                   <div id='request-area' className={layoutStyles.requestArea}>
-                    <Request
-                      handleOnEditorChange={handleOnEditorChange}
-                      sampleQuery={sampleQuery}
-                    />
+                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                  </div>
+                  <div style={{ margin: '0 10px' }}>
+                    <StatusMessages />
                   </div>
                   <div id='response-area' className={layoutStyles.responseArea}>
-                    <StatusMessagesV9 />
-                    <QueryResponseV9 />
+                    <QueryResponse />
                   </div>
                 </div>
               </ValidationProvider>
             </div>
           </div>
-          <TermsOfUseMessageV9 />
+          <TermsOfUseMessage />
         </div>
         <CollectionPermissionsProvider>
           <PopupsWrapper />

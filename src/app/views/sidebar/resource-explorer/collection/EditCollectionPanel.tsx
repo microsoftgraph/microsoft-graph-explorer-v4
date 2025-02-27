@@ -1,4 +1,4 @@
-import { Label, makeStyles } from '@fluentui/react-components';
+import { Label, makeStyles, tokens } from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
@@ -8,15 +8,15 @@ import { useAppDispatch, useAppSelector } from '../../../../../store';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 const useStyles = makeStyles({
-  container: {
-    height: '80vh'
-  },
   centeredLabel: {
     display: 'flex',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     height: '80vh'
+  },
+  paths: {
+    marginBlockStart: tokens.spacingVerticalL
   }
 });
 
@@ -31,8 +31,8 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
   const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'Select all', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   const removeSelectedItems = () => {
@@ -52,7 +52,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
       closePopup={closePopup}
     >
       {items && items.length > 0 ? (
-        <div>
+        <div className={styles.paths}>
           <Paths
             resources={items}
             columns={columns}
@@ -61,7 +61,7 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
           />
         </div>
       ) : (
-        <div className={styles.container}>
+        <div>
           <Label className={styles.centeredLabel}>
             {translateMessage('No items available')}
           </Label>

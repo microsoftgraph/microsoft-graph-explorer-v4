@@ -1,27 +1,37 @@
-// import { ContentType } from '../../../../types/enums';
-// import { isImageResponse } from '../../../services/actions/query-action-creator-util';
-// import { Image, Monaco } from '../../common';
-// import { formatXml } from '../../common/monaco/util/format-xml';
+import { ContentType } from '../../../../types/enums';
+import { isImageResponse } from '../../../services/actions/query-action-creator-util';
+import { Image, MonacoV9 } from '../../common';
+import { formatXml } from '../../common/monaco/util/format-xml';
 
-// const ResponseDisplay = (properties: any) => {
-//   const { contentType, body, height } = properties;
+interface ResponseDisplayProps {
+  contentType: string;
+  body: any;
+}
 
-//   switch (contentType) {
-//   case ContentType.XML:
-//     return <Monaco body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
+const ResponseDisplay = (props: ResponseDisplayProps) => {
+  const { contentType, body } = props;
 
-//   case ContentType.HTML:
-//     return <Monaco body={body} language={ContentType.HTML} readOnly={true} height={height} />;
+  switch (contentType) {
+  case 'application/xml':
+    return (
+      <MonacoV9 body={formatXml(body)} language='text/html' readOnly={true} />
+    );
 
-//   default:
-//     if (isImageResponse(contentType)) {
-//       return <Image
-//         styles={{ padding: '10px' }}
-//         body={body}
-//         alt='profile image' />;
-//     }
-//     return <Monaco body={body} readOnly={true} language={ContentType.Json} height={height} />;
-//   }
-// }
+  case 'text/html':
+    return <MonacoV9 body={body} language='text/html' readOnly={true} />;
 
-// export default ResponseDisplay;
+  default:
+    if (isImageResponse(contentType) && typeof body !== 'string') {
+      return (
+        <Image styles={{ padding: '10px', height: '240px', width: '240px' }} body={body} alt='profile image' />
+      );
+    }
+    return (
+      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+        <MonacoV9 body={body} readOnly language="application/json" />
+      </div>
+    );
+  }
+};
+
+export default ResponseDisplay;

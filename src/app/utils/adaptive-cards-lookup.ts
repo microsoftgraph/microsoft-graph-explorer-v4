@@ -2,7 +2,7 @@ import { Files, Groups, Messages, Profile, Site, Sites, Users } from '../../adap
 import { IQuery } from '../../types/query-runner';
 import { parseSampleUrl } from './sample-url-generation';
 
-export function lookupTemplate(sampleQuery: IQuery): object {
+export function lookupTemplate(sampleQuery: IQuery): object | undefined {
   if (sampleQuery) {
     const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
     const query = requestUrl + search;
@@ -17,7 +17,7 @@ export function lookupTemplate(sampleQuery: IQuery): object {
       }
     }
   }
-  return {};
+  return undefined;
 }
 
 const templateMap: Record<string, object> = {

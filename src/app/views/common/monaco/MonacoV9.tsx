@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { makeStyles } from '@fluentui/react-components';
 import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
@@ -14,32 +15,33 @@ interface MonacoProps {
   readOnly?: boolean;
   height?: string;
   extraInfoElement?: JSX.Element;
+  isVisible?: boolean;
 }
 
-const useEditorStyles = makeStyles({
+const useStyles = makeStyles({
   container: {
-    height: '95%'
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden'
   }
 });
 
-const useUpdatedEditorStyles = makeStyles({
-  container: {
-    height: '350px'
-  }
-})
-
-const MonacoV9 = (props: MonacoProps) => {
+const MonacoV9 = ({ body, onChange, language, readOnly, height, extraInfoElement, isVisible }: MonacoProps) => {
   const mode = useAppSelector((state) => state.graphExplorerMode);
   const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
-  const showSidebar = mode === Mode.Complete && !mobileScreen
-  const styles = useEditorStyles();
-  const { onChange, language, readOnly, height } = props;
+  const showSidebar = mode === Mode.Complete && !mobileScreen;
+  const styles = useStyles();
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+
   const editorOptions: editor.IStandaloneEditorConstructionOptions = {
-    lineNumbers: 'off' as 'off',
+    lineNumbers: 'off',
     automaticLayout: true,
     minimap: { enabled: false },
     readOnly,
-    wordWrap: 'on' as 'on',
+    wordWrap: 'on',
     folding: true,
     foldingStrategy: 'indentation',
     showFoldingControls: 'always',
@@ -48,28 +50,39 @@ const MonacoV9 = (props: MonacoProps) => {
     overviewRulerBorder: false,
     wordSeparators: '"'
   };
-  let body = props.body;
-  if (body && typeof body !== 'string') {
-    body = formatJsonStringForAllBrowsers(body);
+
+  let formattedBody: string | undefined;
+  if (typeof body === 'string') {
+    formattedBody = body;
+  } else if (body) {
+    formattedBody = formatJsonStringForAllBrowsers(body);
   }
 
-  const updatedEditorStyles = useUpdatedEditorStyles()
-  const editorStyles = !showSidebar ? updatedEditorStyles.container : styles.container;
+  // Recalculate layout when the tab becomes visible
+  useEffect(() => {
+    if (isVisible && editorRef.current) {
+      editorRef.current.layout();
+    }
+  }, [isVisible]);
 
   return (
     <ThemeContext.Consumer>
       {(theme) => (
-        <div id='monaco-editor' className={editorStyles}>
-          {props.extraInfoElement}
+        <div id=' monaco-editor'  className={styles.container}>
+          {extraInfoElement}
           <Editor
-            language={language ? language : 'json'}
-            width='98.9%'
-            height={height ? height : '95%'}
-            value={body}
+            language={language || 'json'}
+            width=' 100%'
+            height=' 100%'
+            value={formattedBody}
             options={editorOptions}
             onChange={onChange}
             theme={theme === 'light' ? 'vs' : 'vs-dark'}
-          ></Editor>
+            onMount={(editorInstance) => {
+              editorRef.current = editorInstance;
+              editorInstance.layout();
+            }}
+          />
         </div>
       )}
     </ThemeContext.Consumer>

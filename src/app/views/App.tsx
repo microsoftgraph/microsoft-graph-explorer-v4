@@ -75,6 +75,8 @@ class App extends Component<IAppProps, IAppState> {
   }
 
   public componentDidMount = async () => {
+    window.addEventListener('resize', this.detectMobileScreen);
+    this.detectMobileScreen();
     removeSpinners();
     KeyboardCopyEvent();
 
@@ -173,6 +175,7 @@ class App extends Component<IAppProps, IAppState> {
 
   public componentWillUnmount(): void {
     window.removeEventListener('message', this.receiveMessage);
+    window.removeEventListener('resize', this.detectMobileScreen);
   }
 
   private handleThemeChangeMsg = (msg: IThemeChangedMessage) => {
@@ -242,6 +245,14 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({
       selectedVerb: verb
     });
+  };
+
+  private detectMobileScreen = () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile !== this.state.mobileScreen) {
+      this.setState({ mobileScreen: isMobile });
+      this.props.actions.toggleSidebar({ mobileScreen: isMobile, showSidebar: !isMobile });
+    }
   };
 
   public render() {

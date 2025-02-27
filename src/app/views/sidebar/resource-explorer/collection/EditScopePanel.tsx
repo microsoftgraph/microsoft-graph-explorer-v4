@@ -16,9 +16,6 @@ import { formatScopeLabel, scopeOptions } from './collection.util';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
 const useStyles = makeStyles({
-  container: {
-    height: '80vh'
-  },
   dropdownContainer: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -52,8 +49,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   }, [saved]);
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'Select all', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,6 +83,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
 
       dispatch(updateResourcePaths(updatedItems));
     }
+    setPendingChanges([]);
   };
 
   return (
@@ -114,7 +112,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           ))}
         </Dropdown>
       </div>
-      <div className={styles.container}>
+      <div>
         <Paths
           resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
           columns={columns}

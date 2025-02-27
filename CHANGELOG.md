@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-26)
+
+
+### Bug Fixes
+
+* disable save all button after saving changes ([#3656](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3656)) ([7388fd7](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/7388fd7c0c24f421b235327bf49f00c4e826d2d5))
+* make the dialog actions responsive in collections ([#3493](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3493)) ([b285bbd](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b285bbdd4f16f91947319b4597bd7ff075ef624f))
+
 ## [10.5.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.0...v10.5.1) (2025-01-16)
 
 

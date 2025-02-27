@@ -11,49 +11,66 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     padding: tokens.spacingHorizontalS,
-    height: '100vh'
+    height: '100vh',
+    overflow: 'hidden'
   },
   content: {
     display: 'flex',
-    gap: tokens.spacingVerticalS
+    flex: 1,
+    overflowY: 'hidden',
+    minWidth: 0
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(min(29%, var(${SIDEBAR_SIZE_CSS_VAR})), var(${SIDEBAR_SIZE_CSS_VAR}), 60%)`,
+    flexBasis: `clamp(48px, var(${SIDEBAR_SIZE_CSS_VAR}), 50vw)`,
+    maxWidth: '50vw',
+    minWidth: '48px',
     position: 'relative',
-    height: 'calc(100vh - 98px)'
+    height: 'calc(100vh - 98px)',
+    overflow: 'hidden',
+    transition: 'flex-basis 0.2s ease-in-out',
+
+    '@media (max-width: 768px)': {
+      flexBasis: '100vw',
+      maxWidth: '100vw',
+      minWidth: '100vw',
+      position: 'absolute',
+      left: 0,
+      zIndex: 1000,
+      backgroundColor: 'white'
+    }
   },
   mainContent: {
-    flex: '3 1 auto',
+    flex: '1 1 auto',
     display: 'flex',
     flexDirection: 'column',
-    gap: tokens.spacingHorizontalS,
-    overflowY: 'auto',
-    height: 'calc(100vh - 98px)'
+    minWidth: '300px',
+    height: 'calc(100vh - 98px)',
+    overflow: 'hidden'
   },
   requestResponseArea: {
     flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    gap: tokens.spacingHorizontalS,
-    borderRadius: tokens.borderRadiusMedium
+    height: '100%',
+    overflow: 'hidden'
   },
   responseArea: {
+    flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    flex: '1',
-    maxHeight: '70%',
-    border: `solid ${tokens.colorNeutralForeground3} ${tokens.strokeWidthThin}`,
+    maxHeight: '60%',
+    overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge
+    padding: tokens.spacingHorizontalS
   },
   requestArea: {
+    flex: '1',
     display: 'flex',
     flexDirection: 'column',
-    flex: '1',
-    maxHeight: '30%',
-    border: `solid ${tokens.colorNeutralForeground3} ${tokens.strokeWidthThin}`,
+    maxHeight: '40%',
+    overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalMNudge
+    padding: tokens.spacingHorizontalS
   }
 });

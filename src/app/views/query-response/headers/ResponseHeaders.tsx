@@ -2,7 +2,7 @@
 import { RESPONSE_HEADERS_COPY_BUTTON } from '../../../../telemetry/component-names';
 
 import { trackedGenericCopy } from '../../common/copy';
-import { CopyButton } from '../../common/lazy-loader/component-registry';
+import { CopyButtonV9 } from '../../common/lazy-loader/component-registry';
 import { convertVhToPx, getResponseEditorHeight,
   getResponseHeight } from '../../common/dimensions/dimensions-adjustment';
 import { useAppSelector } from '../../../../store';
@@ -22,7 +22,7 @@ const ResponseHeaders = () => {
   if (headers) {
     return (
       <div id='response-headers-tab'>
-        <CopyButton
+        <CopyButtonV9
           handleOnClick={handleCopy}
           isIconButton={true}
           style={{ float: 'right', zIndex: 1 }}

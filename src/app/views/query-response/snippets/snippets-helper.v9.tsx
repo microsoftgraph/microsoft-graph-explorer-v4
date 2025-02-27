@@ -13,7 +13,7 @@ import { copyAndTrackText, trackedGenericCopy } from '../../common/copy';
 import {
   convertVhToPx, getResponseEditorHeight, getResponseHeight
 } from '../../common/dimensions/dimensions-adjustment';
-import { CopyButton, CopyButtonV9 } from '../../common/lazy-loader/component-registry';
+import {  CopyButtonV9 } from '../../common/lazy-loader/component-registry';
 import { getSnippetStyles } from './Snippets.styles';
 
 interface ISnippetProps {
@@ -190,7 +190,7 @@ function Snippet(props: ISnippetProps) {
       }
       {!loadingState && snippet &&
         <>
-          <CopyButton isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
+          <CopyButtonV9 isIconButton={true} style={{ float: 'right', zIndex: 1 }} handleOnClick={handleCopy} />
           <MonacoV9
             body={snippet}
             language={language}

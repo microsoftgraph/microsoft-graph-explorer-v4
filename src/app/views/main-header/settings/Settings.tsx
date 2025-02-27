@@ -42,6 +42,7 @@ const Settings = ()=>{
       <Tooltip content={translateMessage('Settings')} relationship="description">
         <MenuTrigger disableButtonEnhancement>
           <Button
+            aria-label={translateMessage('Settings')}
             onClick={trackSettingsButtonClickEvent}
             className={styles.iconButton} appearance="subtle" icon={<Settings20Regular />} />
         </MenuTrigger>

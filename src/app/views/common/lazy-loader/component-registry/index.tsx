@@ -6,7 +6,7 @@ import LazyStatusMessages from  '../../../app-sections/StatusMessages';
 import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
 import LazyCopyButton from  '../../copy-button/CopyButton';
-import LazyAuth from  '../../../query-runner/request/auth/AuthV9';
+import LazyAuth from  '../../../query-runner/request/auth/Auth';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
 import LazyHistory from  '../../../sidebar/history/History';
 import LazyResourceExplorer from  '../../../sidebar/resource-explorer/ResourceExplorer';
@@ -33,10 +33,6 @@ export const ResponseHeadersV9 = (props?: any) => {
 
 export const SnippetsV9 = (props?: any) => {
   return <LazySnippetsV9 {...props} />;
-};
-
-export const CopyButton = (props?: any) => {
-  return <LazyCopyButton {...props} />;
 };
 
 export const CopyButtonV9 = (props?: any) => {

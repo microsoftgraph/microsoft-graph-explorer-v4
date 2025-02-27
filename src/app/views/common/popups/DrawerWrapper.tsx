@@ -7,7 +7,9 @@ import {
   DrawerHeaderTitle,
   Button,
   Spinner,
-  makeStyles
+  makeStyles,
+  tokens,
+  Tooltip
 } from '@fluentui/react-components';
 import { ArrowLeft24Regular, Dismiss24Regular } from '@fluentui/react-icons';
 
@@ -20,6 +22,9 @@ const useDrawerStyles = makeStyles({
   },
   button: {
     marginInlineEnd: '20px'
+  },
+  body: {
+    padding: 0
   }
 });
 
@@ -66,28 +71,34 @@ export function DrawerWrapper(props: WrapperProps) {
     >
       <DrawerHeader>
         <DrawerHeaderTitle action={
-          <Button
-            icon={<Dismiss24Regular />}
-            appearance='subtle'
-            onClick={() => dismissPopup()}
-            aria-label={translateMessage('Close')}
-          />
-
-        }>
-          {showBackButton && (
+          <Tooltip
+            content={translateMessage('Close')} relationship='label'>
             <Button
-              icon={<ArrowLeft24Regular />}
+              icon={<Dismiss24Regular />}
               appearance='subtle'
               onClick={() => dismissPopup()}
-              aria-label={translateMessage('Back')}
-              className={drawerStyles.button}
+              aria-label={translateMessage('Close')}
             />
+          </Tooltip>
+        }>
+          {showBackButton && (
+            <Tooltip
+              content={translateMessage('Back')}
+              relationship='label'>
+              <Button
+                icon={<ArrowLeft24Regular />}
+                appearance='subtle'
+                onClick={() => dismissPopup()}
+                aria-label={translateMessage('Back')}
+                className={drawerStyles.button}
+              />
+            </Tooltip>
           )}
           {title || ''}
         </DrawerHeaderTitle>
       </DrawerHeader>
 
-      <DrawerBody>
+      <DrawerBody className={drawerStyles.body}>
         <Suspense fallback={<Spinner />}>
           <Component
             {...popupsProps}

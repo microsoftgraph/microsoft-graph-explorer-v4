@@ -69,7 +69,7 @@ const Request = (props: IRequestProps) => {
         }}
       >
         <div style={containerStyle} id={'request-body-tab'} tabIndex={0}>
-          <RequestBody handleOnEditorChange={handleOnEditorChange} />
+          {/* <RequestBody handleOnEditorChange={handleOnEditorChange} /> */}
         </div>
       </PivotItem>,
       <PivotItem
