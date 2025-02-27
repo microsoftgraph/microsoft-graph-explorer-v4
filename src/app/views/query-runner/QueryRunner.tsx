@@ -1,6 +1,4 @@
-import { IDropdownOption } from '@fluentui/react';
 import { useEffect, useState } from 'react';
-
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
@@ -32,14 +30,14 @@ const QueryRunner = (props: IQueryRunnerProps) => {
     }
   }, [sampleBody])
 
-  const handleOnMethodChange = (method?: IDropdownOption) => {
+  const handleOnMethodChange = (method?: string) => {
     const query = { ...sampleQuery };
     if (method !== undefined) {
-      query.selectedVerb = method.text;
+      query.selectedVerb = method;
       dispatch(setSampleQuery(query));
 
       // Sets selected verb in App Component
-      props.onSelectVerb(method.text);
+      props.onSelectVerb(method);
     }
   };
 
@@ -86,14 +84,14 @@ const QueryRunner = (props: IQueryRunnerProps) => {
       });
   };
 
-  const handleOnVersionChange = (urlVersion?: IDropdownOption) => {
+  const handleOnVersionChange = (urlVersion?: string) => {
     if (urlVersion) {
       const { queryVersion: oldQueryVersion } = parseSampleUrl(
         sampleQuery.sampleUrl
       );
       const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(
         sampleQuery.sampleUrl,
-        urlVersion.text
+        urlVersion
       );
       dispatch(setSampleQuery({
         ...sampleQuery,

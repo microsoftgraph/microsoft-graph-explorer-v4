@@ -1,4 +1,4 @@
-import { Label } from '@fluentui/react';
+import { Label } from '@fluentui/react-components';
 import React, { ReactNode, useState, useEffect } from 'react';
 import { translateMessage } from '../../../utils/translate-messages';
 

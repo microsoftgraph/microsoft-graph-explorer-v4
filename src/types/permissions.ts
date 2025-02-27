@@ -1,4 +1,3 @@
-import { ITheme } from '@fluentui/react';
 import { IDimensions } from './dimensions';
 import { ScopesError } from '../app/utils/error-utils/ScopesError';
 
@@ -12,7 +11,6 @@ export interface IPermission {
 }
 
 export interface IPermissionProps {
-  theme?: ITheme;
   styles?: object;
   dimensions?: IDimensions;
   setPermissions?: Function;

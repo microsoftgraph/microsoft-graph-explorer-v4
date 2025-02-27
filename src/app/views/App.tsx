@@ -1,4 +1,3 @@
-import { ITheme } from '@fluentui/react';
 import {
   FluentProvider,
   teamsHighContrastTheme,
@@ -35,7 +34,6 @@ import { parse, ParsedMessageResult } from './query-runner/util/iframe-message-p
 import { Layout } from './layout/Layout';
 import { KeyboardCopyEvent } from './common/copy-button/KeyboardCopyEvent';
 export interface IAppProps {
-  theme?: ITheme;
   styles?: object;
   profile: object;
   appTheme: string;

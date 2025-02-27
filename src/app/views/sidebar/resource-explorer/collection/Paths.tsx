@@ -95,7 +95,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
         {resources.map((resource) => (
           <TableRow key={resource.key} className={styles.row}>
             {isSelectable && (
-              <TableCell>
+              <TableCell className={styles.checkbox}>
                 <Checkbox
                   aria-label={translateMessage('Select item')}
                   checked={selection.has(resource)}

@@ -1,4 +1,4 @@
-import { Spinner, SpinnerSize } from '@fluentui/react';
+import { Spinner } from '@fluentui/react-components';
 import { Suspense } from 'react';
 import ErrorBoundary from '../../error-boundary/ErrorBoundary';
 
@@ -8,7 +8,7 @@ interface SuspenseChildren{
 export const SuspenseLoader = ({ children }: SuspenseChildren) => {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Spinner size={SpinnerSize.large} />}>
+      <Suspense fallback={<Spinner size='large' />}>
         {children}
       </Suspense>
     </ErrorBoundary >

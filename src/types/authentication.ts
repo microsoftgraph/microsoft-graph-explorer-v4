@@ -1,8 +1,6 @@
-import { ITheme } from '@fluentui/react';
 import { Mode } from './enums';
 
 export interface IAuthenticationProps {
-  theme?: ITheme;
   styles?: object;
   actions?: {
     signIn: Function;

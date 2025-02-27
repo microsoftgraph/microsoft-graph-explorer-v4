@@ -13,7 +13,7 @@ import PopupsWrapper from '../common/popups/PopupsWrapper';
 import { MainHeader } from '../main-header/MainHeader';
 import { QueryResponse } from '../query-response';
 import { QueryRunner } from '../query-runner';
-import Request from '../query-runner/request/RequestV9';
+import Request from '../query-runner/request/Request';
 import { Sidebar } from '../sidebar/Sidebar';
 import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';

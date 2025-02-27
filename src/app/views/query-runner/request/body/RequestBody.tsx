@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../../../../store';
 
-import { MonacoV9 } from '../../../common';
+import { Monaco } from '../../../common';
 
 interface IRequestBodyProps {
   handleOnEditorChange: (v: string | undefined) => void;
@@ -13,7 +13,7 @@ const RequestBody = ({ handleOnEditorChange, isVisible }: IRequestBodyProps) => 
 
   return (
     <div style={{ flex: 1, display: 'flex' }}>
-      <MonacoV9
+      <Monaco
         body={sampleBody}
         onChange={(value) => handleOnEditorChange(value)}
         height='100%'

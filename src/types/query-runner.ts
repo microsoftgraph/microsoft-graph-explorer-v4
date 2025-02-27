@@ -1,5 +1,3 @@
-import { IDropdownOption, ITheme } from '@fluentui/react';
-
 export interface IQueryRunnerState {
   sampleBody?: string;
   url: string;
@@ -31,7 +29,6 @@ export interface IQueryRunnerProps {
 }
 
 export interface IQueryInputProps {
-  theme?: ITheme;
   styles?: object;
   handleOnRunQuery: Function;
   handleOnMethodChange: Function;
@@ -73,7 +70,6 @@ export interface ISampleQuery {
 }
 
 export interface ISampleQueriesProps {
-  theme?: ITheme;
   styles?: object;
   tokenPresent: boolean;
   profile: object;
@@ -92,10 +88,10 @@ export interface ISampleQueriesProps {
   };
 }
 
-export const httpMethods: IDropdownOption[] = [
-  { key: 'GET', text: 'GET' },
-  { key: 'POST', text: 'POST' },
-  { key: 'PUT', text: 'PUT' },
-  { key: 'PATCH', text: 'PATCH' },
-  { key: 'DELETE', text: 'DELETE' }
-];
+export const httpMethods: Record<string, string> = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE'
+};

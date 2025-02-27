@@ -1,11 +1,9 @@
-import LazyResponseHeadersV9 from '../../../query-response/headers/ResponseHeadersV9';
-import LazySnippetsV9 from '../../../query-response/snippets/SnippetsV9';
-import { default as LazyCopyButtonV9 } from '../../copy-button/CopyButtonV9';
+import LazySnippets from '../../../query-response/snippets/Snippets';
 import LazySpecificPermissions from  '../../../query-runner/request/permissions';
 import LazyStatusMessages from  '../../../app-sections/StatusMessages';
 import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
 import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
-import LazyCopyButton from  '../../copy-button/CopyButtonV9';
+import LazyCopyButton from  '../../copy-button/CopyButton';
 import LazyAuth from  '../../../query-runner/request/auth/Auth';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
 import LazyHistory from  '../../../sidebar/history/History';
@@ -27,20 +25,16 @@ export const ResponseHeaders = (props?: any) => {
   return <LazyResponseHeaders {...props} />;
 };
 
-export const ResponseHeadersV9 = (props?: any) => {
-  return <LazyResponseHeadersV9 {...props} />;
+export const Snippets = (props?: any) => {
+  return <LazySnippets {...props} />;
 };
 
-export const SnippetsV9 = (props?: any) => {
-  return <LazySnippetsV9 {...props} />;
-};
-
-export const CopyButtonV9 = (props?: any) => {
-  return <LazyCopyButtonV9 {...props} />;
+export const CopyButton = (props?: any) => {
+  return <LazyCopyButton {...props} />;
 };
 
 export const Auth = (props?: any) => {
-  return <LazyAuth {...props} />;
+  return LazyAuth ? <LazyAuth {...props} /> : null;
 };
 
 export const RequestHeaders = (props?: any) => {

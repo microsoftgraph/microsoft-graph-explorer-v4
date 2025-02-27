@@ -1,4 +1,4 @@
-import { makeStyles } from '@fluentui/react-components';
+import { makeStyles, tokens } from '@fluentui/react-components';
 
 const pathStyles = makeStyles({
   table: {
@@ -10,9 +10,12 @@ const pathStyles = makeStyles({
   row: {
     borderBottom: 'none'
   },
+  checkbox: {
+    width: '10px'
+  },
   scopeLabel: {
-    backgroundColor: 'var(--colorNeutralForeground3)',
-    color: 'var(--colorNeutralBackground1)',
+    backgroundColor: tokens.colorNeutralForeground3,
+    color: tokens.colorNeutralBackground1,
     padding: '4px 12px',
     borderRadius: '16px',
     fontSize: '12px',
