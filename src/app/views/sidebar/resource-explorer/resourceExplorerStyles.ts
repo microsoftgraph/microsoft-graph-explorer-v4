@@ -52,6 +52,7 @@ export const useResourceExplorerStyles = makeStyles({
     width: '100%',
     ':hover': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
+      color: tokens.colorNeutralForeground2BrandHover,
       '& [data-aside-content] .action-button': {
         display: 'flex'
       }
