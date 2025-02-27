@@ -54,7 +54,10 @@ export const useResourceExplorerStyles = makeStyles({
       backgroundColor: tokens.colorNeutralBackground3Hover,
       color: tokens.colorNeutralForeground2BrandHover,
       '& [data-aside-content] .action-button': {
-        display: 'flex'
+        display: 'flex',
+        '& .fui-Button': {
+          color: tokens.colorNeutralForeground2BrandHover
+        }
       }
     },
     '> div.fui-TreeItemLayout__main': {
