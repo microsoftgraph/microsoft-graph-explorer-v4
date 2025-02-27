@@ -43,11 +43,11 @@ class Telemetry implements ITelemetry {
     this.reactPlugin = new ReactPlugin();
 
     this.config = {
-      instrumentationKey: this.getInstrumentationKey(),
+      connectionString: this.getConnectionString(),
       disableExceptionTracking: false, // Enables autocollection of uncaught exceptions. Used with `sanitizeStackTrace` telemetry initializer to remove any data that might be PII.
       disableAjaxTracking: false,
       disableFetchTracking: false, // Enables capturing of telemetry data for outgoing requests. Used with `filterRemoteDependencyData` telemetry initializer to sanitize captured data to prevent inadvertent capture of PII.
-      disableTelemetry: this.getInstrumentationKey() ? false : true,
+      disableTelemetry: this.getConnectionString() ? false : true,
       extensions: [this.reactPlugin]
     };
 
@@ -140,6 +140,14 @@ class Telemetry implements ITelemetry {
     return (
       (window as any).InstrumentationKey ||
       process.env.REACT_APP_INSTRUMENTATION_KEY ||
+      ''
+    );
+  }
+
+  private getConnectionString(): string {
+    return (
+      (window as any).ConnectionString ||
+      process.env.REACT_APP_CONNECTION_STRING ||
       ''
     );
   }
