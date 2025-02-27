@@ -1,75 +1,92 @@
-// import { FocusZone } from '@fluentui/react';
-// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-// import Editor, { OnChange, loader } from '@monaco-editor/react';
-// import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { makeStyles } from '@fluentui/react-components';
+import { Editor, OnChange } from '@monaco-editor/react';
+import { editor } from 'monaco-editor';
+import { ThemeContext } from '../../../../themes/theme-context';
+import { formatJsonStringForAllBrowsers } from './util/format-json';
+import { useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 
-// import { ThemeContext } from '../../../../themes/theme-context';
-// import './monaco.scss';
-// import { formatJsonStringForAllBrowsers } from './util/format-json';
+interface MonacoProps {
+  body: object | string | undefined;
+  onChange?: OnChange;
+  verb?: string;
+  language?: string;
+  readOnly?: boolean;
+  height?: string;
+  extraInfoElement?: JSX.Element;
+  isVisible?: boolean;
+}
 
-// interface IMonaco {
-//   body: object | string | undefined;
-//   onChange?: OnChange;
-//   verb?: string;
-//   language?: string;
-//   readOnly?: boolean;
-//   height?: string;
-//   extraInfoElement?: JSX.Element;
-// }
+const useStyles = makeStyles({
+  container: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden'
+  }
+});
 
-// export function Monaco(props: IMonaco) {
-//   let { body } = props;
-//   const { onChange, language, readOnly, height } = props;
+const Monaco = ({ body, onChange, language, readOnly, height, extraInfoElement, isVisible }: MonacoProps) => {
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+  const showSidebar = mode === Mode.Complete && !mobileScreen;
+  const styles = useStyles();
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
-//   if (body && typeof body !== 'string') {
-//     body = formatJsonStringForAllBrowsers(body);
-//   }
-//   const itemHeight = height ? height : '300px';
+  const editorOptions: editor.IStandaloneEditorConstructionOptions = {
+    lineNumbers: 'off',
+    automaticLayout: true,
+    minimap: { enabled: false },
+    readOnly,
+    wordWrap: 'on',
+    folding: true,
+    foldingStrategy: 'indentation',
+    showFoldingControls: 'always',
+    renderLineHighlight: 'none',
+    scrollBeyondLastLine: true,
+    overviewRulerBorder: false,
+    wordSeparators: '"'
+  };
 
-//   loader.config({ monaco });
+  let formattedBody: string | undefined;
+  if (typeof body === 'string') {
+    formattedBody = body;
+  } else if (body) {
+    formattedBody = formatJsonStringForAllBrowsers(body);
+  }
 
-//   useEffect(() => {
-//     if (monaco) {
-//       monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-//         validate: true,
-//         allowComments: false,
-//         schemas: [],
-//         enableSchemaRequest: true,
-//         schemaRequest: 'ignore'
-//       });
-//     }
-//   }, [monaco]);
+  // Recalculate layout when the tab becomes visible
+  useEffect(() => {
+    if (isVisible && editorRef.current) {
+      editorRef.current.layout();
+    }
+  }, [isVisible]);
 
-//   return (
-//     <FocusZone disabled= {props.extraInfoElement ? false : true}>
-//       <div className='monaco-editor'>
-//         {props.extraInfoElement}
-//         <ThemeContext.Consumer>
-//           {(theme) => (<Editor
-//             width='800 !important'
-//             height={itemHeight}
-//             // @ts-ignore
-//             value={body ? body : ''}
-//             language={language ? language : 'json'}
-//             options={{
-//               lineNumbers: 'off',
-//               automaticLayout: true,
-//               minimap: { enabled: false },
-//               readOnly,
-//               wordWrap: 'on',
-//               folding: true,
-//               foldingStrategy: 'indentation',
-//               showFoldingControls: 'always',
-//               renderLineHighlight: 'none',
-//               scrollBeyondLastLine: true,
-//               overviewRulerBorder: false,
-//               wordSeparators: '"'
-//             }}
-//             onChange={onChange}
-//             theme={theme === 'light' ? 'vs' : 'vs-dark'}
-//           />)}
-//         </ThemeContext.Consumer>
-//       </div>
-//     </FocusZone>
-//   );
-// }
+  return (
+    <ThemeContext.Consumer>
+      {(theme) => (
+        <div id=' monaco-editor'  className={styles.container}>
+          {extraInfoElement}
+          <Editor
+            language={language || 'json'}
+            width=' 100%'
+            height=' 100%'
+            value={formattedBody}
+            options={editorOptions}
+            onChange={onChange}
+            theme={theme === 'light' ? 'vs' : 'vs-dark'}
+            onMount={(editorInstance) => {
+              editorRef.current = editorInstance;
+              editorInstance.layout();
+            }}
+          />
+        </div>
+      )}
+    </ThemeContext.Consumer>
+  );
+};
+
+export { Monaco };

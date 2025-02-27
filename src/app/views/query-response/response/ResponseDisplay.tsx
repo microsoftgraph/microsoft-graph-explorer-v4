@@ -1,6 +1,6 @@
 import { ContentType } from '../../../../types/enums';
 import { isImageResponse } from '../../../services/actions/query-action-creator-util';
-import { Image, MonacoV9 } from '../../common';
+import { Image, Monaco } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
 interface ResponseDisplayProps {
@@ -14,11 +14,11 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
   switch (contentType) {
   case 'application/xml':
     return (
-      <MonacoV9 body={formatXml(body)} language='text/html' readOnly={true} />
+      <Monaco body={formatXml(body)} language='text/html' readOnly={true} />
     );
 
   case 'text/html':
-    return <MonacoV9 body={body} language='text/html' readOnly={true} />;
+    return <Monaco body={body} language='text/html' readOnly={true} />;
 
   default:
     if (isImageResponse(contentType) && typeof body !== 'string') {
@@ -28,7 +28,7 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
     }
     return (
       <div style={{ flex: 1, height: '100%', display: 'flex' }}>
-        <MonacoV9 body={body} readOnly language="application/json" />
+        <Monaco body={body} readOnly language="application/json" />
       </div>
     );
   }

@@ -1,4 +1,3 @@
-import { getTheme } from '@fluentui/react';
 import { makeFloodgate } from '@ms-ofb/officebrowserfeedbacknpm/Floodgate';
 import { AuthenticationType } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Configuration/IInitOptions';
 import { OfficeBrowserFeedback } from '@ms-ofb/officebrowserfeedbacknpm/scripts/app/Window/Window';
@@ -17,7 +16,6 @@ import { uiStringMap } from './uiStrings';
 export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurvey }: any) {
   const dispatch = useAppDispatch();
   const [officeBrowserFeedback, setOfficeBrowserFeedback] = useState<any>(undefined);
-  const currentTheme = getTheme();
   const { NODE_ENV } = process.env;
   const user = useAppSelector((state) => state.profile.user);
 
@@ -82,8 +80,9 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       authenticationType: getAuthType(user?.profileType!),
       onError: (error: string): string => { throw error; },
       build: getVersion().toString(),
-      primaryColour: currentTheme.palette.themePrimary,
-      secondaryColour: currentTheme.palette.themeSecondary,
+      primaryColour: 'var(--colorNeutralForeground1)',
+      secondaryColour: 'var(--colorNeutralForeground2)',
+      backgroundColour: 'var(--colorNeutralBackground1)',
       telemetryGroup: {
         audienceGroup: 'Graph Explorer',
         // loggableUserId: `a:${profile?.id}`,

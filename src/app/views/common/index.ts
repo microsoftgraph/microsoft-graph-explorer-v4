@@ -1,7 +1,7 @@
 import { Image } from './image/Image';
-import { MonacoV9 } from './monaco/MonacoV9';
+import { Monaco } from './monaco/Monaco';
 
 export {
-  Image, MonacoV9
+  Image, Monaco
 };
 

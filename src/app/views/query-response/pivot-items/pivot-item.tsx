@@ -22,15 +22,15 @@ import { useState } from 'react';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { translateMessage } from '../../../utils/translate-messages';
 import {
-  ResponseHeadersV9,
-  SnippetsV9
+  ResponseHeaders,
+  Snippets
 } from '../../common/lazy-loader/component-registry';
 import AdaptiveCards from '../adaptive-cards/AdaptiveCard';
 import {
   darkThemeHostConfig,
   lightThemeHostConfig
 } from '../adaptive-cards/AdaptiveHostConfig';
-import { default as GraphToolkitV9 } from '../graph-toolkit/GraphToolkitV9';
+import { default as GraphToolkit } from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
 import {
   ArrowHookDownRightRegular,
@@ -153,9 +153,9 @@ export const GetPivotItems = () => {
       )}
       <div className={styles.tabContent}>
         {selectedValue === translateMessage('Response Preview') && <Response />}
-        {selectedValue === translateMessage('Response Headers') && <ResponseHeadersV9 />}
-        {selectedValue === translateMessage('Snippets') && <SnippetsV9 />}
-        {selectedValue === translateMessage('Graph toolkit') && <GraphToolkitV9 />}
+        {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
+        {selectedValue === translateMessage('Snippets') && <Snippets />}
+        {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
         {selectedValue === translateMessage('Adaptive Cards') && (
           <ThemeContext.Consumer>
             {(theme) => (
