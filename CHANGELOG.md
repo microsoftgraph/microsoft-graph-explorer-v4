@@ -2,64 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [10.4.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.3.0...v10.4.0) (2024-09-02)
-
-## [10.3.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.2.0...v10.3.0) (2024-07-16)
-
-## [10.2.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.1.0...v10.2.0) (2024-06-18)
-
-## [10.1.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.0.0...v10.1.0) (2024-05-15)
-
-## [10.0.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.8.0...v10.0.0) (2024-05-08)
-
-## [9.8.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.7.0...v9.8.0) (2024-03-27)
-
-## [9.7.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.6.0...v9.7.0) (2024-03-06)
-
-## [9.6.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.5.0...v9.6.0) (2024-02-28)
-
-## [9.5.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.4.0...v9.5.0) (2024-02-05)
-
-## [9.4.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.3.3...v9.4.0) (2024-01-23)
-
-### [9.3.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.3.2...v9.3.3) (2023-11-15)
-
-### [9.3.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.3.1...v9.3.2) (2023-11-14)
-
-### [9.3.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.3.0...v9.3.1) (2023-11-09)
-
-
-### Bug Fixes
-
-* Remove component chunking ([#2871](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/2871)) ([6650770](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/665077088e0aa4c759c4b5658cbadc86f9804f55))
-
-## [9.3.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.2.0...v9.3.0) (2023-11-07)
-
-## [9.2.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.1.0...v9.2.0) (2023-08-16)
-
-## [9.1.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.0.1...v9.1.0) (2023-07-27)
-
-### [9.0.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v9.0.0...v9.0.1) (2023-06-16)
-
-
-### Bug Fixes
-
-* Ensure collections are initiated in store ([#2627](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/2627)) ([a0a75ca](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/a0a75cacf78cd2ed55fef16dd8d9cb0338dd0732))
-* Show documentation URL for supported Resource Explorer items ([#2625](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/2625)) ([8a6c1f1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/8a6c1f176ea44f3475ace3e8cf89c2b7e5890b6d))
-
-## [9.0.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v8.2.0...v9.0.0) (2023-06-13)
-
-## [8.2.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v8.1.0...v8.2.0) (2023-04-19)
-
-## [8.1.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v8.0.0...v8.1.0) (2023-04-11)
-
-
-### Bug Fixes
-
-* Missing return statement ([#2507](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/2507)) ([557db19](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/557db1949d89073195216037d74c0580e952742d))
-
-## [8.0.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v7.2.0...v8.0.0) (2023-03-13)
-
 ### [10.5.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.2...v10.5.3) (2025-02-27)
 
 ## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-26)
