@@ -126,7 +126,7 @@
                 "redux-mock-store": "1.5.5",
                 "selenium-webdriver": "4.28.1",
                 "start-server-and-test": "2.0.10",
-                "ts-jest": "29.2.5",
+                "ts-jest": "29.2.6",
                 "typescript-eslint": "^8.24.1"
         },
         "jestSonar": {
