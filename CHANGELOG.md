@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.3...v10.5.4) (2025-03-05)
+
+
+### Bug Fixes
+
+* add deploy to blob storage task ([#3694](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3694)) ([d5f3012](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d5f3012aee43e0bad418b24ce739fa94b8d61a97))
+
+## [10.5.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.2...v10.5.3) (2025-02-28)
+
+
+### Bug Fixes
+
+* use connectionString for NSP enabled components ([#3618](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3618)) ([0a15bbc](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/0a15bbc347b6a29992298107843cafd21d2a4114))
+
 ## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-26)
 
 
