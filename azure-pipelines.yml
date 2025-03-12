@@ -255,7 +255,7 @@ extends:
           dependsOn: ['Three']
 
     - stage: DeployProduction
-      condition: and(contains(variables['build.sourceBranch'], 'refs/heads/master'), succeeded())
+      # condition: and(contains(variables['build.sourceBranch'], 'refs/heads/master'), succeeded())
       dependsOn: BuildTestAndPublish
       jobs:
       - deployment: production
@@ -275,34 +275,34 @@ extends:
                 displayName: 'Deploy to portal - staging'
                 inputs:
                   SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-                  azureSubscription: 'Federated GE-Portals Managed Identity Connection'
+                  azureSubscription: 'Federated GE Torus-Portals Managed Identity Connection'
                   Destination: AzureBlob
-                  storage: graphstagingblobstorage
-                  ContainerName: staging
+                  storage: graphexpstppeeastus
+                  ContainerName: graphexpcontppe
                   BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
 
-              - task: AzureFileCopy@6
-                displayName: 'Deploy to portal - production'
-                inputs:
-                  SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-                  azureSubscription: 'Federated GE-Portals Managed Identity Connection'
-                  Destination: AzureBlob
-                  storage: graphprodblobstorage
-                  ContainerName: prod
-                  BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
+              # - task: AzureFileCopy@6
+              #   displayName: 'Deploy to portal - production'
+              #   inputs:
+              #     SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
+              #     azureSubscription: 'Federated GE-Portals Managed Identity Connection'
+              #     Destination: AzureBlob
+              #     storage: graphprodblobstorage
+              #     ContainerName: prod
+              #     BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
 
-              - task: ArchiveFiles@2
-                displayName: 'Archive built assets'
-                inputs:
-                  rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/drop/'
-                  archiveFile: '$(Build.ArtifactStagingDirectory)/graph-explorer-$(Build.BuildNumber)-$(Build.BuildId).zip'
+              # - task: ArchiveFiles@2
+              #   displayName: 'Archive built assets'
+              #   inputs:
+              #     rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/drop/'
+              #     archiveFile: '$(Build.ArtifactStagingDirectory)/graph-explorer-$(Build.BuildNumber)-$(Build.BuildId).zip'
 
-              - task: GitHubRelease@1
-                displayName: 'GitHub release (v$(Build.BuildNumber)-$(Build.BuildId))'
-                inputs:
-                  gitHubConnection: 'GitHub - thewahome'
-                  action: edit
-                  tag: 'v$(Build.BuildNumber)'
-                  title: 'Graph Explorer - v$(Build.BuildNumber)'
-                  assets: '$(Build.ArtifactStagingDirectory)/*.zip'
-                  changeLogType: issueBased
+              # - task: GitHubRelease@1
+              #   displayName: 'GitHub release (v$(Build.BuildNumber)-$(Build.BuildId))'
+              #   inputs:
+              #     gitHubConnection: 'GitHub - thewahome'
+              #     action: edit
+              #     tag: 'v$(Build.BuildNumber)'
+              #     title: 'Graph Explorer - v$(Build.BuildNumber)'
+              #     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+              #     changeLogType: issueBased
