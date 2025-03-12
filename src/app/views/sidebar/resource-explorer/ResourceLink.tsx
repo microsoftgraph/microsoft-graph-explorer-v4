@@ -1,6 +1,6 @@
 import { Tooltip, Button, Badge, Link } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
@@ -24,9 +24,9 @@ const ResourceLink = (props: IResourceLinkProps) => {
   const paths = collections?.find(k => k.isDefault)?.paths || [];
   const resourceLink = { ...link };
 
-  useEffect(() => {
-    setExisting(resourceLink, existsInCollection(link, paths, version));
-  }, [paths])
+  const isInCollection = useMemo(() => {
+    return existsInCollection(resourceLink, paths, version);
+  }, [resourceLink, paths, version]);
 
 
   const linkStyles = useStyles();
@@ -48,8 +48,6 @@ const ResourceLink = (props: IResourceLinkProps) => {
     validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
   }
 
-  setExisting(resourceLink, existsInCollection(link, paths, version));
-
   const handleAddToCollectionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -67,7 +65,7 @@ const ResourceLink = (props: IResourceLinkProps) => {
       <ResourceLinkNameContainer resourceLink={resourceLink} linkStyles={linkStyles} />
       {resourceLink.method && (
         <ResourceLinkActions
-          resourceLink={resourceLink}
+          resourceLink={{ ...resourceLink, isInCollection}}
           iconButtonStyles={linkStyles}
           openDocumentationLink={openDocumentationLink}
           handleAddToCollectionClick={handleAddToCollectionClick}
