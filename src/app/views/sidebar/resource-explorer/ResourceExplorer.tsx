@@ -156,10 +156,8 @@ const ResourceExplorer = () => {
   }) => {
     const paths = collections?.find(k => k.isDefault)?.paths || [];
 
-    // Check if this item or any of its direct child items is in the collection
-    const isInCollectionOrChildInCollection = useMemo(() => {
-      return existsInCollection(item, paths, version) ||
-        item.links?.some(child => existsInCollection(child, paths, version));
+    const isInCollection = useMemo(() => {
+      return existsInCollection(item, paths, version);
     }, [item, paths, version]);
 
     const handleAddToCollection = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -175,7 +173,7 @@ const ResourceExplorer = () => {
     return (
       <>
         <div className='action-button'>
-          {isInCollectionOrChildInCollection ? (
+          {isInCollection ? (
             <Tooltip
               withArrow
               content={translateMessage('Remove from collection')}
