@@ -1,5 +1,4 @@
 import { AuthenticationResult } from '@azure/msal-browser';
-import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
@@ -35,7 +34,6 @@ import { Collection } from './types/resources';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
-initializeIcons();
 
 let currentTheme = readFromLocalStorage(CURRENT_THEME);
 export function removeSpinners() {

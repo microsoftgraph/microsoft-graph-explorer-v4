@@ -126,18 +126,17 @@ const QueryInput = (props: IQueryInputProps) => {
             });
           }}
         >
-          {httpMethods.map((method) => {
-            const uppercaseKey = method.key.toString().toUpperCase();
-            const badgeColor = methodColors[uppercaseKey] || 'brand';
+          {Object.values(httpMethods).map((method) => {
+            const badgeColor = methodColors[method] || 'brand';
 
             return (
               <Option
-                key={method.key}
-                value={method.key.toString()}
-                text={method.text}
+                key={method}
+                value={method}
+                text={method}
               >
                 <Badge appearance='ghost' color={badgeColor}>
-                  {method.text}
+                  {method}
                 </Badge>
               </Option>
             );

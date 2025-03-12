@@ -16,7 +16,7 @@ import { componentNames, telemetry } from '../../../../../telemetry';
 import { ACCOUNT_TYPE } from '../../../../services/graph-constants';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { trackedGenericCopy } from '../../../common/copy';
-import { CopyButtonV9 } from '../../../common/lazy-loader/component-registry';
+import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   auth: {
@@ -102,7 +102,7 @@ export function Auth() {
         <div>
           <div className={styles.accessTokenContainer}>
             <Text weight='bold'>{translateMessage('Access Token')}</Text>
-            <CopyButtonV9 isIconButton={true} handleOnClick={handleCopy} />
+            <CopyButton isIconButton={true} handleOnClick={handleCopy} />
             <Tooltip
               content={translateMessage(showMessage())}
               relationship='label'

@@ -1,26 +1,20 @@
-import { FontWeights, IStyle, ITheme, Link, getTheme } from '@fluentui/react';
+import { Link } from '@fluentui/react-components';
 import { Fragment } from 'react';
-
-import { queryResponseStyles } from '../../query-response/queryResponse.styles';
 
 export class JSXBuilder {
   private elements: JSX.Element[] = [];
 
   addText(text: string) {
-    this.elements.push(<Fragment key={this.elements.length}>{text}</Fragment>);
+    this.elements.push(
+      <Fragment key={this.elements.length}>{text}</Fragment>
+    );
     return this;
   }
 
   addLink({ label, url, onClick }: { label: string; url: string; onClick?: (url: string) => void; }) {
-    const currentTheme: ITheme = getTheme();
-    const linkStyle = queryResponseStyles(currentTheme).link as IStyle;
-
     this.elements.push(
       <Link
-        styles={{ root: linkStyle }}
-        underline
         key={this.elements.length}
-
         onClick={onClick ? () => onClick(url) : undefined}
         target={!onClick ? '_blank' : undefined}
         href={!onClick ? url : undefined}
@@ -33,8 +27,8 @@ export class JSXBuilder {
 
   addBoldText(text: string) {
     this.elements.push(
-      <span style={{ fontWeight: FontWeights.bold }}
-        key={this.elements.length}>{text}
+      <span style={{ fontWeight: 'bold' }} key={this.elements.length}>
+        {text}
       </span>
     );
     return this;

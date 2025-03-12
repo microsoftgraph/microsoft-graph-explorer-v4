@@ -1,4 +1,3 @@
-import { getTheme, ITheme } from '@fluentui/react';
 import {
   Label,
   Link,
@@ -21,9 +20,9 @@ import { componentNames, telemetry } from '../../../../telemetry';
 import { IAdaptiveCardContent } from '../../../../types/adaptivecard';
 import { IQuery } from '../../../../types/query-runner';
 import { translateMessage } from '../../../utils/translate-messages';
-import { MonacoV9 } from '../../common';
+import { Monaco } from '../../common';
 import { trackedGenericCopy } from '../../common/copy';
-import { CopyButtonV9 } from '../../common/copy-button';
+import { CopyButton } from '../../common/copy-button';
 import { getAdaptiveCard } from './adaptive-cards.util';
 
 export interface AdaptiveCardResponse {
@@ -85,8 +84,6 @@ const AdaptiveCard = (props: AdaptiveCardProps) => {
   const theme = useAppSelector((state) => state.theme);
   const queryStatus = useAppSelector((state) => state.queryRunnerStatus);
 
-  const currentTheme: ITheme = getTheme();
-
   useEffect(() => {
     try {
       const content = getAdaptiveCard(body, sampleQuery);
@@ -147,32 +144,6 @@ const AdaptiveCard = (props: AdaptiveCardProps) => {
       };
       adaptiveCard.parse(cardContent!.data.card);
       const renderedCard = adaptiveCard.render();
-
-      if (renderedCard) {
-        renderedCard.style.backgroundColor =
-          currentTheme.palette.neutralLighter;
-
-        const applyTheme = (child: HTMLElement) => {
-          if (!child) {
-            return;
-          }
-          if (child && child.tagName === 'BUTTON') {
-            return;
-          }
-
-          child.style.color = currentTheme.palette.black;
-          if (child.children.length > 0) {
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for (let i = 0; i < child.children.length; i++) {
-              applyTheme(child.children[i] as HTMLElement);
-            }
-          }
-        };
-
-        if (theme !== 'light') {
-          applyTheme(renderedCard);
-        }
-      }
 
       const handleCopy = async () => {
         trackedGenericCopy(
@@ -301,8 +272,8 @@ const RenderJSONSchema = (props: RenderCardJSONProps) => {
         </MessageBarBody>
       </MessageBar>
       <div className={styles.editorContainer}>
-        <CopyButtonV9 handleOnClick={handleCopy} isIconButton={true} />
-        <MonacoV9
+        <CopyButton handleOnClick={handleCopy} isIconButton={true} />
+        <Monaco
           body={template}
           language='json'
           readOnly={true}

@@ -32,7 +32,6 @@ import {
   TreeOpenChangeData,
   TreeOpenChangeEvent
 } from '@fluentui/react-components';
-import { IGroup } from '@fluentui/react/lib/DetailsList';
 import {
   AddSquare20Regular,
   ArrowDownloadRegular,
@@ -63,6 +62,22 @@ import { Collection, ResourceLinkType } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
 import { useHistoryStyles } from './History.styles';
+
+interface IGroup {
+  key: string;
+  name: string;
+  startIndex: number;
+  count: number;
+  children?: IGroup[];
+  level?: number;
+  isSelected?: boolean;
+  isCollapsed?: boolean;
+  isShowingAll?: boolean;
+  isDropEnabled?: boolean;
+  data?: any;
+  ariaLabel?: string;
+  hasMoreData?: boolean;
+}
 
 const formatDate = (date: Date) => {
   const year = date.getFullYear();
