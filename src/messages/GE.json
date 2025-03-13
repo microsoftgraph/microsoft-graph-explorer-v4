@@ -528,5 +528,10 @@
   "Select all": "Select all",
   "Select item": "Select item",
   "My API Collection": "My API Collection",
-  "items": "items"
+  "items": "items",
+  "Http method": "Http method",
+  "for": "for",
+  "version": "version",
+  "url": "url",
+  "scope": "scope"
 }

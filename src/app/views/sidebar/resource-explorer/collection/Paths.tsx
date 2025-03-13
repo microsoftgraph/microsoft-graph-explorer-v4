@@ -63,7 +63,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               className={styles.badge}
               size='medium'
               color={METHOD_COLORS[item?.method]}
-              aria-label={'http method ' + item.method + ' for'}>
+              aria-label={`${translateMessage('Http method')} ${item.method} ${translateMessage('for')}`}>
               {item.method}
             </Badge></span>}
             {`/${item.version}${item.url}`}
@@ -74,7 +74,8 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   };
 
   return (
-    <Table className={styles.table}>
+    <Table className={styles.table} aria-label={translateMessage('Resources available')}
+      aria-rowcount={resources.length}>
       <TableHeader>
         <TableRow>
           {isSelectable && (
@@ -98,7 +99,15 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
       </TableHeader>
       <TableBody>
         {resources.map((resource) => (
-          <TableRow key={resource.key} className={styles.row}>
+          <TableRow
+            key={resource.key}
+            className={styles.row}
+            aria-label={`${translateMessage('Http method')} ${resource.method || ''}
+              /${translateMessage('version')}${resource.version}${translateMessage('url')}
+              ${resource.url} ${translateMessage('scope')}${
+            formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
+          }`}
+            tabIndex={0}>
             {isSelectable && (
               <TableCell className={styles.checkbox}>
                 <Checkbox
@@ -109,7 +118,15 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               </TableCell>
             )}
             {columns.map((column) => (
-              <TableCell key={column.key} style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}>
+              <TableCell key={column.key}
+                style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}
+                aria-label={column.key === 'url' ?
+                  `${translateMessage('Http method')} ${resource.method || ''} /${translateMessage('version')}` +
+                  `${resource.version}${translateMessage('url')} ${resource.url}` :
+                  `${translateMessage('scope')}
+                  ${formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)}`
+                }
+              >
                 {renderItemColumn(resource, column)}
               </TableCell>
             ))}
