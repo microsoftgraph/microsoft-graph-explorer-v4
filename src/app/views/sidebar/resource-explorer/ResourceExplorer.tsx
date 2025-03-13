@@ -283,7 +283,7 @@ const ResourceExplorer = () => {
       />
       <Button onClick={openPreviewCollection}
         icon={<Collections20Regular />}
-        aria-label={translateMessage('My API Collection')}
+        aria-label={translateMessage(`My API Collection: ${selectedLinks?.length} ${translateMessage('items')}`)}
         className={resourceExplorerStyles.apiCollectionButton}
       >
         {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
