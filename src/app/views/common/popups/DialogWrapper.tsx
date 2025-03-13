@@ -16,7 +16,7 @@ export function DialogWrapper(props: WrapperProps) {
   const { settings: { title, subtitle } } = popupsProps;
 
   return (
-    <Dialog modalType='non-modal' open={isOpen} onOpenChange={(_, data) => !data.open && dismissPopup()}>
+    <Dialog modalType='modal' open={isOpen} onOpenChange={(_, data) => !data.open && dismissPopup()}>
       <DialogSurface>
         <DialogBody>
           {title && <DialogTitle>{title.toString()}</DialogTitle>}

@@ -40,7 +40,7 @@ export default function CopyButton(props: ICopyButtonProps) {
           />
         </Tooltip>
       ) : (
-        <Button appearance='transparent' onClick={handleCopyClick}>
+        <Button appearance='primary' onClick={handleCopyClick}>
           {copyLabel}
         </Button>
       )}
