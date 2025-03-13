@@ -18,16 +18,6 @@ export const useHistoryStyles = makeStyles({
     alignItems: 'center',
     gap: '2px'
   },
-  historyAsideIcons: {
-    display: 'none'
-  },
-  historyTreeItemLayout: {
-    ':hover, :focus': {
-      '& [data-history-aside]': {
-        display: 'flex'
-      }
-    }
-  },
   badgeContainer: {
     minWidth: '50px',
     display: 'inline-flex'
