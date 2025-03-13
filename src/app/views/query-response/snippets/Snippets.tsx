@@ -127,7 +127,7 @@ const trackLinkClickedEvent = (
   telemetry.trackLinkClickEvent(e.currentTarget.href, componentName);
 };
 
-const addExtraSnippetInformation = (language: string): JSX.Element => {
+const ExtraSnippetInformation: React.FC<{ language: string }> = ({ language }) => {
   const styles = useSnippetStyles();
   const { sdkDownloadLink, sdkDocLink } = supportedLanguages[language];
   const libParagraph =
@@ -253,7 +253,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
           body={snippet}
           language={language}
           readOnly={true}
-          extraInfoElement={addExtraSnippetInformation(props.language)}
+          extraInfoElement={<ExtraSnippetInformation language={props.language} />}
         />
       </div>
     </div>
