@@ -83,6 +83,11 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                 aria-label={translateMessage('Select all')}
                 checked={allSelected}
                 onChange={handleSelectAllChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSelectAllChange();
+                  }
+                }}
               />
             </TableHeaderCell>
           )}
