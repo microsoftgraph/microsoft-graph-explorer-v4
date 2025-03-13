@@ -4,6 +4,7 @@ import {
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
+  DrawerHeaderNavigation,
   DrawerHeaderTitle,
   Button,
   Spinner,
@@ -19,11 +20,23 @@ const useDrawerStyles = makeStyles({
   root: {
     width: '1100px'
   },
-  button: {
-    marginInlineEnd: '20px'
+  closeButton: {
+    alignSelf: 'flex-end'
   },
   body: {
     padding: 0
+  },
+  header: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  headerTitle: {
+    display: 'flex',
+    flex: '1',
+    marginInlineStart: '20px'
+  },
+  headerNavigation: {
+    display: 'flex'
   }
 });
 
@@ -68,18 +81,8 @@ export function DrawerWrapper(props: WrapperProps) {
       size={getDrawerSize()}
       className={drawerStyles.root}
     >
-      <DrawerHeader>
-        <DrawerHeaderTitle action={
-          <Tooltip
-            content={translateMessage('Close')} relationship='label'>
-            <Button
-              icon={<Dismiss24Regular />}
-              appearance='subtle'
-              onClick={() => dismissPopup()}
-              aria-label={translateMessage('Close')}
-            />
-          </Tooltip>
-        }>
+      <DrawerHeader className={drawerStyles.header}>
+        <DrawerHeaderNavigation className={drawerStyles.headerNavigation}>
           {showBackButton && (
             <Tooltip
               content={translateMessage('Back')}
@@ -89,11 +92,23 @@ export function DrawerWrapper(props: WrapperProps) {
                 appearance='subtle'
                 onClick={() => dismissPopup()}
                 aria-label={translateMessage('Back')}
-                className={drawerStyles.button}
               />
             </Tooltip>
           )}
-          {title || ''}
+        </DrawerHeaderNavigation>
+        <DrawerHeaderTitle className={drawerStyles.headerTitle} action={
+          <Tooltip
+            content={translateMessage('Close')} relationship='label'>
+            <Button
+              icon={<Dismiss24Regular />}
+              appearance='subtle'
+              onClick={() => dismissPopup()}
+              aria-label={translateMessage('Close')}
+              className={drawerStyles.closeButton}
+            />
+          </Tooltip>
+        }>
+          {translateMessage(title) || ''}
         </DrawerHeaderTitle>
       </DrawerHeader>
 
