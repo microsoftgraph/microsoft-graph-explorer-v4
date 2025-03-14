@@ -341,6 +341,7 @@
   "permissions list": " to see the full list of Microsoft Graph permissions and select the permission(s) you want and consent to them from there.",
   "Get started with adaptive cards on": "Get started with adaptive cards on ",
   "Adaptive Cards Templating SDK": "Adaptive Cards Templating SDK",
+  "profile": "profile",
   "card": "Card",
   "JSON Schema": "JSON template",
   "Report an Issue": "Report an Issue",
