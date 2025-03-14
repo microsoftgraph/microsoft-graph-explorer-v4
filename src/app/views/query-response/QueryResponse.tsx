@@ -7,7 +7,8 @@ import {
   DialogTrigger,
   makeStyles,
   tokens,
-  Tooltip
+  Tooltip,
+  useRestoreFocusTarget
 } from '@fluentui/react-components';
 import { DismissRegular, ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
@@ -44,6 +45,8 @@ const useStyles = makeStyles({
 const PivotItemsDialog = () => {
   const [open, setOpen] = useState(false);
   const styles = useStyles();
+  const restoreFocusTargetAttribute = useRestoreFocusTarget();
+
 
   return (
     <div>
@@ -53,6 +56,7 @@ const PivotItemsDialog = () => {
           icon={<ExpandUpLeftRegular />}
           aria-label={translateMessage('Expand')}
           className={styles.dialogBtn}
+          {...restoreFocusTargetAttribute}
           onClick={() => setOpen(true)}
         />
       </Tooltip>
