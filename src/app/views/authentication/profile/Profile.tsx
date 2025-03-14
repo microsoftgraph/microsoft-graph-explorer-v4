@@ -13,7 +13,8 @@ import {
   PopoverTrigger,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
+  useId
 } from '@fluentui/react-components';
 import { PersonAdd20Regular, SignOut20Regular } from '@fluentui/react-icons';
 import { forwardRef, useEffect } from 'react';
@@ -171,6 +172,7 @@ SignedInButton.displayName = 'SignedInButton';
 
 const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }) => {
   const dispatch = useAppDispatch();
+  const ariaId = useId();
 
   const profile = useAppSelector((state) => state.profile);
   const authenticated = useAppSelector((state) => state.auth.authToken);
@@ -185,13 +187,14 @@ const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }
   if (!profile) {
     return <Spinner />;
   }
+
   return (
-    <Popover withArrow>
+    <Popover withArrow trapFocus>
       <PopoverTrigger disableButtonEnhancement>
         <SignedInButton />
       </PopoverTrigger>
 
-      <PopoverSurface tabIndex={-1}>
+      <PopoverSurface aria-labelledby={ariaId}>
         <PopoverContent signInWithOther={signInWithOther} profile={profile}/>
       </PopoverSurface>
     </Popover>
