@@ -104,7 +104,7 @@ const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) =
   };
 
   return (
-    <div className={styles.card}>
+    <div role="dialog" id="profileContent" className={styles.card}>
       <CardHeader
         header={
           <Body1>
@@ -154,6 +154,9 @@ const SignedInButton = forwardRef<
     <Tooltip content={translateMessage('sign out')} relationship='description'>
       <Button
         aria-label={translateMessage('sign out')}
+        aria-haspopup='dialog'
+        aria-expanded={false}
+        aria-controls='profileContent'
         appearance='subtle'
         className={styles.iconButton}
         ref={ref}
