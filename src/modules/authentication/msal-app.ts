@@ -1,3 +1,5 @@
+import { telemetry, errorTypes } from '../../telemetry';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
 
 function getClientIdFromWindow() {
@@ -27,18 +29,37 @@ export const configuration: Configuration = {
         if (containsPii) {
           return;
         }
+
+        const properties = { ComponentName: 'MSAL', Message: message };
+
         switch (level) {
         case LogLevel.Error:
-          console.error(message);
+          telemetry.trackException(
+            new Error(errorTypes.OPERATIONAL_ERROR),
+            SeverityLevel.Error,
+            properties
+          );
           return;
+
         case LogLevel.Info:
-          console.info(message);
+          telemetry.trackEvent('MSAL Authentication', {
+            ...properties,
+            LogLevel: 'Info'
+          });
           return;
+
         case LogLevel.Verbose:
-          console.debug(message);
+          telemetry.trackEvent('MSAL Trace', {
+            ...properties,
+            LogLevel: 'Verbose'
+          });
           return;
+
         case LogLevel.Warning:
-          console.warn(message);
+          telemetry.trackEvent('MSAL Warning', {
+            ...properties,
+            LogLevel: 'Warning'
+          });
           return;
         }
       },
@@ -46,7 +67,6 @@ export const configuration: Configuration = {
     }
   }
 };
-
 
 const msalApplication = new PublicClientApplication(configuration);
 msalApplication.initialize();
