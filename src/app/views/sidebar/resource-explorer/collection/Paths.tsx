@@ -114,6 +114,11 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                   aria-label={translateMessage('Select item')}
                   checked={selection.has(resource)}
                   onChange={() => handleSelectionChange(resource)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSelectionChange(resource);
+                    }
+                  }}
                 />
               </TableCell>
             )}
