@@ -18,7 +18,7 @@ import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   textArea: {
-    width: '90%',
+    width: '98%',
     minHeight: '63px',
     wordWrap: 'break-word',
     fontFamily: 'monospace',
@@ -58,7 +58,7 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
       </DialogContent>
 
       <DialogActions>
-        <CopyButton handleOnClick={handleCopy} isIconButton={false} />
+        <CopyButton handleOnClick={handleCopy} isIconButton={false} appearance="outline"/>
         <Button appearance="secondary" onClick={() => props.dismissPopup()}>
           {translateMessage('Close')}
         </Button>
