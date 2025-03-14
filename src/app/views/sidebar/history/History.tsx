@@ -48,7 +48,7 @@ import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
 import { IQuery } from '../../../../types/query-runner';
 import { GRAPH_URL } from '../../../services/graph-constants';
-import { runQuery, setQueryResponse } from '../../../services/slices/graph-response.slice';
+import { setQueryResponse } from '../../../services/slices/graph-response.slice';
 import { removeAllHistoryItems, removeHistoryItem } from '../../../services/slices/history.slice';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
@@ -320,14 +320,8 @@ const HistoryItems = (props: HistoryProps)=>{
               aria-setsize={groups.length}
               aria-posinset={pos+1}
               aria-label={ariaLabel}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  toggleGroup(`group-${name}`);
-                }
-              }}
             >
-              <TreeItemLayout aside={
+              <TreeItemLayout actions={
                 <CounterBadge
                   color='informative'
                   aria-label={count + translateMessage('History')}
@@ -348,11 +342,10 @@ const HistoryItems = (props: HistoryProps)=>{
                 aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
               >
                 <TreeItemLayout
-                  className={itemStyles.historyTreeItemLayout}
                   onClick={() => handleViewQuery(h)}
                   iconBefore={<HistoryStatusCodes status={h.status} method={h.method} />}
-                  aside={
-                    <div data-history-aside className={itemStyles.historyAsideIcons}>
+                  actions={
+                    <>
                       <HistoryItemActionMenu item={h}/>
                       {isInCollection(h) ? (
                         <Tooltip
@@ -364,7 +357,11 @@ const HistoryItems = (props: HistoryProps)=>{
                             aria-label={translateMessage('Remove from collection')}
                             appearance='transparent'
                             icon={<SubtractSquare20Regular />}
-                            onClick={ () => handleRemoveFromCollection(h)}
+                            onClick={ (e: React.MouseEvent<HTMLButtonElement>) => {
+                              e.stopPropagation();
+                              handleRemoveFromCollection(h);
+                            }}
+                            tabIndex={0}
                           />
                         </Tooltip>
                       ) : (
@@ -377,11 +374,15 @@ const HistoryItems = (props: HistoryProps)=>{
                             aria-label={translateMessage('Add to collection')}
                             appearance='transparent'
                             icon={<AddSquare20Regular />}
-                            onClick={() => handleAddToCollection(h)}
+                            onClick={(e:  React.MouseEvent<HTMLButtonElement>) => {
+                              e.stopPropagation();
+                              handleAddToCollection(h);
+                            }}
+                            tabIndex={0}
                           />
                         </Tooltip>
                       )}
-                    </div>
+                    </>
                   }>
                   <Tooltip content={`${h.method} - ${h.url}`} relationship='description' withArrow>
                     <Text>{h.url.replace(GRAPH_URL, '')}</Text>
@@ -465,7 +466,7 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
   }
   return <Menu>
     <MenuTrigger disableButtonEnhancement>
-      <Button appearance='subtle' icon={<MoreHorizontalRegular/>}></Button>
+      <Button  tabIndex={0} appearance='subtle' icon={<MoreHorizontalRegular/>}></Button>
     </MenuTrigger>
 
     <MenuPopover>
@@ -473,9 +474,17 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
         <MenuGroup>
           <MenuGroupHeader>{translateMessage('actions')}</MenuGroupHeader>
           <MenuItem icon={<ArrowDownloadRegular/>}
-            onClick={()=>handleExportQuery(item)}>{translateMessage('Export')}</MenuItem>
+            onClick={(e) => {
+              e.stopPropagation();
+              handleExportQuery(item);
+            }}>
+            {translateMessage('Export')}
+          </MenuItem>
           <MenuItem icon={<DeleteRegular/>}
-            onClick={()=>handleDeleteQuery(item)}>{translateMessage('Delete')}</MenuItem>
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteQuery(item);
+            }}>{translateMessage('Delete')}</MenuItem>
         </MenuGroup>
       </MenuList>
     </MenuPopover>
