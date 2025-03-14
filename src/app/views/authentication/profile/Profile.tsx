@@ -188,13 +188,15 @@ const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }
     return <Spinner />;
   }
 
+  const cardAriaLabel = `${profile.user?.displayName}'s ${translateMessage('profile')} ${translateMessage('card')}`;
+
   return (
-    <Popover withArrow trapFocus>
+    <Popover withArrow inertTrapFocus>
       <PopoverTrigger disableButtonEnhancement>
         <SignedInButton />
       </PopoverTrigger>
 
-      <PopoverSurface aria-labelledby={ariaId}>
+      <PopoverSurface aria-label={cardAriaLabel} aria-live='polite' aria-labelledby={ariaId}>
         <PopoverContent signInWithOther={signInWithOther} profile={profile}/>
       </PopoverSurface>
     </Popover>
