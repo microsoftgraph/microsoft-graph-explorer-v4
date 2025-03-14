@@ -30,10 +30,23 @@ export default function CopyButton(props: ICopyButtonProps) {
     return () => clearTimeout(timer);
   };
 
-  const appearance = props.appearance ? props.appearance : 'transparent';
+  const appearance = props.appearance ? props.appearance : 'primary';
 
   return (
     <>
+      <div
+        role="status"
+        aria-live="assertive"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden'
+        }}
+      >
+        {copied && translateMessage('Copied')}
+      </div>
       {props.isIconButton ? (
         <Tooltip content={copyLabel} relationship='label'>
           <Button
