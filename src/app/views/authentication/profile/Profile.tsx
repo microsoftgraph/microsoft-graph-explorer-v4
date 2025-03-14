@@ -153,7 +153,7 @@ const SignedInButton = forwardRef<
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
       <Button
-        aria-label={translateMessage('sign out')}
+        aria-label={`${user?.displayName} ${translateMessage('sign out')}`}
         aria-haspopup='dialog'
         aria-expanded={false}
         aria-controls='profileContent'
