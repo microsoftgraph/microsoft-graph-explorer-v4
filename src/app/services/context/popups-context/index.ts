@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import { PopupsProvider, usePopupsDispatchContext, usePopupsStateContext } from './PopupsContext';
 
 export interface PopupsComponent<Data = {}> {
@@ -11,6 +12,7 @@ interface PopupSettings {
   title: React.ReactNode | string;
   subtitle?: string;
   width?: width;
+  trigger?: RefObject<HTMLElement>;
   renderFooter?: () => JSX.Element;
 }
 

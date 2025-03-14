@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { makeStyles, Button, Tooltip } from '@fluentui/react-components';
 import { Share24Regular } from '@fluentui/react-icons';
 
@@ -20,10 +20,13 @@ const ShareButton = () => {
     showShareQuery({
       settings: {
         title: translateMessage('Share Query'),
-        subtitle: translateMessage('Share Query Message')
+        subtitle: translateMessage('Share Query Message'),
+        trigger: shareTriggerBtnRef
       }
     });
   };
+
+  const shareTriggerBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <Tooltip
@@ -32,6 +35,7 @@ const ShareButton = () => {
       relationship="label"
     >
       <Button
+        ref={shareTriggerBtnRef}
         icon={<Share24Regular />}
         className={classes.iconButton}
         appearance="subtle"

@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 
 const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
   const styles = useStyles();
-  const { sampleQuery } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const query = { ...sampleQuery };
   const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
   const shareLink = createShareLink(sampleQuery);
