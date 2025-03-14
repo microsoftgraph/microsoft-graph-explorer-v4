@@ -14,11 +14,11 @@ import { WrapperProps } from './popups.types';
 export function DialogWrapper(props: WrapperProps) {
   const { isOpen, dismissPopup, Component, popupsProps, closePopup } = props;
   const { settings: { title, subtitle } } = popupsProps;
-  const firstFocusableRef = useRef<HTMLDivElement>(null);
+  const focusableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen && firstFocusableRef.current) {
-      firstFocusableRef.current.focus();
+    if (isOpen && focusableRef.current) {
+      focusableRef.current.focus();
     }
   }, [isOpen]);
 
