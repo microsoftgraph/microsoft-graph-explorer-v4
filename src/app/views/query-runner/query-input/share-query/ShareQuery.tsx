@@ -59,7 +59,7 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
 
       <DialogActions>
         <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-        <Button appearance="secondary" onClick={() => props.dismissPopup()}>
+        <Button appearance='secondary' onClick={() => props.dismissPopup()}>
           {translateMessage('Close')}
         </Button>
       </DialogActions>
