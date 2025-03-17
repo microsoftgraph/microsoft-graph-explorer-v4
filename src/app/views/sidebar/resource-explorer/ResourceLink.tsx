@@ -115,7 +115,7 @@ const ResourceLinkActions = ({
   handleAddToCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
   handleRemoveFromCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void
 }) => (
-  <div className={`${iconButtonStyles.actions} actions`}>
+  <div className='actions'>
     {resourceLink.method && (
       <Tooltip
         withArrow

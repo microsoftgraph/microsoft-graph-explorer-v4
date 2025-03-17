@@ -51,7 +51,7 @@ export const useResourceExplorerStyles = makeStyles({
   },
   treeItemLayout: {
     width: '100%',
-    ':hover': {
+    ':hover, :focus, :focus-visible, :focus-within': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
       color: tokens.colorNeutralForeground2BrandHover,
       '& [data-aside-content] .action-button': {

@@ -526,5 +526,12 @@
   "Save all": "Save all",
   "expand resources to view details":"You can expand each resource and add specific operations into your API collection.",
   "Select all": "Select all",
-  "Select item": "Select item"
+  "Select item": "Select item",
+  "My API Collection": "My API Collection",
+  "items": "items",
+  "Http method": "Http method",
+  "for": "for",
+  "version": "version",
+  "url": "url",
+  "scope": "scope"
 }

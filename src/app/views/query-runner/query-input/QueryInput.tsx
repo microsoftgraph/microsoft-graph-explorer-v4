@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import {
   Dropdown,
   Field,
+  Tooltip,
   Option,
   Badge,
   makeStyles,
@@ -113,56 +114,66 @@ const QueryInput = (props: IQueryInputProps) => {
         }
         validationState={showError ? 'error' : 'none'}
       >
+        <Tooltip
+          content={translateMessage('HTTP request method')}
+          relationship='description'
+          withArrow>
+          <Dropdown
+            aria-label={translateMessage('HTTP request method option')}
+            placeholder='Select method'
+            value={sampleQuery.selectedVerb}
+            className={classes.smallDropdown}
+            button={{ style: { color: selectedBadgeColor } }}
+            onOptionSelect={(event, data) => {
+              handleOnMethodChange({
+                key: data.optionValue,
+                text: data.optionValue
+              });
+            }}
+          >
+            {Object.values(httpMethods).map((method) => {
+              const badgeColor = methodColors[method] || 'brand';
+
+              return (
+                <Option
+                  key={method}
+                  value={method}
+                  text={method}
+                >
+                  <Badge appearance='ghost' color={badgeColor}>
+                    {method}
+                  </Badge>
+                </Option>
+              );
+            })}
+          </Dropdown>
+        </Tooltip>
+      </Field>
+
+      <Tooltip
+        content={translateMessage('Microsoft Graph API Version')}
+        relationship='description'
+        withArrow
+      >
         <Dropdown
-          aria-label={translateMessage('HTTP request method option')}
-          placeholder='Select method'
-          value={sampleQuery.selectedVerb}
-          className={classes.smallDropdown}
-          button={{ style: { color: selectedBadgeColor } }}
+          aria-label={translateMessage('Microsoft Graph API Version option')}
+          placeholder='Select a version'
+          value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
           onOptionSelect={(event, data) => {
-            handleOnMethodChange({
+            handleOnVersionChange({
               key: data.optionValue,
               text: data.optionValue
             });
           }}
+          className={classes.smallDropdown}
         >
-          {Object.values(httpMethods).map((method) => {
-            const badgeColor = methodColors[method] || 'brand';
-
-            return (
-              <Option
-                key={method}
-                value={method}
-                text={method}
-              >
-                <Badge appearance='ghost' color={badgeColor}>
-                  {method}
-                </Badge>
-              </Option>
-            );
-          })}
+          {GRAPH_API_VERSIONS.map((version) => (
+            <Option key={version} value={version}>
+              {version}
+            </Option>
+          ))}
         </Dropdown>
-      </Field>
-
-      <Dropdown
-        aria-label={translateMessage('Microsoft Graph API Version option')}
-        placeholder='Select a version'
-        value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
-        onOptionSelect={(event, data) => {
-          handleOnVersionChange({
-            key: data.optionValue,
-            text: data.optionValue
-          });
-        }}
-        className={classes.smallDropdown}
-      >
-        {GRAPH_API_VERSIONS.map((version) => (
-          <Option key={version} value={version}>
-            {version}
-          </Option>
-        ))}
-      </Dropdown>
-
+      </Tooltip>
       <AutoComplete contentChanged={contentChanged} runQuery={runQuery} />
 
       <SubmitButton

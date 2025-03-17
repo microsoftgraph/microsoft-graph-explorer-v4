@@ -77,7 +77,7 @@ export const SampleQueries = () => {
     shouldGenerateGroups.current = true;
     setSearchStarted(true);
     const filteredQueries = value ? performSearch(queries, value) : [];
-    if(value && filteredQueries.length >= 0) {
+    if(value && filteredQueries.length > 0) {
       setSampleQueries(filteredQueries);
     } else {
       setSampleQueries(queries);

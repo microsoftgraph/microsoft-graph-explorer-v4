@@ -20,6 +20,13 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
   case 'text/html':
     return <Monaco body={body} language='text/html' readOnly={true} />;
 
+  case 'application/json':
+    return (
+      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+        <Monaco body={body} readOnly language="application/json" />
+      </div>
+    );
+
   default:
     if (isImageResponse(contentType) && typeof body !== 'string') {
       return (
@@ -28,7 +35,7 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
     }
     return (
       <div style={{ flex: 1, height: '100%', display: 'flex' }}>
-        <Monaco body={body} readOnly language="application/json" />
+        <Monaco body={body} readOnly language="text/plain" />
       </div>
     );
   }
