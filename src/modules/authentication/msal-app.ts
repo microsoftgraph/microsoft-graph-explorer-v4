@@ -1,6 +1,6 @@
 import { telemetry, errorTypes } from '../../telemetry';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
-import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
+import { Configuration, LogLevel, PublicClientApplication, BrowserCacheLocation } from '@azure/msal-browser';
 
 function getClientIdFromWindow() {
   return window?.ClientId ?? '';
@@ -18,7 +18,7 @@ export const configuration: Configuration = {
     clientCapabilities: ['CP1']
   },
   cache: {
-    cacheLocation: 'localStorage',
+    cacheLocation: BrowserCacheLocation.LocalStorage,
     storeAuthStateInCookie: true,
     claimsBasedCachingEnabled: true
   },
@@ -68,6 +68,10 @@ export const configuration: Configuration = {
   }
 };
 
+const initializeMsal = async (): Promise<void> => {
+  await msalApplication.initialize();
+};
+
 const msalApplication = new PublicClientApplication(configuration);
-msalApplication.initialize();
+await initializeMsal();
 export { msalApplication };
