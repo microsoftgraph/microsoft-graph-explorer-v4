@@ -37,13 +37,6 @@ export const useResourceExplorerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
-  asideIcons: {
-    display: 'flex',
-    alignItems: 'center',
-    '& .action-button': {
-      display: 'none'
-    }
-  },
   tree: {
     height: 'calc(100vh - 374px)',
     overflowY: 'auto',
@@ -51,15 +44,9 @@ export const useResourceExplorerStyles = makeStyles({
   },
   treeItemLayout: {
     width: '100%',
-    ':hover': {
+    ':hover, :focus, :focus-visible, :focus-within': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
-      color: tokens.colorNeutralForeground2BrandHover,
-      '& [data-aside-content] .action-button': {
-        display: 'flex',
-        '& .fui-Button': {
-          color: tokens.colorNeutralForeground2BrandHover
-        }
-      }
+      color: tokens.colorNeutralForeground2BrandHover
     },
     '> div.fui-TreeItemLayout__main': {
       width: '100%'

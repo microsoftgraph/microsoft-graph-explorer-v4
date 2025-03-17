@@ -21,7 +21,7 @@ import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { existsInCollection, setExisting } from './resourcelink.utils';
+import { existsInCollection } from './resourcelink.utils';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -147,7 +147,7 @@ const ResourceExplorer = () => {
     })
   }
 
-  const AsideContent = ({
+  const ActionsContent = ({
     item,
     messageCount
   }: {
@@ -231,14 +231,12 @@ const ResourceExplorer = () => {
         >
           <TreeItemLayout
             className={resourceExplorerStyles.treeItemLayout}
-            aside={
+            actions={
               item.links.length > 0 ? (
-                <div data-aside-content className={resourceExplorerStyles.asideIcons}>
-                  <AsideContent
-                    item={item}
-                    messageCount={item.links?.length}
-                  />
-                </div>
+                <ActionsContent
+                  item={item}
+                  messageCount={item.links?.length}
+                />
               ) : null
             }
           >

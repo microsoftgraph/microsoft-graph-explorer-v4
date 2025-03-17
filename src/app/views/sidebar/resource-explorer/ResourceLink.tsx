@@ -1,13 +1,13 @@
 import { Tooltip, Button, Badge, Link } from '@fluentui/react-components'
 import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IResourceLink, ResourceOptions } from '../../../../types/resources';
 import { validateExternalLink } from '../../../utils/external-link-validation';
 import { translateMessage } from '../../../utils/translate-messages';
-import { existsInCollection, setExisting } from './resourcelink.utils';
+import { existsInCollection } from './resourcelink.utils';
 import { useStyles } from './resourceLinkStyles';
 import { METHOD_COLORS } from '../sidebar-utils/SidebarUtils';
 
@@ -15,6 +15,7 @@ interface IResourceLinkProps {
   link: IResourceLink;
   resourceOptionSelected: Function;
   version: string;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 const ResourceLink = (props: IResourceLinkProps) => {
@@ -48,13 +49,17 @@ const ResourceLink = (props: IResourceLinkProps) => {
     validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
   }
 
-  const handleAddToCollectionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddToCollection = (
+    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     props.resourceOptionSelected(ResourceOptions.ADD_TO_COLLECTION, link);
   }
 
-  const handleRemoveFromCollectionClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRemoveFromCollection = (
+    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     props.resourceOptionSelected(ResourceOptions.REMOVE_FROM_COLLECTION, link);
@@ -68,8 +73,8 @@ const ResourceLink = (props: IResourceLinkProps) => {
           resourceLink={{ ...resourceLink, isInCollection}}
           iconButtonStyles={linkStyles}
           openDocumentationLink={openDocumentationLink}
-          handleAddToCollectionClick={handleAddToCollectionClick}
-          handleRemoveFromCollectionClick={handleRemoveFromCollectionClick}
+          handleAddToCollection={handleAddToCollection}
+          handleRemoveFromCollection={handleRemoveFromCollection}
         />
       )}
     </div>
@@ -106,14 +111,16 @@ const ResourceLinkActions = ({
   resourceLink,
   iconButtonStyles,
   openDocumentationLink,
-  handleAddToCollectionClick,
-  handleRemoveFromCollectionClick
+  handleAddToCollection,
+  handleRemoveFromCollection
 }: {
   resourceLink: IResourceLink,
   iconButtonStyles: any,
   openDocumentationLink: () => void,
-  handleAddToCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
-  handleRemoveFromCollectionClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  handleAddToCollection: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => void,
+  handleRemoveFromCollection: (
+    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
+  ) => void
 }) => (
   <div className={`${iconButtonStyles.actions} actions`}>
     {resourceLink.method && (
@@ -131,7 +138,16 @@ const ResourceLinkActions = ({
             appearance='subtle'
             className={iconButtonStyles.linkIcon}
             target='_blank' href={resourceLink.docLink}
-            onClick={() => openDocumentationLink()}>
+            tabIndex={0}
+            onClick={() => openDocumentationLink()}
+            onKeyDown={(e: React.KeyboardEvent) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                openDocumentationLink();
+              }
+            }
+            }
+          >
             <DocumentText20Regular /></Link>) :
           <Link
             disabled
@@ -153,7 +169,14 @@ const ResourceLinkActions = ({
           appearance='transparent'
           className={iconButtonStyles.root}
           icon={<SubtractSquare20Regular />}
-          onClick={handleRemoveFromCollectionClick}
+          tabIndex={0}
+          onClick={handleRemoveFromCollection}
+          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleRemoveFromCollection(e);
+            }
+          }}
         />
       </Tooltip>
     ) : (
@@ -169,7 +192,14 @@ const ResourceLinkActions = ({
           aria-describedby='tooltip'
           className={iconButtonStyles.root}
           icon={<AddSquare20Regular />}
-          onClick={handleAddToCollectionClick}
+          tabIndex={0}
+          onClick={handleAddToCollection}
+          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleAddToCollection(e);
+            }
+          }}
         />
       </Tooltip>
     )}

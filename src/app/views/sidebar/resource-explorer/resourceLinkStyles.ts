@@ -10,8 +10,9 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     marginRight: tokens.spacingHorizontalS,
     position: 'relative',
-    ':hover .actions': {
-      visibility: 'visible'
+    ':hover .actions, :focus-within .actions': {
+      display: 'flex',
+      alignItems: 'center'
     }
   },
   resourceLinkNameContainer: {
@@ -30,9 +31,13 @@ export const useStyles = makeStyles({
     maxWidth: '50px'
   },
   actions: {
-    visibility: 'hidden',
-    display: 'flex',
-    alignItems: 'center'
+    display: 'none',
+    '& a:focus, a:focus-within, & button:focus': {
+      outline: `2px solid ${tokens.colorBrandStroke1}`,
+      outlineOffset: '2px',
+      display: 'flex',
+      alignItems: 'center'
+    }
   },
   linkIcon: {
     display: 'flex',
