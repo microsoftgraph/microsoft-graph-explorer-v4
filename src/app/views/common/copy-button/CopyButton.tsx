@@ -6,6 +6,7 @@ import { translateMessage } from '../../../utils/translate-messages';
 interface ICopyButtonProps {
   handleOnClick: () => void;
   isIconButton: boolean;
+  appearance?: 'outline' | 'transparent' | 'secondary' | 'primary' | 'subtle' | undefined;
 }
 
 export default function CopyButton(props: ICopyButtonProps) {
@@ -28,6 +29,8 @@ export default function CopyButton(props: ICopyButtonProps) {
     }, 3000); // 3 seconds
     return () => clearTimeout(timer);
   };
+
+  const appearance = props.appearance ? props.appearance : 'primary';
 
   return (
     <>
@@ -53,7 +56,7 @@ export default function CopyButton(props: ICopyButtonProps) {
           />
         </Tooltip>
       ) : (
-        <Button appearance='primary' onClick={handleCopyClick}>
+        <Button appearance={appearance} onClick={handleCopyClick}>
           {copyLabel}
         </Button>
       )}

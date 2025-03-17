@@ -18,11 +18,19 @@ const PopupWrapper = () => {
     }
     payload.status = 'closed';
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
+    const triggerBtn = payload.popupsProps.settings.trigger;
+    if (triggerBtn?.current){
+      triggerBtn.current?.focus();
+    }
   }
 
   const dismiss = (payload: Popup) => {
     payload.status = 'dismissed';
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
+    const triggerBtn = payload.popupsProps.settings.trigger;
+    if (triggerBtn?.current){
+      triggerBtn.current?.focus();
+    }
   }
 
   return (

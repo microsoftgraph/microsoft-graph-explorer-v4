@@ -18,7 +18,7 @@ import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
 const useStyles = makeStyles({
   textArea: {
-    width: '90%',
+    width: '98%',
     minHeight: '63px',
     wordWrap: 'break-word',
     fontFamily: 'monospace',
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
 
 const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
   const styles = useStyles();
-  const { sampleQuery } = useAppSelector((state) => state);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const query = { ...sampleQuery };
   const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
   const shareLink = createShareLink(sampleQuery);
@@ -58,8 +58,8 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
       </DialogContent>
 
       <DialogActions>
-        <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-        <Button appearance='secondary' onClick={() => props.dismissPopup()}>
+        <CopyButton handleOnClick={handleCopy} isIconButton={false}/>
+        <Button appearance="secondary" onClick={() => props.dismissPopup()}>
           {translateMessage('Close')}
         </Button>
       </DialogActions>
