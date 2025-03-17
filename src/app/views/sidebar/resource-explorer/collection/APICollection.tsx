@@ -11,7 +11,7 @@ import {
   DialogTitle,
   Button,
   makeStyles,
-  tokens
+  tokens,  useRestoreFocusTarget
 } from '@fluentui/react-components';
 import { Edit20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -58,6 +58,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const [items, setItems] = useState<ResourcePath[]>([]);
   const [loading, setLoading] = useState(true);
   const labelStyles = useStyles();
+  const restoreFocusTargetAttribute = useRestoreFocusTarget();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -244,6 +245,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
               disabled={option.disabled}
               onClick={option.onClick}
               style={{ marginInlineEnd: '30px' }}
+              {...restoreFocusTargetAttribute}
             >
               {option.text}
             </ToolbarButton>
@@ -256,6 +258,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
               icon={item.icon}
               disabled={item.disabled}
               onClick={item.onClick}
+              {...restoreFocusTargetAttribute}
             >
               {item.text}
             </ToolbarButton>
