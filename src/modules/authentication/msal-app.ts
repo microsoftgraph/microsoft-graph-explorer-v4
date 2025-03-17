@@ -1,4 +1,6 @@
-import { Configuration, LogLevel, PublicClientApplication } from '@azure/msal-browser';
+import { telemetry, errorTypes } from '../../telemetry';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
+import { Configuration, LogLevel, PublicClientApplication, BrowserCacheLocation } from '@azure/msal-browser';
 
 function getClientIdFromWindow() {
   return window?.ClientId ?? '';
@@ -16,7 +18,7 @@ export const configuration: Configuration = {
     clientCapabilities: ['CP1']
   },
   cache: {
-    cacheLocation: 'localStorage',
+    cacheLocation: BrowserCacheLocation.LocalStorage,
     storeAuthStateInCookie: true,
     claimsBasedCachingEnabled: true
   },
@@ -27,18 +29,37 @@ export const configuration: Configuration = {
         if (containsPii) {
           return;
         }
+
+        const properties = { ComponentName: 'MSAL', Message: message };
+
         switch (level) {
         case LogLevel.Error:
-          console.error(message);
+          telemetry.trackException(
+            new Error(errorTypes.OPERATIONAL_ERROR),
+            SeverityLevel.Error,
+            properties
+          );
           return;
+
         case LogLevel.Info:
-          console.info(message);
+          telemetry.trackEvent('MSAL Authentication', {
+            ...properties,
+            LogLevel: 'Info'
+          });
           return;
+
         case LogLevel.Verbose:
-          console.debug(message);
+          telemetry.trackEvent('MSAL Trace', {
+            ...properties,
+            LogLevel: 'Verbose'
+          });
           return;
+
         case LogLevel.Warning:
-          console.warn(message);
+          telemetry.trackEvent('MSAL Warning', {
+            ...properties,
+            LogLevel: 'Warning'
+          });
           return;
         }
       },
@@ -47,7 +68,18 @@ export const configuration: Configuration = {
   }
 };
 
+export const msalApplication = new PublicClientApplication(configuration);
 
-const msalApplication = new PublicClientApplication(configuration);
-msalApplication.initialize();
-export { msalApplication };
+export async function initializeMsal(): Promise<void> {
+  try {
+    await msalApplication.initialize();
+    return Promise.resolve();
+  } catch (error) {
+    telemetry.trackException(
+      new Error(errorTypes.OPERATIONAL_ERROR),
+      SeverityLevel.Error,
+      { ComponentName: 'MSAL', Message: 'Failed to initialize MSAL' }
+    );
+    return Promise.reject(error);
+  }
+}
