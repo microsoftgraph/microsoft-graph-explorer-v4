@@ -68,10 +68,18 @@ export const configuration: Configuration = {
   }
 };
 
-const initializeMsal = async (): Promise<void> => {
-  await msalApplication.initialize();
-};
+export const msalApplication = new PublicClientApplication(configuration);
 
-const msalApplication = new PublicClientApplication(configuration);
-await initializeMsal();
-export { msalApplication };
+export async function initializeMsal(): Promise<void> {
+  try {
+    await msalApplication.initialize();
+    return Promise.resolve();
+  } catch (error) {
+    telemetry.trackException(
+      new Error(errorTypes.OPERATIONAL_ERROR),
+      SeverityLevel.Error,
+      { ComponentName: 'MSAL', Message: 'Failed to initialize MSAL' }
+    );
+    return Promise.reject(error);
+  }
+}
