@@ -13,7 +13,8 @@ import {
   PopoverTrigger,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
+  useId
 } from '@fluentui/react-components';
 import { PersonAdd20Regular, SignOut20Regular } from '@fluentui/react-icons';
 import { forwardRef, useEffect } from 'react';
@@ -103,7 +104,7 @@ const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) =
   };
 
   return (
-    <div className={styles.card}>
+    <div role="dialog" id="profileContent" className={styles.card}>
       <CardHeader
         header={
           <Body1>
@@ -152,7 +153,10 @@ const SignedInButton = forwardRef<
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
       <Button
-        aria-label={translateMessage('sign out')}
+        aria-label={`${user?.displayName} ${translateMessage('sign out')}`}
+        aria-haspopup='dialog'
+        aria-expanded={false}
+        aria-controls='profileContent'
         appearance='subtle'
         className={styles.iconButton}
         ref={ref}
@@ -171,6 +175,7 @@ SignedInButton.displayName = 'SignedInButton';
 
 const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }) => {
   const dispatch = useAppDispatch();
+  const ariaId = useId();
 
   const profile = useAppSelector((state) => state.profile);
   const authenticated = useAppSelector((state) => state.auth.authToken);
@@ -185,13 +190,16 @@ const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }
   if (!profile) {
     return <Spinner />;
   }
+
+  const cardAriaLabel = `${profile.user?.displayName}'s ${translateMessage('profile')} ${translateMessage('card')}`;
+
   return (
-    <Popover withArrow>
+    <Popover withArrow inertTrapFocus>
       <PopoverTrigger disableButtonEnhancement>
         <SignedInButton />
       </PopoverTrigger>
 
-      <PopoverSurface tabIndex={-1}>
+      <PopoverSurface aria-label={cardAriaLabel} aria-live='polite' aria-labelledby={ariaId}>
         <PopoverContent signInWithOther={signInWithOther} profile={profile}/>
       </PopoverSurface>
     </Popover>
