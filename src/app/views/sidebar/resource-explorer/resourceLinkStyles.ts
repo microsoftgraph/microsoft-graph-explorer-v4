@@ -10,7 +10,10 @@ export const useStyles = makeStyles({
     alignItems: 'center',
     marginRight: tokens.spacingHorizontalS,
     position: 'relative',
-    ':hover .actions, :focus-within .actions': {
+    '& .actions': {
+      display: 'none'
+    },
+    '&:hover .actions, &:focus-within .actions, &:focus-visible .actions, &:focus .actions': {
       display: 'flex',
       alignItems: 'center'
     }

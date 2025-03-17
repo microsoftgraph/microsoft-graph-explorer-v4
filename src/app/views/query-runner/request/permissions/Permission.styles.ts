@@ -8,7 +8,7 @@ const permissionStyles = makeStyles({
     marginLeft: tokens.spacingHorizontalS
   },
   table: {
-    tableLayout: 'fixed',
+    tableLayout: 'auto',
     display: 'table-cell'
   },
   tableHeader: {

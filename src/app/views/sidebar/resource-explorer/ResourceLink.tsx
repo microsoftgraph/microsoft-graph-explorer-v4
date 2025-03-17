@@ -122,7 +122,7 @@ const ResourceLinkActions = ({
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
   ) => void
 }) => (
-  <div className={`${iconButtonStyles.actions} actions`}>
+  <div className='actions'>
     {resourceLink.method && (
       <Tooltip
         withArrow

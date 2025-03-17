@@ -90,9 +90,9 @@ const ResourceExplorer = () => {
     return debounce((event: React.ChangeEvent<HTMLInputElement>) => changeSearchValue(event), 300);
   }, []);
 
-  const clickLink = (ev?: React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
+  const clickLink = (ev?: React.KeyboardEvent<HTMLElement> | React.MouseEvent<HTMLElement>, item?: IResourceLink) => {
     ev?.preventDefault();
-    if (!item) {return;}
+    if (!item) { return; }
     // Toggle expanded state for items with child links
     if (item.links.length > 0) {
       const updatedOpenItems = new Set(openItems);
@@ -221,13 +221,21 @@ const ResourceExplorer = () => {
     return items_.map((item, index) => (
       <React.Fragment key={item.key}>
         <FlatTreeItem
+          key={item.key}
           value={item.key ?? ''}
           itemType={item.links.length > 0 ? 'branch' : 'leaf'}
           aria-level={level}
           aria-setsize={items_.length}
           aria-posinset={index + 1}
           parentValue={parentValue}
+          tabIndex={0}
           onClick={(ev) => clickLink(ev, item)}
+          onKeyDown={(ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+              ev.preventDefault();
+              clickLink(ev, item);
+            }
+          }}
         >
           <TreeItemLayout
             className={resourceExplorerStyles.treeItemLayout}
@@ -273,7 +281,7 @@ const ResourceExplorer = () => {
       />
       <Button onClick={openPreviewCollection}
         icon={<Collections20Regular />}
-        aria-label={translateMessage('My API Collection')}
+        aria-label={translateMessage(`My API Collection: ${selectedLinks?.length} ${translateMessage('items')}`)}
         className={resourceExplorerStyles.apiCollectionButton}
       >
         {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}

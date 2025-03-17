@@ -8,7 +8,7 @@ export interface PopupsComponent<Data = {}> {
 }
 
 interface PopupSettings {
-  title: React.ReactNode | string;
+  title: string;
   subtitle?: string;
   width?: width;
   renderFooter?: () => JSX.Element;
