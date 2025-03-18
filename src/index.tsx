@@ -35,7 +35,6 @@ import { initializeMsal } from './modules/authentication/msal-app';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
-initializeIcons();
 await initializeMsal();
 
 let currentTheme = readFromLocalStorage(CURRENT_THEME);
