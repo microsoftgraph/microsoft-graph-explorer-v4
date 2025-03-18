@@ -37,5 +37,8 @@ export const useStyles = makeStyles({
       outline: '2px solid !important',
       outlineOffset: '2px !important'
     }
+  },
+  messageBar: {
+    whiteSpace: 'wrap'
   }
 });
