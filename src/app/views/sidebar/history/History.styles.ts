@@ -2,8 +2,7 @@ import { makeStyles } from '@fluentui/react-components'
 export const useHistoryStyles = makeStyles({
   container: {
     display: 'flex',
-    flexDirection: 'column',
-    marginTop: '8px'
+    flexDirection: 'column'
   },
   tree: {
     flexGrow: 1,
