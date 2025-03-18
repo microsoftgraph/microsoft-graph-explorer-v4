@@ -11,7 +11,8 @@ import {
   Tooltip,
   TreeItemValue,
   TreeOpenChangeData,
-  TreeOpenChangeEvent
+  TreeOpenChangeEvent,
+  useRestoreFocusTarget
 } from '@fluentui/react-components';
 import { Collections20Regular, AddSquare20Regular, SubtractSquare20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
@@ -44,6 +45,7 @@ const ResourceExplorer = () => {
   const resourceExplorerStyles = useResourceExplorerStyles();
   const searchBoxStyles = useSearchBoxStyles();
   const spinnerStyles = useSpinnerStyles();
+  const restoreFocusTargetAttribute = useRestoreFocusTarget();
 
   const dispatch: AppDispatch = useAppDispatch();
   const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
@@ -283,6 +285,7 @@ const ResourceExplorer = () => {
       />
       <Button onClick={openPreviewCollection}
         icon={<Collections20Regular />}
+        {...restoreFocusTargetAttribute}
         aria-label={translateMessage(`My API Collection: ${selectedLinks?.length} ${translateMessage('items')}`)}
         className={resourceExplorerStyles.apiCollectionButton}
       >
