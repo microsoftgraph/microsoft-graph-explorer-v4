@@ -26,7 +26,6 @@ export const useLayoutStyles = makeStyles({
     maxWidth: '50vw',
     minWidth: '48px',
     position: 'relative',
-    height: 'calc(100vh - 98px)',
     overflow: 'hidden',
     transition: 'flex-basis 0.2s ease-in-out',
 
@@ -73,7 +72,7 @@ export const useLayoutStyles = makeStyles({
     flexDirection: 'column',
     minHeight: '200px',
     height:'auto',
-    maxHeight: '100%',
+    maxHeight: '40%',
     overflow: 'auto',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
