@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: '100vh',
+    height: '90vh',
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground2,
     borderRightWidth: tokens.strokeWidthThin,
