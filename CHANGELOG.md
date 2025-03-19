@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [10.5.4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.3...v10.5.4) (2025-03-05)
+
+
+### Bug Fixes
+
+* add deploy to blob storage task ([#3694](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3694)) ([d5f3012](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d5f3012aee43e0bad418b24ce739fa94b8d61a97))
+
+## [10.5.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.2...v10.5.3) (2025-02-28)
+
+
+### Bug Fixes
+
+* use connectionString for NSP enabled components ([#3618](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3618)) ([0a15bbc](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/0a15bbc347b6a29992298107843cafd21d2a4114))
+
+## [10.5.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.1...v10.5.2) (2025-02-26)
+
+
+### Bug Fixes
+
+* disable save all button after saving changes ([#3656](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3656)) ([7388fd7](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/7388fd7c0c24f421b235327bf49f00c4e826d2d5))
+* make the dialog actions responsive in collections ([#3493](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3493)) ([b285bbd](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/b285bbdd4f16f91947319b4597bd7ff075ef624f))
+
 ## [10.5.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.0...v10.5.1) (2025-01-16)
 
 

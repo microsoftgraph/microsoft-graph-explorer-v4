@@ -6,9 +6,7 @@
 # 1. Validates the repository's pull requests and commits
 # 2. Builds and publishes release artifacts
 # 3. This pipeline will be extended to the OneESPT template
-
 name: $(date:yyyyMMdd)$(rev:.r)
-
 pr:
   branches:
     include:
@@ -30,11 +28,9 @@ pr:
       - README.md
       - azure-pipelines.yml
       - package-lock.json
-
 variables:
   isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
   isDev: $[eq(variables['Build.SourceBranch'], 'refs/heads/dev')]
-
 trigger:
   branches:
     include:
@@ -56,7 +52,6 @@ trigger:
       - README.md
       - azure-pipelines.yml
       - package-lock.json
-
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -66,7 +61,6 @@ resources:
   - repository: ReleasePipelines
     type: git
     name: "Graph Developer Experiences/release-pipelines"
-
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
@@ -74,57 +68,46 @@ extends:
       name: Azure-Pipelines-1ESPT-ExDShared
       image: windows-latest
       os: windows
-
     sdl:
       sourceRepositoriesToScan:
         exclude:
         - repository: ReleasePipelines
-
     customBuildTags:
     - ES365AIMigrationTooling
-
     stages:
     - stage: BuildTestAndPublish
       jobs:
       - job: One
         displayName: "Build and test validation"
         steps:
-
         - task: ComponentGovernanceComponentDetection@0
           inputs:
             scanType: "Register"
             verbosity: "Verbose"
             alertWarningLevel: "High"
             ignoreDirectories: ".github,.vscode/"
-
         - task: NodeTool@0
           inputs:
             versionSpec: "18.16.x"
           displayName: "Install Node.js"
-
         - script: |
             npm install
           displayName: "npm install"
-
         - script: |
             npm run lint
           displayName: "Runs linting checks"
-
         - script: |
             npm test
           displayName: "Runs Unit tests"
-
         - task: PublishTestResults@2
           condition: succeededOrFailed()
           inputs:
             testResultsFormat: "JUnit"
             testResultsFiles: "test-report.xml"
           displayName: "Publish Test Results"
-
         - script: |
             npm run build
           displayName: "Run build"
-
       - job: Two
         displayName: "Run playwright tests"
         condition: eq(variables['isDev'], 'true')
@@ -133,30 +116,26 @@ extends:
           inputs:
             versionSpec: "18.16.x"
           displayName: "Install npm"
-
         - script: |
             npm install
           displayName: "npm install"
-
         - script: |
             npm install -D @playwright/test
             npx playwright install-deps
           displayName: "Install playwright dependancies"
-
         - script: |
             npx playwright install
           displayName: "Install playwright"
-
         - script: |
             npm run test-playwright-accessibility
           displayName: "Run accessibility tests"
-
         - script: |
             set CI=true
             npm run test-playwright
           env:
             REACT_APP_CLIENT_ID: $(REACT_APP_PLAYWRIGHT_TEST_CLIENT_ID)
             REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+            REACT_APP_CONNECTION_STRING: $(REACT_APP_STAGING_CONNECTION_STRING)
             REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
@@ -166,7 +145,6 @@ extends:
             PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
             PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
           displayName: "Run playwright tests"
-
         templateContext:
           outputs:
           - output: pipelineArtifact
@@ -174,7 +152,6 @@ extends:
             condition: always()
             targetPath: $(System.DefaultWorkingDirectory)/playwright-report
             artifactName: playwright-report
-
       - job: Three
         displayName: "Publish artifacts"
         dependsOn: One
@@ -183,16 +160,15 @@ extends:
           inputs:
             versionSpec: "18.16.x"
           displayName: "Install Node.js"
-
         - script: |
             npm install
           displayName: "npm install"
-
         - script: |
             npm run build
           env:
             REACT_APP_CLIENT_ID: $(REACT_APP_STAGING_CLIENT_ID)
             REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
+            REACT_APP_CONNECTION_STRING: $(REACT_APP_STAGING_CONNECTION_STRING)
             REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
@@ -201,7 +177,6 @@ extends:
             REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
             REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for staging"
-
         - task: PowerShell@2
           displayName: "Set version-number"
           condition: and(succeeded(), eq(variables['isMaster'], 'true'))
@@ -213,13 +188,13 @@ extends:
               $versionNumber = $json.version;
               Write-Host "Setting the build number variable to '$versionNumber'."
               Write-Host "##vso[build.updatebuildnumber]$versionNumber"
-
         - script: |
             npm run build
           condition: and(succeeded(), eq(variables['isMaster'], 'true'))
           env:
             REACT_APP_CLIENT_ID: $(REACT_APP_PROD_CLIENT_ID)
             REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_INSTRUMENTATION_KEY)
+            REACT_APP_CONNECTION_STRING: $(REACT_APP_CONNECTION_STRING)
             REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
             REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
@@ -228,7 +203,6 @@ extends:
             REACT_APP_DEVX_API_URL: $(REACT_APP_DEVX_API_URL)
             REACT_APP_MIGRATION_PARAMETER: $(REACT_APP_MIGRATION_PARAMETER)
           displayName: "Build static assets for prod"
-
         - task: PowerShell@2
           displayName: "Create _manifest directory"
           inputs:
@@ -237,31 +211,26 @@ extends:
               $manifestPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/_manifest"
               mkdir -p $manifestPath
               Write-Host "Created directory '$manifestPath'."
-
         - task: ManifestGeneratorTask@0
           inputs:
             ManifestDirPath: "$(System.DefaultWorkingDirectory)/_manifest"
             BuildComponentPath: "$(System.DefaultWorkingDirectory)/build"
             PackageName: "graph-explorer-v2"
             PackageVersion: "$(Build.UpdateBuildNumber)"
-
         - task: CopyFiles@1
           displayName: "Copy manifest files to artifact staging dir: manifest"
           inputs:
             SourceFolder: "$(System.DefaultWorkingDirectory)/_manifest"
             TargetFolder: "$(Build.ArtifactStagingDirectory)/manifest"
-
         - task: CopyFiles@1
           displayName: "Copy files to: $(Build.ArtifactStagingDirectory)/build"
           inputs:
             SourceFolder: "$(System.DefaultWorkingDirectory)/build"
             TargetFolder: "$(Build.ArtifactStagingDirectory)/build"
-
         - task: DeleteFiles@1
           inputs:
             contents: node_modules
           displayName: "Delete node_modules"
-
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/build'
@@ -269,7 +238,6 @@ extends:
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/build/graph-explorer.zip'
             replaceExistingArchive: true
-
         templateContext:
           outputs:
           - output: pipelineArtifact
@@ -280,47 +248,11 @@ extends:
             displayName: 'Publish Artifact: drop'
             targetPath: "$(build.ArtifactStagingDirectory)/build"
             artifactName: drop
-
       - template: pipelines/templates/checkout-and-copy-1es.yml@ReleasePipelines
         parameters:
           directory: 'microsoft-graph-explorer-v4'
           repoName: ReleasePipelines
           dependsOn: ['Three']
-
-    - stage: DeployStaging
-      condition: and(contains(variables['build.sourceBranch'], 'refs/heads/dev'), succeeded())
-      dependsOn: BuildTestAndPublish
-      jobs:
-      - deployment: staging
-        templateContext:
-          type: releaseJob
-          isProduction: false
-          inputs:
-          - input: pipelineArtifact
-            artifactName: drop
-            targetPath: '$(Build.ArtifactStagingDirectory)/drop'
-        environment: graphexplorer-staging
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: AzureWebApp@1
-                displayName: 'Deploy to graphTryIt-staging copy'
-                inputs:
-                  azureSubscription: 'Federated GE Managed Identity Connection'
-                  appType: webApp
-                  appName: 'graphTryIt-staging'
-                  package: '$(Build.ArtifactStagingDirectory)/drop'
-
-              - task: AzureFileCopy@6
-                displayName: 'Deploy to dev storage -tst'
-                inputs:
-                  SourcePath: '$(Build.ArtifactStagingDirectory)/drop'
-                  azureSubscription: 'Federated GE Managed Identity Connection'
-                  Destination: AzureBlob
-                  storage: graphexplorerstorage
-                  ContainerName: deployments
-                  BlobPrefix: 'vendor/bower_components/explorer-v2/build'
 
     - stage: DeployProduction
       condition: and(contains(variables['build.sourceBranch'], 'refs/heads/master'), succeeded())
@@ -339,14 +271,6 @@ extends:
           runOnce:
             deploy:
               steps:
-              - task: AzureWebApp@1
-                displayName: 'Azure Web App Deploy: graphTryIt'
-                inputs:
-                  azureSubscription: 'Federated GE Managed Identity Connection'
-                  appType: webApp
-                  appName: graphTryIt
-                  package: '$(Build.ArtifactStagingDirectory)/drop'
-
               - task: AzureFileCopy@6
                 displayName: 'Deploy to portal - staging'
                 inputs:
