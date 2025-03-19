@@ -275,10 +275,10 @@ extends:
                 displayName: 'Deploy to portal - staging'
                 inputs:
                   SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-                  azureSubscription: 'Federated GE Torus-Portals Managed Identity Connection'
+                  azureSubscription: 'Federated Portals Managed Identity Connection'
                   Destination: AzureBlob
-                  storage: graphexpstppeeastus
-                  ContainerName: graphexpcontppe
+                  storage: graphstagingblobstorage
+                  ContainerName: staging
                   BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
 
               # - task: AzureFileCopy@6
