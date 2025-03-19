@@ -47,7 +47,7 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     width: '100%',
     flex: 1,
-    height: '100%',
+    height: '-webkit-fill-available',
     overflow: 'hidden'
   },
   tabList:{
@@ -57,13 +57,13 @@ const useStyles = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: 0,
+    minHeight: '0',
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
-    overflow: 'hidden'
+    overflow: 'auto'
   }
 });
 

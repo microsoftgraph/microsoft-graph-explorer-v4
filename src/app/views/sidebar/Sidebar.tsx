@@ -21,11 +21,15 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: '100%',
+    height: '90vh',
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground2,
     borderRightWidth: tokens.strokeWidthThin,
-    borderRight: `1px solid ${tokens.colorNeutralForeground3}`
+    borderRight: `1px solid ${tokens.colorNeutralForeground3}`,
+    '@media (max-width: 768px)': {
+      height: 'auto',
+      minHeight: '100%'
+    }
   },
   sidebarToggle: {
     marginLeft: 'auto'

@@ -5,9 +5,10 @@ export const useHistoryStyles = makeStyles({
     flexDirection: 'column'
   },
   tree: {
-    height: 'calc(100vh - 374px)',
+    flexGrow: 1,
     overflowY: 'auto',
-    padding: '5px'
+    padding: '5px',
+    maxHeight: 'calc(100vh - 100px)'
   },
   searchBox: {
     width: '100%',

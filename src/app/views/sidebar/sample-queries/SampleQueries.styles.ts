@@ -1,7 +1,7 @@
 import { makeStyles, tokens } from '@fluentui/react-components';
 export const useStyles = makeStyles({
   container: {
-    marginTop: '6px'
+    marginTop: '8px'
   },
   searchBox: {
     width: '100%',
@@ -24,9 +24,10 @@ export const useStyles = makeStyles({
     }
   },
   tree: {
-    height: 'calc(100vh - 374px)',
+    flexGrow: 1,
     overflowY: 'auto',
-    padding: '5px'
+    padding: '5px',
+    maxHeight: 'calc(100vh - 100px)'
   },
   itemLayout: {
     paddingLeft: tokens.spacingHorizontalXXL
@@ -36,5 +37,8 @@ export const useStyles = makeStyles({
       outline: '2px solid !important',
       outlineOffset: '2px !important'
     }
+  },
+  messageBar: {
+    whiteSpace: 'wrap'
   }
 });

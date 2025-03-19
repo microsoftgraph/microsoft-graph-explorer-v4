@@ -142,8 +142,9 @@ const CachedSetMessageBar = () => {
  * @returns {JSX.Element} The rendered MessageBar component with a link.
  */
 const SeeMoreQueriesMessageBar = () => {
+  const sampleQueriesStyles = useStyles();
   return (
-    <MessageBar intent={'info'}>
+    <MessageBar className={sampleQueriesStyles.messageBar} intent={'info'}>
       <MessageBarBody>
         {translateMessage('see more queries')}{' '}
         <Link
