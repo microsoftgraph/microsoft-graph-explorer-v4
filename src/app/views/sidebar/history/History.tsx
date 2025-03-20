@@ -567,6 +567,8 @@ const History = ()=>{
       placeholder={translateMessage('Search history items')}
       onChange={handleSearchValueChanged}
       className={styles.searchBox}
+      aria-live='polite'
+      aria-label={translateMessage('Search history items')}
     >
     </SearchBox>
     <hr/>
@@ -576,7 +578,14 @@ const History = ()=>{
       </MessageBarBody>
     </MessageBar>
     {historyItems.length === 0 && <Label size='medium'>{translateMessage('We did not find any history items')}</Label>}
-    <AriaLiveAnnouncer><Text>{`${historyItems.length} search results available.`}</Text></AriaLiveAnnouncer>
+    <AriaLiveAnnouncer>
+      <Text
+        aria-live='polite'
+        aria-label={`${historyItems.length} ${translateMessage('search results available')}.`}
+      >
+        {`${historyItems.length} ${translateMessage('search results available')}.`}
+      </Text>
+    </AriaLiveAnnouncer>
     <HistoryItems history={items} searchValue={searchValue} groups={groups}></HistoryItems>
   </div>
 }

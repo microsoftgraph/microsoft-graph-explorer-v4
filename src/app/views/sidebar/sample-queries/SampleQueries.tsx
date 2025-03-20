@@ -91,12 +91,19 @@ export const SampleQueries = () => {
         className={sampleQueriesStyles.searchBox}
         placeholder={translateMessage('Search sample queries')}
         onChange={handleSearchValueChange}
+        aria-live='polite'
+        aria-label={translateMessage('Search sample queries')}
       />
       <hr />
       {error && <CachedSetMessageBar />}
       <SeeMoreQueriesMessageBar />
       <AriaLiveAnnouncer>
-        <Text>{`${sampleQueries.length} search results available.`}</Text>
+        <Text
+          aria-live='polite'
+          aria-label={`${sampleQueries.length} ${translateMessage('search results available')}.`}
+        >
+          {`${sampleQueries.length} ${translateMessage('search results available')}.`}
+        </Text>
       </AriaLiveAnnouncer>
       {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} searchValue={searchValue} />}
     </div>

@@ -1,4 +1,5 @@
 import {
+  AriaLiveAnnouncer,
   Button,
   SearchBox,
   Spinner,
@@ -8,6 +9,7 @@ import {
   FlatTreeItem,
   TreeItemLayout,
   CounterBadge,
+  Text,
   Tooltip,
   TreeItemValue,
   TreeOpenChangeData,
@@ -22,7 +24,7 @@ import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 import { IQuery } from '../../../../types/query-runner';
 import { IResourceLink, ResourceLinkType, ResourceOptions } from '../../../../types/resources';
-import { existsInCollection, setExisting } from './resourcelink.utils';
+import { existsInCollection } from './resourcelink.utils';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { GRAPH_URL } from '../../../services/graph-constants';
@@ -282,7 +284,17 @@ const ResourceExplorer = () => {
         placeholder={translateMessage('Search resources')}
         onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}
         className={searchBoxStyles.root}
+        aria-live='polite'
+        aria-label={translateMessage('Search resources')}
       />
+      <AriaLiveAnnouncer>
+        <Text
+          aria-live='polite'
+          aria-label={`${items.length} ${translateMessage('search results available')}.`}
+        >
+          {`${items.length} ${translateMessage('search results available')}.`}
+        </Text>
+      </AriaLiveAnnouncer>
       <Button onClick={openPreviewCollection}
         icon={<Collections20Regular />}
         {...restoreFocusTargetAttribute}
