@@ -229,11 +229,16 @@ const ResourceExplorer = () => {
           aria-posinset={index + 1}
           parentValue={parentValue}
           tabIndex={0}
+          className={resourceExplorerStyles.focusVisible}
           onClick={(ev) => clickLink(ev, item)}
           onKeyDown={(ev) => {
             if (ev.key === 'Enter' || ev.key === ' ') {
               ev.preventDefault();
               clickLink(ev, item);
+            }
+            // Let Tab key pass through to child elements
+            if (ev.key !== 'Tab') {
+              ev.stopPropagation();
             }
           }}
         >

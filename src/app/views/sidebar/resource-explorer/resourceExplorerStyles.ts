@@ -51,6 +51,15 @@ export const useResourceExplorerStyles = makeStyles({
     '> div.fui-TreeItemLayout__main': {
       width: '100%'
     }
+  },
+  focusVisible: {
+    '& .actions': {
+      display: 'none'
+    },
+    '&:hover .actions, &:focus-within .actions, &:focus-visible .actions, &:focus .actions': {
+      display: 'flex',
+      alignItems: 'center'
+    }
   }
 });
 

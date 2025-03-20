@@ -5,18 +5,10 @@ export const useStyles = makeStyles({
   link: {
     display: 'flex',
     lineHeight: tokens.lineHeightBase300,
-    overflow: 'hidden',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginRight: tokens.spacingHorizontalS,
-    position: 'relative',
-    '& .actions': {
-      display: 'none'
-    },
-    '&:hover .actions, &:focus-within .actions, &:focus-visible .actions, &:focus .actions': {
-      display: 'flex',
-      alignItems: 'center'
-    }
+    position: 'relative'
   },
   resourceLinkNameContainer: {
     textAlign: 'left',
@@ -32,15 +24,6 @@ export const useStyles = makeStyles({
   },
   badge: {
     maxWidth: '50px'
-  },
-  actions: {
-    display: 'none',
-    '& a:focus, a:focus-within, & button:focus': {
-      outline: `2px solid ${tokens.colorBrandStroke1}`,
-      outlineOffset: '2px',
-      display: 'flex',
-      alignItems: 'center'
-    }
   },
   linkIcon: {
     display: 'flex',

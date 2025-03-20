@@ -270,7 +270,7 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
     >
       <Link
         className={styles.focusableLink}
-        aria-label={item.humanName + translateMessage('Read documentation')}
+        aria-label={translateMessage('Read documentation')}
         target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
         <DocumentText20Regular />
       </Link>
