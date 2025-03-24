@@ -12,6 +12,7 @@ import {
   FlatTreeItem,
   InputOnChangeData,
   Link,
+  mergeClasses,
   MessageBar,
   MessageBarActions,
   MessageBarBody,
@@ -219,7 +220,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             aria-setsize={leafs.length}
             aria-posinset={leafs.findIndex((q) => q.id === query.id) + 1}
             itemType='leaf'
-            className={`${notSignedIn ? leafStyles.disabled : ''} ${isActive ? leafStyles.activeLeaf : ''}`}
+            className={mergeClasses(notSignedIn && leafStyles.disabled,isActive && leafStyles.activeLeaf)}
             id={query.id}
             tabIndex={0}
             onKeyDown={(e) => {

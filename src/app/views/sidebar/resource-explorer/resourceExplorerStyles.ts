@@ -61,6 +61,9 @@ export const useResourceExplorerStyles = makeStyles({
       display: 'flex',
       alignItems: 'center'
     }
+  },
+  activeLeaf: {
+    backgroundColor: tokens.colorNeutralBackground4
   }
 });
 

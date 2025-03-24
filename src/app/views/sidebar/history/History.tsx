@@ -198,6 +198,7 @@ const HistoryItems = (props: HistoryProps)=>{
   const dispatch = useAppDispatch()
   const {groups, history} = props
   const shouldGenerateGroups = useRef(true);
+  const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
 
   const openHistoryItems = new Set<string>()
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch));
@@ -214,6 +215,7 @@ const HistoryItems = (props: HistoryProps)=>{
   };
 
   const handleViewQuery = (query: IHistoryItem)=>{
+    setSelectedItemKey(query.createdAt);
     const { sampleUrl, queryVersion } = parseSampleUrl(query.url);
     const sampleQuery: IQuery = {
       sampleUrl,
@@ -340,6 +342,7 @@ const HistoryItems = (props: HistoryProps)=>{
                 aria-level={groups.length}
                 aria-setsize={historyLeafs.length}
                 aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
+                className={h.createdAt === selectedItemKey ? itemStyles.activeLeaf : undefined}
               >
                 <TreeItemLayout
                   onClick={() => handleViewQuery(h)}

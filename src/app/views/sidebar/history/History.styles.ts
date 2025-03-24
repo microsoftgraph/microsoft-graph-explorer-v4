@@ -1,4 +1,4 @@
-import { makeStyles } from '@fluentui/react-components'
+import { makeStyles, tokens } from '@fluentui/react-components'
 export const useHistoryStyles = makeStyles({
   container: {
     display: 'flex',
@@ -25,5 +25,8 @@ export const useHistoryStyles = makeStyles({
   },
   badge: {
     maxWidth: '50px'
+  },
+  activeLeaf: {
+    backgroundColor: tokens.colorNeutralBackground4
   }
 })
