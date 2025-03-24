@@ -178,6 +178,7 @@ interface SampleLeaf {
   leafs: ISampleQuery[];
   group: IGroup;
   handleSelectedSample: (item: ISampleQuery)=> void;
+  selectedQueryKey: string | null;
 }
 
 /**
@@ -196,6 +197,8 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
   return (
     <>
       {leafs.map((query: ISampleQuery) => {
+        const queryKey = query.id ?? `${query.method}-${query.requestUrl}`;
+        const isActive = queryKey === props.selectedQueryKey;
         const notSignedIn = !isSignedIn && query.method !== 'GET';
         const handleOnClick = (item:ISampleQuery)=>{
           if (!isSignedIn) {
@@ -216,7 +219,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             aria-setsize={leafs.length}
             aria-posinset={leafs.findIndex((q) => q.id === query.id) + 1}
             itemType='leaf'
-            className={notSignedIn ? leafStyles.disabled : ''}
+            className={`${notSignedIn ? leafStyles.disabled : ''} ${isActive ? leafStyles.activeLeaf : ''}`}
             id={query.id}
             tabIndex={0}
             onKeyDown={(e) => {
@@ -350,12 +353,26 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const authenticated = authToken.token
   const styles = useStyles();
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
+  const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
+  const [hasAutoSelected, setHasAutoSelected] = useState(false);
 
   useEffect(() => {
     if (!searchValue && queries.length === 0) {
       dispatch(fetchSamples());
     } else {
       setSampleQueries(queries);
+      if (!hasAutoSelected && queries.length > 0) {
+        const defaultSample = queries.find(q =>
+          q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
+        );
+
+        if (defaultSample) {
+          const defaultKey = defaultSample.id ?? `${defaultSample.method}-${defaultSample.requestUrl}`;
+          setSelectedQueryKey(defaultKey);
+          sampleQueryItemSelected(defaultSample);
+          setHasAutoSelected(true);
+        }
+      }
     }
   }, [queries]);
 
@@ -377,6 +394,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   };
 
   const sampleQueryItemSelected = (item: ISampleQuery)=>{
+    const itemKey = item.id ?? `${item.method}-${item.requestUrl}`;
+    setSelectedQueryKey(itemKey);
     dispatch(setQueryResponseStatus({
       messageBarType: '',
       statusText: '',
@@ -469,6 +488,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 )}
                 group={group}
                 handleSelectedSample={sampleQueryItemSelected}
+                selectedQueryKey={selectedQueryKey}
               />
             )}
           </React.Fragment>

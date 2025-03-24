@@ -40,5 +40,8 @@ export const useStyles = makeStyles({
   },
   messageBar: {
     whiteSpace: 'wrap'
+  },
+  activeLeaf: {
+    backgroundColor: tokens.colorNeutralBackground4
   }
 });
