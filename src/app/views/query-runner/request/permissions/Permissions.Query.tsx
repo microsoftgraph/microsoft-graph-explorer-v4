@@ -1,8 +1,13 @@
 import {
   Table, TableHeader, TableRow, TableCell, TableBody,
-  Link, Text, Label
+  Link, Text, Label,
+  TableColumnSizingOptions,
+  useTableFeatures,
+  useTableColumnSizing_unstable,
+  TableFeaturesState,
+  TableFeaturePlugin
 } from '@fluentui/react-components';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { IPermission } from '../../../../../types/permissions';
 import { ValidationContext } from '../../../../services/context/validation-context/ValidationContext';
@@ -16,6 +21,7 @@ import { getColumns } from './columns';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 import permissionStyles  from './Permission.styles';
 
+interface PermissionTableItem { item: IPermission; index: number }
 
 export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -74,13 +80,37 @@ export const Permissions = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    let updatedPermissions = scopes.data.specificPermissions || [];
-    updatedPermissions = sortPermissionsWithPrivilege(updatedPermissions);
+    const specific = scopes.data?.specificPermissions ?? [];
+    let updatedPermissions = sortPermissionsWithPrivilege(specific);
     updatedPermissions = setConsentedStatus(tokenPresent, updatedPermissions, consentedScopes);
     setPermissions(updatedPermissions.map((item, index) => ({ item, index })));
   }, [scopes.data.specificPermissions, tokenPresent, consentedScopes]);
 
-  const columns = getColumns({ source: 'tab', tokenPresent });
+  const columnSizingOptions: TableColumnSizingOptions = useMemo(() => ({
+    value: { defaultWidth: 150, minWidth: 110 },
+    consentDescription: { defaultWidth: 300 },
+    isAdmin: { defaultWidth: 187, minWidth: 190 },
+    consented: { defaultWidth: 140, minWidth: 130 },
+    consentType: { defaultWidth: 140, minWidth: 130 }
+  }), []);
+
+  const columns = useMemo(() => getColumns({ source: 'tab', tokenPresent }), [tokenPresent]);
+
+  const columnSizing = useMemo(() => {
+    return useTableColumnSizing_unstable<PermissionTableItem>({ columnSizingOptions }) as TableFeaturePlugin;
+  }, [columnSizingOptions]);
+
+
+  const tableState = useMemo(() => {
+    if (!permissions || permissions.length === 0 || !columns.length) {return null;}
+    return useTableFeatures<PermissionTableItem>({
+      columns,
+      items: permissions
+    }, [columnSizing]);
+  }, [columns, permissions, columnSizing]);
+
+  const getTableProps = tableState?.columnSizing_unstable?.getTableProps ?? (() => ({}));
+  const getTableHeaderCellProps = tableState?.columnSizing_unstable?.getTableHeaderCellProps ?? (() => ({}));
 
   if (loading.isSpecificPermissions) {
     return <div className={styles.label}><Text>{translateMessage('Fetching permissions')}... </Text></div>;
@@ -130,12 +160,15 @@ export const Permissions = (): JSX.Element => {
         </Label>
       </div>
       <div className={styles.tableWrapper}>
-        <Table className={styles.table} aria-label={translateMessage('Permissions Table')}  size="extra-small">
+        <Table
+          {...getTableProps()}
+          className={styles.table} aria-label={translateMessage('Permissions Table')}  size="small">
           <TableHeader className={styles.tableHeader}>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.columnId}
+                  {...getTableHeaderCellProps(column.columnId)}
                   style={{ textAlign: column.columnId === 'consented' ? 'center' : 'left' }}
                 >
                   {column.renderHeaderCell()}
