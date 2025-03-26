@@ -21,13 +21,13 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: '90vh',
+    height: '100%',
     padding: `0 ${tokens.spacingHorizontalS}`,
     backgroundColor: tokens.colorNeutralBackground2,
     borderRightWidth: tokens.strokeWidthThin,
     borderRight: `1px solid ${tokens.colorNeutralForeground3}`,
     '@media (max-width: 768px)': {
-      height: 'auto',
+      height: '100%',
       minHeight: '100%'
     }
   },
@@ -101,11 +101,11 @@ const renderTablistItems = (showSidebar: boolean) =>{
     )
   }
   return (
-    <>
+    <div style={{height: '100%'}}>
       <Tab id='sample-queries' value='sample-queries' icon={<Rocket20Regular />}></Tab>
       <Tab id='resources' value='resources' icon={<GroupList20Regular />}></Tab>
       <Tab id='history' value='history' icon={<History20Regular />}></Tab>
-    </>
+    </div>
   )
 }
 
