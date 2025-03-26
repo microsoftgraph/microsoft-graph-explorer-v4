@@ -50,6 +50,11 @@ const useStyles = makeStyles({
     height: '-webkit-fill-available',
     overflow: 'hidden'
   },
+  tabContainer: {
+    display: 'flex',
+    flexShrink: 0,
+    overflowX: 'hidden'
+  },
   tabList:{
     padding: '5px 5px'
   },
@@ -107,8 +112,6 @@ export const GetPivotItems = () => {
   const body = useAppSelector((state) => state.graphResponse.response.body);
   const styles = useStyles();
   const selected = translateMessage('Response Preview');
-  const { mobileScreen } = useAppSelector((state) => state.sidebarProperties);
-
   const [selectedValue, setSelectedValue] = useState<TabValue>(selected);
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
@@ -129,7 +132,7 @@ export const GetPivotItems = () => {
 
   return (
     <div className={styles.container}>
-      {mobileScreen ? (
+      <div className={styles.tabContainer}>
         <Overflow minimumVisible={2}>
           <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small'>
             {tabs.map((tab) => (
@@ -142,15 +145,7 @@ export const GetPivotItems = () => {
             <OverflowMenu onTabSelect={setSelectedValue} tabs={tabs} />
           </TabList>
         </Overflow>
-      ) : (
-        <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small' className={styles.tabList}>
-          {tabs.map((tab) => (
-            <Tab key={tab.id} value={tab.id} icon={tab.icon}>
-              {tab.name}
-            </Tab>
-          ))}
-        </TabList>
-      )}
+      </div>
       <div className={styles.tabContent}>
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
