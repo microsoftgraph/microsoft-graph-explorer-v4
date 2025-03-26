@@ -356,13 +356,14 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
   const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
   const [hasAutoSelected, setHasAutoSelected] = useState(false);
+  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
   useEffect(() => {
     if (!searchValue && queries.length === 0) {
       dispatch(fetchSamples());
     } else {
       setSampleQueries(queries);
-      if (!hasAutoSelected && queries.length > 0) {
+      if (!mobileScreen && !hasAutoSelected && queries.length > 0) {
         const defaultSample = queries.find(q =>
           q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
         );
