@@ -30,7 +30,7 @@ import {
   darkThemeHostConfig,
   lightThemeHostConfig
 } from '../adaptive-cards/AdaptiveHostConfig';
-import { default as GraphToolkit } from '../graph-toolkit/GraphToolkit';
+import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
 import {
   ArrowHookDownRightRegular,
@@ -46,62 +46,61 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    flex: 1,
-    height: '-webkit-fill-available',
+    height: '100%',
     overflow: 'hidden'
   },
-  tabContainer: {
-    display: 'flex',
-    flexShrink: 0,
-    overflowX: 'hidden'
-  },
-  tabList:{
-    padding: '5px 5px'
+  tabHeader: {
+    display: 'flex'
   },
   tabContent: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '0',
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
+    minHeight: '0',
     overflow: 'auto'
   }
 });
 
-const OverflowMenuItem = ({ tab, onClick }:
-  { tab: { id: string; name: string; icon: JSX.Element }; onClick: () => void }) => {
-  const isVisible = useIsOverflowItemVisible(tab.id);
-  if (isVisible) {return null;}
-  return (
-    <MenuItem key={tab.id} icon={tab.icon} onClick={onClick}>
-      {tab.name}
-    </MenuItem>
-  );
-};
-
-const OverflowMenu = ({ onTabSelect, tabs }:
-  { onTabSelect: (tabId: string) => void; tabs: { id: string; name: string; icon: JSX.Element }[] }) => {
+const OverflowMenu = ({
+  onTabSelect,
+  tabs
+}: {
+  onTabSelect: (tabId: string) => void;
+  tabs: { id: string; name: string; icon: JSX.Element }[];
+}) => {
   const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>();
 
-  if (!isOverflowing) {
-    return null;
-  }
+  const visibilityMap = Object.fromEntries(
+    tabs.map((tab) => [tab.id, useIsOverflowItemVisible(tab.id)])
+  );
+
+  if (!isOverflowing) {return null;}
 
   return (
     <Menu hasIcons>
       <MenuTrigger disableButtonEnhancement>
-        <Button appearance='transparent' ref={ref}
-          icon={<MoreHorizontalRegular />} aria-label={`${overflowCount} more tabs`} role='tab' />
+        <Button
+          appearance='transparent'
+          ref={ref}
+          icon={<MoreHorizontalRegular />}
+          aria-label={`${overflowCount} more tabs`}
+          role='tab'
+        />
       </MenuTrigger>
       <MenuPopover>
         <MenuList>
-          {tabs.map((tab) => (
-            <OverflowMenuItem key={tab.id} tab={tab} onClick={() => onTabSelect(tab.id)} />
-          ))}
+          {tabs
+            .filter((tab) => !visibilityMap[tab.id])
+            .map((tab) => (
+              <MenuItem key={tab.id} icon={tab.icon} onClick={() => onTabSelect(tab.id)}>
+                {tab.name}
+              </MenuItem>
+            ))}
         </MenuList>
       </MenuPopover>
     </Menu>
@@ -109,43 +108,70 @@ const OverflowMenu = ({ onTabSelect, tabs }:
 };
 
 export const GetPivotItems = () => {
-  const body = useAppSelector((state) => state.graphResponse.response.body);
   const styles = useStyles();
+  const body = useAppSelector((state) => state.graphResponse.response.body);
   const selected = translateMessage('Response Preview');
   const [selectedValue, setSelectedValue] = useState<TabValue>(selected);
 
-  const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
+  const onTabSelect = (_: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value);
   };
 
   const tabs = [
-    { id: translateMessage('Response Preview'),
+    {
+      id: translateMessage('Response Preview'),
       name: translateMessage('Response Preview'),
       icon: <ArrowHookDownRightRegular />
     },
-    { id: translateMessage('Response Headers'),
-      name:translateMessage('Response Headers'), icon:<DocumentChevronDoubleRegular /> },
-    { id: translateMessage('Snippets'), name: translateMessage('Snippets'), icon: <ClipboardCodeRegular /> },
-    { id: translateMessage('Graph toolkit'), name: translateMessage('Graph toolkit'), icon: <WindowWrenchRegular /> },
-    { id: translateMessage('Adaptive Cards'), name: translateMessage('Adaptive Cards'), icon: <CardUiRegular /> }
+    {
+      id: translateMessage('Response Headers'),
+      name: translateMessage('Response Headers'),
+      icon: <DocumentChevronDoubleRegular />
+    },
+    {
+      id: translateMessage('Snippets'),
+      name: translateMessage('Snippets'),
+      icon: <ClipboardCodeRegular />
+    },
+    {
+      id: translateMessage('Graph toolkit'),
+      name: translateMessage('Graph toolkit'),
+      icon: <WindowWrenchRegular />
+    },
+    {
+      id: translateMessage('Adaptive Cards'),
+      name: translateMessage('Adaptive Cards'),
+      icon: <CardUiRegular />
+    }
   ];
 
   return (
     <div className={styles.container}>
-      <div className={styles.tabContainer}>
-        <Overflow minimumVisible={2}>
-          <TabList selectedValue={selectedValue} onTabSelect={onTabSelect} size='small'>
-            {tabs.map((tab) => (
-              <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedValue ? 2 : 1}>
-                <Tab value={tab.id} icon={tab.icon}>
-                  {tab.name}
-                </Tab>
-              </OverflowItem>
-            ))}
-            <OverflowMenu onTabSelect={setSelectedValue} tabs={tabs} />
-          </TabList>
-        </Overflow>
+      <div className={styles.tabHeader}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <Overflow minimumVisible={2}>
+            <TabList
+              selectedValue={selectedValue}
+              onTabSelect={onTabSelect}
+              size="small"
+            >
+              {tabs.map((tab) => (
+                <OverflowItem
+                  key={tab.id}
+                  id={tab.id}
+                  priority={tab.id === selectedValue ? 2 : 1}
+                >
+                  <Tab value={tab.id} icon={tab.icon}>
+                    {tab.name}
+                  </Tab>
+                </OverflowItem>
+              ))}
+              <OverflowMenu onTabSelect={setSelectedValue} tabs={tabs} />
+            </TabList>
+          </Overflow>
+        </div>
       </div>
+
       <div className={styles.tabContent}>
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
