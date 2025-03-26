@@ -43,7 +43,7 @@ const SubmitButton = ({
         <span className={classes.buttonContent}>
           {text}
           <Spinner
-            size="small"
+            size='small'
             className={mergeClasses(classes.spinner, submitting && classes.spinnerVisible)}
           />
         </span>
