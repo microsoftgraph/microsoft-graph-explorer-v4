@@ -6,7 +6,7 @@ import {
   useId
 } from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
 import { resetSaveState, updateResourcePaths } from '../../../../services/slices/collections.slice';
 import Paths from './Paths';
@@ -40,6 +40,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
   const styles = useStyles();
   const dropdownId = useId('dropdown-scope');
+  const dropdownRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (saved) {
@@ -47,6 +48,12 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
       setPendingChanges([]);
     }
   }, [saved]);
+
+  useEffect(() => {
+    if (selectedItems.length > 0 && dropdownRef.current) {
+      dropdownRef.current.focus();
+    }
+  }, [selectedItems]);
 
   const columns = [
     { key: 'url', name: 'Select all', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
@@ -104,6 +111,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           onOptionSelect={handleScopeChange}
           disabled={selectedItems.length === 0}
           className={styles.dropdown}
+          aria-label={translateMessage('Select one scope')}
+          ref={dropdownRef}
         >
           {scopeOptions.map(option => (
             <Option key={option.key} value={option.key}>
