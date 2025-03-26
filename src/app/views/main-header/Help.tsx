@@ -45,7 +45,8 @@ export const Help = () => {
       {
         key: 'ge-documentation',
         text: translateMessage('Get started with Graph Explorer'),
-        href: 'https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0',
+        // eslint-disable-next-line max-len
+        href: 'https://learn.microsoft.com/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0/?WT.mc_id=msgraph_inproduct_graphexhelp',
         target: '_blank',
         iconProps: {
           iconName: 'TextDocument'
