@@ -175,8 +175,8 @@ const ResourceExplorer = () => {
     };
 
     return (
-      <>
-        <div className='action-button'>
+      <div className={resourceExplorerStyles.treeActions}>
+        <div>
           {isInCollection ? (
             <Tooltip
               withArrow
@@ -213,7 +213,7 @@ const ResourceExplorer = () => {
             aria-label={messageCount + translateMessage('Resources')}
           />
         )}
-      </>
+      </div>
     );
   };
 
