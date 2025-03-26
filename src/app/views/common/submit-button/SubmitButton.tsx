@@ -18,8 +18,7 @@ const useStyles = makeStyles({
     visibility: 'visible'
   },
   button: {
-    width: '100%',
-    padding: '3px'
+    width: '100%'
   }
 });
 
