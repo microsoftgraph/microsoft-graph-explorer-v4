@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   Dropdown,
   Field,
@@ -6,7 +6,9 @@ import {
   Option,
   Badge,
   makeStyles,
-  tokens
+  tokens,
+  SelectionEvents,
+  OptionOnSelectData
 } from '@fluentui/react-components';
 import { ErrorCircle12Filled } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -60,6 +62,7 @@ const QueryInput = (props: IQueryInputProps) => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
+  const [dropdownKey, setDropdownKey] = useState(0);
 
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const authToken = useAppSelector((state) => state.auth.authToken);
@@ -101,6 +104,28 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnRunQuery(query);
   };
 
+  const handleMethodSelect = (
+    event: SelectionEvents,
+    data: OptionOnSelectData
+  ) => {
+    if (!data.optionValue) {
+      return;
+    }
+    handleOnMethodChange(data.optionValue);
+    setDropdownKey(prevKey => prevKey + 1);
+  };
+
+  const handleVersionChange = (
+    event: SelectionEvents,
+    data: OptionOnSelectData
+  ) => {
+    if (!data.optionValue) {
+      return;
+    }
+    handleOnVersionChange(data.optionValue);
+    setDropdownKey(prevKey => prevKey + 1);
+  };
+
   // Compute the selected badge color for the method dropdown
   const selectedMethod = sampleQuery.selectedVerb;
   const selectedBadgeColor = getStyleFor(selectedMethod);
@@ -119,17 +144,13 @@ const QueryInput = (props: IQueryInputProps) => {
           relationship='description'
           withArrow>
           <Dropdown
-            aria-label={translateMessage('HTTP request method option')}
+            key={dropdownKey}
+            aria-labelledby='http-method-dropdown'
             placeholder='Select method'
             value={sampleQuery.selectedVerb}
             className={classes.smallDropdown}
             button={{ style: { color: selectedBadgeColor } }}
-            onOptionSelect={(event, data) => {
-              handleOnMethodChange({
-                key: data.optionValue,
-                text: data.optionValue
-              });
-            }}
+            onOptionSelect={handleMethodSelect}
           >
             {Object.values(httpMethods).map((method) => {
               const badgeColor = methodColors[method] || 'brand';
@@ -156,15 +177,11 @@ const QueryInput = (props: IQueryInputProps) => {
         withArrow
       >
         <Dropdown
-          aria-label={translateMessage('Microsoft Graph API Version option')}
+          key={dropdownKey}
+          aria-labelledby='graph-api-version-dropdown'
           placeholder='Select a version'
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
-          onOptionSelect={(event, data) => {
-            handleOnVersionChange({
-              key: data.optionValue,
-              text: data.optionValue
-            });
-          }}
+          onOptionSelect={handleVersionChange}
           className={classes.smallDropdown}
         >
           {GRAPH_API_VERSIONS.map((version) => (
