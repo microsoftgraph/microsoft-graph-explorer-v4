@@ -104,17 +104,6 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnRunQuery(query);
   };
 
-  const handleDropdownSelect = (
-    event: SelectionEvents,
-    data: OptionOnSelectData
-  ) => {
-    if (!data.optionValue) {
-      return;
-    }
-    handleChange(data.optionValue);
-    setDropdownKey(prevKey => prevKey + 1);
-  };
-
   // Compute the selected badge color for the method dropdown
   const selectedMethod = sampleQuery.selectedVerb;
   const selectedBadgeColor = getStyleFor(selectedMethod);
@@ -137,9 +126,12 @@ const QueryInput = (props: IQueryInputProps) => {
             aria-labelledby='http-method-dropdown'
             placeholder='Select method'
             value={sampleQuery.selectedVerb}
+            selectedOptions={[sampleQuery.selectedVerb || httpMethods.GET]}
             className={classes.smallDropdown}
             button={{ style: { color: selectedBadgeColor } }}
-            onOptionSelect={handleDropdownSelect}
+            onOptionSelect={(event, data) => {
+              handleChange(data.optionValue);
+            }}
           >
             {Object.values(httpMethods).map((method) => {
               const badgeColor = methodColors[method] || 'brand';
@@ -169,8 +161,11 @@ const QueryInput = (props: IQueryInputProps) => {
           key={dropdownKey}
           aria-labelledby='graph-api-version-dropdown'
           placeholder='Select a version'
+          selectedOptions={[sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]]}
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
-          onOptionSelect={handleDropdownSelect}
+          onOptionSelect={(event, data) => {
+            handleChange(data.optionValue);
+          }}
           className={classes.smallDropdown}
         >
           {GRAPH_API_VERSIONS.map((version) => (
