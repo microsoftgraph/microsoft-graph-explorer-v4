@@ -57,7 +57,7 @@ const useStyles = makeStyles({
 });
 
 const QueryInput = (props: IQueryInputProps) => {
-  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } = props;
+  const { handleOnRunQuery, handleChange } = props;
 
   const classes = useStyles();
   const dispatch = useAppDispatch();
@@ -104,25 +104,14 @@ const QueryInput = (props: IQueryInputProps) => {
     handleOnRunQuery(query);
   };
 
-  const handleMethodSelect = (
+  const handleDropdownSelect = (
     event: SelectionEvents,
     data: OptionOnSelectData
   ) => {
     if (!data.optionValue) {
       return;
     }
-    handleOnMethodChange(data.optionValue);
-    setDropdownKey(prevKey => prevKey + 1);
-  };
-
-  const handleVersionChange = (
-    event: SelectionEvents,
-    data: OptionOnSelectData
-  ) => {
-    if (!data.optionValue) {
-      return;
-    }
-    handleOnVersionChange(data.optionValue);
+    handleChange(data.optionValue);
     setDropdownKey(prevKey => prevKey + 1);
   };
 
@@ -150,7 +139,7 @@ const QueryInput = (props: IQueryInputProps) => {
             value={sampleQuery.selectedVerb}
             className={classes.smallDropdown}
             button={{ style: { color: selectedBadgeColor } }}
-            onOptionSelect={handleMethodSelect}
+            onOptionSelect={handleDropdownSelect}
           >
             {Object.values(httpMethods).map((method) => {
               const badgeColor = methodColors[method] || 'brand';
@@ -181,7 +170,7 @@ const QueryInput = (props: IQueryInputProps) => {
           aria-labelledby='graph-api-version-dropdown'
           placeholder='Select a version'
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
-          onOptionSelect={handleVersionChange}
+          onOptionSelect={handleDropdownSelect}
           className={classes.smallDropdown}
         >
           {GRAPH_API_VERSIONS.map((version) => (

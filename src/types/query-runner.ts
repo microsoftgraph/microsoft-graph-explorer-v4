@@ -31,8 +31,7 @@ export interface IQueryRunnerProps {
 export interface IQueryInputProps {
   styles?: object;
   handleOnRunQuery: Function;
-  handleOnMethodChange: Function;
-  handleOnVersionChange: Function;
+  handleChange: Function;
   actions?: {
     setSampleQuery: Function;
   };
