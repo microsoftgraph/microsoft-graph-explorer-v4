@@ -34,13 +34,15 @@ export function handleShiftArrowSelection<T>({
   focusedIndex,
   anchorIndex,
   items,
-  currentSelection
+  currentSelection,
+  targetIndex
 }: {
-  direction: 'up' | 'down';
+  direction?: 'up' | 'down';
   focusedIndex: number | null;
   anchorIndex: number | null;
   items: T[];
   currentSelection: Set<T>;
+  targetIndex?: number;
 }): {
   newFocusedIndex: number;
   newAnchorIndex: number;
@@ -48,13 +50,18 @@ export function handleShiftArrowSelection<T>({
 } {
   if (focusedIndex === null || anchorIndex === null) {
     return {
-      newFocusedIndex: focusedIndex ?? 0,
-      newAnchorIndex: anchorIndex ?? focusedIndex ?? 0,
+      newFocusedIndex: targetIndex ?? focusedIndex ?? 0,
+      newAnchorIndex: anchorIndex ?? targetIndex ?? focusedIndex ?? 0,
       newSelection: new Set(currentSelection)
     };
   }
 
-  const newIndex = direction === 'down' ? focusedIndex + 1 : focusedIndex - 1;
+  const newIndex =
+    targetIndex !== undefined
+      ? targetIndex
+      : direction === 'down'
+        ? focusedIndex + 1
+        : focusedIndex - 1;
 
   if (newIndex < 0 || newIndex >= items.length) {
     return {

@@ -112,10 +112,24 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
             formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
           }`}
             onClick={(e) => {
-            // Ignore click if the target is a checkbox
               if ((e.target as HTMLElement).tagName !== 'INPUT') {
-                setFocusedIndex(index);
-                setAnchorIndex(null);
+                const isShiftPressed = e.shiftKey;
+                if (isShiftPressed && anchorIndex !== null) {
+                  const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                    targetIndex: index,
+                    focusedIndex,
+                    anchorIndex,
+                    items: resources,
+                    currentSelection: selection
+                  });
+                  setSelection(newSelection);
+                  onSelectionChange?.(Array.from(newSelection));
+                  setFocusedIndex(newFocusedIndex);
+                  setAnchorIndex(newAnchorIndex);
+                } else {
+                  setFocusedIndex(index);
+                  setAnchorIndex(index);
+                }
               }
             }}
             onKeyDown={(e) => {
@@ -143,7 +157,26 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                 <Checkbox
                   aria-label={translateMessage('Select item')}
                   checked={selection.has(resource)}
-                  onChange={() => handleSelectionChange(resource)}
+                  onChange={(e) => {
+                    const isShiftPressed = (e.nativeEvent as PointerEvent).shiftKey;
+                    if (isShiftPressed && anchorIndex !== null) {
+                      const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                        targetIndex: index,
+                        focusedIndex,
+                        anchorIndex,
+                        items: resources,
+                        currentSelection: selection
+                      });
+                      setSelection(newSelection);
+                      onSelectionChange?.(Array.from(newSelection));
+                      setFocusedIndex(newFocusedIndex);
+                      setAnchorIndex(newAnchorIndex);
+                    } else {
+                      handleSelectionChange(resource);
+                      setFocusedIndex(index);
+                      setAnchorIndex(index);
+                    }
+                  }}
                   onFocus={() => {
                     setFocusedIndex(index);
                     setAnchorIndex(anchorIndex === null ? index : anchorIndex);
