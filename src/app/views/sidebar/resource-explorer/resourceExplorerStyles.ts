@@ -43,6 +43,10 @@ export const useResourceExplorerStyles = makeStyles({
     padding: '5px',
     maxHeight: 'calc(100vh - 100px)'
   },
+  treeActions: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   treeItemLayout: {
     width: '100%',
     ':hover, :focus, :focus-visible, :focus-within': {
