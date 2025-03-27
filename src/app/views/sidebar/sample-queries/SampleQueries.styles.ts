@@ -42,6 +42,6 @@ export const useStyles = makeStyles({
     whiteSpace: 'wrap'
   },
   activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground4
+    backgroundColor: tokens.colorNeutralBackground3Hover
   }
 });
