@@ -37,9 +37,6 @@ const useStyles = makeStyles({
   messageBar: {
     marginInlineStart: tokens.spacingHorizontalM,
     width: '100%'
-  },
-  drawerBody: {
-    padding: 0
   }
 });
 
@@ -66,7 +63,6 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
           ) : null}
         </MessageBarBody>
       </MessageBar> : null}
-      {/* <DrawerBody className={styles.drawerBody}>{children}</DrawerBody> */}
       {children}
       <DrawerFooter className={styles.drawerFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
