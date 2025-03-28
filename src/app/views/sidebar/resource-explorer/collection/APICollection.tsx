@@ -42,7 +42,8 @@ const useStyles = makeStyles({
     alignItems: 'center'
   },
   paths: {
-    marginInlineStart: tokens.spacingHorizontalL
+    marginInlineStart: tokens.spacingHorizontalL,
+    height: '80vh'
   }
 });
 

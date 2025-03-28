@@ -4,6 +4,7 @@ import {
   MessageBar,
   MessageBarBody,
   DrawerFooter,
+  DrawerBody,
   tokens
 } from '@fluentui/react-components';
 import { ReactNode } from 'react';
@@ -62,7 +63,7 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
           ) : null}
         </MessageBarBody>
       </MessageBar> : null}
-      {children}
+      <DrawerBody>{children}</DrawerBody>
       <DrawerFooter className={styles.drawerFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}

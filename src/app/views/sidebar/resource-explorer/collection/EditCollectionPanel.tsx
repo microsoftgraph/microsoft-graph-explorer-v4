@@ -16,7 +16,8 @@ const useStyles = makeStyles({
     height: '80vh'
   },
   paths: {
-    marginBlockStart: tokens.spacingVerticalL
+    marginBlockStart: tokens.spacingVerticalL,
+    height: '80vh'
   }
 });
 
