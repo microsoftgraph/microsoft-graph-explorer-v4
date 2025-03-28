@@ -281,15 +281,15 @@ extends:
                   ContainerName: staging
                   BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
 
-              # - task: AzureFileCopy@6
-              #   displayName: 'Deploy to portal - production'
-              #   inputs:
-              #     SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-              #     azureSubscription: 'Federated GE-Portals Managed Identity Connection'
-              #     Destination: AzureBlob
-              #     storage: graphprodblobstorage
-              #     ContainerName: prod
-              #     BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
+              - task: AzureFileCopy@6
+                displayName: 'Deploy to portal - production'
+                inputs:
+                  SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
+                  azureSubscription: 'Federated Portals Managed Identity Connection'
+                  Destination: AzureBlob
+                  storage: graphprodblobstorage
+                  ContainerName: prod
+                  BlobPrefix: 'vendor/bower_components/explorer$(Build.BuildNumber)/build'
 
               # - task: ArchiveFiles@2
               #   displayName: 'Archive built assets'
