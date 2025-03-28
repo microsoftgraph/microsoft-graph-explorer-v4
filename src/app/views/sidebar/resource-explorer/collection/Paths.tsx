@@ -132,12 +132,35 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               ${resource.url} ${translateMessage('scope')}${
               formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
             }`}
-            onClick={(e: React.MouseEvent) => {
-              if ((e.target as HTMLElement).tagName !== 'INPUT') {
-                const isShiftPressed = e.shiftKey;
-                if (isShiftPressed && anchorIndex !== null) {
+              onClick={(e: React.MouseEvent) => {
+                if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                  const isShiftPressed = e.shiftKey;
+                  if (isShiftPressed && anchorIndex !== null) {
+                    const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                      targetIndex: index,
+                      focusedIndex,
+                      anchorIndex,
+                      items: resources,
+                      currentSelection: selection
+                    });
+                    setSelection(newSelection);
+                    onSelectionChange?.(Array.from(newSelection));
+                    setFocusedIndex(newFocusedIndex);
+                    setAnchorIndex(newAnchorIndex);
+                  } else {
+                    setFocusedIndex(index);
+                    setAnchorIndex(index);
+                  }
+                }
+              }}
+              onKeyDown={(e: React.KeyboardEvent) => {
+                if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
+              focusedIndex !== null &&
+              anchorIndex !== null
+                ) {
+                  e.preventDefault();
                   const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
-                    targetIndex: index,
+                    direction: e.key === 'ArrowDown' ? 'down' : 'up',
                     focusedIndex,
                     anchorIndex,
                     items: resources,
@@ -147,31 +170,8 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                   onSelectionChange?.(Array.from(newSelection));
                   setFocusedIndex(newFocusedIndex);
                   setAnchorIndex(newAnchorIndex);
-                } else {
-                  setFocusedIndex(index);
-                  setAnchorIndex(index);
                 }
-              }
-            }}
-            onKeyDown={(e: React.KeyboardEvent) => {
-              if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
-              focusedIndex !== null &&
-              anchorIndex !== null
-              ) {
-                e.preventDefault();
-                const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
-                  direction: e.key === 'ArrowDown' ? 'down' : 'up',
-                  focusedIndex,
-                  anchorIndex,
-                  items: resources,
-                  currentSelection: selection
-                });
-                setSelection(newSelection);
-                onSelectionChange?.(Array.from(newSelection));
-                setFocusedIndex(newFocusedIndex);
-                setAnchorIndex(newAnchorIndex);
-              }
-            }}>
+              }}>
               {isSelectable && (
                 <TableCell id='select-item' aria-label={translateMessage('Select item')} className={styles.checkbox}>
                   <Checkbox
