@@ -56,7 +56,8 @@ export const Help = () => {
       {
         key: 'graph-documentation',
         text: translateMessage('Graph Documentation'),
-        href: ' https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0',
+        // eslint-disable-next-line max-len
+        href: 'https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0%2F/?WT.mc_id=msgraph_inproduct_graphexhelp',
         target: '_blank',
         iconProps: {
           iconName: 'Documentation'
