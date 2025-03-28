@@ -290,18 +290,6 @@ const HistoryItems = (props: HistoryProps)=>{
     dispatch(removeResourcePaths([resourcePath]));
   };
 
-  const toggleGroup = (groupKey: string) => {
-    setOpenItems((prevOpenItems) => {
-      const newOpenItems = new Set(prevOpenItems);
-      if (newOpenItems.has(groupKey)) {
-        newOpenItems.delete(groupKey);
-      } else {
-        newOpenItems.add(groupKey);
-      }
-      return newOpenItems;
-    });
-  };
-
   return(
     <FlatTree
       className={sidebarStyles.tree}

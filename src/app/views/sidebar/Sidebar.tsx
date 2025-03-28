@@ -1,5 +1,5 @@
 import {
-  Button, ButtonProps, makeStyles, SelectTabData, SelectTabEvent, Tab, TabList, tokens,
+  Button, ButtonProps, SelectTabData, SelectTabEvent, Tab, TabList,
   Tooltip
 } from '@fluentui/react-components';
 import {
