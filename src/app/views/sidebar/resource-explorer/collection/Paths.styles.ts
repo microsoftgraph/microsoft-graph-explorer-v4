@@ -3,7 +3,8 @@ import { makeStyles, tokens } from '@fluentui/react-components';
 const pathStyles = makeStyles({
   drawerBody: {
     padding: 0,
-    marginInlineStart: tokens.spacingHorizontalL
+    marginInlineStart: tokens.spacingHorizontalL,
+    height: '80vh'
   },
   table: {
     tableLayout: 'auto',
