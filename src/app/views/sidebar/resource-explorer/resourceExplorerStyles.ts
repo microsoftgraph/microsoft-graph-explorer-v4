@@ -37,12 +37,6 @@ export const useResourceExplorerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
-  tree: {
-    flexGrow: 1,
-    overflowY: 'auto',
-    padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
-  },
   treeActions: {
     display: 'flex',
     alignItems: 'center'
@@ -65,9 +59,6 @@ export const useResourceExplorerStyles = makeStyles({
       display: 'flex',
       alignItems: 'center'
     }
-  },
-  activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground4
   }
 });
 

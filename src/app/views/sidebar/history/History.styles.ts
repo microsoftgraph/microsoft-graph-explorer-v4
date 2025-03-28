@@ -1,18 +1,8 @@
-import { makeStyles, tokens } from '@fluentui/react-components'
+import { makeStyles } from '@fluentui/react-components'
 export const useHistoryStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column'
-  },
-  tree: {
-    flexGrow: 1,
-    overflowY: 'auto',
-    padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
-  },
-  searchBox: {
-    width: '100%',
-    maxWidth: '100%'
   },
   titleAside: {
     display: 'flex',
@@ -25,8 +15,5 @@ export const useHistoryStyles = makeStyles({
   },
   badge: {
     maxWidth: '50px'
-  },
-  activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground4
   }
 })

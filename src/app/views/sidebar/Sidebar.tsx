@@ -11,30 +11,12 @@ import { translateMessage } from '../../utils/translate-messages';
 import History from './history/History';
 import ResourceExplorer from './resource-explorer';
 import { SampleQueries } from './sample-queries/SampleQueries';
+import { useSidebarStyles } from './Sidebar.styles';
 
 interface IShowSidebar {
   show: boolean
   handleShow: ()=>void
 }
-const useStyles = makeStyles({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    height: '100%',
-    padding: `0 ${tokens.spacingHorizontalS}`,
-    backgroundColor: tokens.colorNeutralBackground2,
-    borderRightWidth: tokens.strokeWidthThin,
-    borderRight: `1px solid ${tokens.colorNeutralForeground3}`,
-    '@media (max-width: 768px)': {
-      height: '100%',
-      minHeight: '100%'
-    }
-  },
-  sidebarToggle: {
-    marginLeft: 'auto'
-  }
-})
 const SidebarToggle = (props: IShowSidebar & ButtonProps)=>{
   const {show, handleShow} = props;
   const PanelIcon = ()=> show ? <PanelLeftContract20Regular/>: <PanelLeftExpand20Regular/>
@@ -52,7 +34,7 @@ interface SidebarProps {
   handleToggleSelect: (showSidebarValue: boolean) => void;
 }
 const Sidebar = (props: SidebarProps)=>{
-  const sidebarStyles = useStyles();
+  const sidebarStyles = useSidebarStyles();
   const [showSidebarValue, setShowSidebarValue] = useState(true);
   const [selectedValue, setSelectedValue] = useState<string>('sample-queries');
 

@@ -62,6 +62,7 @@ import { Collection, ResourceLinkType } from '../../../../types/resources';
 import { addResourcePaths, removeResourcePaths } from '../../../services/slices/collections.slice';
 import { METHOD_COLORS, BadgeColors } from '../sidebar-utils/SidebarUtils';
 import { useHistoryStyles } from './History.styles';
+import { useSidebarStyles } from '../Sidebar.styles';
 
 interface IGroup {
   key: string;
@@ -122,7 +123,7 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
   const dispatch = useAppDispatch()
   const {groupName, historyItems} = props
   const [open, setOpen] = useState(false);
-  const styles = useHistoryStyles()
+  const styles = useHistoryStyles();
 
   const handleDeleteHistoryGroup = (event: React.MouseEvent<HTMLButtonElement>)=>{
     event.preventDefault()
@@ -195,7 +196,8 @@ interface HistoryProps {
 }
 
 const HistoryItems = (props: HistoryProps)=>{
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const sidebarStyles = useSidebarStyles();
   const {groups, history} = props
   const shouldGenerateGroups = useRef(true);
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -203,8 +205,6 @@ const HistoryItems = (props: HistoryProps)=>{
   const openHistoryItems = new Set<string>()
   'Today'.split('').forEach(ch=> openHistoryItems.add(ch));
   openHistoryItems.add('Today');
-
-  const itemStyles = useHistoryStyles();
 
   const [openItems, setOpenItems] = useState<Set<TreeItemValue>>(
     () => openHistoryItems
@@ -304,7 +304,7 @@ const HistoryItems = (props: HistoryProps)=>{
 
   return(
     <FlatTree
-      className={itemStyles.tree}
+      className={sidebarStyles.tree}
       openItems={openItems}
       aria-label={translateMessage('History')}
       onOpenChange={handleOpenChange}
@@ -342,7 +342,7 @@ const HistoryItems = (props: HistoryProps)=>{
                 aria-level={groups.length}
                 aria-setsize={historyLeafs.length}
                 aria-posinset={historyLeafs.findIndex((q) => q.createdAt === h.createdAt) + 1}
-                className={h.createdAt === selectedItemKey ? itemStyles.activeLeaf : undefined}
+                className={h.createdAt === selectedItemKey ? sidebarStyles.activeLeaf : undefined}
               >
                 <TreeItemLayout
                   onClick={() => handleViewQuery(h)}
@@ -528,7 +528,8 @@ const getItems = (content: IHistoryItem[]): IHistoryItem[] => {
 
 
 const History = ()=>{
-  const styles = useHistoryStyles()
+  const styles = useHistoryStyles();
+  const sidebarStyles = useSidebarStyles();
   const history = useAppSelector(state=> state.history)
   const [historyItems, setHistoryItems] = useState<IHistoryItem[]>(history)
   const [searchValue, setSearchValue] = useState<string>('');
@@ -569,7 +570,7 @@ const History = ()=>{
     <SearchBox
       placeholder={translateMessage('Search history items')}
       onChange={handleSearchValueChanged}
-      className={styles.searchBox}
+      className={sidebarStyles.searchBox}
       aria-live='polite'
       aria-label={translateMessage('Search history items')}
     >

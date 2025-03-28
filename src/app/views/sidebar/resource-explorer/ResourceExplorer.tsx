@@ -40,12 +40,14 @@ import {
   useSearchBoxStyles,
   useSpinnerStyles
 } from './resourceExplorerStyles';
+import { useSidebarStyles } from '../Sidebar.styles';
 
 const ResourceExplorer = () => {
   const { data, pending } = useAppSelector((state) => state.resources);
   const { collections } = useAppSelector((state) => state.collections);
 
   const resourceExplorerStyles = useResourceExplorerStyles();
+  const sidebarStyles = useSidebarStyles();
   const searchBoxStyles = useSearchBoxStyles();
   const spinnerStyles = useSpinnerStyles();
   const restoreFocusTargetAttribute = useRestoreFocusTarget();
@@ -240,7 +242,7 @@ const ResourceExplorer = () => {
             tabIndex={0}
             className={mergeClasses(
               resourceExplorerStyles.focusVisible,
-              isSelected && resourceExplorerStyles.activeLeaf
+              isSelected && sidebarStyles.activeLeaf
             )}
             onClick={(ev) => clickLink(ev, item)}
             onKeyDown={(ev) => {
@@ -333,7 +335,7 @@ const ResourceExplorer = () => {
       {
         items.length === 0 ? <NoResultsFound message='No resources found' /> :
           <FlatTree
-            className={resourceExplorerStyles.tree}
+            className={sidebarStyles.tree}
             aria-label={translateMessage('Resources')}
             openItems={openItems}
             onOpenChange={handleOpenChange}

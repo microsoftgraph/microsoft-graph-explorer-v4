@@ -3,10 +3,6 @@ export const useStyles = makeStyles({
   container: {
     marginTop: '8px'
   },
-  searchBox: {
-    width: '100%',
-    maxWidth: '100%'
-  },
   iconBefore: {
     display: 'flex',
     flexDirection: 'row',
@@ -40,8 +36,5 @@ export const useStyles = makeStyles({
   },
   messageBar: {
     whiteSpace: 'wrap'
-  },
-  activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground3Hover
   }
 });

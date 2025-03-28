@@ -45,9 +45,11 @@ import {
   isJsonString, performSearch, trackDocumentLinkClickedEvent, trackSampleQueryClickEvent
 } from './sample-query-utils';
 import { useStyles } from './SampleQueries.styles';
+import { useSidebarStyles } from '../Sidebar.styles';
 
 export const SampleQueries = () => {
   const sampleQueriesStyles = useStyles();
+  const sidebarStyles = useSidebarStyles();
   const samples = useAppSelector((s) => s.samples);
   const { error, pending, queries } = samples;
   const [sampleQueries, setSampleQueries] = useState<ISampleQuery[]>(queries);
@@ -89,7 +91,7 @@ export const SampleQueries = () => {
   return (
     <div className={sampleQueriesStyles.container}>
       <SearchBox
-        className={sampleQueriesStyles.searchBox}
+        className={sidebarStyles.searchBox}
         placeholder={translateMessage('Search sample queries')}
         onChange={handleSearchValueChange}
         aria-live='polite'
@@ -194,6 +196,7 @@ interface SampleLeaf {
 const RenderSampleLeafs = (props: SampleLeaf) => {
   const { leafs, group, handleSelectedSample, isSignedIn } = props;
   const leafStyles = useStyles();
+  const sidebarStyles = useSidebarStyles();
 
   return (
     <>
@@ -220,7 +223,7 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             aria-setsize={leafs.length}
             aria-posinset={leafs.findIndex((q) => q.id === query.id) + 1}
             itemType='leaf'
-            className={mergeClasses(notSignedIn && leafStyles.disabled,isActive && leafStyles.activeLeaf)}
+            className={mergeClasses(notSignedIn && leafStyles.disabled,isActive && sidebarStyles.activeLeaf)}
             id={query.id}
             tabIndex={0}
             onKeyDown={(e) => {
