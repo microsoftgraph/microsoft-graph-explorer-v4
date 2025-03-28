@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import {
   Dropdown,
   Field,
@@ -6,7 +6,9 @@ import {
   Option,
   Badge,
   makeStyles,
-  tokens
+  tokens,
+  SelectionEvents,
+  OptionOnSelectData
 } from '@fluentui/react-components';
 import { ErrorCircle12Filled } from '@fluentui/react-icons';
 import { useAppDispatch, useAppSelector } from '../../../../store';
@@ -55,11 +57,12 @@ const useStyles = makeStyles({
 });
 
 const QueryInput = (props: IQueryInputProps) => {
-  const { handleOnRunQuery, handleOnMethodChange, handleOnVersionChange } = props;
+  const { handleOnRunQuery, handleChange } = props;
 
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
+  const [dropdownKey, setDropdownKey] = useState(0);
 
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const authToken = useAppSelector((state) => state.auth.authToken);
@@ -119,16 +122,15 @@ const QueryInput = (props: IQueryInputProps) => {
           relationship='description'
           withArrow>
           <Dropdown
-            aria-label={translateMessage('HTTP request method option')}
+            key={dropdownKey}
+            aria-labelledby='http-method-dropdown'
             placeholder='Select method'
             value={sampleQuery.selectedVerb}
+            selectedOptions={[sampleQuery.selectedVerb || httpMethods.GET]}
             className={classes.smallDropdown}
             button={{ style: { color: selectedBadgeColor } }}
             onOptionSelect={(event, data) => {
-              handleOnMethodChange({
-                key: data.optionValue,
-                text: data.optionValue
-              });
+              handleChange(data.optionValue);
             }}
           >
             {Object.values(httpMethods).map((method) => {
@@ -156,14 +158,13 @@ const QueryInput = (props: IQueryInputProps) => {
         withArrow
       >
         <Dropdown
-          aria-label={translateMessage('Microsoft Graph API Version option')}
+          key={dropdownKey}
+          aria-labelledby='graph-api-version-dropdown'
           placeholder='Select a version'
+          selectedOptions={[sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]]}
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}
           onOptionSelect={(event, data) => {
-            handleOnVersionChange({
-              key: data.optionValue,
-              text: data.optionValue
-            });
+            handleChange(data.optionValue);
           }}
           className={classes.smallDropdown}
         >

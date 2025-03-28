@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { ContentType } from '../../../types/enums';
-import { IQuery } from '../../../types/query-runner';
+import { IQuery, httpMethods } from '../../../types/query-runner';
 import { runQuery } from '../../services/slices/graph-response.slice';
 import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../services/slices/sample-query.slice';
@@ -10,6 +10,7 @@ import { sanitizeQueryUrl } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { translateMessage } from '../../utils/translate-messages';
 import { QueryInput } from './query-input';
+import { GRAPH_API_VERSIONS } from '../../services/graph-constants';
 import './query-runner.scss';
 
 interface IQueryRunnerProps {
@@ -29,17 +30,6 @@ const QueryRunner = (props: IQueryRunnerProps) => {
       dispatch(setSampleQuery(query));
     }
   }, [sampleBody])
-
-  const handleOnMethodChange = (method?: string) => {
-    const query = { ...sampleQuery };
-    if (method !== undefined) {
-      query.selectedVerb = method;
-      dispatch(setSampleQuery(query));
-
-      // Sets selected verb in App Component
-      props.onSelectVerb(method);
-    }
-  };
 
   const handleOnRunQuery = (query?: IQuery) => {
     let sample = { ...sampleQuery };
@@ -84,20 +74,30 @@ const QueryRunner = (props: IQueryRunnerProps) => {
       });
   };
 
-  const handleOnVersionChange = (urlVersion?: string) => {
-    if (urlVersion) {
-      const { queryVersion: oldQueryVersion } = parseSampleUrl(
-        sampleQuery.sampleUrl
-      );
+  const handleOptionChange = (value?: string) => {
+    if (!value) { return; }
+
+    const query = { ...sampleQuery };
+
+    if (Object.values(httpMethods).includes(value)) {
+      query.selectedVerb = value;
+      dispatch(setSampleQuery(query));
+
+      props.onSelectVerb(value);
+    }
+    else if (GRAPH_API_VERSIONS.includes(value)) {
+      const { queryVersion: oldQueryVersion } = parseSampleUrl(query.sampleUrl);
       const { sampleUrl, queryVersion: newQueryVersion } = parseSampleUrl(
-        sampleQuery.sampleUrl,
-        urlVersion
+        query.sampleUrl,
+        value
       );
+
       dispatch(setSampleQuery({
-        ...sampleQuery,
+        ...query,
         sampleUrl,
         selectedVersion: newQueryVersion
       }));
+
       if (oldQueryVersion !== newQueryVersion) {
         telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
           ComponentName: componentNames.VERSION_CHANGE_DROPDOWN,
@@ -111,8 +111,7 @@ const QueryRunner = (props: IQueryRunnerProps) => {
   return (
     <QueryInput
       handleOnRunQuery={handleOnRunQuery}
-      handleOnMethodChange={handleOnMethodChange}
-      handleOnVersionChange={handleOnVersionChange}
+      handleChange={handleOptionChange}
     />
   );
 }
