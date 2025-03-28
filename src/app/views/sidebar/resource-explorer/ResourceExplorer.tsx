@@ -14,7 +14,8 @@ import {
   TreeItemValue,
   TreeOpenChangeData,
   TreeOpenChangeEvent,
-  useRestoreFocusTarget
+  useRestoreFocusTarget,
+  mergeClasses
 } from '@fluentui/react-components';
 import { Collections20Regular, AddSquare20Regular, SubtractSquare20Regular } from '@fluentui/react-icons';
 import debounce from 'lodash.debounce';
@@ -39,15 +40,18 @@ import {
   useSearchBoxStyles,
   useSpinnerStyles
 } from './resourceExplorerStyles';
+import { useSidebarStyles } from '../Sidebar.styles';
 
 const ResourceExplorer = () => {
   const { data, pending } = useAppSelector((state) => state.resources);
   const { collections } = useAppSelector((state) => state.collections);
 
   const resourceExplorerStyles = useResourceExplorerStyles();
+  const sidebarStyles = useSidebarStyles();
   const searchBoxStyles = useSearchBoxStyles();
   const spinnerStyles = useSpinnerStyles();
   const restoreFocusTargetAttribute = useRestoreFocusTarget();
+  const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
 
   const dispatch: AppDispatch = useAppDispatch();
   const selectedLinks = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
@@ -107,6 +111,7 @@ const ResourceExplorer = () => {
       }
       setOpenItems(updatedOpenItems);
     }
+    setSelectedItemKey(item.key);
     setQuery(item);
   };
 
@@ -222,52 +227,58 @@ const ResourceExplorer = () => {
   };
 
   const renderTreeItems = (items_: IResourceLink[], level = 1, parentValue?: string) => {
-    return items_.map((item, index) => (
-      <React.Fragment key={item.key}>
-        <FlatTreeItem
-          key={item.key}
-          value={item.key ?? ''}
-          itemType={item.links.length > 0 ? 'branch' : 'leaf'}
-          aria-level={level}
-          aria-setsize={items_.length}
-          aria-posinset={index + 1}
-          parentValue={parentValue}
-          tabIndex={0}
-          className={resourceExplorerStyles.focusVisible}
-          onClick={(ev) => clickLink(ev, item)}
-          onKeyDown={(ev) => {
-            if (ev.key === 'Enter' || ev.key === ' ') {
-              ev.preventDefault();
-              clickLink(ev, item);
-            }
-            // Let Tab key pass through to child elements
-            if (ev.key !== 'Tab') {
-              ev.stopPropagation();
-            }
-          }}
-        >
-          <TreeItemLayout
-            className={resourceExplorerStyles.treeItemLayout}
-            actions={
-              item.links.length > 0 ? (
-                <ActionsContent
-                  item={item}
-                  messageCount={item.links?.length}
-                />
-              ) : null
-            }
+    return items_.map((item, index) => {
+      const isSelected = item.key === selectedItemKey;
+      return (
+        <React.Fragment key={item.key}>
+          <FlatTreeItem
+            key={item.key}
+            value={item.key ?? ''}
+            itemType={item.links.length > 0 ? 'branch' : 'leaf'}
+            aria-level={level}
+            aria-setsize={items_.length}
+            aria-posinset={index + 1}
+            parentValue={parentValue}
+            tabIndex={0}
+            className={mergeClasses(
+              resourceExplorerStyles.focusVisible,
+              isSelected && sidebarStyles.activeLeaf
+            )}
+            onClick={(ev) => clickLink(ev, item)}
+            onKeyDown={(ev) => {
+              if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                clickLink(ev, item);
+              }
+              // Let Tab key pass through to child elements
+              if (ev.key !== 'Tab') {
+                ev.stopPropagation();
+              }
+            }}
           >
-            <ResourceLink
-              link={item}
-              version={item.version!}
-              resourceOptionSelected={(activity: string, context: IResourceLink) =>
-                resourceOptionSelected(activity, context)}
-            />
-          </TreeItemLayout>
-        </FlatTreeItem>
-        {openItems.has(item.key) && renderTreeItems(item.links, level + 1, item.key)}
-      </React.Fragment>
-    ));
+            <TreeItemLayout
+              className={resourceExplorerStyles.treeItemLayout}
+              actions={
+                item.links.length > 0 ? (
+                  <ActionsContent
+                    item={item}
+                    messageCount={item.links?.length}
+                  />
+                ) : null
+              }
+            >
+              <ResourceLink
+                link={item}
+                version={item.version!}
+                resourceOptionSelected={(activity: string, context: IResourceLink) =>
+                  resourceOptionSelected(activity, context)}
+              />
+            </TreeItemLayout>
+          </FlatTreeItem>
+          {openItems.has(item.key) && renderTreeItems(item.links, level + 1, item.key)}
+        </React.Fragment>
+      )
+    });
   };
 
   if (pending) {
@@ -324,7 +335,7 @@ const ResourceExplorer = () => {
       {
         items.length === 0 ? <NoResultsFound message='No resources found' /> :
           <FlatTree
-            className={resourceExplorerStyles.tree}
+            className={sidebarStyles.tree}
             aria-label={translateMessage('Resources')}
             openItems={openItems}
             onOpenChange={handleOpenChange}

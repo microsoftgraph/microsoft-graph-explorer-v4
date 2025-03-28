@@ -3,10 +3,6 @@ export const useStyles = makeStyles({
   container: {
     marginTop: '8px'
   },
-  searchBox: {
-    width: '100%',
-    maxWidth: '100%'
-  },
   iconBefore: {
     display: 'flex',
     flexDirection: 'row',

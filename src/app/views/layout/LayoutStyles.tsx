@@ -3,7 +3,7 @@ import { makeResetStyles, tokens, makeStyles } from '@fluentui/react-components'
 export const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 export const useLayoutResizeStyles = makeResetStyles({
-  [SIDEBAR_SIZE_CSS_VAR]: '29%'
+  [SIDEBAR_SIZE_CSS_VAR]: '23%'
 })
 
 export const useLayoutStyles = makeStyles({
@@ -22,9 +22,9 @@ export const useLayoutStyles = makeStyles({
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(48px, var(${SIDEBAR_SIZE_CSS_VAR}), 50vw)`,
-    maxWidth: '50vw',
-    minWidth: '48px',
+    flexBasis: `clamp(40px, var(${SIDEBAR_SIZE_CSS_VAR}), 25vw)`,
+    maxWidth: '25vw',
+    minWidth: '40px',
     position: 'relative',
     overflow: 'hidden',
     transition: 'flex-basis 0.2s ease-in-out',
