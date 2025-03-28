@@ -11,7 +11,6 @@ import { fetchAllPrincipalGrants } from '../../../../services/slices/permission-
 import { fetchScopes } from '../../../../services/slices/scopes.slice';
 import { ScopesError } from '../../../../utils/error-utils/ScopesError';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
 import { getColumns } from './columns';
 import { setConsentedStatus, sortPermissionsWithPrivilege } from './util';
 import permissionStyles  from './Permission.styles';
@@ -24,7 +23,6 @@ export const Permissions = (): JSX.Element => {
   const scopes = useAppSelector((state) => state.scopes);
   const authToken = useAppSelector((state) => state.auth.authToken);
   const consentedScopes = useAppSelector((state) => state.auth.consentedScopes);
-  const dimensions = useAppSelector((state) => state.dimensions);
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
 
   const tokenPresent = !!authToken.token;
@@ -33,7 +31,6 @@ export const Permissions = (): JSX.Element => {
   const [permissionsError, setPermissionsError] = useState<ScopesError | null>(error);
 
   const styles = permissionStyles();
-  const tabHeight = convertVhToPx(dimensions.request.height, 110);
 
   useEffect(() => {
     if (error && error?.url.includes('permissions')) {
@@ -74,8 +71,8 @@ export const Permissions = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    let updatedPermissions = scopes.data.specificPermissions || [];
-    updatedPermissions = sortPermissionsWithPrivilege(updatedPermissions);
+    const specific = scopes.data?.specificPermissions ?? [];
+    let updatedPermissions = sortPermissionsWithPrivilege(specific);
     updatedPermissions = setConsentedStatus(tokenPresent, updatedPermissions, consentedScopes);
     setPermissions(updatedPermissions.map((item, index) => ({ item, index })));
   }, [scopes.data.specificPermissions, tokenPresent, consentedScopes]);
@@ -122,6 +119,14 @@ export const Permissions = (): JSX.Element => {
       : displayErrorFetchingPermissionsMessage();
   }
 
+  const columnWidths: Record<string, React.CSSProperties> = {
+    value: { width: 200 },
+    consentDescription: { minWidth: 300 },
+    isAdmin: { width: 190 },
+    consented: { width: 140 },
+    consentType: { width: 140 }
+  };
+
   return (
     <>
       <div className={styles.permissionText}>
@@ -130,13 +135,17 @@ export const Permissions = (): JSX.Element => {
         </Label>
       </div>
       <div className={styles.tableWrapper}>
-        <Table className={styles.table} aria-label={translateMessage('Permissions Table')}  size="extra-small">
+        <Table
+          className={styles.table} aria-label={translateMessage('Permissions Table')}  size="small">
           <TableHeader className={styles.tableHeader}>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.columnId}
-                  style={{ textAlign: column.columnId === 'consented' ? 'center' : 'left' }}
+                  style={{
+                    ...columnWidths[column.columnId],
+                    textAlign: column.columnId === 'consented' ? 'center' : 'left'
+                  }}
                 >
                   {column.renderHeaderCell()}
                 </TableCell>

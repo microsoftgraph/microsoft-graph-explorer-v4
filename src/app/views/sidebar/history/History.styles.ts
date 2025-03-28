@@ -4,16 +4,6 @@ export const useHistoryStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column'
   },
-  tree: {
-    flexGrow: 1,
-    overflowY: 'auto',
-    padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
-  },
-  searchBox: {
-    width: '100%',
-    maxWidth: '100%'
-  },
   titleAside: {
     display: 'flex',
     alignItems: 'center',

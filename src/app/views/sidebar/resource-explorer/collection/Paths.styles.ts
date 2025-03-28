@@ -41,6 +41,9 @@ const pathStyles = makeStyles({
   },
   tableHeader: {
     fontWeight: 'bold'
+  },
+  rowFocused: {
+    backgroundColor: tokens.colorNeutralBackground4
   }
 });
 

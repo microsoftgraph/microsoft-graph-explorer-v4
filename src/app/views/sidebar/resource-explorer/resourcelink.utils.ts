@@ -28,3 +28,60 @@ export const existsInCollection = (link: IResourceLink, paths: ResourcePath[], v
 export function setExisting(item: IResourceLink, value: boolean) {
   item.isInCollection = value;
 }
+
+export function handleShiftArrowSelection<T>({
+  direction,
+  focusedIndex,
+  anchorIndex,
+  items,
+  currentSelection,
+  targetIndex
+}: {
+  direction?: 'up' | 'down';
+  focusedIndex: number | null;
+  anchorIndex: number | null;
+  items: T[];
+  currentSelection: Set<T>;
+  targetIndex?: number;
+}): {
+  newFocusedIndex: number;
+  newAnchorIndex: number;
+  newSelection: Set<T>;
+} {
+  if (focusedIndex === null || anchorIndex === null) {
+    return {
+      newFocusedIndex: targetIndex ?? focusedIndex ?? 0,
+      newAnchorIndex: anchorIndex ?? targetIndex ?? focusedIndex ?? 0,
+      newSelection: new Set(currentSelection)
+    };
+  }
+
+  const newIndex =
+    targetIndex !== undefined
+      ? targetIndex
+      : direction === 'down'
+        ? focusedIndex + 1
+        : focusedIndex - 1;
+
+  if (newIndex < 0 || newIndex >= items.length) {
+    return {
+      newFocusedIndex: focusedIndex,
+      newAnchorIndex: anchorIndex,
+      newSelection: new Set(currentSelection)
+    };
+  }
+
+  const rangeStart = Math.min(anchorIndex, newIndex);
+  const rangeEnd = Math.max(anchorIndex, newIndex);
+
+  const newSelection = new Set<T>();
+  for (let i = rangeStart; i <= rangeEnd; i++) {
+    newSelection.add(items[i]);
+  }
+
+  return {
+    newFocusedIndex: newIndex,
+    newAnchorIndex: anchorIndex,
+    newSelection
+  };
+}

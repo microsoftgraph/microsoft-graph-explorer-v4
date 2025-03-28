@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Checkbox, Label, Tooltip, Badge } from '@fluentui/react-components';
+import { Checkbox, Label, Tooltip, Badge, mergeClasses } from '@fluentui/react-components';
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '@fluentui/react-components';
 import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
@@ -7,6 +7,7 @@ import { PERMS_SCOPE } from '../../../../services/graph-constants';
 import pathStyles from './Paths.styles';
 import { METHOD_COLORS } from '../../sidebar-utils/SidebarUtils';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { handleShiftArrowSelection } from '../resourcelink.utils';
 
 interface IPathProps {
   resources: ResourcePath[];
@@ -19,6 +20,8 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   const styles = pathStyles();
   const [selection, setSelection] = React.useState<Set<ResourcePath>>(new Set());
   const [allSelected, setAllSelected] = React.useState(false);
+  const [focusedIndex, setFocusedIndex] = React.useState<number | null>(null);
+  const [anchorIndex, setAnchorIndex] = React.useState<number | null>(null);
 
   const handleSelectionChange = (item: ResourcePath) => {
     const newSelection = new Set(selection);
@@ -98,25 +101,103 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
         </TableRow>
       </TableHeader>
       <TableBody>
-        {resources.map((resource) => (
+        {resources.map((resource, index) => (
           <TableRow
             key={resource.key}
-            className={styles.row}
+            tabIndex={0}
+            className={mergeClasses(styles.row, focusedIndex === index && styles.rowFocused)}
             aria-label={`${translateMessage('Http method')} ${resource.method || ''}
               /${translateMessage('version')}${resource.version}${translateMessage('url')}
               ${resource.url} ${translateMessage('scope')}${
             formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
           }`}
-            tabIndex={0}>
+            onClick={(e) => {
+              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                const isShiftPressed = e.shiftKey;
+                if (isShiftPressed && anchorIndex !== null) {
+                  const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                    targetIndex: index,
+                    focusedIndex,
+                    anchorIndex,
+                    items: resources,
+                    currentSelection: selection
+                  });
+                  setSelection(newSelection);
+                  onSelectionChange?.(Array.from(newSelection));
+                  setFocusedIndex(newFocusedIndex);
+                  setAnchorIndex(newAnchorIndex);
+                } else {
+                  setFocusedIndex(index);
+                  setAnchorIndex(index);
+                }
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
+              focusedIndex !== null &&
+              anchorIndex !== null
+              ) {
+                e.preventDefault();
+                const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                  direction: e.key === 'ArrowDown' ? 'down' : 'up',
+                  focusedIndex,
+                  anchorIndex,
+                  items: resources,
+                  currentSelection: selection
+                });
+                setSelection(newSelection);
+                onSelectionChange?.(Array.from(newSelection));
+                setFocusedIndex(newFocusedIndex);
+                setAnchorIndex(newAnchorIndex);
+              }
+            }}
+          >
             {isSelectable && (
               <TableCell className={styles.checkbox}>
                 <Checkbox
                   aria-label={translateMessage('Select item')}
                   checked={selection.has(resource)}
-                  onChange={() => handleSelectionChange(resource)}
+                  onChange={(e) => {
+                    const isShiftPressed = (e.nativeEvent as PointerEvent).shiftKey;
+                    if (isShiftPressed && anchorIndex !== null) {
+                      const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                        targetIndex: index,
+                        focusedIndex,
+                        anchorIndex,
+                        items: resources,
+                        currentSelection: selection
+                      });
+                      setSelection(newSelection);
+                      onSelectionChange?.(Array.from(newSelection));
+                      setFocusedIndex(newFocusedIndex);
+                      setAnchorIndex(newAnchorIndex);
+                    } else {
+                      handleSelectionChange(resource);
+                      setFocusedIndex(index);
+                      setAnchorIndex(index);
+                    }
+                  }}
+                  onFocus={() => {
+                    setFocusedIndex(index);
+                    setAnchorIndex(anchorIndex === null ? index : anchorIndex);
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleSelectionChange(resource);
+                    }
+                    if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                      e.preventDefault();
+                      const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                        direction: e.key === 'ArrowDown' ? 'down' : 'up',
+                        focusedIndex,
+                        anchorIndex,
+                        items: resources,
+                        currentSelection: selection
+                      });
+                      setSelection(newSelection);
+                      onSelectionChange?.(Array.from(newSelection));
+                      setFocusedIndex(newFocusedIndex);
+                      setAnchorIndex(newAnchorIndex);
                     }
                   }}
                 />
