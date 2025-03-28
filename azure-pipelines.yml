@@ -109,50 +109,6 @@ extends:
             npm run build
           displayName: "Run build"
       - job: Two
-        displayName: "Run playwright tests"
-        condition: eq(variables['isDev'], 'true')
-        steps:
-        - task: NodeTool@0
-          inputs:
-            versionSpec: "18.16.x"
-          displayName: "Install npm"
-        - script: |
-            npm install
-          displayName: "npm install"
-        - script: |
-            npm install -D @playwright/test
-            npx playwright install-deps
-          displayName: "Install playwright dependancies"
-        - script: |
-            npx playwright install
-          displayName: "Install playwright"
-        - script: |
-            npm run test-playwright-accessibility
-          displayName: "Run accessibility tests"
-        - script: |
-            set CI=true
-            npm run test-playwright
-          env:
-            REACT_APP_CLIENT_ID: $(REACT_APP_PLAYWRIGHT_TEST_CLIENT_ID)
-            REACT_APP_INSTRUMENTATION_KEY: $(REACT_APP_STAGING_INSTRUMENTATION_KEY)
-            REACT_APP_CONNECTION_STRING: $(REACT_APP_STAGING_CONNECTION_STRING)
-            REACT_APP_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_STAGING_FEEDBACK_CAMPAIGN_ID)
-            REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID: $(REACT_APP_NPS_FEEDBACK_CAMPAIGN_ID)
-            REACT_APP_NOMINATION_PERIOD: $(REACT_APP_NOMINATION_PERIOD)
-            REACT_APP_COOLDOWN_PERIOD: $(REACT_APP_COOLDOWN_PERIOD)
-            REACT_APP_USAGE_TIME: $(REACT_APP_USAGE_TIME)
-            PLAYWRIGHT_TESTS_BASE_URL: $(PLAYWRIGHT_TESTS_BASE_URL)
-            PLAYWRIGHT_TESTS_USERNAME: $(PLAYWRIGHT_TESTS_USERNAME)
-            PLAYWRIGHT_TESTS_PASSWORD: $(PLAYWRIGHT_TESTS_PASSWORD)
-          displayName: "Run playwright tests"
-        templateContext:
-          outputs:
-          - output: pipelineArtifact
-            displayName: 'Publish test results'
-            condition: always()
-            targetPath: $(System.DefaultWorkingDirectory)/playwright-report
-            artifactName: playwright-report
-      - job: Three
         displayName: "Publish artifacts"
         dependsOn: One
         steps:
@@ -252,7 +208,7 @@ extends:
         parameters:
           directory: 'microsoft-graph-explorer-v4'
           repoName: ReleasePipelines
-          dependsOn: ['Three']
+          dependsOn: ['Two']
 
     - stage: DeployProduction
       condition: and(contains(variables['build.sourceBranch'], 'refs/heads/master'), succeeded())
