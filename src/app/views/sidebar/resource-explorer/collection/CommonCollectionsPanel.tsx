@@ -4,7 +4,6 @@ import {
   MessageBar,
   MessageBarBody,
   DrawerFooter,
-  DrawerBody,
   tokens
 } from '@fluentui/react-components';
 import { ReactNode } from 'react';
