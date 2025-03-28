@@ -121,14 +121,12 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           ))}
         </Dropdown>
       </div>
-      <div>
-        <Paths
-          resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
-          columns={columns}
-          isSelectable={true}
-          onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
-        />
-      </div>
+      <Paths
+        resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
+        columns={columns}
+        isSelectable={true}
+        onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
+      />
     </CommonCollectionsPanel>
   );
 };
