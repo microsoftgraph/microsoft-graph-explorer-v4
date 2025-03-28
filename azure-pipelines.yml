@@ -275,7 +275,7 @@ extends:
                 displayName: 'Deploy to portal - staging'
                 inputs:
                   SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-                  azureSubscription: 'Federated GE-Portals Managed Identity Connection'
+                  azureSubscription: 'Federated Portals Managed Identity Connection'
                   Destination: AzureBlob
                   storage: graphstagingblobstorage
                   ContainerName: staging
@@ -285,7 +285,7 @@ extends:
                 displayName: 'Deploy to portal - production'
                 inputs:
                   SourcePath: '$(Build.ArtifactStagingDirectory)/drop/*'
-                  azureSubscription: 'Federated GE-Portals Managed Identity Connection'
+                  azureSubscription: 'Federated Portals Managed Identity Connection'
                   Destination: AzureBlob
                   storage: graphprodblobstorage
                   ContainerName: prod
