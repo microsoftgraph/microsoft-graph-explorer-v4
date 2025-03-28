@@ -14,10 +14,6 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     height: '80vh'
-  },
-  paths: {
-    marginBlockStart: tokens.spacingVerticalL,
-    height: '80vh'
   }
 });
 
@@ -53,14 +49,12 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup })
       closePopup={closePopup}
     >
       {items && items.length > 0 ? (
-        <div className={styles.paths}>
-          <Paths
-            resources={items}
-            columns={columns}
-            isSelectable={true}
-            onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
-          />
-        </div>
+        <Paths
+          resources={items}
+          columns={columns}
+          isSelectable={true}
+          onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
+        />
       ) : (
         <div>
           <Label className={styles.centeredLabel}>

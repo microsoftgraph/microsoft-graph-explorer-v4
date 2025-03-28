@@ -24,9 +24,6 @@ const useStyles = makeStyles({
   },
   dropdown: {
     width: '200px'
-  },
-  paths: {
-    height: '80vh'
   }
 });
 
@@ -124,14 +121,12 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
           ))}
         </Dropdown>
       </div>
-      <div className={styles.paths}>
-        <Paths
-          resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
-          columns={columns}
-          isSelectable={true}
-          onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
-        />
-      </div>
+      <Paths
+        resources={items.map(item => pendingChanges.find(change => change.key === item.key) || item)}
+        columns={columns}
+        isSelectable={true}
+        onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
+      />
     </CommonCollectionsPanel>
   );
 };

@@ -1,6 +1,18 @@
 import * as React from 'react';
-import { Checkbox, Label, Tooltip, Badge, mergeClasses } from '@fluentui/react-components';
-import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from '@fluentui/react-components';
+import {
+  Checkbox,
+  Label,
+  Tooltip,
+  Badge,
+  DrawerBody,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+  mergeClasses
+} from '@fluentui/react-components';
 import { ResourcePath } from '../../../../../types/resources';
 import { formatScopeLabel, scopeOptions } from './collection.util';
 import { PERMS_SCOPE } from '../../../../services/graph-constants';
@@ -77,41 +89,50 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
   };
 
   return (
-    <Table className={styles.table} aria-label={translateMessage('Resources available')}
-      aria-rowcount={resources.length}>
-      <TableHeader>
-        <TableRow>
-          {isSelectable && (
-            <TableHeaderCell>
-              <Checkbox
-                aria-label={translateMessage('Select all')}
-                checked={allSelected}
-                onChange={handleSelectAllChange}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSelectAllChange();
-                  }
-                }}
-              />
-            </TableHeaderCell>
-          )}
-          {columns.map((column) => (
-            <TableHeaderCell className={styles.tableHeader} key={column.key}>{column.name}</TableHeaderCell>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {resources.map((resource, index) => (
-          <TableRow
-            key={resource.key}
-            tabIndex={0}
-            className={mergeClasses(styles.row, focusedIndex === index && styles.rowFocused)}
-            aria-label={`${translateMessage('Http method')} ${resource.method || ''}
+    <DrawerBody className={styles.drawerBody}>
+      <Table className={styles.table} aria-label={translateMessage('Resources available')}
+        aria-rowcount={resources.length}>
+        <TableHeader>
+          <TableRow>
+            {isSelectable && (
+              <TableHeaderCell id='select-all-header' aria-label={translateMessage('Select all')} aria-live='polite'>
+                <Checkbox
+                  aria-labelledby='select-all-header'
+                  checked={allSelected}
+                  onChange={handleSelectAllChange}
+                  onKeyDown={(e: React.KeyboardEvent) => {
+                    if (e.key === 'Enter') {
+                      handleSelectAllChange();
+                    }
+                  }}
+                />
+              </TableHeaderCell>
+            )}
+            {columns.map((column) => (
+              <TableHeaderCell
+                className={styles.tableHeader}
+                key={column.key}
+                aria-label={column.name}
+                aria-live='polite'
+              >
+                {column.name}
+              </TableHeaderCell>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {resources.map((resource, index) => (
+            <TableRow
+              key={resource.key}
+              tabIndex={0}
+              className={mergeClasses(styles.row, focusedIndex === index && styles.rowFocused)}
+              aria-rowindex={index + 1}
+              aria-label={`${translateMessage('Http method')} ${resource.method || ''}
               /${translateMessage('version')}${resource.version}${translateMessage('url')}
               ${resource.url} ${translateMessage('scope')}${
-            formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
-          }`}
-            onClick={(e) => {
+              formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)
+            }`}
+            onClick={(e: React.MouseEvent) => {
               if ((e.target as HTMLElement).tagName !== 'INPUT') {
                 const isShiftPressed = e.shiftKey;
                 if (isShiftPressed && anchorIndex !== null) {
@@ -132,7 +153,7 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                 }
               }
             }}
-            onKeyDown={(e) => {
+            onKeyDown={(e: React.KeyboardEvent) => {
               if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp') &&
               focusedIndex !== null &&
               anchorIndex !== null
@@ -150,76 +171,76 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                 setFocusedIndex(newFocusedIndex);
                 setAnchorIndex(newAnchorIndex);
               }
-            }}
-          >
-            {isSelectable && (
-              <TableCell className={styles.checkbox}>
-                <Checkbox
-                  aria-label={translateMessage('Select item')}
-                  checked={selection.has(resource)}
-                  onChange={(e) => {
-                    const isShiftPressed = (e.nativeEvent as PointerEvent).shiftKey;
-                    if (isShiftPressed && anchorIndex !== null) {
-                      const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
-                        targetIndex: index,
-                        focusedIndex,
-                        anchorIndex,
-                        items: resources,
-                        currentSelection: selection
-                      });
-                      setSelection(newSelection);
-                      onSelectionChange?.(Array.from(newSelection));
-                      setFocusedIndex(newFocusedIndex);
-                      setAnchorIndex(newAnchorIndex);
-                    } else {
-                      handleSelectionChange(resource);
+            }}>
+              {isSelectable && (
+                <TableCell id='select-item' aria-label={translateMessage('Select item')} className={styles.checkbox}>
+                  <Checkbox
+                    aria-labelledby='select-item'
+                    checked={selection.has(resource)}
+                    onChange={(e) => {
+                      const isShiftPressed = (e.nativeEvent as PointerEvent).shiftKey;
+                      if (isShiftPressed && anchorIndex !== null) {
+                        const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                          targetIndex: index,
+                          focusedIndex,
+                          anchorIndex,
+                          items: resources,
+                          currentSelection: selection
+                        });
+                        setSelection(newSelection);
+                        onSelectionChange?.(Array.from(newSelection));
+                        setFocusedIndex(newFocusedIndex);
+                        setAnchorIndex(newAnchorIndex);
+                      } else {
+                        handleSelectionChange(resource);
+                        setFocusedIndex(index);
+                        setAnchorIndex(index);
+                      }
+                    }}
+                    onFocus={() => {
                       setFocusedIndex(index);
-                      setAnchorIndex(index);
-                    }
-                  }}
-                  onFocus={() => {
-                    setFocusedIndex(index);
-                    setAnchorIndex(anchorIndex === null ? index : anchorIndex);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSelectionChange(resource);
-                    }
-                    if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-                      e.preventDefault();
-                      const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
-                        direction: e.key === 'ArrowDown' ? 'down' : 'up',
-                        focusedIndex,
-                        anchorIndex,
-                        items: resources,
-                        currentSelection: selection
-                      });
-                      setSelection(newSelection);
-                      onSelectionChange?.(Array.from(newSelection));
-                      setFocusedIndex(newFocusedIndex);
-                      setAnchorIndex(newAnchorIndex);
-                    }
-                  }}
-                />
-              </TableCell>
-            )}
-            {columns.map((column) => (
-              <TableCell key={column.key}
-                style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}
-                aria-label={column.key === 'url' ?
-                  `${translateMessage('Http method')} ${resource.method || ''} /${translateMessage('version')}` +
+                      setAnchorIndex(anchorIndex === null ? index : anchorIndex);
+                    }}
+                    onKeyDown={(e: React.KeyboardEvent) => {
+                      if (e.key === 'Enter') {
+                        handleSelectionChange(resource);
+                      }
+                      if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                        e.preventDefault();
+                        const { newFocusedIndex, newAnchorIndex, newSelection } = handleShiftArrowSelection({
+                          direction: e.key === 'ArrowDown' ? 'down' : 'up',
+                          focusedIndex,
+                          anchorIndex,
+                          items: resources,
+                          currentSelection: selection
+                        });
+                        setSelection(newSelection);
+                        onSelectionChange?.(Array.from(newSelection));
+                        setFocusedIndex(newFocusedIndex);
+                        setAnchorIndex(newAnchorIndex);
+                      }
+                    }}
+                  />
+                </TableCell>
+              )}
+              {columns.map((column) => (
+                <TableCell key={column.key}
+                  style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}
+                  aria-label={column.key === 'url' ?
+                    `${translateMessage('Http method')} ${resource.method || ''} /${translateMessage('version')}` +
                   `${resource.version}${translateMessage('url')} ${resource.url}` :
-                  `${translateMessage('scope')}
+                    `${translateMessage('scope')}
                   ${formatScopeLabel(resource.scope as PERMS_SCOPE ?? scopeOptions[0].key)}`
-                }
-              >
-                {renderItemColumn(resource, column)}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+                  }
+                >
+                  {renderItemColumn(resource, column)}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </DrawerBody>
   );
 };
 

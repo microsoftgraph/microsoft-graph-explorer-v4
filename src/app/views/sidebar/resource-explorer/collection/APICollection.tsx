@@ -40,10 +40,6 @@ const useStyles = makeStyles({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  paths: {
-    marginInlineStart: tokens.spacingHorizontalL,
-    height: '80vh'
   }
 });
 
@@ -276,12 +272,10 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       />
 
       {items && items.length > 0 ?
-        (<div className={labelStyles.paths}>
-          <Paths
-            resources={items}
-            columns={columns}
-          />
-        </div>
+        (<Paths
+          resources={items}
+          columns={columns}
+        />
         ) :
         (
           <Label className={labelStyles.labelStyle}>

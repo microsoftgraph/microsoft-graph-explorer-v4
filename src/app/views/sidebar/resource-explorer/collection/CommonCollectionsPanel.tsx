@@ -66,7 +66,8 @@ const CommonCollectionsPanel: React.FC<CommonCollectionsPanelProps> = ({
           ) : null}
         </MessageBarBody>
       </MessageBar> : null}
-      <DrawerBody className={styles.drawerBody}>{children}</DrawerBody>
+      {/* <DrawerBody className={styles.drawerBody}>{children}</DrawerBody> */}
+      {children}
       <DrawerFooter className={styles.drawerFooter}>
         <Button appearance="primary" onClick={primaryButtonAction} disabled={primaryButtonDisabled}>
           {translateMessage(primaryButtonText)}
