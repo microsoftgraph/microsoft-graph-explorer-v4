@@ -9,10 +9,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * Fluent V9 Migration upgrades ([#3758](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3758))
 
-### Features
-
-* fluent v9 upgrades feature branch ([#3428](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3428)) ([31f8fab](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/31f8fab6cddd66da0f1028805a36afa0868a2ab8))
-
 
 ### Bug Fixes
 
