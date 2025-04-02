@@ -41,7 +41,11 @@ const SuffixRenderer = () => {
     }).getDocumentationLink();
 
     const documentationUrl = sampleDocumentationUrl || resourceDocumentationUrl;
-    if (documentationUrl) { return documentationUrl; }
+    if (documentationUrl) {
+      const hasQuery = documentationUrl.includes('?');
+      const param = 'WT.mc_id=msgraph_inproduct_graphexhelp';
+      return `${documentationUrl}${hasQuery ? '&' : '?'}${param}`;
+    }
     return null;
   }
 

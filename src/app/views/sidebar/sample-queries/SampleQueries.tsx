@@ -6,7 +6,6 @@ import {
 } from '@fluentui/react';
 import { useEffect, useRef, useState } from 'react';
 
-import { geLocale } from '../../../../appLocale';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQueriesProps, ISampleQuery } from '../../../../types/query-runner';
