@@ -1,3 +1,4 @@
+import { key } from 'localforage';
 import { telemetry } from '../../../telemetry';
 import { IQuery } from '../../../types/query-runner';
 
@@ -34,4 +35,13 @@ export function trackedGenericCopy(
 ) {
   genericCopy(text);
   telemetry.trackCopyButtonClickEvent(componentName, sampleQuery, properties);
+}
+
+export function copyAndTrackText(
+  text: string,
+  componentName: string,
+  properties?: { [key: string]: string }
+) {
+  genericCopy(text);
+  telemetry.trackCopyButtonClickEvent(componentName, undefined, properties);
 }

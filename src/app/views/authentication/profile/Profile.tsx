@@ -1,77 +1,98 @@
 import {
-  ActionButton, Callout, FontSizes, getTheme, IPersonaProps, IPersonaSharedProps, mergeStyleSets,
-  Persona, PersonaSize, Spinner, SpinnerSize, Stack, styled
-} from '@fluentui/react';
-import { useId } from '@fluentui/react-hooks';
-import { useEffect, useState } from 'react';
-
-import { AppDispatch, useAppDispatch, useAppSelector } from '../../../../store';
-import { Mode } from '../../../../types/enums';
+  Body1,
+  Button,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Link,
+  makeStyles,
+  Persona,
+  PersonaProps,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+  Spinner,
+  Text,
+  Tooltip,
+  useId
+} from '@fluentui/react-components';
+import { PersonAdd20Regular, SignOut20Regular } from '@fluentui/react-icons';
+import { forwardRef, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../store';
+import { IProfileState } from '../../../../types/profile';
 import { signOut } from '../../../services/slices/auth.slice';
-import { usePopups } from '../../../services/hooks';
-import { translateMessage } from '../../../utils/translate-messages';
-import { classNames } from '../../classnames';
-import { authenticationStyles } from '../Authentication.styles';
-import { profileStyles } from './Profile.styles';
 import { getProfileInfo } from '../../../services/slices/profile.slice';
-const getInitials = (name: string | undefined) => {
-  let initials = '';
-  if (name && name !== '') {
-    const n = name.indexOf('(');
-    name = name.substring(0, n !== -1 ? n : name.length);
-    const parts = name.split(' ');
-    for (const part of parts) {
-      if (part.length > 0 && part !== '') {
-        initials += part[0];
-      }
-    }
-    initials = initials.substring(0, 2);
+import { translateMessage } from '../../../utils/translate-messages';
+import { useHeaderStyles } from '../../main-header/utils';
+import { usePopups } from '../../../services/hooks/usePopups';
+
+const useProfileStyles = makeStyles({
+  card: {
+    margin: 'auto',
+    maxWidth: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    rowGap: '8px'
+  },
+  headerImage: {
+    borderRadius: '4px',
+    maxWidth: '44px',
+    maxHeight: '44px'
+  },
+  cardPreview: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(1, 0fr)'
+  },
+  footerButton: {
+    width: '100%'
   }
-  return initials;
+});
+
+interface ProfileProps {
+  signInWithOther: ()=>Promise<void>;
+  profile: IProfileState
+}
+
+const PersonaLayout = ({profile}: {profile: IProfileState}) => {
+  const {error, status, user} = profile;
+  const imageUrl = user?.profileImageUrl ?? '';
+
+  if(error){
+    return <Text>{translateMessage('Failed to get profile information')}: {error.message}</Text>
+  }
+  if(status === 'unset'){
+    return  <Spinner size="small" label={translateMessage('Getting profile details')} />
+  }
+  return (
+    <Persona
+      textAlignment='center'
+      size='extra-large'
+      name={user?.displayName}
+      presence={{ status: 'available' }}
+      secondaryText={user?.emailAddress}
+      tertiaryText={user?.profileType}
+      avatar={{
+        image: {
+          src: imageUrl
+        }
+      }}
+    />
+  )
 };
 
-const Profile = (props: any) => {
-  const dispatch: AppDispatch = useAppDispatch();
-  const { profile, auth: { authToken }, graphExplorerMode } = useAppSelector((state) => state);
+
+const PopoverContent: React.FC<Partial<PersonaProps> & ProfileProps> = (props) => {
+  const dispatch = useAppDispatch();
+  const styles = useProfileStyles();
+  const {signInWithOther, profile} = props;
   const user = profile.user;
-
+  const tenant = user && user.tenant ? user.tenant : 'Sample';
   const { show: showPermissions } = usePopups('full-permissions', 'panel');
-  const authenticated = authToken.token;
-  const [isCalloutVisible, setIsCalloutVisible] = useState(false);
-  const toggleIsCalloutVisible = () => { setIsCalloutVisible(!isCalloutVisible) };
-
-  const buttonId = useId('callout-button');
-  const labelId = useId('callout-label');
-  const descriptionId = useId('callout-description');
-  const theme = getTheme();
-  const { personaStyleToken, profileSpinnerStyles, permissionsLabelStyles, personaButtonStyles,
-    profileContainerStyles } = profileStyles(theme);
-
-  useEffect(() => {
-    if (authenticated) {
-      dispatch(getProfileInfo());
-    }
-  }, [authenticated]);
-
-
-  if (!profile) {
-    return (<Spinner size={SpinnerSize.medium} styles={profileSpinnerStyles} />);
-  }
 
   const handleSignOut = () => {
     dispatch(signOut());
-  }
-
-  const handleSignInOther = async () => {
-    props.signInWithOther();
-  }
-
-  const persona: IPersonaSharedProps = {
-    imageUrl: user?.profileImageUrl,
-    imageInitials: getInitials(user?.displayName),
-    text: user?.displayName,
-    secondaryText: user?.emailAddress
   };
+
 
   const changePanelState = () => {
     showPermissions({
@@ -82,100 +103,108 @@ const Profile = (props: any) => {
     })
   };
 
-  const classes = classNames(props);
-
-
-  const onRenderSecondaryText = (prop: IPersonaProps): JSX.Element => {
-    return (
-      <span style={{ fontSize: FontSizes.small }}>
-        {prop.secondaryText}
-      </span>
-    );
-  }
-
-  const showProfileComponent = (userPersona: any): React.ReactNode => {
-
-    const smallPersona = <Persona
-      {...userPersona}
-      size={PersonaSize.size32}
-      styles={personaStyleToken}
-      hidePersonaDetails={true} />;
-
-    const fullPersona = <Persona
-      {...userPersona}
-      size={PersonaSize.size72}
-      hidePersonaDetails={false}
-      onRenderSecondaryText={onRenderSecondaryText}
-      styles={personaStyleToken} />
-
-    return (<>
-      <ActionButton ariaLabel='profile'
-        id={buttonId}
-        onClick={toggleIsCalloutVisible}
-        role='button'
-        styles={personaButtonStyles}
-      >
-        {smallPersona}
-      </ActionButton>
-
-      {isCalloutVisible && (
-        <Callout
-          className={styles.callout}
-          ariaLabelledBy={labelId}
-          ariaDescribedBy={descriptionId}
-          role='dialog'
-          gapSpace={0}
-          target={`#${buttonId}`}
-          isBeakVisible={false}
-          beakWidth={10}
-          onDismiss={toggleIsCalloutVisible}
-          setInitialFocus
-          styles={{ root: { border: '1px solid' + theme.palette.neutralTertiary } }}
-        >
-          <Stack horizontal horizontalAlign='space-between' styles={{ root: { paddingBottom: 0 } }}>
-            {user &&
-              <ActionButton text={`${user.tenant}`} disabled={true} />
-            }
-            <ActionButton key={'sign-out'} onClick={() => handleSignOut()}>
-              {translateMessage('sign out')}
-            </ActionButton>
-          </Stack>
-          <Stack styles={{ root: { paddingLeft: 10 } }}>{fullPersona}</Stack>
-          {graphExplorerMode === Mode.Complete &&
-            <ActionButton key={'view-all-permissions'}
-              onClick={() => changePanelState()} styles={permissionsLabelStyles}>
-              {translateMessage('view all permissions')}
-            </ActionButton>
-          }
-          <Stack styles={{ root: { background: theme.palette.neutralLighter, padding: 10 } }}>
-            <ActionButton key={'sign-other-account'} onClick={() => handleSignInOther()}
-              iconProps={{ iconName: 'AddFriend' }}
-            >
-              {translateMessage('sign in other account')}
-            </ActionButton>
-
-          </Stack>
-        </Callout>
-      )}
-    </>
-    )
-  }
-
   return (
-    <div className={classes.profile} style={profileContainerStyles}>
-      {showProfileComponent(persona)}
+    <div role="dialog" id="profileContent" className={styles.card}>
+      <CardHeader
+        header={
+          <Body1>
+            <Text size={200} weight="semibold">{tenant}</Text>
+          </Body1>
+        }
+        action={
+          <Button
+            appearance='transparent'
+            icon={<SignOut20Regular />}
+            aria-label={translateMessage('sign out')}
+            onClick={handleSignOut}
+          >
+            {translateMessage('sign out')}
+          </Button>
+        }
+      />
+      <Divider/>
+      <PersonaLayout profile={profile}/>
+      <Link key={'view-all-permissions'}
+        onClick={() => changePanelState()}>
+        {translateMessage('view all permissions')}
+      </Link>
+      <CardFooter>
+        <Button
+          className={styles.footerButton}
+          onClick={signInWithOther} appearance="outline" icon={<PersonAdd20Regular />}>
+          {translateMessage('sign in other account')}
+        </Button>
+      </CardFooter>
     </div>
   );
-}
+};
 
-const styles = mergeStyleSets({
-  callout: {
-    width: 320,
-    maxWidth: '90%'
-  }
+export const PersonaSignedIn = (props: Partial<PersonaProps>) => {
+  return <Persona presence={{ status: 'available' }} {...props} />;
+};
+
+const SignedInButton = forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button>
+>((props, ref) => {
+  const styles = useHeaderStyles();
+  const user = useAppSelector((state) => state.profile.user);
+
+  return (
+    <Tooltip content={translateMessage('sign out')} relationship='description'>
+      <Button
+        aria-label={`${user?.displayName} ${translateMessage('sign out')}`}
+        aria-haspopup='dialog'
+        aria-expanded={false}
+        aria-controls='profileContent'
+        appearance='subtle'
+        className={styles.iconButton}
+        ref={ref}
+        {...props}>
+        <Persona
+          name={user?.displayName}
+          className={styles.iconButton}
+          presence={{ status: 'available' }}
+        />
+      </Button>
+    </Tooltip>
+  );
 });
 
-// @ts-ignore
-const styledProfile = styled(Profile, authenticationStyles);
-// @ts-ignore
-export default styledProfile;
+SignedInButton.displayName = 'SignedInButton';
+
+const ProfileV9 = ({ signInWithOther }: { signInWithOther: () => Promise<void> }) => {
+  const dispatch = useAppDispatch();
+  const ariaId = useId();
+
+  const profile = useAppSelector((state) => state.profile);
+  const authenticated = useAppSelector((state) => state.auth.authToken);
+
+  useEffect(() => {
+    if (authenticated) {
+      dispatch(getProfileInfo());
+    }
+  }, [authenticated]);
+
+
+  if (!profile) {
+    return <Spinner />;
+  }
+
+  const cardAriaLabel = `${profile.user?.displayName}'s ${translateMessage('profile')} ${translateMessage('card')}`;
+
+  return (
+    <Popover withArrow inertTrapFocus>
+      <PopoverTrigger disableButtonEnhancement>
+        <SignedInButton />
+      </PopoverTrigger>
+
+      <PopoverSurface aria-label={cardAriaLabel} aria-live='polite' aria-labelledby={ariaId}>
+        <PopoverContent signInWithOther={signInWithOther} profile={profile}/>
+      </PopoverSurface>
+    </Popover>
+  );
+};
+
+export { ProfileV9 };
+

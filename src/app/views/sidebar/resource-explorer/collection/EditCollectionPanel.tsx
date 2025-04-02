@@ -1,27 +1,35 @@
-import { DefaultButton, DialogFooter, Label, MessageBar, PrimaryButton } from '@fluentui/react';
+import { Label, makeStyles, tokens } from '@fluentui/react-components';
 import { translateMessage } from '../../../../utils/translate-messages';
 import { useState } from 'react';
 import { IResourceLink } from '../../../../../types/resources';
 import { removeResourcePaths } from '../../../../services/slices/collections.slice';
 import Paths from './Paths';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
+import CommonCollectionsPanel from './CommonCollectionsPanel';
+
+const useStyles = makeStyles({
+  centeredLabel: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80vh'
+  }
+});
 
 interface EditCollectionPanelProps {
-    closePopup: () => void;
-  }
+  closePopup: () => void;
+}
 
-const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) => {
+const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({ closePopup }) => {
   const dispatch = useAppDispatch();
   const [selectedItems, setSelectedItems] = useState<IResourceLink[]>([]);
-  const { collections } = useAppSelector(
-    (state) => state.collections
-  );
-  const items = collections && collections.length >
-        0 ? collections.find(k => k.isDefault)!.paths : [];
+  const { collections } = useAppSelector((state) => state.collections);
+  const items = collections && collections.length > 0 ? collections.find(k => k.isDefault)!.paths : [];
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'Select all', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   const removeSelectedItems = () => {
@@ -29,48 +37,32 @@ const EditCollectionPanel: React.FC<EditCollectionPanelProps> = ({closePopup}) =
     setSelectedItems([]);
   };
 
+  const styles = useStyles();
+
   return (
-    <>
-      <MessageBar isMultiline={true}>
-        {translateMessage('edit collections')}
-        <span style={{ fontWeight: 'bold' }}>{translateMessage('Delete all selected')}</span>
-      </MessageBar>
+    <CommonCollectionsPanel
+      messageBarText={translateMessage('edit collections')}
+      messageBarSpanText={translateMessage('Delete All Selected')}
+      primaryButtonText='Delete all selected'
+      primaryButtonAction={removeSelectedItems}
+      primaryButtonDisabled={selectedItems.length === 0}
+      closePopup={closePopup}
+    >
       {items && items.length > 0 ? (
-        <div>
-          <Paths
-            resources={items}
-            columns={columns}
-            isSelectable={true}
-            onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
-          />
-        </div>
+        <Paths
+          resources={items}
+          columns={columns}
+          isSelectable={true}
+          onSelectionChange={(selected) => setSelectedItems(selected as IResourceLink[])}
+        />
       ) : (
         <div>
-          <Label
-            style={{
-              display: 'flex',
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
+          <Label className={styles.centeredLabel}>
             {translateMessage('No items available')}
           </Label>
         </div>
       )}
-      <DialogFooter
-        styles={{
-          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1 }
-        }}>
-        <PrimaryButton onClick={removeSelectedItems} disabled={selectedItems.length === 0}>
-          {translateMessage('Delete all selected')}
-        </PrimaryButton>
-
-        <DefaultButton onClick={closePopup}>
-          {translateMessage('Close')}
-        </DefaultButton>
-      </DialogFooter>
-    </>
+    </CommonCollectionsPanel>
   );
 };
 

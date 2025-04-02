@@ -1,5 +1,3 @@
 import QueryResponse from './QueryResponse';
 
-export {
-  QueryResponse
-};
+export { QueryResponse };

@@ -61,12 +61,11 @@ function extractBody(payload: string): string {
  *
  * @param payload
  */
-function extractHeaders(payload: string): object[] {
+function extractHeaders(payload: string): { name: string, value: string }[] {
   const SPACE = /\s/;
   const NEWLINE = /\n/;
 
-  const headers: any = [];
-  let header: any = {};
+  const headers: { name: string, value: string }[] = [];
   let newlineCount = 0;
   let positionOfSecondNewLine = 0;
   let word = '';
@@ -89,9 +88,7 @@ function extractHeaders(payload: string): object[] {
         if (isDelimiter) {
           const spl = word.trim().split(':');
 
-          header[spl[0]] = spl[1].trim();
-          headers.push(header);
-          header = {};
+          headers.push({ name: spl[0], value: spl[1].trim() });
           word = '';
         }
 
@@ -142,7 +139,15 @@ function extractUrl(payload: string): object[] {
   return result;
 }
 
-export function parse(httpRequestMessage: string) {
+export interface ParsedMessageResult {
+  url: string
+  headers: { name: string, value: string }[]
+  body: string
+  tokens: object[]
+  verb: string
+}
+
+export function parse(httpRequestMessage: string):  ParsedMessageResult{
   /**
    * The parser expects the http request message to start and end with a new line character, however,
    * the request message it receives does not have them. Hence, we prefix and suffix the httpRequestMessage
@@ -160,5 +165,5 @@ export function parse(httpRequestMessage: string) {
     return { ...obj, ...item };
   }, {});
 
-  return { ...result, headers };
+  return { ...result, headers } as ParsedMessageResult;
 }

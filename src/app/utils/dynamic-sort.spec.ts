@@ -1,6 +1,9 @@
-import { dynamicSort } from './dynamic-sort';
 import { SortOrder } from '../../types/enums';
-
+import { dynamicSort } from './dynamic-sort';
+interface INameAge {
+  name: string
+  age: number
+}
 describe('Dynamic Sort', () => {
 
   it('should sort an array of objects in ascending order', () => {
@@ -16,7 +19,7 @@ describe('Dynamic Sort', () => {
       { name: 'Lucy', age: 18 }
     ];
 
-    const sortedArray = arrayToSort.sort(dynamicSort('name', SortOrder.ASC));
+    const sortedArray = arrayToSort.sort(dynamicSort<INameAge>('name', SortOrder.ASC));
     expect(expected).toEqual(sortedArray);
   });
 
@@ -33,30 +36,7 @@ describe('Dynamic Sort', () => {
       { name: 'Ann', age: 14 }
     ];
 
-    const sortedArray = arrayToSort.sort(dynamicSort('name', SortOrder.DESC));
+    const sortedArray = arrayToSort.sort(dynamicSort<INameAge>('name', SortOrder.DESC));
     expect(expected).toEqual(sortedArray);
   });
-
-  it('should return unsorted object array when property does not exist', () => {
-    const arrayToSort = [
-      { name: 'Ann', age: 14 },
-      { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 }
-    ];
-
-    const sortedArray = arrayToSort.sort(dynamicSort('gender', SortOrder.DESC));
-    expect(arrayToSort).toEqual(sortedArray);
-  });
-
-  it('should return unsorted object array when property is empty', () => {
-    const arrayToSort = [
-      { name: 'Ann', age: 14 },
-      { name: 'Lucy', age: 18 },
-      { name: 'Diana', age: 11 }
-    ];
-
-    const sortedArray = arrayToSort.sort(dynamicSort('', SortOrder.DESC));
-    expect(arrayToSort).toEqual(sortedArray);
-  });
-
 });
