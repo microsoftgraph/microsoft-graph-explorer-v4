@@ -1,4 +1,5 @@
 import { AuthenticationResult } from '@azure/msal-browser';
+import { initializeIcons } from '@fluentui/react';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
@@ -27,6 +28,7 @@ import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
+import { loadGETheme } from './themes';
 import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
@@ -35,9 +37,10 @@ import { initializeMsal } from './modules/authentication/msal-app';
 
 
 const appRoot: HTMLElement = document.getElementById('root')!;
+initializeIcons();
 await initializeMsal();
 
-let currentTheme = readFromLocalStorage(CURRENT_THEME);
+let currentTheme = readFromLocalStorage(CURRENT_THEME) || 'light';
 export function removeSpinners() {
   // removes the loading spinner from GE html after the app is loaded
   const spinner = document.getElementById('spinner');
@@ -55,17 +58,16 @@ export function removeSpinners() {
   appRoot.classList.remove('hidden');
 }
 
-function setCurrentTheme(): void {
+function setCurrentSystemTheme(): void {
   const themeFromLocalStorage = readFromLocalStorage(CURRENT_THEME);
 
   if (themeFromLocalStorage) {
     currentTheme = themeFromLocalStorage;
   } else {
     currentTheme = getOSTheme();
-    localStorage.setItem('CURRENT_THEME', currentTheme);
   }
 
-  applyCurrentTheme(currentTheme);
+  applyCurrentSystemTheme(currentTheme);
 }
 function getOSTheme(): string {
   let currentSystemTheme: string;
@@ -88,13 +90,14 @@ function getOSTheme(): string {
   return currentSystemTheme;
 }
 
-function applyCurrentTheme(themeToApply: string): void {
+function applyCurrentSystemTheme(themeToApply: string): void {
+  loadGETheme(themeToApply);
   appStore.dispatch(changeTheme(themeToApply));
 }
 
 const appStore: any = store;
 
-setCurrentTheme();
+setCurrentSystemTheme();
 appStore.dispatch(getGraphProxyUrl());
 
 function refreshAccessToken() {
@@ -115,6 +118,7 @@ setInterval(refreshAccessToken, 1000 * 60 * 10); // refresh access token every 1
 const theme = new URLSearchParams(location.search).get('theme');
 
 if (theme) {
+  loadGETheme(theme);
   appStore.dispatch(changeTheme(theme));
   appStore.dispatch(setGraphExplorerMode(Mode.TryIt));
 } else {

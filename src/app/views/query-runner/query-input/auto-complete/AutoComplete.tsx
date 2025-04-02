@@ -1,19 +1,7 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-  ChangeEvent,
-  KeyboardEvent,
-  FocusEvent
-} from 'react';
-import {
-  Input,
-  Textarea,
-  Text,
-  makeStyles
-} from '@fluentui/react-components';
+import { getTheme, ITextFieldProps, KeyCodes, mergeStyles, Text, TextField } from '@fluentui/react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
+import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { IAutoCompleteProps } from '../../../../../types/auto-complete';
@@ -23,62 +11,36 @@ import { fetchAutoCompleteOptions } from '../../../../services/slices/autocomple
 import { sanitizeQueryUrl } from '../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { delimiters, getLastDelimiterInUrl, getSuggestions, SignContext } from '../../../../../modules/suggestions';
+import { queryInputStyles } from '../QueryInput.styles';
 import {
-  cleanUpSelectedSuggestion,
-  getFilteredSuggestions,
+  cleanUpSelectedSuggestion, getFilteredSuggestions,
   getSearchText
 } from './auto-complete.util';
 import SuffixRenderer from './suffix/SuffixRenderer';
 import SuggestionsList from './suggestion-list/SuggestionsList';
 import { usePrevious } from './use-previous';
 
-const useStyles = makeStyles({
-  container: {
-    margin: 0,
-    display: 'block'
-  },
-  autoInput: {
-    width: '100%'
-  },
-  noResize: {
-    resize: 'none'
-  },
-  errorText: {
-    color: 'red'
-  }
-});
+const AutoComplete = (props: IAutoCompleteProps) => {
 
-const KEYCODES = {
-  ENTER: 'Enter',
-  TAB: 'Tab',
-  UP: 'ArrowUp',
-  DOWN: 'ArrowDown',
-  ESCAPE: 'Escape',
-  BACKSPACE: 'Backspace'
-};
-
-function AutoComplete(props: IAutoCompleteProps) {
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const focusRef = useRef<any>(null);
 
-  const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const autoCompleteOptions = useAppSelector((state) => state.autoComplete.data);
-  const autoCompletePending = useAppSelector((state) => state.autoComplete.pending);
+  let element: HTMLDivElement | null | undefined = null;
+
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const autoCompleteOptions = useAppSelector((state)=> state.autoComplete.data);
+  const autoCompletePending = useAppSelector((state)=> state.autoComplete.pending);
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);
-  const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [isMultiline, setIsMultiline] = useState<boolean>(false);
   const [activeSuggestion, setActiveSuggestion] = useState<number>(0);
   const [searchText, setSearchText] = useState<string>('');
+  const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
   const [shouldShowSuggestions, setShouldShowSuggestions] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [backSpacing, setBackspacing] = useState<boolean>(false);
-  const [descriptionError, setDescriptionError] = useState<string>('');
-
-  const focusRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
@@ -91,54 +53,137 @@ function AutoComplete(props: IAutoCompleteProps) {
     setIsMultiline(isOverflowing(queryUrl));
   }, [autoCompleteOptions, queryUrl]);
 
-  useEffect(() => {
-    const errorMessage = getErrorMessage();
-    if (errorMessage) {
-      setDescriptionError(errorMessage);
-    } else {
-      setDescriptionError('');
-    }
-  }, [queryUrl, validation]);
-
-  function setFocus() {
-    focusRef.current?.focus();
+  const setFocus = () => {
+    focusRef?.current?.focus();
   }
 
-  function updateUrlContent(e: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const targetValue = e.currentTarget.value;
+  const updateUrlContent = (e: React.FocusEvent<HTMLInputElement>) => {
+    const targetValue = e.target.value;
     setQueryUrl(targetValue);
     props.contentChanged(targetValue);
-  }
+  };
 
-  function onChange(
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    newValue?: string
-  ) {
-    const val = newValue ?? e.currentTarget.value;
-    setQueryUrl(val);
-    initialiseAutoComplete(val);
-  }
-
-  function initialiseAutoComplete(currentValue: string) {
+  const initialiseAutoComplete = (currentValue: string) => {
     if (currentValue.includes(GRAPH_URL)) {
       const { index, context } = getLastDelimiterInUrl(currentValue);
-      const { searchText: searchWith, previous: preceedingText } = getSearchText(
-        currentValue,
-        index!
-      );
+      const { searchText: searchWith, previous: preceedingText } = getSearchText(currentValue, index!);
       setSearchText(searchWith);
       requestForAutocompleteOptions(preceedingText, context);
     }
   }
 
-  function requestForAutocompleteOptions(url: string, context: SignContext) {
+  const onChange = (event_: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+    setQueryUrl(newValue!);
+    initialiseAutoComplete(newValue!)
+  };
+
+  const isOverflowing = (input: string) => {
+
+    function getTextWidth(text: string) {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      if (context === null) {
+        return 0;
+      }
+
+      context.font = getComputedStyle(document.body).font;
+      return context.measureText(text).width + 5;
+    }
+
+    return !!element && getTextWidth(input) > element.scrollWidth;
+  }
+
+  const selectSuggestion = (suggestion: string) => {
+    appendSuggestionToUrl(suggestion);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (event.keyCode) {
+    case KeyCodes.enter:
+      event.preventDefault();
+      handleEnterKeyPressed();
+      break;
+
+    case KeyCodes.tab:
+      if (shouldShowSuggestions) {
+        event.preventDefault();
+        handleTabKeyPressed();
+      }
+      break;
+
+    case KeyCodes.up:
+      event.preventDefault();
+      handleUpKeyPressed();
+      break;
+
+    case KeyCodes.down:
+      event.preventDefault();
+      handleDownKeyPressed();
+      break;
+
+    case KeyCodes.escape:
+      handleEscapeKeyPressed();
+      break;
+
+    case KeyCodes.backspace:
+      setBackspacing(true);
+      break;
+
+    default:
+      setBackspacing(false);
+      break;
+    }
+  };
+
+  function handleEscapeKeyPressed() {
+    if (shouldShowSuggestions) {
+      props.contentChanged(queryUrl);
+      setShouldShowSuggestions(false);
+    }
+  }
+
+  function handleDownKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion + 1;
+      if (activeSuggestion === suggestions.length - 1) {
+        active = 0;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleUpKeyPressed() {
+    if (shouldShowSuggestions) {
+      let active = activeSuggestion - 1;
+      if (activeSuggestion === 0) {
+        active = suggestions.length - 1;
+      }
+      setActiveSuggestion(active);
+    }
+  }
+
+  function handleTabKeyPressed() {
+    const selected = suggestions[activeSuggestion];
+    appendSuggestionToUrl(selected);
+    setShouldShowSuggestions(false);
+  }
+
+  function handleEnterKeyPressed() {
+    if (shouldShowSuggestions) {
+      const selected = suggestions[activeSuggestion];
+      appendSuggestionToUrl(selected);
+    } else {
+      props.contentChanged(queryUrl);
+      props.runQuery(queryUrl);
+    }
+  }
+
+  const requestForAutocompleteOptions = (url: string, context: SignContext) => {
     const signature = sanitizeQueryUrl(url);
     const { requestUrl, queryVersion } = parseSampleUrl(signature);
-    const urlExistsInStore =
-      autoCompleteOptions &&
-      requestUrl === autoCompleteOptions.url &&
+    const urlExistsInStore = autoCompleteOptions && requestUrl === autoCompleteOptions.url &&
       queryVersion === autoCompleteOptions.version;
-
     if (urlExistsInStore) {
       displayAutoCompleteSuggestions(autoCompleteOptions.url);
       return;
@@ -152,17 +197,21 @@ function AutoComplete(props: IAutoCompleteProps) {
     dispatch(fetchAutoCompleteOptions({ url: requestUrl, version: queryVersion, context }));
   }
 
-  function displayAutoCompleteSuggestions(url: string) {
+  const displayAutoCompleteSuggestions = (url: string) => {
+
     setShouldShowSuggestions(false);
 
     const { index } = getLastDelimiterInUrl(url);
     const { previous: preceedingText, searchText: searchTerm } = getSearchText(url, index!);
     const shouldSuggestVersions = preceedingText === GRAPH_URL + '/';
 
+    setShouldShowSuggestions(false);
+
     let theSuggestions: string[] = [];
     if (shouldSuggestVersions) {
       theSuggestions = GRAPH_API_VERSIONS;
-    } else if (autoCompleteOptions) {
+    }
+    else if (autoCompleteOptions) {
       theSuggestions = getSuggestions(url, autoCompleteOptions);
     }
 
@@ -170,9 +219,7 @@ function AutoComplete(props: IAutoCompleteProps) {
       return;
     }
 
-    const filtered = searchText
-      ? getFilteredSuggestions(searchText, theSuggestions)
-      : theSuggestions;
+    const filtered = (searchText) ? getFilteredSuggestions(searchText, theSuggestions) : theSuggestions;
     if (filtered.length > 0) {
       setSuggestions(filtered);
       setShouldShowSuggestions(true);
@@ -183,11 +230,19 @@ function AutoComplete(props: IAutoCompleteProps) {
     }
   }
 
-  function appendSuggestionToUrl(selected: string) {
-    if (!selected) {return;}
+  const trackSuggestionSelectionEvent = (suggestion: string) => {
+    telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT,
+      {
+        ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
+        QuerySignature: sanitizeQueryUrl(queryUrl),
+        SelectedSuggestion: suggestion
+      });
+  }
+
+  const appendSuggestionToUrl = (selected: string) => {
+    if (!selected) { return; }
     const { context } = getLastDelimiterInUrl(queryUrl);
     let query = selected;
-
     if (selected.startsWith(delimiters.DOLLAR.symbol) && context === 'parameters') {
       selected += delimiters.EQUALS.symbol;
       query = '';
@@ -206,171 +261,71 @@ function AutoComplete(props: IAutoCompleteProps) {
     trackSuggestionSelectionEvent(selected);
   }
 
-  function trackSuggestionSelectionEvent(suggestion: string) {
-    telemetry.trackEvent(eventTypes.DROPDOWN_CHANGE_EVENT, {
-      ComponentName: componentNames.QUERY_URL_AUTOCOMPLETE_DROPDOWN,
-      QuerySignature: sanitizeQueryUrl(queryUrl),
-      SelectedSuggestion: suggestion
-    });
+  const renderSuffix = () => {
+    return <SuffixRenderer />;
   }
 
-  function onKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    switch (event.key) {
-    case KEYCODES.ENTER:
-      event.preventDefault();
-      handleEnterKeyPressed();
-      break;
-
-    case KEYCODES.TAB:
-      if (shouldShowSuggestions) {
-        event.preventDefault();
-        handleTabKeyPressed();
-      }
-      break;
-
-    case KEYCODES.UP:
-      event.preventDefault();
-      handleUpKeyPressed();
-      break;
-
-    case KEYCODES.DOWN:
-      event.preventDefault();
-      handleDownKeyPressed();
-      break;
-
-    case KEYCODES.ESCAPE:
-      handleEscapeKeyPressed();
-      break;
-
-    case KEYCODES.BACKSPACE:
-      setBackspacing(true);
-      break;
-
-    default:
-      setBackspacing(false);
-      break;
-    }
-  }
-
-  function handleEnterKeyPressed() {
-    if (shouldShowSuggestions) {
-      const selected = suggestions[activeSuggestion];
-      appendSuggestionToUrl(selected);
-    } else {
-      props.contentChanged(queryUrl);
-      props.runQuery(queryUrl);
-    }
-  }
-
-  function handleTabKeyPressed() {
-    const selected = suggestions[activeSuggestion];
-    appendSuggestionToUrl(selected);
-    setShouldShowSuggestions(false);
-  }
-
-  function handleUpKeyPressed() {
-    if (shouldShowSuggestions) {
-      let active = activeSuggestion - 1;
-      if (active < 0) {
-        active = suggestions.length - 1;
-      }
-      setActiveSuggestion(active);
-    }
-  }
-
-  function handleDownKeyPressed() {
-    if (shouldShowSuggestions) {
-      let active = activeSuggestion + 1;
-      if (active > suggestions.length - 1) {
-        active = 0;
-      }
-      setActiveSuggestion(active);
-    }
-  }
-
-  function handleEscapeKeyPressed() {
-    if (shouldShowSuggestions) {
-      props.contentChanged(queryUrl);
-      setShouldShowSuggestions(false);
-    }
-  }
-
-  function selectSuggestion(suggestion: string) {
-    appendSuggestionToUrl(suggestion);
-  }
-
-  function closeSuggestionDialog(event: React.FocusEvent<HTMLDivElement>) {
+  const closeSuggestionDialog = (event: React.FocusEvent<HTMLInputElement>) => {
     const { currentTarget, relatedTarget } = event;
     if (!currentTarget.contains(relatedTarget as Node) && shouldShowSuggestions) {
       setShouldShowSuggestions(false);
     }
   }
 
-  function isOverflowing(input: string) {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx || !containerRef.current) {
-      return false;
+  const currentTheme = getTheme();
+  const autoInput = mergeStyles(queryInputStyles(currentTheme).autoComplete);
+
+  const handleRenderDescription = (properties?: ITextFieldProps): JSX.Element | null => {
+    if (!shouldShowSuggestions && !autoCompletePending && properties?.description) {
+      return (
+        <Text variant="small" >
+          {properties?.description}
+        </Text>
+      );
     }
+    return null;
+  };
 
-    ctx.font = getComputedStyle(document.body).font;
-    const width = ctx.measureText(input).width + 5;
-    return width > containerRef.current.scrollWidth;
-  }
-
-  function getErrorMessage(): string {
+  function getErrorMessage() {
     validation.validate(queryUrl);
-    return validation.error || '';
+    return validation.error;
   }
+  const [descriptionError, setDescriptionError] = useState('');
 
-  function renderSuffix() {
-    return <SuffixRenderer />;
-  }
+  useEffect(()=>{
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setDescriptionError(errorMessage)
+    }
+  }, [getErrorMessage])
 
   return (
-    <div
-      className={classes.container}
-      onBlur={closeSuggestionDialog}
-      ref={containerRef}
-    >
-      {isMultiline ? (
-        <Textarea
-          value={queryUrl}
-          aria-label={translateMessage('Query Sample Input')}
-          className={`${classes.autoInput} ${classes.noResize}`}
-          style={{ minHeight: '32px' }} // approximate
-          autoComplete="off"
-          onChange={(e) => onChange(e)}
+    <div onBlur={closeSuggestionDialog}>
+      <div ref={(el) => { element = el }}>
+        <TextField
+          className={autoInput}
+          multiline={isMultiline}
+          autoAdjustHeight
+          resizable={false}
+          type='text'
+          autoComplete='off'
+          onChange={onChange}
           onBlur={updateUrlContent}
           onKeyDown={onKeyDown}
-        />
-      ) : (
-        <Input
           value={queryUrl}
-          aria-label={translateMessage('Query Sample Input')}
-          className={classes.autoInput}
-          type="text"
-          autoComplete="off"
-          onChange={(e) => onChange(e)}
-          onBlur={updateUrlContent}
-          onKeyDown={onKeyDown}
-          contentAfter={renderSuffix() ? renderSuffix() : undefined}
+          componentRef={focusRef}
+          onRenderSuffix={(renderSuffix()) ? renderSuffix : undefined}
+          ariaLabel={translateMessage('Query Sample Input')}
+          role='textbox'
+          onRenderDescription={handleRenderDescription}
+          description={descriptionError}
         />
-      )}
-
-      {descriptionError && !shouldShowSuggestions && !autoCompletePending && (
-        <Text size={200} className={classes.errorText}>
-          {descriptionError}
-        </Text>
-      )}
-
-      {shouldShowSuggestions && queryUrl && suggestions.length > 0 && (
+      </div>
+      {shouldShowSuggestions && queryUrl && suggestions.length > 0 &&
         <SuggestionsList
           filteredSuggestions={suggestions}
           activeSuggestion={activeSuggestion}
-          onSuggestionSelected={selectSuggestion}
-        />
-      )}
+          onSuggestionSelected={selectSuggestion} />}
     </div>
   );
 }

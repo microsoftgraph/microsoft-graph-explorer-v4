@@ -3,14 +3,14 @@
  * Formats the xml content so that it can be readable. Monaco does not have an inbuilt xml formatter
  * @returns string
  */
-export function formatXml(xml: string) {
+export function formatXml(xml: any) {
   const PADDING = ' '.repeat(2);
   const reg = /(>)(<)(\/*)/g;
   let pad = 0;
 
   xml = xml.replace(reg, '$1\r\n$2$3');
 
-  return xml.split('\r\n').map((node: string) => {
+  return xml.split('\r\n').map((node: any) => {
     let indent = 0;
     if (node.match(/.+<\/\w[^>]*>$/)) {
       indent = 0;

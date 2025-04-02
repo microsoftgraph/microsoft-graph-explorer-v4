@@ -1,5 +1,5 @@
 import { BrowserAuthError } from '@azure/msal-browser';
-
+import { MessageBarType } from '@fluentui/react';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';
@@ -112,7 +112,7 @@ export const consentToScopes = createAsyncThunk(
             statusText: translateMessage('Success'),
             status: translateMessage('Scope consent successful'),
             ok: true,
-            messageBarType: 'success'
+            messageType: MessageBarType.success
           })
         );
         dispatch(fetchAllPrincipalGrants());
@@ -125,7 +125,7 @@ export const consentToScopes = createAsyncThunk(
           statusText: translateMessage('Scope consent failed'),
           status: errorCode,
           ok: false,
-          messageBarType: 'error',
+          messageType: MessageBarType.error,
           hint: getConsentAuthErrorHint(errorCode)
         })
       );

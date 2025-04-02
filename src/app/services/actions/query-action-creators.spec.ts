@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import configureMockStore from 'redux-mock-store';
 
-import { AnyAction } from '@reduxjs/toolkit';
-import { IQuery } from '../../../types/query-runner';
 import { ADD_HISTORY_ITEM_SUCCESS, QUERY_GRAPH_RUNNING, QUERY_GRAPH_STATUS, QUERY_GRAPH_SUCCESS } from '../redux-constants';
 import { runQuery } from '../slices/graph-response.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
+import { AnyAction } from '@reduxjs/toolkit';
+import { IQuery } from '../../../types/query-runner';
 
 const mockStore = configureMockStore([mockThunkMiddleware]);
 
@@ -34,7 +34,7 @@ describe('Query action creators', () => {
           body: undefined,
           createdAt,
           duration: undefined,
-          headers: {},
+          headers: undefined,
           method: undefined,
           responseHeaders:
           {

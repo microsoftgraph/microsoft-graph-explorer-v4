@@ -2,16 +2,7 @@ import { IApiResponse } from './action';
 
 export interface ISnippet extends IApiResponse {
   pending: boolean;
-  data: Snippet;
-  error: SnippetError;
+  data: any;
+  error: any | null;
   snippetTab?: string;
-}
-
-export interface Snippet {
-  [language: string]: string
-}
-
-export interface SnippetError {
-  status: number,
-  error: string
 }

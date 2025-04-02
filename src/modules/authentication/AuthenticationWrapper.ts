@@ -14,6 +14,7 @@ import {
 } from '../../app/services/graph-constants';
 import { SAFEROLLOUTACTIVE } from '../../app/services/variant-constants';
 import variantService from '../../app/services/variant-service';
+import { geLocale } from '../../appLocale';
 import { IQuery } from '../../types/query-runner';
 import { ClaimsChallenge } from './ClaimsChallenge';
 import { getCurrentUri } from './authUtils';
@@ -301,6 +302,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
 
 function getExtraQueryParameters(): { [key: string]: string } {
   const params: { [key: string]: string } = {
+    mkt: geLocale
   };
   getSafeRolloutParameter(params);
   return params;

@@ -1,9 +1,12 @@
-import { Button, Input, makeStyles, tokens } from '@fluentui/react-components';
-import { useState } from 'react';
+import { Announced, ITextField, PrimaryButton, styled, TextField } from '@fluentui/react';
+import { createRef, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { setSampleQuery } from '../../../../services/slices/sample-query.slice';
 import { translateMessage } from '../../../../utils/translate-messages';
+import { classNames } from '../../../classnames';
+import { convertVhToPx } from '../../../common/dimensions/dimensions-adjustment';
+import { headerStyles } from './Headers.styles';
 import HeadersList from './HeadersList';
 
 interface IHeader {
@@ -11,124 +14,124 @@ interface IHeader {
   value: string;
 }
 
-const useStyles = makeStyles({
-  container: {
-    textAlign: 'center',
-    padding: '10px',
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-    maxHeight:'100%'
-  },
-  row: {
-    display: 'flex',
-    gap: '16px',
-    marginBottom: '16px',
-    alignItems: 'center',
-    flexShrink: 0
-  },
-  column: {
-    display: 'flex',
-    gap: tokens.spacingHorizontalSNudge,
-    flexDirection: 'column'
-  },
-  input: {
-    flex: 1
-  },
-  button: {
-    flexShrink: 0,
-    minWidth: '80px'
-  },
-  listContainer: {
-    flex: 1,
-    overflowY: 'auto',
-    maxHeight: '15vh',
-    minHeight: 0,
-    width: '100%'
-  }
-});
-
-const RequestHeaders = () => {
-  const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const mobileScreen = useAppSelector(
-    (state) => state.sidebarProperties.mobileScreen
-  );
-  const [header, setHeader] = useState<IHeader>({ name: '', value: '' });
-  const [isUpdatingHeader, setIsUpdatingHeader] = useState(false);
+const RequestHeaders = (props: any) => {
+  const { sampleQuery, dimensions: { request: { height } } } = useAppSelector((state) => state);
+  const [announcedMessage, setAnnouncedMessage] = useState('');
   const [isHoverOverHeadersList, setIsHoverOverHeadersList] = useState(false);
+  const [isUpdatingHeader, setIsUpdatingHeader] = useState<boolean>(false);
+
+  const emptyHeader = { name: '', value: '' };
+  const [header, setHeader] = useState(emptyHeader);
+
+  const sampleQueryHeaders = sampleQuery.sampleHeaders;
 
   const dispatch = useAppDispatch();
-  const styles = useStyles();
+  const classes = classNames(props);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setHeader({ ...header, [e.target.name]: e.target.value });
+  const textfieldRef = createRef<ITextField>();
+  const onSetFocus = () => textfieldRef.current!.focus();
+
+  const changeHeaderProperties =
+    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setHeader({ ...header, [event.currentTarget.name]: event.currentTarget.value });
+    };
+
+  const handleOnHeaderDelete = (headerToDelete: IHeader) => {
+    let headers = [...sampleQuery.sampleHeaders];
+    headers = headers.filter(head => head.name !== headerToDelete.name);
+
+    const query = { ...sampleQuery };
+    query.sampleHeaders = headers;
+
+    dispatch(setSampleQuery(query));
+    setAnnouncedMessage(translateMessage('Request Header deleted'));
+    onSetFocus(); //set focus to textfield after an item is deleted
   };
 
-  const handleAddHeader = () => {
-    if (header.name.trim() && header.value.trim()) {
-      const updatedHeaders = [header, ...(sampleQuery.sampleHeaders || [])];
-      dispatch(
-        setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders })
-      );
-      setHeader({ name: '', value: '' });
+  const handleOnHeaderAdd = () => {
+    if (header.name && header.value) {
+      let { sampleHeaders } = sampleQuery;
+
+      if (!sampleHeaders) {
+        sampleHeaders = [{
+          name: '',
+          value: ''
+        }];
+      }
+
+      const newHeaders = [header, ...sampleHeaders];
+      setHeader(emptyHeader);
+      setAnnouncedMessage(translateMessage('Request Header added'));
       setIsUpdatingHeader(false);
+
+      const query = { ...sampleQuery };
+      query.sampleHeaders = newHeaders;
+      dispatch(setSampleQuery(query));
     }
   };
 
-  const handleDeleteHeader = (headerToDelete: IHeader) => {
-    const updatedHeaders = sampleQuery.sampleHeaders.filter(
-      (h) => h.name !== headerToDelete.name
-    );
-    dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
-  };
-
-  const handleEditHeader = (headerToEdit: IHeader) => {
-    setHeader(headerToEdit);
+  const handleOnHeaderEdit = (headerToEdit: IHeader) => {
+    if (header.name !== '') {
+      return;
+    }
+    removeHeaderFromSampleQuery(headerToEdit);
     setIsUpdatingHeader(true);
-    const updatedHeaders = sampleQuery.sampleHeaders.filter(
-      (h: { name: string }) => h.name !== headerToEdit.name
-    );
-    dispatch(setSampleQuery({ ...sampleQuery, sampleHeaders: updatedHeaders }));
-  };
+    setHeader({ ...headerToEdit });
+    onSetFocus();
+  }
+
+  const removeHeaderFromSampleQuery = (headerToRemove: IHeader) => {
+    let headers = [...sampleQuery.sampleHeaders];
+    headers = headers.filter(head => head.name !== headerToRemove.name);
+    const query = { ...sampleQuery };
+    query.sampleHeaders = headers;
+    dispatch(setSampleQuery(query));
+  }
 
   return (
     <div
-      className={styles.container}
       onMouseEnter={() => setIsHoverOverHeadersList(true)}
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
-    >
-      <div className={mobileScreen ? styles.column : styles.row}>
-        <Input
-          className={styles.input}
-          placeholder={translateMessage('Key')}
-          name='name'
-          value={header.name}
-          onChange={handleInputChange}
-        />
-        <Input
-          className={styles.input}
-          placeholder={translateMessage('Value')}
-          name='value'
-          value={header.value}
-          onChange={handleInputChange}
-        />
-        <Button
-          className={styles.button}
-          appearance='primary'
-          onClick={handleAddHeader}
-        >
-          {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}
-        </Button>
+      className={classes.container}
+      style={isHoverOverHeadersList ? { height: convertVhToPx(height, 60) } :
+        { height: convertVhToPx(height, 60), overflow: 'hidden' }}>
+      <Announced message={announcedMessage} />
+      <div className='row'>
+        <div className='col-sm-5'>
+          <TextField className='header-input'
+            placeholder={translateMessage('Key')}
+            value={header.name}
+            onChange={changeHeaderProperties}
+            componentRef={textfieldRef}
+            name='name'
+          />
+        </div>
+        <div className='col-sm-5'>
+          <TextField
+            className='header-input'
+            placeholder={translateMessage('Value')}
+            value={header.value}
+            onChange={changeHeaderProperties}
+            name='value'
+          />
+        </div>
+        <div className='col-sm-2 col-md-2'>
+          <PrimaryButton
+            style={{ width: '100%' }}
+            onClick={handleOnHeaderAdd}>
+            {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}
+          </PrimaryButton>
+        </div>
       </div>
-      <div className={styles.listContainer}>
-        <HeadersList
-          headers={sampleQuery.sampleHeaders || []}
-          handleOnHeaderDelete={handleDeleteHeader}
-          handleOnHeaderEdit={handleEditHeader}
-        />
-      </div>
+      <hr />
+      <HeadersList
+        handleOnHeaderDelete={(headerToDelete: IHeader) => handleOnHeaderDelete(headerToDelete)}
+        headers={sampleQueryHeaders}
+        handleOnHeaderEdit={(headerToEdit: IHeader) => handleOnHeaderEdit(headerToEdit)}
+      />
     </div>
   );
 };
-
-export default RequestHeaders;
+// @ts-ignore
+const styledRequestHeaders = styled(RequestHeaders, headerStyles);
+export default styledRequestHeaders;

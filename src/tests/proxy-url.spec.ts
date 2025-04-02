@@ -27,7 +27,7 @@ describe.skip('Sandbox api fetch should', () => {
     }
 
     const queryRunnerStatus: IStatus = {
-      messageBarType: 'error',
+      messageType: 0,
       ok: false,
       status: 400,
       statusText: '',

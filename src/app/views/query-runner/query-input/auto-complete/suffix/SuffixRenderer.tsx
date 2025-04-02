@@ -1,6 +1,6 @@
-import React from 'react';
-import { makeStyles, Button, Tooltip } from '@fluentui/react-components';
-import { DocumentText20Regular } from '@fluentui/react-icons';
+import {
+  getId, IconButton, IIconProps, ITooltipHostStyles, TooltipHost
+} from '@fluentui/react';
 
 import { useAppSelector } from '../../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../../telemetry';
@@ -10,31 +10,26 @@ import { sanitizeQueryUrl } from '../../../../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../../../../utils/sample-url-generation';
 import { translateMessage } from '../../../../../utils/translate-messages';
 import DocumentationService from './documentation';
+import { styles } from './suffix.styles';
 import ShareButton from '../../share-query/ShareButton';
 
-const useStyles = makeStyles({
-  iconButton: {
-    padding: '4px',
-    minWidth: '32px'
-  }
-});
-
 const SuffixRenderer = () => {
-  const classes = useStyles();
+  const sampleQuery = useAppSelector((state)=> state.sampleQuery);
+  const samples = useAppSelector((state)=> state.samples);
+  const resources = useAppSelector((state)=> state.resources);
 
-  const sampleQuery = useAppSelector((state) => state.sampleQuery);
-  const samples = useAppSelector((state) => state.samples);
-  const resources = useAppSelector((state) => state.resources);
+  const buttonId = getId('callout-button');
+  const calloutProps = { gapSpace: 0 };
+  const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
 
   const getDocumentationLink = (): string | null => {
     const { queries } = samples;
-    const getChildren = () => {
-      if (resources.data && Object.keys(resources.data).length > 0 && (sampleQuery.selectedVersion in resources.data)) {
+    const getChildren = ()=> {
+      if (resources.data && Object.keys(resources.data).length > 0 && sampleQuery.selectedVersion in resources.data){
         return resources.data[sampleQuery.selectedVersion].children ?? [];
       }
       return [];
-    };
-
+    }
     const resourceDocumentationUrl = new DocumentationService({
       sampleQuery,
       source: getChildren()
@@ -45,11 +40,14 @@ const SuffixRenderer = () => {
       source: queries
     }).getDocumentationLink();
 
-    return sampleDocumentationUrl || resourceDocumentationUrl || null;
-  };
+    const documentationUrl = sampleDocumentationUrl || resourceDocumentationUrl;
+    if (documentationUrl) { return documentationUrl; }
+    return null;
+  }
 
   const documentationLink = getDocumentationLink();
   const documentationLinkAvailable = !!documentationLink;
+  const infoIcon: IIconProps = { iconName: 'TextDocument' };
 
   const onDocumentationLinkClicked = () => {
     if (documentationLink) {
@@ -58,7 +56,7 @@ const SuffixRenderer = () => {
     }
   };
 
-  const trackDocumentLinkClickedEvent = async () => {
+  const trackDocumentLinkClickedEvent = async (): Promise<void> => {
     const { requestUrl } = parseSampleUrl(sanitizeQueryUrl(sampleQuery.sampleUrl));
     const parsed = parseSampleUrl(sanitizeQueryUrl(`${GRAPH_URL}/v1.0/${requestUrl}`));
 
@@ -70,37 +68,33 @@ const SuffixRenderer = () => {
     telemetry.trackEvent(eventTypes.LINK_CLICK_EVENT, properties);
 
     // Check if link throws error
-    validateExternalLink(
-      documentationLink || '',
-      componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK,
-      documentationLink
-    );
-  };
+    validateExternalLink(documentationLink || '', componentNames.AUTOCOMPLETE_DOCUMENTATION_LINK, documentationLink);
+  }
 
-  const tipMessage = documentationLinkAvailable
-    ? translateMessage('Read documentation')
-    : translateMessage('Query documentation not found');
+  const tipMessage = documentationLinkAvailable ?
+    translateMessage('Read documentation') :
+    translateMessage('Query documentation not found')
 
   return (
     <>
-      <Tooltip
+      <TooltipHost
         content={tipMessage}
-        positioning="above"
-        relationship="label"
+        id={getId()}
+        calloutProps={calloutProps}
+        styles={hostStyles}
       >
-        <Button
-          aria-label={tipMessage}
+        <IconButton
+          iconProps={infoIcon}
+          className={styles.iconButton}
+          onClick={() => onDocumentationLinkClicked()}
+          id={buttonId}
+          ariaLabel={tipMessage}
           disabled={!documentationLinkAvailable}
-          onClick={onDocumentationLinkClicked}
-          icon={<DocumentText20Regular />}
-          className={classes.iconButton}
-          appearance="subtle"
         />
-      </Tooltip>
-
+      </TooltipHost>
       <ShareButton />
     </>
   );
-};
+}
 
 export default SuffixRenderer;

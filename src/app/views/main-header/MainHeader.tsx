@@ -1,83 +1,120 @@
-import { makeStyles, Text, tokens } from '@fluentui/react-components';
-import Authentication from '../authentication/Authentication';
+import {
+  FontIcon, getId, getTheme, IconButton, IStackTokens, Label,
+  registerIcons, Stack, TooltipHost
+} from '@fluentui/react';
+
+import { useAppSelector } from '../../../store';
+import { Mode } from '../../../types/enums';
+import { translateMessage } from '../../utils/translate-messages';
+import { Authentication } from '../authentication';
 import { FeedbackButton } from './FeedbackButton';
 import { Help } from './Help';
+import { mainHeaderStyles } from './MainHeader.styles';
 import { Settings } from './settings/Settings';
-import { Tenant } from './Tenant';
-import { useAppDispatch, useAppSelector } from '../../../store';
-import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
-import { PanelLeftExpand20Regular } from '@fluentui/react-icons';
-const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '0 0 0 24px',
-    height: '48px',
-    background: tokens.colorNeutralBackground4,
-    marginBottom: '8px' // TODO: remove when sidebar and query areas are updated
-  },
-  headerIcons: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    maxHeight: '100%',
-    columnGap: '4px'
-  },
-  headerTextContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: tokens.spacingHorizontalS
-  },
-  headerText: {
-    color: tokens.colorBrandForeground1,
-    lineHeight: '28px'
-  },
-  menuIcon: {
-    display: 'none',
-    cursor: 'pointer',
+import TenantIcon from './tenantIcon';
 
-    '@media (max-width: 768px)': {
-      display: 'block'
-    }
+interface MainHeaderProps {
+  toggleSidebar: Function;
+}
+const sectionStackTokens: IStackTokens = {
+  childrenGap: 0
+};
+const itemAlignmentsStackTokens: IStackTokens = {
+  childrenGap: 10
+};
+
+registerIcons({
+  icons: {
+    tenantIcon: <TenantIcon />
   }
 });
+export const MainHeader: React.FunctionComponent<MainHeaderProps> = (props: MainHeaderProps) => {
+  const profile = useAppSelector((state)=> state.profile)
+  const user = profile.user;
+  const graphExplorerMode = useAppSelector((state)=> state.graphExplorerMode)
+  const sidebarProperties = useAppSelector((state)=> state.sidebarProperties)
 
-const MainHeader = ()=>{
-  const styles = useStyles()
-  const dispatch = useAppDispatch();
-  const  mobileScreen  = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+  const mobileScreen = !!sidebarProperties.mobileScreen;
+  const showSidebar = !!sidebarProperties.showSidebar;
+  const minimised = !mobileScreen && !showSidebar;
 
-  const handleSidebarToggle = () => {
-    dispatch(toggleSidebar({ mobileScreen: true }));
-  };
+  const currentTheme = getTheme();
+  const { rootStyles: itemAlignmentStackStyles, rightItemsStyles, graphExplorerLabelStyles,
+    feedbackIconAdjustmentStyles, tenantIconStyles, moreInformationStyles,
+    tenantLabelStyle, tenantContainerStyle } = mainHeaderStyles(currentTheme, mobileScreen);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.headerTextContainer}>
-        {mobileScreen && (
-          <PanelLeftExpand20Regular className={styles.menuIcon} onClick={handleSidebarToggle} />
-        )}
-        <Text size={mobileScreen ? 500 : 600} as="h1" className={styles.headerText}>Graph Explorer</Text>
-      </div>
-      <HeaderIcons />
-    </div>
-  )
-}
+    <Stack tokens={sectionStackTokens}>
+      <Stack
+        horizontal
+        horizontalAlign="space-between"
+        styles={itemAlignmentStackStyles}
+        tokens={itemAlignmentsStackTokens}>
 
-const HeaderIcons = () => {
+        <Stack horizontal tokens={{ childrenGap: 5, padding: 10 }}>
+          {graphExplorerMode === Mode.Complete &&
 
-  const styles = useStyles()
-  return (
-    <div className={styles.headerIcons}>
-      <Tenant/>
-      <Settings />
-      <Help />
-      <FeedbackButton />
-      <Authentication />
-    </div>
-  )
-}
+            <TooltipHost
+              content={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
+              id={getId()}
+              calloutProps={{ gapSpace: 0 }}
+              tooltipProps={{
+                onRenderContent: function renderContent() {
+                  return <div>
+                    {translateMessage(!minimised ? 'Minimize sidebar' : 'Maximize sidebar')}</div>
+                }
+              }}>
+              <IconButton
+                iconProps={{
+                  iconName:
+                    !minimised && !mobileScreen ? 'ClosePaneMirrored' :
+                      mobileScreen ? 'GlobalNavButton' : 'OpenPaneMirrored',
+                  style: { fontSize: '20px' }
+                }}
+                ariaLabel={!minimised ? 'Minimize sidebar' : 'Maximize sidebar'}
+                onClick={() => props.toggleSidebar()}
+                name={'Minimize sidebar'}
+              />
+            </TooltipHost>
+          }
+          <h1><Label
+            style={graphExplorerLabelStyles}>
+            Graph Explorer
+          </Label></h1>
+        </Stack>
 
-export { MainHeader };
-
+        <Stack horizontal styles={rightItemsStyles}
+          tokens={{ childrenGap: mobileScreen ? 0 : 10 }}
+        >
+          {!mobileScreen && <FontIcon aria-label='tenant icon' iconName='tenantIcon' style={tenantIconStyles} />}
+          {!user && !mobileScreen &&
+            <div style={tenantContainerStyle}>
+              <TooltipHost
+                content={
+                  <>
+                    {translateMessage('Using demo tenant')}{' '}
+                    {translateMessage('To access your own data:')}
+                  </>}
+                id={getId()}
+                calloutProps={{ gapSpace: 0 }}
+              >
+                <Label style={tenantLabelStyle}> Tenant</Label>
+                <Label>Sample</Label>
+              </TooltipHost>
+            </div>
+          }
+          {user && !mobileScreen &&
+            <div style={tenantContainerStyle}>
+              <Label style={tenantLabelStyle}>Tenant</Label>
+              <Label>{user?.tenant}</Label>
+            </div>
+          }
+          <span style={moreInformationStyles}> <Settings /> </span>
+          <span style={moreInformationStyles}> <Help /> </span>
+          <span style={feedbackIconAdjustmentStyles}> <FeedbackButton /> </span>
+          <Authentication />
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+};

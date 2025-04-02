@@ -23,7 +23,6 @@
     "package.json": "package-lock.json, .npmrc"
   },
   "cSpell.words": [
-    "fluentui",
-    "noreferrer"
+    "fluentui"
   ],
 }

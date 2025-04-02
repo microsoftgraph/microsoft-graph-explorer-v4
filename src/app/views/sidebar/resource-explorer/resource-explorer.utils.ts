@@ -1,3 +1,5 @@
+import { INavLinkGroup } from '@fluentui/react';
+
 import {
   IResource, IResourceLabel, IResourceLink, Method, ResourceLinkType, ResourceMethod, ResourcePath
 } from '../../../../types/resources';
@@ -13,7 +15,7 @@ export function createResourcesList(
   source: IResource[],
   version: string,
   searchText?: string
-): IResourceLink[] {
+): INavLinkGroup[] {
   function getLinkType({ segment, links }: any): ResourceLinkType {
     const isGraphFunction = segment.startsWith('microsoft.graph');
     const hasChildren = links && links.length > 0;
@@ -52,8 +54,8 @@ export function createResourcesList(
     const type = getLinkType({ ...info, links: versionedChildren });
     const enclosedCounter =
       versionedChildren && versionedChildren.length > 0
-        ? versionedChildren.length
-        : null;
+        ? ` (${versionedChildren.length})`
+        : '';
 
     // if segment name does not contain search text, then found text is in child, so expand this link
     const isExpanded =
@@ -68,7 +70,7 @@ export function createResourcesList(
     return {
       key,
       url: key,
-      name: segment,
+      name: `${segment}${enclosedCounter}`,
       labels,
       isExpanded,
       parent,
@@ -77,8 +79,7 @@ export function createResourcesList(
       method: method?.toUpperCase(),
       type,
       links: versionedChildren,
-      docLink: docLink ? docLink : getLink(labels, version, method),
-      count: enclosedCounter
+      docLink: docLink ? docLink : getLink(labels, version, method)
     };
   }
 
@@ -132,7 +133,11 @@ export function createResourcesList(
     ''
   );
 
-  return navLink.links;
+  return [
+    {
+      links: navLink.links
+    }
+  ];
 }
 
 export function generateKey(method: string | undefined, paths: string[], version: string) {
@@ -166,21 +171,24 @@ export function getCurrentTree({
   level,
   resourceItems,
   version
-}: ITreeFilter): IResourceLink {
-  const currentTree = createResourcesList(resourceItems, version)[0];
+}: ITreeFilter): INavLinkGroup {
+  let currentTree = createResourcesList(resourceItems, version)[0];
   const filters = paths.slice(1, level + 1);
-  const currentPaths = ['/'];
   filters.forEach((key: string) => {
-    if (key) {
-      currentPaths.push(key);
-    } else {
-      throw new Error(`Path segment "${key}" not found in the current tree.`);
+    const linkedKey = findLinkByName(currentTree, key);
+    if (linkedKey) {
+      currentTree = linkedKey;
     }
   });
-
-  currentTree.paths = currentPaths;
   return currentTree;
+}
 
+function findLinkByName(list: any, filter: string): INavLinkGroup {
+  return list.links.find((k: any) => removeCounter(k.name) === filter);
+}
+
+export function removeCounter(title: string): string {
+  return title.split(' (')[0].trim();
 }
 
 export function getAvailableMethods(

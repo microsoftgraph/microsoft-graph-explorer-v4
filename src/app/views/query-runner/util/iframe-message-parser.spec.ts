@@ -14,8 +14,8 @@ Prefer: A-timezone
       verb: 'POST',
       url: 'https://graph.microsoft.com/beta/me/calendars',
       headers: [
-        {'name': 'Content-type', 'value': 'application/json'},
-        {'name': 'Prefer', 'value': 'A-timezone'}
+        { 'Content-type': 'application/json' },
+        { 'Prefer': 'A-timezone' }
       ],
       body: '{ "name": "Volunteer" } '
     });
@@ -33,8 +33,8 @@ Prefer: A-timezone
       verb: 'POST',
       url: 'https://graph.microsoft.com/v1.0/me/calendars',
       headers: [
-        {'name': 'Content-type', 'value': 'application/json'},
-        {'name': 'Prefer', 'value': 'A-timezone'}
+        { 'Content-type': 'application/json' },
+        { 'Prefer': 'A-timezone' }
       ],
       body: '{ "name": "Volunteer" } '
     });
@@ -49,7 +49,7 @@ ConsistencyLevel: eventual`;
       verb: 'GET',
       url: 'https://graph.microsoft.com/v1.0/users/{id}/memberOf/microsoft.graph.group?$count=true&$orderby=displayName&$search="displayName:tier"&$select=displayName,id',
       headers: [
-        {'name': 'ConsistencyLevel', 'value': 'eventual'}
+        { 'ConsistencyLevel': 'eventual' }
       ],
       body: ''
     });
@@ -65,7 +65,7 @@ ConsistencyLevel: eventual`;
       // eslint-disable-next-line quotes
       url: `https://graph.microsoft.com/v1.0/users/{id}/memberOf/microsoft.graph.group?$count=true&$orderby=displayName&$filter=startswith(displayName, 'a')`,
       headers: [
-        {'name': 'ConsistencyLevel', 'value': 'eventual'}
+        { 'ConsistencyLevel': 'eventual' }
       ],
       body: ''
     });

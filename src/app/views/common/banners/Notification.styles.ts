@@ -25,7 +25,7 @@ export const useNotificationStyles = makeStyles({
   body: {
     width: '100%',
     '@media (min-width: 720px)': {
-      width: '100%'
+      width: '70%'
     }
   }
 });
