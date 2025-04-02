@@ -5,7 +5,7 @@ import {
 import ErrorBoundary from '../error-boundary/ErrorBoundary';
 import { DialogWrapper } from './DialogWrapper';
 import { ModalWrapper } from './ModalWrapper';
-import { PanelWrapper } from './PanelWrapper';
+import { DrawerWrapper } from './DrawerWrapper';
 
 const PopupWrapper = () => {
 
@@ -18,11 +18,19 @@ const PopupWrapper = () => {
     }
     payload.status = 'closed';
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
+    const triggerBtn = payload.popupsProps.settings.trigger;
+    if (triggerBtn?.current){
+      triggerBtn.current?.focus();
+    }
   }
 
   const dismiss = (payload: Popup) => {
     payload.status = 'dismissed';
     dispatch({ type: POPUPS.DELETE_POPUPS, payload });
+    const triggerBtn = payload.popupsProps.settings.trigger;
+    if (triggerBtn?.current){
+      triggerBtn.current?.focus();
+    }
   }
 
   return (
@@ -30,7 +38,7 @@ const PopupWrapper = () => {
       {popups && popups.map((popup: Popup) => {
         const { component, type, popupsProps, isOpen } = popup;
         if (type === 'panel') {
-          return component && <PanelWrapper
+          return component && <DrawerWrapper
             isOpen={!!isOpen}
             key={popup.id}
             dismissPopup={() => dismiss(popup)}

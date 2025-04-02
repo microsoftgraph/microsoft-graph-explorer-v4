@@ -1,4 +1,4 @@
-import { MessageBarType, Spinner, SpinnerSize, styled } from '@fluentui/react';
+import { Spinner } from '@fluentui/react-components';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { useState } from 'react';
 
@@ -6,12 +6,21 @@ import { authenticationWrapper } from '../../../modules/authentication';
 import { getSignInAuthErrorHint, signInAuthError } from '../../../modules/authentication/authentication-error-hints';
 import { AppDispatch, useAppDispatch, useAppSelector } from '../../../store';
 import { componentNames, errorTypes, eventTypes, telemetry } from '../../../telemetry';
-import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../../services/slices/auth.slice';
-import { classNames } from '../classnames';
-import { showSignInButtonOrProfile } from './auth-util-components';
-import { authenticationStyles } from './Authentication.styles';
+import { setQueryResponseStatus } from '../../services/slices/query-status.slice';
 import { translateMessage } from '../../utils/translate-messages';
+import { showSignInButtonOrProfile } from './auth-util-components/ProfileButton';
+
+const showProgressSpinner = (): React.ReactNode => {
+  return (
+    <Spinner/>
+  );
+};
+
+const removeUnderScore = (statusString: string): string => {
+  return statusString ? statusString.replace(/_/g, ' ') : statusString;
+}
+
 
 const Authentication = (props: any) => {
   const dispatch: AppDispatch = useAppDispatch();
@@ -19,8 +28,6 @@ const Authentication = (props: any) => {
   const authToken = useAppSelector((state) => state.auth.authToken);
   const tokenPresent = !!authToken.token;
   const logoutInProgress = !!authToken.pending;
-
-  const classes = classNames(props);
 
   const signIn = async (): Promise<void> => {
     setLoginInProgress(true);
@@ -47,7 +54,7 @@ const Authentication = (props: any) => {
           ok: false,
           statusText: translateMessage('Authentication failed'),
           status: removeUnderScore(errorCode),
-          messageType: MessageBarType.error,
+          messageBarType: 'error',
           hint: getSignInAuthErrorHint(errorCode)
         })
       );
@@ -82,19 +89,6 @@ const Authentication = (props: any) => {
     }
   }
 
-
-  const removeUnderScore = (statusString: string): string => {
-    return statusString ? statusString.replace(/_/g, ' ') : statusString;
-  }
-
-  const showProgressSpinner = (): React.ReactNode => {
-    return (
-      <div className={classes.spinnerContainer}>
-        <Spinner className={classes.spinner} size={SpinnerSize.medium} />
-      </div>
-    );
-  };
-
   if (logoutInProgress) {
     return showProgressSpinner();
   }
@@ -116,6 +110,4 @@ const Authentication = (props: any) => {
   );
 };
 
-// @ts-ignore
-const StyledAuthentication = styled(Authentication, authenticationStyles);
-export default StyledAuthentication;
+export default Authentication;

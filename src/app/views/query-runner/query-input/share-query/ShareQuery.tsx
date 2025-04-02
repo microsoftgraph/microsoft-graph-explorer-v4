@@ -1,5 +1,11 @@
-import { DefaultButton, DialogFooter, FontSizes } from '@fluentui/react';
 import React from 'react';
+import {
+  DialogContent,
+  DialogActions,
+  Button,
+  makeStyles,
+  tokens
+} from '@fluentui/react-components';
 
 import { useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
@@ -10,9 +16,20 @@ import { copy } from '../../../common/copy';
 import { createShareLink } from '../../../common/share';
 import { CopyButton } from '../../../common/lazy-loader/component-registry';
 
-const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
+const useStyles = makeStyles({
+  textArea: {
+    width: '98%',
+    minHeight: '63px',
+    wordWrap: 'break-word',
+    fontFamily: 'monospace',
+    fontSize: tokens.fontSizeBase200,
+    margin: '20px auto'
+  }
+});
 
-  const { sampleQuery } = useAppSelector((state) => state);
+const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
+  const styles = useStyles();
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const query = { ...sampleQuery };
   const sanitizedQueryUrl = sanitizeQueryUrl(query.sampleUrl);
   const shareLink = createShareLink(sampleQuery);
@@ -20,43 +37,34 @@ const ShareQuery: React.FC<PopupsComponent<null>> = (props) => {
   const handleCopy = async () => {
     await copy('share-query-text');
     trackCopyEvent();
-  }
+  };
 
   const trackCopyEvent = () => {
-    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT,
-      {
-        ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
-        QuerySignature: `${query.selectedVerb} ${sanitizedQueryUrl}`
-      });
-  }
+    telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.SHARE_QUERY_COPY_BUTTON,
+      QuerySignature: `${query.selectedVerb} ${sanitizedQueryUrl}`
+    });
+  };
 
   return (
-    <div >
-      <textarea
-        style={{
-          wordWrap: 'break-word',
-          fontFamily: 'monospace',
-          fontSize: FontSizes.xSmall,
-          width: '100%',
-          height: 63,
-          overflowY: 'scroll',
-          resize: 'none',
-          color: 'black'
-        }}
-        id='share-query-text'
-        className='share-query-params'
-        defaultValue={shareLink}
-        aria-label={translateMessage('Share Query')}
-      />
-      <DialogFooter>
-        <CopyButton handleOnClick={handleCopy} isIconButton={false} />
-        <DefaultButton
-          text={translateMessage('Close')}
-          onClick={() => props.dismissPopup()}
+    <>
+      <DialogContent>
+        <textarea
+          id="share-query-text"
+          className={styles.textArea}
+          defaultValue={shareLink}
+          aria-label={translateMessage('Share Query')}
         />
-      </DialogFooter>
-    </div>
-  )
-}
+      </DialogContent>
 
-export default ShareQuery
+      <DialogActions>
+        <CopyButton handleOnClick={handleCopy} isIconButton={false}/>
+        <Button appearance="secondary" onClick={() => props.dismissPopup()}>
+          {translateMessage('Close')}
+        </Button>
+      </DialogActions>
+    </>
+  );
+};
+
+export default ShareQuery;
