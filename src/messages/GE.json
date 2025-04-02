@@ -515,7 +515,7 @@
   "Banner notification 1 header": "New to Graph Explorer?",
   "Banner notification 1 content": "Graph Explorer is a developer tool that let's you learn about Microsoft Graph APIs. Use Graph Explorer to try the APIs on the default sample tenant to explore capabilities.",
   "Banner notification 1 link text": "Follow a step-by-step tutorial",
-  "Banner notification 1 link": "https://learn.microsoft.com/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0",
+  "Banner notification 1 link": "https://learn.microsoft.com/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0/?WT.mc_id=msgraph_inproduct_graphex",
   "Dismiss banner": "Dismiss banner",
   "list of permissions": "The following is the list of least-privileged permissions required to call the operations in your API Collection. For more information, see ",
   "Preview permissions": "Preview permissions",

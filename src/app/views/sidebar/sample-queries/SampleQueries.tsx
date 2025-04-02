@@ -33,7 +33,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQuery } from '../../../../types/query-runner';
-import { GRAPH_URL } from '../../../services/graph-constants';
+import { GRAPH_URL, GRAPHDOCSLINK, TRACKINGPARAMS } from '../../../services/graph-constants';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { fetchSamples } from '../../../services/slices/samples.slice';
@@ -116,7 +116,7 @@ export const SampleQueries = () => {
 const LoadingSamples = ()=> {
   return (
     <Spinner
-      size="large"
+      size='large'
       label={`${translateMessage('loading samples')} ...`}
       labelPosition='below'
     />
@@ -166,7 +166,7 @@ const SeeMoreQueriesMessageBar = () => {
               componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK
             )
           }
-          href='https://learn.microsoft.com/graph/api/overview?view=graph-rest-1.0'
+          href={GRAPHDOCSLINK + TRACKINGPARAMS}
           inline={true}
         >
           {translateMessage('Microsoft Graph API Reference docs')}
