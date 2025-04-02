@@ -166,6 +166,7 @@ const SeeMoreQueriesMessageBar = () => {
               componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK
             )
           }
+          // eslint-disable-next-line max-len
           href='https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0%2F/WT.mc_id=msgraph_inproduct_graphex'
           inline={true}
         >
