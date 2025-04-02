@@ -33,7 +33,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { IQuery, ISampleQuery } from '../../../../types/query-runner';
-import { GRAPH_URL } from '../../../services/graph-constants';
+import { GRAPH_URL, GRAPHDOCSLINK, TRACKINGPARAMS } from '../../../services/graph-constants';
 import { setQueryResponseStatus } from '../../../services/slices/query-status.slice';
 import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 import { fetchSamples } from '../../../services/slices/samples.slice';
@@ -166,8 +166,7 @@ const SeeMoreQueriesMessageBar = () => {
               componentNames.MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK
             )
           }
-          // eslint-disable-next-line max-len
-          href='https://learn.microsoft.com/en-us/graph/graph-explorer/graph-explorer-overview?view=graph-rest-1.0%2F/WT.mc_id=msgraph_inproduct_graphex'
+          href={GRAPHDOCSLINK + TRACKINGPARAMS}
           inline={true}
         >
           {translateMessage('Microsoft Graph API Reference docs')}
