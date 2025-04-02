@@ -327,6 +327,13 @@ function AutoComplete(props: IAutoCompleteProps) {
     return <SuffixRenderer />;
   }
 
+  useEffect(()=>{
+    const errorMessage = getErrorMessage();
+    if (errorMessage) {
+      setDescriptionError(errorMessage)
+    }
+  }, [getErrorMessage])
+
   return (
     <div
       className={classes.container}

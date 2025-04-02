@@ -62,6 +62,7 @@ export const SampleQueries = () => {
     setSampleQueries(queries);
   }, [queries]);
 
+
   useEffect(() => {
     if (shouldGenerateGroups.current) {
       setGroups(generateGroupsFromList(sampleQueries, 'category'));
