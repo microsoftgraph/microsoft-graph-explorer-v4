@@ -1,11 +1,4 @@
-export interface IGroup {
-  key: string;
-  name: string;
-  startIndex: number;
-  count: number;
-  isCollapsed: boolean;
-  ariaLabel: string;
-}
+import { IGroup } from '@fluentui/react';
 
 export function generateGroupsFromList(list: any[], property: string) : IGroup[] {
   const map = new Map();

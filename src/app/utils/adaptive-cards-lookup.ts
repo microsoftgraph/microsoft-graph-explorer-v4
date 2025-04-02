@@ -1,8 +1,8 @@
-import { Files, Groups, Messages, Profile, Site, Sites, Users } from '../../adaptivecards-templates';
 import { IQuery } from '../../types/query-runner';
 import { parseSampleUrl } from './sample-url-generation';
+import { Groups, Profile, Users, Files, Messages, Site, Sites} from '../../adaptivecards-templates';
 
-export function lookupTemplate(sampleQuery: IQuery): object | undefined {
+export function lookupTemplate(sampleQuery: IQuery): string {
   if (sampleQuery) {
     const { requestUrl, search } = parseSampleUrl(sampleQuery.sampleUrl);
     const query = requestUrl + search;
@@ -17,10 +17,10 @@ export function lookupTemplate(sampleQuery: IQuery): object | undefined {
       }
     }
   }
-  return undefined;
+  return '';
 }
 
-const templateMap: Record<string, object> = {
+const templateMap: any = {
   '/groups': Groups,
   '/me': Profile,
   '/me/directReports': Users,

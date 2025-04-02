@@ -1,9 +1,9 @@
-@use "../../../../styles/variables";
+@import"../../../../styles/variables";
 
 .request-editors {
     width:100%;
-    margin-top: variables.$gutter;
-    margin-bottom: variables.$gutter;
+    margin-top: $gutter;
+    margin-bottom: $gutter;
     height: 270px;
     border: 1px solid silver;
     overflow: hidden;
@@ -21,7 +21,7 @@
         position: relative;
 
         .headers-editor {
-            padding: variables.$gutter;
+            padding: $gutter;
 
             .header-input-button {
                 width: 100%;
@@ -41,11 +41,11 @@
 
         .detail-list {
             width:100%;
-            margin-left: variables.$gutter;
+            margin-left: $gutter;
 
             .field-content {
                 line-height: 32px;
-                padding: variables.$gutter;
+                padding: $gutter;
             }
         }
     }

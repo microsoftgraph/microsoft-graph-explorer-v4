@@ -10,7 +10,7 @@ export function convertPxToVh(px: number){
   return convertedHeight+ 'vh';
 }
 
-export function getResponseHeight(height: string, responseAreaExpanded: boolean) {
+export function getResponseHeight(height: any, responseAreaExpanded: any) {
   let responseHeight = height;
   if (responseAreaExpanded) {
     responseHeight = '90vh';

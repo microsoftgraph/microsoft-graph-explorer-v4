@@ -1,5 +1,7 @@
+import { MessageBarType } from '@fluentui/react';
+
 export interface IStatus {
-  messageBarType: string;
+  messageType: MessageBarType;
   ok?: boolean;
   status: number | string;
   statusText: string;

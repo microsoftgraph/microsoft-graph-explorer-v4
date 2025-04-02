@@ -8,7 +8,6 @@ export const popups = new Map<string, any>([
   ['collection-permissions', lazy(() => import('../../../sidebar/resource-explorer/collection/CollectionPermissions'))],
   ['edit-collection-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditCollectionPanel'))],
   ['edit-scope-panel', lazy(() => import('../../../sidebar/resource-explorer/collection/EditScopePanel'))]
-
 ]);
 
 export type PopupItem =

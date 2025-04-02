@@ -22,16 +22,8 @@ const collections = createSlice({
     addResourcePaths: (state, action: PayloadAction<ResourcePath[]>) => {
       const index = state.collections.findIndex(collection => collection.isDefault);
       if (index > -1) {
-        const existingPaths = state.collections[index].paths;
-        const existingKeys = new Set(existingPaths.map(path => path.key));
-        const pathsToAdd = action.payload.filter(
-          newPath => !existingKeys.has(newPath.key)
-        );
-
-        if (pathsToAdd.length > 0) {
-          state.collections[index].paths.push(...pathsToAdd);
-          state.saved = false;
-        }
+        state.collections[index].paths.push(...action.payload);
+        state.saved = false;
       }
     },
     updateResourcePaths: (state, action: PayloadAction<ResourcePath[]>) => {

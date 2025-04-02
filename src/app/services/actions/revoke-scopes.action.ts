@@ -30,7 +30,7 @@ export const revokeScopes = createAsyncThunk(
     const requiredPermissions = REVOKING_PERMISSIONS_REQUIRED_SCOPES.split(' ');
     const defaultUserScopes = DEFAULT_USER_SCOPES.split(' ');
 
-    dispatchScopesStatus(dispatch, 'Please wait while we revoke this permission', 'Revoking ', 'info');
+    dispatchScopesStatus(dispatch, 'Please wait while we revoke this permission', 'Revoking ', 0);
     const revokePermissionUtil = await RevokePermissionsUtil.initialize(profile.user!.id!);
 
     if (!consentedScopes || consentedScopes.length === 0) {
@@ -62,7 +62,7 @@ export const revokeScopes = createAsyncThunk(
       const updatedScopes = await updatePermissions(permissionsUpdateObject);
 
       if (updatedScopes) {
-        dispatchScopesStatus(dispatch, 'Permission revoked', 'Success', 'success');
+        dispatchScopesStatus(dispatch, 'Permission revoked', 'Success', 4);
         dispatch(getConsentedScopesSuccess(updatedScopes));
         trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
         return updatedScopes;
@@ -77,7 +77,7 @@ export const revokeScopes = createAsyncThunk(
     } catch (errorMessage: any) {
       if (errorMessage instanceof RevokeScopesError) {
         const { errorText, statusText, status, messageType } = errorMessage;
-        dispatchScopesStatus(dispatch, statusText, status, 'error');
+        dispatchScopesStatus(dispatch, statusText, status, messageType);
         const permissionObject = {
           permissionToRevoke,
           statusCode: statusText,
@@ -88,20 +88,20 @@ export const revokeScopes = createAsyncThunk(
       } else {
         const { code, message } = errorMessage;
         trackRevokeConsentEvent(REVOKE_STATUS.failure, 'Failed to revoke consent');
-        dispatchScopesStatus(dispatch, message ? message : 'Failed to revoke consent', code ? code : 'Failed', 'error');
+        dispatchScopesStatus(dispatch, message ? message : 'Failed to revoke consent', code ? code : 'Failed', 1);
         return rejectWithValue(errorMessage);
       }
     }
   }
 );
 
-const dispatchScopesStatus = (dispatch: Function, statusText: string, status: string, messageBarType: string) => {
+const dispatchScopesStatus = (dispatch: Function, statusText: string, status: string, messageType: number) => {
   dispatch(
     setQueryResponseStatus({
       statusText: translateMessage(status),
       status: translateMessage(statusText),
       ok: false,
-      messageBarType
+      messageType
     })
   )
 }
@@ -135,7 +135,7 @@ async function updatePermissions(permissionsUpdateObject: IPermissionUpdate): Pr
   }
   else if ((retryCount < maxRetryCount) && !isRevokeSuccessful) {
     await new Promise(resolve => setTimeout(resolve, retryDelay * 2));
-    dispatchScopesStatus(dispatch, 'We are retrying the revoking operation', 'Retrying', 'info');
+    dispatchScopesStatus(dispatch, 'We are retrying the revoking operation', 'Retrying', 5);
 
     permissionsUpdateObject.retryCount += 1;
     return updatePermissions(permissionsUpdateObject);

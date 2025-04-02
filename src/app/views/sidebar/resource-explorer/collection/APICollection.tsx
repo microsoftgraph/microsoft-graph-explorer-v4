@@ -1,19 +1,11 @@
 import {
-  Label,
-  Toolbar,
-  ToolbarButton,
-  ToolbarGroup,
+  CommandBar,
+  DefaultButton,
   Dialog,
-  DialogActions,
-  DialogBody,
-  DialogContent,
-  DialogSurface,
-  DialogTitle,
-  Button,
-  makeStyles,
-  tokens,  useRestoreFocusTarget
-} from '@fluentui/react-components';
-import { Edit20Regular, Key20Regular, ArrowUpload20Regular, List20Regular } from '@fluentui/react-icons';
+  DialogFooter, DialogType, ICommandBarItemProps,
+  Label, MessageBarType, PrimaryButton
+} from '@fluentui/react';
+
 import { useAppDispatch, useAppSelector } from '../../../../../store';
 import { componentNames, eventTypes, telemetry } from '../../../../../telemetry';
 import { PopupsComponent } from '../../../../services/context/popups-context';
@@ -27,21 +19,11 @@ import { useEffect, useState } from 'react';
 import { ResourcePath } from '../../../../../types/resources';
 import { setQueryResponseStatus } from '../../../../services/slices/query-status.slice';
 import { isGeneratedCollectionInCollection } from './upload-collection.util';
-import CommonCollectionsPanel from './CommonCollectionsPanel';
+import './api-collections.scss';
 
 export interface APICollection {
   version: string;
 }
-
-const useStyles = makeStyles({
-  labelStyle: {
-    height: '80vh',
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});
 
 const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const dispatch = useAppDispatch();
@@ -54,8 +36,6 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   const [fileInputKey, setFileInputKey] = useState(Date.now());
   const [items, setItems] = useState<ResourcePath[]>([]);
   const [loading, setLoading] = useState(true);
-  const labelStyles = useStyles();
-  const restoreFocusTargetAttribute = useRestoreFocusTarget();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -74,8 +54,8 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   }
 
   const columns = [
-    { key: 'url', name: '', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   const generateCollection = () => {
@@ -84,6 +64,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     downloadToLocal(content, filename);
     trackDownload(filename, componentNames.DOWNLOAD_POSTMAN_COLLECTION_BUTTON);
   }
+
 
   const handleFileSelect = (event: any) => {
     const file = event.target.files[0];
@@ -119,7 +100,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
               status: translateMessage('Invalid file format'),
               statusText: translateMessage('Invalid file format'),
               ok: false,
-              messageBarType: 'error'
+              messageType: MessageBarType.error
             })
           )
         }
@@ -135,7 +116,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         status: translateMessage(status),
         statusText: translateMessage(statusMessage),
         ok: false,
-        messageBarType: 'error'
+        messageType: MessageBarType.error
       })
     )
   }
@@ -175,7 +156,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showPopup({
       settings: {
         title: translateMessage('Edit Collection'),
-        width: 'lg'
+        width: 'xl'
       }
     });
   };
@@ -184,84 +165,57 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
     showEditScopePanel({
       settings: {
         title: translateMessage('Edit Scope'),
-        width: 'lg'
+        width: 'xl'
       }
     });
   };
 
-  const options = [
+  const options: ICommandBarItemProps[] = [
     {
       key: 'remove',
       text: translateMessage('Edit collection'),
-      icon: <Edit20Regular />,
+      iconProps: { iconName: 'Delete' },
       disabled: items.length === 0,
       onClick: openEditCollectionPanel
     },
     {
       key: 'set-scope',
       text: translateMessage('Edit scope'),
-      icon: <Key20Regular />,
+      iconProps: { iconName: 'Permissions' },
       disabled: items.length === 0,
       onClick: openEditScopePanel
     },
     {
       key: 'upload',
       text: translateMessage('Upload a new list'),
-      icon: <ArrowUpload20Regular />,
+      iconProps: { iconName: 'Upload' },
       onClick: () => document.getElementById('file-input')?.click()
     }
   ];
 
-  const farItems = [
+  const farItems: ICommandBarItemProps[] = [
     {
       key: 'preview-permissions',
       text: translateMessage('Preview permissions'),
-      icon: <List20Regular />,
+      iconProps: { iconName: 'ListMirrored' },
       disabled: items.length === 0,
       onClick: () => viewPermissions({
         settings: {
           title: translateMessage('Preview Permissions'),
-          width: 'lg'
+          width: 'xl'
         }
       })}
   ];
 
   return (
-    <CommonCollectionsPanel
-      primaryButtonText='Download postman collection'
-      primaryButtonAction={generateCollection}
-      primaryButtonDisabled={items.length === 0}
-      closePopup={props.dismissPopup}
-    >
-      <Toolbar aria-label='Selection actions' style={{ justifyContent: 'space-between' }}>
-        <ToolbarGroup>
-          {options.map(option => (
-            <ToolbarButton
-              key={option.key}
-              icon={option.icon}
-              disabled={option.disabled}
-              onClick={option.onClick}
-              style={{ marginInlineEnd: '30px' }}
-              {...restoreFocusTargetAttribute}
-            >
-              {option.text}
-            </ToolbarButton>
-          ))}
-        </ToolbarGroup>
-        <ToolbarGroup>
-          {farItems.map(item => (
-            <ToolbarButton
-              key={item.key}
-              icon={item.icon}
-              disabled={item.disabled}
-              onClick={item.onClick}
-              {...restoreFocusTargetAttribute}
-            >
-              {item.text}
-            </ToolbarButton>
-          ))}
-        </ToolbarGroup>
-      </Toolbar>
+    <>
+      <CommandBar
+        items={options}
+        ariaLabel='Selection actions'
+        primaryGroupAriaLabel='Selection actions'
+        farItemsGroupAriaLabel='More selection actions'
+        farItems={farItems}
+      />
 
       <input
         key={fileInputKey}
@@ -271,37 +225,54 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
         onChange={handleFileSelect}
       />
 
+      {!isDialogHidden && (
+        <Dialog
+          hidden={isDialogHidden}
+          onDismiss={() => setIsDialogHidden(true)}
+          dialogContentProps={{
+            type: DialogType.normal,
+            title: translateMessage('Upload collection'),
+            closeButtonAriaLabel: 'Close',
+            subText: translateMessage('You have an existing collection. Would you like to merge or replace it?')
+          }}
+        >
+          <DialogFooter>
+            <PrimaryButton onClick={mergeWithExistingCollection} text={translateMessage('Merge with existing')} />
+            <DefaultButton onClick={overwriteCollection} text={translateMessage('Replace existing')} />
+          </DialogFooter>
+        </Dialog>
+      )}
+
       {items && items.length > 0 ?
-        (<Paths
-          resources={items}
-          columns={columns}
-        />
+        (<div>
+          <Paths
+            resources={items}
+            columns={columns}
+          />
+        </div>
         ) :
         (
-          <Label className={labelStyles.labelStyle}>
+          <Label
+            className='label'>
             {translateMessage('Add queries in the API Explorer and History tab')}
           </Label>
         )}
+      <DialogFooter
+        styles={{
+          actionsRight: { bottom: 0, justifyContent: 'start', position: 'fixed', width: '100%', zIndex: 1  }
+        }}>
+        <PrimaryButton onClick={generateCollection} disabled={items.length === 0}>
+          {translateMessage('Download postman collection')}
+        </PrimaryButton>
 
-      <Dialog open={!isDialogHidden} onOpenChange={toggleIsDialogHidden}>
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>{translateMessage('Upload collection')}</DialogTitle>
-            <DialogContent>
-              {translateMessage('You have an existing collection. Would you like to merge or replace it?')}
-            </DialogContent>
-            <DialogActions>
-              <Button appearance="primary" onClick={mergeWithExistingCollection}>
-                {translateMessage('Merge with existing')}
-              </Button>
-              <Button onClick={overwriteCollection}>
-                {translateMessage('Replace existing')}
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-    </CommonCollectionsPanel>
+        <DefaultButton
+          onClick={
+            () => props.closePopup()
+          }>
+          {translateMessage('Close')}
+        </DefaultButton>
+      </DialogFooter>
+    </>
   )
 }
 

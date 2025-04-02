@@ -16,8 +16,6 @@ export enum ContentType {
   HTML = 'text/html',
   BinaryResponse = 'application/octet-stream',
   TextCsv = 'text/csv',
-  OneNote = 'application/onenote',
-  Pdf = 'application/pdf'
 }
 
 export enum AppTheme {

@@ -1,2 +1,2 @@
 import CopyButton from './CopyButton';
-export { CopyButton };
+export default CopyButton;

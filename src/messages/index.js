@@ -1,7 +1,5 @@
 import enUS from './GE';
 
-const messages = {
+export default {
   'en-US': enUS
-};
-
-export default messages;
+}

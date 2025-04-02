@@ -1,3 +1,4 @@
+import { geLocale } from '../../../appLocale';
 import { authenticationWrapper } from '../../../modules/authentication';
 import { IQuery } from '../../../types/query-runner';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
@@ -19,7 +20,7 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
 
   const url = new URL(sampleUrl);
   const graphUrl = url.origin;
-  const appUrl = 'https://developer.microsoft.com/graph/graph-explorer';
+  const appUrl = 'https://developer.microsoft.com/' + geLocale.toLowerCase() + '/graph/graph-explorer';
 
   const graphUrlRequest = encodeURIComponent(requestUrl + search);
   let shareLink =
