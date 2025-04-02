@@ -1,11 +1,13 @@
+import { User } from '@microsoft/microsoft-graph-types';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IOAuthGrantPayload, IPermissionGrant } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
+import { CustomBody, ResponseValue } from '../../../types/query-response';
 import { IQuery } from '../../../types/query-runner';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 import { exponentialFetchRetry } from '../../utils/fetch-retry-handler';
 import { GRAPH_URL } from '../graph-constants';
-import { makeGraphRequest, parseResponse } from './query-action-creator-util';
+import { parseResponse, makeGraphRequest as queryMakeGraphRequest } from './query-action-creator-util';
 
 interface IPreliminaryChecksObject {
   defaultUserScopes: string[];
@@ -107,7 +109,9 @@ export class RevokePermissionsUtil {
     const tenantAdminQuery = { ...genericQuery };
     tenantAdminQuery.sampleUrl = `${GRAPH_URL}/v1.0/me/memberOf`;
     const response = await RevokePermissionsUtil.makeExponentialFetch([], tenantAdminQuery);
-    return response ? response.value.some((value: any) => value.displayName === 'Global Administrator') : false
+    const value = (response as CustomBody).value
+    const isAdmin = value ? value.some((v: Partial<User>)=>v?.displayName === 'Global Administrator') : false
+    return isAdmin
   }
 
   public async getUserPermissionChecks(preliminaryObject: PartialCheckObject): Promise<{
@@ -191,7 +195,7 @@ export class RevokePermissionsUtil {
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants?$filter=clientId eq '${servicePrincipalAppId}'`;
     genericQuery.sampleHeaders = [{ name: 'ConsistencyLevel', value: 'eventual' }];
     const oAuthGrant = await RevokePermissionsUtil.makeExponentialFetch(scopes, genericQuery);
-    return oAuthGrant;
+    return oAuthGrant as IOAuthGrantPayload;
   }
 
   public permissionToRevokeInGrant(permissionsGrant: IPermissionGrant, allPrincipalGrant: IPermissionGrant,
@@ -207,7 +211,8 @@ export class RevokePermissionsUtil {
     const currentAppId = process.env.REACT_APP_CLIENT_ID;
     genericQuery.sampleUrl = `${GRAPH_URL}/v1.0/servicePrincipals?$filter=appId eq '${currentAppId}'`;
     const response = await this.makeGraphRequest(scopes, genericQuery);
-    return response ? response.value[0].id : '';
+    const value = (response as CustomBody)?.value
+    return value ? value[0]?.id ?? '' : ''
   }
 
   private async revokePermission(permissionGrantId: string, newScopes: string): Promise<boolean> {
@@ -219,32 +224,24 @@ export class RevokePermissionsUtil {
     patchQuery.sampleUrl = `${GRAPH_URL}/v1.0/oauth2PermissionGrants/${permissionGrantId}`;
     genericQuery.sampleHeaders = [{ name: 'ConsistencyLevel', value: 'eventual' }];
     patchQuery.selectedVerb = 'PATCH';
-    // eslint-disable-next-line no-useless-catch
-    try {
-      const response = await RevokePermissionsUtil.makeGraphRequest([], patchQuery);
-      const { error } = response;
-      if (error) {
-        return false;
-      }
-      return true;
+
+    const response = await RevokePermissionsUtil.makeGraphRequest([], patchQuery);
+    const error  = (response as CustomBody).error;
+    if (error) {
+      return false;
     }
-    catch (error: any) {
-      throw error;
-    }
+    return true;
   }
 
-  private static async makeExponentialFetch(scopes: string[], query: IQuery, condition?:
-  (args?: any) => Promise<boolean>) {
-    const respHeaders: any = {};
-    const response = await exponentialFetchRetry(() => makeGraphRequest(scopes)(query),
-      8, 100, condition);
-    return parseResponse(response, respHeaders);
+  private static async makeExponentialFetch(
+    scopes: string[], query: IQuery, condition?: (args?: unknown) => Promise<boolean>) {
+    const response = await exponentialFetchRetry(() => queryMakeGraphRequest(scopes)(query), 8, 100, condition);
+    return parseResponse(response as Response);
   }
 
   private static async makeGraphRequest(scopes: string[], query: IQuery) {
-    const respHeaders: any = {};
-    const response = await makeGraphRequest(scopes)(query);
-    return parseResponse(response, respHeaders);
+    const response = await queryMakeGraphRequest(scopes)(query);
+    return parseResponse(response as Response);
   }
 
   private trackRevokeConsentEvent = (status: string, permissionObject: any) => {

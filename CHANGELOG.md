@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.4...v11.0.0) (2025-04-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* Fluent V9 Migration upgrades ([#3758](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3758))
+
+
+### Bug Fixes
+
+* ensure initialize completes before other invocations ([#3714](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3714)) ([1c9ef08](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/1c9ef08b52f9841c99954ef71caafdbcfdcfebe6))
+* update doc links ([#3729](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3729)) ([3f0b96c](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/3f0b96cdaf93f83f886702b035780387227eed7f))
+* update pipeline to include new service connection ([#3733](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3733)) ([36ccd02](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/36ccd026de4eca86687a90d9a4479de4270a23e3))
+
+
+### Code Refactoring
+
+* Fluent V9 Migration upgrades ([#3758](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3758)) ([39df321](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/39df321104ec495e2c0b2b7bed6ad2d1cb3a334f))
+
 ## [10.5.4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.3...v10.5.4) (2025-03-05)
 
 
