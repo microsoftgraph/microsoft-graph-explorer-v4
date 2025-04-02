@@ -1,82 +1,78 @@
-import { DetailsList, DetailsRow, IColumn, IconButton, SelectionMode } from '@fluentui/react';
-import { IHeadersListControl } from '../../../../../types/request';
+import {
+  Table,
+  TableHeader,
+  TableHeaderCell,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Tooltip
+} from '@fluentui/react-components';
+import { Delete24Regular, Edit24Regular } from '@fluentui/react-icons';
 import { translateMessage } from '../../../../utils/translate-messages';
-import { headerStyles } from './Headers.styles';
+import { IHeadersListControl } from '../../../../../types/request';
+import { useHeaderStyles } from './Headers.styles';
 
+const HeadersList = ({ handleOnHeaderDelete, headers, handleOnHeaderEdit }: IHeadersListControl) => {
+  const styles = useHeaderStyles();
 
-const HeadersList = ({
-  handleOnHeaderDelete,
-  headers,
-  handleOnHeaderEdit
-}: IHeadersListControl) => {
+  const columns = [
+    { key: 'key', name: translateMessage('Key'), fieldName: 'name' },
+    { key: 'value', name: translateMessage('Value'), fieldName: 'value' },
+    { key: 'button', name: translateMessage('actions'), fieldName: 'button' }
+  ];
 
-  const renderItemColumn = (item: any, index: number | undefined, column: IColumn | undefined) => {
-    const itemContent: any = headerStyles().itemContent;
-    if (column) {
-      const fieldContent = item[column.fieldName as keyof any] as string;
-      if(column.key === 'button') {
-        return <div>
-          <IconButton
-            iconProps={{ iconName: 'Delete' }}
-            title={translateMessage('Remove request header')}
-            ariaLabel={translateMessage('Remove request header')}
-            onClick={() => handleOnHeaderDelete(item)}
-          />
-          <span style={{fontSize: 'large', position: 'relative', bottom: '3px'}}>|</span>
-          <IconButton
-            iconProps={{ iconName: 'Edit' }}
-            title={translateMessage('Edit request header')}
-            ariaLabel={translateMessage('Edit request header')}
-            onClick={() => handleOnHeaderEdit(item)}
-          />
-        </div>;
-      }
-      else{
-        return <div style={itemContent}>{fieldContent}</div>;
-      }
-    }
-  };
+  const headerItems = headers ? headers.filter(h => h.value !== '') : [];
 
-  const renderRow = (props: any): any => {
-    const { detailsRow, rowContainer }: any = headerStyles();
-
-    if (props) {
+  const renderItemColumn = (item: any, colKey: string) => {
+    if (colKey === 'button') {
       return (
-        <div style={rowContainer}>
-          <DetailsRow {...props} style={detailsRow} />
+        <div className={styles.actionButtons}>
+          <Tooltip content={translateMessage('Remove request header')} relationship='label'>
+            <Button
+              icon={<Delete24Regular />}
+              appearance='subtle'
+              aria-label={translateMessage('Remove request header')}
+              onClick={() => handleOnHeaderDelete(item)}
+            />
+          </Tooltip>
+          <Tooltip content={translateMessage('Edit request header')} relationship='label'>
+            <Button
+              icon={<Edit24Regular />}
+              appearance='subtle'
+              aria-label={translateMessage('Edit request header')}
+              onClick={() => handleOnHeaderEdit(item)}
+            />
+          </Tooltip>
         </div>
       );
     }
+    return <div className={styles.itemContent}>{item[colKey]}</div>;
   };
 
-  const columns = [
-    {
-      key: 'key', name: translateMessage('Key'), fieldName: 'name', minWidth: 300,
-      maxWidth: 400, ariaLabel: translateMessage('Key')
-    },
-    {
-      key: 'value', name: translateMessage('Value'), fieldName: 'value', minWidth: 300,
-      maxWidth: 400, ariaLabel: translateMessage('Value')
-    },
-    {
-      key: 'button', name: translateMessage('actions'), fieldName: 'button', minWidth: 200,
-      maxWidth: 300, ariaLabel: translateMessage('actions')
-    }
-  ];
-
-  const headerItems = (headers) ? headers.filter((header) => {
-    return header.value !== '';
-  }) : [];
-
   return (
-    <DetailsList
-      items={headerItems}
-      columns={columns}
-      onRenderItemColumn={renderItemColumn}
-      onRenderRow={renderRow}
-      selectionMode={SelectionMode.none}
-      styles={{root: {height: '100%'}}}
-    />
+    <div className={styles.container}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {columns.map(col => (
+              <TableHeaderCell key={col.key}>{col.name}</TableHeaderCell>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {headerItems.map((item, idx) => (
+            <TableRow key={idx} className={styles.rowContainer}>
+              {columns.map(col => (
+                <TableCell key={col.key}>
+                  {renderItemColumn(item, col.fieldName)}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

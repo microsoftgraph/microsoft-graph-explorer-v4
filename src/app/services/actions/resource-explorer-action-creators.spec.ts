@@ -6,6 +6,7 @@ import {
 } from '../../../app/services/redux-constants';
 import { ApplicationState } from '../../../store';
 import { Mode } from '../../../types/enums';
+import { SnippetError } from '../../../types/snippets';
 import { fetchResources } from '../slices/resources.slice';
 import { mockThunkMiddleware } from './mockThunkMiddleware';
 
@@ -62,13 +63,13 @@ const mockState: ApplicationState = {
     isLoadingData: false,
     response: {
       body: undefined,
-      headers: undefined
+      headers: {}
     }
   },
   snippets: {
     pending: false,
-    data: [],
-    error: null
+    data: {},
+    error: {} as SnippetError
   },
   responseAreaExpanded: false,
   dimensions: {
