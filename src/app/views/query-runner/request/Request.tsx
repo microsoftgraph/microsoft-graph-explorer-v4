@@ -1,219 +1,178 @@
-import {
-  FontSizes,
-  Pivot,
-  PivotItem
-} from '@fluentui/react';
-import { Resizable } from 're-resizable';
-import { CSSProperties, useEffect, useState } from 'react';
-
-import { useAppDispatch, useAppSelector } from '../../../../store';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../../store';
 import { telemetry } from '../../../../telemetry';
 import { Mode } from '../../../../types/enums';
-import { setDimensions } from '../../../services/slices/dimensions.slice';
 import { translateMessage } from '../../../utils/translate-messages';
-import { convertPxToVh, convertVhToPx } from '../../common/dimensions/dimensions-adjustment';
 import { Auth, Permissions, RequestHeaders } from '../../common/lazy-loader/component-registry';
 import { RequestBody } from './body';
 import './request.scss';
 import { IQuery } from '../../../../types/query-runner';
+import {
+  makeStyles,
+  Tab,
+  TabList,
+  TabValue,
+  tokens,
+  Button,
+  Menu,
+  MenuItem,
+  MenuList,
+  MenuPopover,
+  MenuTrigger,
+  Overflow,
+  OverflowItem,
+  useOverflowMenu,
+  useIsOverflowItemVisible
+} from '@fluentui/react-components';
+import {
+  SendRegular,
+  DocumentTableRegular,
+  ShieldKeyholeRegular,
+  KeyRegular,
+  MoreHorizontalRegular } from '@fluentui/react-icons';
 
 interface IRequestProps {
-  handleOnEditorChange: ()=> void
-  sampleQuery: IQuery
+  handleOnEditorChange: () => void;
+  sampleQuery: IQuery;
 }
 
-const Request = (props: IRequestProps) => {
-  const dispatch = useAppDispatch();
-  const [selectedPivot, setSelectedPivot] = useState('request-body');
-  const mode = useAppSelector((state)=> state.graphExplorerMode);
-  const dimensions= useAppSelector((state)=> state.dimensions);
-  const sidebarProperties = useAppSelector((state)=> state.sidebarProperties);
-  const pivot = selectedPivot.replace('.$', '');
-  const minHeight = 60;
-  const maxHeight = 800;
-
-  const {
-    handleOnEditorChange,
-    sampleQuery
-  }: IRequestProps = props;
-
-  useEffect(() => {
-    if(sidebarProperties && sidebarProperties.mobileScreen){
-      window.addEventListener('resize', resizeHandler);
-    }
-    else{
-      window.removeEventListener('resize', resizeHandler);
-    }
-  }, [sidebarProperties.mobileScreen])
-
-  const getPivotItems = (height: string) => {
-
-    const heightAdjustment = 55;
-    const containerStyle: CSSProperties = {
-      height: convertVhToPx(height, heightAdjustment),
-      overflowY: 'hidden',
-      overflowX: 'hidden',
-      borderBottom: '1px solid #ddd'
-    };
-
-    const pivotItems = [
-      <PivotItem
-        key='request-body'
-        itemIcon='Send'
-        itemKey='request-body' // To be used to construct component name for telemetry data
-        ariaLabel={translateMessage('request body')}
-        headerText={translateMessage('request body')}
-        title={translateMessage('request body')}
-        headerButtonProps={{
-          'aria-controls': 'request-body-tab'
-        }}
-      >
-        <div style={containerStyle} id={'request-body-tab'} tabIndex={0}>
-          <RequestBody handleOnEditorChange={handleOnEditorChange} />
-        </div>
-      </PivotItem>,
-      <PivotItem
-        key='request-headers'
-        itemIcon='FileComment'
-        itemKey='request-headers'
-        ariaLabel={translateMessage('request header')}
-        headerText={translateMessage('request header')}
-        title={translateMessage('request header')}
-        headerButtonProps={{
-          'aria-controls': 'request-header-tab'
-        }}
-      >
-        <div style={containerStyle} id={'request-header-tab'} tabIndex={0}>
-          <RequestHeaders />
-        </div>
-      </PivotItem>,
-      <PivotItem
-        key='modify-permissions'
-        itemIcon='AzureKeyVault'
-        itemKey='modify-permissions'
-        ariaLabel={translateMessage('modify permissions')}
-        headerText={translateMessage('modify permissions')}
-        title={translateMessage('modify permissions')}
-        headerButtonProps={{
-          'aria-controls': 'permission-tab'
-        }}
-      >
-        <div style={containerStyle} id={'permission-tab'} tabIndex={0}>
-          <Permissions />
-        </div>
-      </PivotItem>
-    ];
-    if (mode === Mode.Complete) {
-      pivotItems.push(
-        <PivotItem
-          key='access-token'
-          itemIcon='AuthenticatorApp'
-          itemKey='access-token'
-          ariaLabel={translateMessage('Access Token')}
-          headerText={translateMessage('Access Token')}
-          title={translateMessage('Access Token')}
-          headerButtonProps={{
-            'aria-controls': 'access-token-tab'
-          }}>
-          <div style={containerStyle} id={'access-token-tab'} tabIndex={0}>
-            <Auth />
-          </div>
-        </PivotItem>
-      );
-    }
-
-    return pivotItems;
+const useStyles = makeStyles({
+  container: {
+    height: '-webkit-fill-available',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  tabContainer: {
+    display: 'flex',
+    flexShrink: 0,
+    overflowX: 'hidden'
+  },
+  tabList: {
+    padding: '5px 5px'
+  },
+  tabContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalS,
+    marginTop: tokens.spacingHorizontalS,
+    backgroundColor: tokens.colorNeutralBackground1,
+    minHeight: '0',
+    overflow: 'auto'
+  },
+  menuButton: {
+    alignSelf: 'center'
   }
+});
 
-  const requestPivotItems = getPivotItems(dimensions.request.height);
+const OverflowMenuItem = ({ tab, onClick }: { tab: { id: string; name: string; icon: JSX.Element };
+  onClick: () => void }) => {
+  const isVisible = useIsOverflowItemVisible(tab.id);
 
-  const handlePivotItemClick = (pivotItem?: PivotItem) => {
-    if (!pivotItem) {
-      return;
-    }
-    onPivotItemClick(pivotItem);
-    setSelectedPivot(pivotItem.props.itemKey!);
-  }
-
-  const onPivotItemClick = (item?: PivotItem) => {
-    if (!item) { return; }
-    const tabKey = item.props.itemKey;
-    if (tabKey) {
-      telemetry.trackTabClickEvent(tabKey, sampleQuery);
-    }
-  };
-
-  const setRequestAndResponseHeights = (requestHeight: string) => {
-    const heightInPx = requestHeight.replace('px', '').trim();
-    const requestHeightInVh = convertPxToVh(parseFloat(heightInPx)).toString();
-    const maxDeviceVerticalHeight = 90;
-
-    const dimensionsToUpdate = {
-      ...dimensions,
-      request: {
-        ...dimensions.request,
-        height: requestHeightInVh
-      },
-      response: {
-        ...dimensions.response,
-        height: `${maxDeviceVerticalHeight - parseFloat(requestHeightInVh.replace('vh', ''))}vh`
-      }
-    };
-
-    dispatch(setDimensions(dimensionsToUpdate));
-  };
-
-
-  // Resizable element does not update it's size when the browser window is resized.
-  // This is a workaround to reset the height
-  const resizeHandler = () => {
-    const resizable = document.getElementsByClassName('request-resizable');
-    if (resizable && resizable.length > 0) {
-      const resizableElement = resizable[0] as HTMLElement;
-      if(resizableElement && resizableElement.style && resizableElement.style.height){
-        resizableElement.style.height = '';
-      }
-    }
+  if (isVisible) {
+    return null;
   }
 
   return (
-    <>
-      <Resizable
-        style={{
-          border: 'solid 1px #ddd'
-        }}
-        onResize={(e: any, direction: any, ref: any) => {
-          if (ref && ref.style && ref.style.height) {
-            setRequestAndResponseHeights(ref.style.height);
-          }
-        }}
-        maxHeight={maxHeight}
-        minHeight={minHeight}
-        bounds={'window'}
-        size={{
-          height: 'inherit',
-          width: '100%'
-        }}
-        enable={{
-          bottom: true
-        }}
-        className='request-resizable'
-      >
-        <div className='query-request'>
-          <Pivot
-            overflowBehavior='menu'
-            overflowAriaLabel={translateMessage('More request area items')}
-            onLinkClick={handlePivotItemClick}
-            className='pivot-request'
-            selectedKey={pivot}
-            styles={{ text: { fontSize: FontSizes.size14 }}}
-          >
-            {requestPivotItems}
-          </Pivot>
-        </div>
-      </Resizable>
-    </>
+    <MenuItem key={tab.id} icon={tab.icon} onClick={onClick}>
+      {tab.name}
+    </MenuItem>
   );
-}
+};
+
+const OverflowMenu = ({ onTabSelect, tabs }:
+  { onTabSelect: (tabId: string) => void; tabs: { id: string; name: string; icon: JSX.Element }[] }) => {
+  const { ref, isOverflowing, overflowCount } = useOverflowMenu<HTMLButtonElement>();
+
+  if (!isOverflowing) {
+    return null;
+  }
+
+  return (
+    <Menu hasIcons>
+      <MenuTrigger disableButtonEnhancement>
+        <Button appearance='transparent' ref={ref}
+          icon={<MoreHorizontalRegular />} aria-label={`${overflowCount} more tabs`} role='tab' />
+      </MenuTrigger>
+      <MenuPopover>
+        <MenuList>
+          {tabs.map((tab) => (
+            <OverflowMenuItem key={tab.id} tab={tab} onClick={() => onTabSelect(tab.id)} />
+          ))}
+        </MenuList>
+      </MenuPopover>
+    </Menu>
+  );
+};
+
+const Request = (props: IRequestProps) => {
+  const styles = useStyles();
+  const [selectedTab, setSelectedTab] = useState<TabValue>('request-body');
+  const mode = useAppSelector((state) => state.graphExplorerMode);
+  const  mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+
+  const tabs = [
+    { id: 'request-body', name: translateMessage('Request Body'), icon: <SendRegular /> },
+    { id: 'request-headers', name: translateMessage('Request Headers'), icon: <DocumentTableRegular /> },
+    { id: 'modify-permissions', name: translateMessage('Modify Permissions'), icon: <ShieldKeyholeRegular /> }
+  ];
+
+  if (mode === Mode.Complete) {
+    tabs.push({ id: 'access-token', name: translateMessage('Access Token'), icon: <KeyRegular /> });
+  }
+
+  const handleTabSelect = (tab: TabValue) => {
+    setSelectedTab(tab);
+    telemetry.trackTabClickEvent(tab as string, props.sampleQuery);
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.tabContainer}>
+        {mobileScreen ? (
+          <Overflow minimumVisible={2}>
+            <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
+              {tabs.map((tab) => (
+                <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedTab ? 2 : 1}>
+                  <Tab value={tab.id} icon={tab.icon}>
+                    {tab.name}
+                  </Tab>
+                </OverflowItem>
+              ))}
+              <OverflowMenu onTabSelect={handleTabSelect} tabs={tabs} />
+            </TabList>
+          </Overflow>
+        ) : (
+          <TabList selectedValue={selectedTab}
+            onTabSelect={(_, data) => handleTabSelect(data.value)}
+            size='small' className={styles.tabList}
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.id} value={tab.id} icon={tab.icon}>
+                {tab.name}
+              </Tab>
+            ))}
+          </TabList>
+        )}
+      </div>
+      <div className={styles.tabContent}>
+        {selectedTab === 'request-body' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestBody handleOnEditorChange={props.handleOnEditorChange} isVisible={selectedTab === 'request-body'} />
+          </div>
+        )}
+        {selectedTab === 'request-headers' && (
+          <div style={{ flex: 1, display: 'flex' }}>
+            <RequestHeaders />
+          </div>
+        )}
+        {selectedTab === 'modify-permissions' && <Permissions />}
+        {selectedTab === 'access-token' && mode === Mode.Complete && <Auth />}
+      </div>
+    </div>
+  );
+};
 
 export default Request;

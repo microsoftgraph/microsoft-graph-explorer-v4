@@ -103,10 +103,9 @@ export async function getProfileImage(): Promise<string> {
 
 export async function getProfileResponse(): Promise<IProfileResponse> {
   const scopes = DEFAULT_USER_SCOPES.split(' ');
-  const respHeaders: Record<string, string> = {};
 
   const response = await makeGraphRequest(scopes)(query);
-  const userInfo = await parseResponse(response, respHeaders);
+  const userInfo = await parseResponse(response as Response);
   return {
     userInfo,
     response

@@ -3,25 +3,42 @@ import { isImageResponse } from '../../../services/actions/query-action-creator-
 import { Image, Monaco } from '../../common';
 import { formatXml } from '../../common/monaco/util/format-xml';
 
-const ResponseDisplay = (properties: any) => {
-  const { contentType, body, height } = properties;
+interface ResponseDisplayProps {
+  contentType: string;
+  body: any;
+}
+
+const ResponseDisplay = (props: ResponseDisplayProps) => {
+  const { contentType, body } = props;
 
   switch (contentType) {
-  case ContentType.XML:
-    return <Monaco body={formatXml(body)} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'application/xml':
+    return (
+      <Monaco body={formatXml(body)} language='text/html' readOnly={true} />
+    );
 
-  case ContentType.HTML:
-    return <Monaco body={body} language={ContentType.HTML} readOnly={true} height={height} />;
+  case 'text/html':
+    return <Monaco body={body} language='text/html' readOnly={true} />;
+
+  case 'application/json':
+    return (
+      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+        <Monaco body={body} readOnly language="application/json" />
+      </div>
+    );
 
   default:
-    if (isImageResponse(contentType)) {
-      return <Image
-        styles={{ padding: '10px' }}
-        body={body}
-        alt='profile image' />;
+    if (isImageResponse(contentType) && typeof body !== 'string') {
+      return (
+        <Image styles={{ padding: '10px', height: '240px', width: '240px' }} body={body} alt='profile image' />
+      );
     }
-    return <Monaco body={body} readOnly={true} language={ContentType.Json} height={height} />;
+    return (
+      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+        <Monaco body={body} readOnly language="text/plain" />
+      </div>
+    );
   }
-}
+};
 
 export default ResponseDisplay;

@@ -1,32 +1,55 @@
-import { PrimaryButton, Spinner, SpinnerSize } from '@fluentui/react';
-import { ISubmitButtonControl } from '../../../../types/submit-button';
+import { PlayRegular } from '@fluentui/react-icons';
+import { ISubmitButton } from '../../../../types/submit-button';
+import { Button, Spinner } from '@fluentui/react-components';
+import { makeStyles, tokens, mergeClasses } from '@fluentui/react-components';
 
-const SubmitButtonControl = ({
+const useStyles = makeStyles({
+  buttonContent: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: tokens.spacingHorizontalXS
+  },
+  spinner: {
+    width: '16px',
+    height: '16px',
+    visibility: 'hidden'
+  },
+  spinnerVisible: {
+    visibility: 'visible'
+  },
+  button: {
+    width: '100%'
+  }
+});
+
+const SubmitButton = ({
   handleOnClick,
   submitting,
-  className,
   text,
   ariaLabel,
-  role,
-  disabled,
-  allowDisabledFocus
-}: ISubmitButtonControl) => {
+  disabled
+}: ISubmitButton) => {
+  const classes = useStyles();
 
   return (
-    <div className={className}>
-      <PrimaryButton disabled={submitting || disabled}
+    <div className={classes.button}>
+      <Button
+        disabled={submitting || disabled}
+        appearance='primary'
         onClick={() => handleOnClick()}
-        ariaLabel={ariaLabel}
-        role={role}
-        allowDisabledFocus={allowDisabledFocus}
+        aria-label={ariaLabel}
+        icon={<PlayRegular />}
       >
-        {text}
-        {submitting && <>&nbsp;
-          <Spinner size={SpinnerSize.small} />
-        </>}
-      </PrimaryButton>
+        <span className={classes.buttonContent}>
+          {text}
+          <Spinner
+            size='small'
+            className={mergeClasses(classes.spinner, submitting && classes.spinnerVisible)}
+          />
+        </span>
+      </Button>
     </div>
   );
 };
 
-export default SubmitButtonControl;
+export default SubmitButton;
