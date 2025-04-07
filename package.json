@@ -11,7 +11,7 @@
                 "@fluentui-contrib/react-resize-handle": "0.6.1",
                 "@fluentui/react-components": "9.61.6",
                 "@fluentui/react-icons": "2.0.274",
-                "@microsoft/applicationinsights-react-js": "17.3.4",
+                "@microsoft/applicationinsights-react-js": "18.3.6",
                 "@microsoft/applicationinsights-web": "3.3.6",
                 "@microsoft/microsoft-graph-client": "3.0.7",
                 "@microsoft/microsoft-graph-types": "2.40.0",
