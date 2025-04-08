@@ -44,8 +44,7 @@ const useStyles = makeStyles({
   },
   tabContainer: {
     display: 'flex',
-    flexShrink: 0,
-    overflowX: 'hidden'
+    flexShrink: 0
   },
   tabList: {
     padding: '5px 5px'

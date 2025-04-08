@@ -4,7 +4,7 @@ export const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
 
 export const useLayoutResizeStyles = makeResetStyles({
   [SIDEBAR_SIZE_CSS_VAR]: '23%'
-})
+});
 
 export const useLayoutStyles = makeStyles({
   container: {
@@ -44,19 +44,20 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    minWidth: 0
+    minWidth: 0,
+    minHeight: 0
   },
   requestResponseArea: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
-    minHeight: 0
+    minHeight: 0,
+    overflowY: 'auto',
+    overflowX: 'hidden'
   },
   requestArea: {
-    flex: '0 0 35%',
+    flex: 1,
     minHeight: '200px',
-    maxHeight: '40%',
     overflow: 'auto',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
