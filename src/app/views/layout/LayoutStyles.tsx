@@ -10,14 +10,14 @@ export const useLayoutStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    padding: tokens.spacingHorizontalS,
-    height: 'clamp(100vh, auto, 200vh)',
-    overflow: 'hidden'
+    height: '100vh',
+    overflow: 'hidden',
+    padding: tokens.spacingHorizontalS
   },
   content: {
     display: 'flex',
     flex: 1,
-    overflowY: 'hidden',
+    overflow: 'hidden',
     minWidth: 0
   },
   sidebar: {
@@ -43,36 +43,26 @@ export const useLayoutStyles = makeStyles({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    minWidth: '300px',
-    minHeight: 'calc(100vh - 98px)',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    minWidth: 0
   },
   requestResponseArea: {
-    flex: '1 1 auto',
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    height: '60vh',
-    minHeight: '550px',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    minHeight: 0
   },
-  responseArea: {
-    flex: '1 1 auto',
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '300px',
-    height: 'auto',
-    maxHeight: '100%',
+  requestArea: {
+    flex: '0 0 35%',
+    minHeight: '200px',
+    maxHeight: '40%',
     overflow: 'auto',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
   },
-  requestArea: {
-    flex: '1 1 40%',
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '200px',
-    height:'auto',
-    maxHeight: '40%',
+  responseArea: {
+    flex: 1,
     overflow: 'auto',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
