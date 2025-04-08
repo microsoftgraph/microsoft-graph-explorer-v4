@@ -108,7 +108,7 @@
                 "acorn": "8.14.1",
                 "babel-jest": "29.7.0",
                 "chromedriver": "134.0.5",
-                "eslint": "8.57.1",
+                "eslint": "9.24.0",
                 "eslint-plugin-react": "7.37.4",
                 "globals": "16.0.0",
                 "html-webpack-plugin": "5.6.3",
