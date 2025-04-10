@@ -67,7 +67,7 @@ const useSnippetStyles = makeStyles({
   container: {
     margin: '0 auto',
     maxHeight: '100vh',
-    overflowY: 'auto',
+    overflowY: 'hidden',
     display: 'flex',
     flexDirection: 'column'
   },
@@ -80,7 +80,7 @@ const useSnippetStyles = makeStyles({
     flexDirection: 'column',
     flex: '1 1 auto',
     height: '30vh',
-    overflowY: 'auto'
+    overflowY: 'hidden'
   },
   copyButton: {
     marginLeft: 'auto'
