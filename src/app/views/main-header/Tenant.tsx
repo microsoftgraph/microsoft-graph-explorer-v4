@@ -9,6 +9,7 @@ const tooltipContent = `${translateMessage('Using demo tenant')} ${translateMess
 const Tenant = ()=>{
   const styles = useHeaderStyles()
   const user = useAppSelector(state => state.profile.user)
+  console.log('user', user)
   const secondaryContent = user && user.tenant ? user.tenant : 'Sample'
 
   return (

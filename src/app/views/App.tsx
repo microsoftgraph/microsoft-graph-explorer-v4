@@ -1,6 +1,5 @@
 import {
   FluentProvider,
-  teamsHighContrastTheme,
   Theme,
   webDarkTheme,
   webLightTheme
@@ -256,8 +255,7 @@ class App extends Component<IAppProps, IAppState> {
   public render() {
     const fluentV9Themes: Record<string, Theme> = {
       light: webLightTheme,
-      dark: webDarkTheme,
-      'high-contrast': teamsHighContrastTheme
+      dark: webDarkTheme
     };
     return (
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>

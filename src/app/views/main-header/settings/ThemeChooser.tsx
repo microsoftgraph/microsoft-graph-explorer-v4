@@ -6,7 +6,7 @@ import { PopupsComponent } from '../../../services/context/popups-context';
 import { changeTheme } from '../../../services/slices/theme.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { useIconOptionStyles, useRadioGroupStyles } from './ThemeChooser.styles';
-import { BrightnessHigh24Regular, WeatherMoon24Regular, DarkTheme24Regular} from '@fluentui/react-icons';
+import { BrightnessHigh24Regular, WeatherMoon24Regular} from '@fluentui/react-icons';
 
 const availableThemes = [
   {
@@ -18,11 +18,6 @@ const availableThemes = [
     key: 'dark',
     displayName: 'Dark',
     icon: <WeatherMoon24Regular />
-  },
-  {
-    key: 'high-contrast',
-    displayName: 'High Contrast',
-    icon: <DarkTheme24Regular />
   }
 ];
 

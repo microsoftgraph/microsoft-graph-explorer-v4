@@ -41,11 +41,23 @@ export const useResourceExplorerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
+  button: {
+    border: 'none'
+  },
   treeItemLayout: {
     width: '100%',
     ':hover, :focus, :focus-visible, :focus-within': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
-      color: tokens.colorNeutralForeground2BrandHover
+      color: tokens.colorNeutralForeground2BrandHover,
+      '@media (forced-colors: hover)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none',
+        // Adding border for better visibility in high contrast mode
+        outlineWidth: '2px',
+        outlineStyle: 'solid',
+        outlineColor: 'ButtonText'
+      }
     },
     '> div.fui-TreeItemLayout__main': {
       width: '100%'
