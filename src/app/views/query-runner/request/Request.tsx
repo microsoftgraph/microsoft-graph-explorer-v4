@@ -61,7 +61,7 @@ const useStyles = makeStyles({
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
     minHeight: '0',
-    overflow: 'auto'
+    overflow: 'hidden'
   },
   menuButton: {
     alignSelf: 'center'
