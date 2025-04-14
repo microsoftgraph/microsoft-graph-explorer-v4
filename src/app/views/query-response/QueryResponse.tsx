@@ -29,9 +29,9 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     width: '90%',
-    maxWidth: '1000px',
+    maxWidth: '90%',
     overflow: 'hidden',
-    height: '600px',
+    height: '90%',
     maxHeight: '100%'
   },
   dialogBtn: {

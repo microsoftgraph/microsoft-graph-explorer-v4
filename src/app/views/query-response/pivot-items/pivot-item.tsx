@@ -62,7 +62,7 @@ const useStyles = makeStyles({
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
     height: '100%',
-    minHeight: '400px',
+    minHeight: '600px',
     overflow: 'auto'
   }
 });
