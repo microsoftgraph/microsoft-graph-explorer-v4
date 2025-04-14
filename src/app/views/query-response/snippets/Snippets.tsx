@@ -195,6 +195,8 @@ const RenderSnippets = () => {
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
     const newLang = data.value as string;
     dispatch(setSnippetTabSuccess(newLang));
+    dispatch(getSnippet(newLang.toLowerCase()));
+    telemetry.trackTabClickEvent(newLang);
   };
   return (
     <div id='snippets-tablist' className={styles.container}>
@@ -239,13 +241,13 @@ const SnippetContent: React.FC<SnippetContentProps> = (
 
   useEffect(() => {
     if (snippetTab) {
-      dispatch(getSnippet(snippetTab));
+      dispatch(getSnippet(snippetTab.toLowerCase()));
     }
   }, [snippetTab]);
 
   useEffect(() => {
     if (sampleQuery && snippetTab) {
-      dispatch(getSnippet(snippetTab));
+      dispatch(getSnippet(snippetTab.toLowerCase()));
     }
   }, [sampleQuery]);
 
