@@ -1,6 +1,7 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogBody,
   DialogContent,
   DialogSurface,
@@ -10,7 +11,7 @@ import {
   Tooltip,
   useRestoreFocusTarget
 } from '@fluentui/react-components';
-import { DismissRegular, ExpandUpLeftRegular } from '@fluentui/react-icons';
+import { ExpandUpLeftRegular } from '@fluentui/react-icons';
 import { useState } from 'react';
 import { GetPivotItems } from './pivot-items/pivot-item';
 import { translateMessage } from '../../utils/translate-messages';
@@ -26,9 +27,12 @@ const useStyles = makeStyles({
   },
   dialog: {
     display: 'flex',
-    justifyContent: 'center',
-    maxWidth: '70%',
-    minHeight: '70%'
+    flexDirection: 'column',
+    width: '90%',
+    maxWidth: '1000px',
+    overflow: 'hidden',
+    height: '600px',
+    maxHeight: '100%'
   },
   dialogBtn: {
     position: 'absolute',
@@ -39,6 +43,13 @@ const useStyles = makeStyles({
   dismissBtn: {
     height: 'min-content',
     marginTop: tokens.spacingVerticalL
+  },
+  dialogContent: {
+    padding: '16px',
+    overflow: 'auto',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+    flexGrow: 1
   }
 });
 
@@ -63,21 +74,15 @@ const PivotItemsDialog = () => {
       <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
         <DialogSurface className={styles.dialog}>
           <DialogBody>
-            <DialogContent>
+            <DialogContent className={styles.dialogContent}>
               <GetPivotItems />
             </DialogContent>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance='secondary'>{translateMessage('Close')}</Button>
+              </DialogTrigger>
+            </DialogActions>
           </DialogBody>
-          <DialogTrigger disableButtonEnhancement>
-            <Tooltip relationship='label' content={translateMessage('Close')}>
-              <Button
-                appearance='transparent'
-                icon={<DismissRegular />}
-                aria-label={translateMessage('Close')}
-                className={styles.dismissBtn}
-                onClick={() => setOpen(false)}
-              />
-            </Tooltip>
-          </DialogTrigger>
         </DialogSurface>
       </Dialog>
     </div>
