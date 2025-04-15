@@ -149,6 +149,7 @@ const SignedInButton = forwardRef<
 >((props, ref) => {
   const styles = useHeaderStyles();
   const user = useAppSelector((state) => state.profile.user);
+  const imageUrl = user?.profileImageUrl ?? '';
 
   return (
     <Tooltip content={translateMessage('sign out')} relationship='description'>
@@ -165,6 +166,11 @@ const SignedInButton = forwardRef<
           name={user?.displayName}
           className={styles.iconButton}
           presence={{ status: 'available' }}
+          avatar={{
+            image: {
+              src: imageUrl
+            }
+          }}
         />
       </Button>
     </Tooltip>
