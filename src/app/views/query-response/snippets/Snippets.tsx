@@ -65,6 +65,8 @@ const supportedLanguages: LanguageSnippet = {
 const useSnippetStyles = makeStyles({
   container: {
     margin: '0 auto',
+    paddingTop: '5px',
+    paddingLeft: '5px',
     maxHeight: '100vh',
     overflowY: 'hidden',
     display: 'flex',
