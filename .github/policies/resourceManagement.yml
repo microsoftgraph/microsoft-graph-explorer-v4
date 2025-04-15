@@ -89,7 +89,6 @@ configuration:
           - isOpen
           - not:
               and:
-                - isAssignedToSomeone
                 - isLabeled
       then:
         - addLabel:
@@ -98,7 +97,6 @@ configuration:
       - payloadType: Issues
       - and:
           - isOpen
-          - isAssignedToSomeone
           - isLabeled
       then:
         - removeLabel:
