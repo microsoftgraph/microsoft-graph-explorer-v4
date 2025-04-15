@@ -49,14 +49,10 @@ export const useResourceExplorerStyles = makeStyles({
     ':hover, :focus, :focus-visible, :focus-within': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
       color: tokens.colorNeutralForeground2BrandHover,
-      '@media (forced-colors: hover)': {
+      '@media (forced-colors: active)': {
         backgroundColor: 'Highlight',
         color: 'HighlightText',
-        forcedColorAdjust: 'none',
-        // Adding border for better visibility in high contrast mode
-        outlineWidth: '2px',
-        outlineStyle: 'solid',
-        outlineColor: 'ButtonText'
+        forcedColorAdjust: 'none'
       }
     },
     '> div.fui-TreeItemLayout__main': {
@@ -69,7 +65,12 @@ export const useResourceExplorerStyles = makeStyles({
     },
     '&:hover .actions, &:focus-within .actions, &:focus-visible .actions, &:focus .actions': {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      '@media (forced-colors: active)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none'
+      }
     }
   }
 });
