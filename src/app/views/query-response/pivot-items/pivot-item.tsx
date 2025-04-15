@@ -32,6 +32,7 @@ import {
 } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
+import { Mode } from '../../../../types/enums';
 import {
   ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
@@ -110,6 +111,7 @@ const OverflowMenu = ({
 
 export const GetPivotItems = () => {
   const styles = useStyles();
+  const mode = useAppSelector((state)=> state.graphExplorerMode);
   const body = useAppSelector((state) => state.graphResponse.response.body);
   const selected = translateMessage('Response Preview');
   const [selectedValue, setSelectedValue] = useState<TabValue>(selected);
@@ -176,19 +178,23 @@ export const GetPivotItems = () => {
       <div className={styles.tabContent}>
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
-        {selectedValue === translateMessage('Snippets') && <Snippets />}
-        {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
-        {selectedValue === translateMessage('Adaptive Cards') && (
-          <ThemeContext.Consumer>
-            {(theme) => (
-              <div id={'adaptive-cards-tab'} tabIndex={0}>
-                <AdaptiveCards
-                  body={body as string}
-                  hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-                />
-              </div>
+        {mode === Mode.Complete && (
+          <>
+            {selectedValue === translateMessage('Snippets') && <Snippets />}
+            {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
+            {selectedValue === translateMessage('Adaptive Cards') && (
+              <ThemeContext.Consumer>
+                {(theme) => (
+                  <div id={'adaptive-cards-tab'} tabIndex={0}>
+                    <AdaptiveCards
+                      body={body as string}
+                      hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+                    />
+                  </div>
+                )}
+              </ThemeContext.Consumer>
             )}
-          </ThemeContext.Consumer>
+          </>
         )}
       </div>
     </div>
