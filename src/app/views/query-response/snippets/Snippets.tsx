@@ -200,11 +200,14 @@ const RenderSnippets = () => {
   return (
     <div id='snippets-tablist' className={styles.container}>
       <TabList selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
-        {Object.keys(supportedLanguages).map((language: string) => (
-          <Tab key={language} value={language}>
-            {language === 'CSharp' ? 'C#' : language}
-          </Tab>
-        ))}
+        <Tab key='CSharp' value='CSharp'>C#</Tab>
+        {/*The rest should be sorted in alphabetical order to match docs */}
+        {Object.keys(supportedLanguages)
+          .filter(lang => lang !== 'CSharp')
+          .sort((a, b) => a.localeCompare(b))
+          .map(language => (
+            <Tab key={language} value={language}>{language}</Tab>
+          ))}
       </TabList>
       <div id='snippet-content'>
         <SnippetContent language={selectedLanguage as string} />
