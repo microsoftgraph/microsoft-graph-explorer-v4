@@ -89,7 +89,9 @@ const snippetSlice = createSlice({
       })
       .addCase(getSnippet.fulfilled, (state, action) => {
         state.pending = false;
-        state.data = action.payload as Snippet;
+        const [rawKey, value] = Object.entries(action.payload)[0];
+        const key = rawKey.toLowerCase();
+        state.data = { [key]: value };
         state.error = {} as SnippetError;
       })
       .addCase(getSnippet.rejected, (state, action) => {
