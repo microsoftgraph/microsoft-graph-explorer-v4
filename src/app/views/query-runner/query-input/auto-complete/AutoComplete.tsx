@@ -43,9 +43,6 @@ const useStyles = makeStyles({
   },
   noResize: {
     resize: 'none'
-  },
-  errorText: {
-    color: 'red'
   }
 });
 
@@ -359,7 +356,7 @@ function AutoComplete(props: IAutoCompleteProps) {
       )}
 
       {descriptionError && !shouldShowSuggestions && !autoCompletePending && (
-        <Text size={200} className={classes.errorText}>
+        <Text size={200}>
           {descriptionError}
         </Text>
       )}
