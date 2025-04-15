@@ -65,7 +65,7 @@ export const ResponseMessages = () => {
   // Display link to step to next result
   if (odataLink) {
     messageBars.push(
-      <MessageBar intent='warning' key={'odataLink'}>
+      <MessageBar intent='info' key={'odataLink'}>
         <MessageBarBody>
           {translateMessage('This response contains an @odata property.')}&nbsp;
           <Text font="monospace">@odata.{odataLink.name}</Text>&nbsp;
@@ -119,7 +119,7 @@ export const ResponseMessages = () => {
   ) {
     messageBars.push(
       <div key={'displayMessage'}>
-        <MessageBar intent='warning'>
+        <MessageBar intent='info'>
           <MessageBarBody>
             {translateMessage('Using demo tenant')}{' '}
             {translateMessage('To access your own data:')}
