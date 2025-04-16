@@ -72,8 +72,8 @@ const Monaco = ({ body, onChange, language, readOnly, height, extraInfoElement, 
           {extraInfoElement}
           <Editor
             language={language || 'json'}
-            width=' 100%'
-            height=' 100%'
+            width='100%'
+            height='100%'
             value={formattedBody}
             options={editorOptions}
             onChange={onChange}
