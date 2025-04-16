@@ -98,6 +98,17 @@ configuration:
       - and:
           - isOpen
           - isLabeled
+          - not:
+              and:
+                - isAssignedToSomeone
+      then:
+        - addLabel:
+            label: 'Triaged-Unassigned'
+    - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
+          - isLabeled
       then:
         - removeLabel:
             label: 'ToTriage'
