@@ -64,7 +64,7 @@ const useStyles = makeStyles({
     backgroundColor: tokens.colorNeutralBackground1,
     height: '100%',
     minHeight: '600px',
-    overflow: 'auto'
+    overflow: 'hidden'
   }
 });
 
