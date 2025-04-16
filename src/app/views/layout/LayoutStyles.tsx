@@ -61,7 +61,9 @@ export const useLayoutStyles = makeStyles({
     position: 'relative',
     overflow: 'auto',
     flexShrink: 0,
-    transition: 'height 0.2s ease-in-out'
+    transition: 'height 0.2s ease-in-out',
+    borderRadius: tokens.borderRadiusMedium,
+    padding: tokens.spacingHorizontalS
   },
   responseArea: {
     flex: 1,
