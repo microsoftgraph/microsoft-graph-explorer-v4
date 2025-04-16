@@ -23,7 +23,14 @@ import { handleShiftArrowSelection } from '../resourcelink.utils';
 
 interface IPathProps {
   resources: ResourcePath[];
-  columns: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }[];
+  columns: {
+    key: string;
+    name: string;
+    fieldName: string;
+    minWidth: number;
+    maxWidth: number;
+    isResizable: boolean;
+  }[];
   isSelectable?: boolean;
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
@@ -61,7 +68,14 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
 
   const renderItemColumn = (
     item: ResourcePath,
-    column: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }
+    column: {
+      key: string;
+      name: string;
+      fieldName: string;
+      minWidth: number;
+      maxWidth: number;
+      isResizable: boolean;
+    }
   ) => {
     if (column.key === 'scope') {
       return (
@@ -92,12 +106,14 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
     <DrawerBody className={styles.drawerBody}>
       <Table className={styles.table} aria-label={translateMessage('Resources available')}
         aria-rowcount={resources.length}>
-        <TableHeader>
+        <TableHeader role="presentation">
           <TableRow>
             {isSelectable && (
-              <TableHeaderCell id='select-all-header' aria-label={translateMessage('Select all')} aria-live='polite'>
+              <TableHeaderCell
+              >
                 <Checkbox
-                  aria-labelledby='select-all-header'
+                  aria-label={`${translateMessage('Select all')} ${translateMessage('Collection queries')}`}
+                  aria-live='polite'
                   checked={allSelected}
                   onChange={handleSelectAllChange}
                   onKeyDown={(e: React.KeyboardEvent) => {
@@ -112,8 +128,6 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               <TableHeaderCell
                 className={styles.tableHeader}
                 key={column.key}
-                aria-label={column.name}
-                aria-live='polite'
               >
                 {column.name}
               </TableHeaderCell>
