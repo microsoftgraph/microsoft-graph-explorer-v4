@@ -65,6 +65,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
       return authResult;
     } catch (error) {
+      console.error('Error occurred during login:', error);
       throw error;
     }
   }
@@ -146,15 +147,54 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken() {
-    const silentRequest: SilentRequest = {
-      scopes: defaultScopes,
-      authority: this.getAuthority(),
-      account: this.getAccount(),
-      redirectUri: getCurrentUri(),
-      claims: this.claimsAvailable ? this.getClaims() : undefined
-    };
-    const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-    return response;
+    try {
+      const account = this.getAccount();
+      if (!account) {
+        // If no account is found, try to get accounts from cache
+        const allAccounts = msalApplication.getAllAccounts();
+        if (allAccounts.length > 0) {
+          this.storeHomeAccountId(allAccounts[0]);
+        } else {
+          // No accounts found in cache, user needs to sign in
+          throw new InteractionRequiredAuthError();
+        }
+      }
+      const silentRequest: SilentRequest = {
+        scopes: defaultScopes,
+        authority: this.getAuthority(),
+        account: this.getAccount(),
+        redirectUri: getCurrentUri(),
+        claims: this.claimsAvailable ? this.getClaims() : undefined,
+        // Force MSAL to attempt to use refresh token
+        forceRefresh: false
+      };
+
+      try {
+        const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
+        return response;
+      } catch (error) {
+        if (error instanceof InteractionRequiredAuthError) {
+          // Try refresh token silently once more
+          try {
+            const homeAccountId = this.getHomeAccountId();
+            if (homeAccountId) {
+              const account = msalApplication.getAccountByHomeId(homeAccountId);
+              if (account) {
+                silentRequest.account = account;
+                const response = await msalApplication.acquireTokenSilent(silentRequest);
+                return response;
+              }
+            }
+          } catch (refreshError) {
+            console.error('Error during token refresh:', refreshError);
+            throw refreshError; // Log the error and rethrow it
+          }
+        }
+        throw error;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {

@@ -1,4 +1,4 @@
-import { AuthenticationResult } from '@azure/msal-browser';
+import { AuthenticationResult, InteractionRequiredAuthError } from '@azure/msal-browser';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
@@ -104,8 +104,12 @@ function refreshAccessToken() {
       appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   })
-    .catch(() => {
-      // ignore the error as it means that a User login is required
+    .catch((error) => {
+    // Only log errors that aren't interaction required
+      if (!(error instanceof InteractionRequiredAuthError)) {
+        console.error('Token refresh failed:', error);
+      }
+    // Other errors are ignored as they require user interaction
     });
 }
 refreshAccessToken();
