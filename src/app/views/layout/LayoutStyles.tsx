@@ -1,6 +1,7 @@
 import { makeResetStyles, tokens, makeStyles } from '@fluentui/react-components';
 
 export const SIDEBAR_SIZE_CSS_VAR = '--sidebar-size';
+export const REQUEST_HEIGHT_CSS_VAR = '--request-area-height';
 
 export const useLayoutResizeStyles = makeResetStyles({
   [SIDEBAR_SIZE_CSS_VAR]: '23%'
@@ -22,9 +23,9 @@ export const useLayoutStyles = makeStyles({
   },
   sidebar: {
     flex: '0 0 auto',
-    flexBasis: `clamp(40px, var(${SIDEBAR_SIZE_CSS_VAR}), 25vw)`,
-    maxWidth: '25vw',
-    minWidth: '40px',
+    flexBasis: `var(${SIDEBAR_SIZE_CSS_VAR})`,
+    minWidth: '48px',
+    maxWidth: '50vw',
     position: 'relative',
     overflow: 'hidden',
     transition: 'flex-basis 0.2s ease-in-out',
@@ -48,19 +49,19 @@ export const useLayoutStyles = makeStyles({
     minHeight: 0
   },
   requestResponseArea: {
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: 0,
-    overflowY: 'auto',
-    overflowX: 'hidden'
+    flexGrow: 1,
+    overflow: 'hidden'
   },
   requestArea: {
-    flex: 1,
-    minHeight: '200px',
+    height: `var(${REQUEST_HEIGHT_CSS_VAR})`,
+    minHeight: '150px',
+    maxHeight: '50vh',
+    position: 'relative',
     overflow: 'auto',
-    borderRadius: tokens.borderRadiusMedium,
-    padding: tokens.spacingHorizontalS
+    flexShrink: 0,
+    transition: 'height 0.2s ease-in-out'
   },
   responseArea: {
     flex: 1,
