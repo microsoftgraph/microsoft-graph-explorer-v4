@@ -7,9 +7,9 @@ import { useHeaderStyles } from './utils'
 const Tenant = ()=>{
   const styles = useHeaderStyles()
   const user = useAppSelector(state => state.profile.user)
-  const secondaryContent = user && user.tenant ? user.tenant : 'Sample'
-  const tooltipContent = user && user.tenant    ? user.tenant
-    : `${translateMessage('Using demo tenant')} ${translateMessage('To access your own data:')}`
+  const secondaryContent = user?.tenant ?? 'Sample'
+  const tooltipContent = user?.tenant
+    ?? `${translateMessage('Using demo tenant')} ${translateMessage('To access your own data:')}`
 
   return (
     <Tooltip content={tooltipContent} relationship="description">
