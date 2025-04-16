@@ -119,7 +119,7 @@ export const ResponseMessages = () => {
   ) {
     messageBars.push(
       <div key={'displayMessage'}>
-        <MessageBar intent='info'>
+        <MessageBar intent='warning'>
           <MessageBarBody>
             {translateMessage('Using demo tenant')}{' '}
             {translateMessage('To access your own data:')}
