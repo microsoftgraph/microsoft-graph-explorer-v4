@@ -358,7 +358,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const styles = useStyles();
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
   const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
-  const hasAutoSelectedGlobally = useAppSelector(state => state.samples.hasAutoSelectedDefault) || false;
+  const hasAutoSelectedGlobally = useAppSelector(state => state.samples.hasAutoSelectedDefault) ?? false;
   const [hasAutoSelected, setHasAutoSelected] = useState(hasAutoSelectedGlobally);
   const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
@@ -371,7 +371,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   }, [queries]);
 
   useEffect(() => {
-    if (!mobileScreen && !hasAutoSelectedGlobally && queries.length > 0) {
+    if (!mobileScreen && !hasAutoSelected && queries.length > 0) {
       const defaultSample = queries.find(q =>
         q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
       );
@@ -384,7 +384,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         dispatch({ type: 'samples/setHasAutoSelectedDefault', payload: true });
       }
     }
-  }, [mobileScreen, queries, hasAutoSelectedGlobally, dispatch]);
+  }, [mobileScreen, queries, hasAutoSelected, dispatch]);
   useEffect(() => {
     if (groups && groups.length > 0) {
       setOpenItems(prev => {
