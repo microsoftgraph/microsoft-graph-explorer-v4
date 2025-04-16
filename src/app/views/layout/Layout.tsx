@@ -1,5 +1,5 @@
 import { mergeClasses } from '@fluentui/react-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import CollectionPermissionsProvider from '../../services/context/collection-permissions/CollectionPermissionsProvider';
 import { PopupsProvider } from '../../services/context/popups-context';
@@ -34,8 +34,8 @@ export const Layout = (props: LayoutProps) => {
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
-  const [initialRequestHeight, setInitialRequestHeight] = useState(300);
-  const [requestWrapperElement, setRequestWrapperElement] = useState<HTMLElement | null>(null);
+  const [requestHeight, setRequestHeight] = useState(300);
+  const requestRef = useRef<HTMLDivElement | null>(null);
 
   const {
     handleRef: sidebarHandleRef,
@@ -45,16 +45,6 @@ export const Layout = (props: LayoutProps) => {
   } = useResizeHandle({
     variableName: SIDEBAR_SIZE_CSS_VAR,
     growDirection: 'end'
-  });
-
-  const {
-    handleRef: requestHandleRef,
-    wrapperRef: requestWrapperRef,
-    elementRef: storeRequestElement,
-    setValue: setRequestHeight
-  } = useResizeHandle({
-    variableName: REQUEST_HEIGHT_CSS_VAR,
-    growDirection: 'down'
   });
 
   useEffect(() => {
@@ -129,27 +119,24 @@ export const Layout = (props: LayoutProps) => {
   };
 
   const updateRequestHeight = (newHeight: number) => {
-    const minHeight = 150;
-    const maxHeight = window.innerHeight * 0.5;
+    const min = 150;
+    const max = window.innerHeight * 0.5;
+    const finalHeight = Math.max(min, Math.min(max, newHeight));
 
-    const finalHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+    document.documentElement.style.setProperty(REQUEST_HEIGHT_CSS_VAR, `${finalHeight}px`);
     setRequestHeight(finalHeight);
-
-    if (finalHeight > minHeight) {
-      setInitialRequestHeight(finalHeight);
-    }
   };
 
-  const handleVerticalResizeStart = (event: React.MouseEvent) => {
-    event.preventDefault();
+  const handleRequestResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
 
-    if (!requestWrapperElement) {return;}
+    const startY = e.clientY;
+    const startHeight = requestRef.current
+      ? parseInt(getComputedStyle(requestRef.current).height, 10)
+      : requestHeight;
 
-    const startY = event.clientY;
-    const startHeight = parseInt(getComputedStyle(requestWrapperElement).height, 10);
-
-    const onMouseMove = (moveEvent: MouseEvent) => {
-      const newHeight = startHeight + (moveEvent.clientY - startY);
+    const onMouseMove = (event: MouseEvent) => {
+      const newHeight = startHeight + (event.clientY - startY);
       updateRequestHeight(newHeight);
     };
 
@@ -162,6 +149,9 @@ export const Layout = (props: LayoutProps) => {
     window.addEventListener('mouseup', onMouseUp);
   };
 
+  useEffect(() => {
+    document.documentElement.style.setProperty(REQUEST_HEIGHT_CSS_VAR, `${requestHeight}px`);
+  }, []);
   return (
     <>
       <PopupsProvider>
@@ -173,7 +163,7 @@ export const Layout = (props: LayoutProps) => {
                 <Sidebar handleToggleSelect={handleToggleSelect} />
                 {!mobileScreen && (
                   <LayoutResizeHandler
-                    position="end"
+                    position='end'
                     ref={sidebarHandleRef}
                     onDoubleClick={() => updateSidebarSize(456)}
                     onMouseDown={handleResizeStart}
@@ -198,21 +188,14 @@ export const Layout = (props: LayoutProps) => {
                   <div
                     id='request-area'
                     className={layoutStyles.requestArea}
-                    ref={(el) => {
-                      requestWrapperRef(el);
-                      setRequestWrapperElement(el);
-                    }}
+                    ref={requestRef}
                     style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
                   >
-                    <Request
-                      handleOnEditorChange={handleOnEditorChange}
-                      sampleQuery={sampleQuery}
-                    />
+                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
                     {!mobileScreen && (
                       <LayoutResizeHandler
                         position='bottom'
-                        ref={requestHandleRef}
-                        onMouseDown={handleVerticalResizeStart}
+                        onMouseDown={handleRequestResizeStart}
                         onDoubleClick={() => updateRequestHeight(300)}
                       />
                     )}
