@@ -262,7 +262,10 @@ class App extends Component<IAppProps, IAppState> {
     return (
       <FluentProvider theme={fluentV9Themes[this.props.appTheme]}>
         <ThemeContext.Provider value={this.props.appTheme}>
-          <Layout handleSelectVerb={this.handleSelectVerb} />
+          <Layout
+            handleSelectVerb={this.handleSelectVerb}
+            graphExplorerMode={this.props.graphExplorerMode}
+            authenticated={this.props.authenticated} />
         </ThemeContext.Provider>
       </FluentProvider>
     );

@@ -20,9 +20,13 @@ import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR } from './LayoutStyles';
 import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
 import { Mode } from '../../../types/enums';
+import { createShareLink } from '../common/share';
+import { headerMessaging } from '../app-sections/HeaderMessaging';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
+  graphExplorerMode: Mode;
+  authenticated: boolean;
 }
 
 export const Layout = (props: LayoutProps) => {
@@ -35,6 +39,7 @@ export const Layout = (props: LayoutProps) => {
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
   const mode = useAppSelector((state) => state.graphExplorerMode);
+  const query = createShareLink(sampleQuery, props.authenticated);
 
   const {
     handleRef: sidebarHandleRef,
@@ -123,6 +128,7 @@ export const Layout = (props: LayoutProps) => {
     <PopupsProvider>
       <div className={layoutStyles.container}>
         <MainHeader />
+        {props.graphExplorerMode === Mode.TryIt && headerMessaging(query)}
         <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
           {(showSidebar && mode !== Mode.TryIt) && (
             <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
