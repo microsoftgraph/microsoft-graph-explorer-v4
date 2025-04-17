@@ -38,14 +38,15 @@ interface IRequestProps {
 
 const useStyles = makeStyles({
   container: {
-    height: '-webkit-fill-available',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden'
   },
   tabContainer: {
     display: 'flex',
-    flexShrink: 0,
-    overflowX: 'hidden'
+    flexShrink: 0
   },
   tabList: {
     padding: '5px 5px'
@@ -60,7 +61,7 @@ const useStyles = makeStyles({
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
     minHeight: '0',
-    overflow: 'auto'
+    overflow: 'hidden'
   },
   menuButton: {
     alignSelf: 'center'

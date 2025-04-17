@@ -89,7 +89,6 @@ configuration:
           - isOpen
           - not:
               and:
-                - isAssignedToSomeone
                 - isLabeled
       then:
         - addLabel:
@@ -98,7 +97,17 @@ configuration:
       - payloadType: Issues
       - and:
           - isOpen
-          - isAssignedToSomeone
+          - isLabeled
+          - not:
+              and:
+                - isAssignedToSomeone
+      then:
+        - addLabel:
+            label: 'Triaged-Unassigned'
+    - if:
+      - payloadType: Issues
+      - and:
+          - isOpen
           - isLabeled
       then:
         - removeLabel:

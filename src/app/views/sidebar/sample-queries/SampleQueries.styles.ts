@@ -14,7 +14,6 @@ export const useStyles = makeStyles({
     maxWidth: '50px'
   },
   disabled: {
-    backgroundColor: tokens.colorSubtleBackgroundHover,
     '&:hover': {
       cursor: 'not-allowed'
     }
