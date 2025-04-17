@@ -61,8 +61,9 @@ const useStyles = makeStyles({
     padding: tokens.spacingHorizontalS,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
-    minHeight: '0',
-    overflow: 'auto'
+    height: '100%',
+    minHeight: '600px',
+    overflow: 'hidden'
   }
 });
 

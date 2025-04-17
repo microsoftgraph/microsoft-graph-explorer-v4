@@ -44,8 +44,15 @@ const useStyles = makeStyles({
   noResize: {
     resize: 'none'
   },
-  errorText: {
-    color: 'red'
+  textareaWrapper: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  suffixContainer: {
+    position: 'absolute',
+    right: '8px',
+    top: '8px'
   }
 });
 
@@ -334,16 +341,23 @@ function AutoComplete(props: IAutoCompleteProps) {
       ref={containerRef}
     >
       {isMultiline ? (
-        <Textarea
-          value={queryUrl}
-          aria-label={translateMessage('Query Sample Input')}
-          className={`${classes.autoInput} ${classes.noResize}`}
-          style={{ minHeight: '32px' }} // approximate
-          autoComplete="off"
-          onChange={(e) => onChange(e)}
-          onBlur={updateUrlContent}
-          onKeyDown={onKeyDown}
-        />
+        <div className={classes.textareaWrapper}>
+          <Textarea
+            value={queryUrl}
+            aria-label={translateMessage('Query Sample Input')}
+            className={`${classes.autoInput} ${classes.noResize}`}
+            style={{ minHeight: '32px', paddingRight: '60px' }}
+            autoComplete="off"
+            onChange={(e) => onChange(e)}
+            onBlur={updateUrlContent}
+            onKeyDown={onKeyDown}
+          />
+          {renderSuffix() && (
+            <div className={classes.suffixContainer}>
+              {renderSuffix()}
+            </div>
+          )}
+        </div>
       ) : (
         <Input
           value={queryUrl}
@@ -359,7 +373,7 @@ function AutoComplete(props: IAutoCompleteProps) {
       )}
 
       {descriptionError && !shouldShowSuggestions && !autoCompletePending && (
-        <Text size={200} className={classes.errorText}>
+        <Text size={200}>
           {descriptionError}
         </Text>
       )}
