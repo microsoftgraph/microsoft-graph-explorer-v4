@@ -29,6 +29,15 @@ export const useSidebarStyles = makeStyles({
     maxWidth: '100%'
   },
   activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground3Hover
+    backgroundColor: tokens.colorNeutralBackground3Hover,
+    '@media (forced-colors: active)': {
+      backgroundColor: 'Highlight',
+      color: 'HighlightText',
+      forcedColorAdjust: 'none',
+      // Adding border for better visibility in high contrast mode
+      outlineWidth: '2px',
+      outlineStyle: 'solid',
+      outlineColor: 'ButtonText'
+    }
   }
 })

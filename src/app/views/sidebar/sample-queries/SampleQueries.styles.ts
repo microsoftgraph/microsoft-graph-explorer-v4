@@ -1,5 +1,12 @@
 import { makeStyles, tokens } from '@fluentui/react-components';
-export const useStyles = makeStyles({
+
+const forcedColorsActiveStyles = {
+  '@media (forced-colors: active)': {
+    backgroundColor: 'Highlight',
+    color: 'HighlightText',
+    forcedColorAdjust: 'none'
+  }
+};export const useStyles = makeStyles({
   container: {
     marginTop: '8px'
   },
@@ -25,7 +32,23 @@ export const useStyles = makeStyles({
     maxHeight: 'calc(100vh - 100px)'
   },
   itemLayout: {
-    paddingLeft: tokens.spacingHorizontalXXL
+    paddingLeft: tokens.spacingHorizontalXXL,
+    '&:hover, &:focus, &:focus-visible, &:focus-within': {
+      '@media (forced-colors: active)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none'
+      }
+    }
+  },
+  branchItemLayout: {
+    '&:hover, &:focus, &:focus-visible, &:focus-within': {
+      '@media (forced-colors: active)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none'
+      }
+    }
   },
   focusableLink: {
     '&:focus, &:focus-visible': {

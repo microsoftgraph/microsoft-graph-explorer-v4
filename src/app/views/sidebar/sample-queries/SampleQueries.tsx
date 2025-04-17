@@ -479,6 +479,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 group.count + translateMessage('Resources')}
             >
               <TreeItemLayout
+                className={styles.branchItemLayout}
                 aside={
                   <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
                     {group.count}
