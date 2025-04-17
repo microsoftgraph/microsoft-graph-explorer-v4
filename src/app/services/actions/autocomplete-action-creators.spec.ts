@@ -47,7 +47,8 @@ const mockState: ApplicationState = {
   samples: {
     queries: [],
     pending: false,
-    error: null
+    error: null,
+    hasAutoSelectedDefault: false
   },
   scopes: {
     pending: { isSpecificPermissions: false, isFullPermissions: false },
@@ -123,7 +124,8 @@ store.getState = () => ({
   samples: {
     queries: [],
     pending: false,
-    error: null
+    error: null,
+    hasAutoSelectedDefault: false
   }
 })
 
