@@ -9,12 +9,14 @@ interface SamplesState {
   queries: ISampleQuery[];
   pending: boolean;
   error: object | null | string;
+  hasAutoSelectedDefault: boolean;
 }
 
 const initialState: SamplesState = {
   queries: [],
   pending: false,
-  error: null
+  error: null,
+  hasAutoSelectedDefault: false
 };
 
 export const fetchSamples = createAsyncThunk<ISampleQuery[], void, { rejectValue: ISampleQuery[] }>(
@@ -52,7 +54,11 @@ export const fetchSamples = createAsyncThunk<ISampleQuery[], void, { rejectValue
 const samplesSlice = createSlice({
   name: 'samples',
   initialState,
-  reducers: {},
+  reducers: {
+    setHasAutoSelectedDefault: (state, action) => {
+      state.hasAutoSelectedDefault = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSamples.pending, (state) => {
@@ -73,4 +79,5 @@ const samplesSlice = createSlice({
   }
 });
 
+export const { setHasAutoSelectedDefault } = samplesSlice.actions;
 export default samplesSlice.reducer;
