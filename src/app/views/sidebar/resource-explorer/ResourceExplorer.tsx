@@ -191,6 +191,7 @@ const ResourceExplorer = () => {
               <Button
                 aria-label={translateMessage('Remove from collection')}
                 appearance='transparent'
+                className={resourceExplorerStyles.button}
                 icon={<SubtractSquare20Regular />}
                 onClick={handleRemoveFromCollection}
               />
@@ -205,6 +206,7 @@ const ResourceExplorer = () => {
                 aria-label={translateMessage('Add to collection')}
                 appearance='transparent'
                 aria-describedby='tooltip'
+                className={resourceExplorerStyles.button}
                 icon={<AddSquare20Regular />}
                 onClick={handleAddToCollection}
               />
