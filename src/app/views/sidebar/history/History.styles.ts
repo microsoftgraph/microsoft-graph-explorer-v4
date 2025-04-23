@@ -9,6 +9,9 @@ export const useHistoryStyles = makeStyles({
     alignItems: 'center',
     gap: '2px'
   },
+  button: {
+    border: 'none'
+  },
   badgeContainer: {
     minWidth: '50px',
     display: 'inline-flex'
