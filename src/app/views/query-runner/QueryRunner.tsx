@@ -25,11 +25,12 @@ const QueryRunner = (props: IQueryRunnerProps) => {
 
   useEffect(() => {
     if (sampleQuery.selectedVerb !== 'GET') {
-      const query = { ...sampleQuery };
-      query.sampleBody = sampleBody;
-      dispatch(setSampleQuery(query));
+      dispatch(setSampleQuery({
+        ...sampleQuery,
+        sampleBody
+      }));
     }
-  }, [sampleBody])
+  }, [sampleBody, sampleQuery.selectedVerb])
 
   const handleOnRunQuery = (query?: IQuery) => {
     let sample = { ...sampleQuery };
@@ -80,8 +81,10 @@ const QueryRunner = (props: IQueryRunnerProps) => {
     const query = { ...sampleQuery };
 
     if (Object.values(httpMethods).includes(value)) {
-      query.selectedVerb = value;
-      dispatch(setSampleQuery(query));
+      dispatch(setSampleQuery({
+        ...query,
+        selectedVerb: value
+      }));
 
       props.onSelectVerb(value);
     }
