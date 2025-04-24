@@ -38,25 +38,30 @@ export const LayoutResizeHandler = React.forwardRef<HTMLDivElement, HandleProps>
         : position === 'start'
           ? 'right'
           : 'left';
-
-    const positioningProps =
-      position === 'start' || position === 'end'
-        ? {
+    const positioningProps = (() => {
+      if (position === 'start' || position === 'end') {
+        return {
           [positioningAttr]: '-5px',
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '6px',
+          width: '8px',
           height: '100%',
           cursor: 'col-resize'
-        }
-        : {
-          ...(position === 'top' ? { top: '-6.5px' } : { bottom: '-6.5px' }),
-          left: '50%',
-          transform: 'translateX(-50%)',
+        };
+      }
+
+      if (position === 'top' || position === 'bottom') {
+        return {
+          [position]: '0',
+          left: '0',
           width: '100%',
-          height: '3px',
+          height: '6px',
           cursor: 'row-resize'
         };
+      }
+
+      return {};
+    })();
 
     return (
       <div
