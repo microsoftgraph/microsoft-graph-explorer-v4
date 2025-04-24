@@ -16,7 +16,8 @@ export const useSidebarStyles = makeStyles({
     }
   },
   sidebarToggle: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    padding: '10px'
   },
   tree: {
     flexGrow: 1,
