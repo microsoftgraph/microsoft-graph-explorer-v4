@@ -41,11 +41,19 @@ export const useResourceExplorerStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
+  button: {
+    border: 'none'
+  },
   treeItemLayout: {
     width: '100%',
     ':hover, :focus, :focus-visible, :focus-within': {
       backgroundColor: tokens.colorNeutralBackground3Hover,
-      color: tokens.colorNeutralForeground2BrandHover
+      color: tokens.colorNeutralForeground2BrandHover,
+      '@media (forced-colors: active)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none'
+      }
     },
     '> div.fui-TreeItemLayout__main': {
       width: '100%'
@@ -57,7 +65,12 @@ export const useResourceExplorerStyles = makeStyles({
     },
     '&:hover .actions, &:focus-within .actions, &:focus-visible .actions, &:focus .actions': {
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      '@media (forced-colors: active)': {
+        backgroundColor: 'Highlight',
+        color: 'HighlightText',
+        forcedColorAdjust: 'none'
+      }
     }
   }
 });

@@ -43,7 +43,7 @@ export interface IInitMessage {
   /** The user's locale on Docs. */
   locale: string;
   /** The current Docs theme. */
-  theme: 'light' | 'dark' | 'high-contrast';
+  theme: 'light' | 'dark';
   /** The text within the Docs code block. */
   code: string;
   /** Data extracted from the permissions table. Will be null if Docs cannot locate the permissions table. */
@@ -52,7 +52,7 @@ export interface IInitMessage {
 
 export interface IThemeChangedMessage {
   type: 'theme-changed';
-  theme: 'light' | 'dark' | 'high-contrast';
+  theme: 'light' | 'dark';
 }
 
 export interface ISampleQuery {
