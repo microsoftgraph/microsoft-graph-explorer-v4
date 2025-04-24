@@ -69,6 +69,6 @@ export const useLayoutStyles = makeStyles({
     padding: tokens.spacingHorizontalS
   },
   headerMessaging: {
-    margin: '0 10px'
+    margin: '10px'
   }
 });
