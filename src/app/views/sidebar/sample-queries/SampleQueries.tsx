@@ -358,7 +358,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const styles = useStyles();
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
   const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
-  const [hasAutoSelected, setHasAutoSelected] = useState(false);
+  const hasAutoSelectedGlobally = useAppSelector(state => state.samples.hasAutoSelectedDefault) ?? false;
+  const [hasAutoSelected, setHasAutoSelected] = useState(hasAutoSelectedGlobally);
   const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
   useEffect(() => {
@@ -366,21 +367,29 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
       dispatch(fetchSamples());
     } else {
       setSampleQueries(queries);
-      if (!mobileScreen && !hasAutoSelected && queries.length > 0) {
-        const defaultSample = queries.find(q =>
-          q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
-        );
-
-        if (defaultSample) {
-          const defaultKey = defaultSample.id ?? `${defaultSample.method}-${defaultSample.requestUrl}`;
-          setSelectedQueryKey(defaultKey);
-          sampleQueryItemSelected(defaultSample);
-          setHasAutoSelected(true);
-        }
-      }
     }
   }, [queries]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasSharedQuery = urlParams.has('request') && urlParams.has('method');
+
+    const shouldAutoSelect = !hasAutoSelected && !selectedQueryKey && !hasSharedQuery;
+
+    if (!mobileScreen && queries.length > 0 && shouldAutoSelect) {
+      const defaultSample = queries.find(q =>
+        q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
+      );
+
+      if (defaultSample) {
+        const defaultKey = defaultSample.id ?? `${defaultSample.method}-${defaultSample.requestUrl}`;
+        setSelectedQueryKey(defaultKey);
+        sampleQueryItemSelected(defaultSample);
+        setHasAutoSelected(true);
+        dispatch({ type: 'samples/setHasAutoSelectedDefault', payload: true });
+      }
+    }
+  }, [mobileScreen, queries, hasAutoSelected, dispatch, selectedQueryKey]);
   useEffect(() => {
     if (groups && groups.length > 0) {
       setOpenItems(prev => {
@@ -475,6 +484,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 group.count + translateMessage('Resources')}
             >
               <TreeItemLayout
+                className={styles.branchItemLayout}
                 aside={
                   <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
                     {group.count}

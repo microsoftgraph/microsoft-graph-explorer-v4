@@ -22,7 +22,6 @@ export enum ContentType {
 
 export enum AppTheme {
   Dark = 'dark',
-  HighContrast = 'high-contrast',
   Light = 'light',
 }
 

@@ -34,9 +34,9 @@ import {
 } from '@fluentui/react-components';
 import {
   AddSquare20Regular,
-  ArrowDownloadRegular,
-  DeleteRegular,
-  MoreHorizontalRegular,
+  ArrowDownload20Regular,
+  Delete20Regular,
+  MoreHorizontal20Regular,
   SubtractSquare20Regular
 } from '@fluentui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
@@ -143,14 +143,15 @@ const GroupIcons = (props: AsideGroupIconsProps)=>{
     <Tooltip withArrow relationship="label" content={`${translateMessage('Export')} ${groupName} queries`}>
       <Button onClick={
         (e) => handleDownloadHistoryGroup(e,groupName, historyItems )}
-      appearance="subtle" icon={<ArrowDownloadRegular/>}></Button>
+      appearance="subtle" icon={<ArrowDownload20Regular/>} className={styles.button}></Button>
     </Tooltip>
     <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
       <DialogTrigger disableButtonEnhancement>
         <Tooltip withArrow relationship="label" content={`${translateMessage('Delete')} ${groupName} queries`}>
           <Button
             appearance="subtle"
-            icon={<DeleteRegular/>}
+            icon={<Delete20Regular/>}
+            className={styles.button}
             onClick={(e) => {
               e.stopPropagation();
               setOpen(true);
@@ -198,6 +199,7 @@ interface HistoryProps {
 const HistoryItems = (props: HistoryProps)=>{
   const dispatch = useAppDispatch();
   const sidebarStyles = useSidebarStyles();
+  const historyStyles = useHistoryStyles();
   const {groups, history} = props
   const shouldGenerateGroups = useRef(true);
   const [selectedItemKey, setSelectedItemKey] = useState<string | null>(null);
@@ -348,6 +350,7 @@ const HistoryItems = (props: HistoryProps)=>{
                             aria-label={translateMessage('Remove from collection')}
                             appearance='transparent'
                             icon={<SubtractSquare20Regular />}
+                            className={historyStyles.button}
                             onClick={ (e: React.MouseEvent<HTMLButtonElement>) => {
                               e.stopPropagation();
                               handleRemoveFromCollection(h);
@@ -365,6 +368,7 @@ const HistoryItems = (props: HistoryProps)=>{
                             aria-label={translateMessage('Add to collection')}
                             appearance='transparent'
                             icon={<AddSquare20Regular />}
+                            className={historyStyles.button}
                             onClick={(e:  React.MouseEvent<HTMLButtonElement>) => {
                               e.stopPropagation();
                               handleAddToCollection(h);
@@ -432,6 +436,7 @@ interface HistoryItemActionMenuProps {
 
 const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
   const dispatch = useAppDispatch()
+  const historyStyles = useHistoryStyles()
   const {item} = props
 
   const handleExportQuery = (query: IHistoryItem)=>{
@@ -457,21 +462,28 @@ const HistoryItemActionMenu = (props: HistoryItemActionMenuProps)=>{
   }
   return <Menu>
     <MenuTrigger disableButtonEnhancement>
-      <Button  tabIndex={0} appearance='subtle' icon={<MoreHorizontalRegular/>}></Button>
+      <Button
+        tabIndex={0}
+        appearance='subtle'
+        icon={<MoreHorizontal20Regular />}
+        className={historyStyles.button}
+      ></Button>
     </MenuTrigger>
 
     <MenuPopover>
       <MenuList>
         <MenuGroup>
           <MenuGroupHeader>{translateMessage('actions')}</MenuGroupHeader>
-          <MenuItem icon={<ArrowDownloadRegular/>}
+          <MenuItem icon={<ArrowDownload20Regular/>}
+            className={historyStyles.button}
             onClick={(e) => {
               e.stopPropagation();
               handleExportQuery(item);
             }}>
             {translateMessage('Export')}
           </MenuItem>
-          <MenuItem icon={<DeleteRegular/>}
+          <MenuItem icon={<Delete20Regular/>}
+            className={historyStyles.button}
             onClick={(e) => {
               e.stopPropagation();
               handleDeleteQuery(item);
