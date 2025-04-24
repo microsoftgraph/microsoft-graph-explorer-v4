@@ -65,8 +65,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
       return authResult;
     } catch (error) {
-      console.error('Error occurred during login:', error);
-      throw error;
+      throw new Error(`Error occurred during login: ${error}`);
     }
   }
 
@@ -122,7 +121,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       return await this.loginWithInteraction(scopes);
     } catch (error) {
-      throw error;
+      throw new Error(`Error occurred while consenting to scopes: ${error}`);
     }
   }
 
@@ -167,7 +166,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
             return await msalApplication.acquireTokenSilent(silentRequest);
           } catch (error) {
             // If silent token acquisition fails, fall through to interactive login
-            console.error('Silent token acquisition failed, attempting interactive login', error);
+            throw new Error(`Silent token acquisition failed, attempting interactive login: ${error}`);
           }
         }
 

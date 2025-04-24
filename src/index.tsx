@@ -98,7 +98,7 @@ function refreshAccessToken() {
     .catch((error) => {
     // Only log errors that aren't interaction required
       if (!(error instanceof InteractionRequiredAuthError)) {
-        console.error('Token refresh failed:', error);
+        throw new Error(`Error refreshing access token: ${error}`);
       }
     // Other errors are ignored as they require user interaction
     });
