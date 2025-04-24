@@ -106,28 +106,38 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
     <DrawerBody className={styles.drawerBody}>
       <Table className={styles.table} aria-label={translateMessage('Resources available')}
         aria-rowcount={resources.length}>
-        <TableHeader role="presentation">
+        <TableHeader>
           <TableRow>
             {isSelectable && (
               <TableHeaderCell
+                aria-label={translateMessage('Select collection queries')}
+                aria-live='polite'
               >
-                <Checkbox
-                  aria-label={`${translateMessage('Select all')} ${translateMessage('Collection queries')}`}
-                  aria-live='polite'
-                  checked={allSelected}
-                  onChange={handleSelectAllChange}
-                  onKeyDown={(e: React.KeyboardEvent) => {
-                    if (e.key === 'Enter') {
-                      handleSelectAllChange();
-                    }
-                  }}
-                />
+                <Tooltip
+                  content={translateMessage('Select all')}
+                  relationship="label"
+                  withArrow
+                >
+                  <Checkbox
+                    aria-label={translateMessage('Select all')}
+                    aria-live='polite'
+                    checked={allSelected}
+                    onChange={handleSelectAllChange}
+                    onKeyDown={(e: React.KeyboardEvent) => {
+                      if (e.key === 'Enter') {
+                        handleSelectAllChange();
+                      }
+                    }}
+                  />
+                </Tooltip>
               </TableHeaderCell>
             )}
             {columns.map((column) => (
               <TableHeaderCell
                 className={styles.tableHeader}
                 key={column.key}
+                aria-label={translateMessage(column.key)}
+                aria-live='polite'
               >
                 {column.name}
               </TableHeaderCell>
