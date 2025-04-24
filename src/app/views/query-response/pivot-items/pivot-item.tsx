@@ -111,6 +111,7 @@ const OverflowMenu = ({
 export const GetPivotItems = () => {
   const styles = useStyles();
   const body = useAppSelector((state) => state.graphResponse.response.body);
+  const currentTheme = useAppSelector((state) => state.theme);
   const selected = translateMessage('Response Preview');
   const [selectedValue, setSelectedValue] = useState<TabValue>(selected);
 
@@ -179,16 +180,12 @@ export const GetPivotItems = () => {
         {selectedValue === translateMessage('Snippets') && <Snippets />}
         {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
         {selectedValue === translateMessage('Adaptive Cards') && (
-          <ThemeContext.Consumer>
-            {(theme) => (
-              <div id={'adaptive-cards-tab'} tabIndex={0}>
-                <AdaptiveCards
-                  body={body as string}
-                  hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-                />
-              </div>
-            )}
-          </ThemeContext.Consumer>
+          <div id={'adaptive-cards-tab'} tabIndex={0}>
+            <AdaptiveCards
+              body={body as string}
+              hostConfig={currentTheme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+            />
+          </div>
         )}
       </div>
     </div>

@@ -1,126 +1,128 @@
+import { tokens } from '@fluentui/react-components';
+
 export const darkThemeHostConfig: any = {
   'containerStyles': {
     'default': {
       'foregroundColors': {
         'default': {
-          'default': '#FFFFFF',
-          'subtle': '#88FFFFFF',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForeground4,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'dark': {
-          'default': '#000000',
-          'subtle': '#66000000',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'light': {
-          'default': '#FFFFFF',
-          'subtle': '#33000000',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'accent': {
-          'default': '#2E89FC',
-          'subtle': '#882E89FC',
+          'default': tokens.colorBrandForeground1,
+          'subtle': tokens.colorBrandForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'good': {
-          'default': '#00FF00',
-          'subtle': '#DD00FF00',
+          'default': tokens.colorPaletteGreenForeground1,
+          'subtle': tokens.colorPaletteGreenForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'warning': {
-          'default': '#FFD800',
-          'subtle': '#DDFFD800',
+          'default': tokens.colorPaletteYellowForeground1,
+          'subtle': tokens.colorPaletteYellowForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'attention': {
-          'default': '#FF0000',
-          'subtle': '#DDFF0000',
+          'default': tokens.colorPaletteRedForeground1,
+          'subtle': tokens.colorPaletteRedForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         }
       },
-      'backgroundColor': '#1F1F1F'
+      'backgroundColor': tokens.colorNeutralBackground1
     },
     'emphasis': {
       'foregroundColors': {
         'default': {
-          'default': '#FFFFFF',
-          'subtle': '#88FFFFFF',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForeground4,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'dark': {
-          'default': '#000000',
-          'subtle': '#66000000',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'light': {
-          'default': '#FFFFFF',
-          'subtle': '#33000000',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'accent': {
-          'default': '#2E89FC',
-          'subtle': '#882E89FC',
+          'default': tokens.colorBrandForeground1,
+          'subtle': tokens.colorBrandForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'good': {
-          'default': '#00FF00',
-          'subtle': '#DD00FF00',
+          'default': tokens.colorPaletteGreenForeground1,
+          'subtle': tokens.colorPaletteGreenForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'warning': {
-          'default': '#FF0000',
-          'subtle': '#DDFF0000',
+          'default': tokens.colorPaletteRedForeground1,
+          'subtle': tokens.colorPaletteRedForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'attention': {
-          'default': '#FFD800',
-          'subtle': '#DDFFD800',
+          'default': tokens.colorPaletteYellowForeground1,
+          'subtle': tokens.colorPaletteYellowForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         }
       },
-      'backgroundColor': '#19FFFFFF'
+      'backgroundColor': tokens.colorNeutralBackground3
     }
   }
 };
@@ -130,124 +132,124 @@ export const lightThemeHostConfig: any = {
     'default': {
       'foregroundColors': {
         'default': {
-          'default': '#000000',
-          'subtle': '#767676',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'dark': {
-          'default': '#000000',
-          'subtle': '#66000000',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'light': {
-          'default': '#FFFFFF',
-          'subtle': '#33000000',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'accent': {
-          'default': '#0063B1',
-          'subtle': '#0063B1',
+          'default': tokens.colorBrandForeground1,
+          'subtle': tokens.colorBrandForeground1,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'good': {
-          'default': '#54a254',
-          'subtle': '#DD54a254',
+          'default': tokens.colorPaletteGreenForeground1,
+          'subtle': tokens.colorPaletteGreenForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'warning': {
-          'default': '#c3ab23',
-          'subtle': '#DDc3ab23',
+          'default': tokens.colorPaletteYellowForeground1,
+          'subtle': tokens.colorPaletteYellowForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'attention': {
-          'default': '#FF0000',
-          'subtle': '#DDFF0000',
+          'default': tokens.colorPaletteRedForeground1,
+          'subtle': tokens.colorPaletteRedForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         }
       },
-      'backgroundColor': '#FFFFFF'
+      'backgroundColor': tokens.colorNeutralBackground1
     },
     'emphasis': {
       'foregroundColors': {
         'default': {
-          'default': '#000000',
-          'subtle': '#767676',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'dark': {
-          'default': '#000000',
-          'subtle': '#66000000',
+          'default': tokens.colorNeutralForeground1,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'light': {
-          'default': '#FFFFFF',
-          'subtle': '#33000000',
+          'default': tokens.colorNeutralForegroundOnBrand,
+          'subtle': tokens.colorNeutralForegroundDisabled,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'accent': {
-          'default': '#2E89FC',
-          'subtle': '#882E89FC',
+          'default': tokens.colorBrandForeground1,
+          'subtle': tokens.colorBrandForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'good': {
-          'default': '#54a254',
-          'subtle': '#DD54a254',
+          'default': tokens.colorPaletteGreenForeground1,
+          'subtle': tokens.colorPaletteGreenForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'warning': {
-          'default': '#c3ab23',
-          'subtle': '#DDc3ab23',
+          'default': tokens.colorPaletteYellowForeground1,
+          'subtle': tokens.colorPaletteYellowForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         },
         'attention': {
-          'default': '#FF0000',
-          'subtle': '#DDFF0000',
+          'default': tokens.colorPaletteRedForeground1,
+          'subtle': tokens.colorPaletteRedForeground2,
           'highlightColors': {
-            'default': '#22000000',
-            'subtle': '#11000000'
+            'default': 'rgba(0, 0, 0, 0.13)',
+            'subtle': 'rgba(0, 0, 0, 0.06)'
           }
         }
       },
-      'backgroundColor': '#F0F0F0'
+      'backgroundColor': tokens.colorNeutralBackground5
     }
   }
 };
