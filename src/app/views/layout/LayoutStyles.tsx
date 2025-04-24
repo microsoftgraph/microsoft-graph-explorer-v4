@@ -67,5 +67,8 @@ export const useLayoutStyles = makeStyles({
     overflow: 'auto',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
+  },
+  headerMessaging: {
+    margin: '0 10px'
   }
 });
