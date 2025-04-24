@@ -9,16 +9,13 @@ export const useNotificationStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     backgroundPosition: 'right',
+    whiteSpace: 'wrap',
     '&light': {
       backgroundColor: '#E8EFFF',
       color: '#000000'
     },
     '&.dark': {
       backgroundColor: '#1D202A',
-      color: '#ffffff'
-    },
-    '&.highContrast': {
-      backgroundColor: '#0C3B5E',
       color: '#ffffff'
     }
   },
