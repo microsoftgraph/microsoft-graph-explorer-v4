@@ -39,7 +39,6 @@ export const Layout = (props: LayoutProps) => {
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
-  const mode = useAppSelector((state) => state.graphExplorerMode);
   const query = createShareLink(sampleQuery, props.authenticated);
   const [requestHeight, setRequestHeight] = useState(300);
   const requestRef = useRef<HTMLDivElement | null>(null);
@@ -160,34 +159,22 @@ export const Layout = (props: LayoutProps) => {
     document.documentElement.style.setProperty(REQUEST_HEIGHT_CSS_VAR, `${requestHeight}px`);
   }, []);
   return (
-    <>
-      <PopupsProvider>
-        <div className={layoutStyles.container}>
-          <MainHeader />
-          <div className={layoutStyles.headerMessaging}>
-            {props.graphExplorerMode === Mode.TryIt && headerMessaging(query)}
-          </div>
-          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {showSidebar && (
-              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
-                <Sidebar handleToggleSelect={handleToggleSelect} />
-                {!mobileScreen && (
-                  <LayoutResizeHandler
-                    position='end'
-                    ref={sidebarHandleRef}
-                    onDoubleClick={() => updateSidebarSize(456)}
-                    onMouseDown={handleResizeStart}
-                  />
-                )}
-              </div>
-            )}
-            <div id='main-content' className={layoutStyles.mainContent}>
-              <div style={{ margin: '0 10px' }}>
-                <Notification
-                  header={translateMessage('Banner notification 1 header')}
-                  content={translateMessage('Banner notification 1 content')}
-                  link={translateMessage('Banner notification 1 link')}
-                  linkText={translateMessage('Banner notification 1 link text')}
+    <PopupsProvider>
+      <div className={layoutStyles.container}>
+        <MainHeader />
+        <div className={layoutStyles.headerMessaging}>
+          {props.graphExplorerMode === Mode.TryIt && headerMessaging(query)}
+        </div>
+        <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+          {showSidebar && props.graphExplorerMode === Mode.Complete && (
+            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
+              <Sidebar handleToggleSelect={handleToggleSelect} />
+              {!mobileScreen && (
+                <LayoutResizeHandler
+                  position='end'
+                  ref={sidebarHandleRef}
+                  onDoubleClick={() => updateSidebarSize(456)}
+                  onMouseDown={handleResizeStart}
                 />
               )}
             </div>
@@ -206,34 +193,26 @@ export const Layout = (props: LayoutProps) => {
                 <QueryRunner onSelectVerb={props.handleSelectVerb} />
               </div>
               <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                <div id='request-area' className={layoutStyles.requestArea}>
+                <div
+                  id='request-area'
+                  className={layoutStyles.requestArea}
+                  ref={requestRef}
+                  style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
+                >
                   <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                  {!mobileScreen && (
+                    <LayoutResizeHandler
+                      position='bottom'
+                      onMouseDown={handleRequestResizeStart}
+                      onDoubleClick={() => updateRequestHeight(300)}
+                    />
+                  )}
                 </div>
                 <div style={{ margin: '0 10px' }}>
                   <StatusMessages />
                 </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div
-                    id='request-area'
-                    className={layoutStyles.requestArea}
-                    ref={requestRef}
-                    style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
-                  >
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                    {!mobileScreen && (
-                      <LayoutResizeHandler
-                        position='bottom'
-                        onMouseDown={handleRequestResizeStart}
-                        onDoubleClick={() => updateRequestHeight(300)}
-                      />
-                    )}
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessages />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponse />
-                  </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
                 </div>
               </div>
             </ValidationProvider>
