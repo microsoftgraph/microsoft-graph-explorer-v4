@@ -371,7 +371,12 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   }, [queries]);
 
   useEffect(() => {
-    if (!mobileScreen && !hasAutoSelected && queries.length > 0) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hasSharedQuery = urlParams.has('request') && urlParams.has('method');
+
+    const shouldAutoSelect = !hasAutoSelected && !selectedQueryKey && !hasSharedQuery;
+
+    if (!mobileScreen && queries.length > 0 && shouldAutoSelect) {
       const defaultSample = queries.find(q =>
         q.method === 'GET' && q.humanName.toLowerCase().includes('my profile')
       );
@@ -384,7 +389,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         dispatch({ type: 'samples/setHasAutoSelectedDefault', payload: true });
       }
     }
-  }, [mobileScreen, queries, hasAutoSelected, dispatch]);
+  }, [mobileScreen, queries, hasAutoSelected, dispatch, selectedQueryKey]);
   useEffect(() => {
     if (groups && groups.length > 0) {
       setOpenItems(prev => {
@@ -479,6 +484,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 group.count + translateMessage('Resources')}
             >
               <TreeItemLayout
+                className={styles.branchItemLayout}
                 aside={
                   <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
                     {group.count}

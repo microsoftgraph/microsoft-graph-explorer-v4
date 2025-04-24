@@ -68,24 +68,15 @@ function setCurrentTheme(): void {
   applyCurrentTheme(currentTheme);
 }
 function getOSTheme(): string {
-  let currentSystemTheme: string;
-  const currentSystemThemeDark = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  );
-
-  const currentSystemThemeLight = window.matchMedia(
-    '(prefers-color-scheme: light)'
-  );
-
-  if (currentSystemThemeDark.matches === true) {
-    currentSystemTheme = 'dark';
-  } else if (currentSystemThemeLight.matches === true) {
-    currentSystemTheme = 'light';
-  } else {
-    currentSystemTheme = 'high-contrast';
+  const currentSystemThemeDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const currentSystemThemeLight = window.matchMedia('(prefers-color-scheme: light)');
+  if (currentSystemThemeDark.matches) {
+    return 'dark';
+  } else if (currentSystemThemeLight.matches) {
+    return 'light';
   }
 
-  return currentSystemTheme;
+  return 'light';
 }
 
 function applyCurrentTheme(themeToApply: string): void {
