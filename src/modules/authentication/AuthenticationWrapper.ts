@@ -146,68 +146,62 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   }
 
   public async getToken(): Promise<AuthenticationResult> {
+    const account = this.getAccount();
+    if (!account) {
+      // If no active account, check cache without triggering interaction
+      const allAccounts = msalApplication.getAllAccounts();
+      if (allAccounts.length > 0) {
+        // Try silent acquisition with the first cached account
+        const silentRequest: SilentRequest = {
+          scopes: defaultScopes,
+          authority: this.getAuthority(),
+          account: allAccounts[0],
+          redirectUri: getCurrentUri(),
+          forceRefresh: false
+        };
+
+        try {
+          // Attempt silent acquisition
+          const result = await msalApplication.acquireTokenSilent(silentRequest);
+          // If successful, store the account ID as it's now the active one
+          this.storeHomeAccountId(result.account!);
+          return result;
+        } catch (error) {
+          // If silent fails (e.g., requires interaction, expired), throw error.
+          throw new Error(`Silent token acquisition failed for cached account: ${error}`);
+        }
+      } else {
+        // No active account and no cached accounts - user needs to log in explicitly.
+        // Throw error indicating login is required
+        throw new Error('No active or cached account found. User login required.');
+      }
+    }
+
+    // We have an active account, try to get token silently
+    const silentRequest: SilentRequest = {
+      scopes: defaultScopes,
+      authority: this.getAuthority(),
+      account,
+      redirectUri: getCurrentUri(),
+      claims: this.claimsAvailable ? this.getClaims() : undefined,
+      forceRefresh: false
+    };
+
     try {
-      const account = this.getAccount();
-      if (!account) {
-        // If no account is found, try to get accounts from cache
-        const allAccounts = msalApplication.getAllAccounts();
-        if (allAccounts.length > 0) {
-          this.storeHomeAccountId(allAccounts[0]);
-          // Use the first account found
-          const silentRequest: SilentRequest = {
-            scopes: defaultScopes,
-            authority: this.getAuthority(),
-            account: allAccounts[0],
-            redirectUri: getCurrentUri(),
-            forceRefresh: false
-          };
-
-          try {
-            return await msalApplication.acquireTokenSilent(silentRequest);
-          } catch (error) {
-            // If silent token acquisition fails, fall through to interactive login
-            throw new Error(`Silent token acquisition failed, attempting interactive login: ${error}`);
-          }
-        }
-
-        // If we get here, we need to prompt for login
-        return await this.loginWithInteraction(defaultScopes);
-      }
-
-      // We have an account, try to get token silently
-      const silentRequest: SilentRequest = {
-        scopes: defaultScopes,
-        authority: this.getAuthority(),
-        account,
-        redirectUri: getCurrentUri(),
-        claims: this.claimsAvailable ? this.getClaims() : undefined,
-        // Don't force refresh on first attempt
-        forceRefresh: false
-      };
-
-      try {
-        return await msalApplication.acquireTokenSilent(silentRequest);
-      } catch (error) {
-        if (error instanceof InteractionRequiredAuthError) {
-          // Token expired or invalid, try with forceRefresh
-          try {
-            silentRequest.forceRefresh = true;
-            return await msalApplication.acquireTokenSilent(silentRequest);
-          } catch {
-            // Falling back to interactive login as refresh token is expired or invalid
-            return await this.loginWithInteraction(defaultScopes);
-          }
-        }
-        throw error;
-      }
+      return await msalApplication.acquireTokenSilent(silentRequest);
     } catch (error) {
-      // Only throw if it's not an InteractionRequiredAuthError
-      if (!(error instanceof InteractionRequiredAuthError)) {
-        throw error;
+      if (error instanceof InteractionRequiredAuthError) {
+        // Attempt silent refresh first
+        try {
+          silentRequest.forceRefresh = true;
+          return await msalApplication.acquireTokenSilent(silentRequest);
+        } catch (refreshError) {
+          // If refresh also fails, throw error indicating interaction is needed.
+          throw new Error(`Silent token refresh failed, login required: ${refreshError}`);
+        }
       }
-
-      // For InteractionRequiredAuthError, attempt interactive login
-      return await this.loginWithInteraction(defaultScopes);
+      // Re-throw other unexpected silent errors so the caller can handle them
+      throw error; // Removed console.error, just re-throw
     }
   }
 
