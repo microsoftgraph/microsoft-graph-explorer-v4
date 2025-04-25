@@ -216,26 +216,8 @@ export const Layout = (props: LayoutProps) => {
                 <div style={{ margin: '0 10px' }}>
                   <StatusMessages />
                 </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div
-                    id='request-area'
-                    className={layoutStyles.requestArea}
-                    ref={requestRef}
-                    style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
-                  >
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                    <LayoutResizeHandler
-                      position='bottom'
-                      onMouseDown={handleRequestResizeStart}
-                      onDoubleClick={() => updateRequestHeight(300)}
-                    />
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessages />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponse />
-                  </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
                 </div>
               </div>
             </ValidationProvider>
