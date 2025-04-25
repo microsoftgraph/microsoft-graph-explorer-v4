@@ -163,16 +163,12 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         try {
           // Attempt silent acquisition
           const result = await msalApplication.acquireTokenSilent(silentRequest);
-          // If successful, store the account ID as it's now the active one
           this.storeHomeAccountId(result.account!);
           return result;
         } catch (error) {
-          // If silent fails (e.g., requires interaction, expired), throw error.
           throw new Error(`Silent token acquisition failed for cached account: ${error}`);
         }
       } else {
-        // No active account and no cached accounts - user needs to log in explicitly.
-        // Throw error indicating login is required
         throw new Error('No active or cached account found. User login required.');
       }
     }
@@ -200,8 +196,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           throw new Error(`Silent token refresh failed, login required: ${refreshError}`);
         }
       }
-      // Re-throw other unexpected silent errors so the caller can handle them
-      throw error; // Removed console.error, just re-throw
+      throw new Error(`Token acquisition failed: ${error}`);
     }
   }
 

@@ -104,7 +104,6 @@ describe('AuthenticationWrapper should', () => {
       return originalGetItem.call(window.localStorage, key);
     });
 
-    // Call the method under test
     authenticationWrapper.clearCache();
 
     // Verify removeItem was called with the expected key
@@ -138,7 +137,6 @@ describe('AuthenticationWrapper should', () => {
     expect(logIn.account!.homeAccountId).toBe('homeAccountId');
   });
 
-  // For other tests that need accounts to be present
   it('get consented scopes along with a valid homeAccountId as returned by the auth call', async () => {
     const { msalApplication } = require('./msal-app.ts');
     msalApplication.getAllAccounts.mockReturnValue([mockAccount]);
