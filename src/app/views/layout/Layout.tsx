@@ -162,9 +162,11 @@ export const Layout = (props: LayoutProps) => {
     <PopupsProvider>
       <div className={layoutStyles.container}>
         <MainHeader />
-        <div className={layoutStyles.headerMessaging}>
-          {props.graphExplorerMode === Mode.TryIt && headerMessaging(query)}
-        </div>
+        {props.graphExplorerMode === Mode.TryIt && (
+          <div className={layoutStyles.headerMessaging}>
+            {headerMessaging(query)}
+          </div>
+        )}
         <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
           {showSidebar && props.graphExplorerMode === Mode.Complete && (
             <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
