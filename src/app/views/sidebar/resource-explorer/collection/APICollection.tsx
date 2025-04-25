@@ -74,7 +74,7 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
   }
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 800, isResizable: true },
     { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
@@ -272,10 +272,12 @@ const APICollection: React.FC<PopupsComponent<APICollection>> = (props) => {
       />
 
       {items && items.length > 0 ?
-        (<Paths
-          resources={items}
-          columns={columns}
-        />
+        (<div style={{height
+        : '80vh'
+        }}><Paths
+            resources={items}
+            columns={columns}
+          /></div>
         ) :
         (
           <Label className={labelStyles.labelStyle}>
