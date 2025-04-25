@@ -23,7 +23,7 @@ export const useSidebarStyles = makeStyles({
     flexGrow: 1,
     overflowY: 'auto',
     padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
+    maxHeight: 'calc(100vh - 400px)'
   },
   searchBox: {
     width: '100%',

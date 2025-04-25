@@ -355,7 +355,8 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const profile = useAppSelector(state=>state.profile)
   const authToken= useAppSelector((state) => state.auth.authToken);
   const authenticated = authToken.token
-  const styles = useStyles();
+  const sampleQueriesStyles = useStyles();
+  const sidebarStyles = useSidebarStyles();
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
   const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
   const hasAutoSelectedGlobally = useAppSelector(state => state.samples.hasAutoSelectedDefault) ?? false;
@@ -464,7 +465,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         openItems={openItems}
         onOpenChange={handleOpenChange}
         aria-label={translateMessage('Sample Queries')}
-        className={styles.tree}>
+        className={sidebarStyles.tree}>
         {groups.map((group, pos) => (
           <React.Fragment key={group.key}>
             <FlatTreeItem
@@ -484,7 +485,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
                 group.count + translateMessage('Resources')}
             >
               <TreeItemLayout
-                className={styles.branchItemLayout}
+                className={sampleQueriesStyles.branchItemLayout}
                 aside={
                   <Badge appearance='tint' color='informative' aria-label={group.count + translateMessage('Resources')}>
                     {group.count}
