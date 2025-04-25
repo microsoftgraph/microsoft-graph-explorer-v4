@@ -318,6 +318,7 @@
   "Row checkbox": "Row checkbox",
   "Administrator permission": "Admin of the tenant needs to authorize first before you can consent to this permission",
   "Adaptive Cards designer": "Adaptive Cards designer.",
+  "Adaptive card rendering error": "Adaptive card rendering error",
   "Click Run Query button above to fetch Adaptive Card": "Click Run Query button above to fetch Adaptive Card.",
   "Fetching suggestions": "Fetching suggestions",
   "No auto-complete suggestions available": "No auto-complete suggestions available",
