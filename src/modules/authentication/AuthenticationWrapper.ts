@@ -65,7 +65,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       }
       return authResult;
     } catch (error) {
-      throw error;
+      throw new Error(`Error occurred during login: ${error}`);
     }
   }
 
@@ -121,7 +121,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     try {
       return await this.loginWithInteraction(scopes);
     } catch (error) {
-      throw error;
+      throw new Error(`Error occurred while consenting to scopes: ${error}`);
     }
   }
 
@@ -145,16 +145,59 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     return allAccounts[0];
   }
 
-  public async getToken() {
+  public async getToken(): Promise<AuthenticationResult> {
+    const account = this.getAccount();
+    if (!account) {
+      // If no active account, check cache without triggering interaction
+      const allAccounts = msalApplication.getAllAccounts();
+      if (allAccounts.length > 0) {
+        // Try silent acquisition with the first cached account
+        const silentRequest: SilentRequest = {
+          scopes: defaultScopes,
+          authority: this.getAuthority(),
+          account: allAccounts[0],
+          redirectUri: getCurrentUri(),
+          forceRefresh: false
+        };
+
+        try {
+          // Attempt silent acquisition
+          const result = await msalApplication.acquireTokenSilent(silentRequest);
+          this.storeHomeAccountId(result.account!);
+          return result;
+        } catch (error) {
+          throw new Error(`Silent token acquisition failed for cached account: ${error}`);
+        }
+      } else {
+        throw new Error('No active or cached account found. User login required.');
+      }
+    }
+
+    // We have an active account, try to get token silently
     const silentRequest: SilentRequest = {
       scopes: defaultScopes,
       authority: this.getAuthority(),
-      account: this.getAccount(),
+      account,
       redirectUri: getCurrentUri(),
-      claims: this.claimsAvailable ? this.getClaims() : undefined
+      claims: this.claimsAvailable ? this.getClaims() : undefined,
+      forceRefresh: false
     };
-    const response: AuthenticationResult = await msalApplication.acquireTokenSilent(silentRequest);
-    return response;
+
+    try {
+      return await msalApplication.acquireTokenSilent(silentRequest);
+    } catch (error) {
+      if (error instanceof InteractionRequiredAuthError) {
+        // Attempt silent refresh first
+        try {
+          silentRequest.forceRefresh = true;
+          return await msalApplication.acquireTokenSilent(silentRequest);
+        } catch (refreshError) {
+          // If refresh also fails, throw error indicating interaction is needed.
+          throw new Error(`Silent token refresh failed, login required: ${refreshError}`);
+        }
+      }
+      throw new Error(`Token acquisition failed: ${error}`);
+    }
   }
 
   private async getAuthResult(scopes: string[] = [], sessionId?: string): Promise<AuthenticationResult> {
