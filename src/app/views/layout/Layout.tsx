@@ -192,13 +192,11 @@ export const Layout = (props: LayoutProps) => {
                     style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
                   >
                     <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                    {!mobileScreen && (
-                      <LayoutResizeHandler
-                        position='bottom'
-                        onMouseDown={handleRequestResizeStart}
-                        onDoubleClick={() => updateRequestHeight(300)}
-                      />
-                    )}
+                    <LayoutResizeHandler
+                      position='bottom'
+                      onMouseDown={handleRequestResizeStart}
+                      onDoubleClick={() => updateRequestHeight(300)}
+                    />
                   </div>
                   <div style={{ margin: '0 10px' }}>
                     <StatusMessages />
