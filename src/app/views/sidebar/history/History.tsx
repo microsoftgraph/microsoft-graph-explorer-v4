@@ -91,8 +91,8 @@ const formatDate = (date: Date) => {
 
 const today = formatDate(new Date());
 const yesterdaysDate = new Date();
-const yesterday = formatDate(yesterdaysDate);
 yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
+const yesterday = formatDate(yesterdaysDate);
 
 const handleDownloadHistoryGroup = (
   event: React.MouseEvent<HTMLButtonElement>, value: string,
