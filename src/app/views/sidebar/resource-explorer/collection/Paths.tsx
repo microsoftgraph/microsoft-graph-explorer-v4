@@ -138,6 +138,12 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
                 key={column.key}
                 aria-label={translateMessage(column.key)}
                 aria-live='polite'
+                style={{
+                  minWidth: column.minWidth,
+                  maxWidth: column.maxWidth,
+                  width: column.minWidth,
+                  textAlign: column.key === 'scope' ? 'right' : 'left'
+                }}
               >
                 {column.name}
               </TableHeaderCell>
@@ -249,7 +255,12 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
               )}
               {columns.map((column) => (
                 <TableCell key={column.key}
-                  style={{ textAlign: column.key === 'scope' ? 'right' : 'left' }}
+                  style={{
+                    minWidth: column.minWidth,
+                    maxWidth: column.maxWidth,
+                    width: column.minWidth,
+                    textAlign: column.key === 'scope' ? 'right' : 'left'
+                  }}
                   aria-label={column.key === 'url' ?
                     `${translateMessage('Http method')} ${resource.method || ''} /${translateMessage('version')}` +
                   `${resource.version}${translateMessage('url')} ${resource.url}` :
