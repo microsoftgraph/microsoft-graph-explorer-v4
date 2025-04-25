@@ -215,25 +215,23 @@ export const parseResponse = async (response: ResponseBody): Promise<ResponseBod
   const headers = getHeaders(response);
   const contentType = getContentType(headers);
 
-  try {
-    switch (contentType) {
-    case 'application/json': {
-      const text = await response.text();
-      return tryParseJson(text);
-    }
-    case 'application/xml':
-    case 'text/html':
-    case 'text/csv':
-    case 'text/plain':
-      return await response.text();
-    default:
-      if (response.status === 204) {
-        return '';
-      }
-      return await response.text();
-    }
-  } catch {
-    return '';
+  switch (true) {
+  case contentType.includes('application/json'): {
+    const text = await response.text();
+    return tryParseJson(text);
+  }
+
+  case contentType.includes('application/xml'):
+  case contentType.includes('text/html'):
+  case contentType.includes('text/csv'):
+  case contentType.includes('text/plain'):
+    return await response.text();
+
+  case contentType.startsWith('image/'):
+    return response;
+
+  default:
+    return response;
   }
 };
 
