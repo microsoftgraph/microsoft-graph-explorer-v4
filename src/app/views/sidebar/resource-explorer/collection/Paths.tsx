@@ -23,7 +23,14 @@ import { handleShiftArrowSelection } from '../resourcelink.utils';
 
 interface IPathProps {
   resources: ResourcePath[];
-  columns: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }[];
+  columns: {
+    key: string;
+    name: string;
+    fieldName: string;
+    minWidth: number;
+    maxWidth: number;
+    isResizable: boolean;
+  }[];
   isSelectable?: boolean;
   onSelectionChange?: (selectedItems: ResourcePath[]) => void;
 }
@@ -61,7 +68,14 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
 
   const renderItemColumn = (
     item: ResourcePath,
-    column: { key: string, name: string, fieldName: string, minWidth: number, maxWidth: number, isResizable: boolean }
+    column: {
+      key: string;
+      name: string;
+      fieldName: string;
+      minWidth: number;
+      maxWidth: number;
+      isResizable: boolean;
+    }
   ) => {
     if (column.key === 'scope') {
       return (
@@ -95,24 +109,34 @@ const Paths: React.FC<IPathProps> = ({ resources, columns, isSelectable, onSelec
         <TableHeader>
           <TableRow>
             {isSelectable && (
-              <TableHeaderCell id='select-all-header' aria-label={translateMessage('Select all')} aria-live='polite'>
-                <Checkbox
-                  aria-labelledby='select-all-header'
-                  checked={allSelected}
-                  onChange={handleSelectAllChange}
-                  onKeyDown={(e: React.KeyboardEvent) => {
-                    if (e.key === 'Enter') {
-                      handleSelectAllChange();
-                    }
-                  }}
-                />
+              <TableHeaderCell
+                aria-label={translateMessage('Select collection queries')}
+                aria-live='polite'
+              >
+                <Tooltip
+                  content={translateMessage('Select all')}
+                  relationship="label"
+                  withArrow
+                >
+                  <Checkbox
+                    aria-label={translateMessage('Select all')}
+                    aria-live='polite'
+                    checked={allSelected}
+                    onChange={handleSelectAllChange}
+                    onKeyDown={(e: React.KeyboardEvent) => {
+                      if (e.key === 'Enter') {
+                        handleSelectAllChange();
+                      }
+                    }}
+                  />
+                </Tooltip>
               </TableHeaderCell>
             )}
             {columns.map((column) => (
               <TableHeaderCell
                 className={styles.tableHeader}
                 key={column.key}
-                aria-label={column.name}
+                aria-label={translateMessage(column.key)}
                 aria-live='polite'
               >
                 {column.name}

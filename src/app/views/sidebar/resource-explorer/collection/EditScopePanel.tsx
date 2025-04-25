@@ -56,8 +56,8 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   }, [selectedItems]);
 
   const columns = [
-    { key: 'url', name: 'Select all', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
-    { key: 'scope', name: '', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
+    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

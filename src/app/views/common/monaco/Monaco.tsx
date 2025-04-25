@@ -29,10 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-const Monaco = ({ body, onChange, language, readOnly, height, extraInfoElement, isVisible }: MonacoProps) => {
-  const mode = useAppSelector((state) => state.graphExplorerMode);
-  const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
-  const showSidebar = mode === Mode.Complete && !mobileScreen;
+const Monaco = ({ body, onChange, language, readOnly, extraInfoElement, isVisible }: MonacoProps) => {
   const styles = useStyles();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
