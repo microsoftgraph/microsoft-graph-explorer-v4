@@ -32,6 +32,7 @@ import {
 } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
+import { Mode } from '../../../../types/enums';
 import {
   ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
@@ -110,6 +111,7 @@ const OverflowMenu = ({
 
 export const GetPivotItems = () => {
   const styles = useStyles();
+  const mode = useAppSelector((state)=> state.graphExplorerMode);
   const body = useAppSelector((state) => state.graphResponse.response.body);
   const currentTheme = useAppSelector((state) => state.theme);
   const selected = translateMessage('Response Preview');
@@ -119,7 +121,7 @@ export const GetPivotItems = () => {
     setSelectedValue(data.value);
   };
 
-  const tabs = [
+  let tabs = [
     {
       id: translateMessage('Response Preview'),
       name: translateMessage('Response Preview'),
@@ -129,8 +131,10 @@ export const GetPivotItems = () => {
       id: translateMessage('Response Headers'),
       name: translateMessage('Response Headers'),
       icon: <DocumentChevronDoubleRegular />
-    },
-    {
+    }]
+
+  if (mode === Mode.Complete) {
+    const newTabs = [{
       id: translateMessage('Snippets'),
       name: translateMessage('Snippets'),
       icon: <ClipboardCodeRegular />
@@ -144,8 +148,9 @@ export const GetPivotItems = () => {
       id: translateMessage('Adaptive Cards'),
       name: translateMessage('Adaptive Cards'),
       icon: <CardUiRegular />
-    }
-  ];
+    }];
+    tabs = [...tabs, ...newTabs];
+  }
 
   return (
     <div className={styles.container}>
