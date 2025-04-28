@@ -68,6 +68,7 @@ const Monaco = ({ body, onChange, language, readOnly, extraInfoElement, isVisibl
         <div id=' monaco-editor'  className={styles.container}>
           {extraInfoElement}
           <Editor
+            key={formattedBody}
             language={language || 'json'}
             width='100%'
             height='100%'

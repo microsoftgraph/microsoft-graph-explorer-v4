@@ -71,8 +71,11 @@ export const Layout = (props: LayoutProps) => {
   }, [mobileScreen]);
 
 
-  const handleOnEditorChange = (value?: string) => {
-    setSampleBody(value!);
+  const handleOnEditorChange = (value: string | undefined) => {
+    dispatch(setSampleQuery({
+      ...sampleQuery,
+      sampleBody: value
+    }));
   };
 
   const handleToggleSelect = (toggled: boolean) => {

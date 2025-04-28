@@ -56,7 +56,7 @@ const EditScopePanel: React.FC<EditScopePanelProps> = ({ closePopup }) => {
   }, [selectedItems]);
 
   const columns = [
-    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 1100, isResizable: true },
+    { key: 'url', name: 'URL', fieldName: 'url', minWidth: 300, maxWidth: 800, isResizable: true },
     { key: 'scope', name: 'Scope', fieldName: 'scope', minWidth: 150, maxWidth: 200, isResizable: true }
   ];
 
