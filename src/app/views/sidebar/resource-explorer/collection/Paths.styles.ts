@@ -1,16 +1,12 @@
 import { makeStyles, tokens } from '@fluentui/react-components';
 
 const pathStyles = makeStyles({
-  drawerBody: {
-    padding: 0,
-    marginInlineStart: tokens.spacingHorizontalL,
-    height: '80vh'
-  },
   table: {
     tableLayout: 'auto',
     width: '100%',
     overflow: 'auto',
-    borderCollapse: 'collapse'
+    borderCollapse: 'collapse',
+    marginInlineStart: tokens.spacingHorizontalL
   },
   row: {
     borderBottom: 'none'

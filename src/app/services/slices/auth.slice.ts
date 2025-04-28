@@ -1,4 +1,5 @@
 import { BrowserAuthError } from '@azure/msal-browser';
+
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { authenticationWrapper } from '../../../modules/authentication';

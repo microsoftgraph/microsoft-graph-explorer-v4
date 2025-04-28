@@ -43,7 +43,8 @@ const mockState: ApplicationState = {
   samples: {
     queries: [],
     pending: false,
-    error: null
+    error: null,
+    hasAutoSelectedDefault: false
   },
   permissionGrants: {
     permissions: [],

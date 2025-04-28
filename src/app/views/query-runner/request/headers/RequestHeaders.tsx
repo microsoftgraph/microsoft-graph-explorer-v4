@@ -116,6 +116,7 @@ const RequestHeaders = () => {
           className={styles.button}
           appearance='primary'
           onClick={handleAddHeader}
+          disabled={!header.name.trim() || !header.value.trim()}
         >
           {translateMessage(isUpdatingHeader ? 'Update' : 'Add')}
         </Button>

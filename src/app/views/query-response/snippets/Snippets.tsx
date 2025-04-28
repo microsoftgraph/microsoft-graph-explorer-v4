@@ -7,15 +7,14 @@ import {
   Spinner,
   Tab,
   TabList,
-  TabValue,
   Text
 } from '@fluentui/react-components';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../store';
 import { componentNames, telemetry } from '../../../../telemetry';
 import { CODE_SNIPPETS_COPY_BUTTON } from '../../../../telemetry/component-names';
 import { ValidationContext } from '../../../services/context/validation-context/ValidationContext';
-import { getSnippet } from '../../../services/slices/snippet.slice';
+import { getSnippet, setSnippetTabSuccess } from '../../../services/slices/snippet.slice';
 import { translateMessage } from '../../../utils/translate-messages';
 import { Monaco } from '../../common';
 import { copyAndTrackText } from '../../common/copy';
@@ -66,8 +65,10 @@ const supportedLanguages: LanguageSnippet = {
 const useSnippetStyles = makeStyles({
   container: {
     margin: '0 auto',
+    paddingTop: '5px',
+    paddingLeft: '5px',
     maxHeight: '100vh',
-    overflowY: 'auto',
+    overflowY: 'hidden',
     display: 'flex',
     flexDirection: 'column'
   },
@@ -79,8 +80,7 @@ const useSnippetStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     flex: '1 1 auto',
-    height: '30vh',
-    overflowY: 'auto'
+    height: '60vh'
   },
   copyButton: {
     marginLeft: 'auto'
@@ -88,7 +88,7 @@ const useSnippetStyles = makeStyles({
   snippetContent: {
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'auto',
+    overflowY: 'hidden',
     maxHeight: 'calc(100vh-120px)'
   }
 });
@@ -129,7 +129,15 @@ const trackLinkClickedEvent = (
 
 const ExtraSnippetInformation: React.FC<{ language: string }> = ({ language }) => {
   const styles = useSnippetStyles();
-  const { sdkDownloadLink, sdkDocLink } = supportedLanguages[language];
+  const langKey = Object.keys(supportedLanguages).find(
+    (key) => key.toLowerCase() === language.toLowerCase()
+  );
+
+  if (!langKey) {
+    return null;
+  }
+
+  const { sdkDownloadLink, sdkDocLink } = supportedLanguages[langKey];
   const libParagraph =
     setCommentSymbol(language) +
     translateMessage('Leverage libraries') +
@@ -182,19 +190,26 @@ const GetSnippets = () => {
 
 const RenderSnippets = () => {
   const styles = useSnippetStyles();
-  const [selectedLanguage, setSelectedLanguage] = useState<TabValue>('CSharp');
+  const dispatch = useAppDispatch();
+  const selectedLanguage = useAppSelector(state => state.snippets.snippetTab);
 
   const onTabSelect = (_event: SelectTabEvent, data: SelectTabData) => {
-    setSelectedLanguage(data.value);
+    const newLang = data.value as string;
+    dispatch(setSnippetTabSuccess(newLang));
+    dispatch(getSnippet(newLang.toLowerCase()));
+    telemetry.trackTabClickEvent(newLang);
   };
   return (
     <div id='snippets-tablist' className={styles.container}>
       <TabList selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
-        {Object.keys(supportedLanguages).map((language: string) => (
-          <Tab key={language} value={language}>
-            {language === 'CSharp' ? 'C#' : language}
-          </Tab>
-        ))}
+        <Tab key='CSharp' value='CSharp'>C#</Tab>
+        {/*The rest should be sorted in alphabetical order to match docs */}
+        {Object.keys(supportedLanguages)
+          .filter(lang => lang !== 'CSharp')
+          .sort((a, b) => a.localeCompare(b))
+          .map(language => (
+            <Tab key={language} value={language}>{language}</Tab>
+          ))}
       </TabList>
       <div id='snippet-content'>
         <SnippetContent language={selectedLanguage as string} />
@@ -213,12 +228,14 @@ const SnippetContent: React.FC<SnippetContentProps> = (
   const dispatch = useAppDispatch();
   const language = props.language.toLowerCase();
   const snippets = useAppSelector((state) => state.snippets);
+  const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const snippetTab = useAppSelector((state) => state.snippets.snippetTab);
   const { data, pending: loadingState, error } = snippets;
   const hasSnippetError =
     (error?.status && error.status === 404) ||
     (error?.status && error.status === 400);
 
-  const snippet = !loadingState && data ? data[language] : '';
+  const snippet = !loadingState && data ? data[language.toLowerCase()] : '';
 
   const handleCopy = async () => {
     copyAndTrackText(snippet, CODE_SNIPPETS_COPY_BUTTON, {
@@ -227,8 +244,16 @@ const SnippetContent: React.FC<SnippetContentProps> = (
   };
 
   useEffect(() => {
-    dispatch(getSnippet(language));
-  }, [language, dispatch]);
+    if (snippetTab) {
+      dispatch(getSnippet(snippetTab.toLowerCase()));
+    }
+  }, [snippetTab]);
+
+  useEffect(() => {
+    if (sampleQuery && snippetTab) {
+      dispatch(getSnippet(snippetTab.toLowerCase()));
+    }
+  }, [sampleQuery]);
 
   const showSpinner = loadingState && !hasSnippetError;
   const notAvailable = !loadingState && hasSnippetError;

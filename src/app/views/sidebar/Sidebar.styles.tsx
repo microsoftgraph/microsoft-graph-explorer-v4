@@ -16,19 +16,29 @@ export const useSidebarStyles = makeStyles({
     }
   },
   sidebarToggle: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    padding: '10px'
   },
   tree: {
     flexGrow: 1,
     overflowY: 'auto',
     padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
+    maxHeight: 'calc(100vh - 400px)'
   },
   searchBox: {
     width: '100%',
     maxWidth: '100%'
   },
   activeLeaf: {
-    backgroundColor: tokens.colorNeutralBackground3Hover
+    backgroundColor: tokens.colorNeutralBackground3Hover,
+    '@media (forced-colors: active)': {
+      backgroundColor: 'Highlight',
+      color: 'HighlightText',
+      forcedColorAdjust: 'none',
+      // Adding border for better visibility in high contrast mode
+      outlineWidth: '2px',
+      outlineStyle: 'solid',
+      outlineColor: 'ButtonText'
+    }
   }
 })

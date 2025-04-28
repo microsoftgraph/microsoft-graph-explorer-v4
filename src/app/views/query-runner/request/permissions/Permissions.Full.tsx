@@ -130,7 +130,6 @@ const FullPermissions = () => {
   const getCellFocusMode = (columnId: TableColumnId): DataGridCellFocusMode =>
     columnId === 'consented' ? 'none' : 'cell';
 
-
   return (
     <div className={styles.permissionContainer}>
       {loading ?

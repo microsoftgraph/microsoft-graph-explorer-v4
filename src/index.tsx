@@ -1,4 +1,4 @@
-import { AuthenticationResult } from '@azure/msal-browser';
+import { AuthenticationResult, InteractionRequiredAuthError } from '@azure/msal-browser';
 import '@ms-ofb/officebrowserfeedbacknpm/styles/officebrowserfeedback.css';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 import ReactDOM from 'react-dom/client';
@@ -68,24 +68,15 @@ function setCurrentTheme(): void {
   applyCurrentTheme(currentTheme);
 }
 function getOSTheme(): string {
-  let currentSystemTheme: string;
-  const currentSystemThemeDark = window.matchMedia(
-    '(prefers-color-scheme: dark)'
-  );
-
-  const currentSystemThemeLight = window.matchMedia(
-    '(prefers-color-scheme: light)'
-  );
-
-  if (currentSystemThemeDark.matches === true) {
-    currentSystemTheme = 'dark';
-  } else if (currentSystemThemeLight.matches === true) {
-    currentSystemTheme = 'light';
-  } else {
-    currentSystemTheme = 'high-contrast';
+  const currentSystemThemeDark = window.matchMedia('(prefers-color-scheme: dark)');
+  const currentSystemThemeLight = window.matchMedia('(prefers-color-scheme: light)');
+  if (currentSystemThemeDark.matches) {
+    return 'dark';
+  } else if (currentSystemThemeLight.matches) {
+    return 'light';
   }
 
-  return currentSystemTheme;
+  return 'light';
 }
 
 function applyCurrentTheme(themeToApply: string): void {
@@ -104,8 +95,10 @@ function refreshAccessToken() {
       appStore.dispatch(getConsentedScopesSuccess(authResponse.scopes));
     }
   })
-    .catch(() => {
-      // ignore the error as it means that a User login is required
+    .catch((error) => {
+      if (!(error instanceof InteractionRequiredAuthError)) {
+        throw new Error(`Error refreshing access token: ${error}`);
+      }
     });
 }
 refreshAccessToken();
