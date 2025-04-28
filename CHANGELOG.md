@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.0.0...v11.1.0) (2025-04-28)
+
+
+### Features
+
+* add request/response area resizing ([#3810](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3810)) ([ad561dd](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ad561dd177fb881999932bfe86dc31c60a17a254))
+* add theming to adaptive cards ([#3818](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3818)) ([e16aac1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/e16aac11ae3cb61f93a3f7b3c58aac0bc78ee77f))
+* use window high contrast ([#3782](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3782)) ([6888b2d](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/6888b2dd36de709204105fa7991b16e6d4f7bac1))
+
+
+### Bug Fixes
+
+* **a11y:** add column headers to collections ([#3809](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3809)) ([391ad07](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/391ad075e6d71b93fed16f1757c433e007f73c62))
+* **a11y:** disable add button when no key, value in headers ([#3808](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3808)) ([48dae26](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/48dae2632d49b4fc46fbfcfaeeaa477a83107500))
+* Add check for shared query url on page load ([#3815](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3815)) ([48b35b0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/48b35b080027aca16d4b7bdcfb6b6e896eb21dab))
+* code snippet loads when a sample is selected ([#3789](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3789)) ([02c32c4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/02c32c4a49242ad744db2dd4ddfdcab91ead4061))
+* code snippets UI enhancements ([#3798](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3798)) ([1d3666f](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/1d3666fbf2a329c25d8a8f363727c45948033e65))
+* correct GE try-it mode view ([#3800](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3800)) ([bbb0e6c](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/bbb0e6c51961d93db3993bd47e3683a5b190fcec))
+* correct history items order and request body updates ([#3822](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3822)) ([ed4cc0b](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ed4cc0b5bc6ceaf526ca0f00dd4ed5c433c545c4))
+* display correct tenant ([#3805](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3805)) ([3a3faec](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/3a3faec82f206c840dbbb29dd12ef26112159535))
+* improve validation error display ([#3792](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3792)) ([289a1e3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/289a1e32b8d48e01f88c679c030ae9ea0381e541))
+* profile user iimage ([#3784](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3784)) ([7d5a215](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/7d5a2158b021294bf061f028f4e5e57454dc9bc8))
+* refresh token silently ([#3806](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3806)) ([76c9866](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/76c9866e15537a2aba48c6ef372e0efb45f639f0))
+* remove unnecessary scrollbars ([#3774](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3774)) ([4c99f98](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/4c99f9890ac4be8b16a0173ea6994eac30d4bd26))
+* set default sample auto selection on page load globally ([#3799](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3799)) ([2a2c3a9](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/2a2c3a9923700c8366ecb668d4574832542597e1))
+* share query button and documentation button are visible even when query is long ([#3796](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3796)) ([e2faa7d](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/e2faa7df53a0fadd94efc509ce2a086a9c225363))
+* tabs on expand modal occupy the modal space ([#3790](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3790)) ([a2f2874](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/a2f28741ef927cfa8c2330d8f102917818db0b32))
+* update message bar intents for o-data ([#3804](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3804)) ([569d938](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/569d938f583421921d84dc2246d96611db15990a))
+* update request body on PATCH request ([#3817](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3817)) ([9735317](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/9735317d0dc9e0da268ab6af14c53999739741b8))
+
 ## [11.0.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v10.5.4...v11.0.0) (2025-04-02)
 
 
