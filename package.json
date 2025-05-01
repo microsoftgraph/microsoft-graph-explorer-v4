@@ -109,7 +109,7 @@
                 "babel-jest": "29.7.0",
                 "chromedriver": "134.0.5",
                 "eslint": "8.57.1",
-                "eslint-plugin-react": "7.37.4",
+                "eslint-plugin-react": "7.37.5",
                 "globals": "16.0.0",
                 "html-webpack-plugin": "5.6.3",
                 "jest": "29.7.0",
