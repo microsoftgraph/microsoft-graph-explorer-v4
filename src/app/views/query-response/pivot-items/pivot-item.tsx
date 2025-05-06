@@ -32,6 +32,7 @@ import {
 } from '../adaptive-cards/AdaptiveHostConfig';
 import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
+import { Mode } from '../../../../types/enums';
 import {
   ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
@@ -110,7 +111,9 @@ const OverflowMenu = ({
 
 export const GetPivotItems = () => {
   const styles = useStyles();
+  const mode = useAppSelector((state)=> state.graphExplorerMode);
   const body = useAppSelector((state) => state.graphResponse.response.body);
+  const currentTheme = useAppSelector((state) => state.theme);
   const selected = translateMessage('Response Preview');
   const [selectedValue, setSelectedValue] = useState<TabValue>(selected);
 
@@ -118,7 +121,7 @@ export const GetPivotItems = () => {
     setSelectedValue(data.value);
   };
 
-  const tabs = [
+  let tabs = [
     {
       id: translateMessage('Response Preview'),
       name: translateMessage('Response Preview'),
@@ -128,8 +131,10 @@ export const GetPivotItems = () => {
       id: translateMessage('Response Headers'),
       name: translateMessage('Response Headers'),
       icon: <DocumentChevronDoubleRegular />
-    },
-    {
+    }]
+
+  if (mode === Mode.Complete) {
+    const newTabs = [{
       id: translateMessage('Snippets'),
       name: translateMessage('Snippets'),
       icon: <ClipboardCodeRegular />
@@ -143,8 +148,9 @@ export const GetPivotItems = () => {
       id: translateMessage('Adaptive Cards'),
       name: translateMessage('Adaptive Cards'),
       icon: <CardUiRegular />
-    }
-  ];
+    }];
+    tabs = [...tabs, ...newTabs];
+  }
 
   return (
     <div className={styles.container}>
@@ -179,16 +185,12 @@ export const GetPivotItems = () => {
         {selectedValue === translateMessage('Snippets') && <Snippets />}
         {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
         {selectedValue === translateMessage('Adaptive Cards') && (
-          <ThemeContext.Consumer>
-            {(theme) => (
-              <div id={'adaptive-cards-tab'} tabIndex={0}>
-                <AdaptiveCards
-                  body={body as string}
-                  hostConfig={theme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
-                />
-              </div>
-            )}
-          </ThemeContext.Consumer>
+          <div id={'adaptive-cards-tab'} tabIndex={0}>
+            <AdaptiveCards
+              body={body as string}
+              hostConfig={currentTheme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
+            />
+          </div>
         )}
       </div>
     </div>

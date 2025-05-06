@@ -32,7 +32,7 @@ import {
   MoreHorizontalRegular } from '@fluentui/react-icons';
 
 interface IRequestProps {
-  handleOnEditorChange: () => void;
+  handleOnEditorChange: (value: string | undefined) => void;
   sampleQuery: IQuery;
 }
 

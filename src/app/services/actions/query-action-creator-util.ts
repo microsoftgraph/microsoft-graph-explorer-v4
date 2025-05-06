@@ -209,25 +209,31 @@ async function tryParseJson(textValue: string) {
   }
 }
 
-export const parseResponse = (response: ResponseBody): Promise<ResponseBody> => {
-  if (response instanceof Response && response.headers) {
-    const headers = getHeaders(response)
-    const contentType = getContentType(headers);
-    switch (contentType) {
-    case 'application/json':
-      return response.text().then(tryParseJson);
-    case 'application/xml':
-    case 'text/html':
-    case 'text/csv':
-    case 'text/plain':
-      return response.text();
+export const parseResponse = async (response: ResponseBody): Promise<ResponseBody> => {
+  if (!(response instanceof Response)) {return response;}
 
-    default:
-      return Promise.resolve(response);
-    }
+  const headers = getHeaders(response);
+  const contentType = getContentType(headers);
+
+  switch (true) {
+  case contentType.includes('application/json'): {
+    const text = await response.text();
+    return tryParseJson(text);
   }
-  return Promise.resolve(response);
-}
+
+  case contentType.includes('application/xml'):
+  case contentType.includes('text/html'):
+  case contentType.includes('text/csv'):
+  case contentType.includes('text/plain'):
+    return await response.text();
+
+  case contentType.startsWith('image/'):
+    return response;
+
+  default:
+    return response;
+  }
+};
 
 /**
  * Check if query attempts to download from OneDrive's /content API or reporting API

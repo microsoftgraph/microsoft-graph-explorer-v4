@@ -19,9 +19,14 @@ import { LayoutResizeHandler } from './LayoutResizeHandler';
 import { useResizeHandle } from '@fluentui-contrib/react-resize-handle';
 import { useLayoutResizeStyles, useLayoutStyles, SIDEBAR_SIZE_CSS_VAR, REQUEST_HEIGHT_CSS_VAR } from './LayoutStyles';
 import { useDetectMobileScreen } from '../../utils/useDetectMobileScreen';
+import { Mode } from '../../../types/enums';
+import { createShareLink } from '../common/share';
+import { headerMessaging } from '../app-sections/HeaderMessaging';
 
 interface LayoutProps {
   handleSelectVerb: (verb: string) => void;
+  graphExplorerMode: Mode;
+  authenticated: boolean;
 }
 
 export const Layout = (props: LayoutProps) => {
@@ -34,6 +39,7 @@ export const Layout = (props: LayoutProps) => {
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
+  const query = createShareLink(sampleQuery, props.authenticated);
   const [requestHeight, setRequestHeight] = useState(300);
   const requestRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,8 +71,11 @@ export const Layout = (props: LayoutProps) => {
   }, [mobileScreen]);
 
 
-  const handleOnEditorChange = (value?: string) => {
-    setSampleBody(value!);
+  const handleOnEditorChange = (value: string | undefined) => {
+    dispatch(setSampleQuery({
+      ...sampleQuery,
+      sampleBody: value
+    }));
   };
 
   const handleToggleSelect = (toggled: boolean) => {
@@ -153,69 +162,72 @@ export const Layout = (props: LayoutProps) => {
     document.documentElement.style.setProperty(REQUEST_HEIGHT_CSS_VAR, `${requestHeight}px`);
   }, []);
   return (
-    <>
-      <PopupsProvider>
-        <div className={layoutStyles.container}>
-          <MainHeader />
-          <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-            {showSidebar && (
-              <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
-                <Sidebar handleToggleSelect={handleToggleSelect} />
-                {!mobileScreen && (
-                  <LayoutResizeHandler
-                    position='end'
-                    ref={sidebarHandleRef}
-                    onDoubleClick={() => updateSidebarSize(456)}
-                    onMouseDown={handleResizeStart}
-                  />
-                )}
-              </div>
-            )}
-            <div id='main-content' className={layoutStyles.mainContent}>
-              <div style={{ margin: '0 10px' }}>
-                <Notification
-                  header={translateMessage('Banner notification 1 header')}
-                  content={translateMessage('Banner notification 1 content')}
-                  link={translateMessage('Banner notification 1 link')}
-                  linkText={translateMessage('Banner notification 1 link text')}
-                />
-              </div>
-              <ValidationProvider>
-                <div style={{ margin: '0 10px' }}>
-                  <QueryRunner onSelectVerb={props.handleSelectVerb} />
-                </div>
-                <div id='request-response-area' className={layoutStyles.requestResponseArea}>
-                  <div
-                    id='request-area'
-                    className={layoutStyles.requestArea}
-                    ref={requestRef}
-                    style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
-                  >
-                    <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
-                    {!mobileScreen && (
-                      <LayoutResizeHandler
-                        position='bottom'
-                        onMouseDown={handleRequestResizeStart}
-                        onDoubleClick={() => updateRequestHeight(300)}
-                      />
-                    )}
-                  </div>
-                  <div style={{ margin: '0 10px' }}>
-                    <StatusMessages />
-                  </div>
-                  <div id='response-area' className={layoutStyles.responseArea}>
-                    <QueryResponse />
-                  </div>
-                </div>
-              </ValidationProvider>
-            </div>
+    <PopupsProvider>
+      <div className={layoutStyles.container}>
+        <MainHeader />
+        {props.graphExplorerMode === Mode.TryIt && (
+          <div className={layoutStyles.headerMessaging}>
+            {headerMessaging(query)}
           </div>
-          <TermsOfUseMessage />
+        )}
+        <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
+          {showSidebar && props.graphExplorerMode === Mode.Complete && (
+            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
+              <Sidebar handleToggleSelect={handleToggleSelect} />
+              {!mobileScreen && (
+                <LayoutResizeHandler
+                  position='end'
+                  ref={sidebarHandleRef}
+                  onDoubleClick={() => updateSidebarSize(456)}
+                  onMouseDown={handleResizeStart}
+                />
+              )}
+            </div>
+          )}
+          <div id='main-content' className={layoutStyles.mainContent}>
+            <div style={{ margin: '0 10px' }}>
+              <Notification
+                header={translateMessage('Banner notification 1 header')}
+                content={translateMessage('Banner notification 1 content')}
+                link={translateMessage('Banner notification 1 link')}
+                linkText={translateMessage('Banner notification 1 link text')}
+              />
+            </div>
+            <ValidationProvider>
+              <div style={{ margin: '0 10px' }}>
+                <QueryRunner onSelectVerb={props.handleSelectVerb} />
+              </div>
+              <div id='request-response-area' className={layoutStyles.requestResponseArea}>
+                <div
+                  id='request-area'
+                  className={layoutStyles.requestArea}
+                  ref={requestRef}
+                  style={{ height: `var(${REQUEST_HEIGHT_CSS_VAR})` }}
+                >
+                  <Request handleOnEditorChange={handleOnEditorChange} sampleQuery={sampleQuery} />
+                  {!mobileScreen && (
+                    <LayoutResizeHandler
+                      position='bottom'
+                      onMouseDown={handleRequestResizeStart}
+                      onDoubleClick={() => updateRequestHeight(300)}
+                    />
+                  )}
+                </div>
+                <div style={{ margin: '0 10px' }}>
+                  <StatusMessages />
+                </div>
+                <div id='response-area' className={layoutStyles.responseArea}>
+                  <QueryResponse />
+                </div>
+              </div>
+            </ValidationProvider>
+          </div>
         </div>
-        <CollectionPermissionsProvider>
-          <PopupsWrapper />
-        </CollectionPermissionsProvider>
-      </PopupsProvider>
-    </>
+        <TermsOfUseMessage />
+      </div>
+      <CollectionPermissionsProvider>
+        <PopupsWrapper />
+      </CollectionPermissionsProvider>
+    </PopupsProvider>
   );
 };

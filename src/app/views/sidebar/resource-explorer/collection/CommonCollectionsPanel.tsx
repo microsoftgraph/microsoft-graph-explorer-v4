@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   drawerFooter: {
     display: 'flex',
     justifyContent: 'flex-start',
-    position: 'sticky',
+    position: 'fixed',
     bottom: 0,
     width: '100%',
     gap: tokens.spacingHorizontalXXXL,

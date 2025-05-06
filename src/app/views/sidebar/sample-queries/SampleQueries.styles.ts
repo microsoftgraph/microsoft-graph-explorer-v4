@@ -25,12 +25,6 @@ const forcedColorsActiveStyles = {
       cursor: 'not-allowed'
     }
   },
-  tree: {
-    flexGrow: 1,
-    overflowY: 'auto',
-    padding: '5px',
-    maxHeight: 'calc(100vh - 100px)'
-  },
   itemLayout: {
     paddingLeft: tokens.spacingHorizontalXXL,
     '&:hover, &:focus, &:focus-visible, &:focus-within': {
