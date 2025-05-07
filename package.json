@@ -36,7 +36,7 @@
                 "express": "5.1.0",
                 "expvariantassignmentsdk": "file:packages/expvariantassignmentsdk-1.0.0.tgz",
                 "file-loader": "6.2.0",
-                "fork-ts-checker-webpack-plugin": "9.0.2",
+                "fork-ts-checker-webpack-plugin": "9.1.0",
                 "fs-extra": "11.3.0",
                 "guid-typescript": "1.0.9",
                 "isomorphic-fetch": "3.0.0",
