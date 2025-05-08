@@ -169,7 +169,11 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           throw new Error(`Silent token acquisition failed for cached account: ${error}`);
         }
       } else {
-        throw new Error('No active or cached account found. User login required.');
+        await msalApplication.loginRedirect({
+          scopes: defaultScopes,
+          redirectUri: getCurrentUri()
+        });
+        throw new Error('Login redirect initiated');
       }
     }
 

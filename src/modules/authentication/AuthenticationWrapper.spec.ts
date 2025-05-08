@@ -150,4 +150,14 @@ describe('AuthenticationWrapper should', () => {
     const token = await authenticationWrapper.getToken();
     expect(token.account!.homeAccountId).toBe('homeAccountId');
   });
+
+  it('redirects to login if no account is found in cache or memory', async () => {
+    const { msalApplication } = require('./msal-app.ts');
+    msalApplication.getAllAccounts.mockReturnValueOnce([]);
+
+    msalApplication.loginRedirect = jest.fn(() => Promise.resolve());
+
+    await expect(authenticationWrapper.getToken()).rejects.toThrow('Login redirect initiated');
+    expect(msalApplication.loginRedirect).toHaveBeenCalled();
+  });
 })
