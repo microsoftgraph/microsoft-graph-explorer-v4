@@ -48,8 +48,12 @@ const Monaco = ({ body, onChange, language, readOnly, extraInfoElement, isVisibl
   };
 
   const formattedBody = useMemo(() => {
-    if (typeof body === 'string') return body;
-    if (body) return formatJsonStringForAllBrowsers(body);
+    if (typeof body === 'string') {
+      return body;
+    }
+    if (body) {
+      return formatJsonStringForAllBrowsers(body);
+    }
     return '';
   }, [body]);
 
