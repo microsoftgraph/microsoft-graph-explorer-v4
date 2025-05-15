@@ -4,6 +4,8 @@ import { Editor, OnChange } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { ThemeContext } from '../../../../themes/theme-context';
 import { formatJsonStringForAllBrowsers } from './util/format-json';
+import { useAppSelector } from '../../../../store';
+import { Mode } from '../../../../types/enums';
 
 interface MonacoProps {
   body: object | string | undefined;
