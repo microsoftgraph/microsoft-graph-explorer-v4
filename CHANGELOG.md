@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.0...v11.1.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* request body input focus issue ([#3849](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3849)) ([4d663e2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/4d663e2ab8cdc7cc4b0323e2de458a4065abdb53))
+
 ## [11.1.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.0.0...v11.1.0) (2025-04-28)
 
 
