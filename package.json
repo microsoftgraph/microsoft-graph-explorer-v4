@@ -126,7 +126,7 @@
                 "selenium-webdriver": "4.32.0",
                 "start-server-and-test": "2.0.11",
                 "ts-jest": "29.3.2",
-                "typescript-eslint": "8.24.1"
+                "typescript-eslint": "8.33.0"
         },
         "jestSonar": {
                 "reportPath": "reports",
