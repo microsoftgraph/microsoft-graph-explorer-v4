@@ -150,7 +150,7 @@ export function getTokens(user?: any) {
     },
     {
       placeholder: 'user-mail',
-      demoTenantValue: 'MiriamG@M365x214355.onmicrosoft.com',
+      demoTenantValue: 'AdeleV@M365x63639251.OnMicrosoft.com',
       authenticatedUserValueFn: () => {
         return emailAddress;
       }
