@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.2](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.1...v11.1.2) (2025-07-08)
+
+
+### Bug Fixes
+
+* removes the CLI generation ([#3906](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3906)) ([1650a0d](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/1650a0da0c607df49b19fdcaab817d0a58b474b9))
+
 ## [11.1.1](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.0...v11.1.1) (2025-05-14)
 
 
