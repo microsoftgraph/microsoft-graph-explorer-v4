@@ -61,7 +61,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 ## E2E playwright testing
 
-- Playwright requires a running GE Url to run against.
+- Playwright requires a running Graph Explorer Url to run against.
 - In your `.env` file, create add variables:
   - PLAYWRIGHT_TESTS_USERNAME='your demo tenant email address'
   - PLAYWRIGHT_TESTS_PASSWORD='password to the demo tenant account'
