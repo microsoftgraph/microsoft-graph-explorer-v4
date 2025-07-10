@@ -1,6 +1,6 @@
 {
         "name": "graph-explorer-v2",
-        "version": "11.1.1",
+        "version": "11.1.2",
         "private": true,
         "dependencies": {
                 "@augloop/types-core": "file:packages/types-core-2.16.189.tgz",
