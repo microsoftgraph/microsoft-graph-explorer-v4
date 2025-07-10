@@ -1,12 +1,15 @@
-import { makeStyles, Text, tokens } from '@fluentui/react-components';
+import { Text, makeStyles, tokens } from '@fluentui/react-components';
+import { useAppDispatch, useAppSelector } from '../../../store';
+
 import Authentication from '../authentication/Authentication';
 import { FeedbackButton } from './FeedbackButton';
 import { Help } from './Help';
+import { PanelLeftExpand20Regular } from '@fluentui/react-icons';
 import { Settings } from './settings/Settings';
 import { Tenant } from './Tenant';
-import { useAppDispatch, useAppSelector } from '../../../store';
 import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
-import { PanelLeftExpand20Regular } from '@fluentui/react-icons';
+import { translateMessage } from '../../utils/translate-messages';
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -58,7 +61,14 @@ const MainHeader = ()=>{
         {mobileScreen && (
           <PanelLeftExpand20Regular className={styles.menuIcon} onClick={handleSidebarToggle} />
         )}
-        <Text size={mobileScreen ? 500 : 600} as="h1" className={styles.headerText}>Graph Explorer</Text>
+        <Text
+          size={mobileScreen ? 500 : 600} as="h1"
+          style={{lineHeight: '28px',
+            color: tokens.colorBrandForeground1
+          }}
+          className="notranslate">
+          {translateMessage('Graph Explorer')}
+        </Text>
       </div>
       <HeaderIcons />
     </div>
