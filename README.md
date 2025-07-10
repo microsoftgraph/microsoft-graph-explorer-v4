@@ -27,7 +27,7 @@ Microsoft Graph Explorer is built and developed using node v18.
 ## Other commands
 
 - `npm test` to run tests from the command line for scenarios like parsing metadata and functional explorer tests.
-- `npm run lint` linting your files
+- `npm run lint` linting your files.
 
 ## Getting Help & Guides
 
