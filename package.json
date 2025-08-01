@@ -91,7 +91,7 @@
         "devDependencies": {
                 "@axe-core/playwright": "4.10.1",
                 "@eslint/js": "9.23.0",
-                "@playwright/test": "1.51.1",
+                "@playwright/test": "1.54.2",
                 "@types/chromedriver": "81.0.1",
                 "@types/isomorphic-fetch": "0.0.39",
                 "@types/jest": "29.5.14",
