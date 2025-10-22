@@ -13,8 +13,11 @@ The Graph Explorer is written in [TypeScript](https://www.typescriptlang.org/) a
 
 Microsoft Graph Explorer is built and developed using node v18.
 
-- `npm install` to install project dependencies. `npm` is installed by default with [Node.js](https://nodejs.org/).
+- `npm install` to install project dependencies. `npm` is installed by default with [Node.js](https://nodejs.org/). If you have issues with packages, try using Node version 18.20.0 locally when you try to run.
+- `npm run build` to build the project.
 - `npm start` starts the TypeScript compiler in watch mode and the local server. It should open your browser automatically with the Graph Explorer at [http://localhost:3000/](http://localhost:3000).
+
+
 
 ### Enabling authentication with your own credentials
 
