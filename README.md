@@ -17,8 +17,6 @@ Microsoft Graph Explorer is built and developed using node v18.
 - `npm run build` to build the project.
 - `npm start` starts the TypeScript compiler in watch mode and the local server. It should open your browser automatically with the Graph Explorer at [http://localhost:3000/](http://localhost:3000).
 
-
-
 ### Enabling authentication with your own credentials
 
 - Sign in to your Microsoft account (or Create one) at the [Microsoft Azure Portal](https://ms.portal.azure.com/).
