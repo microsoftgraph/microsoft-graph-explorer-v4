@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.3...v11.1.4) (2025-10-27)
+
+
+### Bug Fixes
+
+* dummy--readme updates ([#3986](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3986)) ([aab4e11](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/aab4e117ad4b8f4bf002a2ce2c428cecbe1b9a85))
+* upgrading axios version inside tarbell ([#3985](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3985)) ([f7b1424](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f7b1424e5b0bc634185c6a467e2bb9f815a6ddb9))
+
 ## [11.1.3](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.2...v11.1.3) (2025-07-10)
 
 
