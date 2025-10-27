@@ -14,11 +14,30 @@ on:
   push:
     branches:
       - dev  # Trigger when dev is updated
+  workflow_dispatch:  # Allow manual triggering from GitHub UI
+    inputs:
+      reason:
+        description: 'Reason for manual trigger'
+        required: false
+        default: 'Manual release trigger'
+      dry_run:
+        description: 'Perform dry run (no actual release)'
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   release-please-master:
     runs-on: ubuntu-latest
     steps:
+      - name: Log manual trigger details
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Manual trigger initiated"
+          echo "Reason: ${{ github.event.inputs.reason }}"
+          echo "Dry run: ${{ github.event.inputs.dry_run }}"
+          echo "Triggered by: ${{ github.actor }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -38,3 +57,4 @@ jobs:
           manifest: true
           primaryBranch: dev
           handleGHRelease: true
+          dry-run: ${{ github.event.inputs.dry_run == 'true' }}
