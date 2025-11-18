@@ -136,7 +136,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    */
   public async refreshToken(scopes: string[] = []): Promise<AuthenticationResult> {
     this.revokingScopes = true;
-    this.clearAccessTokenCache();
 
     try {
       const result = await this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes);
@@ -318,18 +317,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     localStorage.removeItem(HOME_ACCOUNT_KEY);
   }
 
-  /**
-   * Clears access token cache to force fresh token acquisition on next request
-   */
-  public clearAccessTokenCache(): void {
-    const keyFilter = this.getHomeAccountId() || 'login';
-    const accessTokenKeys = Object.keys(localStorage).filter((key) =>
-      key.includes(keyFilter) && key.includes('accesstoken')
-    );
-    accessTokenKeys.forEach((item: string) => {
-      localStorage.removeItem(item);
-    });
-  }
 
   /**
    * This is an own implementation of the  clearCache() function that is no longer available;
