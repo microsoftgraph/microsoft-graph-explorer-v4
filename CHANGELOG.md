@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.5](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.4...v11.1.5) (2025-11-19)
+
+
+### Bug Fixes
+
+* force interactive token refresh after permission revocation ([6150dd5](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/6150dd5f7464385632a3d74bc7d4335d1148b68b))
+
 ## [11.1.4](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.3...v11.1.4) (2025-10-27)
 
 
