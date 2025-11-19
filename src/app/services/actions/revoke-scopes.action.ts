@@ -1,12 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ApplicationState } from '../../../store';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { componentNames, eventTypes, telemetry } from '../../../telemetry';
 import { IOAuthGrantPayload } from '../../../types/permissions';
 import { IUser } from '../../../types/profile';
 import { RevokeScopesError } from '../../utils/error-utils/RevokeScopesError';
 import { translateMessage } from '../../utils/translate-messages';
 import { DEFAULT_USER_SCOPES, REVOKING_PERMISSIONS_REQUIRED_SCOPES } from '../graph-constants';
-import { getConsentedScopesSuccess } from '../slices/auth.slice';
+import { getAuthTokenSuccess, getConsentedScopesSuccess } from '../slices/auth.slice';
+import { fetchAllPrincipalGrants } from '../slices/permission-grants.slice';
 import { setQueryResponseStatus } from '../slices/query-status.slice';
 import { REVOKE_STATUS, RevokePermissionsUtil } from './permissions-action-creator.util';
 
@@ -62,8 +64,21 @@ export const revokeScopes = createAsyncThunk(
       const updatedScopes = await updatePermissions(permissionsUpdateObject);
 
       if (updatedScopes) {
+        // Force token refresh with user interaction to get new token with updated scopes
+        try {
+          const authResponse = await authenticationWrapper.refreshToken(updatedScopes);
+
+          if (authResponse && authResponse.accessToken) {
+            dispatch(getAuthTokenSuccess());
+          }
+        } catch (error) {
+          // Even if refresh fails, we still update the consented scopes
+          // Token will be refreshed on next API call
+        }
+
         dispatchScopesStatus(dispatch, 'Permission revoked', 'Success', 'success');
         dispatch(getConsentedScopesSuccess(updatedScopes));
+        dispatch(fetchAllPrincipalGrants());
         trackRevokeConsentEvent(REVOKE_STATUS.success, permissionToRevoke);
         return updatedScopes;
       } else {
