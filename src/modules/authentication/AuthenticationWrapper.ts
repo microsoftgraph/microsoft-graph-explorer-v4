@@ -26,6 +26,7 @@ const defaultScopes = DEFAULT_USER_SCOPES.split(' ');
 export class AuthenticationWrapper implements IAuthenticationWrapper {
   private static instance: AuthenticationWrapper;
   private consentingToNewScopes: boolean = false;
+  private revokingScopes: boolean = false;
   private performingStepUpAuth: boolean = false;
   private claimsAvailable: boolean = false;
   private sampleQuery: IQuery = {
@@ -117,11 +118,32 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
    */
   public async consentToScopes(scopes: string[] = []): Promise<AuthenticationResult> {
     this.consentingToNewScopes = true;
-    // eslint-disable-next-line no-useless-catch
     try {
-      return await this.loginWithInteraction(scopes);
+      const result = await this.loginWithInteraction(scopes);
+      this.consentingToNewScopes = false;
+      return result;
     } catch (error) {
-      throw new Error(`Error occurred while consenting to scopes: ${error}`);
+      this.consentingToNewScopes = false;
+      throw error;
+    }
+  }
+
+  /**
+   * Forces a token refresh with user interaction to ensure token reflects updated scopes
+   * This is necessary after permission changes (consent/revoke) to get a fresh token from Azure AD
+   * @param {string[]} scopes - optional scopes to refresh token with
+   * @returns {Promise.<AuthenticationResult>}
+   */
+  public async refreshToken(scopes: string[] = []): Promise<AuthenticationResult> {
+    this.revokingScopes = true;
+
+    try {
+      const result = await this.loginWithInteraction(scopes.length > 0 ? scopes : defaultScopes);
+      this.revokingScopes = false;
+      return result;
+    } catch (error) {
+      this.revokingScopes = false;
+      throw error;
     }
   }
 
@@ -255,7 +277,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       tokenQueryParameters: getExtraQueryParameters()
     };
 
-    if (this.consentingToNewScopes || this.performingStepUpAuth) {
+    if (this.consentingToNewScopes || this.performingStepUpAuth || this.revokingScopes) {
       delete popUpRequest.prompt;
       popUpRequest.loginHint = this.getAccount()?.username;
     }
@@ -294,6 +316,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   public deleteHomeAccountId(): void {
     localStorage.removeItem(HOME_ACCOUNT_KEY);
   }
+
 
   /**
    * This is an own implementation of the  clearCache() function that is no longer available;

@@ -457,7 +457,7 @@
   "No samples found": "We did not find any sample queries",
   "You require the following permissions to revoke": "You require Directory.Read.All and DelegatedPermissionGrant.ReadWrite.All to be able to revoke consent to permissions",
   "Cannot delete default scope": "Graph Explorer requires this permission for its normal working behavior",
-  "Permission revoked": "Permission revoked successfully. Sign out and sign in again for these changes to take effect. These changes may take some time to reflect on your token",
+  "Permission revoked": "Permission revoked successfully. If you don’t see the change right away, sign out and back in. The update may take some time to propagate to your token.",
   "An error occurred when unconsenting": "An error occurred when unconsenting. Please try again",
   "You are unconsenting to an admin pre-consented permission": "You are unconsenting to an admin pre-consented permission. Ask your tenant admin to revoke consent to this permission on Azure AD",
   "Possible error found in URL near": "Possible error found in URL near",
