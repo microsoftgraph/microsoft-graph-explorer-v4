@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.5...v11.1.6) (2025-12-22)
+
+
+### Bug Fixes
+
+* Update node-forge to version 1.3.2 ([#3996](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/3996)) ([aea7fc6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/aea7fc6e45d4ec51bd8d26519606edb2217fa7b8))
+
 ## [11.1.5](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.4...v11.1.5) (2025-11-19)
 
 
