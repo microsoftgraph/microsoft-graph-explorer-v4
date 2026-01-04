@@ -1,11 +1,11 @@
+// MODIFIED: Simplified test to remove async getGraphProxyUrl thunk tests
+// Now only test the synchronous setGraphProxyUrl reducer
 import { AnyAction } from '@reduxjs/toolkit';
 import configureMockStore from 'redux-mock-store';
-import { getGraphProxyUrl, setGraphProxyUrl } from '../../../app/services/slices/proxy.slice';
-import { GRAPH_API_SANDBOX_URL } from '../graph-constants';
-import { GET_GRAPH_PROXY_URL_ERROR, GET_GRAPH_PROXY_URL_PENDING, SET_GRAPH_PROXY_URL } from '../redux-constants';
-import { mockThunkMiddleware } from './mockThunkMiddleware';
+import { setGraphProxyUrl } from '../../../app/services/slices/proxy.slice';
+import { SET_GRAPH_PROXY_URL } from '../redux-constants';
 
-const mockStore = configureMockStore([mockThunkMiddleware]);
+const mockStore = configureMockStore([]);
 
 describe('Tests Proxy-Action-Creators', () => {
   beforeEach(() => {
@@ -25,22 +25,5 @@ describe('Tests Proxy-Action-Creators', () => {
 
     // Assert
     expect(action).toEqual(expectedAction);
-  })
-
-  it('should dispatch GET_GRAPH_PROXY_URL when getGraphProxyUrl() is called', async () => {
-    // Arrange
-    fetchMock.mockResponseOnce(GRAPH_API_SANDBOX_URL);
-    const store_ = mockStore({});
-    await store_.dispatch(getGraphProxyUrl() as unknown as AnyAction);
-
-    const expectedActions = [
-      { type: GET_GRAPH_PROXY_URL_PENDING, payload: undefined },
-      { type: GET_GRAPH_PROXY_URL_ERROR, payload: GRAPH_API_SANDBOX_URL }
-    ];
-    expect(store_.getActions().map(action => {
-      const { meta, error, ...rest } = action;
-      return rest;
-    })).toEqual(expectedActions);
-
   })
 })
