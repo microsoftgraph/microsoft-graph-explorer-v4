@@ -1,22 +1,20 @@
+// MODIFIED: Updated test to validate direct proxy endpoint configuration instead of dynamic fetching
 import fetch from 'isomorphic-fetch';
 
 import { createAnonymousRequest } from '../app/services/actions/query-action-creator-util';
-import { GRAPH_API_SANDBOX_ENDPOINT_URL } from '../app/services/graph-constants';
+import { GRAPH_API_PROXY_ENDPOINT } from '../app/services/graph-constants';
 import { isValidHttpsUrl } from '../app/utils/external-link-validation';
 import { IQuery } from '../types/query-runner';
 import { IStatus } from '../types/status';
 
-describe.skip('Sandbox api fetch should', () => {
+describe.skip('Proxy endpoint should', () => {
 
-  test('return valid url', async () => {
-    const res = await fetch(GRAPH_API_SANDBOX_ENDPOINT_URL);
-    const proxyUrl = await res.json();
-    expect(isValidHttpsUrl(proxyUrl)).toBe(true);  // Success!
+  test('be a valid url', () => {
+    expect(isValidHttpsUrl(GRAPH_API_PROXY_ENDPOINT)).toBe(true);
   });
 
-  test('return valid url and use to make call to proxy', async () => {
-    const res = await fetch(GRAPH_API_SANDBOX_ENDPOINT_URL);
-    const proxyUrl = await res.json();
+  test('be able to make call to proxy with valid endpoint', async () => {
+    const proxyUrl = GRAPH_API_PROXY_ENDPOINT;
 
     const query: IQuery = {
       sampleUrl: 'https://graph.microsoft.com/v1.0/me',
