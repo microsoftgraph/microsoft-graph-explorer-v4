@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.7](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.6...v11.1.7) (2026-01-06)
+
+
+### Bug Fixes
+
+* make proxy endpoint configurable via environment variable ([#4002](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4002)) ([297474e](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/297474e6f5c098cc5d983261712713a169831284))
+
 ## [11.1.6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.5...v11.1.6) (2025-12-22)
 
 
