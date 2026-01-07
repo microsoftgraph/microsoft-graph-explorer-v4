@@ -12,7 +12,7 @@ import { createCollection } from './app/services/slices/collections.slice';
 import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { bulkAddHistoryItems } from './app/services/slices/history.slice';
-import { getGraphProxyUrl } from './app/services/slices/proxy.slice';
+// MODIFIED: Removed getGraphProxyUrl import as we no longer dynamically fetch proxy endpoint
 import { fetchResources } from './app/services/slices/resources.slice';
 import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { toggleSidebar } from './app/services/slices/sidebar-properties.slice';
@@ -86,7 +86,8 @@ function applyCurrentTheme(themeToApply: string): void {
 const appStore: any = store;
 
 setCurrentTheme();
-appStore.dispatch(getGraphProxyUrl());
+// MODIFIED: Removed appStore.dispatch(getGraphProxyUrl()) as proxy endpoint is now configured directly
+// No need to fetch proxy endpoint dynamically at app startup
 
 function refreshAccessToken() {
   authenticationWrapper.getToken().then((authResponse: AuthenticationResult) => {
