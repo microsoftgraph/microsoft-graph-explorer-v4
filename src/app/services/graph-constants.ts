@@ -9,6 +9,13 @@ export const GRAPH_API_SANDBOX_URL =
   'https://proxy.apisandbox.msdn.microsoft.com/svc';
 export const GRAPH_API_SANDBOX_ENDPOINT_URL =
   'https://cdn.graph.office.net/en-us/graph/api/proxy/endpoint';
+// MODIFIED: Use direct proxy endpoint configuration instead of dynamic fetching
+// This allows proxy endpoint to be set via environment variable REACT_APP_GRAPH_API_ENDPOINT
+// MODIFIED: Added /api/proxy path suffix to the configured proxy endpoint
+const PROXY_ENDPOINT_BASE = process.env.REACT_APP_GRAPH_API_ENDPOINT || GRAPH_API_SANDBOX_URL;
+export const GRAPH_API_PROXY_ENDPOINT = PROXY_ENDPOINT_BASE.endsWith('/')
+  ? `${PROXY_ENDPOINT_BASE}api/proxy`
+  : `${PROXY_ENDPOINT_BASE}/api/proxy`;
 export const HOME_ACCOUNT_KEY = 'fbf1ecbe-27ab-42d7-96d4-3e6b03682ee4';
 export enum ACCOUNT_TYPE {
   AAD = 'AAD',
