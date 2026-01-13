@@ -1,5 +1,5 @@
-import { authenticationWrapper } from '../../../modules/authentication';
 import { IQuery } from '../../../types/query-runner';
+import { authenticationWrapper } from '../../../modules/authentication';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
@@ -17,8 +17,15 @@ export const createShareLink = (sampleQuery: IQuery, authenticated?: boolean): s
     return '';
   }
 
-  const url = new URL(sampleUrl);
-  const graphUrl = url.origin;
+  let graphUrl = 'https://graph.microsoft.com';
+
+  try {
+    const url = new URL(sampleUrl);
+    graphUrl = url.origin;
+  } catch {
+    // do nothing and use default graph url
+  }
+
   const appUrl = 'https://developer.microsoft.com/graph/graph-explorer';
 
   const graphUrlRequest = encodeURIComponent(requestUrl + search);
