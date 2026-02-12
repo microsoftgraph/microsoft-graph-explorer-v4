@@ -90,10 +90,9 @@ extends:
           inputs:
             versionSpec: "18.16.x"
           displayName: "Install Node.js"
-        - task: Npm@1
-          displayName: 'Install dependencies'
-          inputs:
-            command: 'install'
+        - script: |
+            npm install --no-audit
+          displayName: "npm install"
         - script: |
             npm run lint
           displayName: "Runs linting checks"
@@ -119,7 +118,7 @@ extends:
           displayName: "Install Node.js"
         - script: |
             npm install
-          displayName: "npm install"
+          displayName: "npm install" --no-audit
         - script: |
             npm run build
           env:
