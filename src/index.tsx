@@ -203,7 +203,7 @@ window.MonacoEnvironment = {
 function getWorkerFor(worker: string): string {
   // tslint:disable-next-line:max-line-length
   const WORKER_PATH =
-    'https://graphstagingblobstorage.blob.core.windows.net/staging/vendor/bower_components/explorer-v2/build';
+    'https://res.public.onecdn.static.microsoft/s01-prod/vendor/bower_components/explorer-v2/build';
 
   return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
 	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
