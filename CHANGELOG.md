@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.8](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.7...v11.1.8) (2026-02-12)
+
+
+### Bug Fixes
+
+* update cdn endpoint ([#4012](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4012)) ([4aaf62c](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/4aaf62cc5f1ba8a7eb7a5c4cf08be430ce9a7982))
+
 ## [11.1.7](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.6...v11.1.7) (2026-01-06)
 
 
