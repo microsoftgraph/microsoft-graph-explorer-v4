@@ -91,7 +91,7 @@ extends:
             versionSpec: "18.16.x"
           displayName: "Install Node.js"
         - script: |
-            npm install
+            npm install --no-audit
           displayName: "npm install"
         - script: |
             npm run lint
@@ -117,7 +117,7 @@ extends:
             versionSpec: "18.16.x"
           displayName: "Install Node.js"
         - script: |
-            npm install
+            npm install --no-audit
           displayName: "npm install"
         - script: |
             npm run build
