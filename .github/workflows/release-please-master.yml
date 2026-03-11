@@ -39,7 +39,7 @@ jobs:
           echo "Triggered by: ${{ github.actor }}"
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate GitHub App token
         id: app-token
