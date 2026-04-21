@@ -9,7 +9,10 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/index.tsx',
     '!src/app/middleware/telemetryMiddleware.ts',
-    '!src/telemetry/telemetry.ts'
+    '!src/telemetry/telemetry.ts',
+    '!src/tests/**',
+    '!src/**/*.spec.{ts,tsx}',
+    '!src/**/*.test.{ts,tsx}'
   ],
   resolver: `${__dirname}/src/tests/common/resolver.js`,
   setupFiles: ['react-app-polyfill/jsdom'],
