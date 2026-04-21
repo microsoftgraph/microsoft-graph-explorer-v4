@@ -4,12 +4,13 @@ import { samplesCache } from './samples.cache';
 jest.mock('localforage', () => ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   config: () => { },
-  createInstance: () => ({
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    getItem: () => { },
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    setItem: () => { }
-  })
+  createInstance: () => {
+    let store: Record<string, string> = {};
+    return {
+      getItem: (key: string) => store[key] || undefined,
+      setItem: (key: string, value: string) => { store[key] = value; }
+    };
+  }
 }));
 
 const queries: ISampleQuery[] = [];

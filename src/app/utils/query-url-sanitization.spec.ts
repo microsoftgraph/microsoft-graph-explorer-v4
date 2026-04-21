@@ -1,5 +1,6 @@
 import {
-  isDeprecation, sanitizeQueryUrl
+  isDeprecation, sanitizeQueryUrl, isFunctionCall, encodeHashCharacters,
+  sanitizeGraphAPISandboxUrl
 } from './query-url-sanitization';
 
 describe('isDepraction should ', () => {
@@ -15,6 +16,71 @@ describe('isDepraction should ', () => {
       const key = isDeprecation(element.key);
       expect(key).toBe(element.deprecated);
     });
+  });
+});
+
+describe('isFunctionCall', () => {
+  it('should return true for function call pattern', () => {
+    expect(isFunctionCall("users('some-id')")).toBe(true);
+  });
+
+  it('should return true for delta(token=value)', () => {
+    expect(isFunctionCall("delta(token='123')")).toBe(true);
+  });
+
+  it('should return false for plain text', () => {
+    expect(isFunctionCall('users')).toBe(false);
+  });
+
+  it('should return false for empty string', () => {
+    expect(isFunctionCall('')).toBe(false);
+  });
+});
+
+describe('encodeHashCharacters', () => {
+  it('should replace # with %2523 in sampleUrl', () => {
+    const query = { sampleUrl: 'https://graph.microsoft.com/v1.0/me#section', selectedVerb: 'GET' } as any;
+    expect(encodeHashCharacters(query)).toBe('https://graph.microsoft.com/v1.0/me%2523section');
+  });
+
+  it('should return empty string when sampleUrl is empty', () => {
+    const query = { sampleUrl: '', selectedVerb: 'GET' } as any;
+    expect(encodeHashCharacters(query)).toBe('');
+  });
+
+  it('should return empty string when sampleUrl is undefined', () => {
+    const query = { selectedVerb: 'GET' } as any;
+    expect(encodeHashCharacters(query)).toBe('');
+  });
+
+  it('should return url unchanged when no hash characters', () => {
+    const query = { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET' } as any;
+    expect(encodeHashCharacters(query)).toBe('https://graph.microsoft.com/v1.0/me');
+  });
+
+  it('should replace multiple hash characters', () => {
+    const query = { sampleUrl: 'https://example.com/a#b#c', selectedVerb: 'GET' } as any;
+    expect(encodeHashCharacters(query)).toBe('https://example.com/a%2523b%2523c');
+  });
+});
+
+describe('sanitizeQueryUrl', () => {
+  it('should return empty string for invalid URL', () => {
+    expect(sanitizeQueryUrl('not-a-url')).toBe('');
+  });
+});
+
+describe('sanitizeGraphAPISandboxUrl', () => {
+  it('should sanitize the url query parameter', () => {
+    const proxyUrl = 'https://proxy.example.com?url=https%3A%2F%2Fgraph.microsoft.com%2Fv1.0%2Fusers%2Fuser-id-123';
+    const result = sanitizeGraphAPISandboxUrl(proxyUrl);
+    expect(result).toContain('proxy.example.com');
+  });
+
+  it('should handle URL without url query parameter', () => {
+    const proxyUrl = 'https://proxy.example.com?other=value';
+    const result = sanitizeGraphAPISandboxUrl(proxyUrl);
+    expect(result).toContain('proxy.example.com');
   });
 });
 
