@@ -445,8 +445,15 @@ describe('FullPermissions', () => {
           error: null
         },
         auth: { authToken: { token: false, pending: false }, consentedScopes: [] },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
-        permissionGrants: { permissions: { singlePermissionsGrant: [], tenantWidePermissionsGrant: [] }, pending: false, error: null }
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
+        permissionGrants: {
+          permissions: { singlePermissionsGrant: [], tenantWidePermissionsGrant: [] },
+          pending: false, error: null
+        }
       }
     });
 
@@ -477,8 +484,15 @@ describe('FullPermissions', () => {
           error: null
         },
         auth: { authToken: { token: false, pending: false }, consentedScopes: [] },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
-        permissionGrants: { permissions: { singlePermissionsGrant: [], tenantWidePermissionsGrant: [] }, pending: false, error: null }
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
+        permissionGrants: {
+          permissions: { singlePermissionsGrant: [], tenantWidePermissionsGrant: [] },
+          pending: false, error: null
+        }
       }
     });
 

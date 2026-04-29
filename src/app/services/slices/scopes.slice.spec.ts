@@ -44,7 +44,9 @@ describe('scopes.slice reducer', () => {
   });
 
   it('should set full permissions on fetchScopes.fulfilled with full arg', () => {
-    const permissions = [{ value: 'User.Read', consentDisplayName: 'Read user', consentDescription: '', isAdmin: false }];
+    const permissions = [{
+      value: 'User.Read', consentDisplayName: 'Read user', consentDescription: '', isAdmin: false
+    }];
     const action = {
       type: fetchScopes.fulfilled.type,
       meta: { arg: 'full' },
@@ -56,7 +58,9 @@ describe('scopes.slice reducer', () => {
   });
 
   it('should set specific permissions on fetchScopes.fulfilled with query arg', () => {
-    const permissions = [{ value: 'Mail.Read', consentDisplayName: 'Read mail', consentDescription: '', isAdmin: false }];
+    const permissions = [{
+      value: 'Mail.Read', consentDisplayName: 'Read mail', consentDescription: '', isAdmin: false
+    }];
     const action = {
       type: fetchScopes.fulfilled.type,
       meta: { arg: 'query' },
@@ -137,7 +141,10 @@ describe('scopes.slice reducer', () => {
       return configureStore({
         reducer: {
           scopes: reducer,
-          devxApi: () => ({ baseUrl: 'https://graphexplorerapi.azurewebsites.net', parameters: 'openapi-operationids=Users.Get' }),
+          devxApi: () => ({
+            baseUrl: 'https://graphexplorerapi.azurewebsites.net',
+            parameters: 'openapi-operationids=Users.Get'
+          }),
           profile: () => ({ user: { id: 'user-1' } }),
           sampleQuery: () => ({ sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET' })
         }
@@ -162,7 +169,9 @@ describe('scopes.slice reducer', () => {
     });
 
     it('dispatches fulfilled for query scopes fetch on 200', async () => {
-      const permissions = [{ value: 'Mail.Read', consentDisplayName: 'Read mail', consentDescription: '', isAdmin: false }];
+      const permissions = [{
+        value: 'Mail.Read', consentDisplayName: 'Read mail', consentDescription: '', isAdmin: false
+      }];
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
         json: jest.fn().mockResolvedValue(permissions)

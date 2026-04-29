@@ -186,7 +186,7 @@ describe('query-action-creator-util', () => {
     });
 
     it('should include body for POST queries', () => {
-      const postQuery = { ...query, selectedVerb: 'POST', sampleBody: { test: true } };
+      const postQuery = { ...query, selectedVerb: 'POST', sampleBody: { test: true } } as unknown as IQuery;
       const result = createAnonymousRequest(postQuery, proxyUrl, { ok: true } as any);
       expect(result.options.body).toBe(JSON.stringify({ test: true }));
     });
@@ -373,7 +373,9 @@ describe('query-action-creator-util', () => {
 
   describe('getContentType - additional branches', () => {
     it('should handle content-type with multiple semicolons', () => {
-      const headers = { 'Content-Type': 'application/json;odata.metadata=minimal;charset=utf-8;IEEE754Compatible=false' };
+      const headers = {
+        'Content-Type': 'application/json;odata.metadata=minimal;charset=utf-8;IEEE754Compatible=false'
+      };
       expect(getContentType(headers)).toBe('application/json');
     });
 

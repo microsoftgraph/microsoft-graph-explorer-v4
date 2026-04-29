@@ -7,14 +7,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CommonCollectionsPanel from './CommonCollectionsPanel';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 describe('CommonCollectionsPanel', () => {
   const defaultProps = {
     primaryButtonText: 'Download',

@@ -73,7 +73,7 @@ describe('ClaimsChallenge', () => {
     const { authenticationWrapper } = require('./index');
     authenticationWrapper.getAccount.mockReturnValue(mockAccount);
 
-    const key = `cc.test-client-id.object-id.https://graph.microsoft.com/v1.0/me.GET`;
+    const key = 'cc.test-client-id.object-id.https://graph.microsoft.com/v1.0/me.GET';
     sessionStorage.setItem(key, 'existingClaims');
 
     const headers = new Headers();

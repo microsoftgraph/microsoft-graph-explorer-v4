@@ -40,7 +40,7 @@ function createTestInstance(grantsPayload: IOAuthGrantPayload, signedInGrant: IP
   instance.grantsPayload = grantsPayload;
   instance.signedInGrant = signedInGrant;
   instance.trackRevokeConsentEvent = jest.fn();
-  return instance as InstanceType<typeof RevokePermissionsUtil>;
+  return instance as unknown as RevokePermissionsUtil;
 }
 
 describe('RevokePermissionsUtil', () => {
@@ -220,7 +220,9 @@ describe('RevokePermissionsUtil', () => {
 
   describe('userHasRequiredPermissions via preliminaryChecksSuccess', () => {
     it('does not throw when required permissions are in allPrincipal scopes', () => {
-      const allPrincipalGrant = createGrant({ consentType: 'AllPrincipals', scope: 'Directory.ReadWrite.All User.Read' });
+      const allPrincipalGrant = createGrant({
+        consentType: 'AllPrincipals', scope: 'Directory.ReadWrite.All User.Read'
+      });
       const principalGrant = createGrant({ scope: 'Mail.Read' });
       const payload: IOAuthGrantPayload = { value: [principalGrant, allPrincipalGrant], '@odata.context': '' };
       const instance = createTestInstance(payload, principalGrant);
@@ -257,7 +259,8 @@ describe('RevokePermissionsUtil', () => {
       const { makeGraphRequest, parseResponse: mockParseResponse } = require('./query-action-creator-util');
       const mockFn = jest.fn().mockResolvedValue({ value: [{ id: 'sp-id-123' }] });
       makeGraphRequest.mockReturnValue(mockFn);
-      (require('./query-action-creator-util').parseResponse as jest.Mock).mockResolvedValue({ value: [{ id: 'sp-id-123' }] });
+      (require('./query-action-creator-util').parseResponse as jest.Mock)
+        .mockResolvedValue({ value: [{ id: 'sp-id-123' }] });
 
       const result = await RevokePermissionsUtil.getServicePrincipalId([]);
       expect(result).toBe('sp-id-123');
@@ -387,7 +390,9 @@ describe('RevokePermissionsUtil', () => {
       makeGraphRequest.mockReturnValue(mockFn);
       (require('./query-action-creator-util').parseResponse as jest.Mock).mockResolvedValue({});
 
-      const allPrincipalGrant = createGrant({ consentType: 'AllPrincipals', scope: 'Mail.Read Files.Read', id: 'all-grant-1' });
+      const allPrincipalGrant = createGrant({
+        consentType: 'AllPrincipals', scope: 'Mail.Read Files.Read', id: 'all-grant-1'
+      });
       const signedInGrant = createGrant({ principalId: 'user-1' });
       const payload: IOAuthGrantPayload = { value: [signedInGrant, allPrincipalGrant], '@odata.context': '' };
       const instance = createTestInstance(payload, signedInGrant);

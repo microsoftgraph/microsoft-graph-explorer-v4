@@ -3,23 +3,23 @@ import { methodColors, getStyleFor, getHeaders } from './http-methods.utils';
 describe('http-methods.utils', () => {
   describe('methodColors', () => {
     it('should have correct color for GET', () => {
-      expect(methodColors['GET']).toBe('brand');
+      expect(methodColors.GET).toBe('brand');
     });
 
     it('should have correct color for POST', () => {
-      expect(methodColors['POST']).toBe('success');
+      expect(methodColors.POST).toBe('success');
     });
 
     it('should have correct color for PATCH', () => {
-      expect(methodColors['PATCH']).toBe('severe');
+      expect(methodColors.PATCH).toBe('severe');
     });
 
     it('should have correct color for DELETE', () => {
-      expect(methodColors['DELETE']).toBe('danger');
+      expect(methodColors.DELETE).toBe('danger');
     });
 
     it('should have correct color for PUT', () => {
-      expect(methodColors['PUT']).toBe('warning');
+      expect(methodColors.PUT).toBe('warning');
     });
   });
 

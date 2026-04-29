@@ -137,7 +137,9 @@ describe('EditScopePanel', () => {
   });
 
   it('save button dispatches updateResourcePaths when pending changes exist', () => {
-    const { store } = renderWithProviders(<EditScopePanel closePopup={jest.fn()} />, { preloadedState: stateWithPaths });
+    const { store } = renderWithProviders(
+      <EditScopePanel closePopup={jest.fn()} />, { preloadedState: stateWithPaths }
+    );
     // Select items
     act(() => {
       mockPathsOnSelectionChange!([mockPaths[0]]);

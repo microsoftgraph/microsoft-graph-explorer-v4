@@ -1,4 +1,10 @@
-import { isAllAlpha, isPropertyName, sanitizeQueryParameter, isAlphaNumeric, isPlaceHolderSegment } from './query-parameter-sanitization';
+import {
+  isAllAlpha,
+  isPropertyName,
+  sanitizeQueryParameter,
+  isAlphaNumeric,
+  isPlaceHolderSegment
+} from './query-parameter-sanitization';
 
 describe('isAllAlpha should ', () => {
   const list = [
@@ -418,7 +424,7 @@ describe('sanitizeQueryParameter edge cases should', () => {
   });
 
   it('handle $filter with function call without comma', () => {
-    const result = sanitizeQueryParameter("$filter=isof('microsoft.graph.user')");
+    const result = sanitizeQueryParameter('$filter=isof(\'microsoft.graph.user\')');
     expect(result).toContain('isof(');
   });
 

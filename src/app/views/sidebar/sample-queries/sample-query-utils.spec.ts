@@ -12,7 +12,13 @@ jest.mock('../../../utils/external-link-validation', () => ({
   validateExternalLink: jest.fn()
 }));
 
-import { isJsonString, performSearch, shouldRunQuery, trackSampleQueryClickEvent, trackDocumentLinkClickedEvent } from './sample-query-utils';
+import {
+  isJsonString,
+  performSearch,
+  shouldRunQuery,
+  trackSampleQueryClickEvent,
+  trackDocumentLinkClickedEvent
+} from './sample-query-utils';
 import { telemetry } from '../../../../telemetry';
 
 describe('Tests isJsonString should', () => {

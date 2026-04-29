@@ -2,33 +2,37 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../../modules/authentication', () => ({
-  authenticationWrapper: { logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(), logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn() }
+  authenticationWrapper: {
+    logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(),
+    logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn()
+  }
 }));
 jest.mock('../../../../modules/authentication/authentication-error-hints', () => ({
   getSignInAuthErrorHint: jest.fn(), signInAuthError: jest.fn()
 }));
 jest.mock('../../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({}) },
+  telemetry: {
+    trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(),
+    trackLinkClickEvent: jest.fn(), trackException: jest.fn(),
+    getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
+  },
   componentNames: {}, eventTypes: {}, errorTypes: {}
 }));
 jest.mock('../../../utils/translate-messages', () => ({
   translateMessage: (msg: string) => msg
 }));
 jest.mock('./auto-complete', () => ({
-  AutoComplete: (props: any) => <input data-testid="autocomplete" onChange={(e) => props.contentChanged(e.target.value)} />
+  AutoComplete: (props: any) => (
+    <input data-testid="autocomplete" onChange={(e) => props.contentChanged(e.target.value)} />
+  )
 }));
 jest.mock('../../../views/common/submit-button/SubmitButton', () => ({
   __esModule: true,
-  default: (props: any) => <button data-testid="run-query-btn" onClick={props.handleOnClick} disabled={props.disabled}>{props.text}</button>
+  default: (props: any) => (
+    <button data-testid="run-query-btn" onClick={props.handleOnClick}
+      disabled={props.disabled}>{props.text}</button>
+  )
 }));
 jest.mock('../../sidebar/sample-queries/sample-query-utils', () => ({
   shouldRunQuery: jest.fn().mockReturnValue(true)
@@ -373,8 +377,8 @@ describe('QueryInput component', () => {
       ([action]: any) => action.type === 'sampleQuery/setSampleQuery'
     );
     expect(setSampleQueryAction).toBeDefined();
-    expect(setSampleQueryAction![0].payload.selectedVersion).toBe('v1.0');
-    expect(setSampleQueryAction![0].payload.sampleUrl).toBe('https://graph.microsoft.com/v3.0/me');
+    expect((setSampleQueryAction![0] as any).payload.selectedVersion).toBe('v1.0');
+    expect((setSampleQueryAction![0] as any).payload.sampleUrl).toBe('https://graph.microsoft.com/v3.0/me');
     dispatchSpy.mockRestore();
   });
 });

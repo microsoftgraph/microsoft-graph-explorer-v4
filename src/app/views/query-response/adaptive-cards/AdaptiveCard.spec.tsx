@@ -78,14 +78,6 @@ describe('AdaptiveCard', () => {
     queryRunnerStatus: { ok: true }
   };
 
-  beforeAll(() => {
-    global.ResizeObserver = class {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    } as any;
-  });
-
   beforeEach(() => {
     jest.useFakeTimers();
     mockGetAdaptiveCard.mockReset();

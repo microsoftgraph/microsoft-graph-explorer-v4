@@ -40,7 +40,7 @@ describe('Paths', () => {
   const resources = [
     { key: '1', url: '/users', method: 'GET', version: 'v1.0', scope: 'DelegatedWork' },
     { key: '2', url: '/groups', method: 'POST', version: 'v1.0', scope: 'DelegatedWork' }
-  ];
+  ] as any[];
 
   it('renders table with headers', () => {
     renderWithProviders(<Paths resources={resources} columns={columns} />);
@@ -121,7 +121,7 @@ describe('Paths', () => {
   it('does not render badge when resource has no method', () => {
     const noMethodResources = [
       { key: '1', url: '/users', method: '', version: 'v1.0', scope: 'DelegatedWork' }
-    ];
+    ] as any[];
     renderWithProviders(<Paths resources={noMethodResources} columns={columns} />);
     expect(screen.queryByText('GET')).not.toBeInTheDocument();
     expect(screen.queryByText('POST')).not.toBeInTheDocument();
@@ -190,7 +190,7 @@ describe('Paths', () => {
     const multiResources = [
       { key: '1', url: '/me/messages', method: 'GET', version: 'v1.0', scope: 'DelegatedWork' },
       { key: '2', url: '/users', method: 'DELETE', version: 'beta', scope: 'Application' }
-    ];
+    ] as any[];
     renderWithProviders(<Paths resources={multiResources} columns={columns} />);
     expect(screen.getByText('GET')).toBeInTheDocument();
     expect(screen.getByText('DELETE')).toBeInTheDocument();

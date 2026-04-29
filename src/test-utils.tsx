@@ -107,7 +107,7 @@ export function renderWithProviders(
   } & Omit<RenderOptions, 'wrapper'> = {}
 ) {
   function Wrapper({ children }: { children: React.ReactNode }) {
-    return React.createElement(Provider, { store }, children);
+    return React.createElement(Provider as any, { store }, children);
   }
 
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };

@@ -42,12 +42,7 @@ const { authenticationWrapper } = require('../../modules/authentication');
 
 describe('App', () => {
   beforeAll(() => {
-    process.on('unhandledRejection', () => {});
-    (global as any).ResizeObserver = class {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    };
+    process.on('unhandledRejection', jest.fn());
   });
 
   beforeEach(() => {
@@ -168,7 +163,8 @@ describe('App', () => {
   it('handles shared query URL with POST method and body', async () => {
     const body = btoa(JSON.stringify({ displayName: 'Test' }));
     delete (window as any).location;
-    (window as any).location = new URL(`https://localhost?request=me/messages&method=POST&version=v1.0&requestBody=${body}`);
+    const url = `https://localhost?request=me/messages&method=POST&version=v1.0&requestBody=${body}`;
+    (window as any).location = new URL(url);
     renderWithProviders(<App />);
     expect(screen.getByTestId('layout')).toBeInTheDocument();
   });
@@ -190,7 +186,8 @@ describe('App', () => {
 
   it('handles shared query URL with custom GraphUrl', async () => {
     delete (window as any).location;
-    (window as any).location = new URL('https://localhost?request=me&method=GET&version=v1.0&GraphUrl=https://custom.graph.com');
+    const url = 'https://localhost?request=me&method=GET&version=v1.0&GraphUrl=https://custom.graph.com';
+    (window as any).location = new URL(url);
     renderWithProviders(<App />);
     expect(screen.getByTestId('layout')).toBeInTheDocument();
   });

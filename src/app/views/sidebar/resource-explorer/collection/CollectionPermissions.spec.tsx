@@ -1,11 +1,5 @@
 import '@testing-library/jest-dom';
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 jest.mock('../../../../../modules/authentication', () => ({
   authenticationWrapper: {
     logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(),
@@ -52,7 +46,10 @@ const mockUseCollectionPermissions = useCollectionPermissions as jest.MockedFunc
 
 describe('CollectionPermissions', () => {
   const defaultProps = {
-    dismissPopup: jest.fn()
+    dismissPopup: jest.fn(),
+    closePopup: jest.fn(),
+    data: null as any,
+    settings: { title: '' }
   };
 
   it('renders "permissions not found" when no permissions and not fetching', () => {
@@ -92,7 +89,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -147,7 +144,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -167,7 +164,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -189,7 +186,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -223,7 +220,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -249,7 +246,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -271,7 +268,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {
@@ -292,7 +289,7 @@ describe('CollectionPermissions', () => {
     };
     mockUseCollectionPermissions.mockReturnValue({
       getPermissions: jest.fn(),
-      permissions: mockPermissions,
+      permissions: mockPermissions as any,
       isFetching: false
     });
     renderWithProviders(<CollectionPermissions {...defaultProps} />, {

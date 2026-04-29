@@ -1,11 +1,3 @@
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../../telemetry', () => ({
   telemetry: {
     trackEvent: jest.fn(),

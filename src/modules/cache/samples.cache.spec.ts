@@ -5,7 +5,7 @@ jest.mock('localforage', () => ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   config: () => { },
   createInstance: () => {
-    let store: Record<string, string> = {};
+    const store: Record<string, string> = {};
     return {
       getItem: (key: string) => store[key] || undefined,
       setItem: (key: string, value: string) => { store[key] = value; }

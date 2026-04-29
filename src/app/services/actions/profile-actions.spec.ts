@@ -1,4 +1,6 @@
-import { getAgeGroup, getProfileType, getProfileInformation, getBetaProfile, getProfileImage, getTenantInfo } from './profile-actions';
+import {
+  getAgeGroup, getProfileType, getProfileInformation, getBetaProfile, getProfileImage, getTenantInfo
+} from './profile-actions';
 import { ACCOUNT_TYPE } from '../graph-constants';
 
 jest.mock('./query-action-creator-util', () => ({

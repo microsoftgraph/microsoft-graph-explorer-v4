@@ -9,7 +9,7 @@ jest.mock('../actions/profile-actions', () => ({
 
 describe('profile.slice reducer', () => {
   const initialState = {
-    status: 'unset',
+    status: 'unset' as const,
     user: undefined,
     error: undefined
   };

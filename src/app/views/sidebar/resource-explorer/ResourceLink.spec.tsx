@@ -342,7 +342,10 @@ describe('ResourceLink', () => {
       {
         preloadedState: {
           collections: {
-            collections: [{ isDefault: true, paths: [{ key: 'users', url: '/users', method: 'GET', version: 'v1.0' }] }],
+            collections: [{
+              isDefault: true,
+              paths: [{ key: 'users', url: '/users', method: 'GET', version: 'v1.0' }]
+            }],
             saved: false
           }
         }

@@ -30,7 +30,8 @@ jest.mock('./query-input', () => ({
       <button data-testid="change-unknown" onClick={() => props.handleChange('unknown-value')}>Change Unknown</button>
       <button data-testid="set-body" onClick={() => props.handleOnEditorChange('{"key":"value"}')}>Set Body</button>
       <button data-testid="set-bad-json" onClick={() => props.handleOnEditorChange('{bad json}')}>Set Bad JSON</button>
-      <button data-testid="set-plain-body" onClick={() => props.handleOnEditorChange('plain text body')}>Set Plain</button>
+      <button data-testid="set-plain-body"
+        onClick={() => props.handleOnEditorChange('plain text body')}>Set Plain</button>
     </div>
   )
 }));

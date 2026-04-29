@@ -1,9 +1,15 @@
 jest.mock('../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackReactComponent: jest.fn((c: any) => c), trackTabClickEvent: jest.fn() },
+  telemetry: {
+    trackEvent: jest.fn(), trackLinkClickEvent: jest.fn(),
+    trackReactComponent: jest.fn((c: any) => c), trackTabClickEvent: jest.fn()
+  },
   eventTypes: {}, componentNames: {}
 }));
 jest.mock('../../../modules/authentication', () => ({
-  authenticationWrapper: { getAccount: jest.fn(), getToken: jest.fn().mockResolvedValue({ accessToken: 'mock-token' }), logIn: jest.fn(), consentToScopes: jest.fn() }
+  authenticationWrapper: {
+    getAccount: jest.fn(), getToken: jest.fn().mockResolvedValue({ accessToken: 'mock-token' }),
+    logIn: jest.fn(), consentToScopes: jest.fn()
+  }
 }));
 
 jest.mock('./pivot-items/pivot-item', () => ({

@@ -32,7 +32,7 @@ jest.mock('@fluentui/react-components', () => ({
 }));
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Auth } from './Auth';
 import { useAppSelector } from '../../../../../store';
 
@@ -68,17 +68,13 @@ describe('Auth', () => {
   });
 
   it('renders access token after loading', async () => {
+    const state = {
+      profile: { user: { profileType: 'Guest' } },
+      auth: { authToken: { token: true, pending: false } }
+    };
     (useAppSelector as unknown as jest.Mock)
-      .mockImplementation((fn: any) => {
-        const state = {
-          profile: { user: { profileType: 'Guest' } },
-          auth: { authToken: { token: true, pending: false } }
-        };
-        return fn(state);
-      });
+      .mockImplementation((fn: any) => fn(state));
     render(<Auth />);
-    await waitFor(() => {
-      expect(screen.getByText('Access Token')).toBeDefined();
-    });
+    expect(await screen.findByText('Access Token')).toBeDefined();
   });
 });

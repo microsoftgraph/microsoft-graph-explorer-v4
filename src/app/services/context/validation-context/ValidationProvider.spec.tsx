@@ -24,7 +24,7 @@ jest.mock('../../../../modules/validation/validation-service', () => ({
 
 jest.mock('../../../utils/sample-url-generation', () => ({
   parseSampleUrl: jest.fn((url: string) => {
-    if (url.includes('beta')) return { queryVersion: 'beta' };
+    if (url.includes('beta')) {return { queryVersion: 'beta' };}
     return { queryVersion: 'v1.0' };
   })
 }));
@@ -44,7 +44,10 @@ function TestConsumer() {
       <button data-testid="validate-btn" onClick={() => ctx.validate('https://graph.microsoft.com/v1.0/me')}>
         Validate
       </button>
-      <button data-testid="validate-invalid-btn" onClick={() => ctx.validate('https://graph.microsoft.com/v1.0/invalid')}>
+      <button
+        data-testid="validate-invalid-btn"
+        onClick={() => ctx.validate('https://graph.microsoft.com/v1.0/invalid')}
+      >
         Validate Invalid
       </button>
     </div>

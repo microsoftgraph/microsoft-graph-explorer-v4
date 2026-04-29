@@ -16,11 +16,11 @@ describe('collection.util', () => {
 
   describe('getScopesFromPaths', () => {
     it('should extract unique scopes from paths', () => {
-      const paths: ResourcePath[] = [
-        { url: '/me', version: 'v1.0', scope: PERMS_SCOPE.WORK, methods: [] },
-        { url: '/users', version: 'v1.0', scope: PERMS_SCOPE.APPLICATION, methods: [] },
-        { url: '/groups', version: 'v1.0', scope: PERMS_SCOPE.WORK, methods: [] }
-      ];
+      const paths = [
+        { url: '/me', version: 'v1.0', scope: PERMS_SCOPE.WORK, method: '' },
+        { url: '/users', version: 'v1.0', scope: PERMS_SCOPE.APPLICATION, method: '' },
+        { url: '/groups', version: 'v1.0', scope: PERMS_SCOPE.WORK, method: '' }
+      ] as any[];
       const scopes = getScopesFromPaths(paths);
       expect(scopes).toHaveLength(2);
       expect(scopes).toContain(PERMS_SCOPE.WORK);

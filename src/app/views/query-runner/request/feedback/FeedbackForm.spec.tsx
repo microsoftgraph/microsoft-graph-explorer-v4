@@ -2,14 +2,6 @@ import React from 'react';
 import { waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 const mockFloodgateStart = jest.fn();
 const mockFloodgateStop = jest.fn();
 const mockFloodgateGetEngine = jest.fn().mockReturnValue({

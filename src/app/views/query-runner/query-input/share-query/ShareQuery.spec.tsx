@@ -30,24 +30,36 @@ describe('ShareQuery', () => {
   const mockDismiss = jest.fn();
 
   it('renders share link textarea', () => {
-    renderWithProviders(<ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()} />);
+    renderWithProviders(
+      <ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()}
+        data={null as any} settings={{ title: '' }} />
+    );
     const textarea = document.getElementById('share-query-text') as HTMLTextAreaElement;
     expect(textarea).toBeDefined();
     expect(textarea.defaultValue).toBe('https://share-link.com/test');
   });
 
   it('renders copy button', () => {
-    renderWithProviders(<ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()} />);
+    renderWithProviders(
+      <ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()}
+        data={null as any} settings={{ title: '' }} />
+    );
     expect(screen.getByText('Copy')).toBeDefined();
   });
 
   it('renders close button', () => {
-    renderWithProviders(<ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()} />);
+    renderWithProviders(
+      <ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()}
+        data={null as any} settings={{ title: '' }} />
+    );
     expect(screen.getByText('Close')).toBeDefined();
   });
 
   it('calls dismissPopup on close', () => {
-    renderWithProviders(<ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()} />);
+    renderWithProviders(
+      <ShareQuery dismissPopup={mockDismiss} closePopup={jest.fn()}
+        data={null as any} settings={{ title: '' }} />
+    );
     fireEvent.click(screen.getByText('Close'));
     expect(mockDismiss).toHaveBeenCalled();
   });

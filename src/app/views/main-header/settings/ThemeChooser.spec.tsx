@@ -39,7 +39,7 @@ describe('ThemeChooser', () => {
 
   it('renders light and dark radio options', () => {
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'light' } }
     );
     expect(screen.getByText('Light')).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe('ThemeChooser', () => {
 
   it('renders save button', () => {
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'light' } }
     );
     expect(screen.getByRole('button', { name: /Save changes/i })).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('ThemeChooser', () => {
 
   it('renders with dark theme selected', () => {
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'dark' } }
     );
     const darkRadio = screen.getByRole('radio', { name: /Dark/i });
@@ -65,7 +65,7 @@ describe('ThemeChooser', () => {
 
   it('renders with light theme selected', () => {
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'light' } }
     );
     const lightRadio = screen.getByRole('radio', { name: /Light/i });
@@ -76,7 +76,7 @@ describe('ThemeChooser', () => {
     const { telemetry } = require('../../../../telemetry');
     const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'light' } }
     );
     const darkRadio = screen.getByRole('radio', { name: /Dark/i });
@@ -92,7 +92,7 @@ describe('ThemeChooser', () => {
     const { telemetry } = require('../../../../telemetry');
     const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'dark' } }
     );
     const lightRadio = screen.getByRole('radio', { name: /Light/i });
@@ -106,7 +106,7 @@ describe('ThemeChooser', () => {
 
   it('save button calls dismissPopup', () => {
     renderWithProviders(
-      <ThemeChooser dismissPopup={dismissPopup} />,
+      <ThemeChooser {...{ dismissPopup, closePopup: jest.fn(), data: null, settings: { title: '' } } as any} />,
       { preloadedState: { theme: 'light' } }
     );
     fireEvent.click(screen.getByRole('button', { name: /Save changes/i }));

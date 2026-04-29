@@ -63,7 +63,9 @@ import { RevokePermissionsUtil } from './permissions-action-creator.util';
 function createTestStore(overrides: Record<string, any> = {}) {
   return configureStore({
     reducer: {
-      auth: (state = { consentedScopes: ['User.Read', 'Mail.Read'], authToken: { token: true, pending: false } }) => state,
+      auth: (
+        state = { consentedScopes: ['User.Read', 'Mail.Read'], authToken: { token: true, pending: false } }
+      ) => state,
       profile: (state = { user: { id: 'user-id-123' } }) => state,
       queryStatus: (state = null, action: any) =>
         action.type === 'queryStatus/set' ? action.payload : state,

@@ -238,7 +238,10 @@ describe('Tests suffix utilities', () => {
       labels: [],
       children: [{
         segment: 'messages',
-        labels: [{ name: 'v1.0', methods: [{ name: 'GET', documentationUrl: 'https://docs.example.com/get-messages' }] }],
+        labels: [{
+          name: 'v1.0',
+          methods: [{ name: 'GET', documentationUrl: 'https://docs.example.com/get-messages' }]
+        }],
         children: []
       }]
     }];

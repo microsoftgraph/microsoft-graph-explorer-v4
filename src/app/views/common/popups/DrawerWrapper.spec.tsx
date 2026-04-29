@@ -19,7 +19,7 @@ describe('DrawerWrapper', () => {
     popupsProps: {
       settings: {
         title: 'Test Panel',
-        width: 'md'
+        width: 'md' as const
       },
       data: {}
     }
@@ -40,7 +40,7 @@ describe('DrawerWrapper', () => {
   });
 
   it('renders with different drawer sizes', () => {
-    const sizes = ['sm', 'md', 'lg', 'xl'];
+    const sizes: Array<'sm' | 'md' | 'lg' | 'xl'> = ['sm', 'md', 'lg', 'xl'];
     sizes.forEach(width => {
       const props = {
         ...defaultProps,
@@ -117,7 +117,7 @@ describe('DrawerWrapper', () => {
       ...defaultProps,
       popupsProps: {
         ...defaultProps.popupsProps,
-        settings: { ...defaultProps.popupsProps.settings, width: 'unknown' }
+        settings: { ...defaultProps.popupsProps.settings, width: 'unknown' as any }
       }
     };
     const { unmount } = render(<DrawerWrapper {...props} />);
@@ -156,7 +156,7 @@ describe('DrawerWrapper', () => {
       ...defaultProps,
       Component: MockTracker,
       popupsProps: {
-        settings: { title: 'Test', width: 'md' },
+        settings: { title: 'Test', width: 'md' as const },
         data: { key: 'value' }
       }
     };

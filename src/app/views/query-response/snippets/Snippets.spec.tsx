@@ -147,7 +147,10 @@ describe('Snippets', () => {
     });
     const sampleQuerySlice = createSlice({
       name: 'sampleQuery',
-      initialState: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+      initialState: {
+        sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+        sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+      },
       reducers: {}
     });
 

@@ -80,7 +80,10 @@ describe('APICollection', () => {
   };
 
   const defaultProps = {
-    dismissPopup: jest.fn()
+    dismissPopup: jest.fn(),
+    closePopup: jest.fn(),
+    data: null as any,
+    settings: { title: '' }
   };
 
   it('renders loading state initially', () => {

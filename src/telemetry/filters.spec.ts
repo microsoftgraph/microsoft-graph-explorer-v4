@@ -1,4 +1,10 @@
-import { filterTelemetryTypes, sanitizeTelemetryItemUriProperty, addCommonTelemetryItemProperties, filterResizeObserverExceptions, filterRemoteDependencyData } from './filters';
+import {
+  filterTelemetryTypes,
+  sanitizeTelemetryItemUriProperty,
+  addCommonTelemetryItemProperties,
+  filterResizeObserverExceptions,
+  filterRemoteDependencyData
+} from './filters';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 
 // Mock the store module

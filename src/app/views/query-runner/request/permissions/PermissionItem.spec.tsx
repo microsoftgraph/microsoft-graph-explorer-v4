@@ -173,7 +173,10 @@ describe('PermissionItem', () => {
     const consentedPerm = { ...defaultPermission, consented: true };
     const stateWithGrants = {
       ...baseState,
-      auth: { authToken: { token: true, pending: false }, consentedScopes: ['DelegatedPermissionGrant.ReadWrite.All', 'Directory.Read.All'] },
+      auth: {
+        authToken: { token: true, pending: false },
+        consentedScopes: ['DelegatedPermissionGrant.ReadWrite.All', 'Directory.Read.All']
+      },
       permissionGrants: {
         pending: false,
         error: null,
@@ -199,7 +202,10 @@ describe('PermissionItem', () => {
     const consentedPerm = { ...defaultPermission, consented: true };
     const stateWithGrants = {
       ...baseState,
-      auth: { authToken: { token: true, pending: false }, consentedScopes: ['DelegatedPermissionGrant.ReadWrite.All', 'Directory.Read.All'] },
+      auth: {
+        authToken: { token: true, pending: false },
+        consentedScopes: ['DelegatedPermissionGrant.ReadWrite.All', 'Directory.Read.All']
+      },
       permissionGrants: {
         pending: false,
         error: null,

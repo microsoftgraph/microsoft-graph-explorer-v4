@@ -261,7 +261,8 @@ describe('AuthenticationWrapper', () => {
       };
       // First call for getAccount returns empty (multiple accounts, no homeAccountId)
       // But getAllAccounts returns one account for the fallback path
-      mockMsal.getAllAccounts.mockReturnValueOnce([cachedAccount, cachedAccount]); // getAccount -> multiple, no localStorage
+      // getAccount -> multiple, no localStorage
+      mockMsal.getAllAccounts.mockReturnValueOnce([cachedAccount, cachedAccount]);
       mockMsal.getAllAccounts.mockReturnValue([cachedAccount]); // fallback in getToken
       mockMsal.acquireTokenSilent.mockResolvedValue({ accessToken: 'cached-token', account: cachedAccount } as any);
 
@@ -836,7 +837,8 @@ describe('AuthenticationWrapper', () => {
         localAccountId: 'l1'
       };
       mockMsal.getAllAccounts.mockReturnValue([account]);
-      mockMsal.acquireTokenSilent.mockRejectedValue(new (require('@azure/msal-browser').InteractionRequiredAuthError)('interaction_required'));
+      const { InteractionRequiredAuthError } = require('@azure/msal-browser');
+      mockMsal.acquireTokenSilent.mockRejectedValue(new InteractionRequiredAuthError('interaction_required'));
       mockMsal.loginPopup.mockRejectedValue(error);
 
       localStorage.setItem('homeAccountKey', 'home-1');

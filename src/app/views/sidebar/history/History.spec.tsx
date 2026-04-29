@@ -2,26 +2,30 @@ import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../../modules/authentication', () => ({
-  authenticationWrapper: { logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(), logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn() }
+  authenticationWrapper: {
+    logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(),
+    getSessionId: jest.fn(), logInWithOther: jest.fn(),
+    clearSession: jest.fn(), refreshToken: jest.fn()
+  }
 }));
 jest.mock('../../../../modules/authentication/authentication-error-hints', () => ({
   getSignInAuthErrorHint: jest.fn(), signInAuthError: jest.fn()
 }));
 jest.mock('../../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({}) },
+  telemetry: {
+    trackEvent: jest.fn(), trackTabClickEvent: jest.fn(),
+    trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(),
+    trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
+  },
   componentNames: {}, eventTypes: {}, errorTypes: {}
 }));
 jest.mock('../../../../modules/cache/history-utils', () => ({
-  historyCache: { bulkRemoveHistoryData: jest.fn(), readHistoryData: jest.fn().mockResolvedValue([]), removeHistoryData: jest.fn() }
+  historyCache: {
+    bulkRemoveHistoryData: jest.fn(),
+    readHistoryData: jest.fn().mockResolvedValue([]),
+    removeHistoryData: jest.fn()
+  }
 }));
 jest.mock('../../../utils/translate-messages', () => ({
   translateMessage: (msg: string) => msg
@@ -125,9 +129,18 @@ describe('History component', () => {
 
   it('categorizes items as today, yesterday, and older', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/todayitem' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(1, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/yesterdayitem' }),
-      makeItem({ index: 2, createdAt: uniqueTimestamp(10, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/olditem' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/todayitem'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(1, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/yesterdayitem'
+      }),
+      makeItem({
+        index: 2, createdAt: uniqueTimestamp(10, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/olditem'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -191,8 +204,14 @@ describe('History component', () => {
 
   it('filters history items via search box', () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/messages' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/contacts' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/messages'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/contacts'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -217,7 +236,10 @@ describe('History component', () => {
 
   it('renders beta URL items after expanding group', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/beta/me/profile' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/beta/me/profile'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -234,8 +256,14 @@ describe('History component', () => {
 
   it('shows search result count announcement', () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/messages' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/messages'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -275,7 +303,10 @@ describe('History component', () => {
 
   it('shows Remove from collection button for items in collection', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET'
+      })
     ];
     const collections = [{
       isDefault: true,
@@ -310,9 +341,18 @@ describe('History component', () => {
 
   it('displays updated result count after filtering', () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/messages' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/contacts' }),
-      makeItem({ index: 2, createdAt: uniqueTimestamp(0, '10:02:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/events' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/messages'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/contacts'
+      }),
+      makeItem({
+        index: 2, createdAt: uniqueTimestamp(0, '10:02:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/events'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -325,7 +365,10 @@ describe('History component', () => {
 
   it('clicking a history item dispatches setSampleQuery and setQueryResponse', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', status: 200, statusText: 'OK', duration: 100 })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', status: 200, statusText: 'OK', duration: 100
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -347,7 +390,10 @@ describe('History component', () => {
   it('clicking Add to collection dispatches addResourcePaths', async () => {
     const { addResourcePaths } = require('../../../services/slices/collections.slice');
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET'
+      })
     ];
     const { container } = renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -370,7 +416,10 @@ describe('History component', () => {
   it('clicking Remove from collection dispatches removeResourcePaths', async () => {
     const { removeResourcePaths } = require('../../../services/slices/collections.slice');
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET'
+      })
     ];
     const collections = [{
       isDefault: true,
@@ -485,7 +534,10 @@ describe('History component', () => {
 
   it('search is case-insensitive', () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/Messages' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/Messages'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -497,7 +549,10 @@ describe('History component', () => {
 
   it('clicking a history item with beta URL dispatches correct version', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/beta/me/profile', method: 'GET', status: 200 })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/beta/me/profile', method: 'GET', status: 200
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -518,7 +573,10 @@ describe('History component', () => {
   it('item action menu Export button exports single item', async () => {
     const { exportQuery, createHarEntry, generateHar } = require('./har-utils');
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET', status: 200 })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET', status: 200
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -550,7 +608,10 @@ describe('History component', () => {
   it('item action menu Delete button deletes single item', async () => {
     const { historyCache } = require('../../../../modules/cache/history-utils');
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET', status: 200 })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET', status: 200
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -585,9 +646,18 @@ describe('History component', () => {
 
   it('renders multiple items sorted by createdAt DESC', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/first' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(0, '10:05:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/second' }),
-      makeItem({ index: 2, createdAt: uniqueTimestamp(0, '10:10:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/third' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/first'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(0, '10:05:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/second'
+      }),
+      makeItem({
+        index: 2, createdAt: uniqueTimestamp(0, '10:10:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/third'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -608,7 +678,10 @@ describe('History component', () => {
     const { addResourcePaths } = require('../../../services/slices/collections.slice');
     addResourcePaths.mockClear();
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/messages', method: 'POST' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/messages', method: 'POST'
+      })
     ];
     const { container } = renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -632,7 +705,10 @@ describe('History component', () => {
     const { removeResourcePaths } = require('../../../services/slices/collections.slice');
     removeResourcePaths.mockClear();
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/beta/me/profile', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/beta/me/profile', method: 'GET'
+      })
     ];
     const collections = [{
       isDefault: true,
@@ -659,7 +735,12 @@ describe('History component', () => {
 
   it('handles items with empty body and headers in view query', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', body: null, headers: [], result: '{"id":"1"}', responseHeaders: { 'content-type': 'application/json' }, status: 200, duration: 50 })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me',
+        body: null, headers: [], result: '{"id":"1"}', responseHeaders: { 'content-type': 'application/json' },
+        status: 200, duration: 50
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -680,7 +761,10 @@ describe('History component', () => {
 
   it('handles item with error status (400+)', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/invalid', status: 403, statusText: 'Forbidden', method: 'DELETE' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/invalid', status: 403, statusText: 'Forbidden', method: 'DELETE'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -698,7 +782,10 @@ describe('History component', () => {
 
   it('isInCollection returns false when no default collection exists', async () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET'
+      })
     ];
     const collections = [{
       isDefault: false,
@@ -726,7 +813,10 @@ describe('History component', () => {
     const { addResourcePaths } = require('../../../services/slices/collections.slice');
     addResourcePaths.mockClear();
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me', method: 'GET' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me', method: 'GET'
+      })
     ];
     const { container } = renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -754,7 +844,10 @@ describe('History component', () => {
     const { addResourcePaths } = require('../../../services/slices/collections.slice');
     addResourcePaths.mockClear();
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/beta/me/profile', method: 'POST' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/beta/me/profile', method: 'POST'
+      })
     ];
     const { container } = renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }
@@ -780,8 +873,14 @@ describe('History component', () => {
 
   it('search reset shows all items again', () => {
     const items = [
-      makeItem({ index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/messages' }),
-      makeItem({ index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'), url: 'https://graph.microsoft.com/v1.0/me/contacts' })
+      makeItem({
+        index: 0, createdAt: uniqueTimestamp(0, '10:00:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/messages'
+      }),
+      makeItem({
+        index: 1, createdAt: uniqueTimestamp(0, '10:01:00.000Z'),
+        url: 'https://graph.microsoft.com/v1.0/me/contacts'
+      })
     ];
     renderWithProviders(<History />, {
       preloadedState: { history: items, collections: { collections: [], saved: false } }

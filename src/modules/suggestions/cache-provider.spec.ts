@@ -2,7 +2,8 @@ import { IParsedOpenApiResponse } from '../../types/open-api';
 import { storeSuggestionsInCache, getSuggestionsFromCache } from './cache-provider';
 
 describe('Cache provider should', () => {
-  it('return options from local storage which is null because suggestions are expired when getSuggestionsFromCache is called', async () => {
+  it('return options from local storage which is null because suggestions' +
+    ' are expired when getSuggestionsFromCache is called', async () => {
     const openApiContent: IParsedOpenApiResponse = {
       url: 'https://api.github.com/search/users?q=tom',
       parameters: [

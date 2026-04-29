@@ -25,7 +25,7 @@ describe('permission-grants slice', () => {
     it('should set permissions and pending false on fulfilled', () => {
       const prevState = { pending: true, error: null, permissions: [] };
       const permissions: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read Mail.Read', principalId: '' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read Mail.Read' }
       ];
       const state = permissionGrantsReducer(prevState, {
         type: fetchAllPrincipalGrants.fulfilled.type,
@@ -46,7 +46,7 @@ describe('permission-grants slice', () => {
 
     it('should preserve existing permissions on rejected', () => {
       const existingPermissions: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: 'user-1' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'User.Read' }
       ];
       const prevState = { pending: true, error: null, permissions: existingPermissions };
       const state = permissionGrantsReducer(prevState, {
@@ -60,7 +60,7 @@ describe('permission-grants slice', () => {
   describe('getAllPrincipalGrant', () => {
     it('should return scopes for AllPrincipals consent type', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read Mail.Read', principalId: '' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read Mail.Read' }
       ];
       const result = getAllPrincipalGrant(grants);
       expect(result).toEqual(['User.Read', 'Mail.Read']);
@@ -68,7 +68,7 @@ describe('permission-grants slice', () => {
 
     it('should return empty array when no AllPrincipals grant', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: '123' }
+        { clientId: '', consentType: 'Principal', principalId: '123', resourceId: '', scope: 'User.Read' }
       ];
       const result = getAllPrincipalGrant(grants);
       expect(result).toEqual([]);
@@ -88,7 +88,8 @@ describe('permission-grants slice', () => {
   describe('getSinglePrincipalGrant', () => {
     it('should return scopes for matching principal', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read Files.Read', principalId: 'user-123' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-123',
+          resourceId: '', scope: 'User.Read Files.Read' }
       ];
       const result = getSinglePrincipalGrant(grants, 'user-123');
       expect(result).toEqual(['User.Read', 'Files.Read']);
@@ -96,7 +97,7 @@ describe('permission-grants slice', () => {
 
     it('should return empty array when principal not found', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: 'user-123' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-123', resourceId: '', scope: 'User.Read' }
       ];
       const result = getSinglePrincipalGrant(grants, 'user-456');
       expect(result).toEqual([]);
@@ -109,7 +110,7 @@ describe('permission-grants slice', () => {
 
     it('should return empty array for empty principalId', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: 'user-123' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-123', resourceId: '', scope: 'User.Read' }
       ];
       const result = getSinglePrincipalGrant(grants, '');
       expect(result).toEqual([]);
@@ -117,7 +118,8 @@ describe('permission-grants slice', () => {
 
     it('should return scopes split by space for matching principal with multiple scopes', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read Mail.Send Files.ReadWrite', principalId: 'user-abc' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-abc',
+          resourceId: '', scope: 'User.Read Mail.Send Files.ReadWrite' }
       ];
       const result = getSinglePrincipalGrant(grants, 'user-abc');
       expect(result).toEqual(['User.Read', 'Mail.Send', 'Files.ReadWrite']);
@@ -133,8 +135,8 @@ describe('permission-grants slice', () => {
     it('should handle fulfilled with multiple permission grants', () => {
       const prevState = { pending: true, error: null, permissions: [] };
       const permissions: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read Mail.Read', principalId: '' },
-        { consentType: 'Principal', scope: 'Files.ReadWrite', principalId: 'user-1' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read Mail.Read' },
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'Files.ReadWrite' }
       ];
       const state = permissionGrantsReducer(prevState, {
         type: fetchAllPrincipalGrants.fulfilled.type,
@@ -147,7 +149,12 @@ describe('permission-grants slice', () => {
     });
 
     it('should handle fulfilled with empty permissions array', () => {
-      const prevState = { pending: true, error: null, permissions: [{ consentType: 'Principal', scope: 'old', principalId: 'x' }] as any[] };
+      const prevState = {
+        pending: true, error: null,
+        permissions: [
+          { clientId: '', consentType: 'Principal', principalId: 'x', resourceId: '', scope: 'old' }
+        ] as any[]
+      };
       const state = permissionGrantsReducer(prevState, {
         type: fetchAllPrincipalGrants.fulfilled.type,
         payload: []
@@ -165,8 +172,8 @@ describe('permission-grants slice', () => {
 
     it('should not modify permissions on rejected', () => {
       const permissions: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read', principalId: '' },
-        { consentType: 'Principal', scope: 'Mail.Send', principalId: 'user-2' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read' },
+        { clientId: '', consentType: 'Principal', principalId: 'user-2', resourceId: '', scope: 'Mail.Send' }
       ];
       const prevState = { pending: true, error: null, permissions };
       const state = permissionGrantsReducer(prevState, {
@@ -181,8 +188,9 @@ describe('permission-grants slice', () => {
   describe('getAllPrincipalGrant edge cases', () => {
     it('should return scopes from AllPrincipals when multiple grants exist', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'Mail.Send', principalId: 'user-1' },
-        { consentType: 'AllPrincipals', scope: 'User.Read Directory.Read.All', principalId: '' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'Mail.Send' },
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '',
+          scope: 'User.Read Directory.Read.All' }
       ];
       const result = getAllPrincipalGrant(grants);
       expect(result).toEqual(['User.Read', 'Directory.Read.All']);
@@ -190,8 +198,8 @@ describe('permission-grants slice', () => {
 
     it('should return only first AllPrincipals match', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read', principalId: '' },
-        { consentType: 'AllPrincipals', scope: 'Mail.Read', principalId: '' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read' },
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'Mail.Read' }
       ];
       const result = getAllPrincipalGrant(grants);
       expect(result).toEqual(['User.Read']);
@@ -216,8 +224,8 @@ describe('permission-grants slice', () => {
     it('should handle fulfilled with permissions from checkScopesConsentType', () => {
       const prevState = { pending: true, error: null, permissions: [] };
       const permissions: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'User.Read Mail.Read', principalId: '' },
-        { consentType: 'Principal', scope: 'Files.Read', principalId: 'user-1' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read Mail.Read' },
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'Files.Read' }
       ];
       const state = permissionGrantsReducer(prevState, {
         type: fetchAllPrincipalGrants.fulfilled.type,
@@ -253,7 +261,9 @@ describe('permission-grants slice', () => {
 
       const fulfilledState = permissionGrantsReducer(pendingState, {
         type: fetchAllPrincipalGrants.fulfilled.type,
-        payload: [{ consentType: 'AllPrincipals', scope: 'User.Read', principalId: '' }]
+        payload: [
+          { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'User.Read' }
+        ] as any[]
       });
       expect(fulfilledState.pending).toBe(false);
       expect(fulfilledState.permissions).toHaveLength(1);
@@ -261,7 +271,7 @@ describe('permission-grants slice', () => {
 
     it('should keep permissions from before if rejected after having them', () => {
       const existingPerms: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'Directory.Read.All', principalId: '' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'Directory.Read.All' }
       ];
       const prevState = { pending: true, error: null, permissions: existingPerms };
       const state = permissionGrantsReducer(prevState, {
@@ -273,10 +283,10 @@ describe('permission-grants slice', () => {
 
     it('should overwrite permissions on fulfilled even if they existed before', () => {
       const existingPerms: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'old.scope', principalId: 'old-user' }
+        { clientId: '', consentType: 'Principal', principalId: 'old-user', resourceId: '', scope: 'old.scope' }
       ];
       const newPerms: IPermissionGrant[] = [
-        { consentType: 'AllPrincipals', scope: 'new.scope', principalId: '' }
+        { clientId: '', consentType: 'AllPrincipals', principalId: '', resourceId: '', scope: 'new.scope' }
       ];
       const prevState = { pending: true, error: null, permissions: existingPerms };
       const state = permissionGrantsReducer(prevState, {
@@ -290,7 +300,7 @@ describe('permission-grants slice', () => {
   describe('getSinglePrincipalGrant additional edge cases', () => {
     it('should handle grants with single scope', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: 'user-1' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'User.Read' }
       ];
       const result = getSinglePrincipalGrant(grants, 'user-1');
       expect(result).toEqual(['User.Read']);
@@ -298,8 +308,8 @@ describe('permission-grants slice', () => {
 
     it('should handle multiple principal grants and return matching one', () => {
       const grants: IPermissionGrant[] = [
-        { consentType: 'Principal', scope: 'User.Read', principalId: 'user-1' },
-        { consentType: 'Principal', scope: 'Mail.Send Files.Read', principalId: 'user-2' }
+        { clientId: '', consentType: 'Principal', principalId: 'user-1', resourceId: '', scope: 'User.Read' },
+        { clientId: '', consentType: 'Principal', principalId: 'user-2', resourceId: '', scope: 'Mail.Send Files.Read' }
       ];
       const result = getSinglePrincipalGrant(grants, 'user-2');
       expect(result).toEqual(['Mail.Send', 'Files.Read']);

@@ -32,8 +32,8 @@ jest.mock('./auth-util-components/ProfileButton', () => ({
       tokenPresent
         ? <div data-testid="profile">
             Profile
-            <button data-testid="sign-in-other-btn" onClick={signInWithOther}>Other</button>
-          </div>
+          <button data-testid="sign-in-other-btn" onClick={signInWithOther}>Other</button>
+        </div>
         : <button data-testid="sign-in-btn" onClick={signIn}>Sign In</button>
   )
 }));
@@ -85,7 +85,7 @@ describe('Authentication component', () => {
   it('shows spinner during sign in', async () => {
     const { authenticationWrapper } = require('../../../modules/authentication');
     // Make logIn return a pending promise
-    authenticationWrapper.logIn.mockReturnValue(new Promise(() => {}));
+    authenticationWrapper.logIn.mockReturnValue(new Promise(jest.fn()));
 
     renderWithProviders(<Authentication />);
     fireEvent.click(screen.getByTestId('sign-in-btn'));

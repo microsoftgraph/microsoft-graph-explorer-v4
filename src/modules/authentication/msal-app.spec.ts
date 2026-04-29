@@ -81,7 +81,9 @@ describe('msal-app', () => {
 
     telemetry.trackEvent.mockClear();
     loggerCallback(LogLevel.Info, 'test info message', false);
-    expect(telemetry.trackEvent).toHaveBeenCalledWith('MSAL Authentication', expect.objectContaining({ LogLevel: 'Info' }));
+    expect(telemetry.trackEvent).toHaveBeenCalledWith(
+      'MSAL Authentication', expect.objectContaining({ LogLevel: 'Info' })
+    );
   });
 
   it('logger callback handles Warning level', () => {

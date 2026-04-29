@@ -2,22 +2,21 @@ import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../../modules/authentication', () => ({
-  authenticationWrapper: { logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(), logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn() }
+  authenticationWrapper: {
+    logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(),
+    logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn()
+  }
 }));
 jest.mock('../../../../modules/authentication/authentication-error-hints', () => ({
   getSignInAuthErrorHint: jest.fn(), signInAuthError: jest.fn()
 }));
 jest.mock('../../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({}) },
+  telemetry: {
+    trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(),
+    trackLinkClickEvent: jest.fn(), trackException: jest.fn(),
+    getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
+  },
   componentNames: {}, eventTypes: {}, errorTypes: {}
 }));
 jest.mock('../../../utils/translate-messages', () => ({
@@ -41,7 +40,10 @@ describe('ResponseMessages component', () => {
     const { container } = renderWithProviders(<ResponseMessages />, {
       preloadedState: {
         graphResponse: { isLoadingData: false, response: { body: undefined, headers: undefined } },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -59,7 +61,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -78,7 +83,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -96,7 +104,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -171,7 +182,10 @@ describe('ResponseMessages component', () => {
             headers: { 'content-type': 'application/json' }
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -190,7 +204,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -209,7 +226,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -230,7 +250,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: 'valid-token', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'COMPLETE'
       }
@@ -248,7 +271,10 @@ describe('ResponseMessages component', () => {
             headers: undefined
           }
         },
-        sampleQuery: { sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET', sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0' },
+        sampleQuery: {
+          sampleUrl: 'https://graph.microsoft.com/v1.0/me', selectedVerb: 'GET',
+          sampleBody: undefined, sampleHeaders: [], selectedVersion: 'v1.0'
+        },
         auth: { authToken: { token: '', pending: false }, consentedScopes: [] },
         graphExplorerMode: 'TryIt'
       }

@@ -10,19 +10,34 @@ let mockModalProps: any = null;
 jest.mock('./DialogWrapper', () => ({
   DialogWrapper: (props: any) => {
     mockDialogProps = props;
-    return <div data-testid="dialog">Dialog<button data-testid="dialog-close" onClick={() => props.closePopup('result')}>Close</button><button data-testid="dialog-dismiss" onClick={props.dismissPopup}>Dismiss</button></div>;
+    return (
+      <div data-testid="dialog">Dialog
+        <button data-testid="dialog-close" onClick={() => props.closePopup('result')}>Close</button>
+        <button data-testid="dialog-dismiss" onClick={props.dismissPopup}>Dismiss</button>
+      </div>
+    );
   }
 }));
 jest.mock('./ModalWrapper', () => ({
   ModalWrapper: (props: any) => {
     mockModalProps = props;
-    return <div data-testid="modal">Modal<button data-testid="modal-close" onClick={() => props.closePopup(null)}>Close</button><button data-testid="modal-dismiss" onClick={props.dismissPopup}>Dismiss</button></div>;
+    return (
+      <div data-testid="modal">Modal
+        <button data-testid="modal-close" onClick={() => props.closePopup(null)}>Close</button>
+        <button data-testid="modal-dismiss" onClick={props.dismissPopup}>Dismiss</button>
+      </div>
+    );
   }
 }));
 jest.mock('./DrawerWrapper', () => ({
   DrawerWrapper: (props: any) => {
     mockDrawerProps = props;
-    return <div data-testid="drawer">Drawer<button data-testid="drawer-close" onClick={() => props.closePopup('saved')}>Close</button><button data-testid="drawer-dismiss" onClick={props.dismissPopup}>Dismiss</button></div>;
+    return (
+      <div data-testid="drawer">Drawer
+        <button data-testid="drawer-close" onClick={() => props.closePopup('saved')}>Close</button>
+        <button data-testid="drawer-dismiss" onClick={props.dismissPopup}>Dismiss</button>
+      </div>
+    );
   }
 }));
 jest.mock('../error-boundary/ErrorBoundary', () => ({

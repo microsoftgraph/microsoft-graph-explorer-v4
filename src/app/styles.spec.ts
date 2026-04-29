@@ -14,7 +14,9 @@ describe('Style modules', () => {
   });
 
   it('useSuggestionStyles is defined', () => {
-    const { useSuggestionStyles } = require('./views/query-runner/query-input/auto-complete/suggestion-list/SuggestionsList.styles');
+    const { useSuggestionStyles } = require(
+      './views/query-runner/query-input/auto-complete/suggestion-list/SuggestionsList.styles'
+    );
     expect(useSuggestionStyles).toBeDefined();
   });
 

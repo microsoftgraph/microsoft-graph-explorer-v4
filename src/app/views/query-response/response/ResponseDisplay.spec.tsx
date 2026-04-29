@@ -3,7 +3,9 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 jest.mock('../../common', () => ({
-  Monaco: (props: any) => <div data-testid="monaco" data-language={props.language}>{String(props.body).substring(0, 50)}</div>,
+  Monaco: (props: any) => (
+    <div data-testid="monaco" data-language={props.language}>{String(props.body).substring(0, 50)}</div>
+  ),
   Image: (props: any) => <div data-testid="image">{props.alt}</div>
 }));
 jest.mock('../../../services/actions/query-action-creator-util', () => ({

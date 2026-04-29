@@ -1,11 +1,3 @@
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../telemetry', () => ({
   telemetry: { trackEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackReactComponent: jest.fn((c: any) => c) },
   componentNames: { MICROSOFT_APIS_TERMS_OF_USE_LINK: 'terms', MICROSOFT_PRIVACY_STATEMENT_LINK: 'privacy' },

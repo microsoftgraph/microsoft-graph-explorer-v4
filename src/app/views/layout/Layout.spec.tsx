@@ -2,22 +2,21 @@ import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../modules/authentication', () => ({
-  authenticationWrapper: { logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(), logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn() }
+  authenticationWrapper: {
+    logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(),
+    logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn()
+  }
 }));
 jest.mock('../../../modules/authentication/authentication-error-hints', () => ({
   getSignInAuthErrorHint: jest.fn(), signInAuthError: jest.fn()
 }));
 jest.mock('../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({}) },
+  telemetry: {
+    trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(),
+    trackLinkClickEvent: jest.fn(), trackException: jest.fn(),
+    getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
+  },
   componentNames: {}, eventTypes: {}, errorTypes: {}
 }));
 jest.mock('../../utils/translate-messages', () => ({
@@ -33,7 +32,8 @@ jest.mock('../query-runner/request/Request', () => ({
   __esModule: true,
   default: ({ handleOnEditorChange }: any) => (
     <div data-testid="request">
-      <button data-testid="editor-change-btn" onClick={() => handleOnEditorChange && handleOnEditorChange('new body content')}>Change</button>
+      <button data-testid="editor-change-btn"
+        onClick={() => handleOnEditorChange && handleOnEditorChange('new body content')}>Change</button>
     </div>
   )
 }));
@@ -724,7 +724,7 @@ describe('Layout component', () => {
       ([action]: any) => action.type === 'sampleQuery/setSampleQuery'
     );
     expect(setSampleQueryAction).toBeDefined();
-    expect(setSampleQueryAction![0].payload.sampleBody).toBe('new body content');
+    expect((setSampleQueryAction![0] as any).payload.sampleBody).toBe('new body content');
     dispatchSpy.mockRestore();
   });
 

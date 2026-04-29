@@ -106,14 +106,18 @@ describe('ValidationService.validate edge cases', () => {
   });
 
   it('should throw warning for placeholders in URL', () => {
-    expect(() => ValidationService.validate('https://graph.microsoft.com/v1.0/users/{user-id}', [])).toThrow(ValidationError);
+    expect(
+      () => ValidationService.validate('https://graph.microsoft.com/v1.0/users/{user-id}', [])
+    ).toThrow(ValidationError);
   });
 
   it('should throw warning when resource not found but resources provided', () => {
     const resources = [
       { segment: '/users', labels: [], children: [], version: 'v1.0' }
     ];
-    expect(() => ValidationService.validate('https://graph.microsoft.com/v1.0/nonexistent', resources as any)).toThrow(ValidationError);
+    expect(
+      () => ValidationService.validate('https://graph.microsoft.com/v1.0/nonexistent', resources as any)
+    ).toThrow(ValidationError);
   });
 
   it('should return true for valid URL with empty resources', () => {

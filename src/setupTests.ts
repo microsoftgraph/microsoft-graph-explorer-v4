@@ -16,3 +16,9 @@ Object.defineProperty(global, 'crypto', {
 
 // Mock MSAL
 jest.mock('@azure/msal-browser');
+
+(global as any).ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn()
+}));

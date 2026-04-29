@@ -2,22 +2,22 @@ import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-beforeAll(() => {
-  (global as any).ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  };
-});
-
 jest.mock('../../../../modules/authentication', () => ({
-  authenticationWrapper: { logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(), getSessionId: jest.fn(), logInWithOther: jest.fn(), clearSession: jest.fn(), refreshToken: jest.fn() }
+  authenticationWrapper: {
+    logIn: jest.fn(), logOut: jest.fn(), getAccount: jest.fn(),
+    getSessionId: jest.fn(), logInWithOther: jest.fn(),
+    clearSession: jest.fn(), refreshToken: jest.fn()
+  }
 }));
 jest.mock('../../../../modules/authentication/authentication-error-hints', () => ({
   getSignInAuthErrorHint: jest.fn(), signInAuthError: jest.fn()
 }));
 jest.mock('../../../../telemetry', () => ({
-  telemetry: { trackEvent: jest.fn(), trackTabClickEvent: jest.fn(), trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(), trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({}) },
+  telemetry: {
+    trackEvent: jest.fn(), trackTabClickEvent: jest.fn(),
+    trackCopyButtonClickEvent: jest.fn(), trackLinkClickEvent: jest.fn(),
+    trackException: jest.fn(), getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
+  },
   componentNames: { MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK: 'docs-link' }, eventTypes: {}, errorTypes: {}
 }));
 jest.mock('../../../utils/translate-messages', () => ({
@@ -119,8 +119,14 @@ describe('SampleQueries component', () => {
 
   it('displays group names from sample queries', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -138,7 +144,10 @@ describe('SampleQueries component', () => {
 
   it('shows search results count', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -155,7 +164,10 @@ describe('SampleQueries component', () => {
 
   it('renders query items with method badges', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: 'https://docs.microsoft.com' }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: 'https://docs.microsoft.com'
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -176,8 +188,14 @@ describe('SampleQueries component', () => {
 
   it('shows lock icon for non-GET methods when not signed in', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'create user', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null },
-      { id: 's2', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'create user',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null
+      },
+      {
+        id: 's2', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -199,8 +217,14 @@ describe('SampleQueries component', () => {
 
   it('filters queries when search input is changed', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -221,8 +245,14 @@ describe('SampleQueries component', () => {
 
   it('resets queries when search is cleared', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -244,9 +274,18 @@ describe('SampleQueries component', () => {
 
   it('renders multiple categories correctly', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's3', category: 'Mail', method: 'GET', humanName: 'my messages', requestUrl: '/v1.0/me/messages', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's3', category: 'Mail', method: 'GET', humanName: 'my messages',
+        requestUrl: '/v1.0/me/messages', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -265,13 +304,20 @@ describe('SampleQueries component', () => {
 
   it('renders sample queries when authenticated', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'create user', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'create user',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
       preloadedState: {
         samples: { queries, pending: false, error: null },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         sidebarProperties: { showSidebar: true, mobileScreen: false }
       }
@@ -287,9 +333,18 @@ describe('SampleQueries component', () => {
 
   it('filters queries and shows filtered results count', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's3', category: 'Users', method: 'GET', humanName: 'list users', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's3', category: 'Users', method: 'GET', humanName: 'list users',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -310,7 +365,10 @@ describe('SampleQueries component', () => {
 
   it('renders doc link icon for queries with docLink', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: 'https://docs.microsoft.com/me' }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: 'https://docs.microsoft.com/me'
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -329,9 +387,18 @@ describe('SampleQueries component', () => {
 
   it('handles multiple methods in same category', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'get user', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Users', method: 'POST', humanName: 'create user', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null },
-      { id: 's3', category: 'Users', method: 'PATCH', humanName: 'update user', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: '{}', docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'get user',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Users', method: 'POST', humanName: 'create user',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{}', docLink: null
+      },
+      {
+        id: 's3', category: 'Users', method: 'PATCH', humanName: 'update user',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: '{}', docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -365,7 +432,10 @@ describe('SampleQueries component', () => {
 
   it('selects a sample query when clicked (GET, not signed in)', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -389,8 +459,14 @@ describe('SampleQueries component', () => {
 
   it('does not select POST sample when not signed in', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'create user', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{"name":"test"}', docLink: null },
-      { id: 's2', category: 'Users', method: 'GET', humanName: 'get profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'create user',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{"name":"test"}', docLink: null
+      },
+      {
+        id: 's2', category: 'Users', method: 'GET', humanName: 'get profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -415,13 +491,20 @@ describe('SampleQueries component', () => {
 
   it('selects POST sample when signed in', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'create user', requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{"displayName":"Test"}', docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'create user',
+        requestUrl: '/v1.0/users', headers: [], tip: null, postBody: '{"displayName":"Test"}', docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
       preloadedState: {
         samples: { queries, pending: false, error: null },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
         auth: { authToken: { token: 'valid-token', pending: false }, consentedScopes: ['User.ReadWrite'] },
         sidebarProperties: { showSidebar: true, mobileScreen: false }
       }
@@ -438,7 +521,10 @@ describe('SampleQueries component', () => {
 
   it('displays tip message when query has a tip', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: 'This requires User.Read permission', postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: 'This requires User.Read permission', postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -460,13 +546,21 @@ describe('SampleQueries component', () => {
 
   it('parses JSON sample body when selecting a query with postBody', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'create item', requestUrl: '/v1.0/items', headers: [{ name: 'Content-Type', value: 'application/json' }], tip: null, postBody: '{"name":"item1"}', docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'create item',
+        requestUrl: '/v1.0/items', headers: [{ name: 'Content-Type', value: 'application/json' }],
+        tip: null, postBody: '{"name":"item1"}', docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
       preloadedState: {
         samples: { queries, pending: false, error: null },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
         auth: { authToken: { token: 'valid-token', pending: false }, consentedScopes: [] },
         sidebarProperties: { showSidebar: true, mobileScreen: false }
       }
@@ -482,13 +576,20 @@ describe('SampleQueries component', () => {
 
   it('handles non-JSON postBody gracefully', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'POST', humanName: 'raw body', requestUrl: '/v1.0/items', headers: [], tip: null, postBody: 'plain text body', docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'POST', humanName: 'raw body',
+        requestUrl: '/v1.0/items', headers: [], tip: null, postBody: 'plain text body', docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
       preloadedState: {
         samples: { queries, pending: false, error: null },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
         auth: { authToken: { token: 'valid-token', pending: false }, consentedScopes: [] },
         sidebarProperties: { showSidebar: true, mobileScreen: false }
       }
@@ -503,8 +604,14 @@ describe('SampleQueries component', () => {
 
   it('toggles group open/closed on Enter key', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups', requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Groups', method: 'GET', humanName: 'all groups',
+        requestUrl: '/v1.0/groups', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -526,7 +633,10 @@ describe('SampleQueries component', () => {
 
   it('toggles group with space key', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -547,7 +657,10 @@ describe('SampleQueries component', () => {
 
   it('auto-selects my profile on first load in desktop mode', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -567,7 +680,10 @@ describe('SampleQueries component', () => {
 
   it('does not auto-select on mobile', () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     const { telemetry } = require('../../../../telemetry');
@@ -589,13 +705,20 @@ describe('SampleQueries component', () => {
   it('calls substituteTokens when profile exists', async () => {
     const { substituteTokens } = require('../../../utils/token-helpers');
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
       preloadedState: {
         samples: { queries, pending: false, error: null },
-        profile: { status: 'success', user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' }, error: null },
+        profile: {
+          status: 'success',
+          user: { id: '1', displayName: 'Test', emailAddress: 'test@test.com', profileImageUrl: '' },
+          error: null
+        },
         auth: { authToken: { token: 'token', pending: false }, consentedScopes: [] },
         sidebarProperties: { showSidebar: true, mobileScreen: false }
       }
@@ -611,7 +734,10 @@ describe('SampleQueries component', () => {
 
   it('selects sample query via Enter key on leaf item', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {
@@ -649,8 +775,14 @@ describe('SampleQueries component', () => {
 
   it('toggles group closed then open via keyboard Enter', async () => {
     const queries = [
-      { id: 's1', category: 'Users', method: 'GET', humanName: 'my profile', requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null },
-      { id: 's2', category: 'Mail', method: 'GET', humanName: 'my messages', requestUrl: '/v1.0/me/messages', headers: [], tip: null, postBody: null, docLink: null }
+      {
+        id: 's1', category: 'Users', method: 'GET', humanName: 'my profile',
+        requestUrl: '/v1.0/me', headers: [], tip: null, postBody: null, docLink: null
+      },
+      {
+        id: 's2', category: 'Mail', method: 'GET', humanName: 'my messages',
+        requestUrl: '/v1.0/me/messages', headers: [], tip: null, postBody: null, docLink: null
+      }
     ];
 
     renderWithProviders(<SampleQueries />, {

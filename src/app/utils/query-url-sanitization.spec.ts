@@ -21,11 +21,11 @@ describe('isDepraction should ', () => {
 
 describe('isFunctionCall', () => {
   it('should return true for function call pattern', () => {
-    expect(isFunctionCall("users('some-id')")).toBe(true);
+    expect(isFunctionCall('users(\'some-id\')')).toBe(true);
   });
 
   it('should return true for delta(token=value)', () => {
-    expect(isFunctionCall("delta(token='123')")).toBe(true);
+    expect(isFunctionCall('delta(token=\'123\')')).toBe(true);
   });
 
   it('should return false for plain text', () => {

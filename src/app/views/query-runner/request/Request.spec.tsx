@@ -39,8 +39,8 @@ jest.mock('@fluentui/react-components', () => {
     ...actual,
     Overflow: ({ children }: any) => <div>{children}</div>,
     OverflowItem: ({ children }: any) => <div>{children}</div>,
-    useOverflowMenu: (...args: any[]) => mockUseOverflowMenu(...args),
-    useIsOverflowItemVisible: (...args: any[]) => mockUseIsOverflowItemVisible(...args)
+    useOverflowMenu: (...args: any[]) => (mockUseOverflowMenu as any)(...args),
+    useIsOverflowItemVisible: (...args: any[]) => (mockUseIsOverflowItemVisible as any)(...args)
   };
 });
 

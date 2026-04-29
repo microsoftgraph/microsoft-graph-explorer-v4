@@ -1,6 +1,7 @@
 import graphResponseReducer, { setQueryResponse, runQuery } from './graph-response.slice';
 import { LOGOUT_SUCCESS } from '../redux-constants';
 import { configureStore } from '@reduxjs/toolkit';
+import { IQuery } from '../../../types/query-runner';
 
 jest.mock('../../../modules/authentication', () => ({
   authenticationWrapper: { getAccount: jest.fn(), logIn: jest.fn() }
@@ -36,8 +37,9 @@ jest.mock('../../utils/status-message', () => ({
   setStatusMessage: jest.fn((code) => `Status ${code}`)
 }));
 
-const { authenticatedRequest, anonymousRequest, parseResponse, queryResultsInCorsError, isImageResponse, isFileResponse } =
-  require('../actions/query-action-creator-util');
+const {
+  authenticatedRequest, anonymousRequest, parseResponse, queryResultsInCorsError, isImageResponse, isFileResponse
+} = require('../actions/query-action-creator-util');
 
 describe('graph-response slice', () => {
   const initialState = {
@@ -273,7 +275,7 @@ describe('graph-response slice', () => {
         ...sampleQuery,
         selectedVerb: 'POST',
         sampleBody: { displayName: 'Test' }
-      };
+      } as unknown as IQuery;
       const mockResponse = new Response(JSON.stringify({ id: '123' }), {
         status: 201,
         statusText: 'Created',
@@ -387,12 +389,15 @@ describe('graph-response slice', () => {
       const { generateResponseDownloadUrl } = require('../actions/query-action-creator-util');
       generateResponseDownloadUrl.mockResolvedValue('https://download.url/file.pdf');
       const { getHeaders } = require('../../utils/http-methods.utils');
-      getHeaders.mockReturnValue({ 'content-type': 'application/octet-stream', 'content-disposition': 'attachment;filename=file.pdf' });
+      getHeaders.mockReturnValue({
+        'content-type': 'application/octet-stream',
+        'content-disposition': 'attachment;filename=file.pdf'
+      });
 
       const store = createStore(true);
       const result = await store.dispatch(runQuery(sampleQuery));
       expect(result.type).toBe('query/runQuery/fulfilled');
-      expect(result.payload.body).toEqual({ contentDownloadUrl: 'https://download.url/file.pdf' });
+      expect((result.payload as any).body).toEqual({ contentDownloadUrl: 'https://download.url/file.pdf' });
     });
 
     it('handles file response when download URL is null', async () => {
