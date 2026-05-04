@@ -23,7 +23,9 @@ describe('Tests history items util functions', () => {
       createdAt: '3232'
     }
 
+    // Act
     const harPayload = createHarEntry(historyItem);
+    // Assert
     expect(harPayload.request.method).toBe('GET');
   })
 
@@ -133,7 +135,9 @@ describe('Tests history items util functions', () => {
       pageref: ''
     }]
 
+    // Act
     const har = generateHar(entry);
+    // Assert
     expect(har.log.entries.length).toBe(1);
     expect(har.log.version).toBe('1.2');
     expect(har.log.creator.name).toBe('Graph Explorer');
