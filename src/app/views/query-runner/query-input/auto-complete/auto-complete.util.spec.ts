@@ -1,5 +1,5 @@
 import {
-  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf
+  cleanUpSelectedSuggestion, getFilteredSuggestions, getLastCharacterOf, getSearchText
 } from './auto-complete.util';
 
 describe('Tests autocomplete utils', () => {
@@ -55,4 +55,59 @@ describe('Query input util should', () => {
       .toEqual('https://graph.microsoft.com/v1.0/me/messages?$select=id,subject&orderby=subject desc');
   });
 
+});
+
+describe('getSearchText', () => {
+  it('should return previous and searchText for valid input and index', () => {
+    const result = getSearchText('hello world', 4);
+    expect(result.previous).toBe('hello');
+    expect(result.searchText).toBe(' world');
+  });
+
+  it('should return empty strings when input is empty', () => {
+    const result = getSearchText('', 5);
+    expect(result).toEqual({ previous: '', searchText: '' });
+  });
+
+  it('should return empty strings when index is 0', () => {
+    const result = getSearchText('hello', 0);
+    expect(result).toEqual({ previous: '', searchText: '' });
+  });
+
+  it('should return empty strings when input is undefined-like', () => {
+    const result = getSearchText(undefined as any, 3);
+    expect(result).toEqual({ previous: '', searchText: '' });
+  });
+
+  it('should handle index at end of string', () => {
+    const result = getSearchText('abc', 2);
+    expect(result.previous).toBe('abc');
+    expect(result.searchText).toBe('');
+  });
+
+  it('should handle index in the middle', () => {
+    const result = getSearchText('abcdef', 2);
+    expect(result.previous).toBe('abc');
+    expect(result.searchText).toBe('def');
+  });
+});
+
+describe('getFilteredSuggestions - additional cases', () => {
+  it('should deduplicate results that match both startsWith and includes', () => {
+    const suggestions = ['testItem', 'anotherTest', 'testing'];
+    const result = getFilteredSuggestions('test', suggestions);
+    expect(result).toEqual(['testItem', 'testing', 'anotherTest']);
+  });
+
+  it('should be case insensitive', () => {
+    const suggestions = ['User.Read', 'Mail.ReadWrite', 'user.readbasic'];
+    const result = getFilteredSuggestions('user', suggestions);
+    expect(result).toEqual(['User.Read', 'user.readbasic']);
+  });
+
+  it('should return empty array when no match', () => {
+    const suggestions = ['alpha', 'beta', 'gamma'];
+    const result = getFilteredSuggestions('xyz', suggestions);
+    expect(result).toEqual([]);
+  });
 });
