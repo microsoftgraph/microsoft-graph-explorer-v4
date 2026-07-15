@@ -1,5 +1,6 @@
 import { SortOrder } from '../../types/enums';
 import { dynamicSort } from './dynamic-sort';
+
 interface INameAge {
   name: string
   age: number
@@ -38,5 +39,17 @@ describe('Dynamic Sort', () => {
 
     const sortedArray = arrayToSort.sort(dynamicSort<INameAge>('name', SortOrder.DESC));
     expect(expected).toEqual(sortedArray);
+  });
+
+  it('should sort primitives without property', () => {
+    const arr = ['banana', 'apple', 'cherry'];
+    const sorted = arr.sort(dynamicSort<string>(undefined as any, SortOrder.ASC));
+    expect(sorted).toEqual(['apple', 'banana', 'cherry']);
+  });
+
+  it('should sort primitives in descending order without property', () => {
+    const arr = [3, 1, 2];
+    const sorted = arr.sort(dynamicSort<number>(undefined as any, SortOrder.DESC));
+    expect(sorted).toEqual([3, 2, 1]);
   });
 });

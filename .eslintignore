@@ -2,3 +2,5 @@ build
 eslintrc.js
 public
 scripts
+coverage
+coverage/**
