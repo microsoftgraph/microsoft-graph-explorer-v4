@@ -90,8 +90,12 @@ extends:
           inputs:
             versionSpec: "25.x"
           displayName: "Install Node.js"
-        - script: |
-            npm ci
+        - task: Npm@1
+          inputs:
+            command: 'ci'
+            verbose: true
+            customRegistry: 'useFeed'
+            customFeed: 'Graph Developer Experiences/msgraph-typescript'
           displayName: "npm ci"
         - script: |
             npm run lint
@@ -116,8 +120,12 @@ extends:
           inputs:
             versionSpec: "25.x"
           displayName: "Install Node.js"
-        - script: |
-            npm ci
+        - task: Npm@1
+          inputs:
+            command: 'ci'
+            verbose: true
+            customRegistry: 'useFeed'
+            customFeed: 'Graph Developer Experiences/msgraph-typescript'
           displayName: "npm ci"
         - script: |
             npm run build
