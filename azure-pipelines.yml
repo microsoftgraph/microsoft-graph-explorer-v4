@@ -95,7 +95,7 @@ extends:
             command: 'ci'
             verbose: true
             customRegistry: 'useFeed'
-            customFeed: 'Graph Developer Experiences/msgraph-typescript'
+            customFeed: 'Graph Developer Experiences/GraphDeveloperExperiences_Public'
           displayName: "npm ci"
         - script: |
             npm run lint
@@ -125,7 +125,7 @@ extends:
             command: 'ci'
             verbose: true
             customRegistry: 'useFeed'
-            customFeed: 'Graph Developer Experiences/msgraph-typescript'
+            customFeed: 'Graph Developer Experiences/GraphDeveloperExperiences_Public'
           displayName: "npm ci"
         - script: |
             npm run build
