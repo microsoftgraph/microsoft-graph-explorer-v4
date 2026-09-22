@@ -20,18 +20,18 @@ jobs:
         if: ${{ github.event.inputs.release-type != 'major' && github.event.inputs.release-type != 'minor' && github.event.inputs.release-type != 'patch' }}
 
       - name: Checkout dev for ${{ github.event.inputs.release-type }} release
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: ${{ github.event.inputs.release-type == 'major' || github.event.inputs.release-type == 'minor' }}
         with:
           ref: dev
 
       - name: Checkout master for ${{ github.event.inputs.release-type }} release
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         if: ${{ github.event.inputs.release-type == 'patch' }}
         with:
           ref: master
 
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Create release branch and generate PR body
         id: create-release
         env:
