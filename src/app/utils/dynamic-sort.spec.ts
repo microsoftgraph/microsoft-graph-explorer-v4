@@ -1,6 +1,5 @@
 import { SortOrder } from '../../types/enums';
 import { dynamicSort } from './dynamic-sort';
-
 interface INameAge {
   name: string
   age: number
