@@ -2,10 +2,9 @@ jest.mock('../../common/download', () => ({
   downloadToLocal: jest.fn()
 }));
 
-import { createHarEntry, exportQuery, generateHar } from './har-utils';
-
 import { Entry } from '../../../../types/har';
 import { IHistoryItem } from '../../../../types/history';
+import { createHarEntry, generateHar, exportQuery } from './har-utils';
 import { downloadToLocal } from '../../common/download';
 
 describe('Tests history items util functions', () => {

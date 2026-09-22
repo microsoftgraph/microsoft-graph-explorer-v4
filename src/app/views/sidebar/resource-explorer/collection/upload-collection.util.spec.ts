@@ -1,4 +1,4 @@
-import { ResourceLinkType, ResourcePath } from '../../../../../types/resources';
+import { ResourcePath, ResourceLinkType } from '../../../../../types/resources';
 import { isGeneratedCollectionInCollection, trackUploadAction } from './upload-collection.util';
 
 jest.mock('../../../../../telemetry', () => ({
