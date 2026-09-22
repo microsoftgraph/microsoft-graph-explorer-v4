@@ -39,17 +39,17 @@ jobs:
           echo "Triggered by: ${{ github.actor }}"
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
       - name: Generate GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         with:
           app-id: ${{ vars.RELEASE_PLEASE_TOKEN_PROVIDER_APP_ID }}
           private-key: ${{ secrets.RELEASE_PLEASE_TOKEN_PROVIDER_PEM }}
 
       - name: Release Please
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
