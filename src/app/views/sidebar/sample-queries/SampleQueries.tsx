@@ -287,6 +287,7 @@ const ResourceLink = ({item}: {item: ISampleQuery}) =>{
         className={styles.focusableLink}
         aria-label={translateMessage('Read documentation')}
         target='_blank' href={href} onClick={()=>trackDocumentLinkClickedEvent(item)}>
+          {/* TODO: Fix HCM issue with icon */}
         <DocumentText20Regular />
       </Link>
     </Tooltip>
