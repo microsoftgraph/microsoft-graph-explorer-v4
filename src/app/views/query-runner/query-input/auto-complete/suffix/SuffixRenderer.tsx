@@ -98,7 +98,6 @@ const SuffixRenderer = () => {
           aria-label={tipMessage}
           disabled={!documentationLinkAvailable}
           onClick={onDocumentationLinkClicked}
-          // {/* TODO: Fix HCM issue with icon */}
           icon={<DocumentText20Regular />}
           className={classes.iconButton}
           appearance="subtle"

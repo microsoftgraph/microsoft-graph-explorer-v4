@@ -148,7 +148,6 @@ const ResourceLinkActions = ({
             }
             }
           >
-            {/* TODO: Fix HCM issue with icon */}
             <DocumentText20Regular /></Link>) :
           <Link
             disabled
@@ -156,7 +155,6 @@ const ResourceLinkActions = ({
             appearance='subtle'
             aria-disabled
             className={iconButtonStyles.linkIcon}>
-            {/* TODO: Fix HCM issue with icon */}
             <DocumentText20Regular /></Link>}
       </Tooltip>
     )}
