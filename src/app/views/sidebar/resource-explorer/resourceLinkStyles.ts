@@ -27,6 +27,9 @@ export const useStyles = makeStyles({
   },
   linkIcon: {
     display: 'flex',
+    '@media (forced-colors: active)': {
+      color: 'HighlightText !important'
+    },
     '&:hover': {
       color: tokens.colorBrandForegroundLinkHover
     }
