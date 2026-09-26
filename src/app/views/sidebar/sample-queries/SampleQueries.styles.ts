@@ -33,6 +33,11 @@ const forcedColorsActiveStyles = {
         color: 'HighlightText',
         forcedColorAdjust: 'none'
       }
+    },
+    '&:hover a, &:focus a, &:focus-visible a, &:focus-within a': {
+      '@media (forced-colors: active)': {
+        color: 'HighlightText !important'
+      }
     }
   },
   branchItemLayout: {

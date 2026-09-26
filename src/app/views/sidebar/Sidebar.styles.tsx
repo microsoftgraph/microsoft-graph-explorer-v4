@@ -31,9 +31,15 @@ export const useSidebarStyles = makeStyles({
   },
   activeLeaf: {
     backgroundColor: tokens.colorNeutralBackground3Hover,
+    // when selected, resource link / button visible in HCM
+    '& a, & button': {
+      '@media (forced-colors: active)': {
+        color: 'HighlightText !important'
+      }
+    },
     '@media (forced-colors: active)': {
       backgroundColor: 'Highlight',
-      color: 'HighlightText',
+      color: 'HighlightText !important',
       forcedColorAdjust: 'none',
       // Adding border for better visibility in high contrast mode
       outlineWidth: '2px',
