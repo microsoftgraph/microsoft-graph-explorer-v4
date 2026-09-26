@@ -25,6 +25,12 @@ export const useStyles = makeStyles({
   badge: {
     maxWidth: '50px'
   },
+  root: {
+    marginRight: tokens.spacingHorizontalXXS,
+    '@media (forced-colors: active)': {
+      color: 'HighlightText !important'
+    }
+  },
   linkIcon: {
     display: 'flex',
     '@media (forced-colors: active)': {
@@ -36,8 +42,3 @@ export const useStyles = makeStyles({
   }
 });
 
-export const useIconButtonStyles = makeStyles({
-  root: {
-    marginRight: tokens.spacingHorizontalXXS
-  }
-});

@@ -1,5 +1,5 @@
 import { Tooltip, Button, Badge, Link } from '@fluentui/react-components'
-import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular, DocumentText20Filled } from '@fluentui/react-icons';
+import { SubtractSquare20Regular, AddSquare20Regular, DocumentText20Regular } from '@fluentui/react-icons';
 import React, { useMemo } from 'react';
 
 import { useAppSelector } from '../../../../store';
