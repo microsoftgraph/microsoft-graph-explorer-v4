@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.11](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.10...v11.1.11) (2026-09-28)
+
+
+### Bug Fixes
+
+* hcm compatible read documentation and add to collection buttons ([34865cc](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/34865ccc9d3bd406d3e0e401f15d95b90b2a5e58))
+
 ## [11.1.10](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.9...v11.1.10) (2026-09-25)
 
 
