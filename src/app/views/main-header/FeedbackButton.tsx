@@ -1,6 +1,6 @@
 import { Button, MenuTrigger, Tooltip } from '@fluentui/react-components'
 import { PersonFeedback20Regular } from '@fluentui/react-icons'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useAppSelector } from '../../../store'
 import { eventTypes, telemetry } from '../../../telemetry'
 import { FEEDBACK_BUTTON } from '../../../telemetry/component-names'
@@ -17,6 +17,7 @@ const trackFeedbackButtonEvent = () => {
 const FeedbackButton = ()=>{
   const [enableSurvey, setEnableSurvey] = useState(false);
   const user = useAppSelector(state=> state.profile.user)
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const activateSurvey = () => {
     setEnableSurvey(true);
     trackFeedbackButtonEvent();
@@ -24,6 +25,7 @@ const FeedbackButton = ()=>{
 
   const disableSurvey = () => {
     setEnableSurvey(false);
+    buttonRef.current?.focus();
   }
 
   const styles = useHeaderStyles()
@@ -33,6 +35,7 @@ const FeedbackButton = ()=>{
         <Button
           aria-label={translateMessage('Feedback')}
           onClick={activateSurvey}
+          ref={buttonRef}
           className={styles.iconButton} appearance="subtle" icon={<PersonFeedback20Regular />} />
       </Tooltip>
       <FeedbackForm onDismissSurvey={disableSurvey}
