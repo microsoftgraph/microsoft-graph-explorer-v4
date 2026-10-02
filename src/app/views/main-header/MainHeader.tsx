@@ -9,6 +9,7 @@ import { Settings } from './settings/Settings';
 import { Tenant } from './Tenant';
 import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
+import { Button } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   root: {
@@ -59,7 +60,14 @@ const MainHeader = ()=>{
     <div className={styles.root}>
       <div className={styles.headerTextContainer}>
         {mobileScreen && (
-          <PanelLeftExpand20Regular className={styles.menuIcon} onClick={handleSidebarToggle} />
+          <Button
+            appearance="subtle"
+            className={styles.menuIcon}
+            icon={<PanelLeftExpand20Regular />}
+            aria-label={translateMessage('Toggle sidebar')}
+            onClick={handleSidebarToggle}
+            // ref={buttonRef}
+          />
         )}
         <Text
           size={mobileScreen ? 500 : 600} as="h1"
