@@ -25,7 +25,7 @@ const FeedbackButton = ()=>{
 
   const disableSurvey = () => {
     setEnableSurvey(false);
-    setTimeout(() => buttonRef.current?.focus(), 0);
+    buttonRef.current?.focus();
   }
 
   const styles = useHeaderStyles()
