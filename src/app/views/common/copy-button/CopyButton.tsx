@@ -20,7 +20,7 @@ export default function CopyButton(props: ICopyButtonProps) {
 
   const handleCopyClick = async () => {
     props.handleOnClick();
-    buttonRef.current?.focus({ preventScroll: true });
+    buttonRef.current?.focus();
     setCopied(true);
     handleTimeout();
   };
