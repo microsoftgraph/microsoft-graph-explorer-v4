@@ -21,7 +21,7 @@ const ResponseHeaders = () => {
     return (
       <>
         <CopyButton handleOnClick={handleCopy} isIconButton={true} />
-        <Monaco body={headers} height='25rem' />
+        <Monaco body={headers} readOnly={true} height='25rem' />
       </>
     );
   }
