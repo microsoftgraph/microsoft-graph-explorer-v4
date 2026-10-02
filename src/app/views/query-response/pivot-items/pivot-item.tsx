@@ -185,7 +185,7 @@ export const GetPivotItems = () => {
         {selectedValue === translateMessage('Snippets') && <Snippets />}
         {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
         {selectedValue === translateMessage('Adaptive Cards') && (
-          <div id={'adaptive-cards-tab'} tabIndex={0}>
+          <div id={'adaptive-cards-tab'}>
             <AdaptiveCards
               body={body as string}
               hostConfig={currentTheme === 'light' ? lightThemeHostConfig : darkThemeHostConfig}
