@@ -52,6 +52,7 @@ export default function CopyButton(props: ICopyButtonProps) {
       {props.isIconButton ? (
         <Tooltip content={copyLabel} relationship='label'>
           <Button
+            ref={buttonRef}
             appearance='transparent'
             onClick={handleCopyClick}
             icon={<CopyIcon />}
