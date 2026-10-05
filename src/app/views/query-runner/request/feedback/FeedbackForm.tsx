@@ -25,7 +25,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
 
   const initializeFeedback = () => {
     const floodgateObject: OfficeBrowserFeedback = makeFloodgate();
-    loadAndInitialize(floodgateObject, surveyActivated).then(() => {
+    void loadAndInitialize(floodgateObject, surveyActivated).then(() => {
       setOfficeBrowserFeedback(floodgateObject);
     });
   }
@@ -55,16 +55,8 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       title: translateMessage('title')
     }
     if(officeBrowserFeedback){
-      const onFocusIn = (event: FocusEvent) => {
-        if ((event.target as HTMLInputElement)?.name !== 'obf-TFormRating') { return; }
-        document.removeEventListener('focusin', onFocusIn);
-        document.getElementById('obf-ToastCancel')?.focus();
-      };
-      document.addEventListener('focusin', onFocusIn);
-
       officeBrowserFeedback.floodgate.showCustomSurvey(customSurvey).catch(
         (error: any) => {
-          document.removeEventListener('focusin', onFocusIn);
           onDisableSurvey();
           throw error; }
       );
