@@ -18,7 +18,7 @@ export default function CopyButton(props: ICopyButtonProps) {
     ? translateMessage('Copy')
     : translateMessage('Copied');
 
-  const handleCopyClick = async () => {
+  const handleCopyClick = () => {
     props.handleOnClick();
     buttonRef.current?.focus();
     setCopied(true);

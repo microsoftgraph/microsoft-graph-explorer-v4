@@ -10,7 +10,7 @@ const ResponseHeaders = () => {
 
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const { headers } = graphResponse.response;
-  const handleCopy = async () =>
+  const handleCopy = () =>
     trackedGenericCopy(
       JSON.stringify(headers),
       RESPONSE_HEADERS_COPY_BUTTON,
