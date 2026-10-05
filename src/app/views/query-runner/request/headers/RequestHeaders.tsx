@@ -1,4 +1,4 @@
-import { Button, Input, makeStyles, tokens } from '@fluentui/react-components';
+import { Button, Input, Label, makeStyles, tokens, useId } from '@fluentui/react-components';
 import { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../../../store';
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     display: 'flex',
     gap: '16px',
     marginBottom: '16px',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     flexShrink: 0
   },
   column: {
@@ -32,8 +32,15 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalSNudge,
     flexDirection: 'column'
   },
+  field: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: tokens.spacingVerticalXXS,
+    flex:1
+  },
   input: {
-    flex: 1
+    width: '100%'
   },
   button: {
     flexShrink: 0,
@@ -59,6 +66,8 @@ const RequestHeaders = () => {
 
   const dispatch = useAppDispatch();
   const styles = useStyles();
+  const keyInputId = useId('request-header-key');
+  const valueInputId = useId('request-header-value');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHeader({ ...header, [e.target.name]: e.target.value });
@@ -98,20 +107,26 @@ const RequestHeaders = () => {
       onMouseLeave={() => setIsHoverOverHeadersList(false)}
     >
       <div className={mobileScreen ? styles.column : styles.row}>
-        <Input
-          className={styles.input}
-          placeholder={translateMessage('Key')}
-          name='name'
-          value={header.name}
-          onChange={handleInputChange}
-        />
-        <Input
-          className={styles.input}
-          placeholder={translateMessage('Value')}
-          name='value'
-          value={header.value}
-          onChange={handleInputChange}
-        />
+        <div className={styles.field}>
+          <Label htmlFor={keyInputId}>{translateMessage('Header Key')}</Label>
+          <Input
+            id={keyInputId}
+            className={styles.input}
+            name='name'
+            value={header.name}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className={styles.field}>
+          <Label htmlFor={valueInputId}>{translateMessage('Header Value')}</Label>
+          <Input
+            id={valueInputId}
+            className={styles.input}
+            name='value'
+            value={header.value}
+            onChange={handleInputChange}
+          />
+        </div>
         <Button
           className={styles.button}
           appearance='primary'
