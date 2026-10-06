@@ -137,7 +137,7 @@ const CachedSetMessageBar = () => {
       </MessageBarBody>
       <MessageBarActions
         containerAction={
-          <Button appearance='transparent' icon={<DismissRegular />} />
+          <Button appearance='transparent' icon={<DismissRegular />} aria-label={translateMessage('Dismiss warning')}/>
         }
       />
     </MessageBar>
