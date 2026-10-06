@@ -108,7 +108,7 @@ const RequestHeaders = () => {
     >
       <div className={mobileScreen ? styles.column : styles.row}>
         <div className={styles.field}>
-          <Label htmlFor={keyInputId}>{translateMessage('Header Key')}</Label>
+          <Label htmlFor={keyInputId}>{translateMessage('Header key')}</Label>
           <Input
             id={keyInputId}
             className={styles.input}
@@ -118,7 +118,7 @@ const RequestHeaders = () => {
           />
         </div>
         <div className={styles.field}>
-          <Label htmlFor={valueInputId}>{translateMessage('Header Value')}</Label>
+          <Label htmlFor={valueInputId}>{translateMessage('Header value')}</Label>
           <Input
             id={valueInputId}
             className={styles.input}
