@@ -6,3 +6,12 @@ updates:
   schedule:
     interval: monthly
   open-pull-requests-limit: 20
+- package-ecosystem: "github-actions"
+  directory: "/"
+  groups:
+    github-actions:
+      patterns: ["*"]
+  schedule:
+    interval: "weekly"
+  cooldown:
+    default-days: 7
