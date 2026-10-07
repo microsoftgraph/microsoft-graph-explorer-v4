@@ -18,7 +18,7 @@ jobs:
       run: echo "today=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
 
     - name: Pushes English file
-      uses: dmnemec/copy_file_to_another_repo_action@main
+      uses: dmnemec/copy_file_to_another_repo_action@c93037aa10fa8893de271f19978c980d0c1a9b37 # v1.1.1
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
       with:
