@@ -1,13 +1,21 @@
-import { IResource } from '../../types/resources';
+import { IResource, IResourceLink } from '../../types/resources';
 import { resourcesCache } from './resources.cache';
+
+const mockStore: Record<string, any> = {};
+
 jest.mock('localforage', () => ({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   config: () => { },
   createInstance: () => ({
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    getItem: () => { },
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    setItem: () => { }
+    getItem: jest.fn((key: string) => Promise.resolve(mockStore[key] ?? null)),
+    setItem: jest.fn((key: string, value: any) => {
+      mockStore[key] = value;
+      return Promise.resolve(value);
+    }),
+    removeItem: jest.fn((key: string) => {
+      delete mockStore[key];
+      return Promise.resolve();
+    })
   })
 }));
 
@@ -66,13 +74,14 @@ const resources: IResource = {
 };
 
 beforeEach(async () => {
+  // Clear mock store
+  Object.keys(mockStore).forEach(key => delete mockStore[key]);
   // Save resource in the cache
   await resourcesCache.saveResources(resources, 'beta');
 });
 
 afterEach(async () => {
-  // Clear the cache
-  await resourcesCache.saveResources(emptyResource, 'beta');
+  Object.keys(mockStore).forEach(key => delete mockStore[key]);
 });
 
 describe('Resources Cache should', () => {
@@ -86,6 +95,45 @@ describe('Resources Cache should', () => {
     const updatedResource = await resourcesCache.readResources('beta');
 
     expect(updatedResource).toEqual(null);
+    jest.restoreAllMocks();
+  });
+
+  it('save and read resources within expiry', async () => {
+    await resourcesCache.saveResources(resources, 'v1.0');
+    // Read within expiry (Date.now returns current time which is before expiry)
+    const result = await resourcesCache.readResources('v1.0');
+    expect(result).toEqual(resources);
+  });
+
+  it('return null when no cached resource exists', async () => {
+    const result = await resourcesCache.readResources('v1.0');
+    expect(result).toBeNull();
+  });
+
+  it('save and read collection', async () => {
+    const collection: IResourceLink[] = [
+      {
+        key: 'test-key',
+        url: '/users',
+        name: 'users',
+        labels: [],
+        isExpanded: false,
+        parent: '',
+        level: 0,
+        paths: ['/', 'users'],
+        type: 'PATH' as any,
+        links: [],
+        method: 'GET'
+      }
+    ];
+    await resourcesCache.saveCollection(collection);
+    const result = await resourcesCache.readCollection();
+    expect(result).toEqual(collection);
+  });
+
+  it('return empty array when no collection is cached', async () => {
+    const result = await resourcesCache.readCollection();
+    expect(result).toEqual([]);
   });
 });
 

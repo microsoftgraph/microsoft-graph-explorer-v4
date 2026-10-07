@@ -42,7 +42,10 @@ export const useResourceExplorerStyles = makeStyles({
     alignItems: 'center'
   },
   button: {
-    border: 'none'
+    border: 'none',
+    '@media (forced-colors: active)': {
+      color: 'HighlightText !important'
+    }
   },
   treeItemLayout: {
     width: '100%',
