@@ -1,4 +1,10 @@
-import { isAllAlpha, isPropertyName, sanitizeQueryParameter } from './query-parameter-sanitization';
+import {
+  isAllAlpha,
+  isPropertyName,
+  sanitizeQueryParameter,
+  isAlphaNumeric,
+  isPlaceHolderSegment
+} from './query-parameter-sanitization';
 
 describe('isAllAlpha should ', () => {
   const list = [
@@ -280,6 +286,34 @@ describe('Sanitize Query Parameters should', () => {
       check: 'returns value as is when query parameter key starts with $',
       queryParam: '$id=max',
       sanitizedQueryParam: '$id=<value>'
+    },
+
+    // Edge case: $search with non-property name before colon
+    {
+      check: 'returns <property> when $search quoted text has invalid property name before colon',
+      queryParam: '$search="123:somevalue"',
+      sanitizedQueryParam: '$search="<property>:<value>"'
+    },
+
+    // Edge case: $expand with invalid property name before opening bracket
+    {
+      check: 'returns <property> when $expand has invalid property name before nested query',
+      queryParam: '$expand=123invalid($select=id)',
+      sanitizedQueryParam: '$expand=<property>($select=id)'
+    },
+
+    // Edge case: $filter with lambda on invalid property name
+    {
+      check: 'returns <property> when $filter lambda has invalid collection property name',
+      queryParam: '$filter=123items/any(c:c/id eq \'val\')',
+      sanitizedQueryParam: '$filter=<property>/any(c: c/id eq <value>)'
+    },
+
+    // Edge case: $filter query function with no opening bracket (lines 441-442)
+    {
+      check: 'returns <unknown> when $filter has query function name without opening bracket',
+      queryParam: '$filter=startswithNoBracket',
+      sanitizedQueryParam: '$filter=startswith(<unknown>)'
     }
 
   ];
@@ -291,4 +325,125 @@ describe('Sanitize Query Parameters should', () => {
     });
   });
 
+});
+
+describe('isAlphaNumeric should', () => {
+  const cases = [
+    { key: 'abc1def', expected: true },
+    { key: 'a1b', expected: true },
+    { key: 'abc', expected: false },
+    { key: '123', expected: false },
+    { key: 'a1', expected: true },
+    { key: 'a', expected: false },
+    { key: '1', expected: true },
+    { key: 'test5', expected: true }
+  ];
+
+  cases.forEach(c => {
+    it(`return ${c.expected} for "${c.key}"`, () => {
+      expect(isAlphaNumeric(c.key)).toBe(c.expected);
+    });
+  });
+});
+
+describe('isPlaceHolderSegment should', () => {
+  it('return true for {id}', () => {
+    expect(isPlaceHolderSegment('{id}')).toBe(true);
+  });
+  it('return true for {user-id}', () => {
+    expect(isPlaceHolderSegment('{user-id}')).toBe(true);
+  });
+  it('return false for plain text', () => {
+    expect(isPlaceHolderSegment('users')).toBe(false);
+  });
+  it('return false for only opening brace', () => {
+    expect(isPlaceHolderSegment('{id')).toBe(false);
+  });
+  it('return false for only closing brace', () => {
+    expect(isPlaceHolderSegment('id}')).toBe(false);
+  });
+  it('return false for empty string', () => {
+    expect(isPlaceHolderSegment('')).toBe(false);
+  });
+});
+
+describe('sanitizeQueryParameter edge cases should', () => {
+  it('return query parameter as-is when no equals sign', () => {
+    expect(sanitizeQueryParameter('noequals')).toBe('noequals');
+  });
+
+  it('handle $count=false as valid', () => {
+    expect(sanitizeQueryParameter('$count=false')).toBe('$count=false');
+  });
+
+  it('handle $search with bracketed subexpression', () => {
+    const result = sanitizeQueryParameter('$search="description:One" AND ("displayName:Video" OR "displayName:Drive")');
+    expect(result).toContain('$search=');
+    expect(result).toContain('AND');
+  });
+
+  it('handle $filter with not operator', () => {
+    const result = sanitizeQueryParameter('$filter=not startswith(displayName,\'Test\')');
+    expect(result).toContain('$filter=');
+    expect(result).toContain('not');
+  });
+
+  it('handle $expand with unknown segment', () => {
+    const result = sanitizeQueryParameter('$expand=123invalid');
+    expect(result).toContain('<unknown>');
+  });
+
+  it('handle $orderby with invalid sort direction', () => {
+    const result = sanitizeQueryParameter('$orderby=displayName xyz');
+    expect(result).toBe('$orderby=displayName <unexpected-value>');
+  });
+
+  it('handle $select with star operator', () => {
+    expect(sanitizeQueryParameter('$select=*')).toBe('$select=*');
+  });
+
+  it('handle $format with invalid parameter', () => {
+    const result = sanitizeQueryParameter('$format=application/json;123=abc');
+    expect(result).toBe('$format=application/json;<invalid-parameter>');
+  });
+
+  it('handle $search with empty value', () => {
+    const result = sanitizeQueryParameter('$search=');
+    expect(result).toBe('$search=');
+  });
+
+  it('handle $filter with empty value', () => {
+    const result = sanitizeQueryParameter('$filter=');
+    expect(result).toBe('$filter=');
+  });
+
+  it('handle $search with non-quoted non-alpha segment', () => {
+    const result = sanitizeQueryParameter('$search=123abc');
+    expect(result).toContain('$search=');
+    expect(result).toContain('<unknown>');
+  });
+
+  it('handle $filter with function call without comma', () => {
+    const result = sanitizeQueryParameter('$filter=isof(\'microsoft.graph.user\')');
+    expect(result).toContain('isof(');
+  });
+
+  it('handle $filter with bracket subexpression', () => {
+    const result = sanitizeQueryParameter('$filter=(displayName eq \'test\')');
+    expect(result).toContain('$filter=');
+  });
+
+  it('handle $expand with nested $expand', () => {
+    const result = sanitizeQueryParameter('$expand=Items($expand=product),customer');
+    expect(result).toContain('Items(');
+    expect(result).toContain('customer');
+  });
+
+  it('handle non-OData key that starts with $ and is all alpha after $', () => {
+    expect(sanitizeQueryParameter('$levels=max')).toBe('$levels=<value>');
+  });
+
+  it('handle $orderby with property/$count', () => {
+    expect(sanitizeQueryParameter('$orderby=products/$count')).toBe('$orderby=products/$count');
+  });
 });

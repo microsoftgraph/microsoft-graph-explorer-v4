@@ -1,6 +1,6 @@
 # Microsoft Graph Explorer V4
 
-[![Build Status](https://dev.azure.com/japhethobalak/japhethobalak/_apis/build/status/microsoftgraph.microsoft-graph-explorer-v2?branchName=dev)](https://dev.azure.com/japhethobalak/japhethobalak/_build/latest?definitionId=4&branchName=dev)
+[![Build Status](https://dev.azure.com/microsoftgraph/Graph%20Developer%20Experiences/_apis/build/status/microsoftgraph.microsoft-graph-explorer-v4?branchName=dev)](https://dev.azure.com/microsoftgraph/Graph%20Developer%20Experiences/_build/latest?definitionId=58&branchName=dev)
 
 The [Microsoft Graph Explorer V4](https://developer.microsoft.com/graph/graph-explorer) lets developers quickly navigate and test API endpoints.
 

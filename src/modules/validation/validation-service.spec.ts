@@ -85,3 +85,43 @@ describe('Abnf parser should', () => {
   });
 
 });
+
+describe('ValidationService.validate edge cases', () => {
+  it('should throw error for empty query URL', () => {
+    expect(() => ValidationService.validate('', [])).toThrow(ValidationError);
+    try {
+      ValidationService.validate('', []);
+    } catch (err) {
+      const error = err as ValidationError;
+      expect(error.message).toBeTruthy();
+    }
+  });
+
+  it('should throw error for invalid hostname', () => {
+    expect(() => ValidationService.validate('https://example.com/v1.0/me', [])).toThrow(ValidationError);
+  });
+
+  it('should throw error for missing version', () => {
+    expect(() => ValidationService.validate('https://graph.microsoft.com/', [])).toThrow(ValidationError);
+  });
+
+  it('should throw warning for placeholders in URL', () => {
+    expect(
+      () => ValidationService.validate('https://graph.microsoft.com/v1.0/users/{user-id}', [])
+    ).toThrow(ValidationError);
+  });
+
+  it('should throw warning when resource not found but resources provided', () => {
+    const resources = [
+      { segment: '/users', labels: [], children: [], version: 'v1.0' }
+    ];
+    expect(
+      () => ValidationService.validate('https://graph.microsoft.com/v1.0/nonexistent', resources as any)
+    ).toThrow(ValidationError);
+  });
+
+  it('should return true for valid URL with empty resources', () => {
+    const result = ValidationService.validate('https://graph.microsoft.com/v1.0/me', []);
+    expect(result).toBe(true);
+  });
+});

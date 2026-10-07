@@ -7,6 +7,13 @@ import {
   createResourcesList, generateKey, getAvailableMethods, getCurrentTree, getResourcePaths, getUrlFromLink
 } from './resource-explorer.utils';
 
+// Polyfill for String.prototype.contains used in resource-explorer.utils
+if (!(String.prototype as any).contains) {
+  (String.prototype as any).contains = function (searchString: string): boolean {
+    return this.toLowerCase().indexOf(searchString.toLowerCase()) !== -1;
+  };
+}
+
 const resource = JSON.parse(JSON.stringify(content)) as IResource
 describe('Resource payload should', () => {
   it('have children', async () => {
@@ -69,6 +76,96 @@ describe('Resource payload should', () => {
     const method = 'GET';
     const key = generateKey(method, paths, version);
     expect(key).toBe('2-root-appCatalogs-teamsApps-get-v1.0');
+  });
+  it('return a valid key without method', () => {
+    const version = 'v1.0';
+    const paths = ['/', 'users'];
+    const key = generateKey(undefined, paths, version);
+    expect(key).toBe('1-root-users-v1.0');
+  });
+
+  it('return empty url from empty paths', () => {
+    const url = getUrlFromLink([]);
+    expect(url).toBe('');
+  });
+
+  it('return url from single path', () => {
+    const url = getUrlFromLink(['/']);
+    expect(url).toBe('/');
+  });
+
+  it('create resources list with search text', () => {
+    const filtered = createResourcesList(resource.children!, 'v1.0', 'appCatalogs');
+    expect(filtered.length).toBeGreaterThan(0);
+  });
+
+  it('create resources list for beta version', () => {
+    const filtered = createResourcesList(resource.children!, 'beta');
+    expect(filtered.length).toBeGreaterThan(0);
+  });
+
+  it('return empty methods for non-existing version label', () => {
+    const methods = getAvailableMethods([], 'v1.0');
+    expect(methods.length).toBe(0);
+  });
+
+  it('handle ResourceMethod objects in labels', () => {
+    const labels = [
+      {
+        name: 'v1.0',
+        methods: [
+          { name: 'GET', documentationUrl: 'https://docs.example.com/get' },
+          { name: 'POST', documentationUrl: 'https://docs.example.com/post' }
+        ]
+      }
+    ];
+    const methods = getAvailableMethods(labels as any, 'v1.0');
+    expect(methods).toContain('GET');
+    expect(methods).toContain('POST');
+  });
+
+  it('handle string methods in labels', () => {
+    const labels = [
+      { name: 'v1.0', methods: ['GET', 'DELETE'] }
+    ];
+    const methods = getAvailableMethods(labels as any, 'v1.0');
+    expect(methods).toContain('GET');
+    expect(methods).toContain('DELETE');
+  });
+
+  it('getCurrentTree throws on empty path segment', () => {
+    expect(() => {
+      getCurrentTree({
+        paths: ['/', '', 'teamsApps'],
+        level: 2,
+        resourceItems: resource.children!,
+        version: 'v1.0'
+      });
+    }).toThrow('Path segment');
+  });
+
+  it('getResourcePaths filters out NODE types', () => {
+    const version = 'v1.0';
+    const filtered = createResourcesList(resource.children!, version);
+    if (filtered.length > 0) {
+      const item = filtered[0];
+      const paths = getResourcePaths(item, version);
+      paths.forEach(p => {
+        expect(p.type).not.toBe('NODE');
+      });
+    }
+  });
+
+  it('getResourcePaths adds version to elements', () => {
+    const version = 'beta';
+    const filtered = createResourcesList(resource.children!, version);
+    if (filtered.length > 0) {
+      const item = filtered[0];
+      const paths = getResourcePaths(item, version);
+      paths.forEach(p => {
+        expect(p.version).toBe(version);
+      });
+    }
   });
 });
 
