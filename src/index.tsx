@@ -136,13 +136,13 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-historyCache.readHistoryData().then((data: IHistoryItem[]) => {
+void historyCache.readHistoryData().then((data: IHistoryItem[]) => {
   if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }
 });
 
-collectionsCache.read().then((data: Collection[]) => {
+void collectionsCache.read().then((data: Collection[]) => {
   if (!data || data.length === 0) {
     appStore.dispatch(createCollection({
       id: new Date().getTime().toString(),
@@ -182,7 +182,7 @@ window.MonacoEnvironment = {
   }
 };
 
-variantService.initialize();
+void variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 
