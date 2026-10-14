@@ -101,6 +101,31 @@ describe('ValidationService.validate edge cases', () => {
     expect(() => ValidationService.validate('https://example.com/v1.0/me', [])).toThrow(ValidationError);
   });
 
+  it.each([
+    'http://graph.microsoft.com/v1.0/me',
+    'htps://graph.microsoft.com/v1.0/me',
+    'https//graph.microsoft.com/v1.0/me',
+    'graph.microsoft.com/v1.0/me'
+  ])('reports an error asking for https:// when the scheme is wrong: %s', (url) => {
+    expect(() => ValidationService.validate(url, [])).toThrow(
+      expect.objectContaining({ type: 'error', message: 'The URL must begin with https://' })
+    );
+  });
+
+  it.each([
+    'https://graph.microsft.com/v1.0/me',
+    'https://example.com/v1.0/me',
+    'https://'
+  ])('reports an error asking for graph.microsoft.com when the host is wrong: %s', (url) => {
+    expect(() => ValidationService.validate(url, [])).toThrow(
+      expect.objectContaining({ type: 'error', message: 'The URL must contain graph.microsoft.com' })
+    );
+  });
+
+  it('does not throw for a valid https url', () => {
+    expect(() => ValidationService.validate('https://graph.microsoft.com/v1.0/me', [])).not.toThrow();
+  });
+
   it('should throw error for missing version', () => {
     expect(() => ValidationService.validate('https://graph.microsoft.com/', [])).toThrow(ValidationError);
   });
