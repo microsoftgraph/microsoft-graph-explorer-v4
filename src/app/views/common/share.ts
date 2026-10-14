@@ -1,5 +1,5 @@
-import { IQuery } from '../../../types/query-runner';
 import { authenticationWrapper } from '../../../modules/authentication';
+import { IQuery } from '../../../types/query-runner';
 import { encodeHashCharacters } from '../../utils/query-url-sanitization';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 
