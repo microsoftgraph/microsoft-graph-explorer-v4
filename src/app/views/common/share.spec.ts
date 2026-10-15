@@ -1,3 +1,4 @@
+import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { createShareLink } from './share';
 
 jest.mock('../../../modules/authentication', () => ({
@@ -62,6 +63,35 @@ describe('createShareLink', () => {
   it('should include session ID when authenticated', () => {
     const link = createShareLink(baseQuery as any, true);
     expect(link).toContain('sid=test-session-id');
+  });
+
+  describe('when the sample url is malformed', () => {
+    // Use the real parser: the module-level mock above does not reproduce how it handles bad input.
+    const { parseSampleUrl: realParseSampleUrl } = jest.requireActual('../../utils/sample-url-generation');
+
+    const createShareLinkFor = (sampleUrl: string) => {
+      (parseSampleUrl as jest.Mock).mockImplementationOnce(() => realParseSampleUrl(sampleUrl));
+      return createShareLink({ ...baseQuery, sampleUrl } as any);
+    };
+
+    // The parser derives an origin of 'null' for an unknown scheme, which produces a url that cannot be parsed.
+    it.each([
+      'htps://graph.microsoft.com/v1.0/me',
+      'htttps://graph.microsoft.com/v1.0/me?$select=id'
+    ])('falls back to the default graph url for a mistyped scheme: %s', (sampleUrl) => {
+      expect(realParseSampleUrl(sampleUrl).sampleUrl).toMatch(/^null\//);
+
+      const link = createShareLinkFor(sampleUrl);
+
+      expect(link).toContain('GraphUrl=https://graph.microsoft.com');
+    });
+
+    it.each([
+      'https//graph.microsoft.com/v1.0/me',
+      'graph.microsoft.com/v1.0/me'
+    ])('returns an empty link without throwing when the parser cannot read the url: %s', (sampleUrl) => {
+      expect(createShareLinkFor(sampleUrl)).toBe('');
+    });
   });
 
   it('should not include session ID when not authenticated', () => {
