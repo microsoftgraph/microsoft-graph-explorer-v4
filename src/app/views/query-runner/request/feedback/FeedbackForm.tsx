@@ -143,7 +143,7 @@ export default function FeedbackForm({ activated, onDismissSurvey, onDisableSurv
       'CloseLabel': translateMessage('Close')
     });
 
-    floodgateObject.floodgate.initialize().then(
+    await floodgateObject.floodgate.initialize().then(
       function () {
         floodgateObject.floodgate.start();
         setEvents();
