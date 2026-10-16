@@ -8,6 +8,14 @@ import { ValidatedUrl } from './abnf';
 
 class ValidationService {
 
+  private static getHostname(queryUrl: string): string {
+    try {
+      return new URL(queryUrl).hostname;
+    } catch {
+      return '';
+    }
+  }
+
   private static getResourceValidationError(queryUrl: string, resources: IResource[]): string | null {
     if (resources.length === 0) {
       return null;
@@ -40,8 +48,13 @@ class ValidationService {
         'error');
     }
 
-    const { hostname } = new URL(queryUrl);
-    if (!isValidHostname(hostname)) {
+    if (!/^https:\/\//i.test(queryUrl.trim())) {
+      throw new ValidationError(
+        `${translateMessage('The URL must begin with https://')}`,
+        'error');
+    }
+
+    if (!isValidHostname(ValidationService.getHostname(queryUrl))) {
       throw new ValidationError(
         `${translateMessage('The URL must contain graph.microsoft.com')}`,
         'error');
