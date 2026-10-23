@@ -136,13 +136,13 @@ if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
   appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
-historyCache.readHistoryData().then((data: IHistoryItem[]) => {
+void historyCache.readHistoryData().then((data: IHistoryItem[]) => {
   if (data && data.length > 0) {
     appStore.dispatch(bulkAddHistoryItems(data));
   }
 });
 
-collectionsCache.read().then((data: Collection[]) => {
+void collectionsCache.read().then((data: Collection[]) => {
   if (!data || data.length === 0) {
     appStore.dispatch(createCollection({
       id: new Date().getTime().toString(),
@@ -172,44 +172,17 @@ appStore.dispatch(setSampleQuery(
   }
 ));
 
-/**
- * Set's up Monaco Editor's Workers.
- */
-enum Workers {
-  Json = 'json',
-  Editor = 'editor',
-  Typescript='ts',
-  Css='css',
-  Html='html'
-}
-
 window.MonacoEnvironment = {
-  getWorkerUrl(moduleId: any, label: string) {
-    switch (label) {
-    case 'json':
-      return getWorkerFor(Workers.Json);
-    case 'css':
-      return getWorkerFor(Workers.Css);
-    case 'html':
-      return getWorkerFor(Workers.Html);
-    case 'typescript':
-      return getWorkerFor(Workers.Typescript);
-    default:
-      return getWorkerFor(Workers.Editor);
-    }
+  getWorkerUrl(_moduleId: string, label: string) {
+    if (label === 'json') { return '/json.worker.js'; }
+    if (label === 'css') { return '/css.worker.js'; }
+    if (label === 'html') { return '/html.worker.js'; }
+    if (label === 'typescript') { return '/ts.worker.js'; }
+    return '/editor.worker.js';
   }
 };
 
-function getWorkerFor(worker: string): string {
-  // tslint:disable-next-line:max-line-length
-  const WORKER_PATH =
-    'https://res.public.onecdn.static.microsoft/s01-prod/vendor/bower_components/explorer-v2/build';
-
-  return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
-	    importScripts('${WORKER_PATH}/${worker}.worker.js');`)}`;
-}
-
-variantService.initialize();
+void variantService.initialize();
 const telemetryProvider: ITelemetry = telemetry;
 telemetryProvider.initialize();
 
