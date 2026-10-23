@@ -19,7 +19,6 @@ import {
   useIsOverflowItemVisible
 } from '@fluentui/react-components';
 import { useState } from 'react';
-import { ThemeContext } from '../../../../themes/theme-context';
 import { translateMessage } from '../../../utils/translate-messages';
 import {
   ResponseHeaders,
@@ -30,14 +29,12 @@ import {
   darkThemeHostConfig,
   lightThemeHostConfig
 } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
 import { Mode } from '../../../../types/enums';
 import {
   ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
   ClipboardCodeRegular,
-  WindowWrenchRegular,
   CardUiRegular,
   MoreHorizontalRegular
 } from '@fluentui/react-icons';
