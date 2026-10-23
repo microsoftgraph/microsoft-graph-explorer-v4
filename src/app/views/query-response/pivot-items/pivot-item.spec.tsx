@@ -15,10 +15,6 @@ jest.mock('../adaptive-cards/AdaptiveHostConfig', () => ({
   darkThemeHostConfig: {},
   lightThemeHostConfig: {}
 }));
-jest.mock('../graph-toolkit/GraphToolkit', () => ({
-  __esModule: true,
-  default: () => <div data-testid="graph-toolkit">GT</div>
-}));
 jest.mock('../../../utils/translate-messages', () => ({
   translateMessage: (msg: string) => msg
 }));

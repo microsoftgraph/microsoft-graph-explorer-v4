@@ -47,7 +47,6 @@ export const REQUEST_HEADERS_TAB = 'Request headers tab';
 export const EXPAND_RESPONSE_TAB = 'Expand response tab';
 export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
-export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
 export const KEYBOARD_COPY_TABS = {
   'access-tokens-tab': 'Access token tab',
