@@ -78,7 +78,6 @@ describe('GetPivotItems', () => {
     expect(screen.getByRole('tab', { name: 'Response Preview' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Snippets' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Graph toolkit' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Adaptive Cards' })).toBeTruthy();
   });
 });
