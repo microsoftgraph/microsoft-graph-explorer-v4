@@ -74,7 +74,7 @@ describe('GetPivotItems', () => {
     });
 
     const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(5);
+    expect(tabs).toHaveLength(4);
     expect(screen.getByRole('tab', { name: 'Response Preview' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Snippets' })).toBeTruthy();
