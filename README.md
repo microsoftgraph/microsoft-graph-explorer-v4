@@ -50,7 +50,7 @@ Are you new to Graph Explorer or would like to raise a bug or request a feature?
 
 ### Building Apps & Accessing M365 Data
 
-- To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs](<(https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)>) and [Microsoft Graph Toolkit (MGT)](<(https://learn.microsoft.com/en-us/graph/toolkit/overview)>) which provide fully functional and out-of-the-box web components.
+- To simplify your Microsoft Graph app-building experience, use our [Microsoft Graph SDKs](<(https://learn.microsoft.com/en-us/graph/sdks/sdks-overview)>).
 
 - Refer to [Microsoft Graph Quick Start](https://developer.microsoft.com/en-us/graph/quick-start) to get a pre-initialized SDK sample application up and running in less 3 minutes using the language of your choice.
 
