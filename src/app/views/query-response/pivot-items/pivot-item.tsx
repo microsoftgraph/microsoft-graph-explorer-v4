@@ -136,11 +136,6 @@ export const GetPivotItems = () => {
       name: translateMessage('Snippets'),
       icon: <ClipboardCodeRegular />
     },
-    // {
-    //   id: translateMessage('Graph toolkit'),
-    //   name: translateMessage('Graph toolkit'),
-    //   icon: <WindowWrenchRegular />
-    // },
     {
       id: translateMessage('Adaptive Cards'),
       name: translateMessage('Adaptive Cards'),
@@ -180,7 +175,6 @@ export const GetPivotItems = () => {
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
         {selectedValue === translateMessage('Snippets') && <Snippets />}
-        {/* {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />} */}
         {selectedValue === translateMessage('Adaptive Cards') && (
           <div id={'adaptive-cards-tab'} tabIndex={0}>
             <AdaptiveCards
