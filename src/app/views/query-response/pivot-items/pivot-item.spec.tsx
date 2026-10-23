@@ -60,7 +60,7 @@ describe('GetPivotItems', () => {
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
   });
 
-  it('shows 5 tabs in Complete mode', () => {
+  it('shows 4 tabs in Complete mode', () => {
     renderWithProviders(<GetPivotItems />, {
       preloadedState: {
         graphExplorerMode: 'COMPLETE',
