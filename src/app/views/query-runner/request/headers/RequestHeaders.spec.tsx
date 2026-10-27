@@ -62,9 +62,40 @@ describe('RequestHeaders', () => {
 
   it('renders header input fields and Add button', () => {
     renderWithProviders(<RequestHeaders />);
-    expect(screen.getByPlaceholderText('Key')).toBeTruthy();
-    expect(screen.getByPlaceholderText('Value')).toBeTruthy();
+    expect(screen.getByLabelText('Header key')).toBeTruthy();
+    expect(screen.getByLabelText('Header value')).toBeTruthy();
     expect(screen.getByText('Add')).toBeTruthy();
+  });
+
+  describe('accessibility', () => {
+    it('provides a visible label for the key and value inputs', () => {
+      renderWithProviders(<RequestHeaders />);
+      expect(screen.getByText('Header key').tagName).toBe('LABEL');
+      expect(screen.getByText('Header value').tagName).toBe('LABEL');
+    });
+
+    it('associates each label with its input', () => {
+      renderWithProviders(<RequestHeaders />);
+      const keyInput = screen.getByLabelText('Header key') as HTMLInputElement;
+      const valueInput = screen.getByLabelText('Header value') as HTMLInputElement;
+      expect(keyInput.name).toBe('name');
+      expect(valueInput.name).toBe('value');
+      expect(keyInput.id).not.toBe(valueInput.id);
+    });
+
+    it('does not rely on placeholders as the only hint', () => {
+      renderWithProviders(<RequestHeaders />);
+      expect(screen.getByLabelText('Header key').getAttribute('placeholder')).toBeNull();
+      expect(screen.getByLabelText('Header value').getAttribute('placeholder')).toBeNull();
+    });
+
+    it('keeps the label visible after the user types', () => {
+      renderWithProviders(<RequestHeaders />);
+      fireEvent.change(screen.getByLabelText('Header key'), { target: { value: 'X-Custom', name: 'name' } });
+      expect((screen.getByLabelText('Header key') as HTMLInputElement).value).toBe('X-Custom');
+      expect(screen.getByText('Header key')).toBeTruthy();
+      expect(screen.getByLabelText('Header key')).toBeTruthy();
+    });
   });
 
   it('Add button is disabled when inputs are empty', () => {
@@ -82,33 +113,33 @@ describe('RequestHeaders', () => {
 
   it('enables Add button when both key and value are filled', () => {
     renderWithProviders(<RequestHeaders />);
-    fireEvent.change(screen.getByPlaceholderText('Key'), { target: { value: 'X-Custom', name: 'name' } });
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: 'test-value', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header key'), { target: { value: 'X-Custom', name: 'name' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: 'test-value', name: 'value' } });
     const addButton = screen.getByText('Add').closest('button');
     expect(addButton!.disabled).toBe(false);
   });
 
   it('adds a header and clears inputs on Add button click', () => {
     renderWithProviders(<RequestHeaders />, { preloadedState: stateWithHeaders });
-    fireEvent.change(screen.getByPlaceholderText('Key'), { target: { value: 'X-Custom', name: 'name' } });
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: 'test-value', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header key'), { target: { value: 'X-Custom', name: 'name' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: 'test-value', name: 'value' } });
     fireEvent.click(screen.getByText('Add'));
     // After adding, inputs should be cleared
-    expect((screen.getByPlaceholderText('Key') as HTMLInputElement).value).toBe('');
-    expect((screen.getByPlaceholderText('Value') as HTMLInputElement).value).toBe('');
+    expect((screen.getByLabelText('Header key') as HTMLInputElement).value).toBe('');
+    expect((screen.getByLabelText('Header value') as HTMLInputElement).value).toBe('');
   });
 
   it('does not add header when key is empty', () => {
     renderWithProviders(<RequestHeaders />, { preloadedState: stateWithHeaders });
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: 'test-value', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: 'test-value', name: 'value' } });
     const addButton = screen.getByText('Add').closest('button');
     expect(addButton!.disabled).toBe(true);
   });
 
   it('does not add header when value is whitespace only', () => {
     renderWithProviders(<RequestHeaders />);
-    fireEvent.change(screen.getByPlaceholderText('Key'), { target: { value: 'X-Custom', name: 'name' } });
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: '   ', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header key'), { target: { value: 'X-Custom', name: 'name' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: '   ', name: 'value' } });
     const addButton = screen.getByText('Add').closest('button');
     expect(addButton!.disabled).toBe(true);
   });
@@ -126,8 +157,8 @@ describe('RequestHeaders', () => {
     renderWithProviders(<RequestHeaders />, { preloadedState: stateWithHeaders });
     fireEvent.click(screen.getByTestId('edit-Content-Type'));
     // After edit, inputs should be filled with the header values
-    expect((screen.getByPlaceholderText('Key') as HTMLInputElement).value).toBe('Content-Type');
-    expect((screen.getByPlaceholderText('Value') as HTMLInputElement).value).toBe('application/json');
+    expect((screen.getByLabelText('Header key') as HTMLInputElement).value).toBe('Content-Type');
+    expect((screen.getByLabelText('Header value') as HTMLInputElement).value).toBe('application/json');
     // Button should say Update
     expect(screen.getByText('Update')).toBeTruthy();
   });
@@ -138,7 +169,7 @@ describe('RequestHeaders', () => {
         sidebarProperties: { showSidebar: true, mobileScreen: true }
       }
     });
-    expect(screen.getByPlaceholderText('Key')).toBeTruthy();
+    expect(screen.getByLabelText('Header key')).toBeTruthy();
   });
 
   it('hover over container sets isHoverOverHeadersList', () => {
@@ -147,13 +178,13 @@ describe('RequestHeaders', () => {
     fireEvent.mouseEnter(mainDiv);
     fireEvent.mouseLeave(mainDiv);
     // No crash, component still renders
-    expect(screen.getByPlaceholderText('Key')).toBeTruthy();
+    expect(screen.getByLabelText('Header key')).toBeTruthy();
   });
 
   it('does not add header when name is whitespace only', () => {
     renderWithProviders(<RequestHeaders />);
-    fireEvent.change(screen.getByPlaceholderText('Key'), { target: { value: '   ', name: 'name' } });
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: 'test-value', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header key'), { target: { value: '   ', name: 'name' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: 'test-value', name: 'value' } });
     const addButton = screen.getByText('Add').closest('button');
     expect(addButton!.disabled).toBe(true);
   });
@@ -161,8 +192,8 @@ describe('RequestHeaders', () => {
   it('updates header after editing - button text changes to Update', () => {
     renderWithProviders(<RequestHeaders />, { preloadedState: stateWithHeaders });
     fireEvent.click(screen.getByTestId('edit-Authorization'));
-    expect((screen.getByPlaceholderText('Key') as HTMLInputElement).value).toBe('Authorization');
-    expect((screen.getByPlaceholderText('Value') as HTMLInputElement).value).toBe('Bearer token');
+    expect((screen.getByLabelText('Header key') as HTMLInputElement).value).toBe('Authorization');
+    expect((screen.getByLabelText('Header value') as HTMLInputElement).value).toBe('Bearer token');
     expect(screen.getByText('Update')).toBeTruthy();
   });
 
@@ -172,11 +203,11 @@ describe('RequestHeaders', () => {
     fireEvent.click(screen.getByTestId('edit-Content-Type'));
     expect(screen.getByText('Update')).toBeTruthy();
     // Modify the value
-    fireEvent.change(screen.getByPlaceholderText('Value'), { target: { value: 'text/plain', name: 'value' } });
+    fireEvent.change(screen.getByLabelText('Header value'), { target: { value: 'text/plain', name: 'value' } });
     // Click Update
     fireEvent.click(screen.getByText('Update'));
     // Inputs should be cleared, button back to Add
-    expect((screen.getByPlaceholderText('Key') as HTMLInputElement).value).toBe('');
+    expect((screen.getByLabelText('Header key') as HTMLInputElement).value).toBe('');
     expect(screen.getByText('Add')).toBeTruthy();
   });
 
