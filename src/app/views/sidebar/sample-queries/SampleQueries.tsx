@@ -131,13 +131,13 @@ const LoadingSamples = ()=> {
  */
 const CachedSetMessageBar = () => {
   return (
-    <MessageBar intent={'warning'}>
+    <MessageBar intent={'warning'} aria-label={translateMessage('viewing a cached set')}>
       <MessageBarBody>
         {translateMessage('viewing a cached set')}
       </MessageBarBody>
       <MessageBarActions
         containerAction={
-          <Button appearance='transparent' icon={<DismissRegular />} />
+          <Button appearance='transparent' icon={<DismissRegular />} aria-label={translateMessage('Dismiss warning')}/>
         }
       />
     </MessageBar>
@@ -227,6 +227,9 @@ const RenderSampleLeafs = (props: SampleLeaf) => {
             id={query.id}
             tabIndex={0}
             onKeyDown={(e) => {
+              if (e.target !== e.currentTarget) {
+                return;
+              }
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 handleOnClick(query);

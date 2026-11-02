@@ -94,14 +94,6 @@ test.describe('Response area navigation', () => {
     await page.waitForTimeout(200);
     expect(await page.screenshot()).toMatchSnapshot();
   })
-  test('should have toolkit component tab in overflow menu', async () => {
-    await page.getByLabel('More response area items').click();
-    await page.getByRole('menuitem', { name: 'Toolkit component' }).click();
-    await page.waitForTimeout(700);
-    await page.evaluate(() => document.fonts.ready);
-    expect(page.locator('text=Open this example in')).toBeDefined();
-    expect(await page.screenshot()).toMatchSnapshot();
-  });
   test('should have expand component tab in overflow menu', async () => {
     await page.getByLabel('More response area items').click();
     await page.getByRole('menuitem', { name: 'Expand response' }).click();

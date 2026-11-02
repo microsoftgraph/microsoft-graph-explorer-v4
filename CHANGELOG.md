@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.12](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.11...v11.1.12) (2026-10-26)
+
+
+### Bug Fixes
+
+* keyboard nav read docs button ([6b3b5af](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/6b3b5af28024bf0afe7e75fe7e750e71539d3b1d))
+* keyboard nav returns to feedback button after closing or submitting feedback form ([#4088](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4088)) ([5467ad9](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/5467ad98decebbdadd74eb06a9773fed973decc0))
+* persistent visual label for the key and value input boxes ([#4090](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4090)) ([ce8fc01](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ce8fc01cb4cbd7e622d49fbada03d0593e8be6b7))
+* prevent createShareLink crash on invalid URL ([#4008](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4008)) ([bc148c8](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/bc148c818346cd93f660a2ebbe3ee68ac8bfd3e2))
+* remove graph toolkit tab item and content ([#4097](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4097)) ([f658aad](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/f658aad79c09ac2ca8edd143ad83808d78b89d15))
+* reverting previous commit ([ad700be](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/ad700be4fd6ea643c3836b469a05574c7ed7cfb1))
+* tab stop copy button and monaco editor (response header, adaptative card) ([#4086](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4086)) ([90074db](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/90074db46f9876e4dc23e8df94af73bc2aac7ba6))
+* toggle sidebar button on mobile or narrow screens added ([d407aa7](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/d407aa7bb9c838e5ec6075ecf80a5bd67b37842d))
+
 ## [11.1.11](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.10...v11.1.11) (2026-09-28)
 
 

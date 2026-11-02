@@ -1,7 +1,6 @@
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import {
   GRAPH_API_SANDBOX_URL,
-  GRAPH_TOOOLKIT_EXAMPLE_URL,
   GRAPH_URL,
   HOME_ACCOUNT_KEY,
   NPS_FEEDBACK_URL
@@ -38,7 +37,6 @@ export function filterRemoteDependencyData(envelope: ITelemetryItem): boolean {
       new URL(devxApiUrl).origin,
       GRAPH_API_SANDBOX_URL,
       new URL(graphProxyUrl).origin,
-      new URL(GRAPH_TOOOLKIT_EXAMPLE_URL).origin,
       new URL(NPS_FEEDBACK_URL).origin
     ];
     if (!targetsToInclude.includes(urlObject.origin)) {

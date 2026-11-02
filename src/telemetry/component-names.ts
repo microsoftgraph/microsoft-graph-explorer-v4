@@ -47,7 +47,6 @@ export const REQUEST_HEADERS_TAB = 'Request headers tab';
 export const EXPAND_RESPONSE_TAB = 'Expand response tab';
 export const RESPONSE_PREVIEW_TAB = 'Response preview tab';
 export const RESPONSE_HEADERS_TAB = 'Response headers tab';
-export const TOOLKIT_COMPONENT_TAB = 'Toolkit component tab';
 export const MODIFY_PERMISSIONS_TAB = 'Modify permissions tab';
 export const KEYBOARD_COPY_TABS = {
   'access-tokens-tab': 'Access token tab',
@@ -72,7 +71,6 @@ export const AUTOCOMPLETE_DOCUMENTATION_LINK = 'Autocomplete documentation link'
 export const RESOURCE_DOCUMENTATION_LINK = 'Resource documentation link';
 export const REPORT_AN_ISSUE_LINK = 'Report an issue link';
 export const OFFICE_DEV_PROGRAM_LINK = 'Office dev program link';
-export const GRAPH_TOOLKIT_PLAYGROUND_LINK = 'Graph toolkit playground link';
 export const MICROSOFT_APIS_TERMS_OF_USE_LINK = 'Microsoft APIs terms of use link';
 export const MICROSOFT_PRIVACY_STATEMENT_LINK = 'Microsoft privacy statement link';
 export const MICROSOFT_GRAPH_API_REFERENCE_DOCS_LINK = 'Microsoft graph API reference docs link';
