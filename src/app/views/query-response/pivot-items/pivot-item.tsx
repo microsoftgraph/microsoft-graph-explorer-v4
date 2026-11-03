@@ -19,7 +19,6 @@ import {
   useIsOverflowItemVisible
 } from '@fluentui/react-components';
 import { useState } from 'react';
-import { ThemeContext } from '../../../../themes/theme-context';
 import { translateMessage } from '../../../utils/translate-messages';
 import {
   ResponseHeaders,
@@ -30,14 +29,12 @@ import {
   darkThemeHostConfig,
   lightThemeHostConfig
 } from '../adaptive-cards/AdaptiveHostConfig';
-import GraphToolkit from '../graph-toolkit/GraphToolkit';
 import { Response } from '../response';
 import { Mode } from '../../../../types/enums';
 import {
   ArrowHookDownRightRegular,
   DocumentChevronDoubleRegular,
   ClipboardCodeRegular,
-  WindowWrenchRegular,
   CardUiRegular,
   MoreHorizontalRegular
 } from '@fluentui/react-icons';
@@ -140,11 +137,6 @@ export const GetPivotItems = () => {
       icon: <ClipboardCodeRegular />
     },
     {
-      id: translateMessage('Graph toolkit'),
-      name: translateMessage('Graph toolkit'),
-      icon: <WindowWrenchRegular />
-    },
-    {
       id: translateMessage('Adaptive Cards'),
       name: translateMessage('Adaptive Cards'),
       icon: <CardUiRegular />
@@ -183,7 +175,6 @@ export const GetPivotItems = () => {
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
         {selectedValue === translateMessage('Snippets') && <Snippets />}
-        {selectedValue === translateMessage('Graph toolkit') && <GraphToolkit />}
         {selectedValue === translateMessage('Adaptive Cards') && (
           <div id={'adaptive-cards-tab'} tabIndex={0}>
             <AdaptiveCards

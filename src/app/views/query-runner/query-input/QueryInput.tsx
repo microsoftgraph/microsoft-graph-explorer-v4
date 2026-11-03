@@ -123,7 +123,7 @@ const QueryInput = (props: IQueryInputProps) => {
           withArrow>
           <Dropdown
             key={dropdownKey}
-            aria-labelledby='http-method-dropdown'
+            aria-label={translateMessage('HTTP Request method')}
             placeholder='Select method'
             value={sampleQuery.selectedVerb}
             selectedOptions={[sampleQuery.selectedVerb || httpMethods.GET]}
@@ -159,7 +159,7 @@ const QueryInput = (props: IQueryInputProps) => {
       >
         <Dropdown
           key={dropdownKey}
-          aria-labelledby='graph-api-version-dropdown'
+          aria-label={translateMessage('Microsoft Graph API Version')}
           placeholder='Select a version'
           selectedOptions={[sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]]}
           value={sampleQuery.selectedVersion || GRAPH_API_VERSIONS[0]}

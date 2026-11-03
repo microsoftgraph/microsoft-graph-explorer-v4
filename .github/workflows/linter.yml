@@ -137,7 +137,9 @@ jobs:
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/lcov.info
           sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' reports/test-report.xml
 
-      - run: cp reports/test-report.xml coverage/${{matrix.shard}}.xml
+      - run: |
+          cp reports/test-report.xml coverage/${{matrix.shard}}.xml
+          mv coverage/lcov.info coverage/lcov-${{matrix.shard}}.info
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:

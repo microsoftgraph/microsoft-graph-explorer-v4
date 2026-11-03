@@ -9,12 +9,24 @@ jest.mock('../../../telemetry/component-names', () => ({
 jest.mock('../../../modules/authentication', () => ({
   authenticationWrapper: { getAccount: jest.fn(), getToken: jest.fn(), logIn: jest.fn(), consentToScopes: jest.fn() }
 }));
+interface FeedbackFormProps {
+  activated: boolean;
+  onDismissSurvey: () => void;
+  onDisableSurvey: () => void;
+}
+
 jest.mock('../query-runner/request/feedback/FeedbackForm', () => ({
   __esModule: true,
-  default: () => <div data-testid="feedback-form">FeedbackForm</div>
+  default: ({ activated, onDismissSurvey, onDisableSurvey }: FeedbackFormProps) => activated ? (
+    <div role="dialog" aria-label="Feedback survey">
+      <button onClick={onDismissSurvey}>Dismiss survey</button>
+      <button onClick={onDisableSurvey}>Disable survey</button>
+    </div>
+  ) : null
 }));
 
 import React from 'react';
+import '@testing-library/jest-dom';
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '../../../test-utils';
 import { FeedbackButton } from './FeedbackButton';
@@ -53,6 +65,46 @@ describe('FeedbackButton', () => {
     expect(telemetry.trackEvent).toHaveBeenCalledWith('btn', expect.objectContaining({
       ComponentName: 'feedback'
     }));
+  });
+
+  describe.each(['Dismiss survey', 'Disable survey'])('when the feedback form calls %s', (actionName) => {
+    const renderWithActiveSurvey = () => {
+      renderWithProviders(<FeedbackButton />, {
+        preloadedState: {
+          profile: { user: { profileType: 'MSA' } }
+        }
+      });
+      const feedbackButton = screen.getByRole('button', { name: 'Help Improve Graph Explorer?' });
+      fireEvent.click(feedbackButton);
+      return {
+        feedbackButton,
+        surveyAction: screen.getByRole('button', { name: actionName })
+      };
+    };
+
+    it('deactivates the survey', () => {
+      // Arrange
+      const { surveyAction } = renderWithActiveSurvey();
+
+      // Act
+      fireEvent.click(surveyAction);
+
+      // Assert
+      expect(screen.queryByRole('dialog', { name: 'Feedback survey' })).not.toBeInTheDocument();
+    });
+
+    it('returns focus to the feedback button', () => {
+      // Arrange
+      const { feedbackButton, surveyAction } = renderWithActiveSurvey();
+      surveyAction.focus();
+      expect(surveyAction).toHaveFocus();
+
+      // Act
+      fireEvent.click(surveyAction);
+
+      // Assert
+      expect(feedbackButton).toHaveFocus();
+    });
   });
 
   it('renders feedback button when user is undefined', () => {

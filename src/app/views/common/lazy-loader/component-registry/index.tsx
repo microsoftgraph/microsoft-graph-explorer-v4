@@ -2,7 +2,6 @@ import LazySnippets from '../../../query-response/snippets/Snippets';
 import LazySpecificPermissions from  '../../../query-runner/request/permissions';
 import LazyStatusMessages from  '../../../app-sections/StatusMessages';
 import LazyResponseHeaders from  '../../../query-response/headers/ResponseHeaders';
-import LazyGraphToolkit from  '../../../query-response/graph-toolkit/GraphToolkit';
 import LazyCopyButton from  '../../copy-button/CopyButton';
 import LazyAuth from  '../../../query-runner/request/auth/Auth';
 import LazyRequestHeaders from  '../../../query-runner/request/headers/RequestHeaders';
@@ -15,10 +14,6 @@ export const Permissions = (props?: any) => {
 
 export const StatusMessages = () => {
   return <LazyStatusMessages />;
-};
-
-export const GraphToolkit = (props?: any) => {
-  return <LazyGraphToolkit {...props} />;
 };
 
 export const ResponseHeaders = (props?: any) => {

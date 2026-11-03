@@ -342,4 +342,159 @@ describe('FeedbackForm component', () => {
     }
   });
 
+  describe('survey focus management', () => {
+    const renderActivatedSurvey = async (onDisableSurvey = jest.fn()) => {
+      const props = { onDismissSurvey: jest.fn(), onDisableSurvey };
+      const utils = render(<FeedbackForm activated={false} {...props} />);
+      await act(async () => {
+        await mockFloodgateInitialize.mock.results[0].value;
+      });
+      utils.rerender(<FeedbackForm activated={true} {...props} />);
+      await waitFor(() => {
+        expect(mockShowCustomSurvey).toHaveBeenCalled();
+      });
+      return utils;
+    };
+
+    const appendToBody = (html: string) => {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      document.body.appendChild(wrapper);
+      return wrapper;
+    };
+
+    let surveyDom: HTMLElement;
+    let addListenerSpy: jest.SpyInstance;
+    beforeEach(() => {
+      mockShowCustomSurvey.mockReset().mockResolvedValue(undefined);
+      addListenerSpy = jest.spyOn(document, 'addEventListener');
+      surveyDom = appendToBody(`
+        <input type="text" name="obf-OtherField" />
+        <input type="radio" name="obf-TFormRating" />
+        <button id="obf-ToastCancel">Cancel</button>
+      `);
+    });
+    afterEach(() => {
+      addListenerSpy.mock.calls
+        .filter(([type]) => type === 'focusin')
+        .forEach(([type, listener]) => document.removeEventListener(type, listener));
+      addListenerSpy.mockRestore();
+      surveyDom.remove();
+    });
+
+    it('moves focus to the survey cancel button when the rating input receives focus', async () => {
+      // Arrange
+      await renderActivatedSurvey();
+      const ratingInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-TFormRating"]')!;
+      const cancelButton = surveyDom.querySelector<HTMLButtonElement>('#obf-ToastCancel')!;
+
+      // Act
+      ratingInput.focus();
+
+      // Assert
+      expect(cancelButton).toHaveFocus();
+    });
+
+    it('ignores focus on elements other than the rating input', async () => {
+      // Arrange
+      await renderActivatedSurvey();
+      const otherInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-OtherField"]')!;
+      const ratingInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-TFormRating"]')!;
+      const cancelButton = surveyDom.querySelector<HTMLButtonElement>('#obf-ToastCancel')!;
+
+      // Act
+      otherInput.focus();
+
+      // Assert
+      expect(otherInput).toHaveFocus();
+      ratingInput.focus();
+      expect(cancelButton).toHaveFocus();
+    });
+
+    it('only redirects focus once per survey', async () => {
+      // Arrange
+      await renderActivatedSurvey();
+      const ratingInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-TFormRating"]')!;
+      const cancelButton = surveyDom.querySelector<HTMLButtonElement>('#obf-ToastCancel')!;
+      ratingInput.focus();
+      expect(cancelButton).toHaveFocus();
+
+      // Act
+      ratingInput.focus();
+
+      // Assert
+      expect(ratingInput).toHaveFocus();
+    });
+
+    it('does not raise an error when the survey has no cancel button', async () => {
+      // Arrange
+      await renderActivatedSurvey();
+      surveyDom.querySelector('#obf-ToastCancel')!.remove();
+      const ratingInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-TFormRating"]')!;
+      // jsdom reports exceptions thrown inside event listeners as window 'error' events
+      const onWindowError = jest.fn((event: ErrorEvent) => event.preventDefault());
+      window.addEventListener('error', onWindowError);
+
+      // Act
+      ratingInput.focus();
+      window.removeEventListener('error', onWindowError);
+
+      // Assert
+      expect(onWindowError).not.toHaveBeenCalled();
+      expect(ratingInput).toHaveFocus();
+    });
+
+    describe('when showing the survey fails', () => {
+      const surveyError = new Error('survey error');
+      const renderFailingSurvey = async () => {
+        const onDisableSurvey = jest.fn();
+        const onRethrownError = jest.fn();
+        mockShowCustomSurvey.mockImplementationOnce(() => {
+          const surveyRequest = Promise.reject<void>(surveyError);
+          const handleRejection = surveyRequest.catch.bind(surveyRequest);
+          jest.spyOn(surveyRequest, 'catch').mockImplementation((onRejected) => {
+            const handledRequest = handleRejection(onRejected);
+            // Observe the component's rethrow without leaving an unhandled rejection.
+            void handledRequest.catch(onRethrownError);
+            return handledRequest;
+          });
+          return surveyRequest;
+        });
+        await renderActivatedSurvey(onDisableSurvey);
+        await waitFor(() => {
+          expect(onRethrownError).toHaveBeenCalledTimes(1);
+        });
+        return { onDisableSurvey, onRethrownError };
+      };
+
+      it('disables the survey', async () => {
+        // Arrange / Act
+        const { onDisableSurvey } = await renderFailingSurvey();
+
+        // Assert
+        expect(onDisableSurvey).toHaveBeenCalledTimes(1);
+      });
+
+      it('re-throws the original error', async () => {
+        // Arrange / Act
+        const { onRethrownError } = await renderFailingSurvey();
+
+        // Assert
+        expect(onRethrownError.mock.calls[0][0]).toBe(surveyError);
+      });
+
+      it('stops redirecting focus from the rating input', async () => {
+        // Arrange
+        await renderFailingSurvey();
+        const ratingInput = surveyDom.querySelector<HTMLInputElement>('[name="obf-TFormRating"]')!;
+
+        // Act
+        ratingInput.focus();
+
+        // Assert
+        expect(ratingInput).toHaveFocus();
+      });
+    });
+  });
+
 });

@@ -15,10 +15,6 @@ jest.mock('../adaptive-cards/AdaptiveHostConfig', () => ({
   darkThemeHostConfig: {},
   lightThemeHostConfig: {}
 }));
-jest.mock('../graph-toolkit/GraphToolkit', () => ({
-  __esModule: true,
-  default: () => <div data-testid="graph-toolkit">GT</div>
-}));
 jest.mock('../../../utils/translate-messages', () => ({
   translateMessage: (msg: string) => msg
 }));
@@ -64,7 +60,7 @@ describe('GetPivotItems', () => {
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
   });
 
-  it('shows 5 tabs in Complete mode', () => {
+  it('shows 4 tabs in Complete mode', () => {
     renderWithProviders(<GetPivotItems />, {
       preloadedState: {
         graphExplorerMode: 'COMPLETE',
@@ -74,11 +70,10 @@ describe('GetPivotItems', () => {
     });
 
     const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(5);
+    expect(tabs).toHaveLength(4);
     expect(screen.getByRole('tab', { name: 'Response Preview' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Snippets' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Graph toolkit' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Adaptive Cards' })).toBeTruthy();
   });
 });

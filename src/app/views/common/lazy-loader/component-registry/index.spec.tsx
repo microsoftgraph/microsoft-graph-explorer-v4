@@ -6,7 +6,6 @@ jest.mock('../../../query-response/snippets/Snippets', () => () => <div>Snippets
 jest.mock('../../../query-runner/request/permissions', () => () => <div>Permissions</div>);
 jest.mock('../../../app-sections/StatusMessages', () => () => <div>StatusMessages</div>);
 jest.mock('../../../query-response/headers/ResponseHeaders', () => () => <div>Headers</div>);
-jest.mock('../../../query-response/graph-toolkit/GraphToolkit', () => () => <div>GraphToolkit</div>);
 jest.mock('../../copy-button/CopyButton', () => () => <div>CopyButton</div>);
 jest.mock('../../../query-runner/request/auth/Auth', () => () => <div>Auth</div>);
 jest.mock('../../../query-runner/request/headers/RequestHeaders', () => () => <div>RequestHeaders</div>);
@@ -22,8 +21,7 @@ import {
   RequestHeaders,
   History,
   ResourceExplorer,
-  ResponseHeaders,
-  GraphToolkit
+  ResponseHeaders
 } from './index';
 
 describe('Component Registry', () => {
@@ -70,10 +68,5 @@ describe('Component Registry', () => {
   it('renders ResponseHeaders', () => {
     render(<ResponseHeaders />);
     expect(screen.getByText('Headers')).toBeInTheDocument();
-  });
-
-  it('renders GraphToolkit', () => {
-    render(<GraphToolkit />);
-    expect(screen.getByText('GraphToolkit')).toBeInTheDocument();
   });
 });
