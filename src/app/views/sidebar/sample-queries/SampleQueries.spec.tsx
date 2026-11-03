@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, createEvent, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 jest.mock('../../../../modules/authentication', () => ({
@@ -28,7 +28,8 @@ jest.mock('../../../utils/token-helpers', () => ({
 }));
 
 import { SampleQueries } from './SampleQueries';
-import { renderWithProviders } from '../../../../test-utils';
+import { createMockStore, renderWithProviders } from '../../../../test-utils';
+import { setSampleQuery } from '../../../services/slices/sample-query.slice';
 
 describe('SampleQueries component', () => {
   it('renders with samples from store', () => {
@@ -757,6 +758,73 @@ describe('SampleQueries component', () => {
     if (leafItem) {
       fireEvent.keyDown(leafItem, { key: 'Enter' });
     }
+  });
+
+  describe('leaf item keyboard selection', () => {
+    const renderLeafWithDocLink = async () => {
+      const queries = [
+        {
+          id: 's1', category: 'Users', method: 'GET', humanName: 'list users',
+          requestUrl: '/v1.0/users', headers: [], tip: null, postBody: null,
+          docLink: 'https://learn.microsoft.com/graph/api/user-list'
+        }
+      ];
+      const store = createMockStore({
+        samples: { queries, pending: false, error: null },
+        profile: null,
+        auth: { authToken: { token: false, pending: false }, consentedScopes: [] },
+        sidebarProperties: { showSidebar: true, mobileScreen: false }
+      });
+      const dispatch = jest.spyOn(store, 'dispatch');
+      renderWithProviders(<SampleQueries />, { store });
+      const leafItem = await screen.findByRole('treeitem', { name: /list users/i });
+      return {
+        leafItem,
+        docLink: within(leafItem).getByRole('link', { name: 'Read documentation' }),
+        dispatch
+      };
+    };
+
+    it.each(['Enter', ' '])('does not select the query when %p bubbles up from the documentation link', async (key) => {
+      // Arrange
+      const { docLink, dispatch } = await renderLeafWithDocLink();
+
+      // Act
+      fireEvent.keyDown(docLink, { key });
+
+      // Assert
+      expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: setSampleQuery.type }));
+    });
+
+    it.each(['Enter', ' '])('loads the query and prevents the default action for %p on the leaf item', async (key) => {
+      // Arrange
+      const { leafItem, dispatch } = await renderLeafWithDocLink();
+      const keyDown = createEvent.keyDown(leafItem, { key });
+
+      // Act
+      fireEvent(leafItem, keyDown);
+
+      // Assert
+      expect(keyDown.defaultPrevented).toBe(true);
+      expect(dispatch).toHaveBeenCalledWith(setSampleQuery({
+        sampleUrl: 'https://graph.microsoft.com/v1.0/users',
+        selectedVerb: 'GET',
+        sampleBody: '',
+        sampleHeaders: [],
+        selectedVersion: 'v1.0'
+      }));
+    });
+
+    it('does not select the query for keys other than Enter or Space', async () => {
+      // Arrange
+      const { leafItem, dispatch } = await renderLeafWithDocLink();
+
+      // Act
+      fireEvent.keyDown(leafItem, { key: 'a' });
+
+      // Assert
+      expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: setSampleQuery.type }));
+    });
   });
 
   it('fetches samples when queries are empty and no search', () => {
