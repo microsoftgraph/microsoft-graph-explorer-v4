@@ -8,6 +8,7 @@ jest.mock('../../../../modules/authentication', () => ({
 }));
 
 import React from 'react';
+import '@testing-library/jest-dom';
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '../../../../test-utils';
 import CopyButton from './CopyButton';
@@ -31,5 +32,26 @@ describe('CopyButton', () => {
     renderWithProviders(<CopyButton handleOnClick={handleClick} isIconButton={false} />);
     fireEvent.click(screen.getByText('Copy'));
     expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([true, false])('restores focus after copying with isIconButton=%s', (isIconButton) => {
+    const handleClick = jest.fn(() => {
+      screen.getByRole('button', { name: 'Other control' }).focus();
+    });
+    renderWithProviders(
+      <>
+        <button>Other control</button>
+        <CopyButton handleOnClick={handleClick} isIconButton={isIconButton} />
+      </>
+    );
+    const copyButton = screen.getByRole('button', { name: 'Copy' });
+    copyButton.focus();
+    expect(copyButton).toHaveFocus();
+
+    fireEvent.click(copyButton);
+
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(copyButton).toHaveFocus();
+    expect(screen.getByRole('status')).toHaveTextContent('Copied');
   });
 });
