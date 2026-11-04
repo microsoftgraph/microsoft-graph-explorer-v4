@@ -38,6 +38,7 @@ export const Layout = (props: LayoutProps) => {
   const [sampleBody, setSampleBody] = useState('');
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
   const [initialSidebarWidth, setInitialSidebarWidth] = useState(456);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
   const [sidebarElement, setSidebarElement] = useState<HTMLElement | null>(null);
   const query = createShareLink(sampleQuery, props.authenticated);
   const [requestHeight, setRequestHeight] = useState(300);
@@ -65,6 +66,7 @@ export const Layout = (props: LayoutProps) => {
     if (!mobileScreen) {
       setSidebarColumnSize(456);
       setInitialSidebarWidth(456);
+      setSidebarExpanded(true);
     } else {
       setSidebarColumnSize(0);
     }
@@ -81,8 +83,8 @@ export const Layout = (props: LayoutProps) => {
   const handleToggleSelect = (toggled: boolean) => {
     if (mobileScreen) {
       dispatch(toggleSidebar({ showSidebar: toggled, mobileScreen: true }));
-      setSidebarColumnSize(toggled ? window.innerWidth : 0);
     } else {
+      setSidebarExpanded(toggled);
       if (toggled) {
         setSidebarColumnSize(initialSidebarWidth > 456 ? initialSidebarWidth : 456);
       } else {
@@ -164,17 +166,26 @@ export const Layout = (props: LayoutProps) => {
   return (
     <PopupsProvider>
       <div className={layoutStyles.container}>
-        <MainHeader />
+        <div className={layoutStyles.fixedSection}>
+          <MainHeader />
+        </div>
         {props.graphExplorerMode === Mode.TryIt && (
           <div className={layoutStyles.headerMessaging}>
             {headerMessaging(query)}
           </div>
         )}
         <div id='content-ref' className={mergeClasses(layoutStyles.content, resizeStyles)} ref={sidebarWrapperRef}>
-          {showSidebar && props.graphExplorerMode === Mode.Complete && (
-            <div id='sidebar-ref' className={layoutStyles.sidebar} ref={storeSidebarElement}>
-              <Sidebar handleToggleSelect={handleToggleSelect} />
-              {!mobileScreen && (
+          {props.graphExplorerMode === Mode.Complete && (
+            <div
+              id='sidebar-ref'
+              className={mergeClasses(
+                layoutStyles.sidebar,
+                mobileScreen ? layoutStyles.mobileSidebar : !showSidebar && layoutStyles.hiddenSidebar
+              )}
+              ref={storeSidebarElement}
+            >
+              <Sidebar handleToggleSelect={handleToggleSelect} expanded={sidebarExpanded} />
+              {!mobileScreen && showSidebar && (
                 <LayoutResizeHandler
                   position='end'
                   ref={sidebarHandleRef}
@@ -185,7 +196,7 @@ export const Layout = (props: LayoutProps) => {
             </div>
           )}
           <div id='main-content' className={layoutStyles.mainContent}>
-            <div style={{ margin: '0 10px' }}>
+            <div className={layoutStyles.workspaceSection}>
               <Notification
                 header={translateMessage('Banner notification 1 header')}
                 content={translateMessage('Banner notification 1 content')}
@@ -194,7 +205,7 @@ export const Layout = (props: LayoutProps) => {
               />
             </div>
             <ValidationProvider>
-              <div style={{ margin: '0 10px' }}>
+              <div className={layoutStyles.workspaceSection}>
                 <QueryRunner onSelectVerb={props.handleSelectVerb} />
               </div>
               <div id='request-response-area' className={layoutStyles.requestResponseArea}>
@@ -213,7 +224,7 @@ export const Layout = (props: LayoutProps) => {
                     />
                   )}
                 </div>
-                <div style={{ margin: '0 10px' }}>
+                <div className={layoutStyles.workspaceSection}>
                   <StatusMessages />
                 </div>
                 <div id='response-area' className={layoutStyles.responseArea}>
@@ -223,7 +234,9 @@ export const Layout = (props: LayoutProps) => {
             </ValidationProvider>
           </div>
         </div>
-        <TermsOfUseMessage />
+        <div className={layoutStyles.fixedSection}>
+          <TermsOfUseMessage />
+        </div>
       </div>
       <CollectionPermissionsProvider>
         <PopupsWrapper />

@@ -21,7 +21,9 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    height: '100%',
+    flex: 1,
+    minHeight: 0,
+    minWidth: 0,
     width: '100%',
     position: 'relative'
   },
@@ -32,7 +34,17 @@ const useStyles = makeStyles({
     maxWidth: '90%',
     overflow: 'hidden',
     height: '90%',
-    maxHeight: '100%'
+    maxHeight: '100%',
+    boxSizing: 'border-box'
+  },
+  dialogBody: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    minHeight: 0
+  },
+  dialogActions: {
+    flexShrink: 0
   },
   dialogBtn: {
     position: 'absolute',
@@ -45,6 +57,9 @@ const useStyles = makeStyles({
     marginTop: tokens.spacingVerticalL
   },
   dialogContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
     padding: '16px',
     overflow: 'auto',
     whiteSpace: 'pre-wrap',
@@ -73,11 +88,11 @@ const PivotItemsDialog = () => {
       </Tooltip>
       <Dialog open={open} onOpenChange={(_event, data) => setOpen(data.open)}>
         <DialogSurface className={styles.dialog}>
-          <DialogBody>
+          <DialogBody className={styles.dialogBody}>
             <DialogContent className={styles.dialogContent}>
               <GetPivotItems />
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={styles.dialogActions}>
               <DialogTrigger disableButtonEnhancement>
                 <Button appearance='secondary'>{translateMessage('Close')}</Button>
               </DialogTrigger>

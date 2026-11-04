@@ -1,4 +1,4 @@
-import { Text, makeStyles, tokens } from '@fluentui/react-components';
+import { Text, makeStyles, tokens, useRestoreFocusTarget } from '@fluentui/react-components';
 import { useAppDispatch, useAppSelector } from '../../../store';
 
 import Authentication from '../authentication/Authentication';
@@ -10,6 +10,7 @@ import { Tenant } from './Tenant';
 import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { Button } from '@fluentui/react-components';
+import { MOBILE_SIDEBAR_ID } from '../sidebar/Sidebar.styles';
 
 const useStyles = makeStyles({
   root: {
@@ -50,7 +51,8 @@ const useStyles = makeStyles({
 const MainHeader = ()=>{
   const styles = useStyles()
   const dispatch = useAppDispatch();
-  const  mobileScreen  = useAppSelector((state) => state.sidebarProperties.mobileScreen);
+  const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
+  const restoreFocusTarget = useRestoreFocusTarget();
 
   const handleSidebarToggle = () => {
     dispatch(toggleSidebar({ mobileScreen: true }));
@@ -61,10 +63,14 @@ const MainHeader = ()=>{
       <div className={styles.headerTextContainer}>
         {mobileScreen && (
           <Button
+            {...restoreFocusTarget}
             appearance="subtle"
             className={styles.menuIcon}
             icon={<PanelLeftExpand20Regular />}
             aria-label={translateMessage('Toggle sidebar')}
+            aria-expanded={showSidebar}
+            aria-controls={MOBILE_SIDEBAR_ID}
+            aria-haspopup='dialog'
             onClick={handleSidebarToggle}
             // ref={buttonRef}
           />

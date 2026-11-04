@@ -161,7 +161,7 @@ describe('Layout component', () => {
     expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument();
   });
 
-  it('does not render sidebar when showSidebar is false', () => {
+  it('keeps the sidebar owner mounted but hidden when showSidebar is false', () => {
     renderWithProviders(<Layout {...defaultProps} />, {
       preloadedState: {
         sidebarProperties: { showSidebar: false, mobileScreen: false },
@@ -175,7 +175,7 @@ describe('Layout component', () => {
         auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
       }
     });
-    expect(screen.queryByTestId('sidebar')).not.toBeInTheDocument();
+    expect(screen.getByTestId('sidebar')).not.toBeVisible();
   });
 
   it('renders in mobile mode without resize handler', () => {

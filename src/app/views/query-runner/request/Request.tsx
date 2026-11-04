@@ -133,7 +133,7 @@ const Request = (props: IRequestProps) => {
     <div className={styles.container}>
       <div className={styles.tabContainer}>
         {mobileScreen ? (
-          <Overflow minimumVisible={2}>
+          <Overflow minimumVisible={1}>
             <TabList selectedValue={selectedTab} onTabSelect={(_, data) => handleTabSelect(data.value)} size='small'>
               {tabs.map((tab) => (
                 <OverflowItem key={tab.id} id={tab.id} priority={tab.id === selectedTab ? 2 : 1}>
@@ -160,12 +160,12 @@ const Request = (props: IRequestProps) => {
       </div>
       <div className={styles.tabContent}>
         {selectedTab === 'request-body' && (
-          <div style={{ flex: 1, display: 'flex' }}>
+          <div style={{ flex: 1, minHeight: 0, minWidth: 0, display: 'flex' }}>
             <RequestBody handleOnEditorChange={props.handleOnEditorChange} isVisible={selectedTab === 'request-body'} />
           </div>
         )}
         {selectedTab === 'request-headers' && (
-          <div style={{ flex: 1, display: 'flex' }}>
+          <div style={{ flex: 1, minHeight: 0, minWidth: 0, display: 'flex' }}>
             <RequestHeaders />
           </div>
         )}

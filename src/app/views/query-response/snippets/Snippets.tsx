@@ -63,8 +63,8 @@ const useSnippetStyles = makeStyles({
     margin: '0 auto',
     paddingTop: '5px',
     paddingLeft: '5px',
-    maxHeight: '100vh',
-    overflowY: 'hidden',
+    flex: 1,
+    minWidth: 0,
     display: 'flex',
     flexDirection: 'column'
   },
@@ -75,17 +75,23 @@ const useSnippetStyles = makeStyles({
   codeContainerLayout: {
     display: 'flex',
     flexDirection: 'column',
-    flex: '1 1 auto',
-    height: '60vh'
+    flex: 1,
+    // Keeps about 150px of code visible on short windows; the response tab content scrolls to reach it.
+    minHeight: '230px'
   },
   copyButton: {
+    flexShrink: 0,
     marginLeft: 'auto'
   },
   snippetContent: {
     display: 'flex',
     flexDirection: 'column',
-    overflowY: 'hidden',
-    maxHeight: 'calc(100vh-120px)'
+    flex: 1,
+    minWidth: 0
+  },
+  tabList: {
+    flexShrink: 0,
+    overflowX: 'auto'
   }
 });
 
@@ -173,9 +179,10 @@ const ExtraSnippetInformation: React.FC<{ language: string }> = ({ language }) =
 };
 
 const GetSnippets = () => {
+  const styles = useSnippetStyles();
   const validation = useContext(ValidationContext);
   return (
-    <div>
+    <div className={styles.snippetContent}>
       {validation.isValid && <RenderSnippets />}
       {!validation.isValid && (
         <Label weight='semibold'>{translateMessage('Invalid URL')}!</Label>
@@ -197,7 +204,7 @@ const RenderSnippets = () => {
   };
   return (
     <div id='snippets-tablist' className={styles.container}>
-      <TabList selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
+      <TabList className={styles.tabList} selectedValue={selectedLanguage} onTabSelect={onTabSelect}>
         <Tab key='CSharp' value='CSharp'>C#</Tab>
         {/*The rest should be sorted in alphabetical order to match docs */}
         {Object.keys(supportedLanguages)
@@ -207,7 +214,7 @@ const RenderSnippets = () => {
             <Tab key={language} value={language}>{language}</Tab>
           ))}
       </TabList>
-      <div id='snippet-content'>
+      <div id='snippet-content' className={styles.snippetContent}>
         <SnippetContent language={selectedLanguage as string} />
       </div>
     </div>

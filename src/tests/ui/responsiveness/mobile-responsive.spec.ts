@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
 import { test, expect, Page } from '@playwright/test';
+import path from 'path';
+import { useLocalMonacoWorkers } from './monaco-workers';
 
 test.use({
   viewport: {
@@ -11,41 +13,83 @@ test.use({
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage();
+  page = await browser.newPage({ viewport: { width: 412, height: 914 }, timezoneId: 'UTC' });
+  await page.route(url => url.pathname.endsWith('/samples'), route => route.fulfill({
+    contentType: 'application/json',
+    headers: { 'access-control-allow-origin': '*' },
+    body: JSON.stringify({ sampleQueries: [{
+      id: 'mobile-profile',
+      category: 'Getting started',
+      requestUrl: '/v1.0/me',
+      method: 'GET',
+      humanName: 'my profile'
+    }] })
+  }));
+  await page.route('**/openapi/tree?**', route => route.fulfill({
+    contentType: 'application/json',
+    headers: { 'access-control-allow-origin': '*' },
+    body: JSON.stringify({
+      segment: '/', labels: [], children: [{
+        segment: 'applications', children: [],
+        labels: ['v1.0', 'beta'].map(name => ({ name, methods: ['GET'] }))
+      }]
+    })
+  }));
+  await page.route('**/api/proxy?**', route => route.fulfill({
+    contentType: 'application/json',
+    body: JSON.stringify({ displayName: 'Layout Profile', givenName: 'Layout', surname: 'Profile' })
+  }));
+  await page.route('https://cdn.jsdelivr.net/npm/monaco-editor@*/min/vs/**', route => route.fulfill({
+    path: path.join(
+      process.cwd(), 'node_modules', 'monaco-editor', 'min', 'vs',
+      new URL(route.request().url()).pathname.split('/min/vs/')[1]
+    )
+  }));
+  await useLocalMonacoWorkers(page);
   await page.goto('/');
+});
+
+test.afterAll(async () => {
+  await page.close();
 });
 
 
 test.describe('Sidebar navigation', () => {
   test('should have sample queries tab', async () => {
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
-    await page.getByRole('tab', { name: 'Sample queries Sample queries xx' }).click();
+    await page.getByRole('button', { name: 'Toggle sidebar', exact: true }).click();
+    const drawer = page.getByRole('dialog', { name: 'Queries', exact: true });
+    await drawer.getByRole('tab', { name: 'Sample queries', exact: true }).click();
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(800);
-    expect(page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' })).toBeDefined();
+    const sample = drawer.getByText('my profile', { exact: true });
+    await expect(sample).toBeVisible();
+    await drawer.evaluate(element => Promise.all(element.getAnimations().map(animation => animation.finished)));
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' }).click();
+    await sample.click();
+    await expect(drawer).not.toBeVisible();
     await page.getByRole('button', { name: 'Run query' }).click();
+    await expect(page.locator('#response-area .view-lines')).toContainText('Layout Profile');
   })
   test('should have resources tab', async () => {
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
-    await page.getByRole('tab', { name: 'Resources Resources xx' }).click();
+    await page.getByRole('button', { name: 'Toggle sidebar', exact: true }).click();
+    const drawer = page.getByRole('dialog', { name: 'Queries', exact: true });
+    await drawer.getByRole('tab', { name: 'API Explorer', exact: true }).click();
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(200);
-    await page.getByRole('button', { name: 'applications (8)' }).click();
+    await drawer.getByText('applications', { exact: true }).click();
+    await expect(drawer.getByText('GET', { exact: true })).toBeVisible();
     expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
+    await drawer.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(drawer).not.toBeVisible();
   })
   test('should have history tab', async () => {
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
+    await page.getByRole('button', { name: 'Toggle sidebar', exact: true }).click();
+    const drawer = page.getByRole('dialog', { name: 'Queries', exact: true });
     await page.evaluate(() => document.fonts.ready);
-    await page.getByRole('tab', { name: 'History History xx' }).click();
+    await drawer.getByRole('tab', { name: 'History', exact: true }).click();
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(500);
-    page.getByText('Today');
+    await expect(drawer.getByRole('treeitem').first()).toBeVisible();
     expect(await page.screenshot()).toMatchSnapshot();
-    expect(page.locator('span:has-text("Today")')).toBeDefined();
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
+    await drawer.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(drawer).not.toBeVisible();
   })
 });
 
@@ -78,9 +122,11 @@ test.describe('Response area navigation', () => {
     expect(await page.screenshot()).toMatchSnapshot();
   })
   test('should have adaptive card tab in overflow menu', async () => {
-    await page.getByRole('button', { name: 'Minimize sidebar' }).click();
-    await page.getByRole('tab', { name: 'Sample queries Sample queries xx' }).click();
-    await page.getByRole('gridcell', { name: 'my profile' }).filter({ hasText: 'my profileGET my profile' }).click();
+    await page.getByRole('button', { name: 'Toggle sidebar', exact: true }).click();
+    const drawer = page.getByRole('dialog', { name: 'Queries', exact: true });
+    await drawer.getByRole('tab', { name: 'Sample queries', exact: true }).click();
+    await drawer.getByText('my profile', { exact: true }).click();
+    await expect(drawer).not.toBeVisible();
     await page.getByRole('button', { name: 'Run query' }).click();
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(1000);

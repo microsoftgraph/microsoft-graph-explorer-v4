@@ -22,7 +22,7 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
 
   case 'application/json':
     return (
-      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+      <div style={{ flex: 1, minHeight: 0, minWidth: 0, display: 'flex' }}>
         <Monaco body={body} readOnly language="application/json" />
       </div>
     );
@@ -34,7 +34,7 @@ const ResponseDisplay = (props: ResponseDisplayProps) => {
       );
     }
     return (
-      <div style={{ flex: 1, height: '100%', display: 'flex' }}>
+      <div style={{ flex: 1, minHeight: 0, minWidth: 0, display: 'flex' }}>
         <Monaco body={body} readOnly language="text/plain" />
       </div>
     );

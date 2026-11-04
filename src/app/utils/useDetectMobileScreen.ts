@@ -9,13 +9,13 @@ export const useDetectMobileScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const handleResize = () => {
-      const isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
-      dispatch(toggleSidebar({ showSidebar: !isMobile, mobileScreen: isMobile }));
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const updateMode = () => {
+      dispatch(toggleSidebar({ showSidebar: !mediaQuery.matches, mobileScreen: mediaQuery.matches }));
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    updateMode();
+    mediaQuery.addEventListener('change', updateMode);
+    return () => mediaQuery.removeEventListener('change', updateMode);
   }, [dispatch]);
 };

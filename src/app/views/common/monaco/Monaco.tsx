@@ -22,8 +22,19 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    height: '100%',
+    minHeight: 0,
+    minWidth: 0,
     overflow: 'hidden'
+  },
+  extraInformation: {
+    flexShrink: 0,
+    maxHeight: '48px',
+    overflowY: 'auto'
+  },
+  editor: {
+    flex: 1,
+    minHeight: 0,
+    minWidth: 0
   }
 });
 
@@ -44,6 +55,7 @@ const Monaco = ({ body, onChange, language, readOnly, extraInfoElement, isVisibl
     renderLineHighlight: 'none',
     scrollBeyondLastLine: true,
     overviewRulerBorder: false,
+    scrollbar: { alwaysConsumeMouseWheel: false },
     wordSeparators: '"'
   };
 
@@ -86,21 +98,23 @@ const Monaco = ({ body, onChange, language, readOnly, extraInfoElement, isVisibl
     <ThemeContext.Consumer>
       {(theme) => (
         <div id='monaco-editor' className={styles.container}>
-          {extraInfoElement}
-          <Editor
-            language={language || 'json'}
-            width='100%'
-            height='100%'
-            options={editorOptions}
-            onChange={onChange}
-            theme={theme === 'light' ? 'vs' : 'vs-dark'}
-            onMount={(editorInstance) => {
-              editorRef.current = editorInstance;
-              editorInstance.layout();
-              editorInstance.setValue(formattedBody ?? '');
-              setEditorReady(true);
-            }}
-          />
+          {extraInfoElement && <div className={styles.extraInformation}>{extraInfoElement}</div>}
+          <div className={styles.editor}>
+            <Editor
+              language={language || 'json'}
+              width='100%'
+              height='100%'
+              options={editorOptions}
+              onChange={onChange}
+              theme={theme === 'light' ? 'vs' : 'vs-dark'}
+              onMount={(editorInstance) => {
+                editorRef.current = editorInstance;
+                editorInstance.layout();
+                editorInstance.setValue(formattedBody ?? '');
+                setEditorReady(true);
+              }}
+            />
+          </div>
         </div>
       )}
     </ThemeContext.Consumer>

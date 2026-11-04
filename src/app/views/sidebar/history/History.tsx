@@ -30,7 +30,8 @@ import {
   TreeItemLayout,
   TreeItemValue,
   TreeOpenChangeData,
-  TreeOpenChangeEvent
+  TreeOpenChangeEvent,
+  mergeClasses
 } from '@fluentui/react-components';
 import {
   AddSquare20Regular,
@@ -566,7 +567,7 @@ const History = ()=>{
     }
     setHistoryItems(content)
   }
-  return <div className={styles.container}>
+  return <div className={mergeClasses(styles.container, sidebarStyles.tabPanel)}>
     <SearchBox
       placeholder={translateMessage('Search history items')}
       onChange={handleSearchValueChanged}
@@ -576,21 +577,25 @@ const History = ()=>{
     >
     </SearchBox>
     <hr/>
-    <MessageBar>
-      <MessageBarBody>
-        {translateMessage('Your history includes queries made in the last 30 days')}
-      </MessageBarBody>
-    </MessageBar>
-    {historyItems.length === 0 && <Label size='medium'>{translateMessage('We did not find any history items')}</Label>}
-    <AriaLiveAnnouncer>
-      <Text
-        aria-live='polite'
-        aria-label={`${historyItems.length} ${translateMessage('search results available')}.`}
-      >
-        {`${historyItems.length} ${translateMessage('search results available')}.`}
-      </Text>
-    </AriaLiveAnnouncer>
-    <HistoryItems history={items} searchValue={searchValue} groups={groups}></HistoryItems>
+    <div className={sidebarStyles.results}>
+      <MessageBar>
+        <MessageBarBody>
+          {translateMessage('Your history includes queries made in the last 30 days')}
+        </MessageBarBody>
+      </MessageBar>
+      {historyItems.length === 0 && (
+        <Label size='medium'>{translateMessage('We did not find any history items')}</Label>
+      )}
+      <AriaLiveAnnouncer>
+        <Text
+          aria-live='polite'
+          aria-label={`${historyItems.length} ${translateMessage('search results available')}.`}
+        >
+          {`${historyItems.length} ${translateMessage('search results available')}.`}
+        </Text>
+      </AriaLiveAnnouncer>
+      <HistoryItems history={items} searchValue={searchValue} groups={groups}></HistoryItems>
+    </div>
   </div>
 }
 

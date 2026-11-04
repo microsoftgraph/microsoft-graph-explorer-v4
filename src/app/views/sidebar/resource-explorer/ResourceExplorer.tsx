@@ -295,7 +295,7 @@ const ResourceExplorer = () => {
   }
 
   return (
-    <div className={resourceExplorerStyles.container}>
+    <div className={mergeClasses(resourceExplorerStyles.container, sidebarStyles.tabPanel)}>
       <SearchBox
         placeholder={translateMessage('Search resources')}
         onChange={(event) => debouncedSearch(event as React.ChangeEvent<HTMLInputElement>)}
@@ -303,48 +303,50 @@ const ResourceExplorer = () => {
         aria-live='polite'
         aria-label={translateMessage('Search resources')}
       />
-      <AriaLiveAnnouncer>
-        <Text
-          aria-live='polite'
-          aria-label={`${items.length} ${translateMessage('search results available')}.`}
-        >
-          {`${items.length} ${translateMessage('search results available')}.`}
-        </Text>
-      </AriaLiveAnnouncer>
-      <Button onClick={openPreviewCollection}
-        icon={<Collections20Regular />}
-        {...restoreFocusTargetAttribute}
-        aria-label={translateMessage(`My API Collection: ${selectedLinks?.length} ${translateMessage('items')}`)}
-        className={resourceExplorerStyles.apiCollectionButton}
-      >
-        {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
-      </Button>
-      <div className={resourceExplorerStyles.stackStyles}>
-        <Label weight='semibold'>
-          {translateMessage('Resources available')}
-        </Label>
-        <div className={resourceExplorerStyles.versioning}>
-          <Switch
-            aria-label={translateMessage('Switch to beta')}
-            onChange={changeVersion}
-            labelPosition='after'
-          />
-          <Label weight='semibold'>
-            {translateMessage('Switch to beta')}
-          </Label>
-        </div>
-      </div>
-      {
-        items.length === 0 ? <NoResultsFound message='No resources found' /> :
-          <FlatTree
-            className={sidebarStyles.tree}
-            aria-label={translateMessage('Resources')}
-            openItems={openItems}
-            onOpenChange={handleOpenChange}
+      <div className={sidebarStyles.results}>
+        <AriaLiveAnnouncer>
+          <Text
+            aria-live='polite'
+            aria-label={`${items.length} ${translateMessage('search results available')}.`}
           >
-            {renderTreeItems(items)}
-          </FlatTree>
-      }
+            {`${items.length} ${translateMessage('search results available')}.`}
+          </Text>
+        </AriaLiveAnnouncer>
+        <Button onClick={openPreviewCollection}
+          icon={<Collections20Regular />}
+          {...restoreFocusTargetAttribute}
+          aria-label={translateMessage(`My API Collection: ${selectedLinks?.length} ${translateMessage('items')}`)}
+          className={resourceExplorerStyles.apiCollectionButton}
+        >
+          {translateMessage('My API Collection')}{selectedLinks.length > 0 ? `(${selectedLinks.length})` : ''}
+        </Button>
+        <div className={resourceExplorerStyles.stackStyles}>
+          <Label weight='semibold'>
+            {translateMessage('Resources available')}
+          </Label>
+          <div className={resourceExplorerStyles.versioning}>
+            <Switch
+              aria-label={translateMessage('Switch to beta')}
+              onChange={changeVersion}
+              labelPosition='after'
+            />
+            <Label weight='semibold'>
+              {translateMessage('Switch to beta')}
+            </Label>
+          </div>
+        </div>
+        {
+          items.length === 0 ? <NoResultsFound message='No resources found' /> :
+            <FlatTree
+              className={sidebarStyles.tree}
+              aria-label={translateMessage('Resources')}
+              openItems={openItems}
+              onOpenChange={handleOpenChange}
+            >
+              {renderTreeItems(items)}
+            </FlatTree>
+        }
+      </div>
     </div>
   );
 }
