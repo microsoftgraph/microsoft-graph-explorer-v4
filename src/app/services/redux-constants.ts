@@ -29,7 +29,6 @@ export const GET_CONSENTED_SCOPES_SUCCESS = 'auth/getConsentedScopesSuccess';
 export const GET_CONSENTED_SCOPES_ERROR = 'auth/consentToScopes/rejected';
 export const GET_CONSENTED_SCOPES_PENDING = 'auth/consentToScopes/pending';
 export const GET_CONSENTED_SCOPES_FULFILLED = 'auth/consentToScopes/fulfilled';
-export const SET_DEVX_API_URL_SUCCESS = 'devxApi/setDevxApiUrl';
 export const REMOVE_ALL_HISTORY_ITEMS_SUCCESS = 'history/removeAllHistoryItems';
 export const AUTOCOMPLETE_FETCH_SUCCESS = 'autoComplete/fetch/fulfilled';
 export const AUTOCOMPLETE_FETCH_ERROR = 'autoComplete/fetch/rejected';

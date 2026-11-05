@@ -46,10 +46,10 @@ describe('localStorageMiddleware', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it('should save samples to cache on SAMPLES_FETCH_SUCCESS', async () => {
+  it('should not save samples on SAMPLES_FETCH_SUCCESS because the loader saves with its source', async () => {
     const samples = [{ id: '1', humanName: 'Test' }];
     await middleware({ type: SAMPLES_FETCH_SUCCESS, payload: samples });
-    expect(samplesCache.saveSamples).toHaveBeenCalledWith(samples);
+    expect(samplesCache.saveSamples).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
 

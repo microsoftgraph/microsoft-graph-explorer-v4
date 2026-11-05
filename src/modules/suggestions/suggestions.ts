@@ -7,10 +7,12 @@ import { IOpenApiParseContent, IOpenApiResponse, IParsedOpenApiResponse } from '
 import { IRequestOptions } from '../../types/request';
 import { IResource } from '../../types/resources';
 import { getSuggestionsFromCache, storeSuggestionsInCache } from './cache-provider';
+import { IDevxAPI } from '../../types/devx-api';
+import { fetchDevxApi } from '../../app/services/devx-api';
 
 class Suggestions implements ISuggestions {
 
-  public async getSuggestions(url: string, api: string,
+  public async getSuggestions(url: string, api: IDevxAPI,
     version: string, context: SignContext, resources?: IResource): Promise<IParsedOpenApiResponse | null> {
 
     if (context === 'paths') {
@@ -21,7 +23,7 @@ class Suggestions implements ISuggestions {
     }
 
     const key = `${version}/${url}`;
-    const localOptions = await getSuggestionsFromCache(key);
+    const localOptions = await getSuggestionsFromCache(key, api);
     if (localOptions) {
       return localOptions;
     }
@@ -67,17 +69,18 @@ class Suggestions implements ISuggestions {
   }
 
   private async fetchSuggestionsFromNetwork(
-    url: string, api: string, version: string): Promise<IParsedOpenApiResponse | null> {
+    url: string, api: IDevxAPI, version: string): Promise<IParsedOpenApiResponse | null> {
     const headers = {
       'Accept': 'application/json'
     };
-    const openApiUrl = `${api}/openapi?url=/${url}&style=geautocomplete&graphVersion=${version}`;
     const options: IRequestOptions = { headers };
     try {
       if (hasBannedPaths()) {
         throw new Error('this call will not get good info');
       }
-      const response = await fetch(openApiUrl, options);
+      const response = await fetchDevxApi(api, '/openapi', {
+        url: `/${url}`, style: 'geautocomplete', graphVersion: version
+      }, options);
       if (response.ok) {
         const openApiResponse: IOpenApiResponse = await response.json();
         const content: IOpenApiParseContent = {
@@ -85,7 +88,7 @@ class Suggestions implements ISuggestions {
           url
         };
         const parsedResponse = parseOpenApiResponse(content);
-        storeSuggestionsInCache(parsedResponse, version);
+        void storeSuggestionsInCache(parsedResponse, version, api);
         return parsedResponse;
       }
       throw new Error(response.statusText);

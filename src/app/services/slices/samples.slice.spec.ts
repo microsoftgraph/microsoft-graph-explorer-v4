@@ -11,6 +11,7 @@ jest.mock('../../views/sidebar/sample-queries/queries', () => ({
 describe('samples.slice reducer', () => {
   const initialState = {
     queries: [],
+    loaded: false,
     pending: false,
     error: null,
     hasAutoSelectedDefault: false

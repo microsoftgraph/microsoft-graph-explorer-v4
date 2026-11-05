@@ -28,6 +28,10 @@ export const REVOKE_PERMISSION_CONSENT_BUTTON = 'Revoke consent to permissions b
 export const UPLOAD_COLLECTIONS_BUTTON = 'Upload collections button';
 export const FILTER_PERMISSIONS_BUTTON = 'Filter permissions button';
 export const NOTIFICATION_BANNER_DISMISS_BUTTON = 'Notification banner dismiss button'
+export const CUSTOM_SAMPLES_BUTTON = 'Custom samples button';
+export const CUSTOM_SAMPLES_APPLY_BUTTON = 'Apply custom samples button';
+export const CUSTOM_SAMPLES_CANCEL_BUTTON = 'Cancel custom samples button';
+export const RESET_SAMPLES_BUTTON = 'Reset samples button';
 
 // List items
 export const HISTORY_LIST_ITEM = 'History list item';
@@ -114,3 +118,4 @@ export const DOWNLOAD_COLLECTION_PERMISSIONS_BUTTON = 'Download collection permi
 
 // Component names
 export const NOTIFICATION_COMPONENT = 'Notification'
+export const CUSTOM_SAMPLES_DIALOG = 'Custom samples dialog';

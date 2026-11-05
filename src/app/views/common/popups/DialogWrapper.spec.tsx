@@ -3,7 +3,8 @@ jest.mock('../../../utils/translate-messages', () => ({
 }));
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { act, render, screen, fireEvent } from '@testing-library/react';
 import { DialogWrapper } from './DialogWrapper';
 
 describe('DialogWrapper', () => {
@@ -60,6 +61,25 @@ describe('DialogWrapper', () => {
     };
     render(<DialogWrapper {...props} />);
     expect(screen.getByTestId('mock-component')).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Close' })).toBeEnabled();
+  });
+
+  it('keeps Close available outside suspended content and dismisses while loading', async () => {
+    let resolveComponent!: (module: { default: typeof MockComponent }) => void;
+    const LazyComponent = React.lazy(() => new Promise<{ default: typeof MockComponent }>(resolve => {
+      resolveComponent = resolve;
+    }));
+    render(<DialogWrapper {...defaultProps} Component={LazyComponent} />);
+    const closeButton = screen.getByRole('button', { name: 'Close' });
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.queryByTestId('mock-component')).not.toBeInTheDocument();
+    expect(closeButton).toBeVisible();
+    expect(closeButton).toBeEnabled();
+    fireEvent.click(closeButton);
+    expect(mockDismiss).toHaveBeenCalledTimes(1);
+    await act(async () => { resolveComponent({ default: MockComponent }); });
+    expect(screen.getByTestId('mock-component')).toBeInTheDocument();
+    expect(closeButton).toBeVisible();
   });
 
   it('renders footer when renderFooter is provided', () => {
@@ -91,5 +111,54 @@ describe('DialogWrapper', () => {
     expect(mockDismiss).toHaveBeenCalled();
     fireEvent.click(screen.getByTestId('close-btn'));
     expect(mockClose).toHaveBeenCalled();
+  });
+
+  describe('initial focus', () => {
+    const FormComponent = () => (
+      <form>
+        <label>First field<input /></label>
+        <button type='button'>Cancel</button>
+      </form>
+    );
+
+    it('focuses the first content field rather than the Close button', () => {
+      render(<DialogWrapper {...defaultProps} Component={FormComponent} />);
+      expect(screen.getByRole('textbox', { name: 'First field' })).toHaveFocus();
+    });
+
+    it('focuses the first footer control when the content has no focusable elements', () => {
+      const props = {
+        ...defaultProps,
+        popupsProps: {
+          ...defaultProps.popupsProps,
+          settings: { ...defaultProps.popupsProps.settings, renderFooter: () => <button>Save</button> }
+        }
+      };
+      render(<DialogWrapper {...props} />);
+      expect(screen.getByRole('button', { name: 'Save' })).toHaveFocus();
+    });
+
+    it('leaves focus on Close when the dialog has no other focusable elements', () => {
+      render(<DialogWrapper {...defaultProps} />);
+      expect(screen.getByRole('button', { name: 'Close' })).toHaveFocus();
+    });
+
+    it('moves focus to the first field once lazy content loads', async () => {
+      let resolveComponent!: (module: { default: typeof FormComponent }) => void;
+      const LazyComponent = React.lazy(() => new Promise<{ default: typeof FormComponent }>(resolve => {
+        resolveComponent = resolve;
+      }));
+      render(<DialogWrapper {...defaultProps} Component={LazyComponent} />);
+      await act(async () => { resolveComponent({ default: FormComponent }); });
+      expect(screen.getByRole('textbox', { name: 'First field' })).toHaveFocus();
+    });
+
+    it('does not take focus back from a content control on re-render', () => {
+      const { rerender } = render(<DialogWrapper {...defaultProps} Component={FormComponent} />);
+      const cancel = screen.getByRole('button', { name: 'Cancel' });
+      act(() => cancel.focus());
+      rerender(<DialogWrapper {...defaultProps} Component={FormComponent} />);
+      expect(cancel).toHaveFocus();
+    });
   });
 });

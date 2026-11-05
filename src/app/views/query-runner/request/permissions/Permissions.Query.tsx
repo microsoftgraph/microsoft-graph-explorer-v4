@@ -20,6 +20,7 @@ export const Permissions = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const validation = useContext(ValidationContext);
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
+  const devxRevision = useAppSelector((state) => state.devxApi.revision);
   const scopes = useAppSelector((state) => state.scopes);
   const authToken = useAppSelector((state) => state.auth.authToken);
   const consentedScopes = useAppSelector((state) => state.auth.consentedScopes);
@@ -62,7 +63,7 @@ export const Permissions = (): JSX.Element => {
     if (validation.isValid) {
       getPermissions();
     }
-  }, [sampleQuery]);
+  }, [sampleQuery, devxRevision]);
 
   useEffect(() => {
     if (tokenPresent && validation.isValid) {

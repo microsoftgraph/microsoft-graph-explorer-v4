@@ -73,6 +73,8 @@ function AutoComplete(props: IAutoCompleteProps) {
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const autoCompleteOptions = useAppSelector((state) => state.autoComplete.data);
   const autoCompletePending = useAppSelector((state) => state.autoComplete.pending);
+  const devxRevision = useAppSelector((state) => state.devxApi.revision);
+  const resources = useAppSelector((state) => state.resources.data);
 
   const previousQuery = usePrevious(sampleQuery.sampleUrl);
   const [queryUrl, setQueryUrl] = useState<string>(sampleQuery.sampleUrl);
@@ -86,6 +88,14 @@ function AutoComplete(props: IAutoCompleteProps) {
 
   const focusRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const refreshingSource = useRef(false);
+
+  useEffect(() => {
+    setSuggestions([]);
+    setShouldShowSuggestions(false);
+    refreshingSource.current = true;
+    if (focusRef.current === document.activeElement) { initialiseAutoComplete(queryUrl); }
+  }, [devxRevision, resources]);
 
   useEffect(() => {
     setQueryUrl(sampleQuery.sampleUrl);
@@ -121,6 +131,7 @@ function AutoComplete(props: IAutoCompleteProps) {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     newValue?: string
   ) {
+    refreshingSource.current = false;
     const val = newValue ?? e.currentTarget.value;
     setQueryUrl(val);
     initialiseAutoComplete(val);
@@ -185,7 +196,7 @@ function AutoComplete(props: IAutoCompleteProps) {
       setShouldShowSuggestions(true);
     }
 
-    if (filtered.length === 1 && filtered[0] === searchTerm && !backSpacing) {
+    if (filtered.length === 1 && filtered[0] === searchTerm && !backSpacing && !refreshingSource.current) {
       appendSuggestionToUrl(searchTerm);
     }
   }

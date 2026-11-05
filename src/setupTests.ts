@@ -14,6 +14,9 @@ Object.defineProperty(global, 'crypto', {
   }
 });
 
+// DevX requests have no hardcoded fallback, so tests need a deterministic build-time base URL.
+process.env.REACT_APP_DEVX_API_URL = 'https://graph-devx-api.test';
+
 // Mock MSAL
 jest.mock('@azure/msal-browser');
 
