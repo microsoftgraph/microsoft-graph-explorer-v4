@@ -12,7 +12,7 @@ const RequestBody = ({ handleOnEditorChange, isVisible }: IRequestBodyProps) => 
 
 
   return (
-    <div style={{ flex: 1, display: 'flex' }}>
+    <div style={{ flex: 1, minHeight: 0, minWidth: 0, display: 'flex' }}>
       <Monaco
         body={sampleBody}
         onChange={(value) => handleOnEditorChange(value)}

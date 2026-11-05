@@ -24,9 +24,13 @@ jest.mock('./Tenant', () => ({
 }));
 
 import React from 'react';
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../../test-utils';
+import { fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { configureStore } from '@reduxjs/toolkit';
+import { createMockStore, renderWithProviders } from '../../../test-utils';
 import { MainHeader } from './MainHeader';
+import { Mode } from '../../../types/enums';
+import sidebarReducer from '../../services/slices/sidebar-properties.slice';
 
 describe('MainHeader', () => {
   it('renders Graph Explorer text', () => {
@@ -44,11 +48,34 @@ describe('MainHeader', () => {
   });
 
   it('renders in mobile mode', () => {
+    const initialState = {
+      ...createMockStore().getState(),
+      graphExplorerMode: Mode.Complete,
+      sidebarProperties: { showSidebar: false, mobileScreen: true }
+    };
+    const store = configureStore({
+      reducer: (state = initialState, action) => ({
+        ...state, sidebarProperties: sidebarReducer(state.sidebarProperties, action)
+      })
+    });
+    renderWithProviders(<MainHeader />, { store });
+    expect(screen.getByText('Graph Explorer')).toBeTruthy();
+    const toggle = screen.getByRole('button', { name: 'Toggle sidebar' });
+    expect(toggle).toHaveAttribute('aria-controls', 'mobile-sidebar-drawer');
+    expect(toggle).toHaveAttribute('aria-haspopup', 'dialog');
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('does not offer a sidebar toggle in the embedded TryIt experience', () => {
     renderWithProviders(<MainHeader />, {
       preloadedState: {
+        graphExplorerMode: Mode.TryIt,
         sidebarProperties: { showSidebar: false, mobileScreen: true }
       }
     });
-    expect(screen.getByText('Graph Explorer')).toBeTruthy();
+    expect(screen.getByText('Graph Explorer')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Toggle sidebar' })).not.toBeInTheDocument();
   });
 });

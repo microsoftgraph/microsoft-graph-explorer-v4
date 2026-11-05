@@ -1,6 +1,7 @@
 import { useAppSelector } from '../../../../store';
 import {
   makeStyles,
+  mergeClasses,
   SelectTabData,
   SelectTabEvent,
   Tab,
@@ -44,11 +45,15 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    height: '100%',
+    flex: 1,
+    minHeight: 0,
+    minWidth: 0,
     overflow: 'hidden'
   },
   tabHeader: {
-    display: 'flex'
+    display: 'flex',
+    flexShrink: 0,
+    padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalXS}`
   },
   tabContent: {
     flex: 1,
@@ -59,9 +64,18 @@ const useStyles = makeStyles({
     padding: tokens.spacingHorizontalS,
     marginTop: tokens.spacingHorizontalS,
     backgroundColor: tokens.colorNeutralBackground1,
-    height: '100%',
-    minHeight: '600px',
-    overflow: 'hidden'
+    minHeight: 0,
+    minWidth: 0,
+    overflow: 'auto'
+  },
+  snippets: {
+    // The telemetry wrapper must pass the available height through to the snippet editor.
+    '& > div': {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      minWidth: 0
+    }
   }
 });
 
@@ -148,7 +162,7 @@ export const GetPivotItems = () => {
     <div className={styles.container}>
       <div className={styles.tabHeader}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <Overflow minimumVisible={2}>
+          <Overflow minimumVisible={1}>
             <TabList
               selectedValue={selectedValue}
               onTabSelect={onTabSelect}
@@ -171,7 +185,10 @@ export const GetPivotItems = () => {
         </div>
       </div>
 
-      <div className={styles.tabContent}>
+      <div className={mergeClasses(
+        styles.tabContent,
+        selectedValue === translateMessage('Snippets') && styles.snippets
+      )}>
         {selectedValue === translateMessage('Response Preview') && <Response />}
         {selectedValue === translateMessage('Response Headers') && <ResponseHeaders />}
         {selectedValue === translateMessage('Snippets') && <Snippets />}

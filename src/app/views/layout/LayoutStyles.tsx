@@ -12,14 +12,23 @@ export const useLayoutStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
+    boxSizing: 'border-box',
     overflow: 'hidden',
     padding: tokens.spacingHorizontalS
+  },
+  fixedSection: {
+    flexShrink: 0
+  },
+  workspaceSection: {
+    flexShrink: 0,
+    margin: '0 10px'
   },
   content: {
     display: 'flex',
     flex: 1,
     overflow: 'hidden',
-    minWidth: 0
+    minWidth: 0,
+    minHeight: 0
   },
   sidebar: {
     flex: '0 0 auto',
@@ -28,33 +37,30 @@ export const useLayoutStyles = makeStyles({
     maxWidth: '50vw',
     position: 'relative',
     overflow: 'hidden',
-    transition: 'flex-basis 0.2s ease-in-out',
-
-    '@media (max-width: 768px)': {
-      flexBasis: '100vw',
-      maxWidth: '100vw',
-      minWidth: '100vw',
-      position: 'absolute',
-      left: 0,
-      zIndex: 1000,
-      backgroundColor: 'white'
-    }
+    transition: 'flex-basis 0.2s ease-in-out'
+  },
+  mobileSidebar: {
+    display: 'contents'
+  },
+  hiddenSidebar: {
+    display: 'none'
   },
   mainContent: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    overflowY: 'auto',
+    overflowX: 'hidden',
     minWidth: 0,
     minHeight: 0
   },
   requestResponseArea: {
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1,
-    overflow: 'hidden'
+    flex: '1 0 auto'
   },
   requestArea: {
+    boxSizing: 'border-box',
     height: `var(${REQUEST_HEIGHT_CSS_VAR})`,
     minHeight: '150px',
     maxHeight: '50vh',
@@ -66,12 +72,18 @@ export const useLayoutStyles = makeStyles({
     padding: tokens.spacingHorizontalS
   },
   responseArea: {
-    flex: 1,
-    overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '1 0 240px',
+    minHeight: '240px',
+    minWidth: 0,
+    boxSizing: 'border-box',
+    overflow: 'hidden',
     borderRadius: tokens.borderRadiusMedium,
     padding: tokens.spacingHorizontalS
   },
   headerMessaging: {
+    flexShrink: 0,
     margin: '10px'
   }
 });

@@ -4,48 +4,67 @@ jest.mock('../../store', () => ({
   useAppDispatch: () => mockDispatch
 }));
 jest.mock('../services/slices/sidebar-properties.slice', () => ({
-  toggleSidebar: jest.fn((payload: any) => ({ type: 'sidebar/toggle', payload }))
+  toggleSidebar: jest.fn(payload => ({ type: 'sidebar/toggle', payload }))
 }));
 
-import { renderHook } from '@testing-library/react';
-import { act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { useDetectMobileScreen } from './useDetectMobileScreen';
 
 describe('useDetectMobileScreen', () => {
-  const originalInnerWidth = window.innerWidth;
+  const originalMatchMedia = window.matchMedia;
+  let mediaQuery: {
+    matches: boolean;
+    addEventListener: jest.Mock;
+    removeEventListener: jest.Mock;
+  };
+
+  beforeEach(() => {
+    mediaQuery = {
+      matches: false,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn()
+    };
+    window.matchMedia = jest.fn().mockReturnValue(mediaQuery);
+    mockDispatch.mockClear();
+  });
 
   afterEach(() => {
-    Object.defineProperty(window, 'innerWidth', { value: originalInnerWidth, writable: true });
-    jest.clearAllMocks();
+    window.matchMedia = originalMatchMedia;
   });
 
-  it('dispatches mobile state for narrow screens', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true });
+  it.each([true, false])('initializes responsive state when mobile is %s', matches => {
+    mediaQuery.matches = matches;
     renderHook(() => useDetectMobileScreen());
+    expect(window.matchMedia).toHaveBeenCalledWith('(max-width: 768px)');
     expect(mockDispatch).toHaveBeenCalledWith(
-      expect.objectContaining({ payload: { showSidebar: false, mobileScreen: true } })
+      expect.objectContaining({ payload: { showSidebar: !matches, mobileScreen: matches } })
     );
   });
 
-  it('dispatches desktop state for wide screens', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true });
-    renderHook(() => useDetectMobileScreen());
-    expect(mockDispatch).toHaveBeenCalledWith(
-      expect.objectContaining({ payload: { showSidebar: true, mobileScreen: false } })
-    );
-  });
-
-  it('responds to resize events', () => {
-    Object.defineProperty(window, 'innerWidth', { value: 1024, writable: true });
+  it('updates state only when the breakpoint changes', () => {
     renderHook(() => useDetectMobileScreen());
     mockDispatch.mockClear();
-
-    Object.defineProperty(window, 'innerWidth', { value: 500, writable: true });
-    act(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
+    mediaQuery.matches = true;
+    act(() => mediaQuery.addEventListener.mock.calls[0][1]());
+    expect(mockDispatch).toHaveBeenCalledTimes(1);
     expect(mockDispatch).toHaveBeenCalledWith(
       expect.objectContaining({ payload: { showSidebar: false, mobileScreen: true } })
+    );
+  });
+
+  it('does not reset navigation on ordinary window resize events', () => {
+    mediaQuery.matches = true;
+    renderHook(() => useDetectMobileScreen());
+    mockDispatch.mockClear();
+    act(() => window.dispatchEvent(new Event('resize')));
+    expect(mockDispatch).not.toHaveBeenCalled();
+  });
+
+  it('removes the breakpoint listener on unmount', () => {
+    const { unmount } = renderHook(() => useDetectMobileScreen());
+    unmount();
+    expect(mediaQuery.removeEventListener).toHaveBeenCalledWith(
+      'change', mediaQuery.addEventListener.mock.calls[0][1]
     );
   });
 });

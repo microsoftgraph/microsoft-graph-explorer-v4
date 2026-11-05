@@ -10,12 +10,14 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    height: '100%',
-    overflow: 'hidden'
+    minHeight: 0,
+    minWidth: 0,
+    overflow: 'auto'
   },
   messageBars: {
     display: 'flex',
     flexDirection: 'column',
+    flexShrink: 0,
     gap: tokens.spacingHorizontalMNudge,
     paddingTop: tokens.spacingHorizontalMNudge,
     paddingBottom: tokens.spacingHorizontalMNudge

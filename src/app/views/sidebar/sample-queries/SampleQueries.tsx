@@ -89,7 +89,7 @@ export const SampleQueries = () => {
 
 
   return (
-    <div className={sampleQueriesStyles.container}>
+    <div className={mergeClasses(sampleQueriesStyles.container, sidebarStyles.tabPanel)}>
       <SearchBox
         className={sidebarStyles.searchBox}
         placeholder={translateMessage('Search sample queries')}
@@ -98,17 +98,19 @@ export const SampleQueries = () => {
         aria-label={translateMessage('Search sample queries')}
       />
       <hr />
-      {error && <CachedSetMessageBar />}
-      <SeeMoreQueriesMessageBar />
-      <AriaLiveAnnouncer>
-        <Text
-          aria-live='polite'
-          aria-label={`${sampleQueries.length} ${translateMessage('search results available')}.`}
-        >
-          {`${sampleQueries.length} ${translateMessage('search results available')}.`}
-        </Text>
-      </AriaLiveAnnouncer>
-      {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} searchValue={searchValue} />}
+      <div className={sidebarStyles.results}>
+        {error && <CachedSetMessageBar />}
+        <SeeMoreQueriesMessageBar />
+        <AriaLiveAnnouncer>
+          <Text
+            aria-live='polite'
+            aria-label={`${sampleQueries.length} ${translateMessage('search results available')}.`}
+          >
+            {`${sampleQueries.length} ${translateMessage('search results available')}.`}
+          </Text>
+        </AriaLiveAnnouncer>
+        {pending ? <LoadingSamples/> : <Samples queries={sampleQueries} groups={groups} searchValue={searchValue} />}
+      </div>
     </div>
   );
 };
