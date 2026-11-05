@@ -61,14 +61,19 @@ const CustomSamples = (props: PopupsComponent<{ accountKey: string }>) => {
     }
   }, [eligible, dismissPopup]);
 
+  const getValidationFailure = (): string => {
+    if (!eligible) { return 'unavailable'; }
+    if (!org.trim() || !branchName.trim()) { return 'required-fields'; }
+    if (baseUrl.trim() && !normalizeDevxUrl(baseUrl)) { return 'invalid-url'; }
+    return '';
+  };
+
   const apply = async (event: FormEvent) => {
     event.preventDefault();
     if (closed.current || devxApi.pending) { return; }
     telemetry.trackEvent(eventTypes.BUTTON_CLICK_EVENT, { ComponentName: componentNames.CUSTOM_SAMPLES_APPLY_BUTTON });
     setSubmitted(true);
-    const validationFailure = !eligible ? 'unavailable'
-      : !org.trim() || !branchName.trim() ? 'required-fields'
-        : baseUrl.trim() && !normalizeDevxUrl(baseUrl) ? 'invalid-url' : '';
+    const validationFailure = getValidationFailure();
     if (validationFailure) {
       trackApplyResult('failed', validationFailure);
       return;

@@ -26,7 +26,8 @@ const initialState: IScopes & { requestIds?: { full?: string; query?: string } }
 
 export const fetchScopes = createAsyncThunk(
   'scopes/fetchScopes',
-  async (scopesFetchType: ScopesFetchType = 'full', { getState, rejectWithValue, signal }) => {
+  async (requestedFetchType: ScopesFetchType | undefined, { getState, rejectWithValue, signal }) => {
+    const scopesFetchType = requestedFetchType ?? 'full';
     const state = getState() as ApplicationState;
     const { profile, sampleQuery: query } = state;
     const config = getDevxConfiguration(state);

@@ -7,7 +7,12 @@ export function normalizeDevxUrl(value: string): string | null {
     if (url.protocol !== 'https:' || url.username || url.password || /[?#]/.test(value)) {
       return null;
     }
-    return url.toString().replace(/\/+$/, '');
+    const normalized = url.toString();
+    let end = normalized.length;
+    while (end > 0 && normalized[end - 1] === '/') {
+      end--;
+    }
+    return normalized.slice(0, end);
   } catch {
     return null;
   }

@@ -34,7 +34,7 @@ export async function loadSamples(config: IDevxAPI, signal?: AbortSignal): Promi
   }
   const data = await response.json();
   if (!Array.isArray(data.sampleQueries)) {
-    throw new Error('Invalid samples response');
+    throw new TypeError('Invalid samples response');
   }
   void Promise.resolve(samplesCache.saveSamples(data.sampleQueries, config)).catch(() => undefined);
   return data.sampleQueries;

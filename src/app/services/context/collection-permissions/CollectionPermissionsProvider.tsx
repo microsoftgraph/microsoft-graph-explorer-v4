@@ -35,28 +35,28 @@ async function getCollectionPermissions(
 Promise<{ [key: string]: CollectionPermission[] }> {
   const versions = getVersionsFromPaths(paths);
   const scopes = getScopesFromPaths(paths);
-  const collectionPermissions: { [key: string]: CollectionPermission[] } = {};
+  if (!isCurrent()) { return {}; }
+  const batches = versions.flatMap(version => scopes.map(scope => ({
+    version, scope, requestPaths: getRequestsFromPaths(paths, version, scope)
+  }))).filter(({ requestPaths }) => requestPaths.length > 0);
 
-  for (const version of versions) {
-    for (const scope of scopes) {
-      if (!isCurrent()) { return collectionPermissions; }
-      const requestPaths = getRequestsFromPaths(paths, version, scope);
-      if (requestPaths.length === 0) {
-        continue;
-      }
-      const response = await fetchDevxApi(config, '/permissions', { version, scopeType: scope }, {
-        method: 'POST',
-        signal,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestPaths)
-      });
-      if (!response.ok) { throw new Error('Failed to fetch collection permissions'); }
-      const perms = await response.json();
-      collectionPermissions[`${version}-${scope}`] = (perms.results) ? perms.results : [];
-    }
-  }
+  const results = await Promise.all(batches.map(async ({ version, scope, requestPaths }) => {
+    const response = await fetchDevxApi(config, '/permissions', { version, scopeType: scope }, {
+      method: 'POST',
+      signal,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestPaths)
+    });
+    if (!response.ok) { throw new Error('Failed to fetch collection permissions'); }
+    const perms = await response.json();
+    return [`${version}-${scope}`, perms.results ? perms.results : []] as const;
+  }));
+
+  const collectionPermissions: { [key: string]: CollectionPermission[] } = {};
+  if (!isCurrent()) { return collectionPermissions; }
+  results.forEach(([key, value]) => { collectionPermissions[key] = value; });
   return collectionPermissions;
 }
 

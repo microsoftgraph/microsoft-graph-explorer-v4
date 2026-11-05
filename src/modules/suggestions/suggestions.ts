@@ -88,7 +88,7 @@ class Suggestions implements ISuggestions {
           url
         };
         const parsedResponse = parseOpenApiResponse(content);
-        storeSuggestionsInCache(parsedResponse, version, api);
+        void storeSuggestionsInCache(parsedResponse, version, api);
         return parsedResponse;
       }
       throw new Error(response.statusText);

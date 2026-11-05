@@ -394,7 +394,7 @@ describe('CollectionPermissionsProvider', () => {
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 
-  it.each(['reset', 'sign-out'])('aborts the old collection batch and stops queued requests after %s', async event => {
+  it.each(['reset', 'sign-out'])('aborts every old collection request after %s', async event => {
     (authenticationWrapper.getAccount as jest.Mock).mockReturnValue({
       username: 'alias@microsoft.com', homeAccountId: 'account', tenantId: 'tenant'
     });
@@ -418,7 +418,8 @@ describe('CollectionPermissionsProvider', () => {
     renderWithProviders(<CollectionPermissionsProvider><TestConsumer paths={paths}/></CollectionPermissionsProvider>,
       { store });
     act(() => { screen.getByTestId('fetch-btn').click(); });
-    const oldOptions = (global.fetch as jest.Mock).mock.calls[0][1];
+    const oldOptions = (global.fetch as jest.Mock).mock.calls.map(([, options]) => options);
+    expect(oldOptions).toHaveLength(2);
     act(() => {
       if (event === 'sign-out') {
         store.dispatch(signOutSuccess());
@@ -430,16 +431,16 @@ describe('CollectionPermissionsProvider', () => {
     });
     await waitFor(() => expect(screen.getByTestId('isFetching')).toHaveTextContent('false'));
     await act(async () => { resolveOld({ ok: true, json: async () => ({ results: [{ value: 'Old' }] }) }); });
-    expect(oldOptions.signal?.aborted).toBe(true);
+    expect(oldOptions.every(options => options.signal?.aborted)).toBe(true);
     expect((global.fetch as jest.Mock).mock.calls.map(([url]) => new URL(url).origin)).toEqual([
-      'https://custom.example', new URL(defaultDevxConfiguration().baseUrl).origin,
+      'https://custom.example', 'https://custom.example', new URL(defaultDevxConfiguration().baseUrl).origin,
       new URL(defaultDevxConfiguration().baseUrl).origin
     ]);
     expect(screen.getByTestId('permissions')).toHaveTextContent('New');
     expect(screen.getByTestId('permissions')).not.toHaveTextContent('Old');
   });
 
-  it('aborts collection requests and stops queued requests when unmounted', async () => {
+  it('aborts every collection request when unmounted', async () => {
     let resolveOld!: (value: any) => void;
     global.fetch = jest.fn().mockReturnValue(new Promise(resolve => { resolveOld = resolve; }));
     const paths = [
@@ -450,10 +451,11 @@ describe('CollectionPermissionsProvider', () => {
       <CollectionPermissionsProvider><TestConsumer paths={paths}/></CollectionPermissionsProvider>
     );
     act(() => { screen.getByTestId('fetch-btn').click(); });
-    const options = (global.fetch as jest.Mock).mock.calls[0][1];
+    const options = (global.fetch as jest.Mock).mock.calls.map(([, requestOptions]) => requestOptions);
     unmount();
     await act(async () => { resolveOld({ ok: true, json: async () => ({ results: [] }) }); });
-    expect(options.signal?.aborted).toBe(true);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(options).toHaveLength(2);
+    expect(options.every(requestOptions => requestOptions.signal?.aborted)).toBe(true);
+    expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 });
