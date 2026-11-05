@@ -5,8 +5,10 @@ import { IRequestOptions } from '../../../types/request';
 import { ISnippet, Snippet, SnippetError } from '../../../types/snippets';
 import { parseSampleUrl } from '../../utils/sample-url-generation';
 import { constructHeaderString } from '../../utils/snippet.utils';
+import { fetchDevxApi, getDevxConfiguration } from '../devx-api';
+import { devxConfigurationChanged } from '../devx-events';
 
-const initialState: ISnippet = {
+const initialState: ISnippet & { requestId?: string } = {
   pending: false,
   data: {} as Snippet,
   error: {} as SnippetError,
@@ -15,11 +17,13 @@ const initialState: ISnippet = {
 
 export const getSnippet = createAsyncThunk<object, string>(
   'snippet/getSnippet',
-  async (language, { getState, rejectWithValue }) => {
-    const { devxApi, sampleQuery } = getState() as ApplicationState;
+  async (language, { getState, rejectWithValue, signal }) => {
+    const state = getState() as ApplicationState;
+    const { sampleQuery } = state;
+    const config = getDevxConfiguration(state);
 
     try {
-      let snippetsUrl = `${devxApi.baseUrl}/api/graphexplorersnippets`;
+      const parameters: Record<string, string> = {};
 
       const { requestUrl, sampleUrl, queryVersion, search } = parseSampleUrl(
         sampleQuery.sampleUrl
@@ -30,12 +34,12 @@ export const getSnippet = createAsyncThunk<object, string>(
       }
 
       if (language !== 'csharp') {
-        snippetsUrl += `?lang=${language}`;
+        parameters.lang = language;
       }
 
       const openApiSnippets: string[] = ['go', 'powershell', 'python', 'cli', 'php'];
       if (openApiSnippets.includes(language)) {
-        snippetsUrl += '&generation=openapi';
+        parameters.generation = 'openapi';
       }
 
       const method = 'POST';
@@ -58,9 +62,9 @@ export const getSnippet = createAsyncThunk<object, string>(
         body += `${requestBody}`;
       }
 
-      const options: IRequestOptions = { method, headers, body };
+      const options: IRequestOptions & { signal?: AbortSignal } = { method, headers, body, signal };
 
-      const response = await fetch(snippetsUrl, options);
+      const response = await fetchDevxApi(config, '/api/graphexplorersnippets', parameters, options);
       if (response.ok) {
         const result = await response.text();
         return { [language]: result };
@@ -82,12 +86,20 @@ const snippetSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getSnippet.pending, (state) => {
+      .addCase(devxConfigurationChanged, (state) => {
+        state.data = {};
+        state.error = {} as SnippetError;
+        state.pending = false;
+        state.requestId = '';
+      })
+      .addCase(getSnippet.pending, (state, action) => {
+        state.requestId = action.meta?.requestId;
         state.pending = true;
         state.error = {} as SnippetError;
         state.data = {};
       })
       .addCase(getSnippet.fulfilled, (state, action) => {
+        if (state.requestId !== action.meta?.requestId) { return; }
         state.pending = false;
         const [rawKey, value] = Object.entries(action.payload)[0];
         const key = rawKey.toLowerCase();
@@ -95,6 +107,7 @@ const snippetSlice = createSlice({
         state.error = {} as SnippetError;
       })
       .addCase(getSnippet.rejected, (state, action) => {
+        if (state.requestId !== action.meta?.requestId) { return; }
         state.pending = false;
         state.error = action.payload as SnippetError;
         state.data = {};

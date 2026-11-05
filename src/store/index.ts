@@ -8,6 +8,7 @@ import { createLogger } from 'redux-logger';
 
 import localStorageMiddleware from '../app/middleware/localStorageMiddleware';
 import telemetryMiddleware from '../app/middleware/telemetryMiddleware';
+import devxMiddleware from '../app/middleware/devxMiddleware';
 import { reducers } from '../app/services/reducers';
 
 const loggerMiddleware = createLogger({
@@ -16,6 +17,7 @@ const loggerMiddleware = createLogger({
 }) as Middleware<{}, unknown, Dispatch<UnknownAction>>;
 
 const middleware = [
+  devxMiddleware,
   localStorageMiddleware,
   telemetryMiddleware
 ];

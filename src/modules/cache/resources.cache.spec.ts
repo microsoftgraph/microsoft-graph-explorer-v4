@@ -86,6 +86,18 @@ afterEach(async () => {
 
 describe('Resources Cache should', () => {
 
+  it('isolates source branches, ignores legacy keys, and preserves the collection key', async () => {
+    mockStore['resources_v1.0'] = { data: resources, expiry: Date.now() + 100000 };
+    mockStore.collection = [{ key: 'saved' }];
+    expect(await resourcesCache.readResources('v1.0')).toBeNull();
+    const a = { baseUrl: 'https://custom.example', custom: true, org: 'org', branchName: 'a' };
+    await resourcesCache.saveResources(resources, 'v1.0', a);
+    expect(await resourcesCache.readResources('v1.0', a)).toEqual(resources);
+    expect(await resourcesCache.readResources('v1.0', { ...a, branchName: 'b' })).toBeNull();
+    expect(await resourcesCache.readResources('v1.0')).toBeNull();
+    expect(await resourcesCache.readCollection()).toEqual([{ key: 'saved' }]);
+  });
+
   it('update the cache after 3 days', async () => {
     // Moving the clock forward by 3 days
     const currentTime = new Date().getTime();
@@ -136,5 +148,3 @@ describe('Resources Cache should', () => {
     expect(result).toEqual([]);
   });
 });
-
-

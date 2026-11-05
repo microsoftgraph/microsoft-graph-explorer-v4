@@ -20,6 +20,12 @@ import { screen, act, waitFor } from '@testing-library/react';
 import { renderWithProviders } from '../../../../test-utils';
 import CollectionPermissionsProvider from './CollectionPermissionsProvider';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
+import { authenticationWrapper } from '../../../../modules/authentication';
+import { configureStore } from '@reduxjs/toolkit';
+import devxApi from '../../slices/devxapi.slice';
+import { devxConfigurationChanged } from '../../devx-events';
+import { defaultDevxConfiguration } from '../../devx-api';
+import auth, { getAuthTokenSuccess, signOutSuccess } from '../../slices/auth.slice';
 
 const TestConsumer = ({ paths }: { paths?: any[] }) => {
   const context = useContext(CollectionPermissionsContext);
@@ -77,6 +83,7 @@ describe('CollectionPermissionsProvider', () => {
   it('fetches permissions successfully and updates context', async () => {
     const mockResults = { results: [{ value: 'User.Read', consentDisplayName: 'Read user profile' }] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -129,6 +136,7 @@ describe('CollectionPermissionsProvider', () => {
   it('caches results and does not re-fetch for same paths', async () => {
     const mockResults = { results: [{ value: 'User.Read' }] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -162,6 +170,7 @@ describe('CollectionPermissionsProvider', () => {
   it('fetches with correct URL and body', async () => {
     const mockResults = { results: [] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -194,6 +203,7 @@ describe('CollectionPermissionsProvider', () => {
   it('skips versions/scopes with no matching paths', async () => {
     const mockResults = { results: [] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -216,6 +226,7 @@ describe('CollectionPermissionsProvider', () => {
 
   it('handles response without results property', async () => {
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue({})
     });
 
@@ -245,6 +256,7 @@ describe('CollectionPermissionsProvider', () => {
   it('handles multiple versions and scopes', async () => {
     const mockResults = { results: [{ value: 'User.Read' }] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -300,7 +312,7 @@ describe('CollectionPermissionsProvider', () => {
 
     // Resolve the promise
     await act(async () => {
-      resolvePromise!({ json: () => Promise.resolve({ results: [] }) });
+      resolvePromise!({ ok: true, json: () => Promise.resolve({ results: [] }) });
     });
 
     await waitFor(() => {
@@ -308,9 +320,13 @@ describe('CollectionPermissionsProvider', () => {
     });
   });
 
-  it('uses baseUrl from devxApi state', async () => {
+  it('uses an eligible account-owned custom source and forwards org/branch', async () => {
+    (authenticationWrapper.getAccount as jest.Mock).mockReturnValue({
+      username: 'alias@microsoft.com', homeAccountId: 'account', tenantId: 'tenant'
+    });
     const mockResults = { results: [] };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       json: jest.fn().mockResolvedValue(mockResults)
     });
 
@@ -324,7 +340,11 @@ describe('CollectionPermissionsProvider', () => {
       </CollectionPermissionsProvider>,
       {
         preloadedState: {
-          devxApi: { baseUrl: 'https://custom-api.example.com', parameters: '' }
+          auth: { authToken: { token: true, pending: false }, consentedScopes: [] },
+          devxApi: {
+            baseUrl: 'https://custom-api.example.com', custom: true,
+            accountKey: 'account:tenant', org: 'org', branchName: 'feature/a'
+          }
         }
       }
     );
@@ -339,5 +359,101 @@ describe('CollectionPermissionsProvider', () => {
         expect.anything()
       );
     });
+    const url = new URL((global.fetch as jest.Mock).mock.calls[0][0]);
+    expect(url.searchParams.get('org')).toBe('org');
+    expect(url.searchParams.get('branchName')).toBe('feature/a');
+  });
+
+  it('refreshes collection permissions on source change and ignores a late old response', async () => {
+    (authenticationWrapper.getAccount as jest.Mock).mockReturnValue({
+      username: 'alias@microsoft.com', homeAccountId: 'account', tenantId: 'tenant'
+    });
+    let resolveOld!: (value: any) => void;
+    const oldResponse = new Promise(resolve => { resolveOld = resolve; });
+    global.fetch = jest.fn().mockReturnValueOnce(oldResponse).mockResolvedValue({
+      ok: true, json: async () => ({ results: [{ value: 'New' }] })
+    });
+    const store = configureStore({
+      reducer: { devxApi, auth: () => ({ authToken: { token: true, pending: false }, consentedScopes: [] }) }
+    });
+    const paths = [{ method: 'GET', url: '/me', version: 'v1.0', scope: 'DelegatedWork' }];
+    renderWithProviders(<CollectionPermissionsProvider><TestConsumer paths={paths}/></CollectionPermissionsProvider>,
+      { store });
+    act(() => { screen.getByTestId('fetch-btn').click(); });
+    act(() => {
+      store.dispatch(devxConfigurationChanged({
+        configuration: {
+          baseUrl: 'https://custom.example', custom: true, accountKey: 'account:tenant',
+          org: 'org', branchName: 'a', revision: 1
+        }
+      }));
+    });
+    await waitFor(() => expect(screen.getByTestId('permissions')).toHaveTextContent('New'));
+    await act(async () => { resolveOld({ ok: true, json: async () => ({ results: [{ value: 'Old' }] }) }); });
+    expect(screen.getByTestId('permissions')).not.toHaveTextContent('Old');
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  it.each(['reset', 'sign-out'])('aborts the old collection batch and stops queued requests after %s', async event => {
+    (authenticationWrapper.getAccount as jest.Mock).mockReturnValue({
+      username: 'alias@microsoft.com', homeAccountId: 'account', tenantId: 'tenant'
+    });
+    let resolveOld!: (value: any) => void;
+    const oldResponse = new Promise(resolve => { resolveOld = resolve; });
+    global.fetch = jest.fn().mockReturnValueOnce(oldResponse).mockResolvedValue({
+      ok: true, json: async () => ({ results: [{ value: 'New' }] })
+    });
+    const store = configureStore({ reducer: { devxApi, auth } });
+    store.dispatch(getAuthTokenSuccess());
+    store.dispatch(devxConfigurationChanged({
+      configuration: {
+        baseUrl: 'https://custom.example', custom: true, accountKey: 'account:tenant',
+        org: 'org', branchName: 'a', revision: 1
+      }
+    }));
+    const paths = [
+      { method: 'GET', url: '/me', version: 'v1.0', scope: 'DelegatedWork' },
+      { method: 'GET', url: '/users', version: 'beta', scope: 'DelegatedWork' }
+    ];
+    renderWithProviders(<CollectionPermissionsProvider><TestConsumer paths={paths}/></CollectionPermissionsProvider>,
+      { store });
+    act(() => { screen.getByTestId('fetch-btn').click(); });
+    const oldOptions = (global.fetch as jest.Mock).mock.calls[0][1];
+    act(() => {
+      if (event === 'sign-out') {
+        store.dispatch(signOutSuccess());
+      } else {
+        store.dispatch(devxConfigurationChanged({
+          configuration: { ...defaultDevxConfiguration(), revision: 2 }
+        }));
+      }
+    });
+    await waitFor(() => expect(screen.getByTestId('isFetching')).toHaveTextContent('false'));
+    await act(async () => { resolveOld({ ok: true, json: async () => ({ results: [{ value: 'Old' }] }) }); });
+    expect(oldOptions.signal?.aborted).toBe(true);
+    expect((global.fetch as jest.Mock).mock.calls.map(([url]) => new URL(url).origin)).toEqual([
+      'https://custom.example', new URL(defaultDevxConfiguration().baseUrl).origin,
+      new URL(defaultDevxConfiguration().baseUrl).origin
+    ]);
+    expect(screen.getByTestId('permissions')).toHaveTextContent('New');
+    expect(screen.getByTestId('permissions')).not.toHaveTextContent('Old');
+  });
+
+  it('aborts collection requests and stops queued requests when unmounted', async () => {
+    let resolveOld!: (value: any) => void;
+    global.fetch = jest.fn().mockReturnValue(new Promise(resolve => { resolveOld = resolve; }));
+    const paths = [
+      { method: 'GET', url: '/me', version: 'v1.0', scope: 'DelegatedWork' },
+      { method: 'GET', url: '/users', version: 'beta', scope: 'DelegatedWork' }
+    ];
+    const { unmount } = renderWithProviders(
+      <CollectionPermissionsProvider><TestConsumer paths={paths}/></CollectionPermissionsProvider>
+    );
+    act(() => { screen.getByTestId('fetch-btn').click(); });
+    const options = (global.fetch as jest.Mock).mock.calls[0][1];
+    unmount();
+    await act(async () => { resolveOld({ ok: true, json: async () => ({ results: [] }) }); });
+    expect(options.signal?.aborted).toBe(true);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 });

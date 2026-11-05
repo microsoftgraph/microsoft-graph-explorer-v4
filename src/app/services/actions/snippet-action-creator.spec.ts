@@ -26,8 +26,7 @@ describe('Snippet actions creators', () => {
 
     const store_ = mockStore({
       devxApi: {
-        baseUrl: 'https://graphexplorerapi.azurewebsites.net',
-        parameters: ''
+        baseUrl: 'https://graphexplorerapi.azurewebsites.net'
       },
       sampleQuery: {
         sampleUrl: 'https://graph.microsoft.com/v1.0/me/',

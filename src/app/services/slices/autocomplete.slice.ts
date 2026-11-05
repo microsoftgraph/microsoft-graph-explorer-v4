@@ -4,6 +4,8 @@ import { SignContext, suggestions } from '../../../modules/suggestions';
 import { ApplicationState } from '../../../store';
 import { IAutocompleteResponse } from '../../../types/auto-complete';
 import { IParsedOpenApiResponse } from '../../../types/open-api';
+import { getDevxConfiguration } from '../devx-api';
+import { devxConfigurationChanged } from '../devx-events';
 
 export const fetchAutoCompleteOptions = createAsyncThunk(
   'autoComplete/fetch',
@@ -12,11 +14,11 @@ export const fetchAutoCompleteOptions = createAsyncThunk(
     const state = getState() as ApplicationState;
 
     try {
-      const devxApiUrl = state.devxApi.baseUrl;
+      const config = getDevxConfiguration(state);
       const resources = Object.keys(state.resources.data).length > 0 ? state.resources.data[version] : undefined;
       const autoOptions = await suggestions.getSuggestions(
         url,
-        devxApiUrl,
+        config,
         version,
         context,
         resources
@@ -28,7 +30,7 @@ export const fetchAutoCompleteOptions = createAsyncThunk(
   }
 );
 
-const initialState: IAutocompleteResponse = {
+const initialState: IAutocompleteResponse & { requestId?: string } = {
   pending: false,
   data: null,
   error: null
@@ -40,17 +42,26 @@ const autoCompleteSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAutoCompleteOptions.pending, (state) => {
+      .addCase(devxConfigurationChanged, (state) => {
+        state.data = null;
+        state.error = null;
+        state.pending = false;
+        state.requestId = '';
+      })
+      .addCase(fetchAutoCompleteOptions.pending, (state, action) => {
+        state.requestId = action.meta?.requestId;
         state.pending = true;
         state.data = null;
         state.error = null;
       })
       .addCase(fetchAutoCompleteOptions.fulfilled, (state, action) => {
+        if (state.requestId !== action.meta?.requestId) { return; }
         state.pending = false;
         state.data = action.payload as IParsedOpenApiResponse;
         state.error = null;
       })
       .addCase(fetchAutoCompleteOptions.rejected, (state, action) => {
+        if (state.requestId !== action.meta?.requestId) { return; }
         state.pending = false;
         state.data = null;
         if (action.payload) {

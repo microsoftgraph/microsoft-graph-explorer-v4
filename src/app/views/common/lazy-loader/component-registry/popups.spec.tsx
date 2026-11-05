@@ -35,8 +35,12 @@ describe('popups component registry', () => {
     expect(popups.has('edit-scope-panel')).toBe(true);
   });
 
-  it('should have exactly 7 entries', () => {
-    expect(popups.size).toBe(7);
+  it('should have custom-samples entry', () => {
+    expect(popups.has('custom-samples')).toBe(true);
+  });
+
+  it('should have exactly 8 entries', () => {
+    expect(popups.size).toBe(8);
   });
 
   it('all entries should be lazy components (functions)', () => {
@@ -48,6 +52,7 @@ describe('popups component registry', () => {
 
   it('PopupItem type should match map keys', () => {
     const keys: PopupItem[] = [
+      'custom-samples',
       'share-query',
       'theme-chooser',
       'preview-collection',
@@ -75,7 +80,7 @@ describe('popups component registry', () => {
     for (const entry of popups) {
       entries.push(entry);
     }
-    expect(entries).toHaveLength(7);
+    expect(entries).toHaveLength(8);
     entries.forEach(([key, value]) => {
       expect(typeof key).toBe('string');
       expect(value).toBeDefined();
@@ -90,6 +95,7 @@ describe('popups component registry', () => {
 
   it('map keys exactly match all PopupItem values', () => {
     const expectedKeys: PopupItem[] = [
+      'custom-samples',
       'share-query',
       'theme-chooser',
       'preview-collection',

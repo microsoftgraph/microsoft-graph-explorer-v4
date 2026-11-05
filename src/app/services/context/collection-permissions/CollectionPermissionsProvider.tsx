@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { CollectionPermission, Method, ResourcePath } from '../../../../types/resources';
 import {
@@ -6,6 +6,8 @@ import {
 } from '../../../views/sidebar/resource-explorer/collection/collection.util';
 import { CollectionPermissionsContext } from './CollectionPermissionsContext';
 import { useAppSelector } from '../../../../store';
+import { IDevxAPI } from '../../../../types/devx-api';
+import { devxCacheKey, fetchDevxApi, getDevxConfiguration } from '../../devx-api';
 
 interface CollectionRequest {
   method: Method;
@@ -27,7 +29,9 @@ function getRequestsFromPaths(paths: ResourcePath[], version: string, scope: str
   return requests;
 }
 
-async function getCollectionPermissions(permissionsUrl: string, paths: ResourcePath[]):
+async function getCollectionPermissions(
+  config: IDevxAPI, paths: ResourcePath[], signal: AbortSignal, isCurrent: () => boolean
+):
 Promise<{ [key: string]: CollectionPermission[] }> {
   const versions = getVersionsFromPaths(paths);
   const scopes = getScopesFromPaths(paths);
@@ -35,18 +39,20 @@ Promise<{ [key: string]: CollectionPermission[] }> {
 
   for (const version of versions) {
     for (const scope of scopes) {
+      if (!isCurrent()) { return collectionPermissions; }
       const requestPaths = getRequestsFromPaths(paths, version, scope);
       if (requestPaths.length === 0) {
         continue;
       }
-      const url = `${permissionsUrl}?version=${version}&scopeType=${scope}`;
-      const response = await fetch(url, {
+      const response = await fetchDevxApi(config, '/permissions', { version, scopeType: scope }, {
         method: 'POST',
+        signal,
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestPaths)
       });
+      if (!response.ok) { throw new Error('Failed to fetch collection permissions'); }
       const perms = await response.json();
       collectionPermissions[`${version}-${scope}`] = (perms.results) ? perms.results : [];
     }
@@ -55,26 +61,59 @@ Promise<{ [key: string]: CollectionPermission[] }> {
 }
 
 const CollectionPermissionsProvider = ({ children }: { children: ReactNode }) => {
-  const { baseUrl } = useAppSelector((state) => state.devxApi);
+  const devxApi = useAppSelector((state) => state.devxApi);
+  const authToken = useAppSelector((state) => state.auth.authToken.token);
+  const config = useMemo(() => getDevxConfiguration({
+    devxApi, auth: { authToken: { token: authToken } }
+  }), [devxApi, authToken]);
   const [permissions, setPermissions] = useState<{ [key: string]: CollectionPermission[] } | undefined>(undefined);
   const [isFetching, setIsFetching] = useState(false);
-  const [code, setCode] = useState('');
+  const code = useRef('');
+  const items = useRef<ResourcePath[] | null>(null);
+  const request = useRef(0);
+  const controller = useRef<AbortController>();
+  const identity = `${devxCacheKey(config)}${devxApi.revision || 0}`;
+  const currentIdentity = useRef(identity);
+  const previousIdentity = useRef(identity);
+  currentIdentity.current = identity;
 
-  const getPermissions = async (items: ResourcePath[]): Promise<void> => {
-    const hashCode = window.btoa(JSON.stringify([...items]));
-    if (hashCode !== code) {
+  const getPermissions = useCallback(async (paths: ResourcePath[]): Promise<void> => {
+    items.current = paths;
+    const hashCode = `${identity}:${JSON.stringify(paths)}`;
+    if (hashCode !== code.current) {
+      controller.current?.abort();
+      const batch = new AbortController();
+      controller.current = batch;
+      const requestId = ++request.current;
+      const isCurrent = () => !batch.signal.aborted &&
+        identity === currentIdentity.current && requestId === request.current;
       try {
         setIsFetching(true);
-        const perms = await getCollectionPermissions(`${baseUrl}/permissions`, items);
+        const perms = await getCollectionPermissions(config, paths, batch.signal, isCurrent);
+        if (!isCurrent()) { return; }
         setPermissions(perms);
-        setCode(hashCode);
+        code.current = hashCode;
       } catch (error) {
-        setPermissions(undefined);
+        if (isCurrent()) {
+          setPermissions(undefined);
+        }
       } finally {
-        setIsFetching(false);
+        if (isCurrent()) { setIsFetching(false); }
       }
     }
-  };
+  }, [config, identity]);
+
+  useEffect(() => {
+    if (previousIdentity.current === identity) { return; }
+    previousIdentity.current = identity;
+    controller.current?.abort();
+    code.current = '';
+    setPermissions(undefined);
+    setIsFetching(false);
+    if (items.current) { void getPermissions(items.current); }
+  }, [getPermissions, identity]);
+
+  useEffect(() => () => { controller.current?.abort(); }, []);
 
   const contextValue = useMemo(
     () => ({ getPermissions, permissions, isFetching }),

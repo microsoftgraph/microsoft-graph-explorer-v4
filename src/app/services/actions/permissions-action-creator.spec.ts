@@ -31,8 +31,7 @@ window.open = jest.fn();
 
 const mockState: ApplicationState = {
   devxApi: {
-    baseUrl: 'https://graph.microsoft.com/v1.0/me',
-    parameters: '$count=true'
+    baseUrl: 'https://graph.microsoft.com/v1.0/me'
   },
   profile: {
     user: {

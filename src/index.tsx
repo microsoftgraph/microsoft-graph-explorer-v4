@@ -9,7 +9,6 @@ import App from './app/views/App';
 import { CURRENT_THEME } from './app/services/graph-constants';
 import { getAuthTokenSuccess, getConsentedScopesSuccess } from './app/services/slices/auth.slice';
 import { createCollection } from './app/services/slices/collections.slice';
-import { setDevxApiUrl } from './app/services/slices/devxapi.slice';
 import { setGraphExplorerMode } from './app/services/slices/explorer-mode.slice';
 import { bulkAddHistoryItems } from './app/services/slices/history.slice';
 // MODIFIED: Removed getGraphProxyUrl import as we no longer dynamically fetch proxy endpoint
@@ -18,7 +17,6 @@ import { setSampleQuery } from './app/services/slices/sample-query.slice';
 import { toggleSidebar } from './app/services/slices/sidebar-properties.slice';
 import { changeTheme } from './app/services/slices/theme.slice';
 import variantService from './app/services/variant-service';
-import { isValidHttpsUrl } from './app/utils/external-link-validation';
 import { readFromLocalStorage } from './app/utils/local-storage';
 import { authenticationWrapper } from './modules/authentication';
 import { collectionsCache } from './modules/cache/collections.cache';
@@ -27,7 +25,6 @@ import { store } from './store';
 import './styles/index.scss';
 import { telemetry } from './telemetry';
 import ITelemetry from './telemetry/ITelemetry';
-import { IDevxAPI } from './types/devx-api';
 import { Mode } from './types/enums';
 import { IHistoryItem } from './types/history';
 import { Collection } from './types/resources';
@@ -117,23 +114,6 @@ if (theme) {
     mobileScreen: false,
     showSidebar: true
   }))
-}
-
-const devxApiUrl = new URLSearchParams(location.search).get('devx-api');
-
-if (devxApiUrl && isValidHttpsUrl(devxApiUrl)) {
-  const org = new URLSearchParams(location.search).get('org');
-  const branchName = new URLSearchParams(location.search).get('branchName');
-
-  const devxApi: IDevxAPI = {
-    baseUrl: devxApiUrl,
-    parameters: ''
-  };
-
-  if (org && branchName) {
-    devxApi.parameters = `org=${org}&branchName=${branchName}`;
-  }
-  appStore.dispatch(setDevxApiUrl(devxApi));
 }
 
 historyCache.readHistoryData().then((data: IHistoryItem[]) => {

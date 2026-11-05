@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 import { test, expect, Page } from '@playwright/test';
 
+const DEVX_API_BASE_URL = (process.env.REACT_APP_DEVX_API_URL || 'https://graph-devx-api.microsoft.com')
+  .replace(/\/+$/, '');
+
 let page: Page;
 
 test.beforeAll(async ({ browser }) => {
@@ -9,6 +12,66 @@ test.beforeAll(async ({ browser }) => {
 });
 
 test.describe('Run query', () => {
+
+  test('ignores DevX endpoint overrides and rejects redirects', async ({ page: isolatedPage }) => {
+    const untrustedOrigins = ['https://untrusted.example.com', 'https://other-untrusted.example.com'];
+    const destinations: string[] = [];
+    let redirectSamples = false;
+
+    await isolatedPage.addInitScript(() => {
+      Object.assign(window, {
+        ConnectionString: 'InstrumentationKey=00000000-0000-0000-0000-000000000001;IngestionEndpoint=http://127.0.0.1:3000'
+      });
+    });
+
+    await isolatedPage.route('**/*', async route => {
+      const url = new URL(route.request().url());
+      if (url.pathname === '/v2/track') {
+        await route.abort();
+      } else if (untrustedOrigins.includes(url.origin)) {
+        destinations.push(url.href);
+        await route.abort();
+      } else if (url.pathname.endsWith('/openapi/tree')) {
+        destinations.push(url.href);
+        await route.fulfill({ json: { segment: '/', children: [], labels: [] } });
+      } else if (url.pathname.endsWith('/samples')) {
+        destinations.push(url.href);
+        if (redirectSamples) {
+          await route.fulfill({ status: 302, headers: { location: `${untrustedOrigins[0]}/samples` } });
+        } else {
+          await route.fulfill({ json: { sampleQueries: [{
+            category: 'Getting Started', humanName: 'My profile', method: 'GET',
+            requestUrl: '/v1.0/me', docLink: 'https://learn.microsoft.com/en-us/graph/api/user-get',
+            skipTest: false
+          }] } });
+        }
+      } else {
+        await route.continue();
+      }
+    });
+
+    const parameters = new URLSearchParams({
+      'devx-api': untrustedOrigins[0], org: 'untrusted', branchName: 'preview',
+      request: 'me', method: 'GET', version: 'v1.0'
+    });
+    parameters.append('devx-api', untrustedOrigins[1]);
+    await isolatedPage.goto(`/?${parameters}`);
+    await expect.poll(() => [...new Set(destinations)].sort()).toEqual([
+      `${DEVX_API_BASE_URL}/openapi/tree?graphVersions=beta`,
+      `${DEVX_API_BASE_URL}/openapi/tree?graphVersions=v1.0`,
+      `${DEVX_API_BASE_URL}/samples`
+    ].sort());
+    await expect(isolatedPage.getByRole('textbox', { name: 'Query sample input' }))
+      .toHaveValue('https://graph.microsoft.com/v1.0/me');
+
+    redirectSamples = true;
+    const redirectFailure = isolatedPage.waitForEvent('requestfailed', {
+      predicate: request => request.url() === `${DEVX_API_BASE_URL}/samples`
+    });
+    await isolatedPage.reload();
+    await redirectFailure;
+    expect(destinations.some(url => untrustedOrigins.some(origin => url.startsWith(origin)))).toBe(false);
+  });
 
   test('should change version options', async () => {
     await page.locator('[aria-label="HTTP request method option"] >> text=GET').click();
@@ -371,5 +434,4 @@ test.describe('Access token tab', () => {
     expect(await page.screenshot({ clip: { x: 300, y: 0, width: 1920, height: 400 } })).toMatchSnapshot();
   })
 })
-
 

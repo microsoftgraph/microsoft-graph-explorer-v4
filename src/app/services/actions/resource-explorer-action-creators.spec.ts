@@ -14,8 +14,7 @@ const mockStore = configureMockStore([mockThunkMiddleware]);
 
 const mockState: ApplicationState = {
   devxApi: {
-    baseUrl: 'https://graph.microsoft.com/v1.0/me',
-    parameters: '$count=true'
+    baseUrl: 'https://graph.microsoft.com/v1.0/me'
   },
   profile: {
     user: undefined,
@@ -147,12 +146,12 @@ describe('Resource Explorer actions', () => {
 
   it('should dispatch FETCH_RESOURCES_PENDING and FETCH_RESOURCES_SUCCESS when fetchResources() is called',
     async () => {
-      const expectedResults = paths;
+      const expectedResults = { segment: '/', labels: [], children: paths };
       const expectedActions = [
         { type: FETCH_RESOURCES_PENDING, payload: undefined },
         {
           type: FETCH_RESOURCES_SUCCESS,
-          payload: { 'v1.0': paths, 'beta': paths }
+          payload: { 'v1.0': expectedResults, 'beta': expectedResults }
         }
       ]
 
