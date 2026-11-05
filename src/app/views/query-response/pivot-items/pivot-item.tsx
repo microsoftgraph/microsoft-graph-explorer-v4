@@ -52,7 +52,8 @@ const useStyles = makeStyles({
   },
   tabHeader: {
     display: 'flex',
-    flexShrink: 0
+    flexShrink: 0,
+    padding: `${tokens.spacingVerticalXS} ${tokens.spacingHorizontalXS}`
   },
   tabContent: {
     flex: 1,

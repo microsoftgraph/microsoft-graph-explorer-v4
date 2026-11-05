@@ -290,6 +290,71 @@ for (const viewport of [{ width: 683, height: 384 }, { width: 320, height: 768 }
   });
 }
 
+for (const scenario of [
+  { width: 1365, height: 768, colorScheme: 'light', forcedColors: 'none' },
+  { width: 1365, height: 768, colorScheme: 'dark', forcedColors: 'none' },
+  { width: 320, height: 768, colorScheme: 'light', forcedColors: 'none' },
+  { width: 320, height: 768, colorScheme: 'dark', forcedColors: 'active' }
+] as const) {
+  test(`keeps response tab focus rings visible at ${scenario.width}x${scenario.height} in ${
+    scenario.colorScheme
+  } mode with forced colors ${scenario.forcedColors}`, async ({ page }) => {
+    await page.emulateMedia(scenario);
+    await page.setViewportSize(scenario);
+    await openExplorer(page);
+    const response = page.locator('#response-area');
+    await response.scrollIntoViewIfNeeded();
+
+    for (const expanded of [false, true]) {
+      if (expanded) {
+        await response.getByRole('button', { name: 'Expand', exact: true }).click();
+      }
+      const scope = expanded ? page.getByRole('dialog') : response;
+      await page.keyboard.press('Tab');
+      const tabs = scope.getByRole('tablist').getByRole('tab');
+      for (let index = 0; index < await tabs.count(); index++) {
+        const tab = tabs.nth(index);
+        await tab.focus();
+        await expect(tab).toBeFocused();
+        await expect(tab).toHaveAttribute('data-fui-focus-visible');
+        const focus = await tab.evaluate(element => {
+          const style = getComputedStyle(element);
+          const bounds = element.getBoundingClientRect();
+          const outset = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+          const clippedSides: string[] = [];
+          for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+            const parentStyle = getComputedStyle(parent);
+            const parentBounds = parent.getBoundingClientRect();
+            const left = parentBounds.left + parent.clientLeft;
+            const top = parentBounds.top + parent.clientTop;
+            const name = parent.id || parent.tagName;
+            if (parentStyle.overflowX !== 'visible') {
+              if (bounds.left - outset < left) {
+                clippedSides.push(`${name}: left`);
+              }
+              if (bounds.right + outset > left + parent.clientWidth) {
+                clippedSides.push(`${name}: right`);
+              }
+            }
+            if (parentStyle.overflowY !== 'visible') {
+              if (bounds.top - outset < top) {
+                clippedSides.push(`${name}: top`);
+              }
+              if (bounds.bottom + outset > top + parent.clientHeight) {
+                clippedSides.push(`${name}: bottom`);
+              }
+            }
+          }
+          return { outlineStyle: style.outlineStyle, outset, clippedSides };
+        });
+        expect(focus.outlineStyle).toBe('solid');
+        expect(focus.outset).toBeGreaterThan(0);
+        expect(focus.clippedSides).toEqual([]);
+      }
+    }
+  });
+}
+
 test('keeps the expanded response dialog bounded and its close button reachable', async ({ page }) => {
   await page.setViewportSize({ width: 683, height: 384 });
   await openExplorer(page);
