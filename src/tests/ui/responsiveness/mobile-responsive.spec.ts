@@ -39,6 +39,17 @@ test.beforeAll(async ({ browser }) => {
     contentType: 'application/json',
     body: JSON.stringify({ displayName: 'Layout Profile', givenName: 'Layout', surname: 'Profile' })
   }));
+  await page.route(url => url.pathname.endsWith('/permissions'), route => route.fulfill({
+    contentType: 'application/json',
+    headers: { 'access-control-allow-origin': '*' },
+    body: JSON.stringify([{
+      value: 'User.Read',
+      consentDescription: 'Allows users to sign in to the app and read their profile.',
+      isAdmin: false,
+      consented: false,
+      isLeastPrivilege: true
+    }])
+  }));
   await page.route('https://cdn.jsdelivr.net/npm/monaco-editor@*/min/vs/**', route => route.fulfill({
     path: path.join(
       process.cwd(), 'node_modules', 'monaco-editor', 'min', 'vs',
@@ -93,62 +104,26 @@ test.describe('Sidebar navigation', () => {
   })
 });
 
+// Response tabs in the overflow menu and the expanded response dialog are covered by layout-scrolling.spec.ts.
 test.describe('Request area navigation', () => {
+  // At this width only the selected request tab fits, so the other tabs are listed in the "more tabs" menu.
+  async function selectRequestTabFromOverflowMenu(name: string) {
+    const request = page.locator('#request-area');
+    await request.getByRole('tab', { name: /more tabs/ }).click();
+    await page.getByRole('menuitem', { name, exact: true }).click();
+    await expect(request.getByRole('tab', { name, exact: true })).toHaveAttribute('aria-selected', 'true');
+    return request;
+  }
+
   test('should have permissions tab in overflow menu', async () => {
-    await page.getByLabel('More request area items').click();
-    await page.getByRole('menuitem', { name: 'Modify permissions' }).click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(500);
-    page.locator('span').filter({ hasText: 'Directory.Read.All' });
-    expect(await page.screenshot()).toMatchSnapshot();
-  })
+    const request = await selectRequestTabFromOverflowMenu('Modify Permissions');
+    await expect(request.getByRole('table', { name: 'Permissions Table' })).toBeVisible();
+    await expect(request.getByText('User.Read', { exact: true })).toBeVisible();
+  });
 
   test('should have access token tab in overflow menu', async () => {
-    await page.getByLabel('More request area items').click();
-    await page.getByRole('menuitem', { name: 'Access token' }).click();
-    page.getByText('To view your access token, sign in to Graph Explorer.');
-    expect(await page.screenshot()).toMatchSnapshot();
-  })
-});
-test.describe('Response area navigation', () => {
-  test('should have code snippets tab in overflow menu', async () => {
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(200);
-    await page.getByLabel('More response area items').click();
-    await page.getByRole('menuitem', { name: 'Code snippets' }).click();
-    await page.getByRole('tab', { name: 'C# C#' }).click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(500);
-    expect(await page.screenshot()).toMatchSnapshot();
-  })
-  test('should have adaptive card tab in overflow menu', async () => {
-    await page.getByRole('button', { name: 'Toggle sidebar', exact: true }).click();
-    const drawer = page.getByRole('dialog', { name: 'Queries', exact: true });
-    await drawer.getByRole('tab', { name: 'Sample queries', exact: true }).click();
-    await drawer.getByText('my profile', { exact: true }).click();
-    await expect(drawer).not.toBeVisible();
-    await page.getByRole('button', { name: 'Run query' }).click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(1000);
-    await page.getByLabel('More response area items').click();
-    await page.getByRole('menuitem', { name: 'Adaptive cards' }).click();
-    await page.getByRole('tabpanel', { name: 'Adaptive cards' }).getByRole('tab', { name: 'Card' }).click();
-    expect(page.getByText('Megan Bowen')).toBeDefined();
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('tab', { name: 'JSON template' }).click();
-    expect(page.getByText('Get started with adaptive cards on Adaptive Cards Templating SDK and experiment ')).toBeDefined();
-    await page.waitForTimeout(200);
-    expect(await page.screenshot()).toMatchSnapshot();
-  })
-  test('should have expand component tab in overflow menu', async () => {
-    await page.getByLabel('More response area items').click();
-    await page.getByRole('menuitem', { name: 'Expand response' }).click();
-    await page.getByRole('tab', { name: 'More items' }).click();
-    await page.getByRole('menuitem', { name: 'Code snippets' }).click();
-    await page.getByRole('tab', { name: 'C# C#' }).click();
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(500);
-    expect(await page.screenshot()).toMatchSnapshot();
-    await page.getByRole('button', { name: 'Close expanded response area' }).click();
+    const request = await selectRequestTabFromOverflowMenu('Access token');
+    await expect(request.getByText('To view your access token, sign in to Graph Explorer.', { exact: true }))
+      .toBeVisible();
   });
 });
