@@ -393,6 +393,7 @@ test('keeps the embedded TryIt layout scrollable without a sidebar', async ({ pa
   await page.setViewportSize({ width: 683, height: 384 });
   await openExplorer(page, '/?theme=dark');
   await expect(page.locator('#sidebar-ref')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Toggle sidebar', exact: true })).toHaveCount(0);
   const response = page.locator('#response-area');
   await response.scrollIntoViewIfNeeded();
   await expectLastLine(response, responseMarker);

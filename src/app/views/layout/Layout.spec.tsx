@@ -1,6 +1,7 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { act, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { configureStore } from '@reduxjs/toolkit';
 
 jest.mock('../../../modules/authentication', () => ({
   authenticationWrapper: {
@@ -38,8 +39,8 @@ jest.mock('../query-runner/request/Request', () => ({
   )
 }));
 jest.mock('../sidebar/Sidebar', () => ({
-  Sidebar: ({ handleToggleSelect }: any) => (
-    <div data-testid="sidebar">
+  Sidebar: ({ handleToggleSelect, expanded }: any) => (
+    <div data-testid="sidebar" data-expanded={String(expanded)}>
       <button data-testid="toggle-open" onClick={() => handleToggleSelect(true)}>Open</button>
       <button data-testid="toggle-close" onClick={() => handleToggleSelect(false)}>Close</button>
     </div>
@@ -94,8 +95,9 @@ jest.mock('@fluentui-contrib/react-resize-handle', () => ({
 }));
 
 import { Layout } from './Layout';
-import { renderWithProviders } from '../../../test-utils';
+import { createMockStore, renderWithProviders } from '../../../test-utils';
 import { Mode } from '../../../types/enums';
+import sidebarReducer, { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 
 describe('Layout component', () => {
   const defaultProps = {
@@ -451,7 +453,9 @@ describe('Layout component', () => {
         auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
       }
     });
+    fireEvent.click(screen.getByTestId('toggle-close'));
     fireEvent.click(screen.getByTestId('toggle-open'));
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'true');
   });
 
   it('handleToggleSelect closes sidebar in desktop mode', () => {
@@ -468,41 +472,73 @@ describe('Layout component', () => {
         auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
       }
     });
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'true');
     fireEvent.click(screen.getByTestId('toggle-close'));
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'false');
   });
 
   it('handleToggleSelect in mobile mode dispatches toggleSidebar', () => {
-    renderWithProviders(<Layout {...defaultProps} />, {
-      preloadedState: {
-        sidebarProperties: { showSidebar: true, mobileScreen: true },
-        sampleQuery: {
-          sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-          selectedVerb: 'GET',
-          sampleBody: undefined,
-          sampleHeaders: [],
-          selectedVersion: 'v1.0'
-        },
-        auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
-      }
+    const store = createMockStore({
+      sidebarProperties: { showSidebar: false, mobileScreen: true },
+      sampleQuery: {
+        sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+        selectedVerb: 'GET',
+        sampleBody: undefined,
+        sampleHeaders: [],
+        selectedVersion: 'v1.0'
+      },
+      auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
     });
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    renderWithProviders(<Layout {...defaultProps} />, { store });
     fireEvent.click(screen.getByTestId('toggle-open'));
+    expect(dispatchSpy).toHaveBeenCalledWith({
+      type: 'sidebarProperties/toggleSidebar',
+      payload: { showSidebar: true, mobileScreen: true }
+    });
+    dispatchSpy.mockRestore();
   });
 
   it('handleToggleSelect closes in mobile mode', () => {
-    renderWithProviders(<Layout {...defaultProps} />, {
-      preloadedState: {
-        sidebarProperties: { showSidebar: true, mobileScreen: true },
-        sampleQuery: {
-          sampleUrl: 'https://graph.microsoft.com/v1.0/me',
-          selectedVerb: 'GET',
-          sampleBody: undefined,
-          sampleHeaders: [],
-          selectedVersion: 'v1.0'
-        },
-        auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
-      }
+    const store = createMockStore({
+      sidebarProperties: { showSidebar: true, mobileScreen: true },
+      sampleQuery: {
+        sampleUrl: 'https://graph.microsoft.com/v1.0/me',
+        selectedVerb: 'GET',
+        sampleBody: undefined,
+        sampleHeaders: [],
+        selectedVersion: 'v1.0'
+      },
+      auth: { authToken: { token: false, pending: false }, consentedScopes: [] }
     });
+    const dispatchSpy = jest.spyOn(store, 'dispatch');
+    renderWithProviders(<Layout {...defaultProps} />, { store });
     fireEvent.click(screen.getByTestId('toggle-close'));
+    expect(dispatchSpy).toHaveBeenCalledWith({
+      type: 'sidebarProperties/toggleSidebar',
+      payload: { showSidebar: false, mobileScreen: true }
+    });
+    // The mobile drawer is driven by the store only; the desktop expanded state is left alone.
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'true');
+    dispatchSpy.mockRestore();
+  });
+
+  it('re-expands a collapsed desktop sidebar after switching from mobile back to desktop', () => {
+    const initialState = {
+      ...createMockStore().getState(),
+      sidebarProperties: { showSidebar: true, mobileScreen: false }
+    };
+    const store = configureStore({
+      reducer: (state = initialState, action) => ({
+        ...state, sidebarProperties: sidebarReducer(state.sidebarProperties, action)
+      })
+    });
+    renderWithProviders(<Layout {...defaultProps} />, { store });
+    fireEvent.click(screen.getByTestId('toggle-close'));
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'false');
+    act(() => { store.dispatch(toggleSidebar({ showSidebar: false, mobileScreen: true })); });
+    act(() => { store.dispatch(toggleSidebar({ showSidebar: true, mobileScreen: false })); });
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-expanded', 'true');
   });
 
   it('sidebar resize handler receives onMouseDown for drag', () => {

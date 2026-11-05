@@ -1,24 +1,48 @@
-jest.mock('@monaco-editor/react', () => ({
-  __esModule: true,
-  default: ({ language, onMount, onChange }: any) => {
-    // Simulate mount
-    if (onMount) {
-      const mockEditor = {
-        layout: jest.fn(),
-        getValue: jest.fn(() => ''),
-        setValue: jest.fn(),
-        getModel: jest.fn(() => ({
-          getFullModelRange: jest.fn(() => ({})),
-          pushEditOperations: jest.fn()
-        })),
-        pushUndoStop: jest.fn()
-      };
-      setTimeout(() => onMount(mockEditor), 0);
+jest.mock('@monaco-editor/react', () => {
+  const { useEffect } = jest.requireActual('react');
+  const mountedEditors: unknown[] = [];
+  // Mirrors the real Editor: onMount fires once with an editor whose value is kept by setValue.
+  const createMountedEditor = () => {
+    let value = '';
+    const model = { getFullModelRange: jest.fn(() => ({})), pushEditOperations: jest.fn() };
+    return {
+      layout: jest.fn(),
+      getValue: jest.fn(() => value),
+      setValue: jest.fn((newValue: string) => { value = newValue; }),
+      getModel: jest.fn(() => model),
+      pushUndoStop: jest.fn()
+    };
+  };
+  return {
+    __esModule: true,
+    mountedEditors,
+    default: ({ language, onMount, onChange }: any) => {
+      // Simulate mount
+      if (onMount) {
+        const mockEditor = {
+          layout: jest.fn(),
+          getValue: jest.fn(() => ''),
+          setValue: jest.fn(),
+          getModel: jest.fn(() => ({
+            getFullModelRange: jest.fn(() => ({})),
+            pushEditOperations: jest.fn()
+          })),
+          pushUndoStop: jest.fn()
+        };
+        setTimeout(() => onMount(mockEditor), 0);
+      }
+      return <div data-testid="mock-monaco" data-language={language}>Monaco Editor</div>;
+    },
+    Editor: ({ language, onMount }: any) => {
+      useEffect(() => {
+        const mountedEditor = createMountedEditor();
+        mountedEditors.push(mountedEditor);
+        onMount?.(mountedEditor);
+      }, []);
+      return <div data-testid="mock-monaco" data-language={language}>Monaco Editor</div>;
     }
-    return <div data-testid="mock-monaco" data-language={language}>Monaco Editor</div>;
-  },
-  Editor: ({ language }: any) => <div data-testid="mock-monaco" data-language={language}>Monaco Editor</div>
-}));
+  };
+});
 jest.mock('../../../../themes/theme-context', () => ({
   ThemeContext: {
     Consumer: ({ children }: any) => children('light')
@@ -32,7 +56,37 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { Monaco } from './Monaco';
 
+interface MountedEditor {
+  layout: jest.Mock;
+  setValue: jest.Mock;
+  pushUndoStop: jest.Mock;
+  getModel: () => { pushEditOperations: jest.Mock };
+}
+
+const getLastMountedEditor = (): MountedEditor => {
+  const { mountedEditors } = jest.requireMock('@monaco-editor/react');
+  return mountedEditors[mountedEditors.length - 1];
+};
+
 describe('Monaco', () => {
+  it('lays out the editor and loads the formatted body when it mounts', () => {
+    render(<Monaco body={{ key: 'value' }} />);
+    const mountedEditor = getLastMountedEditor();
+    expect(mountedEditor.layout).toHaveBeenCalledTimes(1);
+    expect(mountedEditor.setValue).toHaveBeenCalledWith('{"key":"value"}');
+    expect(mountedEditor.getModel().pushEditOperations).not.toHaveBeenCalled();
+  });
+
+  it('pushes an undoable edit with the new text when the body changes after mount', () => {
+    const { rerender } = render(<Monaco body='original' />);
+    const mountedEditor = getLastMountedEditor();
+    rerender(<Monaco body='updated' />);
+    expect(mountedEditor.pushUndoStop).toHaveBeenCalledTimes(1);
+    expect(mountedEditor.getModel().pushEditOperations).toHaveBeenCalledWith(
+      [], [{ range: {}, text: 'updated' }], expect.any(Function)
+    );
+  });
+
   it('renders with string body', () => {
     render(<Monaco body="test content" />);
     expect(screen.getByTestId('mock-monaco')).toBeDefined();

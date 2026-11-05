@@ -84,6 +84,27 @@ describe('Sidebar', () => {
     expect(handleToggleSelect).toHaveBeenCalledWith(false);
   });
 
+  it('closes the mobile drawer when Escape is pressed', () => {
+    renderWithProviders(
+      <Sidebar expanded handleToggleSelect={handleToggleSelect} />,
+      { preloadedState: { sidebarProperties: { showSidebar: true, mobileScreen: true } } }
+    );
+    fireEvent.keyDown(screen.getByRole('dialog', { name: 'Queries' }), { key: 'Escape' });
+    expect(handleToggleSelect).toHaveBeenCalledTimes(1);
+    expect(handleToggleSelect).toHaveBeenCalledWith(false);
+  });
+
+  it('renders nothing on desktop when the sidebar is hidden', () => {
+    renderWithProviders(
+      <Sidebar expanded handleToggleSelect={handleToggleSelect} />,
+      { preloadedState: { sidebarProperties: { showSidebar: false, mobileScreen: false } } }
+    );
+    expect(screen.queryAllByRole('tab')).toHaveLength(0);
+    expect(screen.queryByRole('button', { name: /sidebar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('sample-queries')).not.toBeInTheDocument();
+  });
+
   it('makes the page behind the open mobile drawer inert until it closes', () => {
     const appRoot = document.createElement('div');
     appRoot.id = 'root';

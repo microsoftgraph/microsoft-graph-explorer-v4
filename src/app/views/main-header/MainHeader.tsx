@@ -11,6 +11,7 @@ import { toggleSidebar } from '../../services/slices/sidebar-properties.slice';
 import { translateMessage } from '../../utils/translate-messages';
 import { Button } from '@fluentui/react-components';
 import { MOBILE_SIDEBAR_ID } from '../sidebar/Sidebar.styles';
+import { Mode } from '../../../types/enums';
 
 const useStyles = makeStyles({
   root: {
@@ -52,7 +53,10 @@ const MainHeader = ()=>{
   const styles = useStyles()
   const dispatch = useAppDispatch();
   const { mobileScreen, showSidebar } = useAppSelector((state) => state.sidebarProperties);
+  const graphExplorerMode = useAppSelector((state) => state.graphExplorerMode);
   const restoreFocusTarget = useRestoreFocusTarget();
+  // The embedded TryIt experience has no sidebar, so there is nothing for the menu button to open.
+  const showSidebarToggle = mobileScreen && graphExplorerMode === Mode.Complete;
 
   const handleSidebarToggle = () => {
     dispatch(toggleSidebar({ mobileScreen: true }));
@@ -61,7 +65,7 @@ const MainHeader = ()=>{
   return (
     <div className={styles.root}>
       <div className={styles.headerTextContainer}>
-        {mobileScreen && (
+        {showSidebarToggle && (
           <Button
             {...restoreFocusTarget}
             appearance="subtle"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '../../../../test-utils';
 
 jest.mock('../response', () => ({ Response: () => <div data-testid="response">Response</div> }));
@@ -75,5 +75,21 @@ describe('GetPivotItems', () => {
     expect(screen.getByRole('tab', { name: 'Response Headers' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Snippets' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'Adaptive Cards' })).toBeTruthy();
+  });
+
+  it('shows the code snippets in place of the response preview when the Snippets tab is selected', () => {
+    renderWithProviders(<GetPivotItems />, {
+      preloadedState: {
+        graphExplorerMode: 'COMPLETE',
+        graphResponse: { isLoadingData: false, response: { body: undefined, headers: undefined } },
+        theme: 'light'
+      }
+    });
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Snippets' }));
+
+    expect(screen.getByRole('tab', { name: 'Snippets' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByTestId('snippets')).toBeTruthy();
+    expect(screen.queryByTestId('response')).toBeNull();
   });
 });

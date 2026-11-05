@@ -67,4 +67,15 @@ describe('MainHeader', () => {
     fireEvent.click(toggle);
     expect(toggle).toHaveAttribute('aria-expanded', 'true');
   });
+
+  it('does not offer a sidebar toggle in the embedded TryIt experience', () => {
+    renderWithProviders(<MainHeader />, {
+      preloadedState: {
+        graphExplorerMode: Mode.TryIt,
+        sidebarProperties: { showSidebar: false, mobileScreen: true }
+      }
+    });
+    expect(screen.getByText('Graph Explorer')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Toggle sidebar' })).not.toBeInTheDocument();
+  });
 });
