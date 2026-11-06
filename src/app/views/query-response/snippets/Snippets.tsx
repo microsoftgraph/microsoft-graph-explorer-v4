@@ -224,6 +224,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
   const dispatch = useAppDispatch();
   const language = props.language.toLowerCase();
   const snippets = useAppSelector((state) => state.snippets);
+  const devxRevision = useAppSelector((state) => state.devxApi.revision);
   const sampleQuery = useAppSelector((state) => state.sampleQuery);
   const snippetTab = useAppSelector((state) => state.snippets.snippetTab);
   const { data, pending: loadingState, error } = snippets;
@@ -249,7 +250,7 @@ const SnippetContent: React.FC<SnippetContentProps> = (
     if (sampleQuery && snippetTab) {
       dispatch(getSnippet(snippetTab.toLowerCase()));
     }
-  }, [sampleQuery]);
+  }, [sampleQuery, devxRevision]);
 
   const showSpinner = loadingState && !hasSnippetError;
   const notAvailable = !loadingState && hasSnippetError;

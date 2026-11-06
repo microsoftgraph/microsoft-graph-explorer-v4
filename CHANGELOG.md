@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.2.0](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.12...v11.2.0) (2026-11-05)
+
+
+### Features
+
+* add Custom samples dialog for Microsoft accounts ([#4104](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4104)) ([fc8f9d6](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/commit/fc8f9d67c4127dc4d2361d1d02aa411c12baaaba)), closes [#4103](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/issues/4103)
+
 ## [11.1.12](https://github.com/microsoftgraph/microsoft-graph-explorer-v4/compare/v11.1.11...v11.1.12) (2026-10-26)
 
 

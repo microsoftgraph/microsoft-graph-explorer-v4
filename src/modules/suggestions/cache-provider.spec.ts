@@ -2,6 +2,17 @@ import { IParsedOpenApiResponse } from '../../types/open-api';
 import { storeSuggestionsInCache, getSuggestionsFromCache } from './cache-provider';
 
 describe('Cache provider should', () => {
+  it('isolates custom suggestion caches by service and branch', async () => {
+    const content: IParsedOpenApiResponse = {
+      url: 'users', parameters: [], version: 'beta', createdAt: new Date().toISOString()
+    };
+    const source = { baseUrl: 'https://custom.example', org: 'org', branchName: 'a', custom: true };
+    await storeSuggestionsInCache(content, 'beta', source);
+    expect(await getSuggestionsFromCache('beta/users', source)).toEqual(content);
+    expect(await getSuggestionsFromCache('beta/users', { ...source, branchName: 'b' })).toBeNull();
+    expect(await getSuggestionsFromCache('beta/users')).toBeNull();
+  });
+
   it('return options from local storage which is null because suggestions' +
     ' are expired when getSuggestionsFromCache is called', async () => {
     const openApiContent: IParsedOpenApiResponse = {

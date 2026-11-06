@@ -67,8 +67,7 @@ const defaultState: Record<string, any> = {
     pending: false
   },
   devxApi: {
-    baseUrl: 'https://graphexplorerapi.azurewebsites.net',
-    parameters: ''
+    baseUrl: 'https://graphexplorerapi.azurewebsites.net'
   },
   resources: {
     pending: false,

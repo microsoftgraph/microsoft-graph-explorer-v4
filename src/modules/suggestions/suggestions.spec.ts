@@ -19,6 +19,7 @@ import { getMatchingResourceForUrl } from '../../app/utils/resources/resources-f
 import { getSuggestionsFromCache } from './cache-provider';
 
 describe('Suggestions should ', () => {
+  const api = { baseUrl: 'https://api' };
   beforeEach(() => {
     // eslint-disable-next-line no-undef
     fetchMock.resetMocks();
@@ -34,7 +35,7 @@ describe('Suggestions should ', () => {
 
   it('return null when getSuggestions fails', () => {
     const url = 'https://api.github.com/search/users?q=tom';
-    const api = 'https://api.github.com';
+    const api = { baseUrl: 'https://api.github.com' };
     const version = 'v1';
     return suggestions.getSuggestions(url, api, version, 'paths')
       .then((data) => {
@@ -53,7 +54,7 @@ describe('Suggestions should ', () => {
       }
     }));
     const url = 'https://test_url';
-    const api = 'https://test_api';
+    const api = { baseUrl: 'https://test_api' };
     const version = 'v1';
     return suggestions.getSuggestions(url, api, version, 'paths')
       .then((data) => {
@@ -69,41 +70,41 @@ describe('Suggestions should ', () => {
         { segment: 'groups' }
       ]
     };
-    const result = await suggestions.getSuggestions('', 'https://api', 'v1.0', 'paths', resources as any);
+    const result = await suggestions.getSuggestions('', api, 'v1.0', 'paths', resources as any);
     expect(result).toBeDefined();
     expect(result!.parameters[0].links).toEqual(['users', 'groups']);
   });
 
   it('returns null for paths with no resources', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'paths', undefined as any);
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'paths', undefined as any);
     expect(result).toBeNull();
   });
 
   it('returns cached suggestions if available', async () => {
     const cached = { createdAt: '', version: '', parameters: [], url: 'test' };
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(cached);
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'paths', { children: [] } as any);
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'paths', { children: [] } as any);
     expect(result).toBe(cached);
   });
 
   it('fetches from network for parameters context', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
     fetchMock.mockResponseOnce(JSON.stringify({ paths: {} }));
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'parameters');
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'parameters');
     expect(result).toBeDefined();
   });
 
   it('returns null on network error for parameters', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
     fetchMock.mockRejectOnce(new Error('fail'));
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'parameters');
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'parameters');
     expect(result).toBeNull();
   });
 
   it('returns null for banned paths (undefined in URL)', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
-    const result = await suggestions.getSuggestions('users/undefined/messages', 'https://api', 'v1.0', 'parameters');
+    const result = await suggestions.getSuggestions('users/undefined/messages', api, 'v1.0', 'parameters');
     expect(result).toBeNull();
   });
 
@@ -112,7 +113,7 @@ describe('Suggestions should ', () => {
       children: [{ segment: 'messages' }, { segment: 'contacts' }]
     });
     const resources = { children: [{ segment: 'users' }] };
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'paths', resources as any);
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'paths', resources as any);
     expect(result).toBeDefined();
     expect(result!.parameters[0].links).toEqual(['messages', 'contacts']);
   });
@@ -121,20 +122,20 @@ describe('Suggestions should ', () => {
     (getMatchingResourceForUrl as jest.Mock).mockReturnValue({ children: [] });
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
     const resources = { children: [{ segment: 'users' }] };
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'paths', resources as any);
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'paths', resources as any);
     expect(result).toBeNull();
   });
 
   it('returns null when fetch response not ok', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
     fetchMock.mockResponseOnce('Not Found', { status: 404, statusText: 'Not Found' });
-    const result = await suggestions.getSuggestions('users', 'https://api', 'v1.0', 'parameters');
+    const result = await suggestions.getSuggestions('users', api, 'v1.0', 'parameters');
     expect(result).toBeNull();
   });
 
   it('returns null for unknown banned path', async () => {
     (getSuggestionsFromCache as jest.Mock).mockResolvedValue(null);
-    const result = await suggestions.getSuggestions('users/unknown/messages', 'https://api', 'v1.0', 'parameters');
+    const result = await suggestions.getSuggestions('users/unknown/messages', api, 'v1.0', 'parameters');
     expect(result).toBeNull();
   });
 })

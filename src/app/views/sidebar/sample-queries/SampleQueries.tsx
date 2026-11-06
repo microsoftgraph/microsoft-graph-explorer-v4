@@ -363,22 +363,26 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
   const [openItems, setOpenItems] = React.useState<Set<TreeItemValue>>(new Set());
   const [selectedQueryKey, setSelectedQueryKey] = useState<string | null>(null);
   const hasAutoSelectedGlobally = useAppSelector(state => state.samples.hasAutoSelectedDefault) ?? false;
+  const samplesLoaded = useAppSelector(state => state.samples.loaded);
+  const samplesPending = useAppSelector(state => state.samples.pending);
   const [hasAutoSelected, setHasAutoSelected] = useState(hasAutoSelectedGlobally);
   const mobileScreen = useAppSelector((state) => state.sidebarProperties.mobileScreen);
 
   useEffect(() => {
-    if (!searchValue && queries.length === 0) {
+    if (!searchValue && !samplesLoaded && !samplesPending && queries.length === 0) {
       dispatch(fetchSamples());
-    } else {
-      setSampleQueries(queries);
     }
+  }, [dispatch, searchValue, samplesLoaded, samplesPending, queries.length]);
+
+  useEffect(() => {
+    setSampleQueries(queries);
   }, [queries]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hasSharedQuery = urlParams.has('request') && urlParams.has('method');
 
-    const shouldAutoSelect = !hasAutoSelected && !selectedQueryKey && !hasSharedQuery;
+    const shouldAutoSelect = !hasAutoSelectedGlobally && !hasAutoSelected && !selectedQueryKey && !hasSharedQuery;
 
     if (!mobileScreen && queries.length > 0 && shouldAutoSelect) {
       const defaultSample = queries.find(q =>
@@ -393,7 +397,7 @@ const Samples: React.FC<SamplesProps> = ({ queries, groups, searchValue }) => {
         dispatch({ type: 'samples/setHasAutoSelectedDefault', payload: true });
       }
     }
-  }, [mobileScreen, queries, hasAutoSelected, dispatch, selectedQueryKey]);
+  }, [mobileScreen, queries, hasAutoSelectedGlobally, hasAutoSelected, dispatch, selectedQueryKey]);
   useEffect(() => {
     if (groups && groups.length > 0) {
       setOpenItems(prev => {

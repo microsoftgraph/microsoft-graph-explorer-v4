@@ -1,14 +1,12 @@
 import { Dispatch, Middleware, UnknownAction } from '@reduxjs/toolkit';
 import { collectionsCache } from '../../modules/cache/collections.cache';
-import { samplesCache } from '../../modules/cache/samples.cache';
 import { AppAction } from '../../types/action';
 import { Collection, ResourcePath } from '../../types/resources';
 import { CURRENT_THEME } from '../services/graph-constants';
 import { getUniquePaths } from '../services/reducers/collections-reducer.util';
 import {
   CHANGE_THEME_SUCCESS, COLLECTION_CREATE_SUCCESS,
-  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS,
-  SAMPLES_FETCH_SUCCESS
+  RESOURCEPATHS_ADD_SUCCESS, RESOURCEPATHS_DELETE_SUCCESS
 } from '../services/redux-constants';
 import { saveToLocalStorage } from '../utils/local-storage';
 
@@ -17,10 +15,6 @@ const localStorageMiddleware: Middleware<{}, any, Dispatch<UnknownAction>> = () 
   switch (action.type) {
   case CHANGE_THEME_SUCCESS:
     saveToLocalStorage(CURRENT_THEME, action.payload);
-    break;
-
-  case SAMPLES_FETCH_SUCCESS:
-    samplesCache.saveSamples(action.payload);
     break;
 
   case RESOURCEPATHS_ADD_SUCCESS: {

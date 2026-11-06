@@ -29,8 +29,8 @@ describe('scopes.slice reducer', () => {
     expect(reducer(undefined, { type: 'unknown' })).toEqual(initialState);
   });
 
-  it('should set full permissions pending on fetchScopes.pending with full arg', () => {
-    const action = { type: fetchScopes.pending.type, meta: { arg: 'full' } };
+  it.each(['full', undefined])('should set full permissions pending with arg %s', arg => {
+    const action = { type: fetchScopes.pending.type, meta: { arg } };
     const state = reducer(initialState, action);
     expect(state.pending.isFullPermissions).toBe(true);
     expect(state.pending.isSpecificPermissions).toBe(false);
@@ -87,7 +87,7 @@ describe('scopes.slice reducer', () => {
     expect(state.error).toBeNull();
   });
 
-  it('should reset data on rejected', () => {
+  it('should reset only the failed permissions data on rejected', () => {
     const stateWithData = {
       ...initialState,
       data: {
@@ -97,11 +97,11 @@ describe('scopes.slice reducer', () => {
     };
     const action = { type: fetchScopes.rejected.type, payload: { message: 'Error' } };
     const state = reducer(stateWithData, action);
-    expect(state.data.specificPermissions).toEqual([]);
+    expect(state.data.specificPermissions).toEqual(stateWithData.data.specificPermissions);
     expect(state.data.fullPermissions).toEqual([]);
   });
 
-  it('should reset pending on fulfilled', () => {
+  it('should preserve query pending while full permissions are fulfilled', () => {
     const pendingState = {
       ...initialState,
       pending: { isSpecificPermissions: true, isFullPermissions: true }
@@ -113,7 +113,7 @@ describe('scopes.slice reducer', () => {
     };
     const state = reducer(pendingState, action);
     expect(state.pending.isFullPermissions).toBe(false);
-    expect(state.pending.isSpecificPermissions).toBe(false);
+    expect(state.pending.isSpecificPermissions).toBe(true);
   });
 
   it('should handle fulfilled with undefined fullPermissions', () => {
@@ -202,7 +202,7 @@ describe('scopes.slice reducer', () => {
       expect(result.type).toBe('scopes/fetchScopes/rejected');
     });
 
-    it('includes devxApi parameters in the request URL', async () => {
+    it('ignores legacy devxApi parameters in the request URL', async () => {
       const permissions = [{ value: 'User.Read' }];
       global.fetch = jest.fn().mockResolvedValue({
         ok: true,
@@ -212,7 +212,7 @@ describe('scopes.slice reducer', () => {
       const store = createStore();
       await store.dispatch(fetchScopes('full'));
       const calledUrl = (global.fetch as jest.Mock).mock.calls[0][0];
-      expect(calledUrl).toContain('openapi-operationids=Users.Get');
+      expect(calledUrl).not.toContain('openapi-operationids');
     });
   });
 });

@@ -44,6 +44,7 @@ const FullPermissions = () => {
   const dispatch = useAppDispatch();
   const scopes = useAppSelector((state) => state.scopes);
   const auth = useAppSelector((state) => state.auth);
+  const devxRevision = useAppSelector((state) => state.devxApi.revision);
   const { fullPermissions } = scopes.data;
   const tokenPresent = !!auth.authToken.token;
   const loading = scopes.pending.isFullPermissions;
@@ -60,7 +61,7 @@ const FullPermissions = () => {
     if (tokenPresent) {
       dispatch(fetchAllPrincipalGrants());
     }
-  }, [dispatch, tokenPresent]);
+  }, [dispatch, tokenPresent, devxRevision]);
 
   useEffect(() => {
     const sortedPermissions = [...fullPermissions].sort((a, b) => a.value.localeCompare(b.value));

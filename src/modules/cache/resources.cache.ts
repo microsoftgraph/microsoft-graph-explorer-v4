@@ -1,6 +1,8 @@
 import localforage from 'localforage';
 import { IResource, IResourceLink, Version } from '../../types/resources';
 import { ICacheData } from '.';
+import { devxCacheKey } from '../../app/services/devx-api';
+import { IDevxAPI } from '../../types/devx-api';
 
 const resourcesStorage = localforage.createInstance({
   storeName: 'resources',
@@ -13,22 +15,23 @@ const expiryTime = new Date().getTime() + 3 * 24 * 60 * 60 * 1000; // 3 days exp
 
 export const resourcesCache = (function () {
 
-  const saveResources = async (resource: IResource, version: Version) => {
+  const saveResources = async (resource: IResource, version: Version, config?: IDevxAPI) => {
     const cacheData = {
       data: resource,
       expiry: expiryTime
     }
-    await resourcesStorage.setItem(`${RESOURCE_KEY}_${version}`, cacheData);
+    await resourcesStorage.setItem(`${devxCacheKey(config)}${RESOURCE_KEY}_${version}`, cacheData);
   }
 
-  const readResources = async (version: Version): Promise<IResource | null> => {
-    const cacheData = await resourcesStorage.getItem(`${RESOURCE_KEY}_${version}`) as ICacheData<IResource>;
+  const readResources = async (version: Version, config?: IDevxAPI): Promise<IResource | null> => {
+    const key = `${devxCacheKey(config)}${RESOURCE_KEY}_${version}`;
+    const cacheData = await resourcesStorage.getItem(key) as ICacheData<IResource>;
     if (cacheData) {
       const { data, expiry } = cacheData;
       if (expiry >= Date.now()) {
         return data;
       }
-      resourcesStorage.removeItem(`${RESOURCE_KEY}_${version}`);
+      resourcesStorage.removeItem(key);
     }
     return null;
   }

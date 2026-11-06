@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '../../../../test-utils';
 
+const mockShowCustomSamples = jest.fn();
 const mockRevokeScopes: any = jest.fn(() => ({ type: 'revoke/mock' }));
 mockRevokeScopes.pending = 'revokeScopes/pending';
 mockRevokeScopes.fulfilled = 'revokeScopes/fulfilled';
@@ -30,21 +31,25 @@ jest.mock('../../../../telemetry', () => ({
     trackException: jest.fn(),
     getDeviceCharacteristicsData: jest.fn().mockReturnValue({})
   },
-  componentNames: {},
-  eventTypes: {},
+  componentNames: jest.requireActual('../../../../telemetry/component-names'),
+  eventTypes: jest.requireActual('../../../../telemetry/event-types'),
   errorTypes: {}
 }));
 jest.mock('../../../utils/translate-messages', () => ({
   translateMessage: (msg: string) => msg
 }));
 jest.mock('../../../services/hooks/usePopups', () => ({
-  usePopups: () => ({ show: jest.fn() })
+  usePopups: () => ({ show: mockShowCustomSamples })
 }));
 jest.mock('../../../services/hooks', () => ({
   usePopups: () => ({ show: jest.fn() })
 }));
 jest.mock('../../../services/slices/profile.slice', () => ({
   getProfileInfo: jest.fn(() => ({ type: 'profile/get' }))
+}));
+jest.mock('../../../services/custom-samples', () => ({
+  ...jest.requireActual('../../../services/custom-samples'),
+  resetCustomSamples: jest.fn(() => ({ type: 'devx/reset' }))
 }));
 jest.mock('../../../services/slices/auth.slice', () => ({
   signOut: jest.fn(() => ({ type: 'auth/signOut' })),
@@ -56,9 +61,67 @@ jest.mock('../../main-header/utils', () => ({
 }));
 
 import { ProfileV9 } from './Profile';
+import { authenticationWrapper } from '../../../../modules/authentication';
+import { componentNames, eventTypes, telemetry } from '../../../../telemetry';
 
 describe('ProfileV9', () => {
   const signInWithOther = jest.fn().mockResolvedValue(undefined);
+
+  beforeEach(() => { jest.clearAllMocks(); });
+
+  function renderProfileAction(username: string, custom = false, authenticated = true) {
+    (authenticationWrapper.getAccount as jest.Mock).mockReturnValue({
+      username, homeAccountId: 'account', tenantId: 'tenant'
+    });
+    return renderWithProviders(<ProfileV9 signInWithOther={signInWithOther} />, {
+      preloadedState: {
+        auth: { authToken: { token: authenticated, pending: false }, consentedScopes: [] },
+        devxApi: { baseUrl: 'https://custom.example', custom, eligible: true, accountKey: 'account:tenant' },
+        profile: {
+          status: 'success', error: null,
+          user: { displayName: 'Example User', emailAddress: 'different@example.com', id: 'test' }
+        }
+      }
+    });
+  }
+
+  it.each(['alias@microsoft.com', 'alias@MICROSOFT.COM'])('shows Custom samples for username %s', username => {
+    renderProfileAction(username);
+    fireEvent.click(screen.getByRole('button', { name: 'Example User sign out' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Custom samples' }));
+    expect(telemetry.trackEvent).toHaveBeenCalledWith(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.CUSTOM_SAMPLES_BUTTON
+    });
+    expect(mockShowCustomSamples).toHaveBeenCalledWith(expect.objectContaining({
+      settings: expect.objectContaining({ title: 'Custom samples' }), data: { accountKey: 'account:tenant' }
+    }));
+  });
+
+  it.each(['alias@example.com', 'alias@microsoft.com.example', 'alias@sub.microsoft.com'])(
+    'hides customization for username %s', username => {
+      renderProfileAction(username);
+      fireEvent.click(screen.getByRole('button', { name: 'Example User sign out' }));
+      expect(screen.queryByRole('button', { name: 'Custom samples' })).not.toBeInTheDocument();
+    }
+  );
+
+  it('hides customization without authentication even for a cached Microsoft account', () => {
+    renderProfileAction('alias@microsoft.com', false, false);
+    fireEvent.click(screen.getByRole('button', { name: 'Example User sign out' }));
+    expect(screen.queryByRole('button', { name: 'Custom samples' })).not.toBeInTheDocument();
+  });
+
+  it('shows Reset samples when customization is active', () => {
+    renderProfileAction('alias@microsoft.com', true);
+    fireEvent.click(screen.getByRole('button', { name: 'Example User sign out' }));
+    expect(screen.getByRole('button', { name: 'Reset samples' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Custom samples' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Reset samples' }));
+    expect(telemetry.trackEvent).toHaveBeenCalledWith(eventTypes.BUTTON_CLICK_EVENT, {
+      ComponentName: componentNames.RESET_SAMPLES_BUTTON
+    });
+    (authenticationWrapper.getAccount as jest.Mock).mockReset();
+  });
 
   it('renders profile with user info when authenticated', () => {
     renderWithProviders(<ProfileV9 signInWithOther={signInWithOther} />, {
