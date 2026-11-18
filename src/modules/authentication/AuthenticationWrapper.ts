@@ -16,7 +16,6 @@ import { SAFEROLLOUTACTIVE } from '../../app/services/variant-constants';
 import variantService from '../../app/services/variant-service';
 import { IQuery } from '../../types/query-runner';
 import { ClaimsChallenge } from './ClaimsChallenge';
-import { getCurrentUri } from './authUtils';
 import { signInAuthError } from './authentication-error-hints';
 import IAuthenticationWrapper from './interfaces/IAuthenticationWrapper';
 import { msalApplication } from './msal-app';
@@ -75,9 +74,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: defaultScopes,
       authority: this.getAuthority(),
       prompt: 'select_account',
-      redirectUri: getCurrentUri(),
-      extraQueryParameters: getExtraQueryParameters(),
-      tokenQueryParameters: getExtraQueryParameters()
+      extraQueryParameters: getExtraQueryParameters()
     };
     try {
       const result = await msalApplication.loginPopup(popUpRequest);
@@ -97,7 +94,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
   public async logOut() {
     const homeAccountId = this.getHomeAccountId();
     if (homeAccountId) {
-      const currentAccount = msalApplication.getAccountByHomeId(homeAccountId);
+      const currentAccount = msalApplication.getAccount({ homeAccountId });
       const logoutHint = currentAccount!.idTokenClaims?.login_hint;
       await msalApplication.logoutPopup({ logoutHint });
     } else {
@@ -160,7 +157,7 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
     if (allAccounts.length > 1) {
       const homeAccountId = this.getHomeAccountId();
       return homeAccountId
-        ? msalApplication.getAccountByHomeId(homeAccountId) || undefined
+        ? msalApplication.getAccount({ homeAccountId }) || undefined
         : undefined;
     }
 
@@ -178,7 +175,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
           scopes: defaultScopes,
           authority: this.getAuthority(),
           account: allAccounts[0],
-          redirectUri: getCurrentUri(),
           forceRefresh: false
         };
 
@@ -200,7 +196,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: defaultScopes,
       authority: this.getAuthority(),
       account,
-      redirectUri: getCurrentUri(),
       claims: this.claimsAvailable ? this.getClaims() : undefined,
       forceRefresh: false
     };
@@ -228,7 +223,6 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
         scopes: scopes.length > 0 ? scopes : defaultScopes,
         authority: this.getAuthority(),
         account: this.getAccount(),
-        redirectUri: getCurrentUri(),
         claims: this.getClaims()
       };
       const result = await msalApplication.acquireTokenSilent(silentRequest);
@@ -271,10 +265,8 @@ export class AuthenticationWrapper implements IAuthenticationWrapper {
       scopes: userScopes,
       authority: this.getAuthority(),
       prompt: 'select_account',
-      redirectUri: getCurrentUri(),
       claims: this.getClaims(),
-      extraQueryParameters: getExtraQueryParameters(),
-      tokenQueryParameters: getExtraQueryParameters()
+      extraQueryParameters: getExtraQueryParameters()
     };
 
     if (this.consentingToNewScopes || this.performingStepUpAuth || this.revokingScopes) {

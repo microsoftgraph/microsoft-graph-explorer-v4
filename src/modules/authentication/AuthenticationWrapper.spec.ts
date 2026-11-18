@@ -1,7 +1,7 @@
 jest.mock('./msal-app', () => ({
   msalApplication: {
     getAllAccounts: jest.fn(() => []),
-    getAccountByHomeId: jest.fn(),
+    getAccount: jest.fn(),
     acquireTokenSilent: jest.fn(),
     loginPopup: jest.fn(),
     logoutPopup: jest.fn(),
@@ -16,10 +16,6 @@ jest.mock('../../app/services/variant-service', () => ({
 
 jest.mock('../../app/services/variant-constants', () => ({
   SAFEROLLOUTACTIVE: 'saferollout'
-}));
-
-jest.mock('./authUtils', () => ({
-  getCurrentUri: jest.fn(() => 'http://localhost')
 }));
 
 jest.mock('./authentication-error-hints', () => ({
@@ -117,10 +113,10 @@ describe('AuthenticationWrapper', () => {
       };
       mockMsal.getAllAccounts.mockReturnValue([account1, account2]);
       localStorage.setItem('homeAccountKey', 'home-2');
-      mockMsal.getAccountByHomeId.mockReturnValue(account2);
+      mockMsal.getAccount.mockReturnValue(account2);
 
       expect(wrapper.getAccount()).toBe(account2);
-      expect(mockMsal.getAccountByHomeId).toHaveBeenCalledWith('home-2');
+      expect(mockMsal.getAccount).toHaveBeenCalledWith({ homeAccountId: 'home-2' });
     });
 
     it('returns undefined when multiple accounts and no homeAccountId stored', () => {
@@ -384,7 +380,7 @@ describe('AuthenticationWrapper', () => {
         localAccountId: 'l1',
         idTokenClaims: { login_hint: 'hint@test.com' }
       };
-      mockMsal.getAccountByHomeId.mockReturnValue(account);
+      mockMsal.getAccount.mockReturnValue(account);
       mockMsal.logoutPopup.mockResolvedValue(undefined);
 
       await wrapper.logOut();
@@ -482,8 +478,8 @@ describe('AuthenticationWrapper', () => {
     });
   });
 
-  describe('getAccount - multiple accounts with null from getAccountByHomeId', () => {
-    it('returns undefined when getAccountByHomeId returns null', () => {
+  describe('getAccount - multiple accounts with null from msal getAccount', () => {
+    it('returns undefined when msal getAccount returns null', () => {
       const account1 = {
         homeAccountId: 'home-1',
         environment: 'env',
@@ -500,7 +496,7 @@ describe('AuthenticationWrapper', () => {
       };
       mockMsal.getAllAccounts.mockReturnValue([account1, account2]);
       localStorage.setItem('homeAccountKey', 'home-3');
-      mockMsal.getAccountByHomeId.mockReturnValue(null);
+      mockMsal.getAccount.mockReturnValue(null);
 
       expect(wrapper.getAccount()).toBeUndefined();
     });
@@ -792,7 +788,7 @@ describe('AuthenticationWrapper', () => {
       await wrapper.logIn();
       const popupCall = mockMsal.loginPopup.mock.calls[0][0] as any;
       expect(popupCall.extraQueryParameters).toEqual({ safe_rollout: 'migration_v2' });
-      expect(popupCall.tokenQueryParameters).toEqual({ safe_rollout: 'migration_v2' });
+      expect(popupCall).not.toHaveProperty('tokenQueryParameters');
 
       // Restore
       process.env.REACT_APP_MIGRATION_PARAMETER = originalEnv;

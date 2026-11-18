@@ -14,12 +14,13 @@ export function getLoginType(): LoginType {
   return isIE || isEdge ? LoginType.Redirect : LoginType.Popup;
 }
 
+const REDIRECT_BRIDGE_FILENAME = 'redirect.html';
+
 /**
- * get current uri for redirect uri purpose
- * ref - https://github.com/AzureAD/microsoft-authentication-library-for
- * -js/blob/9274fac6d100a6300eb2faa4c94aa2431b1ca4b0/lib/msal-browser/src/utils/BrowserUtils.ts#L49
-*/
-export function getCurrentUri(): string {
-  const currentUrl = window.location.href.split('?')[0].split('#')[0];
-  return currentUrl.toLowerCase();
+ * Redirect URI of the MSAL v5 redirect bridge page, which must be same-origin with the app.
+ * Host pages that don't serve the bridge from the origin root set window.RedirectUri
+ * (mirroring window.ClientId).
+ */
+export function getRedirectBridgeUri(): string {
+  return window.RedirectUri || `${window.location.origin}/${REDIRECT_BRIDGE_FILENAME}`;
 }

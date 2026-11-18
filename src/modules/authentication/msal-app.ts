@@ -1,6 +1,7 @@
 import { telemetry, errorTypes } from '../../telemetry';
 import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { Configuration, LogLevel, PublicClientApplication, BrowserCacheLocation } from '@azure/msal-browser';
+import { getRedirectBridgeUri } from './authUtils';
 
 function getClientIdFromWindow() {
   return window?.ClientId ?? '';
@@ -12,15 +13,17 @@ function getClientIdFromEnv() {
 
 const windowHasClientId = getClientIdFromWindow();
 const clientId = windowHasClientId ? getClientIdFromWindow() : getClientIdFromEnv();
+const redirectBridgeUri = getRedirectBridgeUri();
 export const configuration: Configuration = {
   auth: {
     clientId,
-    clientCapabilities: ['CP1']
+    clientCapabilities: ['CP1'],
+    redirectUri: redirectBridgeUri,
+    // logoutPopup needs the bridge to close the popup; MSA also requires this URI to be registered.
+    postLogoutRedirectUri: redirectBridgeUri
   },
   cache: {
-    cacheLocation: BrowserCacheLocation.LocalStorage,
-    storeAuthStateInCookie: true,
-    claimsBasedCachingEnabled: true
+    cacheLocation: BrowserCacheLocation.LocalStorage
   },
   system: {
     loggerOptions: {
