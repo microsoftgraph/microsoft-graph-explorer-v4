@@ -42,7 +42,13 @@ describe('msal-app', () => {
   it('configuration uses localStorage for cache', () => {
     const { configuration } = require('./msal-app');
     expect(configuration.cache.cacheLocation).toBe('localStorage');
-    expect(configuration.cache.storeAuthStateInCookie).toBe(true);
+  });
+
+  it('configuration routes sign-in and sign-out responses through the redirect bridge', () => {
+    const { configuration } = require('./msal-app');
+    const bridgeUri = `${window.location.origin}/redirect.html`;
+    expect(configuration.auth.redirectUri).toBe(bridgeUri);
+    expect(configuration.auth.postLogoutRedirectUri).toBe(bridgeUri);
   });
 
   it('configuration includes client capabilities', () => {

@@ -73,6 +73,8 @@ module.exports = {
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),
+  appRedirectBridgeJs: resolveModule(resolveApp, 'src/redirect-bridge'),
+  appRedirectBridgeHtml: resolveApp('src/redirect-bridge.html'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appTsConfig: resolveApp('tsconfig.json'),

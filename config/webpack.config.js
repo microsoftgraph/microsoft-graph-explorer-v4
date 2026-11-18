@@ -134,25 +134,29 @@ module.exports = function (webpackEnv) {
       : isEnvDevelopment && 'eval-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
-    entry: [
-      // Include an alternative client for WebpackDevServer. A client's job is to
-      // connect to WebpackDevServer by a socket and get notified about changes.
-      // When you save a file, the client will either apply hot updates (in case
-      // of CSS changes), or refresh the page (in case of JS changes). When you
-      // make a syntax error, this client will display a syntax error overlay.
-      // Note: instead of the default WebpackDevServer client, we use a custom one
-      // to bring better experience for Create React App users. You can replace
-      // the line below with these two lines if you prefer the stock client:
-      // require.resolve('webpack-dev-server/client') + '?/',
-      // require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      // Finally, this is your app's code:
-      paths.appIndexJs
-      // We include the app code last so that if there is a runtime error during
-      // initialization, it doesn't blow up the WebpackDevServer client, and
-      // changing JS code would still trigger a refresh.
-    ].filter(Boolean),
+    entry: {
+      main: [
+        // Include an alternative client for WebpackDevServer. A client's job is to
+        // connect to WebpackDevServer by a socket and get notified about changes.
+        // When you save a file, the client will either apply hot updates (in case
+        // of CSS changes), or refresh the page (in case of JS changes). When you
+        // make a syntax error, this client will display a syntax error overlay.
+        // Note: instead of the default WebpackDevServer client, we use a custom one
+        // to bring better experience for Create React App users. You can replace
+        // the line below with these two lines if you prefer the stock client:
+        // require.resolve('webpack-dev-server/client') + '?/',
+        // require.resolve('webpack/hot/dev-server'),
+        isEnvDevelopment &&
+        require.resolve('react-dev-utils/webpackHotDevClient'),
+        // Finally, this is your app's code:
+        paths.appIndexJs
+        // We include the app code last so that if there is a runtime error during
+        // initialization, it doesn't blow up the WebpackDevServer client, and
+        // changing JS code would still trigger a refresh.
+      ].filter(Boolean),
+      // MSAL v5 redirect bridge, emitted as a standalone redirect.html page
+      redirect: paths.appRedirectBridgeJs
+    },
     output: {
       // The build folder.
       path: isEnvProduction ? paths.appBuild : path.resolve(__dirname, 'dist'),
@@ -160,7 +164,9 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: 'static/js/graph-explorer-v2.js',
+      filename: ({ chunk }) => chunk.name === 'redirect'
+        ? 'static/js/redirect-bridge.js'
+        : 'static/js/graph-explorer-v2.js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath,
@@ -441,7 +447,8 @@ module.exports = function (webpackEnv) {
           {},
           {
             inject: true,
-            template: paths.appHtml
+            template: paths.appHtml,
+            chunks: ['main']
           },
           isEnvProduction
             ? {
@@ -461,6 +468,16 @@ module.exports = function (webpackEnv) {
             : undefined
         )
       ),
+      // Generates the MSAL redirect bridge page. Host pages must serve it from the app's own origin.
+      new HtmlWebpackPlugin({
+        filename: 'redirect.html',
+        template: paths.appRedirectBridgeHtml,
+        chunks: ['redirect']
+      }),
+      // Inline the bridge script so redirect.html is self-contained: MSAL guidance forbids loading
+      // bridge assets from a CDN or any origin other than the app's.
+      isEnvProduction &&
+      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/redirect-bridge[.]js$/]),
       new ESLintPlugin({
         formatter: require.resolve('react-dev-utils/eslintFormatter'),
         eslintPath: require.resolve('eslint')

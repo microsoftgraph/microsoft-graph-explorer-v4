@@ -21,7 +21,7 @@ Microsoft Graph Explorer is built and developed using node v18.
 
 - Sign in to your Microsoft account (or Create one) at the [Microsoft Azure Portal](https://ms.portal.azure.com/).
 - Find the Azure service named App registrations. If you haven't used this service before, you might need to search for it in the search bar.
-- In the App registrations page, click `+ New registration`. You will be redirected to a form in the Microsoft Azure portal where you Register an application. Fill out the form and set the Redirect URI to a `Single-page application (SPA)` with `http://localhost:3000`. You can also set it from authentication tab in the app you have just created.
+- In the App registrations page, click `+ New registration`. You will be redirected to a form in the Microsoft Azure portal where you Register an application. Fill out the form and set the Redirect URI to a `Single-page application (SPA)` with `http://localhost:3000/redirect.html`. You can also set it from authentication tab in the app you have just created. Graph Explorer signs in through this MSAL redirect bridge page rather than the app page itself. Use your own app registration for local development; loopback redirect URIs are not allowed on Microsoft-owned registrations.
 - Create a `.env` file at the root of the project/repo and add the following keys. - REACT_APP_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx - REACT_APP_INSTRUMENTATION_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
   Where `REACT_APP_CLIENT_ID` is the `Application (client) ID` from the Azure portal and `REACT_APP_INSTRUMENTATION_KEY` is the `Object ID` from the portal.
 

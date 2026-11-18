@@ -4,6 +4,7 @@ export {};
 declare global {
   interface Window {
     ClientId: string | undefined
+    RedirectUri: string | undefined
     MonacoEnvironment: Environment;
   }
 }
